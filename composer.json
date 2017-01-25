@@ -1,0 +1,33 @@
+{
+    "name": "dtl/worse-reflection",
+    "description": "Lazy AST reflector",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Leech",
+            "email": "daniel@dantleech.com"
+        }
+    ],
+    "require": {
+        "nikic/php-parser": "^3.0",
+        "phpunit/phpunit": "^5.7",
+        "phpspec/phpspec": "^3.2"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "DTL\\WorseReflection\\": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DTL\\WorseReflection\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

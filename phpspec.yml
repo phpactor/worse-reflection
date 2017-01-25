@@ -1,0 +1,5 @@
+suites:
+    default:
+        src_path: "%paths.config%/lib/"
+        namespace: "DTL\\WorseReflection"
+        psr4_prefix: "DTL\\WorseReflection"
