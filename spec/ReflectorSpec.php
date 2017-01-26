@@ -7,7 +7,7 @@ use DTL\WorseReflection\SourceContextFactory;
 use DTL\WorseReflection\SourceContext;
 use DTL\WorseReflection\Source;
 use DTL\WorseReflection\Reflection\ReflectionClass;
-use DTL\WorseReflection\ClassLocator;
+use DTL\WorseReflection\SourceLocator;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use PhpParser\ParserFactory;
@@ -16,7 +16,7 @@ use DTL\WorseReflection\ClassName;
 class ReflectorSpec extends ObjectBehavior
 {
     function let(
-        ClassLocator $classLocator,
+        SourceLocator $classLocator,
         SourceContextFactory $sourceContextFactory
     )
     {
@@ -29,7 +29,7 @@ class ReflectorSpec extends ObjectBehavior
     }
 
     function it_should_reflect_a_class(
-        ClassLocator $classLocator,
+        SourceLocator $classLocator,
         ReflectionClass $reflectionClass,
         Source $source,
         SourceContextFactory $sourceContextFactory,

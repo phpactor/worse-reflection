@@ -8,19 +8,19 @@ use PhpParser\Parser;
 
 class Reflector
 {
-    private $classLocator;
+    private $sourceLocator;
     private $sourceContextFactory;
 
-    public function __construct(ClassLocator $classLocator, SourceContextFactory $sourceContextFactory)
+    public function __construct(SourceLocator $sourceLocator, SourceContextFactory $sourceContextFactory)
     {
-        $this->classLocator = $classLocator;
+        $this->sourceLocator = $sourceLocator;
         $this->sourceContextFactory = $sourceContextFactory;
     }
 
 
     public function reflectClass(ClassName $className): ReflectionClass
     {
-        $source = $this->classLocator->locate($className);
+        $source = $this->sourceLocator->locate($className);
         $sourceContext = $this->sourceContextFactory->createFor($source);
 
         if (false === $sourceContext->hasClass($className)) {

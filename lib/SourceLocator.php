@@ -2,7 +2,7 @@
 
 namespace DTL\WorseReflection;
 
-interface ClassLocator
+interface SourceLocator
 {
     public function locate(ClassName $className);
 }
