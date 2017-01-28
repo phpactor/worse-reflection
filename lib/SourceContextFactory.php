@@ -2,9 +2,27 @@
 
 namespace DTL\WorseReflection;
 
-interface SourceContextFactory
-{
-    public function createFor(Source $source);
+use DTL\WorseReflection\SourceContext;
+use PhpParser\Parser;
+use DTL\WorseReflection\Source;
 
-    public function hasClass($argument1);
+class SourceContextFactory
+{
+    private $parser;
+
+    public function __construct(
+        Parser $parser
+    )
+    {
+        $this->parser = $parser;
+    }
+
+    public function createFor(Source $source): SourceContext
+    {
+        return new SourceContext($source, $this->parser);
+    }
+
+    public function hasClass(string $classFqn): string
+    {
+    }
 }

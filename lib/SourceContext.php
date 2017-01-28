@@ -3,8 +3,17 @@
 namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\ClassName;
+use PhpParser\Parser;
 
-interface SourceContext
+class SourceContext
 {
-    public function hasClass(ClassName $className);
+    public function __construct(Source $source, Parser $parser)
+    {
+        foreach ($parser->parse($source->getSource()) as $statement) {
+        }
+    }
+
+    public function hasClass(ClassName $className)
+    {
+    }
 }

@@ -11,7 +11,8 @@
     "require": {
         "nikic/php-parser": "^3.0",
         "phpunit/phpunit": "^5.7",
-        "phpspec/phpspec": "^3.2"
+        "phpspec/phpspec": "^3.2",
+        "behat/behat": "^3.3"
     },
     "require-dev": {
     },

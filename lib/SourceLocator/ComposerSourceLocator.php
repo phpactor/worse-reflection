@@ -19,7 +19,7 @@ class ComposerSourceLocator implements SourceLocator
     /**
      * {@inheritDoc}
      */
-    public function locate(ClassName $className)
+    public function locate(ClassName $className): Source
     {
         $path = $this->classLoader->findFile($className->getFqn());
 

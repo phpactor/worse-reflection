@@ -29,4 +29,9 @@ class ComposerSourceLocatorSpec extends ObjectBehavior
 
         $this->locate(ClassName::create($classFqn))->shouldReturnAnInstanceOf(Source::class);
     }
+
+    function it_should_throw_an_exception_if_source_not_found()
+    {
+        $this->shouldThrow('InvalidArgumentException')->duringLocate(ClassName::create('Foobar'));
+    }
 }
