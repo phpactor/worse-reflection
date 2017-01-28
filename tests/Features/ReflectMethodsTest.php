@@ -25,6 +25,9 @@ class ReflectMethodsTest extends IntegrationTestCase
         );
         $methods = $class->getMethods();
         $this->assertCount(1, $methods);
+        $methodOne = $methods->current();
+        $this->assertEquals('methodOne', $methodOne->getName());
+        $this->assertTrue($methodOne->getVisibility()->isPublic());
     }
 
     public function provideReflectMethods()
