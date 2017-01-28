@@ -2,24 +2,25 @@
 
 namespace DTL\WorseReflection;
 
-class ClassName
+class Namespace_
 {
-    private $classFqn;
+    private $namespace;
 
     private function __construct()
     {
     }
 
-    public static function fromFqn(string $classFqn)
+    public static function fromString(string $namespace)
     {
         $instance = new self();
-        $instance->classFqn = $classFqn;
+        $instance->namespace = $namespace;
 
         return $instance;
     }
 
     public function getFqn()
     {
-        return $this->classFqn;
+        return $this->namespace;
     }
 }
+

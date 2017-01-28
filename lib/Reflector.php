@@ -33,4 +33,9 @@ class Reflector
 
         return new ReflectionClass($classFqn);
     }
+
+    public function reflectString(string $string)
+    {
+        return $this->sourceContextFactory->createFor(Source::fromString($string));
+    }
 }

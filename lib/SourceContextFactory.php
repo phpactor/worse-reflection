@@ -10,9 +10,7 @@ class SourceContextFactory
 {
     private $parser;
 
-    public function __construct(
-        Parser $parser
-    )
+    public function __construct(Parser $parser)
     {
         $this->parser = $parser;
     }
