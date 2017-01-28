@@ -17,18 +17,9 @@ class SourceContext
     public function __construct(Source $source, Parser $parser)
     {
         $statements = $parser->parse($source->getSource());
+        $this->scanNamespace($statements);
 
-        // get namespace
-        foreach ($statements as $statement) {
-            if ($statement instanceof Namespace_) {
-                $this->namespaceNode = $statement;
-                break;
-            }
-        }
-
-        if ($this->namespaceNode) {
-            $this->scanClassNodes($this->namespaceNode->stmts);
-        } else {
+        if (null === $this->namespaceNode) {
             $this->scanClassNodes($statements);
         }
     }
@@ -41,7 +32,7 @@ class SourceContext
     public function getClassNode(ClassName $className): Class_
     {
         if (false === $this->hasClass($className)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \RuntimeException(sprintf(
                 'Source context does not contain class "%s", it has classes: ["%s"]',
                 $className->getFqn(), implode('", "', array_keys($this->classNodes))
             ));
@@ -55,6 +46,18 @@ class SourceContext
         foreach ($nodes as $node) {
             if ($node instanceof Class_) {
                 $this->classNodes[$node->name] = $node;
+            }
+        }
+    }
+
+    private function scanNamespace(array $nodes)
+    {
+        // get namespace
+        foreach ($nodes as $node) {
+            if ($node instanceof Namespace_) {
+                $this->namespaceNode = $node;
+                $this->scanClassNodes($node->stmts);
+                break;
             }
         }
     }

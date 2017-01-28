@@ -14,27 +14,41 @@ class SourceContextTest extends IntegrationTestCase
     /**
      * It can say if it has a class.
      *
-     * @dataProvider provideGetClass
+     * @dataProvider provideGetClassNode
      */
-    public function testGetClass($className, $filename)
+    public function testGetClassNode($className, $filename)
     {
         $context = $this->createContext($filename);
         $class = $context->getClassNode(ClassName::fromFqn($className));
         $this->assertInstanceOf(Class_::class, $class);
     }
 
-    public function provideGetClass()
+    public function provideGetClassNode()
     {
         return [
             [
                 'ClassOne',
-                'GetClass.1.php',
+                'GetClass.php',
             ],
             [
                 'ClassTwo',
-                'GetClass.1.php',
+                'GetClass.php',
+            ],
+            [
+                'ClassTwo',
+                'GetClass.Namespaced.php',
             ],
         ];
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMethod Source context does not contain class
+     */
+    public function testGetClassNotFound()
+    {
+        $context = $this->createContext('GetClass.php');
+        $context->getClassNode(ClassName::fromFqn('FoobarBarfoo132'));
     }
 
     private function createContext($filename)
