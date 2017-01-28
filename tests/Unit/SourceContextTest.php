@@ -102,6 +102,16 @@ class SourceContextTest extends IntegrationTestCase
                 'ResolveClassName.php',
             ],
             [
+                'MultiUseColaboratorThree',
+                'Foobar\Barfoo\Baz\MultiUseColaboratorThree',
+                'ResolveClassName.php',
+            ],
+            [
+                'AliasedMultiUseColaboratorFour',
+                'Foobar\Barfoo\Baz\MultiUseColaboratorFour',
+                'ResolveClassName.php',
+            ],
+            [
                 'SameScope',
                 'DTL\WorseReflection\Tests\Unit\SourceContext\SameScope',
                 'ResolveClassName.php',
@@ -113,6 +123,7 @@ class SourceContextTest extends IntegrationTestCase
     private function createContext($filename)
     {
         $source = Source::fromString(file_get_contents(__DIR__ . '/SourceContext/' . $filename));
+
         return new SourceContext($source, $this->getParser());
     }
 }

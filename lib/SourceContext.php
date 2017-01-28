@@ -10,6 +10,7 @@ use PhpParser\Parser;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\GroupUse;
 
 class SourceContext
 {
@@ -56,8 +57,8 @@ class SourceContext
     public function resolveClassName(string $classShortName): ClassName
     {
         if (isset($this->useNodes[$classShortName])) {
-            $useNode = $this->useNodes[$classShortName];
-            return ClassName::fromFqnParts($useNode->name->parts);
+            $usedClass = $this->useNodes[$classShortName];
+            return $usedClass;
         }
 
         return $this->getNamespace()->spawnClassName($classShortName);
@@ -69,10 +70,16 @@ class SourceContext
             if ($node instanceof Class_) {
                 $this->classNodes[$node->name] = $node;
             }
+            if ($node instanceof GroupUse) {
+                $namespace = WorseNamespace::fromParts($node->prefix->parts);
+                foreach ($node->uses as $use) {
+                    $this->useNodes[$use->alias] = ClassName::fromNamespaceAndShortName($namespace, (string) $use->name);
+                }
+            }
 
             if ($node instanceof Use_) {
                 foreach ($node->uses as $use) {
-                    $this->useNodes[$use->alias] = $use;
+                    $this->useNodes[$use->alias] = ClassName::fromFqnParts($use->name->parts);
                 }
             }
 
