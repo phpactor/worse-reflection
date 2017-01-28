@@ -23,7 +23,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "DTL\\WorseReflection\\Tests\\": "tests/"
+            "DTL\\WorseReflection\\Tests\\": "tests/",
+            "Workspace\\": "workspace/"
         }
     },
     "extra": {

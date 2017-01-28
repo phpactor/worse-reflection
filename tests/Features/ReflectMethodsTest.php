@@ -7,6 +7,8 @@ use DTL\WorseReflection\SourceLocator\ComposerSourceLocator;
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\SourceLocator;
 use DTL\WorseReflection\Tests\IntegrationTestCase;
+use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\Source;
 
 class ReflectMethodsTest extends IntegrationTestCase
 {
@@ -17,9 +19,12 @@ class ReflectMethodsTest extends IntegrationTestCase
      */
     public function testReflectMethods(string $className, string $source, array $expectedMethods)
     {
-        $context = $this->getReflector()->reflectString($source);
-        $class = $context->getClass($className);
+        $class = $this->getReflector()->reflectClassFromSource(
+            ClassName::fromFqn($className),
+            Source::fromString($source)
+        );
         $methods = $class->getMethods();
+        $this->assertCount(1, $methods);
     }
 
     public function provideReflectMethods()

@@ -6,13 +6,14 @@ use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\SourceLocator;
 use PhpParser\ParserFactory;
 use DTL\WorseReflection\SourceContextFactory;
+use DTL\WorseReflection\SourceLocator\ComposerSourceLocator;
 
 class IntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
     public function getReflector()
     {
         return new Reflector(
-            $this->prophesize(SourceLocator::class)->reveal(),
+            $this->getSourceLocator(),
             new SourceContextFactory($this->getParser())
         );
     }
@@ -27,10 +28,9 @@ class IntegrationTestCase extends \PHPUnit_Framework_TestCase
         static $autoloader;
 
         if (!$autoloader) {
-            $autoloader = require(__DIR__ . '/../../vendor/autoload.php');
+            $autoloader = require(__DIR__ . '/../vendor/autoload.php');
         }
 
         return new ComposerSourceLocator($autoloader);
     }
-
 }
