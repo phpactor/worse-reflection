@@ -2,6 +2,8 @@
 
 namespace DTL\WorseReflection;
 
+use DTL\WorseReflection\ClassName;
+
 class Namespace_
 {
     private $namespace;
@@ -16,6 +18,19 @@ class Namespace_
         $instance->namespace = $namespace;
 
         return $instance;
+    }
+
+    public static function fromParts(array $parts)
+    {
+        $instance = new self();
+        $instance->namespace = implode('\\', $parts);
+
+        return $instance;
+    }
+
+    public function spawnClassName($shortName)
+    {
+        return ClassName::fromNamespaceAndShortName($this, $shortName);
     }
 
     public function getFqn()

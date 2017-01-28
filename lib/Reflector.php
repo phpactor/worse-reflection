@@ -23,15 +23,17 @@ class Reflector
         $source = $this->sourceLocator->locate($className);
         $sourceContext = $this->sourceContextFactory->createFor($source);
 
-        if (false === $sourceContext->hasClass($className)) {
+        if (false === $sourceContext->hasClassNode($className)) {
             throw new \InvalidArgumentException(sprintf(
                 'Unable to locate class "%s" in file "%s"',
-                $classFqn,
+                $className->getFqn(),
                 $source->getLocation()
             ));
         }
 
-        return new ReflectionClass($classFqn);
+        $classNode = $sourceContext->getClassNode($className);
+
+        return new ReflectionClass($this, $sourceContext, $classNode);
     }
 
     public function reflectString(string $string)

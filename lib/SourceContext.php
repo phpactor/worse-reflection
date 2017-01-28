@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\Namespace_ as WorseNamespace;
 use PhpParser\Parser;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Use_;
 
 class SourceContext
 {
     private $namespaceNode;
     private $classNodes = [];
+    private $useNodes = [];
 
     public function __construct(Source $source, Parser $parser)
     {
@@ -41,12 +44,38 @@ class SourceContext
         return $this->classNodes[$className->getFqn()];
     }
 
+    public function getNamespace()
+    {
+        if (null === $this->namespaceNode) {
+            return WorseNamespace::fromParts([]);
+        }
+
+        return WorseNamespace::fromParts($this->namespaceNode->name->parts);
+    }
+
+    public function resolveClassName(string $classShortName): ClassName
+    {
+        if (isset($this->useNodes[$classShortName])) {
+            $useNode = $this->useNodes[$classShortName];
+            return ClassName::fromFqnParts($useNode->name->parts);
+        }
+
+        return $this->getNamespace()->spawnClassName($classShortName);
+    }
+
     private function scanClassNodes(array $nodes)
     {
         foreach ($nodes as $node) {
             if ($node instanceof Class_) {
                 $this->classNodes[$node->name] = $node;
             }
+
+            if ($node instanceof Use_) {
+                foreach ($node->uses as $use) {
+                    $this->useNodes[$use->alias] = $use;
+                }
+            }
+
         }
     }
 
@@ -57,7 +86,6 @@ class SourceContext
             if ($node instanceof Namespace_) {
                 $this->namespaceNode = $node;
                 $this->scanClassNodes($node->stmts);
-                break;
             }
         }
     }

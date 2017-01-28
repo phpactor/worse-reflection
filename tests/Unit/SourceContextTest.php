@@ -8,6 +8,7 @@ use DTL\WorseReflection\SourceContext;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\ReflectionClass;
 use PhpParser\Node\Stmt\Class_;
+use DTL\WorseReflection\Namespace_;
 
 class SourceContextTest extends IntegrationTestCase
 {
@@ -49,6 +50,64 @@ class SourceContextTest extends IntegrationTestCase
     {
         $context = $this->createContext('GetClass.php');
         $context->getClassNode(ClassName::fromFqn('FoobarBarfoo132'));
+    }
+
+    /**
+     * It should return the namespace.
+     *
+     * @dataProvider provideGetNamespace
+     */
+    public function testGetNamespace($expectedNamespace, $filename)
+    {
+        $context = $this->createContext($filename);
+        $namespace = $context->getNamespace();
+        $this->assertInstanceOf(Namespace_::class, $namespace);
+        $this->assertEquals($expectedNamespace, $namespace->getFqn());
+    }
+
+    public function provideGetNamespace()
+    {
+        return [
+            [
+                'DTL\WorseReflection\Tests\Unit\Example',
+                'GetClass.Namespaced.php',
+            ],
+        ];
+    }
+
+    /**
+     * It should return the imported use statements.
+     *
+     * @dataProvider provideResolveClassName
+     */
+    public function testResolveClassName($collaborator, $expectedClassFqn, $filename)
+    {
+        $context = $this->createContext($filename);
+        $className = $context->resolveClassName($collaborator);
+        $this->assertInstanceOf(ClassName::class, $className);
+        $this->assertEquals($expectedClassFqn, $className->getFqn());
+    }
+
+    public function provideResolveClassName()
+    {
+        return [
+            [
+                'ColaboratorOne',
+                'Foobar\Barfoo\ColaboratorOne',
+                'ResolveClassName.php',
+            ],
+            [
+                'AliasedColaboratorTwo',
+                'Foobar\Barfoo\ColaboratorTwo',
+                'ResolveClassName.php',
+            ],
+            [
+                'SameScope',
+                'DTL\WorseReflection\Tests\Unit\SourceContext\SameScope',
+                'ResolveClassName.php',
+            ],
+
+        ];
     }
 
     private function createContext($filename)

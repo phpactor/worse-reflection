@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DTL\WorseReflection;
 
 class ClassName
@@ -14,6 +16,22 @@ class ClassName
     {
         $instance = new self();
         $instance->classFqn = $classFqn;
+
+        return $instance;
+    }
+
+    public static function fromNamespaceAndShortName(Namespace_ $namespace, string $shortName)
+    {
+        $instance = new self();
+        $instance->classFqn = $namespace->getFqn() . '\\' . $shortName;
+
+        return $instance;
+    }
+
+    public static function fromFqnParts(array $parts)
+    {
+        $instance = new self();
+        $instance->classFqn = implode('\\', $parts);
 
         return $instance;
     }
