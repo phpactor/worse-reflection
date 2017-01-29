@@ -1,8 +1,7 @@
 Worse Reflection
 ==================
 
-[![Build Status](https://travis-ci.org/dtl/worse-reflection.svg?branch=master)](https://travis-ci.org/dtl/worse-reflection)
-[![StyleCI](https://styleci.io/repos/<repo-id>/shield)](https://styleci.io/repos/<repo-id>)
+[![Build Status](https://travis-ci.org/dantleech/worse-reflection.svg?branch=master)](https://travis-ci.org/dantleech/worse-reflection)
 
 This library aims to provide a light class-based AST based "reflection" library.
 
