@@ -22,4 +22,10 @@ class ReflectionParameter
         $this->sourceContext = $sourceContext;
         $this->node = $node;
     }
+
+    public function getName() 
+    {
+        return (string) $this->node->name;
+    }
+    
 }
