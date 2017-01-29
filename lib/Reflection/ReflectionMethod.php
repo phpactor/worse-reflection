@@ -8,6 +8,7 @@ use DTL\WorseReflection\SourceContext;
 use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 
 class ReflectionMethod
 {
@@ -64,5 +65,10 @@ class ReflectionMethod
         }
 
         return Visibility::public();
+    }
+
+    public function getParameters()
+    {
+        return new ReflectionParameterCollection($this->reflector, $this->sourceContext, $this->methodNode);
     }
 }
