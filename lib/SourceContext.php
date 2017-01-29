@@ -8,7 +8,7 @@ use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Namespace_ as WorseNamespace;
 use PhpParser\Parser;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Namespace_ as ParserNamespace;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\GroupUse;
 
@@ -79,7 +79,7 @@ class SourceContext
 
             if ($node instanceof Use_) {
                 foreach ($node->uses as $use) {
-                    $this->useNodes[$use->alias] = ClassName::fromFqnParts($use->name->parts);
+                    $this->useNodes[$use->alias] = ClassName::fromParts($use->name->parts);
                 }
             }
 
@@ -90,7 +90,7 @@ class SourceContext
     {
         // get namespace
         foreach ($nodes as $node) {
-            if ($node instanceof Namespace_) {
+            if ($node instanceof ParserNamespace) {
                 $this->namespaceNode = $node;
                 $this->scanClassNodes($node->stmts);
             }

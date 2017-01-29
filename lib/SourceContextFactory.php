@@ -19,8 +19,4 @@ class SourceContextFactory
     {
         return new SourceContext($source, $this->parser);
     }
-
-    public function hasClass(string $classFqn): string
-    {
-    }
 }

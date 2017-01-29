@@ -37,5 +37,10 @@ class Namespace_
     {
         return $this->namespace;
     }
+
+    public function isRoot()
+    {
+        return empty($this->namespace);
+    }
 }
 

@@ -6,6 +6,7 @@ use DTL\WorseReflection\Reflector;
 use PhpParser\Node\Stmt\Class_;
 use DTL\WorseReflection\SourceContext;
 use PhpParser\Node\Stmt\ClassMethod;
+use DTL\WorseReflection\ClassName;
 
 class ReflectionClass
 {
@@ -52,5 +53,10 @@ class ReflectionClass
         }
 
         return $methods;
+    }
+
+    public function getName(): ClassName
+    {
+        return $this->sourceContext->resolveClassName($this->classNode->name);
     }
 }

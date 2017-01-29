@@ -23,12 +23,12 @@ class ClassName
     public static function fromNamespaceAndShortName(Namespace_ $namespace, string $shortName)
     {
         $instance = new self();
-        $instance->classFqn = $namespace->getFqn() . '\\' . $shortName;
+        $instance->classFqn = $namespace->isRoot() ? $shortName : $namespace->getFqn() . '\\' . $shortName;
 
         return $instance;
     }
 
-    public static function fromFqnParts(array $parts)
+    public static function fromParts(array $parts)
     {
         $instance = new self();
         $instance->classFqn = implode('\\', $parts);
