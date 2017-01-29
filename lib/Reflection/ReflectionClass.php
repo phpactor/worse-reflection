@@ -7,6 +7,10 @@ use PhpParser\Node\Stmt\ClassLike;
 use DTL\WorseReflection\SourceContext;
 use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\ClassName;
+use PhpParser\Node\Const_;
+use PhpParser\Node\Stmt\ClassConst;
+use DTL\WorseReflection\Reflection\ReflectionConstant;
+use DTL\WorseReflection\Parser\TypeTool;
 
 class ReflectionClass
 {
@@ -69,5 +73,21 @@ class ReflectionClass
         }
 
         return $interfaces;
+    }
+
+    public function getConstants(): array
+    {
+        $constants = [];
+        foreach ($this->classNode->stmts as $stmt) {
+            if (!$stmt instanceof ClassConst) {
+                continue;
+            }
+
+            foreach ($stmt->consts as $const) {
+                $constants[] = new ReflectionConstant($const->name, $const->value->value);
+            }
+        }
+
+        return $constants;
     }
 }

@@ -70,10 +70,44 @@ EOT
 
     /**
      * It return the constants.
+     *
+     * @dataProvider provideConstants
      */
-    public function testConstants()
+    public function testConstants(string $className, string $source, array $expectedNames)
     {
-        $this->markTestIncomplete();
+        $class = $this->reflectClassFromSource($className, $source);
+        $constants = $class->getConstants();
+
+        $this->assertCount(count($expectedNames), $constants);
+
+        foreach ($expectedNames as $expectedName => $expectedValue) {
+            $constant = array_shift($constants);
+            $this->assertEquals($expectedName, $constant->getName());
+            $this->assertEquals($expectedValue, $constant->getValue());
+        }
+    }
+
+    public function provideConstants()
+    {
+        return [
+            [
+                'Foobar',
+                <<<EOT
+<?php 
+
+class Foobar
+{
+    const TWELVE = 12;
+    const FOOBAR = 'barfoo';
+}
+EOT
+                ,
+                [
+                    'TWELVE' => 12,
+                    'FOOBAR' => 'barfoo',
+                ]
+            ],
+        ];
     }
 
     /**
