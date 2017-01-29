@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use DTL\WorseReflection\SourceContext;
 use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Visibility;
+use DTL\WorseReflection\ClassName;
 
 class ReflectionMethod
 {
@@ -49,12 +50,12 @@ class ReflectionMethod
         $this->setVisibility($methodNode);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getVisibility()
+    public function getVisibility(): Visibility
     {
         return $this->visibility;
     }

@@ -5,6 +5,7 @@ namespace DTL\WorseReflection\Tests\Unit;
 use DTL\WorseReflection\Tests\IntegrationTestCase;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Source;
+use DTL\WorseReflection\Visibility;
 
 class ReflectionClassTest extends IntegrationTestCase
 {
@@ -115,7 +116,24 @@ EOT
      */
     public function testDocComment()
     {
-        $this->markTestIncomplete();
+        $source = <<<EOT
+<?php
+
+/**
+ * This is a comment.
+ */
+class Foobar
+{
+}
+EOT
+        ;
+        $class = $this->reflectClassFromSource('Foobar', $source);
+        $this->assertEquals(<<<EOT
+/**
+ * This is a comment.
+ */
+EOT
+        , $class->getDocComment()->getRaw());
     }
 
     /**
@@ -123,15 +141,89 @@ EOT
      */
     public function testParentClass()
     {
-        $this->markTestIncomplete();
+        $source = <<<EOT
+<?php
+
+class ParentClass
+{
+}
+
+class Foobar extends ParentClass
+{
+}
+EOT
+        ;
+        $class = $this->reflectClassFromSource('Foobar', $source);
+        $parentClass = $class->getParentClass();
+        $this->assertEquals('ParentClass', $parentClass->getName()->getFqn());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Class "Foobar" has no parent
+     */
+    public function testGetParentClassNoParent()
+    {
+        $source = <<<EOT
+<?php
+
+class Foobar
+{
+}
+EOT
+        ;
+        $class = $this->reflectClassFromSource('Foobar', $source);
+        $class->getParentClass();
     }
 
     /**
      * It returns the properties.
+     *
+     * @dataProvider provideProperties
      */
-    public function testProperties()
+    public function testProperties(string $className, string $source, array $expectedProperties)
     {
-        $this->markTestIncomplete();
+        $class = $this->reflectClassFromSource('Foobar', $source);
+        $properties = $class->getProperties();
+
+        $this->assertCount(count($expectedProperties), $properties);
+
+        foreach ($expectedProperties as $expectedName => $expected) {
+            $propertyReflection = array_shift($properties);
+            $this->assertEquals($expectedName, $propertyReflection->getName());
+            $this->assertEquals($expected['visibility'], $propertyReflection->getVisibility());
+        }
+    }
+
+    public function provideProperties()
+    {
+        return [
+            [
+                'Foobar',
+                <<<'EOT'
+<?php 
+
+class Foobar
+{
+    private $private = 'default1';
+    protected $protected;
+    public $public;
+}
+EOT
+                ,
+                [
+                    'private' => [
+                        'visibility' => Visibility::private(),
+                    ],
+                    'protected' => [
+                        'visibility' => Visibility::protected()
+                    ],
+                    'public' => [
+                        'visibility' => Visibility::public(),
+                    ],
+                ]
+            ],
+        ];
     }
 
     /**

@@ -11,6 +11,8 @@ use PhpParser\Node\Const_;
 use PhpParser\Node\Stmt\ClassConst;
 use DTL\WorseReflection\Reflection\ReflectionConstant;
 use DTL\WorseReflection\Parser\TypeTool;
+use DTL\WorseReflection\Reflection\ReflectionDocComment;
+use PhpParser\Node\Stmt\Property;
 
 class ReflectionClass
 {
@@ -89,5 +91,41 @@ class ReflectionClass
         }
 
         return $constants;
+    }
+
+    public function getDocComment(): ReflectionDocComment
+    {
+        return ReflectionDocComment::fromRaw(array_reduce($this->classNode->getAttribute('comments'), function ($text, $comment) {
+            return $text .= $comment->getText();
+        }, ''));
+    }
+
+    public function getParentClass(): ReflectionClass
+    {
+        if (!$this->classNode->extends) {
+            throw new \RuntimeException(sprintf(
+                'Class "%s" has no parent',
+                $this->getName()->getFqn()
+            ));
+        }
+        $parentName = $this->sourceContext->resolveClassName((string) $this->classNode->extends);
+        return $this->reflector->reflectClass($parentName);
+    }
+
+    public function getProperties(): array
+    {
+        $properties = [];
+
+        foreach ($this->classNode->stmts as $stmt) {
+            if (false === $stmt instanceof Property) {
+                continue;
+            }
+
+            foreach ($stmt->props as $prop) {
+                $properties[] = new ReflectionProperty($stmt, $prop);
+            }
+        }
+
+        return $properties;
     }
 }
