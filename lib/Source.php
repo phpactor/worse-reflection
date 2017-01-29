@@ -13,13 +13,14 @@ class Source
     {
         $instance = new self();
         $instance->source = $string;
+        $instance->location = Location::fromNothing();
 
         return $instance;
     }
 
-    public static function fromFilepath($location)
+    public static function fromLocation(Location $location)
     {
-        if (!file_exists($location)) {
+        if (false === $location->exists()) {
             throw new \InvalidArgumentException(sprintf(
                 'File "%s" does not exist',
                 $location
@@ -33,9 +34,14 @@ class Source
         return $instance;
     }
 
-    public function getLocation(): string
+    public function hasLocation(): bool
     {
-        return $this->source;
+        return null !== $this->location;
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
     }
 
     public function getSource(): string

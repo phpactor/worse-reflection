@@ -3,7 +3,7 @@
 namespace DTL\WorseReflection\Reflection;
 
 use DTL\WorseReflection\Reflector;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use DTL\WorseReflection\SourceContext;
 use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\ClassName;
@@ -21,7 +21,7 @@ class ReflectionClass
     private $sourceContext;
 
     /**
-     * @var Class_
+     * @var ClassLike
      */
     private $classNode;
 
@@ -33,7 +33,7 @@ class ReflectionClass
     public function __construct(
         Reflector $reflector,
         SourceContext $sourceContext,
-        Class_ $classNode
+        ClassLike $classNode
     )
     {
         $this->reflector = $reflector;
@@ -58,5 +58,16 @@ class ReflectionClass
     public function getName(): ClassName
     {
         return $this->sourceContext->resolveClassName($this->classNode->name);
+    }
+
+    public function getInterfaces()
+    {
+        $interfaces = [];
+        foreach ($this->classNode->implements as $name) {
+            $interfaceName = $this->sourceContext->resolveClassName((string) $name);
+            $interfaces[] = $this->reflector->reflectClass($interfaceName);
+        }
+
+        return $interfaces;
     }
 }

@@ -9,7 +9,99 @@ use DTL\WorseReflection\Source;
 class ReflectionClassTest extends IntegrationTestCase
 {
     /**
-     * It should return the class name.
+     * It return the interface names
+     *
+     * @dataProvider provideReturnInterfaceNames
+     */
+    public function testReturnInterfaceNames(string $className, string $source, array $expectedInterfaceNames)
+    {
+        $class = $this->reflectClassFromSource($className, $source);
+        $interfaceReflections = $class->getInterfaces();
+
+        $this->assertCount(count($expectedInterfaceNames), $interfaceReflections);
+
+        foreach ($expectedInterfaceNames as $interfaceName) {
+            $interfaceReflection = array_shift($interfaceReflections);
+            $this->assertEquals($interfaceName, $interfaceReflection->getName());
+        }
+    }
+
+    public function provideReturnInterfaceNames()
+    {
+        return [
+            [
+                'Foobar',
+                <<<EOT
+<?php 
+
+interface FoobarInterface
+{
+}
+
+class Foobar implements FoobarInterface
+{
+}
+EOT
+                ,
+                [ ClassName::fromFqn('FoobarInterface') ],
+            ],
+            [
+                'Foobar',
+                <<<EOT
+<?php 
+
+interface FoobarInterface
+{
+}
+
+interface BarfooInterface
+{
+}
+
+class Foobar implements FoobarInterface, BarfooInterface
+{
+}
+EOT
+                ,
+                [ ClassName::fromFqn('FoobarInterface'), ClassName::fromFqn('BarfooInterface'), ],
+            ]
+        ];
+    }
+
+    /**
+     * It return the constants.
+     */
+    public function testConstants()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * It return the doc comment.
+     */
+    public function testDocComment()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * It returns the parent class
+     */
+    public function testParentClass()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * It returns the properties.
+     */
+    public function testProperties()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * It return the class name.
      *
      * @dataProvider provideGetClassName
      */
@@ -50,7 +142,7 @@ EOT
     }
 
     /**
-     * It should reflect methods.
+     * It reflect methods.
      *
      * @dataProvider provideReflectMethods
      */
@@ -87,7 +179,7 @@ EOT
 
     private function reflectClassFromSource(string $className, string $source)
     {
-        return $this->getReflector()->reflectClassFromSource(
+        return $this->getReflectorForSource(Source::fromString($source))->reflectClass(
             ClassName::fromFqn($className),
             Source::fromString($source)
         );

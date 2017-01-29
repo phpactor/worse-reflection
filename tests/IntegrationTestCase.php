@@ -7,13 +7,15 @@ use DTL\WorseReflection\SourceLocator;
 use PhpParser\ParserFactory;
 use DTL\WorseReflection\SourceContextFactory;
 use DTL\WorseReflection\SourceLocator\ComposerSourceLocator;
+use DTL\WorseReflection\Source;
+use DTL\WorseReflection\SourceLocator\StringSourceLocator;
 
 class IntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
-    public function getReflector()
+    public function getReflectorForSource(Source $source)
     {
         return new Reflector(
-            $this->getSourceLocator(),
+            new StringSourceLocator($source),
             new SourceContextFactory($this->getParser())
         );
     }

@@ -33,7 +33,7 @@ class Reflector
             throw new \RuntimeException(sprintf(
                 'Unable to locate class "%s" in file "%s"',
                 $className->getFqn(),
-                $source->getLocation()
+                (string) $source->getLocation()
             ));
         }
 

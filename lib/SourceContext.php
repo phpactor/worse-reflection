@@ -11,6 +11,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_ as ParserNamespace;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Builder\Declaration;
+use PhpParser\Node\Stmt\ClassLike;
 
 class SourceContext
 {
@@ -33,7 +36,7 @@ class SourceContext
         return isset($this->classNodes[$className->getFqn()]);
     }
 
-    public function getClassNode(ClassName $className): Class_
+    public function getClassNode(ClassName $className): ClassLike
     {
         if (false === $this->hasClass($className)) {
             throw new \RuntimeException(sprintf(
@@ -67,7 +70,7 @@ class SourceContext
     private function scanClassNodes(array $nodes)
     {
         foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
+            if ($node instanceof Class_ || $node instanceof Interface_) {
                 $this->classNodes[$node->name] = $node;
             }
             if ($node instanceof GroupUse) {
