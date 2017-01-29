@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\WorseReflection\Tests\Unit;
+namespace DTL\WorseReflection\Tests\Unit\Reflection;
 
 use DTL\WorseReflection\Tests\IntegrationTestCase;
 use DTL\WorseReflection\ClassName;
@@ -277,7 +277,7 @@ EOT
         $class = $this->reflectClassFromSource($className, $source);
         $methods = $class->getMethods();
         $this->assertCount(1, $methods);
-        $methodOne = $methods->current();
+        $methodOne = $methods->getIterator()->current();
         $this->assertEquals('methodOne', $methodOne->getName());
         $this->assertTrue($methodOne->getVisibility()->isPublic());
     }

@@ -13,6 +13,7 @@ use DTL\WorseReflection\Reflection\ReflectionConstant;
 use DTL\WorseReflection\Parser\TypeTool;
 use DTL\WorseReflection\Reflection\ReflectionDocComment;
 use PhpParser\Node\Stmt\Property;
+use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 
 class ReflectionClass
 {
@@ -45,20 +46,11 @@ class ReflectionClass
         $this->reflector = $reflector;
         $this->sourceContext = $sourceContext;
         $this->classNode = $classNode;
-
-        $this->classMethodNodes = array_filter($this->classNode->stmts, function ($node) {
-            return $node instanceof ClassMethod;
-        });
     }
 
-    public function getMethods(): \Iterator
+    public function getMethods(): ReflectionMethodCollection
     {
-        $methods = new \ArrayIterator();
-        foreach ($this->classMethodNodes as $methodNode) {
-            $methods[] = new ReflectionMethod($this->reflector, $this->sourceContext, $methodNode);
-        }
-
-        return $methods;
+        return new ReflectionMethodCollection($this->reflector, $this->sourceContext, $this->classNode);
     }
 
     public function getName(): ClassName

@@ -22,7 +22,7 @@ class ReflectionMethod
     private $sourceContext;
 
     /**
-     * @var Class_
+     * @var ClassMethod
      */
     private $methodNode;
 
@@ -46,8 +46,6 @@ class ReflectionMethod
         $this->sourceContext = $sourceContext;
         $this->methodNode = $methodNode;
         $this->name = $methodNode->name;
-
-        $this->setVisibility($methodNode);
     }
 
     public function getName(): string
@@ -57,21 +55,14 @@ class ReflectionMethod
 
     public function getVisibility(): Visibility
     {
-        return $this->visibility;
-    }
-
-    private function setVisibility()
-    {
         if ($this->methodNode->isProtected()) {
-            $this->visibility = Visibility::protected();
-            return;
+            return Visibility::protected();
         }
 
         if ($this->methodNode->isPrivate()) {
-            $this->visibility = Visibility::private();
-            return;
+            return Visibility::private();
         }
 
-        $this->visibility = Visibility::public();
+        return Visibility::public();
     }
 }

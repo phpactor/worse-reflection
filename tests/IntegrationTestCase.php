@@ -24,15 +24,4 @@ class IntegrationTestCase extends \PHPUnit_Framework_TestCase
     {
         return (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
     }
-
-    public function getSourceLocator()
-    {
-        static $autoloader;
-
-        if (!$autoloader) {
-            $autoloader = require(__DIR__ . '/../vendor/autoload.php');
-        }
-
-        return new ComposerSourceLocator($autoloader);
-    }
 }
