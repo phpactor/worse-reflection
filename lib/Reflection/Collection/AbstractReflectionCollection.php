@@ -15,6 +15,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
     private $sourceContext;
     private $indexedNodes = [];
     private $loadedReflections = [];
+    private $context;
 
     public function __construct(
         string $context,
