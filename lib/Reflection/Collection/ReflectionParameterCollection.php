@@ -13,14 +13,15 @@ use DTL\WorseReflection\Reflection\ReflectionParameter;
 
 class ReflectionParameterCollection extends AbstractReflectionCollection
 {
-    public function __construct(Reflector $reflector, SourceContext $sourceContext, ClassMethod $parentNode)
+    public function __construct(Reflector $reflector, SourceContext $sourceContext, ClassMethod $methodNode)
     {
         parent::__construct(
             'parameter',
-            Param::class,
             $reflector,
             $sourceContext,
-            $parentNode->params
+            array_filter($methodNode->params, function ($stmt) {
+                return $stmt instanceof Param;
+            })
         );
     }
 

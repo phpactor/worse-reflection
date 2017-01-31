@@ -19,20 +19,16 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
 
     public function __construct(
         string $context,
-        string $nodeClass,
         Reflector $reflector,
         SourceContext $sourceContext,
         array $nodes
     )
     {
+        $this->context = $context;
         $this->reflector = $reflector;
         $this->sourceContext = $sourceContext;
 
         foreach ($nodes as $node) {
-            if (false === $node instanceof $nodeClass) {
-                continue;
-            }
-
             $this->indexedNodes[(string) $node->name] = $node;
         }
     }
@@ -50,7 +46,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
 
         if (false === $this->has($name)) {
             throw new \InvalidArgumentException(sprintf(
-                'Unknown %s "%s"', $this->context, $name
+                'Unknown %s "%s", known %s nodes: "%s"',
+                $this->context,
+                $name,
+                $this->context,
+                implode('", "', array_keys($this->all()))
             ));
         }
 

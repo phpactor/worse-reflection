@@ -77,7 +77,7 @@ EOT
     public function testConstants(string $className, string $source, array $expectedNames)
     {
         $class = $this->reflectClassFromSource($className, $source);
-        $constants = $class->getConstants();
+        $constants = $class->getConstants()->all();
 
         $this->assertCount(count($expectedNames), $constants);
 

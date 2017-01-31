@@ -14,6 +14,7 @@ use DTL\WorseReflection\Parser\TypeTool;
 use DTL\WorseReflection\Reflection\ReflectionDocComment;
 use PhpParser\Node\Stmt\Property;
 use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
+use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 
 class ReflectionClass
 {
@@ -69,20 +70,13 @@ class ReflectionClass
         return $interfaces;
     }
 
-    public function getConstants(): array
+    public function getConstants(): ReflectionConstantCollection
     {
-        $constants = [];
-        foreach ($this->classNode->stmts as $stmt) {
-            if (!$stmt instanceof ClassConst) {
-                continue;
-            }
-
-            foreach ($stmt->consts as $const) {
-                $constants[] = new ReflectionConstant($const->name, $const->value->value);
-            }
-        }
-
-        return $constants;
+        return new ReflectionConstantCollection(
+            $this->reflector,
+            $this->sourceContext,
+            $this->classNode
+        );
     }
 
     public function getDocComment(): ReflectionDocComment

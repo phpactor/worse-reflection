@@ -80,15 +80,9 @@ class ReflectionParameterTest extends IntegrationTestCase
      */
     public function testDefaultValueFromConstant()
     {
-        $this->markTestIncomplete();
-    }
-
-    /**
-     * It should return the index.
-     */
-    public function testIndex()
-    {
-        $this->markTestIncomplete();
+        $parameters = $this->getParametersFromString('$foobar = Collaborator::BARFOO');
+        $parameter = $parameters->get('foobar');
+        $this->assertEquals('foobar', $parameter->getDefault());
     }
 
     private function getParametersFromString(string $params)
@@ -98,6 +92,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
 class Collaborator
 {
+    const BARFOO = 'foobar';
 }
 
 class Foobar

@@ -8,6 +8,7 @@ use PhpParser\Node\Param;
 use DTL\WorseReflection\Type;
 use PhpParser\Node\Name;
 use DTL\WorseReflection\ClassName;
+use PhpParser\Node\Expr\ClassConstFetch;
 
 class ReflectionParameter
 {
@@ -56,6 +57,13 @@ class ReflectionParameter
     {
         if (!$this->node->default) {
             return null;
+        }
+
+        if ($this->node->default instanceof ClassConstFetch) {
+            $className = $this->sourceContext->resolveClassName((string) $this->node->default->class);
+            $classReflection = $this->reflector->reflectClass($className);
+            $constantReflection = $classReflection->getConstants()->get($this->node->default->name);
+            return $constantReflection->getValue();
         }
 
         return (string) $this->node->default->value;

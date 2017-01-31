@@ -15,10 +15,11 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
     {
         parent::__construct(
             'method',
-            ClassMethod::class,
             $reflector,
             $sourceContext,
-            $classNode->stmts
+            array_filter($classNode->stmts, function ($stmt) {
+                return $stmt instanceof ClassMethod;
+            })
         );
     }
 
