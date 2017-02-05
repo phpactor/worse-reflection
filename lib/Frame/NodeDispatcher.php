@@ -5,7 +5,7 @@ namespace DTL\WorseReflection\Frame;
 use PhpParser\Node;
 use DTL\WorseReflection\Frame\Frame;
 
-class FrameBuilder
+class NodeDispatcher
 {
     public function __invoke(Node $node, Frame $frame)
     {
@@ -22,6 +22,11 @@ class FrameBuilder
         // updates existing variables
         if ($node instanceof Node\Expr\Variable) {
             return (new Processor\VariableProcessor())($node, $frame, $this);
+        }
+
+        // remove nodes from scope
+        if ($node instanceof Node\Stmt\Unset_) {
+            return (new Processor\UnsetProcessor())($node, $frame, $this);
         }
 
         return $node;

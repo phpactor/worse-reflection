@@ -4,19 +4,19 @@ namespace DTL\WorseReflection\Tests\Unit\Evaluation;
 
 use DTL\WorseReflection\Tests\IntegrationTestCase;
 use DTL\WorseReflection\Frame\Frame;
-use DTL\WorseReflection\Frame\FrameBuilder;
+use DTL\WorseReflection\Frame\NodeDispatcher;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\NodeTraverser;
 use PhpParser\Node;
 
-class FrameBuilderTest extends IntegrationTestCase
+class NodeDispatcherTest extends IntegrationTestCase
 {
-    private $frameBuilder;
+    private $nodeDispatcher;
 
     public function setUp()
     {
-        $this->frameBuilder = new FrameBuilder();
+        $this->nodeDispatcher = new NodeDispatcher();
     }
 
     /**
@@ -27,18 +27,19 @@ class FrameBuilderTest extends IntegrationTestCase
         $parser = $this->getParser();
         $stmts = $parser->parse('<?php ' . $source);
 
-        $frame = new Frame();
         $visitor = new class extends NodeVisitorAbstract {
-            public $frameBuilder;
+            public $nodeDispatcher;
             public $frame;
 
             public function enterNode(Node $node)
             {
-                $this->frameBuilder->__invoke($node, $this->frame);
+                if ($node->getSubNodeNames()) {
+                    $this->nodeDispatcher->__invoke($node, $this->frame);
+                }
             }
         };
-        $visitor->frameBuilder = $this->frameBuilder;
-        $visitor->frame = $frame;
+        $visitor->nodeDispatcher = $this->nodeDispatcher;
+        $visitor->frame = $frame = new Frame();
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor($visitor);
@@ -80,6 +81,27 @@ class FrameBuilderTest extends IntegrationTestCase
                 [
                     'param1' => 'Param',
                     'param2' => 'Param',
+                ],
+            ],
+            [
+                '$foobar = $barfoo = $zoofoo = "foo";',
+                [
+                    'foobar' => 'Scalar_String',
+                    'barfoo' => 'Scalar_String',
+                    'zoofoo' => 'Scalar_String',
+                ],
+            ],
+            [
+                'list($foo, $bar) = [ "foo", 12 ];',
+                [
+                    'foo' => 'Scalar_String',
+                    'bar' => 'Scalar_LNumber',
+                ],
+            ],
+            [
+                '$foo = "bar"; $bar = "foo"; unset($foo);',
+                [
+                    'bar' => 'Scalar_String',
                 ],
             ],
         ];

@@ -13,6 +13,11 @@ class Frame
         $this->variables[$name] = $node;
     }
 
+    public function remove($name)
+    {
+        unset($this->variables[$name]);
+    }
+
     public function get($name): Node
     {
         if (!isset($this->variables[$name])) {
