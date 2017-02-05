@@ -1,20 +1,19 @@
 <?php
 
-namespace DTL\WorseReflection\Evaluation;
+namespace DTL\WorseReflection\Frame;
+
+use PhpParser\Node;
 
 class Frame
 {
-    /**
-     * @var TypedNode[]
-     */
-    private $variables;
+    private $variables = [];
 
-    public function set($name, NodeValue $nodeValue)
+    public function set($name, Node $node)
     {
-        $this->variables[$name] = $nodeValue;
+        $this->variables[$name] = $node;
     }
 
-    public function get($name)
+    public function get($name): Node
     {
         if (!isset($this->variables[$name])) {
             throw new \RuntimeException(sprintf(
@@ -24,5 +23,10 @@ class Frame
         }
 
         return $this->variables[$name];
+    }
+
+    public function all()
+    {
+        return $this->variables;
     }
 }
