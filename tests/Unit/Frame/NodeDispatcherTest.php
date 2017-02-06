@@ -33,9 +33,8 @@ class NodeDispatcherTest extends IntegrationTestCase
 
             public function enterNode(Node $node)
             {
-                if ($node->getSubNodeNames()) {
-                    $this->nodeDispatcher->__invoke($node, $this->frame);
-                }
+                $this->nodeDispatcher->__invoke($node, $this->frame, $traverseChildren);
+                return false === $traverseChildren ? NodeTraverser::DONT_TRAVERSE_CHILDREN : null;
             }
         };
         $visitor->nodeDispatcher = $this->nodeDispatcher;

@@ -7,7 +7,7 @@ use DTL\WorseReflection\Frame\Frame;
 
 class NodeDispatcher
 {
-    public function __invoke(Node $node, Frame $frame)
+    public function __invoke(Node $node, Frame $frame, &$traverseChildren = true)
     {
         // introduces new variables into scope from parameters
         if ($node instanceof Node\FunctionLike) {
@@ -26,6 +26,11 @@ class NodeDispatcher
 
         // remove nodes from scope
         if ($node instanceof Node\Stmt\Unset_) {
+            // we do not want the variables in the unset node to be
+            // traversed after they have been unset, as the variable processor
+            // will be invoked and it will ask for the variable from the Frame,
+            // and an exception would be thrown.
+            $traverseChildren = false;
             return (new Processor\UnsetProcessor())($node, $frame, $this);
         }
 
