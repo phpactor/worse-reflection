@@ -113,7 +113,14 @@ class Foobar
     function method()
     {
         $foo = 'bar';
-        $bar = $foo;
+
+        if ($foo == 'boo') {
+            $bar = $foo; // in scope
+        }
+
+        function () {
+            $zed = 'zog'; // out of scope
+        };
     }
 
     public function publicM()
