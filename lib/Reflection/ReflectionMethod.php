@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
+use DTL\WorseReflection\Reflection\Collection\ReflectionVariableCollection;
 
 class ReflectionMethod
 {
@@ -70,5 +71,10 @@ class ReflectionMethod
     public function getParameters()
     {
         return new ReflectionParameterCollection($this->reflector, $this->sourceContext, $this->methodNode);
+    }
+
+    public function getVariables()
+    {
+        return new ReflectionVariableCollection($this->reflector, $this->sourceContext, $this->methodNode);
     }
 }

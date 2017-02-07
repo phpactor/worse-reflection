@@ -99,4 +99,37 @@ EOT
             $class->getMethods()->get('privateM')->getVisibility()
         );
     }
+
+    /**
+     * It returns variables.
+     */
+    public function testVariables()
+    {
+        $source = <<<'EOT'
+<?php
+
+class Foobar
+{
+    function method()
+    {
+        $foo = 'bar';
+        $bar = $foo;
+    }
+
+    public function publicM()
+    {
+        $baz = 'daz';
+    }
+}
+EOT
+        ;
+
+        $reflector = $this->getReflectorForSource(Source::fromString($source));
+        $class = $reflector->reflectClass(ClassName::fromFqn('Foobar'));
+        $method = $class->getMethods()->get('method');
+        $variables = iterator_to_array($method->getVariables());
+        $this->assertCount(2, $variables);
+        $this->assertEquals('foo', $variables[0]->getName());
+        $this->assertEquals('bar', $variables[1]->getName());
+    }
 }
