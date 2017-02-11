@@ -6,6 +6,10 @@ use DTL\WorseReflection\SourceContext;
 use DTL\WorseReflection\Type;
 use DTL\WorseReflection\ClassName;
 use Prophecy\Argument;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Expr;
 
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,11 +24,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideFromString
+     * @dataProvider providefromstring
      */
     public function testFromString($string, Type $expectedType)
     {
-        Type::fromString($this->context->reveal(), $string);
+        $type = Type::fromString($this->context->reveal(), $string);
+        $this->assertEquals($type, $expectedType);
     }
 
     public function provideFromString()
@@ -49,6 +54,57 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             [
                 '',
                 Type::unknown(),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideFromParserNode
+     */
+    public function testFromParserNode(Node $node, Type $expectedType)
+    {
+        $type = Type::fromParserNode($this->context->reveal(), $node);
+        $this->assertEquals($type, $expectedType);
+    }
+
+    public function provideFromParserNode()
+    {
+        return [
+            [
+                new Scalar\String_('hello'),
+                Type::string(),
+            ],
+            [
+                new Scalar\DNumber(12.12),
+                Type::float(),
+            ],
+            [
+                new Scalar\LNumber(12),
+                Type::int(),
+            ],
+            [
+                new Scalar\Encapsed([]),
+                Type::string(),
+            ],
+            [
+                new Scalar\EncapsedStringPart(''),
+                Type::string(),
+            ],
+            [
+                new Scalar\MagicConst\Class_([]),
+                Type::string(),
+            ],
+            [
+                new Node\Param('foobar', null, 'string'),
+                Type::string(),
+            ],
+            [
+                new Node\Param('foobar', null, new Node\Name('Foo\\Bar')),
+                Type::class(ClassName::fromString('Foo\\Bar')),
+            ],
+            [
+                new Expr\New_(new Node\Name('Foo')),
+                Type::class(ClassName::fromString('Foo')),
             ],
         ];
     }

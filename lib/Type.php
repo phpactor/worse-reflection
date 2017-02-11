@@ -4,6 +4,10 @@ namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\SourceContext;
+use PhpParser\Node;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\MagicConst;
+use PhpParser\Node\Expr;
 
 class Type
 {
@@ -14,6 +18,51 @@ class Type
 
     private $type;
     private $className;
+
+    public static function fromParserNode(SourceContext $context, Node $node): Type
+    {
+        if ($node instanceof Scalar\String_) {
+            return self::string();
+        }
+
+        if ($node instanceof Scalar\LNumber) {
+            return self::int();
+        }
+
+        if ($node instanceof Scalar\DNumber) {
+            return self::float();
+        }
+
+        if ($node instanceof Scalar\ArrayNode) {
+            return self::array();
+        }
+
+        if ($node instanceof Node\Param) {
+            return self::fromString($context, (string) $node->type);
+        }
+
+        if ($node instanceof Scalar\Encapsed) {
+            return self::string();
+        }
+
+        if ($node instanceof Scalar\EncapsedStringPart) {
+            return self::string();
+        }
+
+        if ($node instanceof Scalar\MagicConst) {
+            if ($node instanceof Scalar\MagicConst\Line) {
+                return self::int();
+            }
+
+            return self::string();
+        }
+
+        if ($node instanceof Expr\New_) {
+            return self::fromString($context, (string) $node->class);
+        }
+
+        return self::unknown();
+    }
 
     public static function fromString(SourceContext $context, string $type): Type
     {

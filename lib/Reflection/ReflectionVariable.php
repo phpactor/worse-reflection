@@ -19,4 +19,9 @@ class ReflectionVariable
     {
         return $this->name;
     }
+
+    public function getType(): Type
+    {
+        return Type::fromParserNode($this->node);
+    }
 }

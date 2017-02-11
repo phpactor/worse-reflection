@@ -103,6 +103,18 @@ class NodeDispatcherTest extends IntegrationTestCase
                     'bar' => 'Scalar_String',
                 ],
             ],
+            [
+                '$foo = new Foobar();',
+                [
+                    'foo' => 'Expr_New',
+                ],
+            ],
+            [
+                'class Barfoo { public $foobar; public function barfoo() { $bar = $this->foobar; } }',
+                [
+                    'foo' => 'Expr_New',
+                ],
+            ],
         ];
     }
 }

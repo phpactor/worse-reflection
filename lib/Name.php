@@ -22,9 +22,9 @@ class Name implements NameLike
 
     public static function fromString(string $fqn): Name
     {
-        return self::fromParts(array_filter(explode('\\', $fqn), function ($part) {
+        return self::fromParts(array_values(array_filter(explode('\\', $fqn), function ($part) {
             return '' !== $part;
-        }));
+        })));
     }
 
     public static function fromNamespaceAndShortName(NamespaceName $namespace, string $shortName)
