@@ -34,9 +34,9 @@ class ReflectionFrameTest extends IntegrationTestCase
 
         $source = Source::fromString('<?php ' . $source);
         $reflector = $this->getReflectorForSource($source);
-        $frame = $reflector->reflectFrame($source, $offset);
+        $offset = $reflector->reflectOffsetInSource($source, $offset);
         $this->assertEquals(
-            $expectedVariables, $frame->all()
+            $expectedVariables, $offset->getFrame()->all()
         );
     }
 

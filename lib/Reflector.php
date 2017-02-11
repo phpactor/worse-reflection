@@ -3,8 +3,8 @@
 namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\Reflection\ReflectionClass;
-
 use DTL\WorseReflection\Reflection\ReflectionFrame;
+use DTL\WorseReflection\Reflection\ReflectionOffset;
 use DTL\WorseReflection\Frame\Visitor\FrameFinderVisitor;
 use PhpParser\NodeTraverser;
 
@@ -27,7 +27,7 @@ class Reflector
         return $this->reflectClassFromSource($className, $source);
     }
 
-    public function reflectFrame(Source $source, int $offset): ReflectionFrame
+    public function reflectOffsetInSource(Source $source, int $offset): ReflectionOffset
     {
         $sourceContext = $this->sourceContextFactory->createFor($source);
         $visitor = new FrameFinderVisitor($offset);
@@ -36,7 +36,10 @@ class Reflector
         $traverser->traverse($sourceContext->getNodes());
         $frame = $visitor->getFrame();
 
-        return new ReflectionFrame($this, $sourceContext, $frame);
+        return new ReflectionOffset(
+            $visitor->getNodeAtOffset(),
+            new ReflectionFrame($this, $sourceContext, $frame)
+        );
     }
 
     public function reflectClassFromSource(ClassName $className, Source $source)
