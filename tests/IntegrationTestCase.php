@@ -9,6 +9,7 @@ use DTL\WorseReflection\SourceContextFactory;
 use DTL\WorseReflection\SourceLocator\ComposerSourceLocator;
 use DTL\WorseReflection\Source;
 use DTL\WorseReflection\SourceLocator\StringSourceLocator;
+use PhpParser\Lexer;
 
 class IntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -22,6 +23,7 @@ class IntegrationTestCase extends \PHPUnit_Framework_TestCase
 
     public function getParser()
     {
-        return (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $lexer = new Lexer([ 'usedAttributes' => [ 'comments', 'startLine', 'endLine', 'startFilePos', 'endFilePos' ] ]);
+        return (new ParserFactory)->create(ParserFactory::PREFER_PHP7, $lexer, []);
     }
 }

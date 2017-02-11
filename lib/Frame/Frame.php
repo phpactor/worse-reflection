@@ -34,4 +34,9 @@ class Frame
     {
         return $this->variables;
     }
+
+    public function keys()
+    {
+        return array_keys($this->variables);
+    }
 }
