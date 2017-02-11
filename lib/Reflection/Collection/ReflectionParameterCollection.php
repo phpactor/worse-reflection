@@ -4,8 +4,6 @@ namespace DTL\WorseReflection\Reflection\Collection;
 
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassLike;
-use DTL\WorseReflection\Reflection\ReflectionMethod;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;

@@ -3,7 +3,6 @@
 namespace DTL\WorseReflection\Frame;
 
 use PhpParser\Node;
-use DTL\WorseReflection\Frame\Frame;
 
 class NodeDispatcher
 {

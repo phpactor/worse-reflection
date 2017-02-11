@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DTL\WorseReflection;
 
-use DTL\WorseReflection\Name;
 
 class ClassName implements NameLike
 {

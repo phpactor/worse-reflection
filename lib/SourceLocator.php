@@ -2,7 +2,6 @@
 
 namespace DTL\WorseReflection;
 
-use DTL\WorseReflection\Source;
 
 interface SourceLocator
 {

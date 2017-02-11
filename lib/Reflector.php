@@ -3,9 +3,7 @@
 namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\Reflection\ReflectionClass;
-use DTL\WorseReflection\SourceContextFactory;
-use PhpParser\Parser;
-use DTL\WorseReflection\Source;
+
 use DTL\WorseReflection\Reflection\ReflectionFrame;
 use DTL\WorseReflection\Frame\Visitor\FrameFinderVisitor;
 use PhpParser\NodeTraverser;

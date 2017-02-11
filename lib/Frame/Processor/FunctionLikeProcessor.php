@@ -6,7 +6,6 @@ use PhpParser\Node;
 use DTL\WorseReflection\Frame\Processor;
 use DTL\WorseReflection\Frame\Frame;
 use DTL\WorseReflection\Frame\NodeDispatcher;
-use DTL\WorseReflection\Frame\Processor\FunctionLikeProcessor;
 
 class FunctionLikeProcessor implements Processor
 {

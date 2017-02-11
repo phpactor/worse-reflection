@@ -2,11 +2,8 @@
 
 namespace DTL\WorseReflection;
 
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\SourceContext;
 use PhpParser\Node;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\MagicConst;
 use PhpParser\Node\Expr;
 
 class Type

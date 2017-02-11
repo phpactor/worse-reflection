@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace DTL\WorseReflection;
 
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\NamespaceName;
 use PhpParser\Parser;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Builder\Declaration;
 use PhpParser\Node\Stmt\ClassLike;
 
 class SourceContext

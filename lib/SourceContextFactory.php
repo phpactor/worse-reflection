@@ -2,9 +2,7 @@
 
 namespace DTL\WorseReflection;
 
-use DTL\WorseReflection\SourceContext;
 use PhpParser\Parser;
-use DTL\WorseReflection\Source;
 
 class SourceContextFactory
 {

@@ -3,11 +3,9 @@
 namespace DTL\WorseReflection\Reflection;
 
 use DTL\WorseReflection\Reflector;
-use PhpParser\Node\Stmt\Class_;
 use DTL\WorseReflection\SourceContext;
 use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Visibility;
-use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 use DTL\WorseReflection\Reflection\Collection\ReflectionVariableCollection;
 use DTL\WorseReflection\Type;

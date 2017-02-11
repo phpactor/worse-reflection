@@ -4,9 +4,6 @@ namespace DTL\WorseReflection\Reflection\Collection;
 
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use DTL\WorseReflection\Reflection\ReflectionMethod;
 use PhpParser\Node;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate

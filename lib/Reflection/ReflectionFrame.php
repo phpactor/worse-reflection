@@ -7,7 +7,6 @@ use DTL\WorseReflection\SourceContext;
 use DTL\WorseReflection\Frame\Frame;
 use DTL\WorseReflection\Type;
 use PhpParser\Node;
-use DTL\WorseReflection\ClassName;
 
 class ReflectionFrame
 {

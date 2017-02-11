@@ -2,9 +2,7 @@
 
 namespace DTL\WorseReflection\Frame;
 
-use DTL\WorseReflection\Frame\NodeDispatcher;
 use PhpParser\NodeVisitorAbstract;
-use DTL\WorseReflection\Frame\Frame;
 use PhpParser\NodeTraverser;
 use PhpParser\Node;
 

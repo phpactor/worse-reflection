@@ -4,15 +4,8 @@ namespace DTL\WorseReflection\Reflection\Collection;
 
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassLike;
-use DTL\WorseReflection\Reflection\ReflectionMethod;
 use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use DTL\WorseReflection\Reflection\ReflectionParameter;
-use DTL\WorseReflection\Evaluator\VariableYielder;
 use DTL\WorseReflection\Frame\Frame;
-use DTL\WorseReflection\Frame\NodeDispatcher;
 use PhpParser\NodeTraverser;
 use DTL\WorseReflection\Frame\FrameVisitor;
 use PhpParser\Node\FunctionLike;
