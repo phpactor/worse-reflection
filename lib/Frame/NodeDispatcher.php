@@ -14,6 +14,10 @@ class NodeDispatcher
             return (new Processor\FunctionLikeProcessor())($node, $frame, $this);
         }
 
+        if ($node instanceof Node\Stmt\Class_) {
+            return (new Processor\ClassProcessor())($node, $frame, $this);
+        }
+
         // introduces new variables from direct assignment
         if ($node instanceof Node\Expr\Assign) {
             return (new Processor\AssignProcessor())($node, $frame, $this);

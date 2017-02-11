@@ -75,6 +75,10 @@ class ReflectionMethod
 
     public function getVariables()
     {
-        return new ReflectionVariableCollection($this->reflector, $this->sourceContext, $this->methodNode);
+        return new ReflectionVariableCollection(
+            $this->reflector,
+            $this->sourceContext,
+            $this->methodNode
+        );
     }
 }

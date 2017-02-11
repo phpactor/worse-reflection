@@ -80,6 +80,7 @@ class NodeDispatcherTest extends IntegrationTestCase
                 [
                     'param1' => 'Param',
                     'param2' => 'Param',
+                    'this' => 'Stmt_Class',
                 ],
             ],
             [
@@ -112,7 +113,8 @@ class NodeDispatcherTest extends IntegrationTestCase
             [
                 'class Barfoo { public $foobar; public function barfoo() { $bar = $this->foobar; } }',
                 [
-                    'foo' => 'Expr_New',
+                    'bar' => 'Expr_PropertyFetch',
+                    'this' => 'Stmt_Class',
                 ],
             ],
         ];
