@@ -4,43 +4,50 @@ namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\ClassName;
 
-class Namespace_
+class Namespace_ implements NameLike
 {
-    private $namespace;
+    private $name;
 
     private function __construct()
     {
     }
 
-    public static function fromString(string $namespace)
+    public static function fromParts(array $parts): Namespace_
+    {
+        return self::fromName(Name::fromParts($parts));
+    }
+
+    public static function fromString(string $string): Namespace_
+    {
+        return self::fromName(Name::fromString($string));
+    }
+
+    public static function fromName(Name $name)
     {
         $instance = new self();
-        $instance->namespace = $namespace;
+        $instance->name = $name; 
 
         return $instance;
     }
 
-    public static function fromParts(array $parts)
-    {
-        $instance = new self();
-        $instance->namespace = implode('\\', $parts);
-
-        return $instance;
-    }
-
-    public function spawnClassName($shortName)
+    public function spawnClassName($shortName): ClassName
     {
         return ClassName::fromNamespaceAndShortName($this, $shortName);
     }
 
-    public function getFqn()
+    public function getFqn(): string
     {
-        return $this->namespace;
+        return $this->name->getFqn();
+    }
+
+    public function getParts(): array
+    {
+        return $this->name->getParts();
     }
 
     public function isRoot()
     {
-        return empty($this->namespace);
+        return empty($this->name->getParts());
     }
 }
 

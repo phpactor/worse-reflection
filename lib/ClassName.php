@@ -4,12 +4,21 @@ declare(strict_types=1);
 
 namespace DTL\WorseReflection;
 
-class ClassName
-{
-    private $parts;
+use DTL\WorseReflection\Name;
 
-    private function __construct()
+class ClassName implements NameLike
+{
+    /**
+     * @var Name
+     */
+    private $name;
+
+    public static function fromName(Name $name)
     {
+        $instance = new self();
+        $instance->name = $name; 
+
+        return $instance;
     }
 
     public static function fromParts(array $parts): ClassName
@@ -20,15 +29,12 @@ class ClassName
             );
         }
 
-        $instance = new self();
-        $instance->parts = $parts;
-
-        return $instance;
+        return self::fromName(Name::fromParts($parts));
     }
 
     public static function fromString(string $fqn): ClassName
     {
-        return self::fromParts(explode('\\', $fqn));
+        return self::fromName(Name::fromString($fqn));
     }
 
     public static function fromNamespaceAndShortName(Namespace_ $namespace, string $shortName)
@@ -40,11 +46,16 @@ class ClassName
 
     public function getFqn(): string
     {
-        return implode('\\', $this->parts);
+        return $this->name->getFqn();
     }
 
     public function getShortName(): string
     {
-        return end($this->parts);
+        return $this->name->getShortName();
+    }
+
+    public function getParts(): array
+    {
+        return $this->name->getParts();
     }
 }
