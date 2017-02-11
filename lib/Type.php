@@ -17,19 +17,23 @@ class Type
 
     public static function fromString(SourceContext $context, string $type): Type
     {
+        if ('' === $type) {
+            return self::unknown();
+        }
+
         if ($type === 'string') {
-            return Type::string();
+            return self::string();
         }
 
         if ($type === 'int') {
-            return Type::int();
+            return self::int();
         }
 
         if ($type === 'float') {
-            return Type::float();
+            return self::float();
         }
 
-        return Type::class($context->resolveClassName(ClassName::fromString($type)));
+        return self::class($context->resolveClassName(ClassName::fromString($type)));
     }
 
     public static function unknown()
