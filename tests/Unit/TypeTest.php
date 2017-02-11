@@ -106,6 +106,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 new Expr\New_(new Node\Name('Foo')),
                 Type::class(ClassName::fromString('Foo')),
             ],
+            [
+                new Node\Stmt\Class_(new Node\Name('Foo')),
+                Type::class(ClassName::fromString('Foo')),
+            ],
         ];
     }
 }

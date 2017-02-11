@@ -13,12 +13,6 @@ use DTL\WorseReflection\Frame\Visitor\FrameFinderVisitor;
 
 class FrameFinderVisitorTest extends IntegrationTestCase
 {
-    private $finder;
-
-    public function setUp()
-    {
-    }
-
     /**
      * @dataProvider provideEvaluate
      */
@@ -52,7 +46,7 @@ class FrameFinderVisitorTest extends IntegrationTestCase
     {
         return [
             [
-                '$foobar_ = "hello";',
+                '$foobar = "hello";_',
                 [
                     'foobar' => 'Scalar_String',
                 ],
@@ -107,6 +101,30 @@ class FrameFinderVisitorTest extends IntegrationTestCase
                     'bag' => 'Scalar_LNumber',
                 ],
             ],
+            [
+
+                <<<'EOT'
+class BarBar
+{
+}
+
+class Foobar
+{
+    public function hello()
+    {
+        $bar = $this->world();_
+    }
+
+    public function world(): Barbar
+    {
+    }
+    }
+EOT
+                , [
+                    'bar' => 'Expr_MethodCall',
+                    'this' => 'Stmt_Class',
+                ],
+            ]
         ];
     }
 }

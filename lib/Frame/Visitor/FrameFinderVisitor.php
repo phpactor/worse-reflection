@@ -15,7 +15,7 @@ class FrameFinderVisitor extends NodeVisitorAbstract
     private $frame;
     private $nodeDispatcher;
     private $offset;
-    private $inOffsetScope = false;
+    private $done = false;
 
     public function __construct(
         int $offset,
@@ -34,6 +34,7 @@ class FrameFinderVisitor extends NodeVisitorAbstract
         list($startPos, $endPos) = $this->getStartEndPos($node);
 
         if ($startPos > $this->offset) {
+            $this->done = true;
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
@@ -56,7 +57,7 @@ class FrameFinderVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($this->isScopeChangingNode($node)) {
+        if (false === $this->done && $this->isScopeChangingNode($node)) {
             $this->frameStack->pop();
         }
     }

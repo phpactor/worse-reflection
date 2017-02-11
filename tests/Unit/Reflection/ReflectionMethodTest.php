@@ -7,6 +7,7 @@ use DTL\WorseReflection\Source;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\Reflection\ReflectionParameter;
+use DTL\WorseReflection\Type;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
@@ -97,6 +98,32 @@ EOT
         $this->assertEquals(
             Visibility::private(),
             $class->getMethods()->get('privateM')->getVisibility()
+        );
+    }
+
+    /**
+     * It returns the return type
+     */
+    public function testReturnType()
+    {
+        $source = <<<EOT
+<?php
+
+class Foobar
+{
+    function method(): Barbar
+    {
+    }
+}
+EOT
+        ;
+
+        $reflector = $this->getReflectorForSource(Source::fromString($source));
+        $class = $reflector->reflectClass(ClassName::fromString('Foobar'));
+
+        $this->assertEquals(
+            Type::class(ClassName::fromString('Barbar')),
+            $class->getMethods()->get('method')->getReturnType()
         );
     }
 

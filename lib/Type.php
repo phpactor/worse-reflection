@@ -37,8 +37,16 @@ class Type
             return self::array();
         }
 
+        if ($node instanceof Node\Name) {
+            return self::fromString($context, (string) $node);
+        }
+
         if ($node instanceof Node\Param) {
             return self::fromString($context, (string) $node->type);
+        }
+
+        if ($node instanceof Node\Stmt\Class_) {
+            return self::fromString($context, (string) $node->name);
         }
 
         if ($node instanceof Scalar\Encapsed) {
@@ -117,6 +125,11 @@ class Type
     public function __toString()
     {
         return $this->type ?: '<unknown>';
+    }
+
+    public function getClassName()
+    {
+        return $this->className;
     }
 
     private static function create($type)

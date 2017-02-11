@@ -20,15 +20,21 @@ class SourceContext
     private $namespaceNode;
     private $classNodes = [];
     private $useNodes = [];
+    private $nodes;
 
     public function __construct(Source $source, Parser $parser)
     {
-        $statements = $parser->parse($source->getSource());
-        $this->scanNamespace($statements);
+        $this->nodes = $parser->parse($source->getSource());
+        $this->scanNamespace();
 
         if (null === $this->namespaceNode) {
-            $this->scanClassNodes($statements);
+            $this->scanClassNodes($this->nodes);
         }
+    }
+
+    public function getNodes(): array
+    {
+        return $this->nodes;
     }
 
     public function hasClass(ClassName $className): bool
@@ -88,10 +94,9 @@ class SourceContext
         }
     }
 
-    private function scanNamespace(array $nodes)
+    private function scanNamespace()
     {
-        // get namespace
-        foreach ($nodes as $node) {
+        foreach ($this->nodes as $node) {
             if ($node instanceof Namespace_) {
                 $this->namespaceNode = $node;
                 $this->scanClassNodes($node->stmts);
