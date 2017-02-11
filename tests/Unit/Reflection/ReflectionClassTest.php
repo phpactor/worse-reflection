@@ -44,7 +44,7 @@ class Foobar implements FoobarInterface
 }
 EOT
                 ,
-                [ ClassName::fromFqn('FoobarInterface') ],
+                [ ClassName::fromString('FoobarInterface') ],
             ],
             [
                 'Foobar',
@@ -64,7 +64,7 @@ class Foobar implements FoobarInterface, BarfooInterface
 }
 EOT
                 ,
-                [ ClassName::fromFqn('FoobarInterface'), ClassName::fromFqn('BarfooInterface'), ],
+                [ ClassName::fromString('FoobarInterface'), ClassName::fromString('BarfooInterface'), ],
             ]
         ];
     }
@@ -249,7 +249,7 @@ class Foobar {
 }
 EOT
             ,
-            ClassName::fromFqn('Foobar'),
+            ClassName::fromString('Foobar'),
             ],
             [
                 'Foobar',
@@ -306,7 +306,7 @@ EOT
     private function reflectClassFromSource(string $className, string $source)
     {
         return $this->getReflectorForSource(Source::fromString($source))->reflectClass(
-            ClassName::fromFqn($className),
+            ClassName::fromString($className),
             Source::fromString($source)
         );
     }

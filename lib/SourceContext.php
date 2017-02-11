@@ -57,14 +57,13 @@ class SourceContext
         return WorseNamespace::fromParts($this->namespaceNode->name->parts);
     }
 
-    public function resolveClassName(string $classShortName): ClassName
+    public function resolveClassName(ClassName $className): ClassName
     {
-        if (isset($this->useNodes[$classShortName])) {
-            $usedClass = $this->useNodes[$classShortName];
-            return $usedClass;
+        if (isset($this->useNodes[$className->getShortName()])) {
+            return $this->useNodes[$className->getShortName()];
         }
 
-        return $this->getNamespace()->spawnClassName($classShortName);
+        return $this->getNamespace()->spawnClassName($className->getShortName());
     }
 
     private function scanClassNodes(array $nodes)

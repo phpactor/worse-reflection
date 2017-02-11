@@ -52,7 +52,7 @@ class ReflectionParameterTest extends IntegrationTestCase
     {
         $parameters = $this->getParametersFromString('Collaborator $foobar');
         $parameter = $parameters->get('foobar');
-        $this->assertEquals(Type::class(ClassName::fromFqn('Collaborator')), $parameter->getType());
+        $this->assertEquals(Type::class(ClassName::fromString('Collaborator')), $parameter->getType());
     }
 
     /**
@@ -104,7 +104,7 @@ class Foobar
 EOT
         ;
         $class = $this->getReflectorForSource(Source::fromString($source))->reflectClass(
-            ClassName::fromFqn('Foobar'),
+            ClassName::fromString('Foobar'),
             Source::fromString($source)
         );
 

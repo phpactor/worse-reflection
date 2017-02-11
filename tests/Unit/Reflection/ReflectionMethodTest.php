@@ -35,7 +35,7 @@ class Foobar
 EOT
         ;
         $reflector = $this->getReflectorForSource(Source::fromString($source));
-        $class = $reflector->reflectClass(ClassName::fromFqn('Foobar'));
+        $class = $reflector->reflectClass(ClassName::fromString('Foobar'));
 
         $parameters = $class->getMethods()->get('noParameters')->getParameters();
         $this->assertCount(0, $parameters->all());
@@ -79,7 +79,7 @@ EOT
         ;
 
         $reflector = $this->getReflectorForSource(Source::fromString($source));
-        $class = $reflector->reflectClass(ClassName::fromFqn('Foobar'));
+        $class = $reflector->reflectClass(ClassName::fromString('Foobar'));
 
         $this->assertEquals(
             Visibility::public(),
@@ -132,7 +132,7 @@ EOT
         ;
 
         $reflector = $this->getReflectorForSource(Source::fromString($source));
-        $class = $reflector->reflectClass(ClassName::fromFqn('Foobar'));
+        $class = $reflector->reflectClass(ClassName::fromString('Foobar'));
         $method = $class->getMethods()->get('method');
         $variables = iterator_to_array($method->getVariables());
         $this->assertCount(2, $variables);

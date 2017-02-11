@@ -56,14 +56,14 @@ class ReflectionClass
 
     public function getName(): ClassName
     {
-        return $this->sourceContext->resolveClassName($this->classNode->name);
+        return $this->sourceContext->resolveClassName(ClassName::fromString($this->classNode->name));
     }
 
     public function getInterfaces()
     {
         $interfaces = [];
         foreach ($this->classNode->implements as $name) {
-            $interfaceName = $this->sourceContext->resolveClassName((string) $name);
+            $interfaceName = $this->sourceContext->resolveClassName(ClassName::fromString((string) $name));
             $interfaces[] = $this->reflector->reflectClass($interfaceName);
         }
 
@@ -94,7 +94,7 @@ class ReflectionClass
                 $this->getName()->getFqn()
             ));
         }
-        $parentName = $this->sourceContext->resolveClassName((string) $this->classNode->extends);
+        $parentName = $this->sourceContext->resolveClassName(ClassName::fromString((string) $this->classNode->extends));
         return $this->reflector->reflectClass($parentName);
     }
 

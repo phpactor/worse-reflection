@@ -3,6 +3,7 @@
 namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\SourceContext;
 
 class Type
 {
@@ -13,6 +14,23 @@ class Type
 
     private $type;
     private $className;
+
+    public static function fromString(SourceContext $context, string $type): Type
+    {
+        if ($type === 'string') {
+            return Type::string();
+        }
+
+        if ($type === 'int') {
+            return Type::int();
+        }
+
+        if ($type === 'float') {
+            return Type::float();
+        }
+
+        return Type::class($context->resolveClassName(ClassName::fromString($type)));
+    }
 
     public static function unknown()
     {

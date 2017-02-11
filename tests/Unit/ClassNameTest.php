@@ -31,4 +31,21 @@ class ClassNameTest extends \PHPUnit_Framework_TestCase
             )->getFqn()
         );
     }
+
+    public function testGetShortName()
+    {
+        $this->assertEquals(
+            'Barbar',
+            ClassName::fromString('Barfoo\\Foobar\\Barbar')->getShortName()
+        );
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Class name must have at least one part
+     */
+    public function testExceptionOnEmpty()
+    {
+        ClassName::fromParts([]);
+    }
 }

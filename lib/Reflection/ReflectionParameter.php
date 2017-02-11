@@ -34,23 +34,7 @@ class ReflectionParameter
 
     public function getType(): Type
     {
-        if ($this->node->type === 'string') {
-            return Type::string();
-        }
-
-        if ($this->node->type === 'int') {
-            return Type::int();
-        }
-
-        if ($this->node->type === 'float') {
-            return Type::float();
-        }
-
-        if ($this->node->type instanceof Name) {
-            return Type::class(ClassName::fromParts($this->node->type->parts));
-        }
-
-        return Type::unknown();
+        return Type::fromString($this->sourceContext, (string) $this->node->type);
     }
     
     public function getDefault()
@@ -60,7 +44,7 @@ class ReflectionParameter
         }
 
         if ($this->node->default instanceof ClassConstFetch) {
-            $className = $this->sourceContext->resolveClassName((string) $this->node->default->class);
+            $className = $this->sourceContext->resolveClassName(ClassName::fromString((string) $this->node->default->class));
             $classReflection = $this->reflector->reflectClass($className);
             $constantReflection = $classReflection->getConstants()->get($this->node->default->name);
             return $constantReflection->getValue();

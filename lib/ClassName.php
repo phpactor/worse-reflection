@@ -6,38 +6,45 @@ namespace DTL\WorseReflection;
 
 class ClassName
 {
-    private $classFqn;
+    private $parts;
 
     private function __construct()
     {
     }
 
-    public static function fromFqn(string $classFqn)
+    public static function fromParts(array $parts): ClassName
     {
+        if ([] === $parts) {
+            throw new \RuntimeException(
+                'Class name must have at least one part'
+            );
+        }
+
         $instance = new self();
-        $instance->classFqn = $classFqn;
+        $instance->parts = $parts;
 
         return $instance;
+    }
+
+    public static function fromString(string $fqn): ClassName
+    {
+        return self::fromParts(explode('\\', $fqn));
     }
 
     public static function fromNamespaceAndShortName(Namespace_ $namespace, string $shortName)
     {
-        $instance = new self();
-        $instance->classFqn = $namespace->isRoot() ? $shortName : $namespace->getFqn() . '\\' . $shortName;
+        $fqn = $namespace->isRoot() ? $shortName : $namespace->getFqn() . '\\' . $shortName;
 
-        return $instance;
+        return self::fromString($fqn);
     }
 
-    public static function fromParts(array $parts)
+    public function getFqn(): string
     {
-        $instance = new self();
-        $instance->classFqn = implode('\\', $parts);
-
-        return $instance;
+        return implode('\\', $this->parts);
     }
 
-    public function getFqn()
+    public function getShortName(): string
     {
-        return $this->classFqn;
+        return end($this->parts);
     }
 }

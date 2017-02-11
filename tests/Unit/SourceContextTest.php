@@ -20,7 +20,7 @@ class SourceContextTest extends IntegrationTestCase
     public function testGetClassNode($className, $filename)
     {
         $context = $this->createContext($filename);
-        $class = $context->getClassNode(ClassName::fromFqn($className));
+        $class = $context->getClassNode(ClassName::fromString($className));
         $this->assertInstanceOf(Class_::class, $class);
     }
 
@@ -49,7 +49,7 @@ class SourceContextTest extends IntegrationTestCase
     public function testGetClassNotFound()
     {
         $context = $this->createContext('GetClass.php');
-        $context->getClassNode(ClassName::fromFqn('FoobarBarfoo132'));
+        $context->getClassNode(ClassName::fromString('FoobarBarfoo132'));
     }
 
     /**
@@ -83,7 +83,7 @@ class SourceContextTest extends IntegrationTestCase
     public function testResolveClassName($collaborator, $expectedClassFqn, $filename)
     {
         $context = $this->createContext($filename);
-        $className = $context->resolveClassName($collaborator);
+        $className = $context->resolveClassName(ClassName::fromString($collaborator));
         $this->assertInstanceOf(ClassName::class, $className);
         $this->assertEquals($expectedClassFqn, $className->getFqn());
     }
