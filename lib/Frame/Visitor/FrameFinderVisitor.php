@@ -16,6 +16,7 @@ class FrameFinderVisitor extends NodeVisitorAbstract
     private $nodeDispatcher;
     private $offset;
     private $done = false;
+    private $nodeAtOffset;
 
     public function __construct(
         int $offset,
@@ -33,9 +34,14 @@ class FrameFinderVisitor extends NodeVisitorAbstract
     {
         list($startPos, $endPos) = $this->getStartEndPos($node);
 
-        if ($startPos > $this->offset) {
+        if ($this->done || $startPos > $this->offset) {
             $this->done = true;
+
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        }
+
+        if ($startPos <= $this->offset && $endPos >= $this->offset) {
+            $this->nodeAtOffset = $node;
         }
 
         if ($this->isScopeChangingNode($node)) {
@@ -65,6 +71,16 @@ class FrameFinderVisitor extends NodeVisitorAbstract
     public function getFrame()
     {
         return $this->frame;
+    }
+
+    public function getNodeAtOffset(): Node
+    {
+        return $this->nodeAtOffset;
+    }
+
+    public function hasNodeAtOffset(): bool
+    {
+        return null !== $this->nodeAtOffset;
     }
 
     private function isScopeChangingNode(Node $node)

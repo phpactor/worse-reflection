@@ -14,24 +14,11 @@ use DTL\WorseReflection\Frame\Visitor\FrameFinderVisitor;
 class FrameFinderVisitorTest extends IntegrationTestCase
 {
     /**
-     * @dataProvider provideEvaluate
+     * @dataProvider provideFind
      */
     public function testFind(string $source, array $expectedVariables)
     {
-        $parser = $this->getParser();
-        $offset = strpos($source, '_');
-
-        if (false !== $offset) {
-            $source = substr($source, 0, $offset) . substr($source, $offset + 1);
-        }
-
-        $stmts = $parser->parse('<?php ' . $source);
-
-        $visitor = new FrameFinderVisitor($offset);
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($stmts);
-
+        $visitor = $this->getVisitor($source);
         $frame = $visitor->getFrame();
 
         $actualVariables = [];
@@ -42,11 +29,11 @@ class FrameFinderVisitorTest extends IntegrationTestCase
         $this->assertEquals($expectedVariables, $actualVariables);
     }
 
-    public function provideEvaluate()
+    public function provideFind()
     {
         return [
             [
-                '$foobar = "hello";_',
+                '$foobar = "hello";  _',
                 [
                     'foobar' => 'Scalar_String',
                 ],
@@ -83,7 +70,7 @@ class FrameFinderVisitorTest extends IntegrationTestCase
                 ],
             ],
             [
-                'class Barfoo { public $foobar; public function barfoo() { $bar = 123; if ($bar === $boo = 123) { $baz = 123; _$bag = $baz; } ; } }',
+                'class Barfoo { public $foobar; public function barfoo() { $bar = 123; if ($bar === $boo = 123) { $baz = 123;_ $bag = $baz; } ; } }',
                 [
                     'bar' => 'Scalar_LNumber',
                     'this' => 'Stmt_Class',
@@ -126,5 +113,65 @@ EOT
                 ],
             ]
         ];
+    }
+
+    /**
+     * It should return the node at the given offset.
+     *
+     * @dataProvider provideNodeAtOffset
+     */
+    public function testNodeAtOffset($source, $expectedType)
+    {
+        $visitor = $this->getVisitor($source);
+
+        if (null === $expectedType) {
+            $this->assertFalse($visitor->hasNodeAtOffset());
+            return;
+        }
+
+        $nodeAtOffset = $visitor->getNodeAtOffset();
+        $this->assertEquals($expectedType, $nodeAtOffset->getType());
+    }
+
+    public function provideNodeAtOffset()
+    {
+        return [
+            [
+                '$fo_obar = 1;',
+                'Expr_Variable',
+            ],
+            [
+                '$foobar_ = 1;',
+                'Expr_Assign',
+            ],
+            [
+                '$foobar = _1;',
+                'Scalar_LNumber',
+            ],
+            [
+                '_  $foobar = _1;',
+                null,
+            ],
+        ];
+    }
+
+    private function getVisitor(string $source): FrameFinderVisitor
+    {
+        $parser = $this->getParser();
+        $source = '<?php ' . $source;
+        $offset = strpos($source, '_');
+
+        if (false !== $offset) {
+            $source = substr($source, 0, $offset) . substr($source, $offset + 1);
+        }
+
+        $stmts = $parser->parse($source);
+
+        $visitor = new FrameFinderVisitor($offset);
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($visitor);
+        $traverser->traverse($stmts);
+
+        return $visitor;
     }
 }
