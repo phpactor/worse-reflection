@@ -4,7 +4,7 @@ namespace DTL\WorseReflection;
 
 use DTL\WorseReflection\ClassName;
 
-class Namespace_ implements NameLike
+class NamespaceName implements NameLike
 {
     private $name;
 
@@ -12,12 +12,12 @@ class Namespace_ implements NameLike
     {
     }
 
-    public static function fromParts(array $parts): Namespace_
+    public static function fromParts(array $parts): NamespaceName
     {
         return self::fromName(Name::fromParts($parts));
     }
 
-    public static function fromString(string $string): Namespace_
+    public static function fromString(string $string): NamespaceName
     {
         return self::fromName(Name::fromString($string));
     }

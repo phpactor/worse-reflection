@@ -37,7 +37,7 @@ class ClassName implements NameLike
         return self::fromName(Name::fromString($fqn));
     }
 
-    public static function fromNamespaceAndShortName(Namespace_ $namespace, string $shortName)
+    public static function fromNamespaceAndShortName(NamespaceName $namespace, string $shortName)
     {
         $fqn = $namespace->isRoot() ? $shortName : $namespace->getFqn() . '\\' . $shortName;
 

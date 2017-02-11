@@ -8,7 +8,7 @@ use DTL\WorseReflection\SourceContext;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\ReflectionClass;
 use PhpParser\Node\Stmt\Class_;
-use DTL\WorseReflection\Namespace_;
+use DTL\WorseReflection\NamespaceName;
 
 class SourceContextTest extends IntegrationTestCase
 {
@@ -61,7 +61,7 @@ class SourceContextTest extends IntegrationTestCase
     {
         $context = $this->createContext($filename);
         $namespace = $context->getNamespace();
-        $this->assertInstanceOf(Namespace_::class, $namespace);
+        $this->assertInstanceOf(NamespaceName::class, $namespace);
         $this->assertEquals($expectedNamespace, $namespace->getFqn());
     }
 

@@ -3,7 +3,7 @@
 namespace DTL\WorseReflection\Tests\Unit;
 
 use DTL\WorseReflection\Name;
-use DTL\WorseReflection\Namespace_;
+use DTL\WorseReflection\NamespaceName;
 
 class NameTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,21 +12,21 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'Foobar',
             Name::fromNamespaceAndShortName(
-                Namespace_::fromString(''),
+                NamespaceName::fromString(''),
                 'Foobar'
             )->getFqn()
         );
         $this->assertEquals(
             'Barfoo\\Foobar',
             Name::fromNamespaceAndShortName(
-                Namespace_::fromString('Barfoo'),
+                NamespaceName::fromString('Barfoo'),
                 'Foobar'
             )->getFqn()
         );
         $this->assertEquals(
             'BarBar\\Barfoo\\Foobar',
             Name::fromNamespaceAndShortName(
-                Namespace_::fromString('BarBar\\Barfoo'),
+                NamespaceName::fromString('BarBar\\Barfoo'),
                 'Foobar'
             )->getFqn()
         );
