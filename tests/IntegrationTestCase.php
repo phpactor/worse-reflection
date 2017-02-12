@@ -13,6 +13,18 @@ use PhpParser\Lexer;
 
 class IntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
+    public function getOffsetAndSource(string $source)
+    {
+        $source = '<?php ' . $source;
+        $offset = strpos($source, '_');
+
+        if (false !== $offset) {
+            $source = substr($source, 0, $offset) . substr($source, $offset + 1);
+        }
+
+        return [ $offset, Source::fromString($source) ];
+    }
+
     public function getReflectorForSource(Source $source)
     {
         return new Reflector(

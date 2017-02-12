@@ -16,6 +16,9 @@ class Type
     private $type;
     private $className;
 
+    /**
+     * Create from a parser node from which the type can be directly inferred.
+     */
     public static function fromParserNode(SourceContext $context, Node $node): Type
     {
         if ($node instanceof Scalar\String_) {

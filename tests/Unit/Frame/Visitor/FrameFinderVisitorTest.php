@@ -129,6 +129,7 @@ EOT
             return;
         }
 
+        $this->assertTrue($visitor->hasNodeAtOffset());
         $nodeAtOffset = $visitor->getNodeAtOffset();
         $this->assertEquals($expectedType, $nodeAtOffset->top()->getType());
     }
@@ -158,14 +159,8 @@ EOT
     private function getVisitor(string $source): FrameFinderVisitor
     {
         $parser = $this->getParser();
-        $source = '<?php ' . $source;
-        $offset = strpos($source, '_');
-
-        if (false !== $offset) {
-            $source = substr($source, 0, $offset) . substr($source, $offset + 1);
-        }
-
-        $stmts = $parser->parse($source);
+        list ($offset, $source) = $this->getOffsetAndSource($source);
+        $stmts = $parser->parse($source->getSource());
 
         $visitor = new FrameFinderVisitor($offset);
         $traverser = new NodeTraverser();

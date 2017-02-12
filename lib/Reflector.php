@@ -37,7 +37,7 @@ class Reflector
         $frame = $visitor->getFrame();
 
         return new ReflectionOffset(
-            $visitor->hasNodeAtOffset() ? $visitor->getNodeAtOffset()->top(): null,
+            $visitor->hasNodeAtOffset() ? $visitor->getNodeAtOffset(): null,
             new ReflectionFrame($this, $sourceContext, $frame)
         );
     }
