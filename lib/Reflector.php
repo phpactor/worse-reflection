@@ -27,9 +27,10 @@ class Reflector
         return $this->reflectClassFromSource($className, $source);
     }
 
-    public function reflectOffsetInSource(Source $source, int $offset): ReflectionOffset
+    public function reflectOffsetInSource(int $offset, Source $source): ReflectionOffset
     {
         $sourceContext = $this->sourceContextFactory->createFor($source);
+
         $visitor = new FrameFinderVisitor($offset);
         $traverser = new NodeTraverser();
         $traverser->addVisitor($visitor);
