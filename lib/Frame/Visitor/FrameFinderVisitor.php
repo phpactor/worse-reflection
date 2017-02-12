@@ -8,6 +8,7 @@ use DTL\WorseReflection\Frame\Frame;
 use PhpParser\NodeTraverser;
 use PhpParser\Node;
 use DTL\WorseReflection\Frame\FrameStack;
+use DTL\WorseReflection\Node\LinearNodeTraverser;
 
 class FrameFinderVisitor extends NodeVisitorAbstract
 {
@@ -16,7 +17,8 @@ class FrameFinderVisitor extends NodeVisitorAbstract
     private $nodeDispatcher;
     private $offset;
     private $done = false;
-    private $nodeAtOffset;
+    private $traverser;
+    private $trail = [];
 
     public function __construct(
         int $offset,
@@ -41,7 +43,7 @@ class FrameFinderVisitor extends NodeVisitorAbstract
         }
 
         if ($startPos <= $this->offset && $endPos >= $this->offset) {
-            $this->nodeAtOffset = $node;
+            $this->traverser = new LinearNodeTraverser($this->trail);
         }
 
         if ($this->isScopeChangingNode($node)) {
@@ -63,6 +65,7 @@ class FrameFinderVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
+        array_pop($this->trail);
         if (false === $this->done && $this->isScopeChangingNode($node)) {
             $this->frameStack->pop();
         }
@@ -73,14 +76,14 @@ class FrameFinderVisitor extends NodeVisitorAbstract
         return $this->frame;
     }
 
-    public function getNodeAtOffset(): Node
+    public function getNodeAtOffset(): LinearNodeTraverser
     {
-        return $this->nodeAtOffset;
+        return $this->traverser;
     }
 
     public function hasNodeAtOffset(): bool
     {
-        return null !== $this->nodeAtOffset;
+        return null !== $this->traverser;
     }
 
     private function isScopeChangingNode(Node $node)
