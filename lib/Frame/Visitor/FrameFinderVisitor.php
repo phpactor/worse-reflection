@@ -42,6 +42,8 @@ class FrameFinderVisitor extends NodeVisitorAbstract
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
+        $this->trail[] = $node;
+
         if ($startPos <= $this->offset && $endPos >= $this->offset) {
             $this->traverser = new LinearNodeTraverser($this->trail);
         }
@@ -65,7 +67,10 @@ class FrameFinderVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        array_pop($this->trail);
+        if (false === $this->done) {
+            array_pop($this->trail);
+        }
+
         if (false === $this->done && $this->isScopeChangingNode($node)) {
             $this->frameStack->pop();
         }

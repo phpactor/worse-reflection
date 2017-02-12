@@ -130,7 +130,7 @@ EOT
         }
 
         $nodeAtOffset = $visitor->getNodeAtOffset();
-        $this->assertEquals($expectedType, $nodeAtOffset->getType());
+        $this->assertEquals($expectedType, $nodeAtOffset->top()->getType());
     }
 
     public function provideNodeAtOffset()

@@ -19,7 +19,6 @@ class Reflector
         $this->sourceContextFactory = $sourceContextFactory;
     }
 
-
     public function reflectClass(ClassName $className): ReflectionClass
     {
         $source = $this->sourceLocator->locate($className);
@@ -38,7 +37,7 @@ class Reflector
         $frame = $visitor->getFrame();
 
         return new ReflectionOffset(
-            $visitor->getNodeAtOffset(),
+            $visitor->hasNodeAtOffset() ? $visitor->getNodeAtOffset()->top(): null,
             new ReflectionFrame($this, $sourceContext, $frame)
         );
     }

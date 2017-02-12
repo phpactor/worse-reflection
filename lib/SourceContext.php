@@ -51,6 +51,11 @@ class SourceContext
         return $this->classNodes[$className->getFqn()];
     }
 
+    public function getTraverser()
+    {
+        return new AstTraverser($this->nodes);
+    }
+
     public function getNamespace()
     {
         if (null === $this->namespaceNode) {
