@@ -7,18 +7,21 @@ use DTL\WorseReflection\SourceContext;
 use DTL\WorseReflection\Frame\Frame;
 use DTL\WorseReflection\Type;
 use PhpParser\Node;
+use DTL\WorseReflection\ChainResolver;
 
 class ReflectionFrame
 {
     private $frame;
     private $sourceContext;
     private $reflector;
+    private $chainResolver;
 
     public function __construct(Reflector $reflector, SourceContext $sourceContext, Frame $frame)
     {
         $this->reflector = $reflector;
         $this->sourceContext = $sourceContext;
         $this->frame = $frame;
+        $this->chainResolver = new ChainResolver($reflector);
     }
 
     public function get(string $name)
@@ -26,7 +29,7 @@ class ReflectionFrame
         $node = $this->frame->get($name);
 
         if ($node instanceof Node\Expr\MethodCall) {
-            return $this->walkChain($node);
+            return $this->chainResolver->resolve($this, $node);
         }
 
         return Type::fromParserNode($this->sourceContext, $node);
@@ -40,23 +43,5 @@ class ReflectionFrame
         }
 
         return $frames;
-    }
-
-    private function walkChain(Node $node)
-    {
-        if ($node instanceof Node\Expr\MethodCall) {
-            $subjectType = $this->walkChain($node->var);
-        }
-
-        if ($node instanceof Node\Expr\Variable) {
-            return $this->get($node->name);
-        }
-
-        if ($node instanceof Node\Expr\MethodCall) {
-            $class = $this->reflector->reflectClass($subjectType->getClassName());
-            $method = $class->getMethods()->get($node->name);
-
-            return $method->getReturnType();
-        }
     }
 }
