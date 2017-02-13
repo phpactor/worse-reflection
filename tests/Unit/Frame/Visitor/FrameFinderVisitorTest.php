@@ -153,6 +153,27 @@ EOT
                 '_  $foobar = _1;',
                 null,
             ],
+            [
+                <<<'EOT'
+class Class1
+{
+}
+
+class Class2
+{
+    public function getClass1(): Class1
+    {
+    }
+
+    public function execute()
+    {
+        $this->getClass1();_
+    }
+}
+EOT
+                , 'Stmt_ClassMethod',
+                
+            ],
         ];
     }
 

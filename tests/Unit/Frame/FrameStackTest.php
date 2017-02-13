@@ -57,5 +57,6 @@ class FrameStackTest extends \PHPUnit_Framework_TestCase
         $frame->set('barfoo', new Variable('asd'));
         $newFrame = $this->stack->spawnWith(['foobar']);
         $this->assertEquals([ 'foobar' ], $newFrame->keys());
+        $this->assertSame($this->stack->top(), $newFrame);
     }
 }

@@ -30,7 +30,7 @@ class FrameStack
             $newFrame->set($name, $currentFrame->get($name));
         }
 
-        return $newFrame;
+        return $this->frames[] = $newFrame;
     }
 
     public function pop()
