@@ -74,7 +74,7 @@ class ReflectionMethod
 
     public function getReturnType(): Type
     {
-        return Type::fromParserNode($this->sourceContext, $this->methodNode->returnType);
+        return Type::fromString($this->sourceContext, (string) $this->methodNode->returnType);
     }
 
     public function getVariables()
