@@ -3,9 +3,9 @@
 namespace DTL\WorseReflection\Tests\Unit\Node;
 
 use PhpParser\Node;
-use DTL\WorseReflection\Node\LinearNodeTraverser;
+use DTL\WorseReflection\Node\NodeAndAncestors;
 
-class LinearNodeTraverserTest extends \PHPUnit_Framework_TestCase
+class NodeAndAncestorsTest extends \PHPUnit_Framework_TestCase
 {
     private $nodes;
     private $traverser;
@@ -18,7 +18,7 @@ class LinearNodeTraverserTest extends \PHPUnit_Framework_TestCase
             new Node\Param('Param'),
             new Node\Expr\Variable('foobar')
         ];
-        $this->traverser = new LinearNodeTraverser($this->nodes);
+        $this->traverser = new NodeAndAncestors($this->nodes);
     }
 
     /**

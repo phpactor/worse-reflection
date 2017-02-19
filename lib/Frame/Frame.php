@@ -18,7 +18,7 @@ class Frame
         unset($this->variables[$name]);
     }
 
-    public function get($name): Node
+    public function getType($name): Node
     {
         if (!isset($this->variables[$name])) {
             throw new \RuntimeException(sprintf(

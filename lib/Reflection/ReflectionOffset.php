@@ -3,7 +3,7 @@
 namespace DTL\WorseReflection\Reflection;
 
 use PhpParser\Node;
-use DTL\WorseReflection\Node\LinearNodeTraverser;
+use DTL\WorseReflection\Node\NodeAndAncestors;
 
 class ReflectionOffset
 {
@@ -17,7 +17,7 @@ class ReflectionOffset
      */
     private $frame;
 
-    public function __construct(LinearNodeTraverser $node, ReflectionFrame $frame)
+    public function __construct(NodeAndAncestors $node, ReflectionFrame $frame)
     {
         $this->node = $node;
         $this->frame = $frame;
@@ -28,7 +28,7 @@ class ReflectionOffset
         return null !== $this->node;
     }
 
-    public function getNode(): LinearNodeTraverser
+    public function getNode(): NodeAndAncestors
     {
         return $this->node;
     }

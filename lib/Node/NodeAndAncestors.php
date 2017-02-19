@@ -2,7 +2,7 @@
 
 namespace DTL\WorseReflection\Node;
 
-class LinearNodeTraverser
+class NodeAndAncestors
 {
     private $nodes;
     private $index;

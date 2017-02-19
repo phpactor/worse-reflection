@@ -11,7 +11,7 @@ class VariableProcessor implements Processor
 {
     public function __invoke(Node $node, Frame $frame, NodeDispatcher $nodeDispatcher): Node
     {
-        return $frame->get($node->name);
+        return $frame->getType($node->name);
     }
 }
 

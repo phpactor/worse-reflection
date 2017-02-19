@@ -27,7 +27,7 @@ class FrameStack
         }
 
         foreach ($names as $name) {
-            $newFrame->set($name, $currentFrame->get($name));
+            $newFrame->set($name, $currentFrame->getType($name));
         }
 
         return $this->frames[] = $newFrame;
