@@ -5,6 +5,7 @@ namespace DTL\WorseReflection\Reflection;
 use PhpParser\Node;
 use DTL\WorseReflection\Node\NodeAndAncestors;
 use DTL\WorseReflection\TypeResolver;
+use DTL\WorseReflection\Type;
 
 class ReflectionOffset
 {
@@ -43,7 +44,7 @@ class ReflectionOffset
 
     public function getType(): Type
     {
-        return $this->typeResolver->resolveParserNode($this->frame, $this->node);
+        return $this->typeResolver->resolveParserNode($this->frame, $this->node->top());
     }
 
     public function getFrame(): ReflectionFrame

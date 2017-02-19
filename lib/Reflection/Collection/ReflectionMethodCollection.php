@@ -17,9 +17,12 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
             'method',
             $reflector,
             $sourceContext,
-            array_filter($classNode->stmts, function ($stmt) {
+            array_reduce(array_filter($classNode->stmts, function ($stmt) {
                 return $stmt instanceof ClassMethod;
-            })
+            }), function ($methods, $node) {
+                $methods[$node->name] = $node;
+                return $methods;
+            }, [])
         );
     }
 

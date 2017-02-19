@@ -122,6 +122,11 @@ class Type
         return $instance;
     }
 
+    public static function none()
+    {
+        return new self();
+    }
+
     public function __toString()
     {
         return $this->type ?: '<unknown>';

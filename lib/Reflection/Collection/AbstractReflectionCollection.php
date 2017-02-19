@@ -47,7 +47,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
                 $this->context,
                 $name,
                 $this->context,
-                implode('", "', array_keys($this->all()))
+                implode('", "', array_keys($this->indexedNodes))
             ));
         }
 
