@@ -26,7 +26,7 @@ class Reflector
         return $this->reflectClassFromSource($className, $source);
     }
 
-    public function reflectTypeAtOffsetInSource(int $offset, Source $source): ReflectionOffset
+    public function reflectOffsetInSource(int $offset, Source $source): ReflectionOffset
     {
         $sourceContext = $this->sourceContextFactory->createFor($source);
 
