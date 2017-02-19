@@ -29,7 +29,8 @@ class ReflectionFrameTest extends IntegrationTestCase
         list($offset, $source) = $this->getOffsetAndSource($source);
 
         $reflector = $this->getReflectorForSource($source);
-        $offset = $reflector->reflectOffsetInSource($offset, $source);
+        $offset = $reflector->reflectTypeAtOffsetInSource($offset, $source);
+
         $this->assertEquals(
             $expectedVariables, $offset->getFrame()->all()
         );

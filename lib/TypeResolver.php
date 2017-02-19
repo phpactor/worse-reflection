@@ -7,6 +7,7 @@ namespace DTL\WorseReflection;
 use PhpParser\Node;
 use DTL\WorseReflection\Frame\Frame;
 use DTL\WorseReflection\Reflection\ReflectionFrame;
+use DTL\WorseReflection\Type;
 
 class TypeResolver
 {
@@ -31,9 +32,7 @@ class TypeResolver
             $class = $this->reflector->reflectClass($subjectType->getClassName());
             return $class->getMethods()->get($node->name)->getReturnType();
         }
-    }
 
-    public function resolveNodeAndAncestors(NodeAndAncestors $nodeAndAncestors)
-    {
+        return Type::unknown();
     }
 }
