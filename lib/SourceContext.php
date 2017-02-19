@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\ErrorHandler\Collecting;
 
 class SourceContext
 {
@@ -21,7 +22,7 @@ class SourceContext
 
     public function __construct(Source $source, Parser $parser)
     {
-        $this->nodes = $parser->parse($source->getSource());
+        $this->nodes = $parser->parse($source->getSource(), new Collecting());
         $this->scanNamespace();
 
         if (null === $this->namespaceNode) {
