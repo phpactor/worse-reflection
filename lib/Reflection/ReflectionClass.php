@@ -103,7 +103,7 @@ class ReflectionClass
             }
 
             foreach ($stmt->props as $prop) {
-                $properties[] = new ReflectionProperty($stmt, $prop);
+                $properties[] = new ReflectionProperty($this->sourceContext, $stmt, $prop);
             }
         }
 

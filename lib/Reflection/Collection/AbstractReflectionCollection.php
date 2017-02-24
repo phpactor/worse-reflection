@@ -25,7 +25,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
         $this->reflector = $reflector;
         $this->sourceContext = $sourceContext;
 
-        foreach ($nodes as $node) {
+        foreach ($nodes as $name => $node) {
             $this->indexedNodes[(string) $node->name] = $node;
         }
     }

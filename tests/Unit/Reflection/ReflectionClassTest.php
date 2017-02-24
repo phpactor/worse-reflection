@@ -6,6 +6,7 @@ use DTL\WorseReflection\Tests\IntegrationTestCase;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Source;
 use DTL\WorseReflection\Visibility;
+use DTL\WorseReflection\Type;
 
 class ReflectionClassTest extends IntegrationTestCase
 {
@@ -183,15 +184,20 @@ EOT
      */
     public function testProperties(string $className, string $source, array $expectedProperties)
     {
-        $class = $this->reflectClassFromSource('Foobar', $source);
+        $class = $this->reflectClassFromSource($className, $source);
         $properties = $class->getProperties();
 
         $this->assertCount(count($expectedProperties), $properties);
 
         foreach ($expectedProperties as $expectedName => $expected) {
+            $expected = array_merge([
+                'visibility' => Visibility::public(),
+                'type' => Type::unknown()
+            ], $expected);
             $propertyReflection = array_shift($properties);
             $this->assertEquals($expectedName, $propertyReflection->getName());
             $this->assertEquals($expected['visibility'], $propertyReflection->getVisibility());
+            $this->assertEquals($expected['type'], $propertyReflection->getType());
         }
     }
 
@@ -220,6 +226,30 @@ EOT
                     ],
                     'public' => [
                         'visibility' => Visibility::public(),
+                    ],
+                ]
+            ],
+            [
+                'FoobarWithTypes',
+                <<<'EOT'
+<?php 
+
+class Barfoo
+{
+}
+
+class FoobarWithTypes
+{
+    /**
+     * @var Barfoo
+     */
+    public $public;
+}
+EOT
+                ,
+                [
+                    'public' => [
+                        'type' => Type::class(ClassName::fromString('Barfoo')),
                     ],
                 ]
             ],
