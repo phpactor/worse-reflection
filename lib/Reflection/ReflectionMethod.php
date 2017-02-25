@@ -9,6 +9,7 @@ use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 use DTL\WorseReflection\Reflection\Collection\ReflectionVariableCollection;
 use DTL\WorseReflection\Type;
+use DTL\WorseReflection\Util\DocCommentParser;
 
 class ReflectionMethod
 {
@@ -89,5 +90,10 @@ class ReflectionMethod
             $this->sourceContext,
             $this->methodNode
         );
+    }
+
+    public function getDocComment()
+    {
+        return DocCommentParser::parseProse($this->methodNode->getDocComment());
     }
 }

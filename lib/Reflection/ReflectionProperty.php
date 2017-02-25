@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\Type;
 use DTL\WorseReflection\SourceContext;
+use DTL\WorseReflection\Util\DocCommentParser;
 
 class ReflectionProperty
 {
@@ -52,10 +53,15 @@ class ReflectionProperty
             return Type::unknown();
         }
 
-        if (!preg_match('{@var ([^\s]+)}', $comment, $matches)) {
-            return Type::unknown();
+        if ($varString = DocCommentParser::parseVarDoc($comment)) {
+            return Type::fromString($this->sourceContext, $varString);
         }
 
-        return Type::fromString($this->sourceContext, $matches[1]);
+        return Type::unknown();
+    }
+
+    public function getDocComment(): string
+    {
+        return DocCommentParser::parseProse($this->propertyNode->getDocComment());
     }
 }
