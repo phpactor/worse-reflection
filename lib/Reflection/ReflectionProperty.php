@@ -39,6 +39,11 @@ class ReflectionProperty
         return Visibility::public();
     }
 
+    public function isStatic()
+    {
+        return $this->propertyNode->isStatic();
+    }
+
     public function getType(): Type
     {
         $comment = $this->propertyNode->getDocComment();

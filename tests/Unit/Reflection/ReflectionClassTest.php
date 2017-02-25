@@ -192,12 +192,14 @@ EOT
         foreach ($expectedProperties as $expectedName => $expected) {
             $expected = array_merge([
                 'visibility' => Visibility::public(),
-                'type' => Type::unknown()
+                'type' => Type::unknown(),
+                'static' => false,
             ], $expected);
             $propertyReflection = array_shift($properties);
             $this->assertEquals($expectedName, $propertyReflection->getName());
             $this->assertEquals($expected['visibility'], $propertyReflection->getVisibility());
             $this->assertEquals($expected['type'], $propertyReflection->getType());
+            $this->assertEquals($expected['static'], $propertyReflection->isStatic());
         }
     }
 
@@ -214,6 +216,7 @@ class Foobar
     private $private = 'default1';
     protected $protected;
     public $public;
+
 }
 EOT
                 ,
@@ -250,6 +253,23 @@ EOT
                 [
                     'public' => [
                         'type' => Type::class(ClassName::fromString('Barfoo')),
+                    ],
+                ]
+            ],
+            [
+                'FoobarWithStatics',
+                <<<'EOT'
+<?php 
+
+class FoobarWithStatics
+{
+    public static $public;
+}
+EOT
+                ,
+                [
+                    'public' => [
+                        'static' => true,
                     ],
                 ]
             ],
