@@ -50,7 +50,12 @@ class ClassName implements NameLike
 
     public static function fromString(string $fqn): ClassName
     {
-        return self::fromName(Name::fromString($fqn));
+        $instance = self::fromName(Name::fromString($fqn));
+        if (substr($fqn, 0, 1) === '\\') {
+            $instance->isFullyQualified = true;
+        }
+
+        return $instance;
     }
 
     public static function fromNamespaceAndShortName(NamespaceName $namespace, string $shortName)

@@ -52,7 +52,7 @@ class ReflectionProperty
             return Type::unknown();
         }
 
-        if (!preg_match('{@var (\w+)}', $comment, $matches)) {
+        if (!preg_match('{@var ([^\s]+)}', $comment, $matches)) {
             return Type::unknown();
         }
 

@@ -247,12 +247,20 @@ class FoobarWithTypes
      * @var Barfoo
      */
     public $public;
+
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    public $foo;
 }
 EOT
                 ,
                 [
                     'public' => [
                         'type' => Type::class(ClassName::fromString('Barfoo')),
+                    ],
+                    'foo' => [
+                        'type' => Type::class(ClassName::fromString('\Symfony\Component\Routing\RouterInterface')),
                     ],
                 ]
             ],

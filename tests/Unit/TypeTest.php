@@ -49,7 +49,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '\stdClass',
-                Type::class(ClassName::fromString('stdClass')),
+                Type::class(ClassName::fromString('\stdClass')),
             ],
             [
                 '',
