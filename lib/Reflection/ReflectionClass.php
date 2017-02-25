@@ -95,7 +95,7 @@ class ReflectionClass
                 $this->getName()->getFqn()
             ));
         }
-        $parentName = $this->sourceContext->resolveClassName(ClassName::fromString((string) $this->classNode->extends));
+        $parentName = $this->sourceContext->resolveClassName(ClassName::fromParserName($this->classNode->extends));
         return $this->reflector->reflectClass($parentName);
     }
 

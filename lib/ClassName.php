@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DTL\WorseReflection;
 
+use PhpParser\Node;
+
 
 class ClassName implements NameLike
 {
@@ -11,6 +13,21 @@ class ClassName implements NameLike
      * @var Name
      */
     private $name;
+
+    /**
+     * @var bool
+     */
+    private $isFullyQualified = false;
+
+    public static function fromParserName(Node\Name $name)
+    {
+        $instance = self::fromParts($name->parts);
+        if ($name instanceof Node\Name\FullyQualified) {
+            $instance->isFullyQualified = true;
+        }
+
+        return $instance;
+    }
 
     public static function fromName(Name $name)
     {
@@ -56,5 +73,10 @@ class ClassName implements NameLike
     public function getParts(): array
     {
         return $this->name->getParts();
+    }
+
+    public function isFullyQualified(): bool
+    {
+        return $this->isFullyQualified;
     }
 }

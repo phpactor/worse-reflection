@@ -75,6 +75,10 @@ class SourceContext
             return $this->useNodes[$className->getShortName()];
         }
 
+        if ($className->isFullyQualified()) {
+            return $className;
+        }
+
         return $this->getNamespace()->spawnClassName($className->getShortName());
     }
 
