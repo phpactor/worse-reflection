@@ -14,28 +14,16 @@ class ReflectionConstantCollection extends AbstractReflectionCollection
     public function __construct(Reflector $reflector, SourceContext $sourceContext, ClassLike $classNode)
     {
         parent::__construct(
-            'constant',
-            $reflector,
-            $sourceContext,
-            $consts = array_reduce(array_filter($classNode->stmts, function ($stmt) {
+            'constant', 
+            array_reduce(array_filter($classNode->stmts, function ($stmt) {
                 return $stmt instanceof ClassConst;
-            }), function ($accumulator, $classConst) {
+            }), function ($consts, $classConst) {
                 foreach ($classConst->consts as $const) {
-                    $accumulator[] = $const;
+                    $consts[$const->name] = new ReflectionConstant($const->name, $const->value->value);
                 }
 
-                return $accumulator;
+                return $consts;
             }, [])
         );
-    }
-
-    protected function createReflectionElement(Reflector $reflector, SourceContext $sourceContext, Node $node)
-    {
-        return new ReflectionConstant($node->name, $node->value->value);
-    }
-
-    public function get(string $name): ReflectionConstant
-    {
-        return parent::get($name);
     }
 }

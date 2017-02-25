@@ -8,39 +8,25 @@ use PhpParser\Node;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate
 {
-    private $reflector;
-    private $sourceContext;
-    private $indexedNodes = [];
-    private $loadedReflections = [];
+    private $reflections;
     private $context;
 
     public function __construct(
         string $context,
-        Reflector $reflector,
-        SourceContext $sourceContext,
-        array $nodes
+        array $reflections
     )
     {
+        $this->reflections = $reflections;
         $this->context = $context;
-        $this->reflector = $reflector;
-        $this->sourceContext = $sourceContext;
-
-        foreach ($nodes as $name => $node) {
-            $this->indexedNodes[(string) $node->name] = $node;
-        }
     }
 
     public function has($name): bool
     {
-        return isset($this->indexedNodes[$name]);
+        return isset($this->reflections[$name]);
     }
 
     public function get(string $name)
     {
-        if (isset($this->loadedReflections[$name])) {
-            return $this->loadedReflections[$name];
-        }
-
         if (false === $this->has($name)) {
             throw new \InvalidArgumentException(sprintf(
                 'Unknown %s "%s", known %s nodes: "%s"',
@@ -51,26 +37,16 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
             ));
         }
 
-        $this->loadedReflections[$name] = $this->createReflectionElement($this->reflector, $this->sourceContext, $this->indexedNodes[$name]);
-
-        return $this->loadedReflections[$name];
+        return $this->reflections[$name];
     }
 
     public function all()
     {
-        $methods = [];
-        foreach (array_keys($this->indexedNodes) as $methodName) {
-            $methods[] = $this->get($methodName);
-        }
-
-        return $methods;
+        return $this->reflections;
     }
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->all());
+        return new \ArrayIterator($this->reflections);
     }
-
-    abstract protected function createReflectionElement(Reflector $reflector, SourceContext $sourceContext, Node $node);
 }
-

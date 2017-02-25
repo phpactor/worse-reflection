@@ -15,24 +15,12 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
     {
         parent::__construct(
             'method',
-            $reflector,
-            $sourceContext,
             array_reduce(array_filter($classNode->stmts, function ($stmt) {
                 return $stmt instanceof ClassMethod;
-            }), function ($methods, $node) {
-                $methods[$node->name] = $node;
+            }), function ($methods, $node) use ($reflector, $sourceContext) {
+                $methods[$node->name] = new ReflectionMethod($reflector, $sourceContext, $node);
                 return $methods;
             }, [])
         );
-    }
-
-    protected function createReflectionElement(Reflector $reflector, SourceContext $sourceContext, Node $node)
-    {
-        return new ReflectionMethod($reflector, $sourceContext, $node);
-    }
-
-    public function get(string $name): ReflectionMethod
-    {
-        return parent::get($name);
     }
 }

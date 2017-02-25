@@ -15,17 +15,13 @@ class ReflectionParameterCollection extends AbstractReflectionCollection
     {
         parent::__construct(
             'parameter',
-            $reflector,
-            $sourceContext,
-            array_filter($methodNode->params, function ($stmt) {
+            array_reduce(array_filter($methodNode->params, function ($stmt) {
                 return $stmt instanceof Param;
-            })
+            }), function ($params, $paramNode) use ($reflector, $sourceContext) {
+                $params[$paramNode->name] = new ReflectionParameter($reflector, $sourceContext, $paramNode);
+                return $params;
+            }, [])
         );
-    }
-
-    protected function createReflectionElement(Reflector $reflector, SourceContext $sourceContext, Node $node)
-    {
-        return new ReflectionParameter($reflector, $sourceContext, $node);
     }
 }
 
