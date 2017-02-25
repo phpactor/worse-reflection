@@ -21,7 +21,7 @@ class ReflectionFrame
         $this->reflector = $reflector;
         $this->sourceContext = $sourceContext;
         $this->frame = $frame;
-        $this->typeResolver = new TypeResolver($reflector);
+        $this->typeResolver = new TypeResolver($reflector, $sourceContext);
     }
 
     public function getType(string $name): Type

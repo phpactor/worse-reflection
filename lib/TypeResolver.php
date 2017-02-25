@@ -9,14 +9,17 @@ use DTL\WorseReflection\Frame\Frame;
 use DTL\WorseReflection\Reflection\ReflectionFrame;
 use DTL\WorseReflection\Type;
 use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\SourceContext;
 
 class TypeResolver
 {
     private $reflector;
+    private $sourceContext;
 
-    public function __construct(Reflector $reflector)
+    public function __construct(Reflector $reflector, SourceContext $sourceContext)
     {
         $this->reflector = $reflector;
+        $this->sourceContext = $sourceContext;
     }
 
     public function resolveParserNode(ReflectionFrame $frame, Node $node)
@@ -26,7 +29,7 @@ class TypeResolver
         }
 
         if ($node instanceof Node\Expr\StaticCall) {
-            return Type::class(ClassName::fromParts($node->class->parts));
+            return Type::class($this->sourceContext->resolve(ClassName::fromParts($node->class->parts)));
         }
 
         if ($node instanceof Node\Expr\Variable) {

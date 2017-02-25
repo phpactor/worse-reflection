@@ -35,7 +35,7 @@ class Reflector
         $traverser->addVisitor($visitor);
         $traverser->traverse($sourceContext->getNodes());
         $frame = $visitor->getFrame();
-        $typeResolver = new TypeResolver($this);
+        $typeResolver = new TypeResolver($this, $sourceContext);
 
         return new ReflectionOffset(
             $typeResolver,
@@ -44,20 +44,15 @@ class Reflector
         );
     }
 
-    public function reflectClassFromSource(ClassName $className, Source $source)
+    public function getSourceContextForClass(ClassName $className): SourceContext
     {
-        $sourceContext = $this->sourceContextFactory->createFor($source);
+        $source = $this->sourceLocator->locate($className);
 
-        if (false === $sourceContext->hasClass($className)) {
-            throw new \RuntimeException(sprintf(
-                'Unable to locate class "%s" in file "%s"',
-                $className->getFqn(),
-                (string) $source->getLocation()
-            ));
-        }
+        return $this->getSourceContext($source);
+    }
 
-        $classNode = $sourceContext->getClassNode($className);
-
-        return new ReflectionClass($this, $sourceContext, $classNode);
+    public function getSourceContext(Source $source)
+    {
+        return $this->sourceContextFactory->createForSource($this, $source);
     }
 }
