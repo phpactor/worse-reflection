@@ -11,6 +11,7 @@ class Type
     const TYPE_STRING = 'string';
     const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
+    const TYPE_ARRAY = 'array';
     const TYPE_CLASS = 'class';
 
     private $type;
@@ -90,6 +91,11 @@ class Type
             return self::float();
         }
 
+        if ($type === 'array') {
+            return self::array();
+        }
+
+
         return self::class($context->resolveClassName(ClassName::fromString($type)));
     }
 
@@ -101,6 +107,11 @@ class Type
     public static function string()
     {
         return self::create(self::TYPE_STRING);
+    }
+
+    public static function array()
+    {
+        return self::create(self::TYPE_ARRAY);
     }
 
     public static function int()
