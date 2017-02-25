@@ -24,7 +24,7 @@ class ComposerSourceLocator implements SourceLocator
         $path = $this->classLoader->findFile($className->getFqn());
 
         if (false === $path) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new Exception\SourceNotFoundException(sprintf(
                 'Composer could not locate file for class "%s"',
                 $className->getFqn()
             ));
