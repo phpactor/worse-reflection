@@ -185,7 +185,7 @@ EOT
     public function testProperties(string $className, string $source, array $expectedProperties)
     {
         $class = $this->reflectClassFromSource($className, $source);
-        $properties = $class->getProperties();
+        $properties = iterator_to_array($class->getProperties());
 
         $this->assertCount(count($expectedProperties), $properties);
 

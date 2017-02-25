@@ -10,6 +10,7 @@ use DTL\WorseReflection\ClassName;
 use PhpParser\Node\Stmt\Property;
 use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
+use DTL\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
 
 class ReflectionClass
 {
@@ -98,20 +99,8 @@ class ReflectionClass
         return $this->reflector->reflectClass($parentName);
     }
 
-    public function getProperties(): array
+    public function getProperties(): ReflectionPropertyCollection
     {
-        $properties = [];
-
-        foreach ($this->classNode->stmts as $stmt) {
-            if (false === $stmt instanceof Property) {
-                continue;
-            }
-
-            foreach ($stmt->props as $prop) {
-                $properties[$prop->name] = new ReflectionProperty($this->sourceContext, $stmt, $prop);
-            }
-        }
-
-        return $properties;
+        return new ReflectionPropertyCollection($this->sourceContext, $this->classNode);
     }
 }
