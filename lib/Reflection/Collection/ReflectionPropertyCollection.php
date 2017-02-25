@@ -10,12 +10,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Reflection\ReflectionProperty;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\ClassLike;
+use DTL\WorseReflection\Visibility;
 
 class ReflectionPropertyCollection extends AbstractReflectionCollection
 {
-    public function __construct(SourceContext $sourceContext, ClassLike $classNode)
+    public static function fromClassNode(SourceContext $sourceContext, ClassLike $classNode)
     {
-        parent::__construct(
+        return new self(
             'property',
             array_reduce(array_filter($classNode->stmts, function ($stmt) {
                 return $stmt instanceof Property;
@@ -28,6 +29,21 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
                 return $properties;
             }, [])
         );
+    }
+
+    public function withoutPrivate()
+    {
+        return new self('property', array_filter($this->all(), function ($property) {
+            return false === $property->getVisibility()->isPrivate();
+        }));
+    }
+
+    public function merge(ReflectionPropertyCollection $collection)
+    {
+        return new self('property', array_merge(
+            $this->all(),
+            $collection->all()
+        ));
     }
 }
 

@@ -29,7 +29,7 @@ class Source
 
         $instance = new self();
         $instance->location = $location;
-        $instance->source = file_get_contents(realpath($location));
+        $instance->source = file_get_contents(realpath($location->getPath()));
 
         return $instance;
     }

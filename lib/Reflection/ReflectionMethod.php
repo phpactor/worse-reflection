@@ -54,6 +54,11 @@ class ReflectionMethod
         return $this->name;
     }
 
+    public function isStatic(): bool
+    {
+        return $this->methodNode->isStatic();
+    }
+
     public function getVisibility(): Visibility
     {
         if ($this->methodNode->isProtected()) {

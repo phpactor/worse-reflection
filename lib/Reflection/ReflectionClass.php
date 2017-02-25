@@ -101,6 +101,54 @@ class ReflectionClass
 
     public function getProperties(): ReflectionPropertyCollection
     {
-        return new ReflectionPropertyCollection($this->sourceContext, $this->classNode);
+        return ReflectionPropertyCollection::fromClassNode($this->sourceContext, $this->classNode);
+    }
+
+    public function getVisibleProperties(): ReflectionPropertyCollection
+    {
+        $properties = $this->getProperties();
+
+        if (false === $this->hasParentClass()) {
+            return $properties;
+        }
+
+        $class = $this;
+
+        while ($class->hasParentClass()) {
+            $parentClass = $class->getParentClass();
+            $properties = $properties->merge($parentClass->getProperties()->withoutPrivate());
+            $class = $parentClass;
+        }
+
+        return $properties;
+
+    }
+
+    /**
+     * TODO: Test me
+     */
+    public function isSubclassOf(ClassName $className): bool
+    {
+        if (false === $this->hasParentClass()) {
+            return false;
+        }
+
+        if ($this->getParentClass()->getName() == $className) {
+            return true;
+        }
+
+
+        $currentClass = $this->getParentClass();
+
+        while ($currentClass->hasParentClass()) {
+            $parentClass = $currentClass->getParentClass();
+
+            if ($parentClass->getName() == $className) {
+                return true;
+            }
+            $currentClass = $parentClass;
+        }
+
+        return false;
     }
 }

@@ -27,7 +27,10 @@ class TypeResolver
         }
 
         if ($node instanceof Node\Expr\StaticCall) {
-            return Type::class($frame->getSourceContext()->resolve(ClassName::fromParts($node->class->parts)));
+            $className = $frame->getSourceContext()->resolveClassName(ClassName::fromParts($node->class->parts));
+            $classReflection = $this->reflector->reflectClass($className);
+
+            return $classReflection->getMethods()->get($node->name)->getReturnType();
         }
 
         if ($node instanceof Node\Expr\Variable) {
@@ -41,7 +44,7 @@ class TypeResolver
 
         if ($node instanceof Node\Expr\PropertyFetch) {
             $class = $this->reflector->reflectClass($subjectType->getClassName());
-            $properties = $class->getProperties();
+            $properties = $class->getVisibleProperties();
 
             if (false === $properties->has($node->name)) {
                 return Type::unknown();

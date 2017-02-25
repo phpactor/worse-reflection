@@ -8,8 +8,8 @@ use PhpParser\Node;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate
 {
-    private $reflections;
     private $context;
+    protected $reflections;
 
     public function __construct(
         string $context,
@@ -43,6 +43,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
     public function all()
     {
         return $this->reflections;
+    }
+
+    public function keys()
+    {
+        return array_keys($this->reflections);
     }
 
     public function getIterator()

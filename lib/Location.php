@@ -18,6 +18,12 @@ final class Location
         return $instance;
     }
 
+    public function getPath() 
+    {
+        return $this->path;
+    }
+    
+
     public static function fromNothing()
     {
         $instance = new self();

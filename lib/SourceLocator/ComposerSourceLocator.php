@@ -6,6 +6,7 @@ use DTL\WorseReflection\SourceLocator;
 use DTL\WorseReflection\ClassName;
 use Composer\Autoload\ClassLoader;
 use DTL\WorseReflection\Source;
+use DTL\WorseReflection\Location;
 
 class ComposerSourceLocator implements SourceLocator
 {
@@ -30,6 +31,6 @@ class ComposerSourceLocator implements SourceLocator
             ));
         }
 
-        return Source::fromFilepath($path);
+        return Source::fromLocation(Location::fromPath($path));
     }
 }
