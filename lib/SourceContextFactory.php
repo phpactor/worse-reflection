@@ -13,8 +13,8 @@ class SourceContextFactory
         $this->parser = $parser;
     }
 
-    public function createFor(Source $source): SourceContext
+    public function createForSource(Reflector $reflector, Source $source): SourceContext
     {
-        return new SourceContext($source, $this->parser);
+        return new SourceContext($reflector, $source, $this->parser);
     }
 }

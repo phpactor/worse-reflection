@@ -9,6 +9,7 @@ use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\ReflectionClass;
 use PhpParser\Node\Stmt\Class_;
 use DTL\WorseReflection\NamespaceName;
+use DTL\WorseReflection\Reflector;
 
 class SourceContextTest extends IntegrationTestCase
 {
@@ -125,7 +126,8 @@ class SourceContextTest extends IntegrationTestCase
     private function createContext($filename)
     {
         $source = Source::fromString(file_get_contents(__DIR__ . '/SourceContext/' . $filename));
+        $reflector = $this->prophesize(Reflector::class);
 
-        return new SourceContext($source, $this->getParser());
+        return new SourceContext($reflector->reveal(), $source, $this->getParser());
     }
 }

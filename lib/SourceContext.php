@@ -12,17 +12,20 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\ErrorHandler\Collecting;
+use DTL\WorseReflection\Reflection\ReflectionClass;
 
 class SourceContext
 {
     private $namespaceNode;
     private $classNodes = [];
     private $useNodes = [];
+    private $reflector;
     private $nodes;
 
-    public function __construct(Source $source, Parser $parser)
+    public function __construct(Reflector $reflector, Source $source, Parser $parser)
     {
         $this->nodes = $parser->parse($source->getSource(), new Collecting());
+        $this->reflector = $reflector;
         $this->scanNamespace();
 
         if (null === $this->namespaceNode) {
@@ -73,6 +76,11 @@ class SourceContext
         }
 
         return $this->getNamespace()->spawnClassName($className->getShortName());
+    }
+
+    public function reflectClass(ClassName $className)
+    {
+        return new ReflectionClass($this->reflector, $this, $this->getClassNode($className));
     }
 
     private function scanClassNodes(array $nodes)
