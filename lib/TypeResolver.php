@@ -14,12 +14,10 @@ use DTL\WorseReflection\SourceContext;
 class TypeResolver
 {
     private $reflector;
-    private $sourceContext;
 
-    public function __construct(Reflector $reflector, SourceContext $sourceContext)
+    public function __construct(Reflector $reflector)
     {
         $this->reflector = $reflector;
-        $this->sourceContext = $sourceContext;
     }
 
     public function resolveParserNode(ReflectionFrame $frame, Node $node)
@@ -29,7 +27,7 @@ class TypeResolver
         }
 
         if ($node instanceof Node\Expr\StaticCall) {
-            return Type::class($this->sourceContext->resolve(ClassName::fromParts($node->class->parts)));
+            return Type::class($frame->getSourceContext()->resolve(ClassName::fromParts($node->class->parts)));
         }
 
         if ($node instanceof Node\Expr\Variable) {
@@ -45,11 +43,11 @@ class TypeResolver
             $class = $this->reflector->reflectClass($subjectType->getClassName());
             $properties = $class->getProperties();
 
-            if (!isset($properties[$node->name])) {
+            if (false === $properties->has($node->name)) {
                 return Type::unknown();
             }
 
-            return $properties[$node->name]->getType();
+            return $properties->get($node->name)->getType();
         }
 
         return Type::unknown();

@@ -137,6 +137,38 @@ EOT
                 ],
                 Type::class(ClassName::fromString('Barfoo')),
             ],
+            'staticPropertyType' => [
+                <<<'EOT'
+class Bing
+{
+}
+
+class Barbar
+{
+    /**
+     * @var Bing
+     */
+    public static $staticProp;
+}
+
+class Foobar
+{
+    public function hello()
+    {
+        $bar = $this->world()->st_aticProp;
+    }
+
+    public function world(): Barbar
+    {
+    }
+}
+EOT
+                , [
+                    'bar' => Type::class(ClassName::fromString('Bing')),
+                    'this' => Type::class(ClassName::fromString('Foobar')),
+                ],
+                Type::class(ClassName::fromString('Bing')),
+            ],
         ];
     }
 }

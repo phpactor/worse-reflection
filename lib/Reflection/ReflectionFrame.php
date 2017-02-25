@@ -21,14 +21,17 @@ class ReflectionFrame
         $this->reflector = $reflector;
         $this->sourceContext = $sourceContext;
         $this->frame = $frame;
-        $this->typeResolver = new TypeResolver($reflector, $sourceContext);
+        $this->typeResolver = new TypeResolver($reflector);
     }
 
     public function getType(string $name): Type
     {
         $node = $this->frame->getType($name);
 
-        if ($node instanceof Node\Expr\MethodCall) {
+        if (
+            $node instanceof Node\Expr\MethodCall ||
+            $node instanceof Node\Expr\PropertyFetch
+        ) {
             return $this->typeResolver->resolveParserNode($this, $node);
         }
 
@@ -43,5 +46,10 @@ class ReflectionFrame
         }
 
         return $frames;
+    }
+
+    public function getSourceContext(): SourceContext
+    {
+        return $this->sourceContext;
     }
 }
