@@ -8,6 +8,7 @@ use PhpParser\Node;
 use DTL\WorseReflection\Frame\Frame;
 use DTL\WorseReflection\Reflection\ReflectionFrame;
 use DTL\WorseReflection\Type;
+use DTL\WorseReflection\ClassName;
 
 class TypeResolver
 {
@@ -22,6 +23,10 @@ class TypeResolver
     {
         if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
             $subjectType = $this->resolveParserNode($frame, $node->var);
+        }
+
+        if ($node instanceof Node\Expr\StaticCall) {
+            return Type::class(ClassName::fromParts($node->class->parts));
         }
 
         if ($node instanceof Node\Expr\Variable) {
