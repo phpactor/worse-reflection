@@ -79,7 +79,7 @@ class SourceContext
     {
         foreach ($nodes as $node) {
             if ($node instanceof Class_ || $node instanceof Interface_) {
-                $this->classNodes[(string) $this->namespaceNode->name . '\\' . $node->name] = $node;
+                $this->classNodes[$this->resolveClassName(ClassName::fromString($node->name))->getFqn()] = $node;
             }
             if ($node instanceof GroupUse) {
                 $namespace = NamespaceName::fromParts($node->prefix->parts);

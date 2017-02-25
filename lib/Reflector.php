@@ -39,7 +39,7 @@ class Reflector
 
         return new ReflectionOffset(
             $typeResolver,
-            $visitor->hasNodeAtOffset() ? $visitor->getNodeAtOffset(): null,
+            $visitor->hasNodePathAtOffset() ? $visitor->getNodePathAtOffset(): null,
             new ReflectionFrame($this, $sourceContext, $frame)
         );
     }

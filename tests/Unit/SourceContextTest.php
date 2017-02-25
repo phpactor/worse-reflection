@@ -20,6 +20,8 @@ class SourceContextTest extends IntegrationTestCase
     public function testGetClassNode($className, $filename)
     {
         $context = $this->createContext($filename);
+
+        $this->assertTrue($context->hasClass(ClassName::fromString($className)));
         $class = $context->getClassNode(ClassName::fromString($className));
         $this->assertInstanceOf(Class_::class, $class);
     }
@@ -36,7 +38,7 @@ class SourceContextTest extends IntegrationTestCase
                 'GetClass.php',
             ],
             [
-                'ClassTwo',
+                'DTL\WorseReflection\Tests\Unit\Example\ClassTwo',
                 'GetClass.Namespaced.php',
             ],
         ];

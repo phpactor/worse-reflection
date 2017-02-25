@@ -3,7 +3,7 @@
 namespace DTL\WorseReflection\Reflection;
 
 use PhpParser\Node;
-use DTL\WorseReflection\Node\NodeAndAncestors;
+use DTL\WorseReflection\Node\NodePath;
 use DTL\WorseReflection\TypeResolver;
 use DTL\WorseReflection\Type;
 
@@ -12,7 +12,7 @@ class ReflectionOffset
     /**
      * @var Node
      */
-    private $node;
+    private $nodePath;
 
     /**
      * @var ReflectionFrame
@@ -24,9 +24,9 @@ class ReflectionOffset
      */
     private $typeResolver;
 
-    public function __construct(TypeResolver $typeResolver, NodeAndAncestors $node, ReflectionFrame $frame)
+    public function __construct(TypeResolver $typeResolver, NodePath $nodePath, ReflectionFrame $frame)
     {
-        $this->node = $node;
+        $this->nodePath = $nodePath;
         $this->frame = $frame;
         $this->typeResolver = $typeResolver;
 
@@ -34,17 +34,17 @@ class ReflectionOffset
 
     public function hasNode(): bool
     {
-        return null !== $this->node;
+        return null !== $this->nodePath;
     }
 
-    public function getNode(): NodeAndAncestors
+    public function getNode(): NodePath
     {
-        return $this->node;
+        return $this->nodePath;
     }
 
     public function getType(): Type
     {
-        return $this->typeResolver->resolveParserNode($this->frame, $this->node->top());
+        return $this->typeResolver->resolveParserNode($this->frame, $this->nodePath->top());
     }
 
     public function getFrame(): ReflectionFrame

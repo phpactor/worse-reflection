@@ -118,23 +118,23 @@ EOT
     /**
      * It should return the node at the given offset.
      *
-     * @dataProvider provideNodeAtOffset
+     * @dataProvider provideNodePathAtOffset
      */
-    public function testNodeAtOffset($source, $expectedType)
+    public function testNodePathAtOffset($source, $expectedType)
     {
         $visitor = $this->getVisitor($source);
 
         if (null === $expectedType) {
-            $this->assertFalse($visitor->hasNodeAtOffset());
+            $this->assertFalse($visitor->hasNodePathAtOffset());
             return;
         }
 
-        $this->assertTrue($visitor->hasNodeAtOffset());
-        $nodeAtOffset = $visitor->getNodeAtOffset();
+        $this->assertTrue($visitor->hasNodePathAtOffset());
+        $nodeAtOffset = $visitor->getNodePathAtOffset();
         $this->assertEquals($expectedType, $nodeAtOffset->top()->getType());
     }
 
-    public function provideNodeAtOffset()
+    public function provideNodePathAtOffset()
     {
         return [
             [

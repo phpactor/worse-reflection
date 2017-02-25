@@ -8,7 +8,7 @@ use DTL\WorseReflection\Frame\Frame;
 use PhpParser\NodeTraverser;
 use PhpParser\Node;
 use DTL\WorseReflection\Frame\FrameStack;
-use DTL\WorseReflection\Node\NodeAndAncestors;
+use DTL\WorseReflection\Node\NodePath;
 
 class FrameFinderVisitor extends NodeVisitorAbstract
 {
@@ -45,7 +45,7 @@ class FrameFinderVisitor extends NodeVisitorAbstract
         $this->trail[] = $node;
 
         if ($startPos <= $this->offset && $endPos >= $this->offset) {
-            $this->traverser = new NodeAndAncestors($this->trail);
+            $this->traverser = new NodePath($this->trail);
         }
 
         if ($this->isScopeChangingNode($node)) {
@@ -81,12 +81,12 @@ class FrameFinderVisitor extends NodeVisitorAbstract
         return $this->frame;
     }
 
-    public function getNodeAtOffset(): NodeAndAncestors
+    public function getNodePathAtOffset(): NodePath
     {
         return $this->traverser;
     }
 
-    public function hasNodeAtOffset(): bool
+    public function hasNodePathAtOffset(): bool
     {
         return null !== $this->traverser;
     }
