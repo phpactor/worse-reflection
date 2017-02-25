@@ -19,6 +19,16 @@ class NodeAndAncestors
         return end($this->nodes);
     }
 
+    public function pop()
+    {
+        return array_pop($this->nodes);
+    }
+
+    public function all()
+    {
+        return $this->nodes;
+    }
+
     public function seekBack(\Closure $predicate)
     {
         while ($this->index > 0 && $this->index <= $this->size) {

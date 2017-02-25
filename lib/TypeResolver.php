@@ -20,7 +20,7 @@ class TypeResolver
 
     public function resolveParserNode(ReflectionFrame $frame, Node $node)
     {
-        if ($node instanceof Node\Expr\MethodCall) {
+        if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
             $subjectType = $this->resolveParserNode($frame, $node->var);
         }
 
@@ -31,6 +31,17 @@ class TypeResolver
         if ($node instanceof Node\Expr\MethodCall) {
             $class = $this->reflector->reflectClass($subjectType->getClassName());
             return $class->getMethods()->get($node->name)->getReturnType();
+        }
+
+        if ($node instanceof Node\Expr\PropertyFetch) {
+            $class = $this->reflector->reflectClass($subjectType->getClassName());
+            $properties = $class->getProperties();
+
+            if (!isset($properties[$node->name])) {
+                return Type::unknown();
+            }
+
+            return $properties[$node->name]->getType();
         }
 
         return Type::unknown();

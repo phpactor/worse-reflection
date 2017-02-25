@@ -81,9 +81,14 @@ class ReflectionClass
         }, ''));
     }
 
+    public function hasParentClass(): bool
+    {
+        return (bool) $this->classNode->extends;
+    }
+
     public function getParentClass(): ReflectionClass
     {
-        if (!$this->classNode->extends) {
+        if (!$this->hasParentClass()) {
             throw new \RuntimeException(sprintf(
                 'Class "%s" has no parent',
                 $this->getName()->getFqn()
@@ -103,7 +108,7 @@ class ReflectionClass
             }
 
             foreach ($stmt->props as $prop) {
-                $properties[] = new ReflectionProperty($this->sourceContext, $stmt, $prop);
+                $properties[$prop->name] = new ReflectionProperty($stmt, $prop);
             }
         }
 

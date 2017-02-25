@@ -137,6 +137,11 @@ class Type
         return $this->className;
     }
 
+    public function isClass()
+    {
+        return (bool) $this->className;
+    }
+
     private static function create($type)
     {
         $instance = new self();
