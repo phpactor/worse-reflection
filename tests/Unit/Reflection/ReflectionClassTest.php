@@ -282,7 +282,7 @@ EOT
             ClassName::fromString('Foobar'),
             ],
             [
-                'Foobar',
+                'Foobar\Barfoo\Foobar',
                 <<<EOT
 <?php 
 
