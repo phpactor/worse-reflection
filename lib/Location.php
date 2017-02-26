@@ -22,7 +22,11 @@ final class Location
     {
         return $this->path;
     }
-    
+
+    public function isAbsolute()
+    {
+        return substr($this->path, 0, 1) === '/';
+    }
 
     public static function fromNothing()
     {

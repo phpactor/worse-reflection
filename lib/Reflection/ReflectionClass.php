@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Property;
 use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 use DTL\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
+use PhpParser\Node\Stmt\Interface_;
 
 class ReflectionClass
 {
@@ -47,7 +48,7 @@ class ReflectionClass
 
     public function getMethods(): ReflectionMethodCollection
     {
-        return new ReflectionMethodCollection($this->reflector, $this->sourceContext, $this->classNode);
+        return ReflectionMethodCollection::generate($this->reflector, $this, $this->sourceContext, $this->classNode);
     }
 
     public function getName(): ClassName
@@ -104,19 +105,19 @@ class ReflectionClass
         return ReflectionPropertyCollection::fromClassNode($this->sourceContext, $this->classNode);
     }
 
-    public function getVisibleProperties(): ReflectionPropertyCollection
+    public function getVisibleProperties(ReflectionClass $callingClass = null): ReflectionPropertyCollection
     {
-        $properties = $this->getProperties();
+        $properties = $this->getPropertiesForCallingClass($this, $callingClass);
 
         if (false === $this->hasParentClass()) {
             return $properties;
         }
 
         $class = $this;
-
         while ($class->hasParentClass()) {
             $parentClass = $class->getParentClass();
-            $properties = $properties->merge($parentClass->getProperties()->withoutPrivate());
+            $properties = $this->getPropertiesForCallingClass($parentClass, $callingClass);
+
             $class = $parentClass;
         }
 
@@ -133,12 +134,11 @@ class ReflectionClass
             return false;
         }
 
-        if ($this->getParentClass()->getName() == $className) {
+        if ($this->getName() == $className) {
             return true;
         }
 
-
-        $currentClass = $this->getParentClass();
+        $currentClass = $this;
 
         while ($currentClass->hasParentClass()) {
             $parentClass = $currentClass->getParentClass();
@@ -146,9 +146,32 @@ class ReflectionClass
             if ($parentClass->getName() == $className) {
                 return true;
             }
+
             $currentClass = $parentClass;
         }
 
         return false;
+    }
+
+    public function isInterface(): bool
+    {
+        return $this->classNode instanceof Interface_;
+    }
+
+    private function getPropertiesForCallingClass(ReflectionClass $currentClass, ReflectionClass $callingClass = null)
+    {
+        if (null === $callingClass) {
+            return $currentClass->getProperties()->publicOnly();
+        }
+
+        if ($callingClass->getName()->getFqn() === $currentClass->getName()->getFqn()) {
+            return $currentClass->getProperties();
+        } 
+
+        if ($callingClass->isSubclassOf($currentClass->getName())) {
+            return $currentClass->getProperties()->withoutPrivate();
+        }
+
+        return $currentClass->getProperties()->publicOnly();
     }
 }

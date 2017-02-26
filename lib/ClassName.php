@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DTL\WorseReflection;
 
 use PhpParser\Node;
+use DTL\WorseReflection\NamespaceName;
 
 
 class ClassName implements NameLike
@@ -68,6 +69,13 @@ class ClassName implements NameLike
     public function getFqn(): string
     {
         return $this->name->getFqn();
+    }
+
+    public function getNamespaceName(): NamespaceName
+    {
+        $parts = $this->name->getParts();
+        array_pop($parts);
+        return NamespaceName::fromParts($parts);
     }
 
     public function getShortName(): string

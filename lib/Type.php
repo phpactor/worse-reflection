@@ -140,7 +140,7 @@ class Type
 
     public function __toString()
     {
-        return $this->type ?: '<unknown>';
+        return $this->isClass() ? $this->className->getFqn() : ($this->type ?: '<unknown>');
     }
 
     public function getClassName()

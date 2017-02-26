@@ -10,6 +10,7 @@ use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 use DTL\WorseReflection\Reflection\Collection\ReflectionVariableCollection;
 use DTL\WorseReflection\Type;
 use DTL\WorseReflection\Util\DocCommentParser;
+use DTL\WorseReflection\Reflection\ReflectionClass;
 
 class ReflectionMethod
 {
@@ -40,6 +41,7 @@ class ReflectionMethod
 
     public function __construct(
         Reflector $reflector,
+        ReflectionClass $declaringClass,
         SourceContext $sourceContext,
         ClassMethod $methodNode
     )
@@ -58,6 +60,11 @@ class ReflectionMethod
     public function isStatic(): bool
     {
         return $this->methodNode->isStatic();
+    }
+
+    public function isAbstract(): bool
+    {
+        return $this->methodNode->isAbstract();
     }
 
     public function getVisibility(): Visibility
@@ -95,5 +102,10 @@ class ReflectionMethod
     public function getDocComment()
     {
         return DocCommentParser::parseProse($this->methodNode->getDocComment());
+    }
+
+    public function getDeclaringClass(): ReflectionClass
+    {
+        return $this->declaringClass;
     }
 }

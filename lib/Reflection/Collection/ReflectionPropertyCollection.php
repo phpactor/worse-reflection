@@ -38,6 +38,13 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
         }));
     }
 
+    public function publicOnly()
+    {
+        return new self('property', array_filter($this->all(), function ($property) {
+            return $property->getVisibility()->isPublic();
+        }));
+    }
+
     public function merge(ReflectionPropertyCollection $collection)
     {
         return new self('property', array_merge(
