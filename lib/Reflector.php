@@ -2,62 +2,34 @@
 
 namespace DTL\WorseReflection;
 
-use DTL\WorseReflection\Reflection\ReflectionClass;
-use DTL\WorseReflection\Reflection\ReflectionFrame;
-use DTL\WorseReflection\Reflection\ReflectionOffset;
-use DTL\WorseReflection\Frame\Visitor\FrameFinderVisitor;
-use PhpParser\NodeTraverser;
+use Microsoft\PhpParser\Parser;
+use DTL\WorseReflection\Reflection\ReflectionSourceCode;
+use DTL\WorseReflection\Reflection\AbstractReflectionClass;
 
 class Reflector
 {
     private $sourceLocator;
-    private $sourceContextFactory;
+    private $parser;
 
-    public function __construct(SourceLocator $sourceLocator, SourceContextFactory $sourceContextFactory)
+    public function __construct(SourceCodeLocator $sourceLocator, Parser $parser = null)
     {
         $this->sourceLocator = $sourceLocator;
-        $this->sourceContextFactory = $sourceContextFactory;
+        $this->parser = $parser ?: new Parser();
     }
 
-    public function reflectClass(ClassName $className): ReflectionClass
+    public function reflectClass(ClassName $className): AbstractReflectionClass
     {
         $source = $this->sourceLocator->locate($className);
+        $node = $this->parser->parseSourceFile((string) $source);
+        $sourceCodeReflection = new ReflectionSourceCode($this, $node);
 
-        return $this->reflectClassFromSource($className, $source);
-    }
-
-    public function reflectOffsetInSource(int $offset, Source $source): ReflectionOffset
-    {
-        $sourceContext = $this->sourceContextFactory->createFor($source);
-
-        $visitor = new FrameFinderVisitor($offset);
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($sourceContext->getNodes());
-        $frame = $visitor->getFrame();
-        $typeResolver = new TypeResolver($this);
-
-        return new ReflectionOffset(
-            $typeResolver,
-            $visitor->hasNodeAtOffset() ? $visitor->getNodeAtOffset(): null,
-            new ReflectionFrame($this, $sourceContext, $frame)
-        );
-    }
-
-    public function reflectClassFromSource(ClassName $className, Source $source)
-    {
-        $sourceContext = $this->sourceContextFactory->createFor($source);
-
-        if (false === $sourceContext->hasClass($className)) {
-            throw new \RuntimeException(sprintf(
-                'Unable to locate class "%s" in file "%s"',
-                $className->getFqn(),
-                (string) $source->getLocation()
+        if (null === $class = $sourceCodeReflection->findClass(ClassName::fromString($className))) {
+            throw new Exception\ClassNotFound(sprintf(
+                'Unable to locate class "%s"',
+                $className->full()
             ));
         }
 
-        $classNode = $sourceContext->getClassNode($className);
-
-        return new ReflectionClass($this, $sourceContext, $classNode);
+        return $class;
     }
 }

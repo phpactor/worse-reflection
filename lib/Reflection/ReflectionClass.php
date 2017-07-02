@@ -4,14 +4,16 @@ namespace DTL\WorseReflection\Reflection;
 
 use DTL\WorseReflection\Reflector;
 use PhpParser\Node\Stmt\ClassLike;
-use DTL\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\ClassName;
-use PhpParser\Node\Stmt\Property;
 use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
-use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\NamespacedNameInterface;
+use Microsoft\PhpParser\Node\QualifiedName;
+use DTL\WorseReflection\Exception\ClassNotFound;
+use DTL\WorseReflection\Visibility;
+use DTL\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
 
-class ReflectionClass
+class ReflectionClass extends AbstractReflectionClass
 {
     /**
      * @var Reflector
@@ -19,94 +21,100 @@ class ReflectionClass
     private $reflector;
 
     /**
-     * @var SourceContext
-     */
-    private $sourceContext;
-
-    /**
      * @var ClassLike
      */
-    private $classNode;
-
-    /*
-     * @var ClassMethod[]
-     */
-    private $classMethodNodes;
+    private $node;
 
     public function __construct(
         Reflector $reflector,
-        SourceContext $sourceContext,
-        ClassLike $classNode
-    )
-    {
+        ClassDeclaration $node
+    ) {
         $this->reflector = $reflector;
-        $this->sourceContext = $sourceContext;
-        $this->classNode = $classNode;
+        $this->node = $node;
     }
 
-    public function getMethods(): ReflectionMethodCollection
+    protected function node(): NamespacedNameInterface
     {
-        return new ReflectionMethodCollection($this->reflector, $this->sourceContext, $this->classNode);
+        return $this->node;
     }
 
-    public function getName(): ClassName
+    protected function baseClass()
     {
-        return $this->sourceContext->resolveClassName(ClassName::fromString($this->classNode->name));
     }
 
-    public function getInterfaces()
+    public function parent()
     {
-        $interfaces = [];
-        foreach ($this->classNode->implements as $name) {
-            $interfaceName = $this->sourceContext->resolveClassName(ClassName::fromString((string) $name));
-            $interfaces[] = $this->reflector->reflectClass($interfaceName);
+        if (!$this->node->classBaseClause) {
+            return;
         }
 
-        return $interfaces;
-    }
-
-    public function getConstants(): ReflectionConstantCollection
-    {
-        return new ReflectionConstantCollection(
-            $this->reflector,
-            $this->sourceContext,
-            $this->classNode
-        );
-    }
-
-    public function getDocComment(): ReflectionDocComment
-    {
-        return ReflectionDocComment::fromRaw(array_reduce($this->classNode->getAttribute('comments'), function ($text, $comment) {
-            return $text .= $comment->getText();
-        }, ''));
-    }
-
-    public function getParentClass(): ReflectionClass
-    {
-        if (!$this->classNode->extends) {
-            throw new \RuntimeException(sprintf(
-                'Class "%s" has no parent',
-                $this->getName()->getFqn()
-            ));
+        try {
+            return $this->reflector()->reflectClass(
+                ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
+            );
+        } catch (ClassNotFound $e) {
         }
-        $parentName = $this->sourceContext->resolveClassName(ClassName::fromString((string) $this->classNode->extends));
-        return $this->reflector->reflectClass($parentName);
     }
 
-    public function getProperties(): array
+    protected function reflector(): Reflector
     {
-        $properties = [];
+        return $this->reflector;
+    }
 
-        foreach ($this->classNode->stmts as $stmt) {
-            if (false === $stmt instanceof Property) {
-                continue;
-            }
+    public function properties(): ReflectionPropertyCollection
+    {
+        $parentProperties = null;
+        if ($this->parent()) {
+            $parentProperties = $this->parent()->properties()->byVisibilities([Visibility::public(), Visibility::protected()]);
+        }
 
-            foreach ($stmt->props as $prop) {
-                $properties[] = new ReflectionProperty($stmt, $prop);
-            }
+        $properties = ReflectionPropertyCollection::fromClassDeclaration($this->reflector, $this->node);
+
+        if ($parentProperties) {
+            return $parentProperties->merge($properties);
         }
 
         return $properties;
+    }
+
+    public function methods(): ReflectionMethodCollection
+    {
+        $parentMethods = null;
+        if ($this->parent()) {
+            $parentMethods = $this->parent()->methods()->byVisibilities([Visibility::public(), Visibility::protected()]);
+        }
+
+        $methods = ReflectionMethodCollection::fromClassDeclaration($this->reflector, $this->node);
+
+        if ($parentMethods) {
+            return $parentMethods->merge($methods);
+        }
+
+        return $methods;
+    }
+
+    public function interfaces(): array
+    {
+        if (!$this->node->classInterfaceClause) {
+            return;
+        }
+
+        $interfaces = [];
+
+        foreach ($this->node->classInterfaceClause->interfaceNameList->children as $name) {
+            if (false === $name instanceof QualifiedName) {
+                continue;
+            }
+
+            try {
+                $interface = $this->reflector->reflectClass(
+                    ClassName::fromString((string) $name->getResolvedName())
+                );
+                $interfaces[$interface->name()->full()] = $interface;
+            } catch (ClassNotFound $e) {
+            }
+        }
+
+        return $interfaces;
     }
 }

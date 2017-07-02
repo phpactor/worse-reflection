@@ -3,12 +3,14 @@
 namespace DTL\WorseReflection\Reflection;
 
 use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Visibility;
-use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
-use DTL\WorseReflection\Reflection\Collection\ReflectionVariableCollection;
 use DTL\WorseReflection\Type;
+use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\TokenKind;
+use Microsoft\PhpParser\Token;
+use DTL\WorseReflection\DocblockResolver;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use DTL\WorseReflection\ClassName;
 
 class ReflectionMethod
 {
@@ -18,63 +20,77 @@ class ReflectionMethod
     private $reflector;
 
     /**
-     * @var SourceContext
-     */
-    private $sourceContext;
-
-    /**
      * @var ClassMethod
      */
-    private $methodNode;
-
-    /**
-     * @var string
-     */
-    private $name;
+    private $node;
 
     /**
      * @var Visibility
      */
     private $visibility;
 
+    /**
+     * @var DocblockResolver
+     */
+    private $docblockResolver;
+
     public function __construct(
         Reflector $reflector,
-        SourceContext $sourceContext,
-        ClassMethod $methodNode
-    )
-    {
+        MethodDeclaration $node
+    ) {
         $this->reflector = $reflector;
-        $this->sourceContext = $sourceContext;
-        $this->methodNode = $methodNode;
-        $this->name = $methodNode->name;
+        $this->node = $node;
+        $this->docblockResolver = new DocblockResolver($reflector);
     }
 
-    public function getName(): string
+    public function name(): string
     {
-        return $this->name;
+        return $this->node->getName();
     }
 
-    public function getVisibility(): Visibility
-    {
-        if ($this->methodNode->isProtected()) {
-            return Visibility::protected();
-        }
+    public function class(): ReflectionClass
+ {
+     $class = $this->node->getFirstAncestor(ClassDeclaration::class)->getNamespacedName();
 
-        if ($this->methodNode->isPrivate()) {
-            return Visibility::private();
+     return $this->reflector->reflectClass(ClassName::fromString($class));
+ }
+
+    public function visibility(): Visibility
+    {
+        foreach ($this->node->modifiers as $token) {
+            if ($token->kind === TokenKind::PrivateKeyword) {
+                return Visibility::private();
+            }
+
+            if ($token->kind === TokenKind::ProtectedKeyword) {
+                return Visibility::protected();
+            }
         }
 
         return Visibility::public();
     }
 
+    public function type(): Type
+    {
+        if (!$this->node->returnType) {
+            return $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+        }
+
+        if ($this->node->returnType instanceof Token) {
+            return Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
+        }
+
+        return Type::fromString($this->node->returnType->getResolvedName());
+    }
+
     public function getParameters()
     {
-        return new ReflectionParameterCollection($this->reflector, $this->sourceContext, $this->methodNode);
+        return new ReflectionParameterCollection($this->reflector, $this->sourceContext, $this->node);
     }
 
     public function getReturnType(): Type
     {
-        return Type::fromString($this->sourceContext, (string) $this->methodNode->returnType);
+        return Type::fromString($this->sourceContext, (string) $this->node->returnType);
     }
 
     public function getVariables()
@@ -82,7 +98,7 @@ class ReflectionMethod
         return new ReflectionVariableCollection(
             $this->reflector,
             $this->sourceContext,
-            $this->methodNode
+            $this->node
         );
     }
 }

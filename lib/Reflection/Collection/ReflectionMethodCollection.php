@@ -3,36 +3,39 @@
 namespace DTL\WorseReflection\Reflection\Collection;
 
 use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Reflection\ReflectionMethod;
-use PhpParser\Node;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\MethodDeclaration;
 
 class ReflectionMethodCollection extends AbstractReflectionCollection
 {
-    public function __construct(Reflector $reflector, SourceContext $sourceContext, ClassLike $classNode)
+    public static function fromClassDeclaration(Reflector $reflector, ClassDeclaration $class)
     {
-        parent::__construct(
-            'method',
-            $reflector,
-            $sourceContext,
-            array_reduce(array_filter($classNode->stmts, function ($stmt) {
-                return $stmt instanceof ClassMethod;
-            }), function ($methods, $node) {
-                $methods[$node->name] = $node;
-                return $methods;
-            }, [])
-        );
+        $methods = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
+            return $member instanceof MethodDeclaration;
+        });
+
+        $items = [];
+        foreach ($methods as $method) {
+            $items[$method->getName()] = new ReflectionMethod($reflector, $method);
+        }
+
+        return new static($reflector, $items);
     }
 
-    protected function createReflectionElement(Reflector $reflector, SourceContext $sourceContext, Node $node)
+    public function byVisibilities(array $visibilities)
     {
-        return new ReflectionMethod($reflector, $sourceContext, $node);
-    }
+        $items = [];
+        foreach ($this->items as $key => $item) {
+            foreach ($visibilities as $visibility) {
+                if ($item->visibility() != $visibility) {
+                    continue;
+                }
 
-    public function get(string $name): ReflectionMethod
-    {
-        return parent::get($name);
+                $items[$key] = $item;
+            }
+        }
+
+        return new static($this->reflector, $items);
     }
 }
