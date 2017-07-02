@@ -2,7 +2,6 @@
 
 namespace DTL\WorseReflection\Reflection\Collection;
 
-use Microsoft\PhpParser\Node;
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\Reflection\ReflectionMethod;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
@@ -18,7 +17,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
 
         $items = [];
         foreach ($methods as $method) {
-             $items[$method->getName()] = new ReflectionMethod($reflector, $method);
+            $items[$method->getName()] = new ReflectionMethod($reflector, $method);
         }
 
         return new static($reflector, $items);

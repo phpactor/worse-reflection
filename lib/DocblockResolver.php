@@ -3,7 +3,6 @@
 namespace DTL\WorseReflection;
 
 use Microsoft\PhpParser\Node;
-use DTL\WorseReflection\Type;
 use DTL\WorseReflection\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
@@ -47,10 +46,9 @@ class DocblockResolver
         $firstPart = array_shift($parts);
 
         if (isset($importTable[$firstPart])) {
-            return Type::fromString($importTable[$firstPart] . '\\' . implode('\\', $parts));
+            return Type::fromString($importTable[$firstPart].'\\'.implode('\\', $parts));
         }
 
         return Type::fromString($matches[1]);
     }
-
 }

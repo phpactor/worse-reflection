@@ -17,6 +17,6 @@ class StringSourceLocator implements SourceCodeLocator
 
     public function locate(ClassName $className): SourceCode
     {
-        return $this->source;;
+        return $this->source;
     }
 }

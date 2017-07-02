@@ -17,7 +17,7 @@ class ComposerSourceLocator implements SourceCodeLocator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function locate(ClassName $className): SourceCode
     {

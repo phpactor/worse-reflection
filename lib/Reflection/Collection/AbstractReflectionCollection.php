@@ -3,8 +3,6 @@
 namespace DTL\WorseReflection\Reflection\Collection;
 
 use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\SourceContext;
-use Microsoft\PhpParser\Node;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate
 {

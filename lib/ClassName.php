@@ -14,6 +14,7 @@ class ClassName
     public static function fromString(string $string)
     {
         $parts = explode('\\', trim($string, '\\'));
+
         return new self($parts);
     }
 

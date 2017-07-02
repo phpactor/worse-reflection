@@ -7,7 +7,6 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflector;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
-use DTL\WorseReflection\Reflection\ReflectionInterface;
 
 class ReflectionSourceCode
 {

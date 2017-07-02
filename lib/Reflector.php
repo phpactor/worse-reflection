@@ -2,13 +2,6 @@
 
 namespace DTL\WorseReflection;
 
-use DTL\WorseReflection\Reflection\ReflectionClass;
-use DTL\WorseReflection\Reflection\ReflectionFrame;
-use DTL\WorseReflection\Reflection\ReflectionOffset;
-use DTL\WorseReflection\Frame\Visitor\FrameFinderVisitor;
-use PhpParser\NodeTraverser;
-use DTL\WorseReflection\SourceCode;
-use DTL\WorseReflection\SourceCodeLocator;
 use Microsoft\PhpParser\Parser;
 use DTL\WorseReflection\Reflection\ReflectionSourceCode;
 use DTL\WorseReflection\Reflection\AbstractReflectionClass;

@@ -2,8 +2,6 @@
 
 namespace DTL\WorseReflection;
 
-use Microsoft\PhpParser\Node;
-
 class Type
 {
     const TYPE_ARRAY = 'array';

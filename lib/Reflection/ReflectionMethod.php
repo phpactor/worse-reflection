@@ -37,8 +37,7 @@ class ReflectionMethod
     public function __construct(
         Reflector $reflector,
         MethodDeclaration $node
-    )
-    {
+    ) {
         $this->reflector = $reflector;
         $this->node = $node;
         $this->docblockResolver = new DocblockResolver($reflector);
@@ -50,10 +49,11 @@ class ReflectionMethod
     }
 
     public function class(): ReflectionClass
-    {
-        $class = $this->node->getFirstAncestor(ClassDeclaration::class)->getNamespacedName();
-        return $this->reflector->reflectClass(ClassName::fromString($class));
-    }
+ {
+     $class = $this->node->getFirstAncestor(ClassDeclaration::class)->getNamespacedName();
+
+     return $this->reflector->reflectClass(ClassName::fromString($class));
+ }
 
     public function visibility(): Visibility
     {

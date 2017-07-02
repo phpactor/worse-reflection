@@ -24,11 +24,11 @@ class ReflectionProperty
         $this->docblockResolver = new DocblockResolver($reflector);
     }
 
-    public function name() 
+    public function name()
     {
         return (string) $this->variable->getName();
     }
-    
+
     public function visibility()
     {
         foreach ($this->propertyDeclaration->modifiers as $token) {

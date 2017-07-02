@@ -2,7 +2,6 @@
 
 namespace DTL\WorseReflection\Reflection\Collection;
 
-use Microsoft\PhpParser\Node;
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
