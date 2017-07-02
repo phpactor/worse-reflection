@@ -96,7 +96,7 @@ class ReflectionClass extends AbstractReflectionClass
     public function interfaces(): array
     {
         if (!$this->node->classInterfaceClause) {
-            return;
+            return [];
         }
 
         $interfaces = [];
