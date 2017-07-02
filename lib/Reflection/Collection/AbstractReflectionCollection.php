@@ -9,22 +9,39 @@ use Microsoft\PhpParser\Node;
 abstract class AbstractReflectionCollection implements \IteratorAggregate
 {
     protected $items = [];
-    private $reflector;
+    protected $reflector;
 
-    public function __construct(Reflector $reflector, array $items)
+    protected function __construct(Reflector $reflector, array $items)
     {
         $this->reflector = $reflector;
-        foreach ($items as $item) {
-            $this->add($item);
-        }
+        $this->items = $items;
     }
 
-    abstract protected function add(Node $method);
-    abstract protected function createFromNode(Reflector $reflector, Node $node);
-
-    public function getIterator()
+    public function keys(): array
     {
-        return new \ArrayIterator($this->items);
+        return array_keys($this->items);
+    }
+
+    public function merge(AbstractReflectionCollection $collection)
+    {
+        if (false === $collection instanceof static) {
+            throw new \InvalidArgumentException(sprintf(
+                'Collection must be instance of "%s"',
+                static::class
+            ));
+        }
+
+        $items = $this->items;
+
+        foreach ($collection as $key => $value) {
+            $items[$key] = $value;
+        }
+
+        return new static($this->reflector, $items);
+    }
+
+    protected function assertCollectionType(AbstractReflectionCollection $collection): bool
+    {
     }
 
     public function get(string $name)
@@ -36,6 +53,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
             ));
         }
 
-        return $this->createFromNode($this->reflector, $this->items[$name]);
+        return $this->items[$name];
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->items);
     }
 }

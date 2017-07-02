@@ -15,6 +15,8 @@ use DTL\WorseReflection\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\MethodDeclaration;
+use DTL\WorseReflection\Exception\ClassNotFound;
+use DTL\WorseReflection\Visibility;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -52,9 +54,12 @@ class ReflectionClass extends AbstractReflectionClass
             return;
         }
 
-        return $this->reflector()->reflectClass(
-            ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
-        );
+        try {
+            return $this->reflector()->reflectClass(
+                ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
+            );
+        } catch (ClassNotFound $e) {
+        }
     }
 
     protected function reflector(): Reflector
@@ -68,11 +73,18 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function methods(): ReflectionMethodCollection
     {
-        $methods = array_filter($this->node->classMembers->classMemberDeclarations, function ($member) {
-            return $member instanceof MethodDeclaration;
-        });
+        $parentMethods = null;
+        if ($this->parent()) {
+            $parentMethods = $this->parent()->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
+        }
 
-        return new ReflectionMethodCollection($this->reflector, $methods);
+        $methods = ReflectionMethodCollection::fromClassDeclaration($this->reflector, $this->node);
+
+        if ($parentMethods) {
+            return $parentMethods->merge($methods);
+        }
+
+        return $methods;
     }
 
     public function interfaces(): array
@@ -88,10 +100,13 @@ class ReflectionClass extends AbstractReflectionClass
                 continue;
             }
 
-            $interface = $this->reflector->reflectClass(
-                ClassName::fromString((string) $name->getResolvedName())
-            );
-            $interfaces[$interface->name()->full()] = $interface;
+            try {
+                $interface = $this->reflector->reflectClass(
+                    ClassName::fromString((string) $name->getResolvedName())
+                );
+                $interfaces[$interface->name()->full()] = $interface;
+            } catch (ClassNotFound $e) {
+            }
         }
 
         return $interfaces;

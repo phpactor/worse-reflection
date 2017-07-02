@@ -7,6 +7,10 @@ use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\Type;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\TokenKind;
+use Microsoft\PhpParser\Token;
+use DTL\WorseReflection\DocblockResolver;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use DTL\WorseReflection\ClassName;
 
 class ReflectionMethod
 {
@@ -25,6 +29,11 @@ class ReflectionMethod
      */
     private $visibility;
 
+    /**
+     * @var DocblockResolver
+     */
+    private $docblockResolver;
+
     public function __construct(
         Reflector $reflector,
         MethodDeclaration $node
@@ -32,11 +41,18 @@ class ReflectionMethod
     {
         $this->reflector = $reflector;
         $this->node = $node;
+        $this->docblockResolver = new DocblockResolver($reflector);
     }
 
     public function name(): string
     {
         return $this->node->getName();
+    }
+
+    public function class(): ReflectionClass
+    {
+        $class = $this->node->getFirstAncestor(ClassDeclaration::class)->getNamespacedName();
+        return $this->reflector->reflectClass(ClassName::fromString($class));
     }
 
     public function visibility(): Visibility
@@ -52,6 +68,19 @@ class ReflectionMethod
         }
 
         return Visibility::public();
+    }
+
+    public function type(): Type
+    {
+        if (!$this->node->returnType) {
+            return $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+        }
+
+        if ($this->node->returnType instanceof Token) {
+            return Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
+        }
+
+        return Type::fromString($this->node->returnType->getResolvedName());
     }
 
     public function getParameters()

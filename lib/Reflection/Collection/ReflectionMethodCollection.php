@@ -5,16 +5,38 @@ namespace DTL\WorseReflection\Reflection\Collection;
 use Microsoft\PhpParser\Node;
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\Reflection\ReflectionMethod;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\MethodDeclaration;
 
 class ReflectionMethodCollection extends AbstractReflectionCollection
 {
-    protected function add(Node $method)
+    public static function fromClassDeclaration(Reflector $reflector, ClassDeclaration $class)
     {
-        $this->items[$method->getName()] = $method;
+        $methods = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
+            return $member instanceof MethodDeclaration;
+        });
+
+        $items = [];
+        foreach ($methods as $method) {
+             $items[$method->getName()] = new ReflectionMethod($reflector, $method);
+        }
+
+        return new static($reflector, $items);
     }
-    
-    protected function createFromNode(Reflector $reflector, Node $node)
+
+    public function byVisibilities(array $visibilities)
     {
-        return new ReflectionMethod($reflector, $node);
+        $items = [];
+        foreach ($this->items as $key => $item) {
+            foreach ($visibilities as $visibility) {
+                if ($item->visibility() != $visibility) {
+                    continue;
+                }
+
+                $items[$key] = $item;
+            }
+        }
+
+        return new static($this->reflector, $items);
     }
 }
