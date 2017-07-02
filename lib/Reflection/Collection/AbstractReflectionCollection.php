@@ -4,7 +4,7 @@ namespace DTL\WorseReflection\Reflection\Collection;
 
 use DTL\WorseReflection\Reflector;
 
-abstract class AbstractReflectionCollection implements \IteratorAggregate
+abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     protected $items = [];
     protected $reflector;
@@ -13,6 +13,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
     {
         $this->reflector = $reflector;
         $this->items = $items;
+    }
+
+    public function count()
+    {
+        return count($this->items);
     }
 
     public function keys(): array
@@ -58,4 +63,25 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate
     {
         return new \ArrayIterator($this->items);
     }
+
+    public function offsetGet($name)
+    {
+        return $this->get($name);
+    }
+
+    public function offsetSet($name, $value)
+    {
+        throw new \BadMethodCallException('Collections are immutable');
+    }
+
+    public function offsetUnset($name)
+    {
+        throw new \BadMethodCallException('Collections are immutable');
+    }
+
+    public function offsetExists($name)
+    {
+        return isset($this->items[$name]);
+    }
+
 }
