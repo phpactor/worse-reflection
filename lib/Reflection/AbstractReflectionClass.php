@@ -13,20 +13,6 @@ abstract class AbstractReflectionClass
         return ClassName::fromString((string) $this->node()->getNamespacedName());
     }
 
-    public function parent(): ReflectionClass
-    {
-        if (null === $this->baseClass()) {
-            return;
-        }
-        
-        return $this->reflector()->reflectClass(ClassName::fromString((string) $this->baseClass()->getResolvedName()));
-    }
-
-    /**
-     * @return null|QualifiedName
-     */
-    abstract protected function baseClass();
-
     abstract protected function node(): NamespacedNameInterface;
 
     abstract protected function reflector(): Reflector;

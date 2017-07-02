@@ -13,6 +13,7 @@ use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use DTL\WorseReflection\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use Microsoft\PhpParser\Node\QualifiedName;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -42,11 +43,17 @@ class ReflectionClass extends AbstractReflectionClass
 
     protected function baseClass()
     {
+    }
+
+    public function parent()
+    {
         if (!$this->node->classBaseClause) {
             return;
         }
 
-        return $this->node->classBaseClause->baseClass;
+        return $this->reflector()->reflectClass(
+            ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
+        );
     }
 
     protected function reflector(): Reflector
@@ -58,4 +65,25 @@ class ReflectionClass extends AbstractReflectionClass
     {
     }
 
+    public function interfaces(): array
+    {
+        if (!$this->node->classInterfaceClause) {
+            return;
+        }
+
+        $interfaces = [];
+
+        foreach ($this->node->classInterfaceClause->interfaceNameList->children as $name) {
+            if (false === $name instanceof QualifiedName) {
+                continue;
+            }
+
+            $interface = $this->reflector->reflectClass(
+                ClassName::fromString((string) $name->getResolvedName())
+            );
+            $interfaces[$interface->name()->full()] = $interface;
+        }
+
+        return $interfaces;
+    }
 }

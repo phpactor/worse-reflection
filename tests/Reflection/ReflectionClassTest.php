@@ -71,6 +71,30 @@ EOT
                     $this->assertInstanceOf(ReflectionInterface::class, $class);
                 }
             ],
+            'It reflects a classes interfaces' => [
+                <<<'EOT'
+<?php
+interface Barfoo
+{
+}
+
+interface Bazbar
+{
+}
+
+class Foobar implements Barfoo, Bazbar
+{
+}
+EOT
+                ,
+                'Foobar',
+                function ($class) {
+                    $interfaces = $class->interfaces();
+                    $this->assertCount(2, $interfaces);
+                    $interface = $interfaces['Barfoo'];
+                    $this->assertInstanceOf(ReflectionInterface::class, $interface);
+                }
+            ],
         ];
     }
 }

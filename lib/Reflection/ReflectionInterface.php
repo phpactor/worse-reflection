@@ -40,15 +40,6 @@ class ReflectionInterface extends AbstractReflectionClass
         return $this->node;
     }
 
-    protected function baseClass()
-    {
-        if (!$this->interfaceBaseClause) {
-            return;
-        }
-
-        return $this->interfaceBaseClause->baseClass;
-    }
-
     protected function reflector(): Reflector
     {
         return $this->reflector;
