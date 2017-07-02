@@ -21,3 +21,18 @@ refactoring tool. And is therefore driven by that use case.
 If you want comprehsnsive reflection, use BetterReflection. If you want faster
 class-based reflection with no support and frequent BC breaks, then you can
 use this one.
+
+## Usage
+
+```php
+$reflector = new Reflector(new StringSourceLocator(SourceCode::fromString('<?php ...')));
+$class = $reflector->reflectClass('Foobar');
+$class->methods()->get('foobar')->visiblity() == Visibility::public();
+$class->properties()->get('barbar')->visiblity() == Visibility::public();
+
+/** @var ReflectionMethod */
+foreach ($class->methods() as $method) {
+    echo $method->name();
+}
+```
+
