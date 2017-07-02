@@ -4,9 +4,7 @@ namespace DTL\WorseReflection\Tests\Reflection;
 
 use DTL\WorseReflection\Tests\ReflectionTestCase;
 use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\AbstractReflectionProperty;
 use DTL\WorseReflection\Reflection\ReflectionProperty;
-use DTL\WorseReflection\Reflection\ReflectionInterface;
 use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\Type;
 
@@ -38,7 +36,7 @@ EOT
                 function ($properties) {
                     $this->assertEquals('property', $properties->get('property')->name());
                     $this->assertInstanceOf(ReflectionProperty::class, $properties->get('property'));
-                }
+                },
             ],
             'Private visibility' => [
                 <<<'EOT'
@@ -53,7 +51,7 @@ EOT
                 'Foobar',
                 function ($properties) {
                     $this->assertEquals(Visibility::private(), $properties->get('property')->visibility());
-                }
+                },
             ],
             'Protected visibility' => [
                 <<<'EOT'
@@ -68,7 +66,7 @@ EOT
                 'Foobar',
                 function ($properties) {
                     $this->assertEquals(Visibility::protected(), $properties->get('property')->visibility());
-                }
+                },
             ],
             'Public visibility' => [
                 <<<'EOT'
@@ -83,7 +81,7 @@ EOT
                 'Foobar',
                 function ($properties) {
                     $this->assertEquals(Visibility::public(), $properties->get('property')->visibility());
-                }
+                },
             ],
             'Inherited properties' => [
                 <<<'EOT'
@@ -114,7 +112,7 @@ EOT
                         ['property5', 'property2', 'property3', 'property4'],
                         $properties->keys()
                     );
-                }
+                },
             ],
             'Return type from docblock' => [
                 <<<'EOT'
@@ -134,7 +132,7 @@ EOT
                 'Foobar',
                 function ($properties) {
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $properties->get('property1')->type());
-                }
+                },
             ],
         ];
     }

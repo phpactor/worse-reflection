@@ -4,7 +4,6 @@ namespace DTL\WorseReflection\Tests\Reflection;
 
 use DTL\WorseReflection\Tests\ReflectionTestCase;
 use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\AbstractReflectionClass;
 use DTL\WorseReflection\Reflection\ReflectionClass;
 use DTL\WorseReflection\Reflection\ReflectionInterface;
 
@@ -43,7 +42,7 @@ EOT
                 function ($class) {
                     $this->assertEquals('Foobar', (string) $class->name()->short());
                     $this->assertInstanceOf(ReflectionClass::class, $class);
-                }
+                },
             ],
             'It reflects a class which extends another' => [
                 <<<'EOT'
@@ -61,7 +60,7 @@ EOT
                 function ($class) {
                     $this->assertEquals('Foobar', (string) $class->name()->short());
                     $this->assertEquals('Barfoo', (string) $class->parent()->name()->short());
-                }
+                },
             ],
             'It reflects an interface' => [
                 <<<'EOT'
@@ -76,7 +75,7 @@ EOT
                 function ($class) {
                     $this->assertEquals('Barfoo', (string) $class->name()->short());
                     $this->assertInstanceOf(ReflectionInterface::class, $class);
-                }
+                },
             ],
             'It reflects a classes interfaces' => [
                 <<<'EOT'
@@ -100,7 +99,7 @@ EOT
                     $this->assertCount(2, $interfaces);
                     $interface = $interfaces['Barfoo'];
                     $this->assertInstanceOf(ReflectionInterface::class, $interface);
-                }
+                },
             ],
         ];
     }

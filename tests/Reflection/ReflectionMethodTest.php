@@ -4,9 +4,7 @@ namespace DTL\WorseReflection\Tests\Reflection;
 
 use DTL\WorseReflection\Tests\ReflectionTestCase;
 use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\AbstractReflectionMethod;
 use DTL\WorseReflection\Reflection\ReflectionMethod;
-use DTL\WorseReflection\Reflection\ReflectionInterface;
 use DTL\WorseReflection\Visibility;
 use DTL\WorseReflection\Type;
 
@@ -38,7 +36,7 @@ EOT
                 function ($methods) {
                     $this->assertEquals('method', $methods->get('method')->name());
                     $this->assertInstanceOf(ReflectionMethod::class, $methods->get('method'));
-                }
+                },
             ],
             'Private visibility' => [
                 <<<'EOT'
@@ -53,7 +51,7 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertEquals(Visibility::private(), $methods->get('method')->visibility());
-                }
+                },
             ],
             'Protected visibility' => [
                 <<<'EOT'
@@ -70,7 +68,7 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertEquals(Visibility::protected(), $methods->get('method')->visibility());
-                }
+                },
             ],
             'Public visibility' => [
                 <<<'EOT'
@@ -85,7 +83,7 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertEquals(Visibility::public(), $methods->get('method')->visibility());
-                }
+                },
             ],
             'Return type' => [
                 <<<'EOT'
@@ -112,7 +110,7 @@ EOT
                     $this->assertEquals(Type::array(), $methods->get('method4')->type());
                     $this->assertEquals(Type::class(ClassName::fromString('Barfoo')), $methods->get('method5')->type());
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method6')->type());
-                }
+                },
             ],
             'Inherited methods' => [
                 <<<'EOT'
@@ -143,7 +141,7 @@ EOT
                         ['method5', 'method2', 'method3', 'method4'],
                         $methods->keys()
                     );
-                }
+                },
             ],
             'Return type from docblock' => [
                 <<<'EOT'
@@ -163,7 +161,7 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->type());
-                }
+                },
             ],
             'Return type from inherited docblock' => [
                 <<<'EOT'
@@ -191,7 +189,7 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->type());
-                }
+                },
             ],
         ];
     }
