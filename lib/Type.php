@@ -82,7 +82,7 @@ class Type
         return $this->type ?: '<unknown>';
     }
 
-    public function getClassName()
+    public function className()
     {
         return $this->className;
     }
