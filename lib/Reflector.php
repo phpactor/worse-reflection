@@ -31,7 +31,7 @@ class Reflector
         $sourceCodeReflection = new ReflectionSourceCode($this, $node);
 
         if (null === $class = $sourceCodeReflection->findClass(ClassName::fromString($className))) {
-            throw new \RuntimeException(sprintf(
+            throw new Exception\ClassNotFound(sprintf(
                 'Unable to locate class "%s"',
                 $className->full()
             ));

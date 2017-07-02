@@ -3,12 +3,10 @@
 namespace DTL\WorseReflection\Reflection;
 
 use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassMethod;
 use DTL\WorseReflection\Visibility;
-use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
-use DTL\WorseReflection\Reflection\Collection\ReflectionVariableCollection;
 use DTL\WorseReflection\Type;
+use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\TokenKind;
 
 class ReflectionMethod
 {
@@ -18,19 +16,9 @@ class ReflectionMethod
     private $reflector;
 
     /**
-     * @var SourceContext
-     */
-    private $sourceContext;
-
-    /**
      * @var ClassMethod
      */
-    private $methodNode;
-
-    /**
-     * @var string
-     */
-    private $name;
+    private $node;
 
     /**
      * @var Visibility
@@ -39,29 +27,28 @@ class ReflectionMethod
 
     public function __construct(
         Reflector $reflector,
-        SourceContext $sourceContext,
-        ClassMethod $methodNode
+        MethodDeclaration $node
     )
     {
         $this->reflector = $reflector;
-        $this->sourceContext = $sourceContext;
-        $this->methodNode = $methodNode;
-        $this->name = $methodNode->name;
+        $this->node = $node;
     }
 
-    public function getName(): string
+    public function name(): string
     {
-        return $this->name;
+        return $this->node->getName();
     }
 
-    public function getVisibility(): Visibility
+    public function visibility(): Visibility
     {
-        if ($this->methodNode->isProtected()) {
-            return Visibility::protected();
-        }
+        foreach ($this->node->modifiers as $token) {
+            if ($token->kind === TokenKind::PrivateKeyword) {
+                return Visibility::private();
+            }
 
-        if ($this->methodNode->isPrivate()) {
-            return Visibility::private();
+            if ($token->kind === TokenKind::ProtectedKeyword) {
+                return Visibility::protected();
+            }
         }
 
         return Visibility::public();
@@ -69,12 +56,12 @@ class ReflectionMethod
 
     public function getParameters()
     {
-        return new ReflectionParameterCollection($this->reflector, $this->sourceContext, $this->methodNode);
+        return new ReflectionParameterCollection($this->reflector, $this->sourceContext, $this->node);
     }
 
     public function getReturnType(): Type
     {
-        return Type::fromString($this->sourceContext, (string) $this->methodNode->returnType);
+        return Type::fromString($this->sourceContext, (string) $this->node->returnType);
     }
 
     public function getVariables()
@@ -82,7 +69,7 @@ class ReflectionMethod
         return new ReflectionVariableCollection(
             $this->reflector,
             $this->sourceContext,
-            $this->methodNode
+            $this->node
         );
     }
 }

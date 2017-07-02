@@ -11,12 +11,19 @@ use DTL\WorseReflection\Reflection\ReflectionInterface;
 class ReflectionClassTest extends ReflectionTestCase
 {
     /**
+     * @expectedException DTL\WorseReflection\Exception\ClassNotFound
+     */
+    public function testExceptionOnClassNotFound()
+    {
+        $this->createReflector('')->reflectClass(ClassName::fromString('Foobar'));
+    }
+
+    /**
      * @dataProvider provideReflectionClass
      */
     public function testReflectClass(string $source, string $class, \Closure $assertion)
     {
         $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
-        $this->assertInstanceOf(AbstractReflectionClass::class, $class);
         $assertion($class);
     }
 

@@ -14,6 +14,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use DTL\WorseReflection\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\Node\QualifiedName;
+use Microsoft\PhpParser\Node\MethodDeclaration;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -63,6 +64,15 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function properties(): array
     {
+    }
+
+    public function methods(): ReflectionMethodCollection
+    {
+        $methods = array_filter($this->node->classMembers->classMemberDeclarations, function ($member) {
+            return $member instanceof MethodDeclaration;
+        });
+
+        return new ReflectionMethodCollection($this->reflector, $methods);
     }
 
     public function interfaces(): array
