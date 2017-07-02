@@ -2,36 +2,50 @@
 
 namespace DTL\WorseReflection\Reflection;
 
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use DTL\WorseReflection\Visibility;
+use Microsoft\PhpParser\Node\Expression\Variable;
+use Microsoft\PhpParser\Node\PropertyDeclaration;
+use DTL\WorseReflection\Reflector;
+use Microsoft\PhpParser\TokenKind;
+use DTL\WorseReflection\DocblockResolver;
 
 class ReflectionProperty
 {
-    private $propertyNode;
-    private $propertyPropertyNode;
+    private $reflector;
+    private $propertyDeclaration;
+    private $variable;
+    private $docblockResolver;
 
-    public function __construct(Property $propertyNode, PropertyProperty $propertyPropertyNode)
+    public function __construct(Reflector $reflector, PropertyDeclaration $propertyDeclaration, Variable $variable)
     {
-        $this->propertyPropertyNode = $propertyPropertyNode;
-        $this->propertyNode = $propertyNode;
+        $this->reflector = $reflector;
+        $this->propertyDeclaration = $propertyDeclaration;
+        $this->variable = $variable;
+        $this->docblockResolver = new DocblockResolver($reflector);
     }
 
-    public function getName() 
+    public function name() 
     {
-        return (string) $this->propertyPropertyNode->name;
+        return (string) $this->variable->getName();
     }
     
-    public function getVisibility()
+    public function visibility()
     {
-        if ($this->propertyNode->isProtected()) {
-            return Visibility::protected();
-        }
+        foreach ($this->propertyDeclaration->modifiers as $token) {
+            if ($token->kind === TokenKind::PrivateKeyword) {
+                return Visibility::private();
+            }
 
-        if ($this->propertyNode->isPrivate()) {
-            return Visibility::private();
+            if ($token->kind === TokenKind::ProtectedKeyword) {
+                return Visibility::protected();
+            }
         }
 
         return Visibility::public();
+    }
+
+    public function type()
+    {
+        return $this->docblockResolver->propertyType($this->propertyDeclaration);
     }
 }

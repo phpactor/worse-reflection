@@ -17,6 +17,7 @@ use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use DTL\WorseReflection\Exception\ClassNotFound;
 use DTL\WorseReflection\Visibility;
+use DTL\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -67,8 +68,20 @@ class ReflectionClass extends AbstractReflectionClass
         return $this->reflector;
     }
 
-    public function properties(): array
+    public function properties(): ReflectionPropertyCollection
     {
+        $parentProperties = null;
+        if ($this->parent()) {
+            $parentProperties = $this->parent()->properties()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
+        }
+
+        $properties = ReflectionPropertyCollection::fromClassDeclaration($this->reflector, $this->node);
+
+        if ($parentProperties) {
+            return $parentProperties->merge($properties);
+        }
+
+        return $properties;
     }
 
     public function methods(): ReflectionMethodCollection
