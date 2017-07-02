@@ -3,14 +3,30 @@
 namespace DTL\WorseReflection\Tests\Reflection;
 
 use DTL\WorseReflection\Tests\ReflectionTestCase;
+use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\Reflection\AbstractReflectionClass;
+use DTL\WorseReflection\Reflection\ReflectionClass;
+use DTL\WorseReflection\Reflection\ReflectionInterface;
 
 class ReflectionClassTest extends ReflectionTestCase
 {
+    /**
+     * @dataProvider provideReflectionClass
+     */
+    public function testReflectClass(string $source, string $class, \Closure $assertion)
+    {
+        $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
+        $this->assertInstanceOf(AbstractReflectionClass::class, $class);
+        $assertion($class);
+    }
+
     public function provideReflectionClass()
     {
         return [
             'It reflects an empty class' => [
                 <<<'EOT'
+<?php
+
 class Foobar
 {
 }
@@ -19,12 +35,12 @@ EOT
                 'Foobar',
                 function ($class) {
                     $this->assertEquals('Foobar', (string) $class->name()->short());
-                    $this->assertTrue($class->isClass());
-                    $this->assertFalse($class->isInterface());
+                    $this->assertInstanceOf(ReflectionClass::class, $class);
                 }
             ],
             'It reflects a class which extends another' => [
                 <<<'EOT'
+<?php
 class Barfoo
 {
 }
@@ -42,6 +58,8 @@ EOT
             ],
             'It reflects an interface' => [
                 <<<'EOT'
+<?php
+
 interface Barfoo
 {
 }
@@ -49,9 +67,8 @@ EOT
                 ,
                 'Barfoo',
                 function ($class) {
-                    $this->assertEquals('Barfoo', (string) $class->short());
-                    $this->assertTrue($class->isInterface());
-                    $this->assertFalse($class->isClass());
+                    $this->assertEquals('Barfoo', (string) $class->name()->short());
+                    $this->assertInstanceOf(ReflectionInterface::class, $class);
                 }
             ],
         ];

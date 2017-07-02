@@ -1,60 +1,43 @@
 <?php
 
-declare(strict_types=1);
-
 namespace DTL\WorseReflection;
 
-
-class ClassName implements NameLike
+class ClassName
 {
-    /**
-     * @var Name
-     */
-    private $name;
+    private $parts;
 
-    public static function fromName(Name $name)
+    public function __construct(array $parts)
     {
-        $instance = new self();
-        $instance->name = $name; 
-
-        return $instance;
+        $this->parts = $parts;
     }
 
-    public static function fromParts(array $parts): ClassName
+    public static function fromString(string $string)
     {
-        if ([] === $parts) {
-            throw new \RuntimeException(
-                'Class name must have at least one part'
-            );
+        $parts = explode('\\', trim($string, '\\'));
+        return new self($parts);
+    }
+
+    public function __toString()
+    {
+        return implode('\\', $this->parts);
+    }
+
+    public function full(): string
+    {
+        return $this->__toString();
+    }
+
+    public function short(): string
+    {
+        return end($this->parts);
+    }
+
+    public function namespace(): string
+    {
+        if (count($this->parts) === 1) {
+            return '';
         }
 
-        return self::fromName(Name::fromParts($parts));
-    }
-
-    public static function fromString(string $fqn): ClassName
-    {
-        return self::fromName(Name::fromString($fqn));
-    }
-
-    public static function fromNamespaceAndShortName(NamespaceName $namespace, string $shortName)
-    {
-        $fqn = $namespace->isRoot() ? $shortName : $namespace->getFqn() . '\\' . $shortName;
-
-        return self::fromString($fqn);
-    }
-
-    public function getFqn(): string
-    {
-        return $this->name->getFqn();
-    }
-
-    public function getShortName(): string
-    {
-        return $this->name->getShortName();
-    }
-
-    public function getParts(): array
-    {
-        return $this->name->getParts();
+        return implode('\\', array_slice($this->parts, 0, count($this->parts) - 1));
     }
 }

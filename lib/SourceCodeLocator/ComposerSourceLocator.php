@@ -1,13 +1,13 @@
 <?php
 
-namespace DTL\WorseReflection\SourceLocator;
+namespace DTL\WorseReflection\SourceCodeLocator;
 
-use DTL\WorseReflection\SourceLocator;
+use DTL\WorseReflection\SourceCodeLocator;
 use DTL\WorseReflection\ClassName;
 use Composer\Autoload\ClassLoader;
-use DTL\WorseReflection\Source;
+use DTL\WorseReflection\SourceCode;
 
-class ComposerSourceLocator implements SourceLocator
+class ComposerSourceLocator implements SourceCodeLocator
 {
     private $classLoader;
 
@@ -19,7 +19,7 @@ class ComposerSourceLocator implements SourceLocator
     /**
      * {@inheritDoc}
      */
-    public function locate(ClassName $className): Source
+    public function locate(ClassName $className): SourceCode
     {
         $path = $this->classLoader->findFile($className->getFqn());
 
@@ -30,6 +30,6 @@ class ComposerSourceLocator implements SourceLocator
             ));
         }
 
-        return Source::fromFilepath($path);
+        return SourceCode::fromFilepath($path);
     }
 }

@@ -10,11 +10,11 @@ use DTL\WorseReflection\ClassName;
 use PhpParser\Node\Stmt\Property;
 use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use DTL\WorseReflection\Reflection\AbstractReflectionClass;
+use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 
-class ReflectionClass extends AbstractReflectionClass
+class ReflectionInterface extends AbstractReflectionClass
 {
     /**
      * @var Reflector
@@ -28,7 +28,7 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function __construct(
         Reflector $reflector,
-        ClassDeclaration $node
+        InterfaceDeclaration $node
     )
     {
         $this->reflector = $reflector;
@@ -42,11 +42,11 @@ class ReflectionClass extends AbstractReflectionClass
 
     protected function baseClass()
     {
-        if (!$this->node->classBaseClause) {
+        if (!$this->interfaceBaseClause) {
             return;
         }
 
-        return $this->node->classBaseClause->baseClass;
+        return $this->interfaceBaseClause->baseClass;
     }
 
     protected function reflector(): Reflector
@@ -57,5 +57,4 @@ class ReflectionClass extends AbstractReflectionClass
     public function properties(): array
     {
     }
-
 }
