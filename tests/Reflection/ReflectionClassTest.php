@@ -101,6 +101,22 @@ EOT
                     $this->assertInstanceOf(ReflectionInterface::class, $interface);
                 },
             ],
+            'It reflect interface methods' => [
+                <<<'EOT'
+<?php
+
+interface Barfoo
+{
+    public function foobar();
+}
+EOT
+                ,
+                'Barfoo',
+                function ($class) {
+                    $this->assertEquals('Barfoo', (string) $class->name()->short());
+                    $this->assertEquals(['foobar'], $class->methods()->keys());
+                },
+            ],
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace DTL\WorseReflection\Reflection;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use DTL\WorseReflection\Reflector;
 use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 
 abstract class AbstractReflectionClass
 {
@@ -16,4 +17,8 @@ abstract class AbstractReflectionClass
     abstract protected function node(): NamespacedNameInterface;
 
     abstract protected function reflector(): Reflector;
+
+    abstract protected function methods(): ReflectionMethodCollection;
+
+    abstract protected function parent();
 }
