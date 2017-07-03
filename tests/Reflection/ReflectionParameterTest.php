@@ -73,6 +73,14 @@ class ReflectionParameterTest extends ReflectionTestCase
                     );
                 },
             ],
+            'It returns the default value for an array' => [
+                '$foobar = [ "foobar" ]',
+                function ($method) {
+                    $this->assertEquals(
+                        ['foobar'], $method->parameters()->get('foobar')->default()
+                    );
+                },
+            ],
             'It returns the default value for null' => [
                 '$foobar = null',
                 function ($method) {

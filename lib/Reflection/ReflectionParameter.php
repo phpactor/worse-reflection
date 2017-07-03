@@ -14,6 +14,8 @@ use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\NumericLiteral;
 use Microsoft\PhpParser\Node\ReservedWord;
+use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
+use Microsoft\PhpParser\Node\Expression;
 
 class ReflectionParameter
 {
@@ -55,20 +57,38 @@ class ReflectionParameter
     {
         $default = $this->parameter->default;
 
-        if ($default instanceof StringLiteral) {
-            return (string) $default->getStringContentsText();
+        return $this->resolveValue($default);
+    }
+
+    private function resolveValue(Expression $expression)
+    {
+        if ($expression instanceof StringLiteral) {
+            return (string) $expression->getStringContentsText();
         }
 
-        if ($default instanceof NumericLiteral) {
-            return $default->getText();
+        if ($expression instanceof NumericLiteral) {
+            return $expression->getText();
         }
 
-        if ($default instanceof ReservedWord) {
-            if ('null' === $default->getText()) {
+        if ($expression instanceof ReservedWord) {
+            if ('null' === $expression->getText()) {
                 return null;
             }
         }
 
-        return $default->getText();
+        if ($expression instanceof ArrayCreationExpression) {
+            $array  = [];
+            foreach ($expression->arrayElements->getElements() as $element) {
+                if ($element->elementKey) {
+                    $array[(string) $element->elementKey] = $this->resolveValue($element->elementValue);
+                }
+
+                $array[] = $this->resolveValue($element->elementValue);
+            }
+
+            return $array;
+        }
+
+        return $expression->getText();
     }
 }
