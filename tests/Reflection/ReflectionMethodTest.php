@@ -191,6 +191,23 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->type());
                 },
             ],
+            'It reflects an abstract method' => [
+                <<<'EOT'
+<?php
+
+abstract class Foobar
+{
+    abstract public function method();
+    public function methodNonAbstract();
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertTrue($methods->get('method')->isAbstract());
+                    $this->assertFalse($methods->get('methodNonAbstract')->isAbstract());
+                },
+            ],
         ];
     }
 }

@@ -49,11 +49,22 @@ class ReflectionMethod
     }
 
     public function class(): ReflectionClass
- {
+     {
      $class = $this->node->getFirstAncestor(ClassDeclaration::class)->getNamespacedName();
 
      return $this->reflector->reflectClass(ClassName::fromString($class));
- }
+     }
+
+    public function isAbstract(): bool
+    {
+        foreach ($this->node->modifiers as $token) {
+            if ($token->kind === TokenKind::AbstractKeyword) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public function visibility(): Visibility
     {
