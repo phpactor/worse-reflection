@@ -97,6 +97,14 @@ class ReflectionParameterTest extends ReflectionTestCase
                     );
                 },
             ],
+            'It returns the default value for a boolean' => [
+                '$foobar = false',
+                function ($method) {
+                    $this->assertEquals(
+                        false, $method->parameters()->get('foobar')->default()
+                    );
+                },
+            ],
         ];
     }
 }

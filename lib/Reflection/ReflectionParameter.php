@@ -74,6 +74,14 @@ class ReflectionParameter
             if ('null' === $expression->getText()) {
                 return null;
             }
+
+            if ('false' === $expression->getText()) {
+                return false;
+            }
+
+            if ('true' === $expression->getText()) {
+                return true;
+            }
         }
 
         if ($expression instanceof ArrayCreationExpression) {
