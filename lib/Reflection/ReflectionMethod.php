@@ -12,6 +12,8 @@ use DTL\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
+use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use DTL\WorseReflection\Reflection\AbstractReflectionClass;
 
 final class ReflectionMethod
 {
@@ -49,9 +51,15 @@ final class ReflectionMethod
         return $this->node->getName();
     }
 
+<<<<<<< HEAD
     public function class(): ReflectionClass
      {
      $class = $this->node->getFirstAncestor(ClassDeclaration::class)->getNamespacedName();
+=======
+    public function class(): AbstractReflectionClass
+ {
+     $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
+>>>>>>> Added has() method to collection
 
      return $this->reflector->reflectClass(ClassName::fromString($class));
      }

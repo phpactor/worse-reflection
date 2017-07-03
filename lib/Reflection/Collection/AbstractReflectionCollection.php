@@ -43,10 +43,6 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return new static($this->reflector, $items);
     }
 
-    protected function assertCollectionType(AbstractReflectionCollection $collection): bool
-    {
-    }
-
     public function get(string $name)
     {
         if (!isset($this->items[$name])) {
@@ -57,6 +53,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         }
 
         return $this->items[$name];
+    }
+
+    public function has(string $name): bool
+    {
+        return isset($this->items[$name]);
     }
 
     public function getIterator()

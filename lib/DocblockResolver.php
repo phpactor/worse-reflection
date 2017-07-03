@@ -6,10 +6,11 @@ use Microsoft\PhpParser\Node;
 use DTL\WorseReflection\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
+use DTL\WorseReflection\Reflection\AbstractReflectionClass;
 
 class DocblockResolver
 {
-    public function methodReturnTypeFromNodeDocblock(ReflectionClass $class, MethodDeclaration $node)
+    public function methodReturnTypeFromNodeDocblock(AbstractReflectionClass $class, MethodDeclaration $node)
     {
         if (Type::unknown() != $type = $this->typeFromNode($node, 'return')) {
             return $type;

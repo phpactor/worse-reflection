@@ -36,6 +36,11 @@ class Visibility
         return $this->visibility === 'private';
     }
 
+    public function __toString()
+    {
+        return $this->visibility;
+    }
+
     private function __construct()
     {
     }
