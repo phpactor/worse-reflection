@@ -38,15 +38,28 @@ class ReflectionParameterTest extends ReflectionTestCase
                     $this->assertEquals('foobar', $parameter->name());
                 },
             ],
+            'It returns false if the parameter has no type' => [
+                '$foobar',
+                function ($method) {
+                    $this->assertFalse($method->parameters()->get('foobar')->hasType());
+                },
+            ],
             'It returns the parameter type' => [
                 'Foobar $foobar',
                 function ($method) {
                     $this->assertEquals(Type::fromString('Acme\Foobar'), $method->parameters()->get('foobar')->type());
                 },
             ],
+            'It returns false if the parameter has no default' => [
+                '$foobar',
+                function ($method) {
+                    $this->assertFalse($method->parameters()->get('foobar')->hasDefault());
+                },
+            ],
             'It returns the default value for a string' => [
                 '$foobar = "foo"',
                 function ($method) {
+                    $this->assertTrue($method->parameters()->get('foobar')->hasDefault());
                     $this->assertEquals(
                         'foo', $method->parameters()->get('foobar')->default()
                     );
@@ -57,6 +70,14 @@ class ReflectionParameterTest extends ReflectionTestCase
                 function ($method) {
                     $this->assertEquals(
                         1234, $method->parameters()->get('foobar')->default()
+                    );
+                },
+            ],
+            'It returns the default value for null' => [
+                '$foobar = null',
+                function ($method) {
+                    $this->assertEquals(
+                        null, $method->parameters()->get('foobar')->default()
                     );
                 },
             ],

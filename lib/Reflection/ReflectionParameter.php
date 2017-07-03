@@ -13,6 +13,7 @@ use DTL\WorseReflection\Type;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\NumericLiteral;
+use Microsoft\PhpParser\Node\ReservedWord;
 
 class ReflectionParameter
 {
@@ -40,6 +41,16 @@ class ReflectionParameter
         return Type::fromString($this->parameter->typeDeclaration->getResolvedName());
     }
 
+    public function hasDefault()
+    {
+        return null !== $this->parameter->default;
+    }
+
+    public function hasType()
+    {
+        return null !== $this->parameter->typeDeclaration;
+    }
+
     public function default()
     {
         $default = $this->parameter->default;
@@ -50,6 +61,12 @@ class ReflectionParameter
 
         if ($default instanceof NumericLiteral) {
             return $default->getText();
+        }
+
+        if ($default instanceof ReservedWord) {
+            if ('null' === $default->getText()) {
+                return null;
+            }
         }
 
         return $default->getText();
