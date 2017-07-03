@@ -11,8 +11,9 @@ use Microsoft\PhpParser\Token;
 use DTL\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use DTL\WorseReflection\ClassName;
+use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 
-class ReflectionMethod
+final class ReflectionMethod
 {
     /**
      * @var Reflector
@@ -64,6 +65,11 @@ class ReflectionMethod
         }
 
         return false;
+    }
+
+    public function parameters(): ReflectionParameterCollection
+    {
+        return ReflectionParameterCollection::fromMethodDeclaration($this->reflector, $this->node);
     }
 
     public function visibility(): Visibility

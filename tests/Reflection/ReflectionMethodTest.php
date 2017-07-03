@@ -208,6 +208,23 @@ EOT
                     $this->assertFalse($methods->get('methodNonAbstract')->isAbstract());
                 },
             ],
+            'It returns the method parameters' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function barfoo($foobar, Barfoo $barfoo, int $number)
+    {
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertCount(3, $methods->get('barfoo')->parameters());
+                },
+            ]
         ];
     }
 }
