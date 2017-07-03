@@ -35,7 +35,7 @@ class ReflectionParameter
     {
         // TODO: Generalize this logic (also used in property)
         if ($this->parameter->typeDeclaration instanceof Token) {
-            return Type::fromString($this->parameter->returnType->getText($this->parameter->getFileContents()));
+            return Type::fromString($this->parameter->typeDeclaration->getText($this->parameter->getFileContents()));
         }
 
         return Type::fromString($this->parameter->typeDeclaration->getResolvedName());

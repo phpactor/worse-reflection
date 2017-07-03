@@ -51,15 +51,9 @@ final class ReflectionMethod
         return $this->node->getName();
     }
 
-<<<<<<< HEAD
-    public function class(): ReflectionClass
-     {
-     $class = $this->node->getFirstAncestor(ClassDeclaration::class)->getNamespacedName();
-=======
     public function class(): AbstractReflectionClass
  {
      $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
->>>>>>> Added has() method to collection
 
      return $this->reflector->reflectClass(ClassName::fromString($class));
      }
