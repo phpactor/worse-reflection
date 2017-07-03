@@ -89,6 +89,14 @@ class ReflectionParameterTest extends ReflectionTestCase
                     );
                 },
             ],
+            'It returns the default value for empty array' => [
+                '$foobar = []',
+                function ($method) {
+                    $this->assertEquals(
+                        [], $method->parameters()->get('foobar')->default()
+                    );
+                },
+            ],
         ];
     }
 }

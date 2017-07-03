@@ -78,6 +78,11 @@ class ReflectionParameter
 
         if ($expression instanceof ArrayCreationExpression) {
             $array  = [];
+
+            if (null === $expression->arrayElements) {
+                return $array;
+            }
+
             foreach ($expression->arrayElements->getElements() as $element) {
                 if ($element->elementKey) {
                     $array[(string) $element->elementKey] = $this->resolveValue($element->elementValue);
