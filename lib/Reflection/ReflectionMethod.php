@@ -97,14 +97,22 @@ final class ReflectionMethod
 
     public function type(): Type
     {
+        static $type = null;
+
+        if ($type) {
+            return $type;
+        }
+
         if (!$this->node->returnType) {
-            return $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+            return $type = $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
         }
 
         if ($this->node->returnType instanceof Token) {
-            return Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
+            return $type = Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
         }
 
-        return Type::fromString($this->node->returnType->getResolvedName());
+        $type = Type::fromString($this->node->returnType->getResolvedName());
+
+        return ;
     }
 }
