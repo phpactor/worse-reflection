@@ -224,6 +224,56 @@ EOT
                 function ($methods) {
                     $this->assertCount(3, $methods->get('barfoo')->parameters());
                 },
+            ],
+            'It returns the raw docblock' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    /**
+     * Hello this is a docblock.
+     */
+    public function barfoo($foobar, Barfoo $barfoo, int $number)
+    {
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertContains(<<<EOT
+Hello this is a docblock.
+EOT
+                    , $methods->get('barfoo')->docblock()->raw());
+                },
+            ],
+            'It returns the formatted docblock' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    /**
+     * Hello this is a docblock.
+     *
+     * Yes?
+     */
+    public function barfoo($foobar, Barfoo $barfoo, int $number)
+    {
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals(<<<EOT
+Hello this is a docblock.
+
+Yes?
+EOT
+                    , $methods->get('barfoo')->docblock()->formatted());
+                },
             ]
         ];
     }

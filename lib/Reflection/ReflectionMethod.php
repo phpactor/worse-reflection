@@ -14,6 +14,7 @@ use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use DTL\WorseReflection\Reflection\AbstractReflectionClass;
+use DTL\WorseReflection\Reflection\ReflectionDocblock;
 
 final class ReflectionMethod
 {
@@ -74,6 +75,11 @@ final class ReflectionMethod
         return ReflectionParameterCollection::fromMethodDeclaration($this->reflector, $this->node);
     }
 
+    public function docblock(): ReflectionDocblock
+    {
+        return ReflectionDocblock::fromNode($this->node);
+    }
+
     public function visibility(): Visibility
     {
         foreach ($this->node->modifiers as $token) {
@@ -100,24 +106,5 @@ final class ReflectionMethod
         }
 
         return Type::fromString($this->node->returnType->getResolvedName());
-    }
-
-    public function getParameters()
-    {
-        return new ReflectionParameterCollection($this->reflector, $this->sourceContext, $this->node);
-    }
-
-    public function getReturnType(): Type
-    {
-        return Type::fromString($this->sourceContext, (string) $this->node->returnType);
-    }
-
-    public function getVariables()
-    {
-        return new ReflectionVariableCollection(
-            $this->reflector,
-            $this->sourceContext,
-            $this->node
-        );
     }
 }
