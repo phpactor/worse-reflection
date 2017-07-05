@@ -10,6 +10,7 @@ class Reflector
 {
     private $sourceLocator;
     private $parser;
+    private $cache = [];
 
     public function __construct(SourceCodeLocator $sourceLocator, Parser $parser = null)
     {
@@ -19,6 +20,10 @@ class Reflector
 
     public function reflectClass(ClassName $className): AbstractReflectionClass
     {
+        if (isset($this->cache[(string) $className])) {
+            return $this->cache[(string) $className];
+        }
+
         $source = $this->sourceLocator->locate($className);
         $node = $this->parser->parseSourceFile((string) $source);
         $sourceCodeReflection = new ReflectionSourceCode($this, $node);
@@ -29,6 +34,8 @@ class Reflector
                 $className->full()
             ));
         }
+
+        $this->cache[(string) $className] = $class;
 
         return $class;
     }

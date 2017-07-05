@@ -40,7 +40,11 @@ class ReflectionParameter
             return Type::fromString($this->parameter->typeDeclaration->getText($this->parameter->getFileContents()));
         }
 
-        return Type::fromString($this->parameter->typeDeclaration->getResolvedName());
+        if ($this->parameter->typeDeclaration) {
+            return Type::fromString($this->parameter->typeDeclaration->getResolvedName());
+        }
+
+        return Type::unknown();
     }
 
     public function hasDefault()

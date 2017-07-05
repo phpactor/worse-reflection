@@ -55,10 +55,10 @@ final class ReflectionMethod
     }
 
     public function class(): AbstractReflectionClass
- {
-     $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
+     {
+         $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
 
-     return $this->reflector->reflectClass(ClassName::fromString($class));
+         return $this->reflector->reflectClass(ClassName::fromString($class));
      }
 
     public function isAbstract(): bool
@@ -99,22 +99,15 @@ final class ReflectionMethod
 
     public function type(): Type
     {
-
-        if ($this->type) {
-            return $this->type;
-        }
-
         if (!$this->node->returnType) {
-            return $this->type = $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+            return $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
         }
 
         // scalar
         if ($this->node->returnType instanceof Token) {
-            return $this->type = Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
+            return Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
         }
 
-        $this->type = Type::fromString($this->node->returnType->getResolvedName());
-
-        return $this->type;
+        return Type::fromString($this->node->returnType->getResolvedName());
     }
 }
