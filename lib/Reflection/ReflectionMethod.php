@@ -38,6 +38,8 @@ final class ReflectionMethod
      */
     private $docblockResolver;
 
+    private $type;
+
     public function __construct(
         Reflector $reflector,
         MethodDeclaration $node
@@ -97,22 +99,22 @@ final class ReflectionMethod
 
     public function type(): Type
     {
-        static $type = null;
 
-        if ($type) {
-            return $type;
+        if ($this->type) {
+            return $this->type;
         }
 
         if (!$this->node->returnType) {
-            return $type = $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+            return $this->type = $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
         }
 
+        // scalar
         if ($this->node->returnType instanceof Token) {
-            return $type = Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
+            return $this->type = Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
         }
 
-        $type = Type::fromString($this->node->returnType->getResolvedName());
+        $this->type = Type::fromString($this->node->returnType->getResolvedName());
 
-        return ;
+        return $this->type;
     }
 }
