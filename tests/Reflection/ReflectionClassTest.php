@@ -125,6 +125,30 @@ EOT
                     $this->assertInstanceOf(ReflectionInterface::class, $interface);
                 },
             ],
+            'It reflects inherited methods in an interface' => [
+                <<<'EOT'
+<?php
+interface Barfoo
+{
+    public function methodOne();
+}
+
+interface Zedboo
+{
+    public function methodTwo();
+}
+
+interface Bazbar extends Barfoo, Zedboo
+{
+}
+EOT
+                ,
+                'Bazbar',
+                function ($interface) {
+                    $this->assertInstanceOf(ReflectionInterface::class, $interface);
+                    $this->assertCount(2, $interface->methods());
+                },
+            ],
             'It reflect interface methods' => [
                 <<<'EOT'
 <?php

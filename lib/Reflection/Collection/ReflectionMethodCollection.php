@@ -38,6 +38,11 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
         return new static($reflector, $items);
     }
 
+    public static function fromReflectionMethods(Reflector $reflector, array $methods)
+    {
+        return new static($reflector, $methods);
+    }
+
     public function byVisibilities(array $visibilities)
     {
         $items = [];

@@ -10,6 +10,7 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
+use DTL\WorseReflection\Visibility;
 
 class ReflectionInterface extends AbstractReflectionClass
 {
@@ -48,20 +49,17 @@ class ReflectionInterface extends AbstractReflectionClass
 
     public function methods(): ReflectionMethodCollection
     {
-        $parentMethods = null;
+        $parentMethods = [];
         foreach ($this->parents() as $parent) {
             foreach ($parent->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ]) as $name => $method) {
                 $parentMethods[$method->name()] = $method;
             }
         }
 
+        $parentMethods = ReflectionMethodCollection::fromReflectionMethods($this->reflector, $parentMethods);
         $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->reflector, $this->node);
 
-        if ($parentMethods) {
-            return $parentMethods->merge($methods);
-        }
-
-        return $methods;
+        return $parentMethods->merge($methods);
     }
 
 }
