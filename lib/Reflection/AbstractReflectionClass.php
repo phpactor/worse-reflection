@@ -19,6 +19,4 @@ abstract class AbstractReflectionClass
     abstract protected function reflector(): Reflector;
 
     abstract protected function methods(): ReflectionMethodCollection;
-
-    abstract protected function parent();
 }
