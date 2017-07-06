@@ -1,13 +1,13 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection\Collection;
+namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\Reflection\ReflectionProperty;
+use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\MethodDeclaration;
-use DTL\WorseReflection\Reflection\ReflectionParameter;
+use Phpactor\WorseReflection\Reflection\ReflectionParameter;
 
 class ReflectionParameterCollection extends AbstractReflectionCollection
 {

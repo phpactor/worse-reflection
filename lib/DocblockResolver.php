@@ -1,12 +1,12 @@
 <?php
 
-namespace DTL\WorseReflection;
+namespace Phpactor\WorseReflection;
 
 use Microsoft\PhpParser\Node;
-use DTL\WorseReflection\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
-use DTL\WorseReflection\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 
 class DocblockResolver
 {

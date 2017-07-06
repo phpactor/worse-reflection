@@ -1,17 +1,17 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
-use DTL\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use PhpParser\Node\Stmt\ClassLike;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
-use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
-use DTL\WorseReflection\Visibility;
-use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Visibility;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 
 class ReflectionInterface extends AbstractReflectionClass
 {

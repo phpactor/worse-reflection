@@ -1,10 +1,10 @@
 <?php
 
-namespace DTL\WorseReflection;
+namespace Phpactor\WorseReflection;
 
 use Microsoft\PhpParser\Parser;
-use DTL\WorseReflection\Reflection\ReflectionSourceCode;
-use DTL\WorseReflection\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Reflection\ReflectionSourceCode;
+use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 
 class Reflector
 {

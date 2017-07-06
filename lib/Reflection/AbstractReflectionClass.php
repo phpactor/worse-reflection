@@ -1,12 +1,12 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
 use Microsoft\PhpParser\NamespacedNameInterface;
-use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
-use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
+use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 
 abstract class AbstractReflectionClass
 {

@@ -1,24 +1,24 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
-use DTL\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use PhpParser\Node\Stmt\ClassLike;
-use DTL\WorseReflection\SourceContext;
+use Phpactor\WorseReflection\SourceContext;
 use PhpParser\Node\Stmt\ClassMethod;
-use DTL\WorseReflection\ClassName;
+use Phpactor\WorseReflection\ClassName;
 use PhpParser\Node\Stmt\Property;
-use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
-use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use DTL\WorseReflection\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\MethodDeclaration;
-use DTL\WorseReflection\Exception\ClassNotFound;
-use DTL\WorseReflection\Visibility;
-use DTL\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
-use DTL\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Exception\ClassNotFound;
+use Phpactor\WorseReflection\Visibility;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
 
 class ReflectionClass extends AbstractReflectionClass
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
 use Microsoft\PhpParser\Node;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection\Collection;
+namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use DTL\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflector;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {

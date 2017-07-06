@@ -1,17 +1,17 @@
 <?php
 
-namespace DTL\WorseReflection\Tests\Reflection;
+namespace Phpactor\WorseReflection\Tests\Reflection;
 
-use DTL\WorseReflection\Tests\ReflectionTestCase;
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\ReflectionClass;
-use DTL\WorseReflection\Reflection\ReflectionInterface;
-use DTL\WorseReflection\Reflection\ReflectionConstant;
+use Phpactor\WorseReflection\Tests\ReflectionTestCase;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Reflection\ReflectionConstant;
 
 class ReflectionClassTest extends ReflectionTestCase
 {
     /**
-     * @expectedException DTL\WorseReflection\Exception\ClassNotFound
+     * @expectedException Phpactor\WorseReflection\Exception\ClassNotFound
      */
     public function testExceptionOnClassNotFound()
     {

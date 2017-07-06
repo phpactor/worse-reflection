@@ -1,11 +1,11 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 
 class ReflectionSourceCode

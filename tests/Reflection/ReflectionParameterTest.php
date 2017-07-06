@@ -1,12 +1,12 @@
 <?php
 
-namespace DTL\WorseReflection\Tests\Reflection;
+namespace Phpactor\WorseReflection\Tests\Reflection;
 
-use DTL\WorseReflection\Tests\ReflectionTestCase;
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\ReflectionParameter;
-use DTL\WorseReflection\Visibility;
-use DTL\WorseReflection\Type;
+use Phpactor\WorseReflection\Tests\ReflectionTestCase;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Reflection\ReflectionParameter;
+use Phpactor\WorseReflection\Visibility;
+use Phpactor\WorseReflection\Type;
 
 class ReflectionParameterTest extends ReflectionTestCase
 {

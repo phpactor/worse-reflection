@@ -1,15 +1,15 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
-use DTL\WorseReflection\Visibility;
+use Phpactor\WorseReflection\Visibility;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
-use DTL\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\TokenKind;
-use DTL\WorseReflection\DocblockResolver;
+use Phpactor\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node\Parameter;
-use DTL\WorseReflection\Type;
+use Phpactor\WorseReflection\Type;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\NumericLiteral;

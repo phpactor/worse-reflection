@@ -1,9 +1,9 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection\Collection;
+namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflection\ReflectionMethod;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;

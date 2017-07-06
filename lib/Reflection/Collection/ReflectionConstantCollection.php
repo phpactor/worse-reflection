@@ -1,15 +1,15 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection\Collection;
+namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\Reflection\ReflectionProperty;
+use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
-use DTL\WorseReflection\Reflection\ReflectionConstant;
+use Phpactor\WorseReflection\Reflection\ReflectionConstant;
 
 class ReflectionConstantCollection extends AbstractReflectionCollection
 {

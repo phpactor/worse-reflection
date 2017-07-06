@@ -1,20 +1,20 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
-use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\Visibility;
-use DTL\WorseReflection\Type;
+use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Visibility;
+use Phpactor\WorseReflection\Type;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\TokenKind;
 use Microsoft\PhpParser\Token;
-use DTL\WorseReflection\DocblockResolver;
+use Phpactor\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use DTL\WorseReflection\ClassName;
-use DTL\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
-use DTL\WorseReflection\Reflection\AbstractReflectionClass;
-use DTL\WorseReflection\Reflection\ReflectionDocblock;
+use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Reflection\ReflectionDocblock;
 
 final class ReflectionMethod
 {

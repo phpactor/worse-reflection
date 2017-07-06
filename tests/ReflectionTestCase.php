@@ -1,10 +1,10 @@
 <?php
 
-namespace DTL\WorseReflection\Tests;
+namespace Phpactor\WorseReflection\Tests;
 
-use DTL\WorseReflection\Reflector;
-use DTL\WorseReflection\SourceCode;
-use DTL\WorseReflection\SourceCodeLocator\StringSourceLocator;
+use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\SourceCode;
+use Phpactor\WorseReflection\SourceCodeLocator\StringSourceLocator;
 
 class ReflectionTestCase extends \PHPUnit_Framework_TestCase
 {

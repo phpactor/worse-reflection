@@ -1,11 +1,11 @@
 <?php
 
-namespace DTL\WorseReflection\SourceCodeLocator;
+namespace Phpactor\WorseReflection\SourceCodeLocator;
 
-use DTL\WorseReflection\SourceCodeLocator;
-use DTL\WorseReflection\ClassName;
+use Phpactor\WorseReflection\SourceCodeLocator;
+use Phpactor\WorseReflection\ClassName;
 use Composer\Autoload\ClassLoader;
-use DTL\WorseReflection\SourceCode;
+use Phpactor\WorseReflection\SourceCode;
 
 class ComposerSourceLocator implements SourceCodeLocator
 {

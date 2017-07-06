@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\WorseReflection\Exception;
+namespace Phpactor\WorseReflection\Exception;
 
 class ClassNotFound extends \Exception
 {

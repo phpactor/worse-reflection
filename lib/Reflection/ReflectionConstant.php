@@ -1,8 +1,8 @@
 <?php
 
-namespace DTL\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection;
 
-use DTL\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
 

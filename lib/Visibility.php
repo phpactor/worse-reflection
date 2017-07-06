@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\WorseReflection;
+namespace Phpactor\WorseReflection;
 
 class Visibility
 {
