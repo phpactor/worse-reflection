@@ -46,6 +46,22 @@ class ReflectionClass extends AbstractReflectionClass
         return $this->node;
     }
 
+    public function constants(): ReflectionConstantCollection
+    {
+        $parentConstants = null;
+        if ($this->parent()) {
+            $parentConstants = $this->parent()->constants();
+        }
+
+        $constants = ReflectionConstantCollection::fromClassDeclaration($this->reflector, $this->node);
+
+        if ($parentConstants) {
+            return $parentConstants->merge($constants);
+        }
+
+        return $constants;
+    }
+
     public function parent()
     {
         if (!$this->node->classBaseClause) {
