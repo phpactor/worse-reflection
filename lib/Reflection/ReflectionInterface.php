@@ -11,6 +11,7 @@ use DTL\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
 use DTL\WorseReflection\Visibility;
+use DTL\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 
 class ReflectionInterface extends AbstractReflectionClass
 {
@@ -40,6 +41,21 @@ class ReflectionInterface extends AbstractReflectionClass
     protected function reflector(): Reflector
     {
         return $this->reflector;
+    }
+
+    public function constants(): ReflectionConstantCollection
+    {
+        $parentConstants = [];
+        foreach ($this->parents() as $parent) {
+            foreach ($parent->constants() as $constant) {
+                $parentConstants[$constant->name()] = $constant;
+            }
+        }
+
+        $parentConstants = ReflectionConstantCollection::fromReflectionConstants($this->reflector, $parentConstants);
+        $constants = ReflectionConstantCollection::fromInterfaceDeclaration($this->reflector(), $this->node);
+
+        return $parentConstants->merge($constants);
     }
 
     public function parents(): ReflectionInterfaceCollection
