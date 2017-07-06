@@ -1,5 +1,5 @@
 {
-    "name": "dantleech/worse-reflection",
+    "name": "phpactor/worse-reflection",
     "description": "Lazy AST reflector that is much worse than better",
     "license": "MIT",
     "authors": [
