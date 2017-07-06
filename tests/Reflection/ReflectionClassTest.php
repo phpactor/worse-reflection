@@ -6,6 +6,7 @@ use DTL\WorseReflection\Tests\ReflectionTestCase;
 use DTL\WorseReflection\ClassName;
 use DTL\WorseReflection\Reflection\ReflectionClass;
 use DTL\WorseReflection\Reflection\ReflectionInterface;
+use DTL\WorseReflection\Reflection\ReflectionConstant;
 
 class ReflectionClassTest extends ReflectionTestCase
 {
@@ -163,6 +164,58 @@ EOT
                 function ($class) {
                     $this->assertEquals('Barfoo', (string) $class->name()->short());
                     $this->assertEquals(['foobar'], $class->methods()->keys());
+                },
+            ],
+            'It interface constants' => [
+                <<<'EOT'
+<?php
+
+interface Int1
+{
+    const FOOBAR = 'foobar';
+}
+
+interface Int2
+{
+    const FOOBAR = 'foobar';
+    const BARFOO = 'barfoo';
+}
+
+interface Int3 extends Int1, Int2
+{
+    const EEEBAR = 'eeebar';
+}
+EOT
+                ,
+                'Int3',
+                function ($class) {
+                    $this->assertCount(3, $class->constants());
+                    $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('FOOBAR'));
+                    $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('EEEBAR'));
+                },
+            ],
+            'It reflects class constants' => [
+                <<<'EOT'
+<?php
+
+class Class1
+{
+    const EEEBAR = 'eeebar';
+}
+
+class Class2 extends Class1
+{
+    const FOOBAR = 'foobar';
+    const BARFOO = 'barfoo';
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertCount(3, $class->constants());
+                    $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('FOOBAR'));
+                    $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('EEEBAR'));
                 },
             ],
         ];
