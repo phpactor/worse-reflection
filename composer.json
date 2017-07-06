@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "DTL\\WorseReflection\\": "lib/"
+            "Phpactor\\WorseReflection\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DTL\\WorseReflection\\Tests\\": "tests/"
+            "Phpactor\\WorseReflection\\Tests\\": "tests/"
         }
     },
     "extra": {
