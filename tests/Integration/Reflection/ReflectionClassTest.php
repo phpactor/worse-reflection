@@ -266,7 +266,28 @@ EOT
                 function ($class) {
                     $this->assertEquals(7, $class->position()->start());
                 },
-            ]
+            ],
+            'It can provide the position of its member declarations' => [
+                <<<'EOT'
+<?php
+
+class Class2
+{
+    private $foobar;
+    private $barfoo;
+
+    public function zed()
+    {
+    }
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(20, $class->memberListPosition()->start());
+                },
+            ],
         ];
     }
 }

@@ -35,6 +35,11 @@ final class Position
         return new self($fullStart, $start, $end);
     }
 
+    public static function fromStartAndEnd(int $start, int $end)
+    {
+        return new self($start, $start, $end);
+    }
+
     public function fullStart(): int
     {
         return $this->fullStart;

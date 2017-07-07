@@ -20,6 +20,7 @@ use Phpactor\WorseReflection\Visibility;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Position;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -117,6 +118,15 @@ class ReflectionClass extends AbstractReflectionClass
     public function interfaces(): ReflectionInterfaceCollection
     {
         return ReflectionInterfaceCollection::fromClassDeclaration($this->reflector, $this->node);
+    }
+
+    public function memberListPosition(): Position
+    {
+        return Position::fromFullStartStartAndEnd(
+            $this->node->classMembers->openBrace->fullStart,
+            $this->node->classMembers->openBrace->start,
+            $this->node->classMembers->openBrace->start + $this->node->classMembers->openBrace->length
+        );
     }
 
     public function name(): ClassName
