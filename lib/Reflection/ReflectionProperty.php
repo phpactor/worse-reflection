@@ -10,7 +10,7 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node;
 
-class ReflectionProperty
+class ReflectionProperty extends AbstractReflectedNode
 {
     private $reflector;
     private $propertyDeclaration;
@@ -52,6 +52,6 @@ class ReflectionProperty
 
     protected function node(): Node
     {
-        return $this->node;
+        return $this->variable;
     }
 }

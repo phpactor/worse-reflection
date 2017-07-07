@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node;
 
-class ReflectionSourceCode
+class ReflectionSourceCode extends AbstractReflectedNode
 {
     private $reflector;
     private $node;

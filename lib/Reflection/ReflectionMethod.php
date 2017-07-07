@@ -15,8 +15,9 @@ use Phpactor\WorseReflection\Reflection\Collection\ReflectionParameterCollection
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Reflection\ReflectionDocblock;
+use Microsoft\PhpParser\Node;
 
-final class ReflectionMethod
+final class ReflectionMethod extends AbstractReflectedNode
 {
     /**
      * @var Reflector
