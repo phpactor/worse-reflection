@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\SourceCode;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\SourceCodeLocator;
+use Phpactor\WorseReflection\Exception\SourceNotFound;
 
 final class StubSourceLocator implements SourceCodeLocator
 {
@@ -39,7 +40,7 @@ final class StubSourceLocator implements SourceCodeLocator
             return SourceCode::fromPath($map[(string) $className]);
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new SourceNotFound(sprintf(
             'Could not find source for "%s" in stub directory "%s"',
             (string) $className, $this->stubPath
         ));

@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\SourceCodeLocator;
 use Phpactor\WorseReflection\ClassName;
 use Composer\Autoload\ClassLoader;
 use Phpactor\WorseReflection\SourceCode;
+use Phpactor\WorseReflection\Exception\SourceNotFound;
 
 class ComposerSourceLocator implements SourceCodeLocator
 {
@@ -24,7 +25,7 @@ class ComposerSourceLocator implements SourceCodeLocator
         $path = $this->classLoader->findFile($className->getFqn());
 
         if (false === $path) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new SourceNotFound(sprintf(
                 'Composer could not locate file for class "%s"',
                 $className->getFqn()
             ));
