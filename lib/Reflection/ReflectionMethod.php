@@ -110,4 +110,9 @@ final class ReflectionMethod
 
         return Type::fromString($this->node->returnType->getResolvedName());
     }
+
+    protected function node(): Node
+    {
+        return $this->node;
+    }
 }

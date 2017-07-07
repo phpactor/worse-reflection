@@ -19,6 +19,7 @@ use Phpactor\WorseReflection\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Visibility;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
+use Microsoft\PhpParser\Node;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -41,7 +42,7 @@ class ReflectionClass extends AbstractReflectionClass
         $this->node = $node;
     }
 
-    protected function node(): NamespacedNameInterface
+    protected function node(): Node
     {
         return $this->node;
     }
@@ -116,5 +117,10 @@ class ReflectionClass extends AbstractReflectionClass
     public function interfaces(): ReflectionInterfaceCollection
     {
         return ReflectionInterfaceCollection::fromClassDeclaration($this->reflector, $this->node);
+    }
+
+    public function name(): ClassName
+    {
+        return ClassName::fromString((string) $this->node()->getNamespacedName());
     }
 }

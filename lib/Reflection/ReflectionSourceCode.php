@@ -7,6 +7,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Microsoft\PhpParser\Node;
 
 class ReflectionSourceCode
 {
@@ -37,5 +38,10 @@ class ReflectionSourceCode
                 return new ReflectionClass($this->reflector, $child);
             }
         }
+    }
+
+    protected function node(): Node
+    {
+        return $this->node;
     }
 }

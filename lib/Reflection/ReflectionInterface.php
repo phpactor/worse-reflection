@@ -33,7 +33,7 @@ class ReflectionInterface extends AbstractReflectionClass
         $this->node = $node;
     }
 
-    protected function node(): NamespacedNameInterface
+    protected function node(): Node
     {
         return $this->node;
     }
@@ -78,4 +78,8 @@ class ReflectionInterface extends AbstractReflectionClass
         return $parentMethods->merge($methods);
     }
 
+    public function name(): ClassName
+    {
+        return ClassName::fromString((string) $this->node()->getNamespacedName());
+    }
 }

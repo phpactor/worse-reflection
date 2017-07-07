@@ -16,6 +16,7 @@ use Microsoft\PhpParser\Node\NumericLiteral;
 use Microsoft\PhpParser\Node\ReservedWord;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression;
+use Microsoft\PhpParser\Node;
 
 class ReflectionParameter
 {
@@ -107,5 +108,10 @@ class ReflectionParameter
         }
 
         return $expression->getText();
+    }
+
+    protected function node(): Node
+    {
+        return $this->node;
     }
 }

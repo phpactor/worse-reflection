@@ -8,6 +8,7 @@ use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\DocblockResolver;
+use Microsoft\PhpParser\Node;
 
 class ReflectionProperty
 {
@@ -47,5 +48,10 @@ class ReflectionProperty
     public function type()
     {
         return $this->docblockResolver->propertyType($this->propertyDeclaration);
+    }
+
+    protected function node(): Node
+    {
+        return $this->node;
     }
 }

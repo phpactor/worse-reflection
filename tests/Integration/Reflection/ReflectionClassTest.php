@@ -218,7 +218,7 @@ EOT
                     $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('EEEBAR'));
                 },
             ],
-            'It can provide the position of its last member' => [
+            'It can provide the name of its last member' => [
                 <<<'EOT'
 <?php
 
@@ -235,7 +235,7 @@ EOT
                     $this->assertEquals('bar', $class->properties()->last()->name());
                 },
             ],
-            'It can provide the position of its first member' => [
+            'It can provide the name of its first member' => [
                 <<<'EOT'
 <?php
 
@@ -250,6 +250,21 @@ EOT
                 'Class2',
                 function ($class) {
                     $this->assertEquals('foo', $class->properties()->first()->name());
+                },
+            ],
+            'It can provide its position' => [
+                <<<'EOT'
+<?php
+
+class Class2
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(7, $class->position()->start());
                 },
             ]
         ];
