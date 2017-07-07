@@ -8,7 +8,7 @@ class Type
     const TYPE_STRING = 'string';
     const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
-    const TYPE_CLASS = 'class';
+    const TYPE_CLASS = 'object';
 
     private $type;
     private $className;
@@ -79,7 +79,12 @@ class Type
 
     public function __toString()
     {
-        return $this->type ?: '<unknown>';
+        return $this->className ? (string) $this->className : $this->type ?: '<unknown>';
+    }
+
+    public function primitive(): string
+    {
+        return $this->type;
     }
 
     public function className()
