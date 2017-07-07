@@ -77,6 +77,11 @@ class Type
         return new self();
     }
 
+    public function isUnknown()
+    {
+        return null === $this->type;
+    }
+
     public function __toString()
     {
         return $this->className ? (string) $this->className : $this->type ?: '<unknown>';

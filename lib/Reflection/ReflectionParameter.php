@@ -72,7 +72,7 @@ class ReflectionParameter
         }
 
         if ($expression instanceof NumericLiteral) {
-            return $expression->getText();
+            return (int) $expression->getText();
         }
 
         if ($expression instanceof ReservedWord) {
