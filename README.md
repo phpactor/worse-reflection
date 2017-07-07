@@ -11,8 +11,8 @@ It is influenced by [BetterReflection](https://github.com/Roave/BetterReflection
 
 - Does not aim to implement built-in PHP reflection API.
 - Focuses on class reflection.
-- Only fully parses the AST once per file.
-- Uses the [Tolerant Parser](https://github.com/Microsoft/tolerant-php-parser)
+- Uses the amazing [Tolerant Parser](https://github.com/Microsoft/tolerant-php-parser).
+- Uses the PHPStorm stubs to provide reflections of internal classes.
 
 It is being developed to provide support for the
 [Phpactor](https://github.com/dantleech/phpactor) introspection and
@@ -35,4 +35,3 @@ foreach ($class->methods() as $method) {
     echo $method->name();
 }
 ```
-
