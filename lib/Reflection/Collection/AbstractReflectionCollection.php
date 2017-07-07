@@ -55,6 +55,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return $this->items[$name];
     }
 
+    public function first()
+    {
+        return reset($this->items);
+    }
+
     public function last()
     {
         return end($this->items);

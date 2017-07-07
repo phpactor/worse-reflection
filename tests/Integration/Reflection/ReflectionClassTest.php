@@ -234,6 +234,23 @@ EOT
                 function ($class) {
                     $this->assertEquals('bar', $class->properties()->last()->name());
                 },
+            ],
+            'It can provide the position of its first member' => [
+                <<<'EOT'
+<?php
+
+class Class2
+{
+    private $foo;
+    private $bar;
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals('foo', $class->properties()->first()->name());
+                },
             ]
         ];
     }
