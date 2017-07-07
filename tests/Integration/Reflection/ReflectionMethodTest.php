@@ -1,14 +1,14 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Reflection;
+namespace Phpactor\WorseReflection\Tests\Integration\Reflection;
 
-use Phpactor\WorseReflection\Tests\ReflectionTestCase;
+use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Visibility;
 use Phpactor\WorseReflection\Type;
 
-class ReflectionMethodTest extends ReflectionTestCase
+class ReflectionMethodTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideReflectionMethod

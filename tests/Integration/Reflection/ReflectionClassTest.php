@@ -1,14 +1,14 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Reflection;
+namespace Phpactor\WorseReflection\Tests\Integration\Reflection;
 
-use Phpactor\WorseReflection\Tests\ReflectionTestCase;
+use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Reflection\ReflectionConstant;
 
-class ReflectionClassTest extends ReflectionTestCase
+class ReflectionClassTest extends IntegrationTestCase
 {
     /**
      * @expectedException Phpactor\WorseReflection\Exception\ClassNotFound
