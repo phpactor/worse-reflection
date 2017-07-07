@@ -55,6 +55,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return $this->items[$name];
     }
 
+    public function last()
+    {
+        return end($this->items);
+    }
+
     public function has(string $name): bool
     {
         return isset($this->items[$name]);
@@ -84,5 +89,4 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
     {
         return isset($this->items[$name]);
     }
-
 }
