@@ -35,10 +35,20 @@ class Type
             return self::array();
         }
 
+        if ($type === 'mixed') {
+            return self::mixed();
+        }
+
+
         return self::class(ClassName::fromString($type));
     }
 
     public static function unknown()
+    {
+        return new self();
+    }
+
+    public static function mixed()
     {
         return new self();
     }
