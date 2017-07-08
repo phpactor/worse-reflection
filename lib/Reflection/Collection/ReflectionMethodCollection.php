@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Reflection\ReflectionMethod;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Phpactor\WorseReflection\ClassName;
 
 class ReflectionMethodCollection extends AbstractReflectionCollection
 {
@@ -57,5 +58,12 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
         }
 
         return new static($this->reflector, $items);
+    }
+
+    public function belongingTo(ClassName $class)
+    {
+        return new self($this->reflector, array_filter($this->items, function (ReflectionMethod $item) use ($class) {
+            return $item->class()->name() == $class;
+        }));
     }
 }

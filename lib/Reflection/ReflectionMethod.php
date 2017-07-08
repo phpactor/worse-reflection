@@ -57,11 +57,11 @@ final class ReflectionMethod extends AbstractReflectedNode
     }
 
     public function class(): AbstractReflectionClass
-     {
-         $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
+    {
+        $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
 
-         return $this->reflector->reflectClass(ClassName::fromString($class));
-     }
+        return $this->reflector->reflectClass(ClassName::fromString($class));
+    }
 
     public function isAbstract(): bool
     {

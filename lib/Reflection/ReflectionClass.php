@@ -21,6 +21,7 @@ use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Position;
+use Microsoft\PhpParser\TokenKind;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -46,6 +47,17 @@ class ReflectionClass extends AbstractReflectionClass
     protected function node(): Node
     {
         return $this->node;
+    }
+
+    public function isAbstract(): bool
+    {
+        $modifier = $this->node->abstractOrFinalModifier;
+
+        if (!$modifier) {
+            return false;
+        }
+
+        return $modifier->kind === TokenKind::AbstractKeyword;
     }
 
     public function constants(): ReflectionConstantCollection

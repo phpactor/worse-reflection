@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Reflection\AbstractReflectedNode;
+use Phpactor\WorseReflection\Reflection\ReflectionInterface;
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode
 {
@@ -18,4 +19,9 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode
     abstract protected function reflector(): Reflector;
 
     abstract protected function methods(): ReflectionMethodCollection;
+
+    public function isInterface()
+    {
+        return $this instanceof ReflectionInterface;
+    }
 }
