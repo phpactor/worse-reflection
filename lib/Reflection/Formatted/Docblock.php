@@ -1,10 +1,10 @@
 <?php
 
-namespace Phpactor\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection\Reflection\Formatted;
 
 use Microsoft\PhpParser\Node;
 
-class ReflectionDocblock
+class Docblock
 {
     private $docblock;
 

@@ -14,8 +14,9 @@ use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionParameterCollection;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
-use Phpactor\WorseReflection\Reflection\ReflectionDocblock;
+use Phpactor\WorseReflection\Reflection\Formatted\Docblock;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Reflection\Formatted\MethodHeader;
 
 final class ReflectionMethod extends AbstractReflectedNode
 {
@@ -78,9 +79,14 @@ final class ReflectionMethod extends AbstractReflectedNode
         return ReflectionParameterCollection::fromMethodDeclaration($this->reflector, $this->node);
     }
 
-    public function docblock(): ReflectionDocblock
+    public function docblock(): Docblock
     {
-        return ReflectionDocblock::fromNode($this->node);
+        return Docblock::fromNode($this->node);
+    }
+
+    public function header(): MethodHeader
+    {
+        return MethodHeader::fromNode($this->node);
     }
 
     public function visibility(): Visibility
