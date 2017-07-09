@@ -132,6 +132,24 @@ EOT
                 'Foobar',
                 function ($properties) {
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $properties->get('property1')->type());
+                    $this->assertFalse($properties->get('property1')->isStatic());
+                },
+            ],
+            'Return true if property is static' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+class Foobar
+{
+    private static $property1;
+}
+EOT
+                ,
+                'Foobar',
+                function ($properties) {
+                    $this->assertTrue($properties->get('property1')->isStatic());
                 },
             ],
         ];

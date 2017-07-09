@@ -50,6 +50,11 @@ class ReflectionProperty extends AbstractReflectedNode
         return $this->docblockResolver->propertyType($this->propertyDeclaration);
     }
 
+    public function isStatic(): bool
+    {
+        return $this->propertyDeclaration->isStatic();
+    }
+
     protected function node(): Node
     {
         return $this->variable;
