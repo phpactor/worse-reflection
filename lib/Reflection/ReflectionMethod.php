@@ -74,6 +74,11 @@ final class ReflectionMethod extends AbstractReflectedNode
         return false;
     }
 
+    public function isStatic(): bool
+    {
+        return $this->node->isStatic();
+    }
+
     public function parameters(): ReflectionParameterCollection
     {
         return ReflectionParameterCollection::fromMethodDeclaration($this->reflector, $this->node);

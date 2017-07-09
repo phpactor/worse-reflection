@@ -295,8 +295,26 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertEquals('public function barfoo($foobar, Barfoo $barfoo, int $number)', (string) $methods->get('barfoo')->header());
+                    $this->assertFalse($methods->get('barfoo')->isStatic());
                 },
-            ]
+            ],
+            'It returns true if the method is static' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public static function barfoo($foobar, Barfoo $barfoo, int $number)
+    {
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertTrue($methods->get('barfoo')->isStatic());
+                },
+            ],
         ];
     }
 }
