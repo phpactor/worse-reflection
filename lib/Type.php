@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection;
 
+use Phpactor\WorseReflection\ClassName;
+
 class Type
 {
     const TYPE_ARRAY = 'array';
@@ -97,12 +99,17 @@ class Type
         return $this->className ? (string) $this->className : $this->type ?: '<unknown>';
     }
 
+    public function isPrimitive(): bool
+    {
+        return $this->className === null;
+    }
+
     public function primitive(): string
     {
         return $this->type;
     }
 
-    public function className()
+    public function className(): ClassName
     {
         return $this->className;
     }
