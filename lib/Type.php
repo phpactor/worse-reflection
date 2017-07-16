@@ -109,7 +109,7 @@ class Type
         return $this->type;
     }
 
-    public function className(): ClassName
+    public function className()
     {
         return $this->className;
     }
