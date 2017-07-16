@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\ClassName;
 class Type
 {
     const TYPE_ARRAY = 'array';
+    const TYPE_BOOL = 'bool';
     const TYPE_STRING = 'string';
     const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
@@ -37,6 +38,10 @@ class Type
             return self::array();
         }
 
+        if ($type === 'bool') {
+            return self::bool();
+        }
+
         if ($type === 'mixed') {
             return self::mixed();
         }
@@ -58,6 +63,11 @@ class Type
     public static function array()
     {
         return self::create(self::TYPE_ARRAY);
+    }
+
+    public static function bool()
+    {
+        return self::create(self::TYPE_BOOL);
     }
 
     public static function string()

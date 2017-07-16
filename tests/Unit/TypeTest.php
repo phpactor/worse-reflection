@@ -40,6 +40,11 @@ class TypeTest extends TestCase
                 'int',
             ],
             [
+                'bool',
+                'bool',
+                'bool',
+            ],
+            [
                 'array',
                 'array',
                 'array',
