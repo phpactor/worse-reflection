@@ -66,4 +66,11 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
             return $item->class()->name() == $class;
         }));
     }
+
+    public function abstract()
+    {
+        return new self($this->reflector, array_filter($this->items, function (ReflectionMethod $item) {
+            return $item->isAbstract();
+        }));
+    }
 }
