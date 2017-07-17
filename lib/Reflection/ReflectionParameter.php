@@ -17,6 +17,7 @@ use Microsoft\PhpParser\Node\ReservedWord;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Reflection\ReflectionDefaultValue;
 
 class ReflectionParameter extends AbstractReflectedNode
 {
@@ -48,16 +49,15 @@ class ReflectionParameter extends AbstractReflectedNode
         return Type::none();
     }
 
-    public function hasDefault()
-    {
-        return null !== $this->parameter->default;
-    }
-
     public function default()
     {
         $default = $this->parameter->default;
 
-        return $this->resolveValue($default);
+        if ($default) {
+            return ReflectionDefaultValue::fromValue($this->resolveValue($default));
+        }
+
+        return ReflectionDefaultValue::none();
     }
 
     private function resolveValue(Expression $expression)

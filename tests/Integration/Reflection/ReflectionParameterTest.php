@@ -53,15 +53,15 @@ class ReflectionParameterTest extends IntegrationTestCase
             'It returns false if the parameter has no default' => [
                 '$foobar',
                 function ($method) {
-                    $this->assertFalse($method->parameters()->get('foobar')->hasDefault());
+                    $this->assertTrue($method->parameters()->get('foobar')->default()->isNone());
                 },
             ],
             'It returns the default value for a string' => [
                 '$foobar = "foo"',
                 function ($method) {
-                    $this->assertTrue($method->parameters()->get('foobar')->hasDefault());
+                    $this->assertFalse($method->parameters()->get('foobar')->default()->isNone());
                     $this->assertEquals(
-                        'foo', $method->parameters()->get('foobar')->default()
+                        'foo', $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -69,7 +69,7 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = 1234',
                 function ($method) {
                     $this->assertEquals(
-                        1234, $method->parameters()->get('foobar')->default()
+                        1234, $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -77,7 +77,7 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = [ "foobar" ]',
                 function ($method) {
                     $this->assertEquals(
-                        ['foobar'], $method->parameters()->get('foobar')->default()
+                        ['foobar'], $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -85,7 +85,7 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = null',
                 function ($method) {
                     $this->assertEquals(
-                        null, $method->parameters()->get('foobar')->default()
+                        null, $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -93,7 +93,7 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = []',
                 function ($method) {
                     $this->assertEquals(
-                        [], $method->parameters()->get('foobar')->default()
+                        [], $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -101,7 +101,7 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = false',
                 function ($method) {
                     $this->assertEquals(
-                        false, $method->parameters()->get('foobar')->default()
+                        false, $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
