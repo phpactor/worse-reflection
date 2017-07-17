@@ -61,4 +61,22 @@ class TypeTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @testdox It returns the short name for a class.
+     */
+    public function testShort()
+    {
+        $type = Type::fromString('Foo\Bar\Bar');
+        $this->assertEquals('Bar', $type->short());
+    }
+
+    /**
+     * @testdox It returns the "short" name for a primitive.
+     */
+    public function testShortPrimitive()
+    {
+        $type = Type::fromString('string');
+        $this->assertEquals('string', $type->short());
+    }
 }

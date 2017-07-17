@@ -109,6 +109,18 @@ class Type
         return $this->className ? (string) $this->className : $this->type ?: '<unknown>';
     }
 
+    /**
+     * Return the short name of the type, whether it be a scalar or class name.
+     */
+    public function short(): string
+    {
+        if ($this->isPrimitive()) {
+            return $this->type;
+        }
+
+        return $this->className->short();
+    }
+
     public function isPrimitive(): bool
     {
         return $this->className === null;
