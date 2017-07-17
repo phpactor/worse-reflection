@@ -104,12 +104,12 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::int(), $methods->get('method1')->type());
-                    $this->assertEquals(Type::string(), $methods->get('method2')->type());
-                    $this->assertEquals(Type::float(), $methods->get('method3')->type());
-                    $this->assertEquals(Type::array(), $methods->get('method4')->type());
-                    $this->assertEquals(Type::class(ClassName::fromString('Barfoo')), $methods->get('method5')->type());
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method6')->type());
+                    $this->assertEquals(Type::int(), $methods->get('method1')->returnType());
+                    $this->assertEquals(Type::string(), $methods->get('method2')->returnType());
+                    $this->assertEquals(Type::float(), $methods->get('method3')->returnType());
+                    $this->assertEquals(Type::array(), $methods->get('method4')->returnType());
+                    $this->assertEquals(Type::class(ClassName::fromString('Barfoo')), $methods->get('method5')->returnType());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method6')->returnType());
                 },
             ],
             'Inherited methods' => [
@@ -160,7 +160,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->type());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnType());
                 },
             ],
             'Return type from inherited docblock' => [
@@ -188,7 +188,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->type());
+                    $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnType());
                 },
             ],
             'It reflects an abstract method' => [

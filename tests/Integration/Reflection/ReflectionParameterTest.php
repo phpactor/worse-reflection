@@ -41,7 +41,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             'It returns false if the parameter has no type' => [
                 '$foobar',
                 function ($method) {
-                    $this->assertFalse($method->parameters()->get('foobar')->hasType());
+                    $this->assertTrue($method->parameters()->get('foobar')->type()->isNone());
                 },
             ],
             'It returns the parameter type' => [

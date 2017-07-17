@@ -19,7 +19,7 @@ class DocblockResolver
         if (preg_match('#inheritdoc#i', $node->getLeadingCommentAndWhitespaceText())) {
             if ($class->parent()) {
                 if ($class->parent()->methods()->has($node->getName())) {
-                    return $class->parent()->methods()->get($node->getName())->type();
+                    return $class->parent()->methods()->get($node->getName())->inferredReturnType();
                 }
             }
         }

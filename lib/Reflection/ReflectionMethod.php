@@ -109,13 +109,24 @@ final class ReflectionMethod extends AbstractReflectedNode
         return Visibility::public();
     }
 
-    public function type(): Type
+    /**
+     * If type not explicitly set, try and infer it from the docblock.
+     */
+    public function inferredReturnType(): Type
     {
         if (!$this->node->returnType) {
             return $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
         }
 
-        // scalar
+        return $this->returnType();
+    }
+
+    public function returnType(): Type
+    {
+        if (null === $this->node->returnType) {
+            return Type::none();
+        }
+
         if ($this->node->returnType instanceof Token) {
             return Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
         }

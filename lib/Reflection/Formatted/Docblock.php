@@ -18,6 +18,16 @@ class Docblock
         return new self($node->getLeadingCommentAndWhitespaceText());
     }
 
+    public static function fromString(string $docblock)
+    {
+        return new self($docblock);
+    }
+
+    public function none()
+    {
+        return trim($this->docblock) == '';
+    }
+
     public function raw(): string
     {
         return $this->docblock;

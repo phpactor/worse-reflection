@@ -16,7 +16,7 @@ class TypeTest extends TestCase
         $type = Type::fromString($type);
         $this->assertEquals($expected, (string) $type);
 
-        if (false === $type->isUnknown()) {
+        if (false === $type->isNone()) {
             $this->assertEquals($primitive, $type->primitive());
         }
     }

@@ -99,7 +99,7 @@ class Type
         return new self();
     }
 
-    public function isUnknown()
+    public function isNone()
     {
         return null === $this->type;
     }

@@ -45,17 +45,12 @@ class ReflectionParameter extends AbstractReflectedNode
             return Type::fromString($this->parameter->typeDeclaration->getResolvedName());
         }
 
-        return Type::unknown();
+        return Type::none();
     }
 
     public function hasDefault()
     {
         return null !== $this->parameter->default;
-    }
-
-    public function hasType()
-    {
-        return null !== $this->parameter->typeDeclaration;
     }
 
     public function default()
