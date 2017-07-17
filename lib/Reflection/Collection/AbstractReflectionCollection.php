@@ -25,6 +25,11 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return array_keys($this->items);
     }
 
+    public static function fromReflections(Reflector $reflector, array $reflections)
+    {
+        return new static($reflector, $reflections);
+    }
+
     public function merge(AbstractReflectionCollection $collection)
     {
         if (false === $collection instanceof static) {

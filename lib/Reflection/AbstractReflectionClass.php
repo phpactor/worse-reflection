@@ -24,4 +24,13 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode
     {
         return $this instanceof ReflectionInterface;
     }
+
+    public function isConcrete()
+    {
+        if ($this instanceof ReflectionInterface) {
+            return false;
+        }
+
+        return false === $this->isAbstract();
+    }
 }
