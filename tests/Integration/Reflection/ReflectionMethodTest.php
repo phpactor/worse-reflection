@@ -275,29 +275,6 @@ EOT
                     , $methods->get('barfoo')->docblock()->formatted());
                 },
             ],
-            'It returns the method header as a string' => [
-                <<<'EOT'
-<?php
-
-class Foobar
-{
-    /**
-     * Hello this is a docblock.
-     *
-     * Yes?
-     */
-    public function barfoo($foobar, Barfoo $barfoo, int $number)
-    {
-    }
-}
-EOT
-                ,
-                'Foobar',
-                function ($methods) {
-                    $this->assertEquals('public function barfoo($foobar, Barfoo $barfoo, int $number)', (string) $methods->get('barfoo')->header());
-                    $this->assertFalse($methods->get('barfoo')->isStatic());
-                },
-            ],
             'It returns true if the method is static' => [
                 <<<'EOT'
 <?php
