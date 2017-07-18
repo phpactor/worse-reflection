@@ -8,12 +8,12 @@ use Phpactor\WorseReflection\Reflection\ReflectionDefaultValue;
 class ReflectionDefaultValueTest extends TestCase
 {
     /**
-     * @testdox It returns none.
+     * @testdox It creates an undefined default value.
      */
     public function testNone()
     {
-        $value = ReflectionDefaultValue::none();
-        $this->assertTrue($value->isNone());
+        $value = ReflectionDefaultValue::undefined();
+        $this->assertFalse($value->isDefined());
     }
 
     /**

@@ -94,14 +94,14 @@ class Type
         return $instance;
     }
 
-    public static function none()
+    public static function undefined()
     {
         return new self();
     }
 
-    public function isNone()
+    public function isDefined()
     {
-        return null === $this->type;
+        return null !== $this->type;
     }
 
     public function __toString()
@@ -124,6 +124,11 @@ class Type
     public function isPrimitive(): bool
     {
         return $this->className === null;
+    }
+
+    public function isClass(): bool
+    {
+        return $this->className !== null;
     }
 
     public function primitive(): string

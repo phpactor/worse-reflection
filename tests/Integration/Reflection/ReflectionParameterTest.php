@@ -41,7 +41,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             'It returns false if the parameter has no type' => [
                 '$foobar',
                 function ($method) {
-                    $this->assertTrue($method->parameters()->get('foobar')->type()->isNone());
+                    $this->assertFalse($method->parameters()->get('foobar')->type()->isDefined());
                 },
             ],
             'It returns the parameter type' => [
@@ -53,13 +53,13 @@ class ReflectionParameterTest extends IntegrationTestCase
             'It returns false if the parameter has no default' => [
                 '$foobar',
                 function ($method) {
-                    $this->assertTrue($method->parameters()->get('foobar')->default()->isNone());
+                    $this->assertFalse($method->parameters()->get('foobar')->default()->isDefined());
                 },
             ],
             'It returns the default value for a string' => [
                 '$foobar = "foo"',
                 function ($method) {
-                    $this->assertFalse($method->parameters()->get('foobar')->default()->isNone());
+                    $this->assertTrue($method->parameters()->get('foobar')->default()->isDefined());
                     $this->assertEquals(
                         'foo', $method->parameters()->get('foobar')->default()->value()
                     );

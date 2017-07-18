@@ -16,7 +16,7 @@ class TypeTest extends TestCase
         $type = Type::fromString($type);
         $this->assertEquals($expected, (string) $type);
 
-        if (false === $type->isNone()) {
+        if ($type->isDefined()) {
             $this->assertEquals($primitive, $type->primitive());
         }
     }
@@ -78,5 +78,19 @@ class TypeTest extends TestCase
     {
         $type = Type::fromString('string');
         $this->assertEquals('string', $type->short());
+    }
+
+    /**
+     * @testdox It has descriptors to say if it is a class or primitive.
+     */
+    public function testReturnsIfClass()
+    {
+        $type = Type::fromString('Foo\Bar');
+        $this->assertTrue($type->isClass());
+        $this->assertFalse($type->isPrimitive());
+
+        $type = Type::fromString('string');
+        $this->assertFalse($type->isClass());
+        $this->assertTrue($type->isPrimitive());
     }
 }

@@ -46,7 +46,7 @@ class ReflectionParameter extends AbstractReflectedNode
             return Type::fromString($this->parameter->typeDeclaration->getResolvedName());
         }
 
-        return Type::none();
+        return Type::undefined();
     }
 
     public function default()
@@ -57,7 +57,7 @@ class ReflectionParameter extends AbstractReflectedNode
             return ReflectionDefaultValue::fromValue($this->resolveValue($default));
         }
 
-        return ReflectionDefaultValue::none();
+        return ReflectionDefaultValue::undefined();
     }
 
     private function resolveValue(Expression $expression)

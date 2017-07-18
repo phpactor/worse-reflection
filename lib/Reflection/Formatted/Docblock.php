@@ -23,9 +23,9 @@ class Docblock
         return new self($docblock);
     }
 
-    public function none()
+    public function isDefined()
     {
-        return trim($this->docblock) == '';
+        return trim($this->docblock) != '';
     }
 
     public function raw(): string

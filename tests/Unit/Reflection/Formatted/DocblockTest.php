@@ -13,6 +13,6 @@ class DocblockTest extends TestCase
     public function testNone()
     {
         $docblock = Docblock::fromString('');
-        $this->assertTrue($docblock->none());
+        $this->assertFalse($docblock->isDefined());
     }
 }

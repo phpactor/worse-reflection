@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Reflection\ReflectionDefaultValue;
 final class ReflectionDefaultValue
 {
     private $value;
-    private $none = false;
+    private $undefined = false;
 
     private function __construct($value = null)
     {
@@ -19,17 +19,17 @@ final class ReflectionDefaultValue
         return new self($value);
     }
 
-    public static function none(): ReflectionDefaultValue
+    public static function undefined(): ReflectionDefaultValue
     {
         $new = new self();
-        $new->none = true;
+        $new->undefined = true;
 
         return $new;
     }
 
-    public function isNone(): bool
+    public function isDefined(): bool
     {
-        return $this->none;
+        return false === $this->undefined;
     }
 
     public function value()

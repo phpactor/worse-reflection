@@ -124,7 +124,7 @@ final class ReflectionMethod extends AbstractReflectedNode
     public function returnType(): Type
     {
         if (null === $this->node->returnType) {
-            return Type::none();
+            return Type::undefined();
         }
 
         if ($this->node->returnType instanceof Token) {
