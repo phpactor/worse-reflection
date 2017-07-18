@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Reflection\ReflectionDefaultValue;
+use Phpactor\WorseReflection\DefaultValue;
 
 class ReflectionDefaultValueTest extends TestCase
 {
@@ -12,7 +12,7 @@ class ReflectionDefaultValueTest extends TestCase
      */
     public function testNone()
     {
-        $value = ReflectionDefaultValue::undefined();
+        $value = DefaultValue::undefined();
         $this->assertFalse($value->isDefined());
     }
 
@@ -21,7 +21,7 @@ class ReflectionDefaultValueTest extends TestCase
      */
     public function testValue()
     {
-        $value = ReflectionDefaultValue::fromValue(42);
+        $value = DefaultValue::fromValue(42);
         $this->assertEquals(42, $value->value());
     }
 }

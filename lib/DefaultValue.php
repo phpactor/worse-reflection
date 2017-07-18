@@ -1,10 +1,10 @@
 <?php
 
-namespace Phpactor\WorseReflection\Reflection;
+namespace Phpactor\WorseReflection;
 
-use Phpactor\WorseReflection\Reflection\ReflectionDefaultValue;
+use Phpactor\WorseReflection\DefaultValue;
 
-final class ReflectionDefaultValue
+final class DefaultValue
 {
     private $value;
     private $undefined = false;
@@ -14,12 +14,12 @@ final class ReflectionDefaultValue
         $this->value = $value;
     }
 
-    public static function fromValue($value): ReflectionDefaultValue
+    public static function fromValue($value): DefaultValue
     {
         return new self($value);
     }
 
-    public static function undefined(): ReflectionDefaultValue
+    public static function undefined(): DefaultValue
     {
         $new = new self();
         $new->undefined = true;
