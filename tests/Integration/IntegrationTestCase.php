@@ -6,8 +6,9 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\SourceCode;
 use Phpactor\WorseReflection\SourceCodeLocator\StringSourceLocator;
 use Symfony\Component\Filesystem\Filesystem;
+use PHPUnit\Framework\TestCase;
 
-class IntegrationTestCase extends \PHPUnit_Framework_TestCase
+class IntegrationTestCase extends TestCase
 {
     public function createReflector(string $source)
     {

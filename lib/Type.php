@@ -16,6 +16,11 @@ class Type
     private $type;
     private $className;
 
+    public static function fromArray(array $parts): Type
+    {
+        return self::fromString(implode('\\', $parts));
+    }
+
     public static function fromString(string $type): Type
     {
         if ('' === $type) {

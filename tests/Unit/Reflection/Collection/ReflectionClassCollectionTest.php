@@ -34,5 +34,7 @@ class ReflectionClassCollectionTest extends TestCase
         $collection = ReflectionClassCollection::fromReflections($this->reflector->reveal(), [
             $this->reflection1->reveal(), $this->reflection2->reveal(), $this->reflection3->reveal()
         ]);
+
+        $this->assertCount(1, $collection->concrete());
     }
 }
