@@ -60,7 +60,6 @@ class DocblockResolver
             return Type::fromString($importTable[$firstPart].'\\'.implode('\\', $parts));
         }
 
-        // TODO: Test default namespace
         $namespace = $node->getRoot()->getFirstChildNode(NamespaceDefinition::class);
 
         if (null === $namespace) {

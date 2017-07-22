@@ -7,6 +7,8 @@ use Phpactor\WorseReflection\SourceCode;
 use Phpactor\WorseReflection\SourceCodeLocator\StringSourceLocator;
 use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
+use Microsoft\PhpParser\Parser;
+use Microsoft\PhpParser\Node\SourceFileNode;
 
 class IntegrationTestCase extends TestCase
 {
@@ -31,5 +33,12 @@ class IntegrationTestCase extends TestCase
         }
 
         $filesystem->mkdir($this->workspaceDir());
+    }
+
+    protected function parseSource(string $source): SourceFileNode
+    {
+        $parser = new Parser();
+
+        return $parser->parseSourceFile($source);
     }
 }

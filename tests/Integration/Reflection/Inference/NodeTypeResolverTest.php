@@ -18,9 +18,7 @@ class NodeTypeResolverTest extends IntegrationTestCase
     public function testAdapter(string $source, array $locals, int $offset, Type $expectedType)
     {
         $logger = new ArrayLogger();
-        $parser = new Parser();
-        $node = $parser->parseSourceFile($source);
-        $node = $node->getDescendantNodeAtPosition($offset);
+        $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
         $frame = new Frame(
             LocalAssignments::fromArray($locals)
         );
