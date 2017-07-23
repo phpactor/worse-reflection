@@ -99,7 +99,7 @@ namespace Foobar\Barfoo;
 
 class Foobar
 {
-    public function foobar(Barfoo $barfoo)
+    public function foobar(Barfoo $barfoo = 'test')
     {
     }
 }
@@ -140,6 +140,22 @@ trait Foobar
 
 EOT
                 , [], 94, Value::fromType(Type::fromString('Foobar\Barfoo\World'))
+            ],
+            'It returns the value of a method parameter' => [
+                <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+class Foobar
+{
+    public function foobar(string $barfoo = 'test')
+    {
+    }
+}
+
+EOT
+                , [], 77, Value::fromTypeAndValue(Type::unknown(), 'test')
             ],
             'It returns the FQN of a static call' => [
                 <<<'EOT'

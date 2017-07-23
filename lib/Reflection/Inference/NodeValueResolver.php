@@ -57,9 +57,18 @@ class NodeValueResolver
         }
 
         if ($node instanceof Parameter) {
+            $type = Type::unknown();
+
             if ($node->typeDeclaration instanceof QualifiedName) {
-                return Value::fromType($this->resolveQualifiedName($node->typeDeclaration));
+                $type = $this->resolveQualifiedName($node->typeDeclaration);
             }
+
+            if ($node->default) {
+                $value = $this->resolveNode($frame, $node->default);
+                return Value::fromTypeAndValue($type, $value->value());
+            }
+
+            return Value::fromType($type);
         }
 
         if ($node instanceof Variable) {

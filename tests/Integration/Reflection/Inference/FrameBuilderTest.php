@@ -102,8 +102,9 @@ class Foobar
 
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$foobar'));
-                $value = $frame->locals()->byName('$foobar')->first()->value();
+                $vars = $frame->locals()->byName('$foobar');
+                $this->assertCount(1, $vars);
+                $value = $vars->first()->value();
                 $this->assertEquals('World', (string) $value->type());
                 $this->assertEquals('test', (string) $value->value());
             }],

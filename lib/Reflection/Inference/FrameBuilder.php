@@ -62,10 +62,14 @@ final class FrameBuilder
         }
 
         $name = $node->leftOperand->name->getText($node->getFileContents());
-        $type = $this->typeResolver->resolveNode($frame, $node->rightOperand);
+        $value = $this->typeResolver->resolveNode($frame, $node->rightOperand);
 
-        $value = $this->valueResolver->resolveExpression($node->rightOperand);
-        $frame->locals()->add(Variable::fromOffsetNameTypeAndValue($node->leftOperand->getStart(), $name, (string) $type, $value));
+        $frame->locals()->add(Variable::fromOffsetNameTypeAndValue(
+            $node->leftOperand->getStart(),
+            $name,
+            (string) $value->type(),
+            $value->value()
+        ));
     }
 
     private function processMethodDeclaration(Frame $frame, MethodDeclaration $node)
@@ -78,8 +82,8 @@ final class FrameBuilder
         );
         $classType = $this->typeResolver->resolveNode($frame, $classNode);
 
-        $frame->locals()->add(Variable::fromOffsetNameAndType($node->getStart(), '$this', $classType));
-        $frame->locals()->add(Variable::fromOffsetNameAndType($node->getStart(), 'self', $classType));
+        $frame->locals()->add(Variable::fromOffsetNameAndType($node->getStart(), '$this', (string) $classType->type()));
+        $frame->locals()->add(Variable::fromOffsetNameAndType($node->getStart(), 'self', (string) $classType->type()));
 
         if (null === $node->parameters) {
             return;
@@ -87,11 +91,13 @@ final class FrameBuilder
 
         foreach ($node->parameters->getElements() as $parameterNode) {
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
+            $value = $this->typeResolver->resolveNode($frame, $parameterNode);
             $frame->locals()->add(
-                Variable::fromOffsetNameAndType(
+                Variable::fromOffsetNameTypeAndValue(
                     $parameterNode->getStart(),
                     $parameterName,
-                    $this->typeResolver->resolveNode($frame, $parameterNode)
+                    $value->type(),
+                    $value->value()
                 )
             );
         }
