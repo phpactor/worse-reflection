@@ -18,16 +18,19 @@ use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\DefaultValue;
+use Phpactor\WorseReflection\Reflection\Inference\ValueResolver;
 
 class ReflectionParameter extends AbstractReflectedNode
 {
     private $reflector;
     private $parameter;
+    private $valueResolver;
 
     public function __construct(Reflector $reflector, Parameter $parameter)
     {
         $this->reflector = $reflector;
         $this->parameter = $parameter;
+        $this->valueResolver = new ValueResolver();
     }
 
     public function name(): string
@@ -54,56 +57,12 @@ class ReflectionParameter extends AbstractReflectedNode
         $default = $this->parameter->default;
 
         if ($default) {
-            return DefaultValue::fromValue($this->resolveValue($default));
+            return DefaultValue::fromValue($this->valueResolver->resolveExpression($default));
         }
 
         return DefaultValue::undefined();
     }
 
-    private function resolveValue(Expression $expression)
-    {
-        if ($expression instanceof StringLiteral) {
-            return (string) $expression->getStringContentsText();
-        }
-
-        if ($expression instanceof NumericLiteral) {
-            return (int) $expression->getText();
-        }
-
-        if ($expression instanceof ReservedWord) {
-            if ('null' === $expression->getText()) {
-                return null;
-            }
-
-            if ('false' === $expression->getText()) {
-                return false;
-            }
-
-            if ('true' === $expression->getText()) {
-                return true;
-            }
-        }
-
-        if ($expression instanceof ArrayCreationExpression) {
-            $array  = [];
-
-            if (null === $expression->arrayElements) {
-                return $array;
-            }
-
-            foreach ($expression->arrayElements->getElements() as $element) {
-                if ($element->elementKey) {
-                    $array[(string) $element->elementKey] = $this->resolveValue($element->elementValue);
-                }
-
-                $array[] = $this->resolveValue($element->elementValue);
-            }
-
-            return $array;
-        }
-
-        return $expression->getText();
-    }
 
     protected function node(): Node
     {

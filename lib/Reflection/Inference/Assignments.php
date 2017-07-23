@@ -4,45 +4,51 @@ namespace Phpactor\WorseReflection\Reflection\Inference;
 
 use Phpactor\WorseReflection\Reflection\Inference\Value;
 
-abstract class Assignments
+abstract class Assignments implements \Countable
 {
     /**
      * @var array
      */
-    private $assignments = [];
+    private $variables = [];
 
-    protected function __construct(array $assignments)
+    protected function __construct(array $variables)
     {
-        $this->assignments = $assignments;
-    }
-
-    public function has(string $name)
-    {
-        return isset($this->assignments[$name]);
-    }
-
-    public function set(string $name, Value $type)
-    {
-        $this->assignments[$name] = $type;
-    }
-
-    public function get(string $name)
-    {
-        if (!isset($this->assignments[$name])) {
-            $type = strtolower(
-                str_replace(
-                    'Assignments',
-                    '',
-                    basename(str_replace('\\', '/', get_class($this)))
-                )
-            );
-
-            throw new \InvalidArgumentException(sprintf(
-                'Unknown "%s" value "%s", known values: "%s"',
-                $type, $name, implode('", "', array_keys($this->assignments))
-            ));
+        foreach ($variables as $variable) {
+            $this->add($variable);
         }
-        return $this->assignments[$name];
+    }
+
+    public function add(Variable $variable)
+    {
+        $this->variables[] = $variable;
+    }
+
+    public function byName(string $name): Assignments
+    {
+        return new static(array_filter($this->variables, function (Variable $variable) use ($name) {
+            return $variable->name() === $name;
+        }));
+    }
+
+    public function first(): Variable
+    {
+        $first = reset($this->variables);
+
+        if (!$first) {
+            throw new \RuntimeException(
+                'Variable collection is empty'
+            );
+        }
+
+        return $first;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function count()
+    {
+        return count($this->variables);
     }
 }
 

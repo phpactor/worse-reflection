@@ -6,29 +6,49 @@ use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflection\Inference\NodeTypeResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Type;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Reflection\Inference\Frame;
 
 class FrameBuilderTest extends IntegrationTestCase
 {
     /**
-     * @dataProvider provideTests
+     * @dataProvider provideForMethod
      */
-    public function testFrameBuilder(string $source, int $offset, Type $expectedType)
+    public function testForMethod(string $source, array $classAndMethod, \Closure $assertion)
     {
-        $this->markTestSkipped('TODO');
-        $parser = new Parser();
-        $node = $parser->parseSourceFile($source);
-        $node = $node->getDescendantNodeAtPosition($offset);
+        list($className, $methodName) = $classAndMethod;
+        $reflector = $this->createReflector($source);
+        $method = $reflector->reflectClass(ClassName::fromString($className))->methods()->get($methodName);
+        $frame = $method->frame();
 
-        $typeResolver = new NodeTypeResolver($this->createReflector($source));
-        $type = $typeResolver->resolveNode($node);
-
-        $this->assertEquals($expectedType, $type);
+        $assertion($frame);
     }
 
-    public function provideTests()
+    public function provideForMethod()
     {
         return [
-            'It returns the FQN of variable assigned in frame' => [
+            'It returns this and self' => [
+                <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+use Acme\Factory;
+
+class Foobar
+{
+    public function hello()
+    {
+    }
+}
+
+EOT
+            , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$this'));
+                $this->assertCount(1, $frame->locals()->byName('self'));
+                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->value()->type());
+            }],
+            'It returns method arguments' => [
                 <<<'EOT'
 <?php
 
@@ -40,13 +60,40 @@ class Foobar
 {
     public function hello(World $world)
     {
-        echo $world;
     }
 }
 
 EOT
-                , 127, Type::fromString('Foobar\Barfoo\World')
-            ],
+            , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$this'));
+                $this->assertCount(1, $frame->locals()->byName('self'));
+                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->value()->type());
+            }],
+            'It registers string assignments' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello()
+    {
+        $foobar = 'foobar';
+    }
+}
+
+EOT
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$foobar'));
+                $value = $frame->locals()->byName('$foobar')->first()->value();
+                $this->assertEquals('string', (string) $value->type());
+                $this->assertEquals('foobar', (string) $value->value());
+            }],
+        ];
+    }
+
+    private function abc()
+    {
+        return [
             'It returns types for reassigned variables' => [
                 <<<'EOT'
 <?php

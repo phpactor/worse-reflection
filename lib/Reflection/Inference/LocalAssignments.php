@@ -13,4 +13,5 @@ final class LocalAssignments extends Assignments
     {
         return new self($assignments);
     }
+
 }

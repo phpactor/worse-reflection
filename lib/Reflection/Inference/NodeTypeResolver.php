@@ -20,6 +20,8 @@ use Microsoft\PhpParser\Node\NamespaceUseClause;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Reflection\ReflectionClass;
+use Microsoft\PhpParser\Node\StringLiteral;
+use Microsoft\PhpParser\Node\NumericLiteral;
 
 class NodeTypeResolver
 {
@@ -33,10 +35,16 @@ class NodeTypeResolver
      */
     private $logger;
 
-    public function __construct(Reflector $reflector, Logger $logger = null)
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
+    public function __construct(Reflector $reflector, Logger $logger = null, ValueResolver $valueResolver = null)
     {
         $this->reflector = $reflector;
         $this->logger = $logger ?: new ArrayLogger();
+        $this->valueResolver = $valueResolver ?: new ValueResolver();
     }
 
     public function resolveNode(Frame $frame, Node $node): Type
@@ -71,6 +79,20 @@ class NodeTypeResolver
             return $this->resolveVariable($frame, $node->getText());
         }
 
+        if ($node instanceof StringLiteral) {
+            return Type::string();
+        }
+
+        if ($node instanceof NumericLiteral) {
+            $value = $this->valueResolver->resolveExpression($node);
+
+            if (is_float($value)) {
+                return Type::float();
+            }
+
+            return Type::int();
+        }
+
         $this->logger->warning(sprintf(
             'Could not resolve type for node "%s"',
             get_class($node)
@@ -81,11 +103,11 @@ class NodeTypeResolver
 
     private function resolveVariable(Frame $frame, string $name)
     {
-        if (false === $frame->locals()->has($name)) {
+        if (0 === $frame->locals()->byName($name)->count()) {
             return Type::unknown();
         }
 
-        return $frame->locals()->get($name);
+        return $frame->locals()->byName($name)->first()->value()->type();
     }
 
     private function resolveMemberAccess(Frame $frame, Expression $node, $list = [])
@@ -230,3 +252,4 @@ class NodeTypeResolver
         return $class->properties()->get($name)->type();
     }
 }
+

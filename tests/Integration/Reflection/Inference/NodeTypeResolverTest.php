@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Reflection\Inference\LocalAssignments;
 use Phpactor\WorseReflection\Reflection\Inference\ArrayLogger;
+use Phpactor\WorseReflection\Reflection\Inference\Variable;
 
 class NodeTypeResolverTest extends IntegrationTestCase
 {
@@ -19,8 +20,14 @@ class NodeTypeResolverTest extends IntegrationTestCase
     {
         $logger = new ArrayLogger();
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
+
+        $variables = [];
+        foreach ($locals as $name => $type) {
+            $variables[] = Variable::fromOffsetNameAndType(0, $name, $type);
+        }
+
         $frame = new Frame(
-            LocalAssignments::fromArray($locals)
+            LocalAssignments::fromArray($variables)
         );
 
         $typeResolver = new NodeTypeResolver($this->createReflector($source), $logger);
@@ -245,6 +252,30 @@ EOT
                 , [
                     '$foobar' => Type::fromString('Bar')
                 ], 44, Type::fromString('Bar')
+            ],
+            'It returns type for string literal' => [
+                <<<'EOT'
+<?php
+
+'bar';
+EOT
+                , [], 9, Type::string()
+            ],
+            'It returns type for float' => [
+                <<<'EOT'
+<?php
+
+1.2;
+EOT
+                , [], 9, Type::float()
+            ],
+            'It returns type for integer' => [
+                <<<'EOT'
+<?php
+
+12;
+EOT
+                , [], 9, Type::int()
             ],
         ];
 
