@@ -5,12 +5,12 @@ namespace Phpactor\WorseReflection\Reflection\Inference;
 final class Frame
 {
     /**
-     * @var Assignments
+     * @var PropretyAssignments
      */
     private $properties;
 
     /**
-     * @var Assignments
+     * @var LocalAssignments
      */
     private $locals;
 

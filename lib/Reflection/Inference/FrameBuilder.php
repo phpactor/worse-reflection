@@ -62,8 +62,8 @@ final class FrameBuilder
 
         $name = $node->leftOperand->name->getText($node->getFileContents());
         $type = $this->typeResolver->resolveNode($frame, $node->rightOperand);
-        $value = $this->valueResolver->resolveExpression($node->rightOperand);
 
+        $value = $this->valueResolver->resolveExpression($node->rightOperand);
         $frame->locals()->add(Variable::fromOffsetNameTypeAndValue($node->leftOperand->getStart(), $name, (string) $type, $value));
     }
 

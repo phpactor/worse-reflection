@@ -88,32 +88,31 @@ EOT
                 $this->assertEquals('string', (string) $value->type());
                 $this->assertEquals('foobar', (string) $value->value());
             }],
+            'It returns types for reassigned variables' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello(World $world = 'test')
+    {
+        $foobar = $world;
+    }
+}
+
+EOT
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$foobar'));
+                $value = $frame->locals()->byName('$foobar')->first()->value();
+                $this->assertEquals('World', (string) $value->type());
+                $this->assertEquals('test', (string) $value->value());
+            }],
         ];
     }
 
     private function abc()
     {
         return [
-            'It returns types for reassigned variables' => [
-                <<<'EOT'
-<?php
-
-namespace Foobar\Barfoo;
-
-use Acme\Factory;
-
-class Foobar
-{
-    public function hello(World $world)
-    {
-        $foobar = $world;
-        $foobar;
-    }
-}
-
-EOT
-                , 154, Type::fromString('Foobar\Barfoo\World')
-            ],
             'It returns type for $this' => [
                 <<<'EOT'
 <?php
