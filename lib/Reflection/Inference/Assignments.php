@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Reflection\Inference;
 
-use Phpactor\WorseReflection\Type;
+use Phpactor\WorseReflection\Reflection\Inference\Value;
 
 abstract class Assignments
 {
@@ -21,7 +21,7 @@ abstract class Assignments
         return isset($this->assignments[$name]);
     }
 
-    public function set(string $name, Type $type)
+    public function set(string $name, Value $type)
     {
         $this->assignments[$name] = $type;
     }

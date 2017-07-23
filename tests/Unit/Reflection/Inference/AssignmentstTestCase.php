@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Tests\Unit\Reflection\Inference;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\Reflection\Inference\Assignments;
+use Phpactor\WorseReflection\Reflection\Inference\Value;
 
 abstract class AssignmentstTestCase extends TestCase
 {
@@ -15,7 +16,7 @@ abstract class AssignmentstTestCase extends TestCase
         $assignments = $this->assignments();
         $this->assertFalse($assignments->has('hello'));
 
-        $type = Type::fromString('Foobar');
+        $type = Value::fromType(Type::fromString('Foobar'));
         $assignments->set('hello', $type);
         $this->assertTrue($assignments->has('hello'));
         $this->assertSame($type, $assignments->get('hello'));
