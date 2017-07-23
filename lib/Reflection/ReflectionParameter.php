@@ -18,7 +18,9 @@ use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\DefaultValue;
-use Phpactor\WorseReflection\Reflection\Inference\ValueResolver;
+use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
+use Phpactor\WorseReflection\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Reflection\Inference\Value;
 
 class ReflectionParameter extends AbstractReflectedNode
 {
@@ -30,7 +32,7 @@ class ReflectionParameter extends AbstractReflectedNode
     {
         $this->reflector = $reflector;
         $this->parameter = $parameter;
-        $this->valueResolver = new ValueResolver();
+        $this->valueResolver = new NodeValueResolver($reflector);
     }
 
     public function name(): string
@@ -52,9 +54,13 @@ class ReflectionParameter extends AbstractReflectedNode
         return Type::undefined();
     }
 
-    public function default(): Value
+    public function default(): DefaultValue
     {
-        return $this->valueResolver->resolveNode($this->parameter);
+        if (null === $this->parameter->default) {
+            return DefaultValue::undefined();
+        }
+
+        return DefaultValue::fromValue($this->valueResolver->resolveNode(new Frame(), $this->parameter)->value());
     }
 
     protected function node(): Node

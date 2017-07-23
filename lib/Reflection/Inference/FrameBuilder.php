@@ -18,15 +18,9 @@ final class FrameBuilder
      */
     private $typeResolver;
 
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(NodeValueResolver $typeResolver, ValueResolver $valueResolver = null)
+    public function __construct(NodeValueResolver $typeResolver)
     {
         $this->typeResolver = $typeResolver;
-        $this->valueResolver = $valueResolver ?: new ValueResolver();
     }
 
     public function buildFromNode(Node $node)

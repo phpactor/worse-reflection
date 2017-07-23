@@ -38,16 +38,10 @@ class NodeValueResolver
      */
     private $logger;
 
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(Reflector $reflector, Logger $logger = null, ValueResolver $valueResolver = null)
+    public function __construct(Reflector $reflector, Logger $logger = null)
     {
         $this->reflector = $reflector;
         $this->logger = $logger ?: new ArrayLogger();
-        $this->valueResolver = $valueResolver ?: new ValueResolver();
     }
 
     public function resolveNode(Frame $frame, Node $node): Value
