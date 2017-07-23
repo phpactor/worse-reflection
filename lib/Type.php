@@ -11,7 +11,8 @@ class Type
     const TYPE_STRING = 'string';
     const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
-    const TYPE_CLASS = 'object';
+    const TYPE_CLASS = 'object'; 
+    const TYPE_NULL = 'null';
 
     private $type;
     private $className;
@@ -51,6 +52,9 @@ class Type
             return self::mixed();
         }
 
+        if ($type === 'null') {
+            return self::null();
+        }
 
         return self::class(ClassName::fromString($type));
     }
@@ -68,6 +72,11 @@ class Type
     public static function array()
     {
         return self::create(self::TYPE_ARRAY);
+    }
+
+    public static function null()
+    {
+        return self::create(self::TYPE_NULL);
     }
 
     public static function bool()

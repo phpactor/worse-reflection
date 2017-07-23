@@ -18,7 +18,7 @@ use Phpactor\WorseReflection\Docblock;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Reflection\Formatted\MethodHeader;
 use Phpactor\WorseReflection\Reflection\Inference\FrameBuilder;
-use Phpactor\WorseReflection\Reflection\Inference\NodeTypeResolver;
+use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Reflection\Inference\Frame;
 
 final class ReflectionMethod extends AbstractReflectedNode
@@ -55,7 +55,7 @@ final class ReflectionMethod extends AbstractReflectedNode
         $this->reflector = $reflector;
         $this->node = $node;
         $this->docblockResolver = new DocblockResolver($reflector);
-        $this->frameBuilder = new FrameBuilder(new NodeTypeResolver($reflector));
+        $this->frameBuilder = new FrameBuilder(new NodeValueResolver($reflector));
     }
 
     public function name(): string

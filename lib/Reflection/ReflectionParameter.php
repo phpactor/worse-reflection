@@ -52,17 +52,10 @@ class ReflectionParameter extends AbstractReflectedNode
         return Type::undefined();
     }
 
-    public function default()
+    public function default(): Value
     {
-        $default = $this->parameter->default;
-
-        if ($default) {
-            return DefaultValue::fromValue($this->valueResolver->resolveExpression($default));
-        }
-
-        return DefaultValue::undefined();
+        return $this->valueResolver->resolveNode($this->parameter);
     }
-
 
     protected function node(): Node
     {

@@ -9,6 +9,7 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
+use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
 
 final class FrameBuilder
 {
@@ -22,7 +23,7 @@ final class FrameBuilder
      */
     private $valueResolver;
 
-    public function __construct(NodeTypeResolver $typeResolver, ValueResolver $valueResolver = null)
+    public function __construct(NodeValueResolver $typeResolver, ValueResolver $valueResolver = null)
     {
         $this->typeResolver = $typeResolver;
         $this->valueResolver = $valueResolver ?: new ValueResolver();

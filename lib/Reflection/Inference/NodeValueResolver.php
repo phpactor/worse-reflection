@@ -22,8 +22,11 @@ use Phpactor\WorseReflection\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\NumericLiteral;
+use Phpactor\WorseReflection\Reflection\Inference\Value;
+use Microsoft\PhpParser\Node\ReservedWord;
+use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 
-class NodeTypeResolver
+class NodeValueResolver
 {
     /**
      * @var Reflector $reflector
@@ -47,15 +50,15 @@ class NodeTypeResolver
         $this->valueResolver = $valueResolver ?: new ValueResolver();
     }
 
-    public function resolveNode(Frame $frame, Node $node): Type
+    public function resolveNode(Frame $frame, Node $node): Value
     {
         if ($node instanceof QualifiedName) {
-            return $this->resolveQualifiedName($node);
+            return Value::fromType($this->resolveQualifiedName($node));
         }
 
         if ($node instanceof Parameter) {
             if ($node->typeDeclaration instanceof QualifiedName) {
-                return $this->resolveQualifiedName($node->typeDeclaration);
+                return Value::fromType($this->resolveQualifiedName($node->typeDeclaration));
             }
         }
 
@@ -68,29 +71,60 @@ class NodeTypeResolver
         }
 
         if ($node instanceof ClassDeclaration || $node instanceof InterfaceDeclaration) {
-            return Type::fromString($node->getNamespacedName());
+            return Value::fromType(Type::fromString($node->getNamespacedName()));
         }
 
         if ($node instanceof ObjectCreationExpression) {
-            return $this->resolveQualifiedName($node->classTypeDesignator);
+            return Value::fromType($this->resolveQualifiedName($node->classTypeDesignator));
         }
 
         if ($node instanceof SubscriptExpression) {
-            return $this->resolveVariable($frame, $node->getText());
+            return Value::fromType($this->resolveVariable($frame, $node->getText()));
         }
 
         if ($node instanceof StringLiteral) {
-            return Type::string();
+            return Value::fromTypeAndValue(Type::string(), (string) $node->getStringContentsText());
         }
 
         if ($node instanceof NumericLiteral) {
-            $value = $this->valueResolver->resolveExpression($node);
+            $value = $node->getText() + 0;
+            // note hack to cast to either an int or a float
+            return Value::fromTypeAndValue(is_float($value) ? Type::float() : Type::int(), $value);
+        }
 
-            if (is_float($value)) {
-                return Type::float();
+        if ($node instanceof ReservedWord) {
+            if ('null' === $node->getText()) {
+                return Value::fromTypeAndValue(Type::null(), null);
             }
 
-            return Type::int();
+            if ('false' === $node->getText()) {
+                return Value::fromTypeAndValue(Type::bool(), false);
+            }
+
+            if ('true' === $node->getText()) {
+                return Value::fromTypeAndValue(Type::bool(), true);
+            }
+        }
+
+        if ($node instanceof ArrayCreationExpression) {
+            $array  = [];
+
+            if (null === $node->arrayElements) {
+                return Value::fromTypeAndValue(Type::array(), []);
+            }
+
+            foreach ($node->arrayElements->getElements() as $element) {
+                $value = $this->resolveNode($frame, $element->elementValue)->value();
+                if ($element->elementKey) {
+                    $key = $this->resolveNode($frame, $element->elementKey)->value();
+                    $array[$key] = $value;
+                    continue;
+                }
+
+                $array[] = $value;
+            }
+
+            return Value::fromTypeAndValue(Type::array(), $array);
         }
 
         $this->logger->warning(sprintf(
@@ -98,16 +132,16 @@ class NodeTypeResolver
             get_class($node)
         ));
 
-        return Type::unknown();
+        return Value::none();
     }
 
     private function resolveVariable(Frame $frame, string $name)
     {
         if (0 === $frame->locals()->byName($name)->count()) {
-            return Type::unknown();
+            return Value::none();
         }
 
-        return $frame->locals()->byName($name)->first()->value()->type();
+        return $frame->locals()->byName($name)->first()->value();
     }
 
     private function resolveMemberAccess(Frame $frame, Expression $node, $list = [])
@@ -124,7 +158,6 @@ class NodeTypeResolver
         }
 
         $ancestors[] = $node;
-
         $ancestors = array_reverse($ancestors);
 
         $parent = null;
@@ -139,26 +172,26 @@ class NodeTypeResolver
                 continue;
             }
 
-            $type = $this->resolveMemberType($parent, $ancestor);
-            $parent = $type;
+            $value = $this->resolveMemberType($parent, $ancestor);
+            $parent = $value;
         }
 
-        return $type;
+        return $value;
     }
 
-    private function resolveMemberType(Type $parent, $node)
+    private function resolveMemberType(Value $parent, $node): Value
     {
         $memberName = $node->memberName->getText($node->getFileContents());
 
-        $type = $this->methodType($parent, $memberName);
+        $type = $this->methodType($parent->type(), $memberName);
 
         if (Type::unknown() != $type) {
-            return $type;
+            return Value::fromType($type);
         }
 
-        $type = $this->propertyType($parent, $memberName);
+        $type = $this->propertyType($parent->type(), $memberName);
 
-        return $type;
+        return Value::fromType($type);
     }
 
     public function resolveQualifiedName(Node $node, string $name = null): Type
@@ -250,6 +283,12 @@ class NodeTypeResolver
         }
 
         return $class->properties()->get($name)->type();
+    }
+
+    private function resolveScalarValue(Expression $expression)
+    {
+
+        return null;
     }
 }
 

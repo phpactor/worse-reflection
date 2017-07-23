@@ -32,6 +32,11 @@ final class Value
         return new self($type);
     }
 
+    public static function none()
+    {
+        return new self(Type::undefined());
+    }
+
     public function type(): Type
     {
         return $this->type;

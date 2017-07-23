@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Reflection\Inference;
 
 use Microsoft\PhpParser\Parser;
-use Phpactor\WorseReflection\Reflection\Inference\NodeTypeResolver;
+use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\ClassName;
