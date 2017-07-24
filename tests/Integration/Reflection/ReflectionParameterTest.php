@@ -92,8 +92,9 @@ class ReflectionParameterTest extends IntegrationTestCase
             'It returns the default value for empty array' => [
                 '$foobar = []',
                 function ($method) {
+                    $foobar = $method->parameters()->get('foobar');
                     $this->assertEquals(
-                        [], $method->parameters()->get('foobar')->default()->value()
+                        [], $foobar->default()->value()
                     );
                 },
             ],

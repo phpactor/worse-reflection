@@ -2,30 +2,36 @@
 
 namespace Phpactor\WorseReflection\Reflection\Inference;
 
-use Microsoft\PhpParser\Parser;
-use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\Node\Parameter;
-use Microsoft\PhpParser\Node\Expression\Variable;
-use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
-use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Microsoft\PhpParser\Node\Expression;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
+use Microsoft\PhpParser\Node\Expression\CallExpression;
+use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ObjectCreationExpression;
 use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
-use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Type;
+use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\NamespaceUseClause;
+use Microsoft\PhpParser\Node\NumericLiteral;
+use Microsoft\PhpParser\Node\Parameter;
+use Microsoft\PhpParser\Node\QualifiedName;
+use Microsoft\PhpParser\Node\ReservedWord;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Microsoft\PhpParser\Node\StringLiteral;
+use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Exception\ClassNotFound;
-use Phpactor\WorseReflection\Reflection\ReflectionClass;
-use Microsoft\PhpParser\Node\StringLiteral;
-use Microsoft\PhpParser\Node\NumericLiteral;
+use Phpactor\WorseReflection\Reflection\Inference\Logger;
 use Phpactor\WorseReflection\Reflection\Inference\Value;
-use Microsoft\PhpParser\Node\ReservedWord;
-use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
+use Phpactor\WorseReflection\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Type;
 
+/**
+ * TODO:
+ *    - Return default property values.
+ *    - Log unresolvable nodes
+ */
 class NodeValueResolver
 {
     /**
@@ -46,23 +52,17 @@ class NodeValueResolver
 
     public function resolveNode(Frame $frame, Node $node): Value
     {
+        return $this->_resolveNode($frame, $node);
+    }
+
+    private function _resolveNode(Frame $frame, Node $node)
+    {
         if ($node instanceof QualifiedName) {
             return Value::fromType($this->resolveQualifiedName($node));
         }
 
         if ($node instanceof Parameter) {
-            $type = Type::unknown();
-
-            if ($node->typeDeclaration instanceof QualifiedName) {
-                $type = $this->resolveQualifiedName($node->typeDeclaration);
-            }
-
-            if ($node->default) {
-                $value = $this->resolveNode($frame, $node->default);
-                return Value::fromTypeAndValue($type, $value->value());
-            }
-
-            return Value::fromType($type);
+            return $this->resolveParameter($frame, $node);
         }
 
         if ($node instanceof Variable) {
@@ -90,50 +90,16 @@ class NodeValueResolver
         }
 
         if ($node instanceof NumericLiteral) {
-            $value = $node->getText() + 0;
-            // note hack to cast to either an int or a float
-            return Value::fromTypeAndValue(is_float($value) ? Type::float() : Type::int(), $value);
+            return $this->resolveNumericLiteral($node);
         }
 
         if ($node instanceof ReservedWord) {
-            if ('null' === $node->getText()) {
-                return Value::fromTypeAndValue(Type::null(), null);
-            }
-
-            if ('false' === $node->getText()) {
-                return Value::fromTypeAndValue(Type::bool(), false);
-            }
-
-            if ('true' === $node->getText()) {
-                return Value::fromTypeAndValue(Type::bool(), true);
-            }
+            return $this->resolveReservedWord($node);
         }
 
         if ($node instanceof ArrayCreationExpression) {
-            $array  = [];
-
-            if (null === $node->arrayElements) {
-                return Value::fromTypeAndValue(Type::array(), []);
-            }
-
-            foreach ($node->arrayElements->getElements() as $element) {
-                $value = $this->resolveNode($frame, $element->elementValue)->value();
-                if ($element->elementKey) {
-                    $key = $this->resolveNode($frame, $element->elementKey)->value();
-                    $array[$key] = $value;
-                    continue;
-                }
-
-                $array[] = $value;
-            }
-
-            return Value::fromTypeAndValue(Type::array(), $array);
+            return $this->resolveArrayCreationExpression($frame, $node);
         }
-
-        $this->logger->warning(sprintf(
-            'Could not resolve type for node "%s"',
-            get_class($node)
-        ));
 
         return Value::none();
     }
@@ -166,10 +132,10 @@ class NodeValueResolver
         $parent = null;
         foreach ($ancestors as $ancestor) {
             if ($parent === null) {
-                $parent = $this->resolveNode($frame, $ancestor);
-
-                if (Type::unknown() == $parent) {
-                    return Type::unknown();
+                $parent = $this->_resolveNode($frame, $ancestor);
+                // TODO: This is not tested.
+                if (Type::unknown() == $parent->type()) {
+                    return Value::none();
                 }
 
                 continue;
@@ -288,10 +254,67 @@ class NodeValueResolver
         return $class->properties()->get($name)->type();
     }
 
-    private function resolveScalarValue(Expression $expression)
+    private function resolveParameter(Frame $frame, Node $node)
     {
+        $type = Type::unknown();
 
-        return null;
+        if ($node->typeDeclaration instanceof QualifiedName) {
+            $type = $this->resolveQualifiedName($node->typeDeclaration);
+        }
+
+        if ($node->default) {
+            $value = $this->_resolveNode($frame, $node->default);
+            return Value::fromTypeAndValue($type, $value->value());
+        }
+
+        return Value::fromType($type);
+    }
+
+    private function resolveNumericLiteral(Node $node)
+    {
+        // note hack to cast to either an int or a float
+        $value = $node->getText() + 0;
+
+        return Value::fromTypeAndValue(is_float($value) ? Type::float() : Type::int(), $value);
+    }
+
+    private function resolveReservedWord(Node $node)
+    {
+        if ('null' === $node->getText()) {
+            return Value::fromTypeAndValue(Type::null(), null);
+        }
+
+        if ('false' === $node->getText()) {
+            return Value::fromTypeAndValue(Type::bool(), false);
+        }
+
+        if ('true' === $node->getText()) {
+            return Value::fromTypeAndValue(Type::bool(), true);
+        }
+
+        // TODO: Not tested
+        return Value::none();
+    }
+
+    private function resolveArrayCreationExpression(Frame $frame, Node $node)
+    {
+        $array  = [];
+
+        if (null === $node->arrayElements) {
+            return Value::fromTypeAndValue(Type::array(), []);
+        }
+
+        foreach ($node->arrayElements->getElements() as $element) {
+            $value = $this->_resolveNode($frame, $element->elementValue)->value();
+            if ($element->elementKey) {
+                $key = $this->_resolveNode($frame, $element->elementKey)->value();
+                $array[$key] = $value;
+                continue;
+            }
+
+            $array[] = $value;
+        }
+
+        return Value::fromTypeAndValue(Type::array(), $array);
     }
 }
-
