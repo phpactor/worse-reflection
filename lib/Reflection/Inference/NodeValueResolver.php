@@ -29,6 +29,7 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Exception\SourceNotFound;
+use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 
 class NodeValueResolver
 {
@@ -73,6 +74,10 @@ class NodeValueResolver
 
         if ($node instanceof MemberAccessExpression || $node instanceof CallExpression) {
             return $this->resolveMemberAccess($frame, $node);
+        }
+
+        if ($node instanceof ScopedPropertyAccessExpression) {
+            return $this->resolveScopedPropertyAccessExpression($frame, $node);
         }
 
         if ($node instanceof ClassDeclaration || $node instanceof InterfaceDeclaration) {
@@ -350,5 +355,14 @@ class NodeValueResolver
         }
 
         return Value::none();
+    }
+
+    private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node)
+    {
+        $classType = $this->resolveQualifiedName($node, $node->scopeResolutionQualifier->getText());
+        $memberName = $node->memberName->getText($node->getFileContents());
+        $returnType = $this->methodType($classType, $memberName);
+
+        return Value::fromType($returnType);
     }
 }

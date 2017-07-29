@@ -186,6 +186,21 @@ $foo = Factory::create();
 EOT
                 , [], 63, Value::fromType(Type::fromString('Acme\Factory'))
             ],
+            'It returns the type of a static call' => [
+                <<<'EOT'
+<?php
+
+class Factory
+{
+    public static function create(): string
+    {
+    }
+}
+
+Factory::create();
+EOT
+                , [], 92, Value::fromType(Type::string())
+            ],
             'It returns the FQN of a method parameter' => [
                 <<<'EOT'
 <?php
