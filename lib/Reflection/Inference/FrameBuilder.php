@@ -15,6 +15,8 @@ use Phpactor\WorseReflection\Offset;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
+use Phpactor\WorseReflection\DocblockResolver;
+use Phpactor\WorseReflection\Type;
 
 final class FrameBuilder
 {
@@ -49,6 +51,8 @@ final class FrameBuilder
         if ($node->getStart() > $endPosition) {
             return;
         }
+
+        $this->processLeadingComment($frame, $node);
 
         if ($node instanceof MethodDeclaration) {
             $this->processMethodDeclaration($frame, $node);
@@ -135,6 +139,21 @@ final class FrameBuilder
                     )
                 )
             );
+        }
+    }
+
+    private function processLeadingComment(Frame $frame, Node $node)
+    {
+        $comment = $node->getLeadingCommentAndWhitespaceText();
+
+        if (preg_match('{var \$(\w+) (\w+)}', $comment, $matches)) {
+            $frame->locals()->add(Variable::fromOffsetNameAndValue(
+                Offset::fromInt($node->getStart()),
+                '$' . $matches[1],
+                Value::fromType(
+                    $this->typeResolver->resolveQualifiedName($node, $matches[2])
+                )
+            ));
         }
     }
 }

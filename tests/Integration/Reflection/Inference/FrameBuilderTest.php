@@ -163,70 +163,27 @@ EOT
                 $this->assertEquals('string', (string) $value->type());
                 $this->assertEquals('foobar', (string) $value->value());
             }],
-        ];
-    }
-
-    private function abc()
-    {
-        return [
-            'It returns type for a variable assigned to an access expression' => [
-                <<<'EOT'
-<?php
-
-namespace Foobar\Barfoo;
-
-class Type1
-{
-    public function type2(): Type2
-    {
-    }
-}
-
-class Foobar
-{
-    /**
-     * @var Type1
-     */
-    private $foobar;
-
-    public function hello(Barfoo $world)
-    {
-        $foobar = $this->foobar->type2();
-        $foobar;
-    }
-}
-EOT
-                , 269, Type::fromString('Foobar\Barfoo\Type2')
-            ],
-            'It returns the FQN for self' => [
-                <<<'EOT'
-<?php
-
-namespace Foobar\Barfoo;
-
-class Foobar
-{
-    public function foobar(Barfoo $barfoo)
-    {
-        self::foobar();
-    }
-}
-
-EOT
-                , 106, Type::fromString('Foobar\Barfoo\Foobar')
-            ],
             'It returns type for a for each member (with a docblock)' => [
                 <<<'EOT'
 <?php
 
-/** @var $foobar Foobar */
-foreach ($collection as $foobar) {
-    $foobar->foobar();
+class Foobar
+{
+    public function hello()
+    {
+        /** @var $foobar Foobar */
+        foreach ($collection as $foobar) {
+            $foobar->foobar();
+        }
+    }
 }
 EOT
-                , 75, Type::fromString('Foobar')
-            ],
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $vars = $frame->locals()->byName('$foobar');
+                $this->assertCount(1, $vars);
+                $value = $vars->first()->value();
+                $this->assertEquals('Foobar', (string) $value->type());
+            }],
         ];
-
     }
 }
