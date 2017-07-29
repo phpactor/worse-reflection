@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Reflection\Inference\Value;
 use Phpactor\WorseReflection\Offset;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\SourceFileNode;
+use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 
 final class FrameBuilder
 {
@@ -64,20 +65,43 @@ final class FrameBuilder
 
     private function processAssignment(Frame $frame, AssignmentExpression $node)
     {
-        if (!$node->leftOperand instanceof ParserVariable) {
-            return;
+        if ($node->leftOperand instanceof ParserVariable) {
+            return $this->processParserVariable($frame, $node);
         }
 
+        if ($node->leftOperand instanceof MemberAccessExpression) {
+            return $this->processMemberAccessExpression($frame, $node);
+        }
+    }
+
+    private function processParserVariable(Frame $frame, AssignmentExpression $node)
+    {
         $name = $node->leftOperand->name->getText($node->getFileContents());
         $value = $this->typeResolver->resolveNode($frame, $node->rightOperand);
 
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
             $name,
-            Value::fromTypeAndValue(
-                $value->type(),
-                $value->value()
-            )
+            $value
+        ));
+    }
+
+    private function processMemberAccessExpression(Frame $frame, AssignmentExpression $node)
+    {
+        $variable = $node->leftOperand->dereferencableExpression;
+
+        // we do not track assignments to other classes.
+        if (false === in_array($variable, [ '$this', 'self' ])) {
+            return;
+        }
+
+        $memberName = $node->leftOperand->memberName->getText($node->getFileContents());
+        $value = $this->typeResolver->resolveNode($frame, $node->rightOperand);
+
+        $frame->properties()->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt($node->leftOperand->getStart()),
+            $memberName,
+            $value
         ));
     }
 

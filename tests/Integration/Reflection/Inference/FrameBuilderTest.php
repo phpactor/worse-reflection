@@ -144,20 +144,15 @@ EOT
                 $value = $vars->first()->value();
                 $this->assertEquals('Foobar', (string) $value->type());
             }],
-            'It returns type for a property' => [
+            'It tracks assigned properties' => [
                 <<<'EOT'
 <?php
 
 class Foobar
 {
-    /**
-     * @var \Hello\World
-     */
-    private $foobar;
-
     public function hello(Barfoo $world)
     {
-        $this->foobar;
+        $this->foobar = 'foobar';
     }
 }
 EOT
@@ -165,7 +160,8 @@ EOT
                 $vars = $frame->properties()->byName('foobar');
                 $this->assertCount(1, $vars);
                 $value = $vars->first()->value();
-                $this->assertEquals('Hello\World', (string) $value->type());
+                $this->assertEquals('string', (string) $value->type());
+                $this->assertEquals('foobar', (string) $value->value());
             }],
         ];
     }
