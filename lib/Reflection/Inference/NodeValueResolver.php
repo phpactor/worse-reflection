@@ -27,11 +27,6 @@ use Phpactor\WorseReflection\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Type;
 
-/**
- * TODO:
- *    - Return default property values.
- *    - Log unresolvable nodes
- */
 class NodeValueResolver
 {
     /**
@@ -52,6 +47,10 @@ class NodeValueResolver
 
     public function resolveNode(Frame $frame, Node $node): Value
     {
+        if ($node->getParent() instanceof SubscriptExpression) {
+            return $this->resolveNode($frame, $node->getParent());
+        }
+
         return $this->_resolveNode($frame, $node);
     }
 
@@ -82,7 +81,8 @@ class NodeValueResolver
         }
 
         if ($node instanceof SubscriptExpression) {
-            return Value::fromType($this->resolveVariable($frame, $node->getText()));
+            $variableValue = $this->_resolveNode($frame, $node->postfixExpression);
+            return $this->resolveAccessExpression($frame, $variableValue, $node->accessExpression);
         }
 
         if ($node instanceof StringLiteral) {
@@ -316,5 +316,28 @@ class NodeValueResolver
         }
 
         return Value::fromTypeAndValue(Type::array(), $array);
+    }
+
+    private function resolveAccessExpression(Frame $frame, Value $subject, Node $node): Value
+    {
+        // TODO: test me
+        if ($subject->value() == Value::none()) {
+            return Value::none();
+        }
+
+        if ($subject->type() != Type::array()) {
+            return Value::none();
+        }
+
+        $subjectValue = $subject->value();
+
+        if ($node instanceof StringLiteral) {
+            $string = $this->_resolveNode($frame, $node);
+
+            if (array_key_exists($string->value(), $subjectValue)) {
+                $value = $subjectValue[$string->value()];
+                return Value::fromTypeAndValue(Type::fromValue($value), $value);
+            }
+        }
     }
 }

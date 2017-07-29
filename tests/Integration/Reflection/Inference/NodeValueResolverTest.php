@@ -14,25 +14,24 @@ use Phpactor\WorseReflection\Reflection\Inference\Value;
 
 class NodeValueResolverTest extends IntegrationTestCase
 {
+    private $logger;
+
+    public function setUp()
+    {
+        $this->logger = new ArrayLogger();
+    }
+
     /**
      * @dataProvider provideTests
      */
     public function testResolver(string $source, array $locals, int $offset, Value $expectedValue)
     {
-        $logger = new ArrayLogger();
-        $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
-
         $variables = [];
         foreach ($locals as $name => $type) {
             $variables[] = Variable::fromOffsetNameAndType(0, $name, (string) $type);
         }
 
-        $frame = new Frame(
-            LocalAssignments::fromArray($variables)
-        );
-
-        $typeResolver = new NodeValueResolver($this->createReflector($source), $logger);
-        $value = $typeResolver->resolveNode($frame, $node);
+        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
 
         $this->assertEquals($expectedValue, $value);
     }
@@ -259,17 +258,6 @@ new Bar();
 EOT
                 , [], 9, Value::fromType(Type::fromString('Bar')),
             ],
-            'TODO: It returns type for an array access' => [
-                <<<'EOT'
-<?php
-
-$foobar['barfoo'] = new Bar();
-$foobar['barfoo'];
-EOT
-                , [
-                    '$foobar' => Type::fromString('Bar')
-                ], 44, Value::fromType(Type::fromString('Bar'))
-            ],
             'It returns type for string literal' => [
                 <<<'EOT'
 <?php
@@ -328,5 +316,59 @@ EOT
             ],
         ];
 
+    }
+
+    /**
+     * @dataProvider provideValues
+     */
+    public function testValues(string $source, array $variables, int $offset, Value $expectedValue)
+    {
+        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
+        $this->assertEquals($expectedValue, $value);
+    }
+
+    public function provideValues()
+    {
+        return [
+            'It returns type for an array access' => [
+                <<<'EOT'
+<?php
+
+$array['test'];
+EOT
+                , [
+                    Variable::fromOffsetNameTypeAndValue(0, '$array', 'array', ['test' => 'tock'])
+                ], 8, Value::fromTypeAndValue(Type::string(), 'tock')
+            ],
+            'It returns type for an array assignment' => [
+                <<<'EOT'
+<?php
+
+$hello = $array['barfoo'];
+EOT
+                , [
+                    Variable::fromOffsetNameTypeAndValue(0, '$array', 'array', ['barfoo' => 'tock'])
+                ], 18, Value::fromTypeAndValue(Type::string(), 'tock')
+            ],
+            'It returns nested array value' => [
+                <<<'EOT'
+<?php
+
+$hello = $array['barfoo']['tock'];
+EOT
+                , [
+                    Variable::fromOffsetNameTypeAndValue(0, '$array', 'array', ['barfoo' => [ 'tock' => 777 ]])
+                ], 18, Value::fromTypeAndValue(Type::int(), 777)
+            ],
+        ];
+    }
+
+    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source, int $offset)
+    {
+        $frame = new Frame($assignments);
+        $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
+        $typeResolver = new NodeValueResolver($this->createReflector($source), $this->logger);
+
+        return $typeResolver->resolveNode($frame, $node);
     }
 }

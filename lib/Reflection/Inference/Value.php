@@ -37,6 +37,11 @@ final class Value
         return new self(Type::undefined());
     }
 
+    public function withValue($value)
+    {
+        return self::fromTypeAndValue($this->type, $value);
+    }
+
     public function type(): Type
     {
         return $this->type;
