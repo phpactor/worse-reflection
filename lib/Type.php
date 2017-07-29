@@ -22,6 +22,39 @@ class Type
         return self::fromString(implode('\\', $parts));
     }
 
+    public static function fromValue($value): Type
+    {
+        if (is_int($value)) {
+            return self::int();
+        }
+
+        if (is_string($value)) {
+            return self::string();
+        }
+
+        if (is_float($value)) {
+            return self::float();
+        }
+
+        if (is_array($value)) {
+            return self::array();
+        }
+
+        if (is_bool($value)) {
+            return self::bool();
+        }
+
+        if (null === $value) {
+            return self::null();
+        }
+
+        if (is_object($value)) {
+            return self::class(ClassName::fromString(get_class($value)));
+        }
+
+        return self::unknown();
+    }
+
     public static function fromString(string $type): Type
     {
         if ('' === $type) {

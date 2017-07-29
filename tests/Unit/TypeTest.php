@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Type;
+use Phpactor\WorseReflection\ClassName;
 
 class TypeTest extends TestCase
 {
@@ -92,5 +93,53 @@ class TypeTest extends TestCase
         $type = Type::fromString('string');
         $this->assertFalse($type->isClass());
         $this->assertTrue($type->isPrimitive());
+    }
+
+    /**
+     * @testdox It can be created from a value
+     * @dataProvider provideValues
+     */
+    public function testFromValue($value, Type $expectedType)
+    {
+        $type = Type::fromValue($value);
+        $this->assertEquals($expectedType, $type);
+    }
+
+    public function provideValues()
+    {
+        return [
+            [
+                'string',
+                Type::string(),
+            ],
+            [
+                11,
+                Type::int(),
+            ],
+            [
+                11.2,
+                Type::float(),
+            ],
+            [
+                [],
+                Type::array(),
+            ],
+            [
+                true,
+                Type::bool(),
+            ],
+            [
+                false,
+                Type::bool(),
+            ],
+            [
+                null,
+                Type::null(),
+            ],
+            [
+                new \stdClass(),
+                Type::class(ClassName::fromString('stdClass')),
+            ],
+        ];
     }
 }
