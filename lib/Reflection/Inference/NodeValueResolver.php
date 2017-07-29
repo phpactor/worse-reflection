@@ -27,6 +27,7 @@ use Phpactor\WorseReflection\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\Logger\ArrayLogger;
+use Phpactor\WorseReflection\Exception\SourceNotFound;
 
 class NodeValueResolver
 {
@@ -229,7 +230,7 @@ class NodeValueResolver
         $class = null;
         try {
             $class = $this->reflector->reflectClass(ClassName::fromString((string) $type));
-        } catch (SourceCodeNotFound $e) {
+        } catch (SourceNotFound $e) {
         } catch (ClassNotFound $e) {
         }
 
