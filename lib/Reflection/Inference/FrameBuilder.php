@@ -10,6 +10,8 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
 use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
+use Phpactor\WorseReflection\Reflection\Inference\Value;
+use Phpactor\WorseReflection\Offset;
 
 final class FrameBuilder
 {
@@ -58,11 +60,13 @@ final class FrameBuilder
         $name = $node->leftOperand->name->getText($node->getFileContents());
         $value = $this->typeResolver->resolveNode($frame, $node->rightOperand);
 
-        $frame->locals()->add(Variable::fromOffsetNameTypeAndValue(
-            $node->leftOperand->getStart(),
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt($node->leftOperand->getStart()),
             $name,
-            (string) $value->type(),
-            $value->value()
+            Value::fromTypeAndValue(
+                $value->type(),
+                $value->value()
+            )
         ));
     }
 
@@ -76,8 +80,8 @@ final class FrameBuilder
         );
         $classType = $this->typeResolver->resolveNode($frame, $classNode);
 
-        $frame->locals()->add(Variable::fromOffsetNameAndType($node->getStart(), '$this', (string) $classType->type()));
-        $frame->locals()->add(Variable::fromOffsetNameAndType($node->getStart(), 'self', (string) $classType->type()));
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), '$this', Value::fromType($classType->type())));
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), 'self', Value::fromType($classType->type())));
 
         if (null === $node->parameters) {
             return;
@@ -87,11 +91,13 @@ final class FrameBuilder
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
             $value = $this->typeResolver->resolveNode($frame, $parameterNode);
             $frame->locals()->add(
-                Variable::fromOffsetNameTypeAndValue(
-                    $parameterNode->getStart(),
+                Variable::fromOffsetNameAndValue(
+                    Offset::fromInt($parameterNode->getStart()),
                     $parameterName,
-                    $value->type(),
-                    $value->value()
+                    Value::fromTypeAndValue(
+                        $value->type(),
+                        $value->value()
+                    )
                 )
             );
         }

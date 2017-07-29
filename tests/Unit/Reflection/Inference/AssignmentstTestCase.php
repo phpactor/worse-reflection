@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\Reflection\Inference\Assignments;
 use Phpactor\WorseReflection\Reflection\Inference\Value;
 use Phpactor\WorseReflection\Reflection\Inference\Variable;
+use Phpactor\WorseReflection\Offset;
 
 abstract class AssignmentstTestCase extends TestCase
 {
@@ -19,7 +20,11 @@ abstract class AssignmentstTestCase extends TestCase
 
         $value = Value::fromTypeAndValue(Type::fromString('Foobar'), 'goodbye');
 
-        $assignments->add(Variable::fromOffsetNameTypeAndValue(0, 'hello', 'Foobar', 'goodbye'));
+        $assignments->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt(0),
+            'hello',
+            Value::fromTypeAndValue(Type::fromString('Foobar'), 'goodbye')
+        ));
 
         $this->assertEquals($value, $assignments->byName('hello')->first()->value());
     }
@@ -27,8 +32,17 @@ abstract class AssignmentstTestCase extends TestCase
     public function testByName()
     {
         $assignments = $this->assignments();
-        $assignments->add(Variable::fromOffsetNameTypeAndValue(0, 'hello', 'string', 'goodbye'));
-        $assignments->add(Variable::fromOffsetNameTypeAndValue(10, 'hello', 'string', 'goodbye'));
+        $assignments->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt(0),
+            'hello',
+            Value::fromTypeAndValue(Type::fromString('string'), 'goodbye')
+        ));
+
+        $assignments->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt(10),
+            'hello',
+            Value::fromTypeAndValue(Type::fromString('string'), 'hello')
+        ));
 
         $this->assertCount(2, $assignments->byName('hello'));
     }

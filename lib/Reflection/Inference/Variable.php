@@ -29,14 +29,9 @@ final class Variable
         $this->value = $value;
     }
 
-    public static function fromOffsetNameTypeAndValue(int $offset, string $name, string $type, $value): Variable
+    public static function fromOffsetNameAndValue(Offset $offset, string $name, Value $value): Variable
     {
-         return new self($name, Offset::fromInt($offset), Value::fromTypeAndValue(Type::fromString($type), $value));
-    }
-
-    public static function fromOffsetNameAndType(int $offset, string $name, string $type): Variable
-    {
-         return new self($name, Offset::fromInt($offset), Value::fromType(Type::fromString($type)));
+         return new self($name, $offset, $value);
     }
 
     public function __toString()

@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Reflection\Inference\LocalAssignments;
 use Phpactor\WorseReflection\Reflection\Inference\ArrayLogger;
 use Phpactor\WorseReflection\Reflection\Inference\Variable;
 use Phpactor\WorseReflection\Reflection\Inference\Value;
+use Phpactor\WorseReflection\Offset;
 
 class NodeValueResolverTest extends IntegrationTestCase
 {
@@ -28,7 +29,7 @@ class NodeValueResolverTest extends IntegrationTestCase
     {
         $variables = [];
         foreach ($locals as $name => $type) {
-            $variables[] = Variable::fromOffsetNameAndType(0, $name, (string) $type);
+            $variables[] = Variable::fromOffsetNameAndValue(Offset::fromInt(0), $name, Value::fromType($type));
         }
 
         $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
@@ -337,7 +338,14 @@ EOT
 $array['test'];
 EOT
                 , [
-                    Variable::fromOffsetNameTypeAndValue(0, '$array', 'array', ['test' => 'tock'])
+                    Variable::fromOffsetNameAndValue(
+                        Offset::fromInt(0),
+                        '$array',
+                        Value::fromTypeAndValue(
+                            Type::array(),
+                            ['test' => 'tock']
+                        )
+                    )
                 ], 8, Value::fromTypeAndValue(Type::string(), 'tock')
             ],
             'It returns type for an array assignment' => [
@@ -347,7 +355,14 @@ EOT
 $hello = $array['barfoo'];
 EOT
                 , [
-                    Variable::fromOffsetNameTypeAndValue(0, '$array', 'array', ['barfoo' => 'tock'])
+                    Variable::fromOffsetNameAndValue(
+                        Offset::fromInt(0),
+                        '$array',
+                        Value::fromTypeAndValue(
+                            Type::array(),
+                            ['barfoo' => 'tock']
+                        )
+                    )
                 ], 18, Value::fromTypeAndValue(Type::string(), 'tock')
             ],
             'It returns nested array value' => [
@@ -357,7 +372,14 @@ EOT
 $hello = $array['barfoo']['tock'];
 EOT
                 , [
-                    Variable::fromOffsetNameTypeAndValue(0, '$array', 'array', ['barfoo' => [ 'tock' => 777 ]])
+                    Variable::fromOffsetNameAndValue(
+                        Offset::fromInt(0),
+                        '$array',
+                        Value::fromTypeAndValue(
+                            Type::array(),
+                            ['barfoo' => [ 'tock' => 777 ]]
+                        )
+                    )
                 ], 18, Value::fromTypeAndValue(Type::int(), 777)
             ],
         ];
