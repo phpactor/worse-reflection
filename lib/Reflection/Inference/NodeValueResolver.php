@@ -19,6 +19,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Parser;
+use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Logger;
@@ -259,10 +260,15 @@ class NodeValueResolver
 
     private function resolveParameter(Frame $frame, Node $node)
     {
+        $typeDeclaration = $node->typeDeclaration;
         $type = Type::unknown();
 
-        if ($node->typeDeclaration instanceof QualifiedName) {
+        if ($typeDeclaration instanceof QualifiedName) {
             $type = $this->resolveQualifiedName($node->typeDeclaration);
+        }
+        
+        if ($typeDeclaration instanceof Token) {
+            $type = Type::fromString($typeDeclaration->getText($node->getFileContents()));
         }
 
         if ($node->default) {

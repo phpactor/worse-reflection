@@ -107,6 +107,22 @@ class Foobar
 EOT
                 , [], 77, Value::fromType(Type::fromString('Foobar\Barfoo\Barfoo'))
             ],
+            'It returns the type of a scalar parameter' => [
+                <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+class Foobar
+{
+    public function foobar(string $barfoo = 'test')
+    {
+    }
+}
+
+EOT
+                , [], 77, Value::fromTypeAndValue(Type::string(), 'test')
+            ],
             'It returns the FQN of a method parameter in an interface' => [
                 <<<'EOT'
 <?php
@@ -155,7 +171,7 @@ class Foobar
 }
 
 EOT
-                , [], 77, Value::fromTypeAndValue(Type::unknown(), 'test')
+                , [], 77, Value::fromTypeAndValue(Type::string(), 'test')
             ],
             'It returns the FQN of a static call' => [
                 <<<'EOT'
