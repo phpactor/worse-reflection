@@ -40,15 +40,7 @@ class ReflectionClassCollection extends AbstractReflectionCollection
     public function concrete()
     {
         return new self($this->reflector, array_filter($this->items, function ($item) {
-            if ($item->isInterface()) {
-                return false;
-            }
-
-            if ($item->isAbstract()) {
-                return false;
-            }
-
-            return true;
+            return $item->isConcrete();
         }));
     }
 }

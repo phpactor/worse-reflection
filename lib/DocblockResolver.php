@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
+use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
 
 class DocblockResolver
 {
@@ -28,6 +29,11 @@ class DocblockResolver
     }
 
     public function propertyType(PropertyDeclaration $node)
+    {
+        return $this->typeFromNode($node, 'var');
+    }
+
+    public function nodeType(Node $node)
     {
         return $this->typeFromNode($node, 'var');
     }
@@ -54,6 +60,12 @@ class DocblockResolver
             return Type::fromString($importTable[$firstPart].'\\'.implode('\\', $parts));
         }
 
-        return Type::fromString($matches[1]);
+        $namespace = $node->getRoot()->getFirstChildNode(NamespaceDefinition::class);
+
+        if (null === $namespace) {
+            return Type::fromString($matches[1]);
+        }
+
+        return Type::fromArray([(string) $namespace->name, $matches[1]]);
     }
 }

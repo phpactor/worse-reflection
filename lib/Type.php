@@ -11,10 +11,49 @@ class Type
     const TYPE_STRING = 'string';
     const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
-    const TYPE_CLASS = 'object';
+    const TYPE_CLASS = 'object'; 
+    const TYPE_NULL = 'null';
 
     private $type;
     private $className;
+
+    public static function fromArray(array $parts): Type
+    {
+        return self::fromString(implode('\\', $parts));
+    }
+
+    public static function fromValue($value): Type
+    {
+        if (is_int($value)) {
+            return self::int();
+        }
+
+        if (is_string($value)) {
+            return self::string();
+        }
+
+        if (is_float($value)) {
+            return self::float();
+        }
+
+        if (is_array($value)) {
+            return self::array();
+        }
+
+        if (is_bool($value)) {
+            return self::bool();
+        }
+
+        if (null === $value) {
+            return self::null();
+        }
+
+        if (is_object($value)) {
+            return self::class(ClassName::fromString(get_class($value)));
+        }
+
+        return self::unknown();
+    }
 
     public static function fromString(string $type): Type
     {
@@ -46,6 +85,9 @@ class Type
             return self::mixed();
         }
 
+        if ($type === 'null') {
+            return self::null();
+        }
 
         return self::class(ClassName::fromString($type));
     }
@@ -63,6 +105,11 @@ class Type
     public static function array()
     {
         return self::create(self::TYPE_ARRAY);
+    }
+
+    public static function null()
+    {
+        return self::create(self::TYPE_NULL);
     }
 
     public static function bool()

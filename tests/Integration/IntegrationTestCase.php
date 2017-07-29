@@ -6,10 +6,13 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\SourceCode;
 use Phpactor\WorseReflection\SourceCodeLocator\StringSourceLocator;
 use Symfony\Component\Filesystem\Filesystem;
+use PHPUnit\Framework\TestCase;
+use Microsoft\PhpParser\Parser;
+use Microsoft\PhpParser\Node\SourceFileNode;
 
-class IntegrationTestCase extends \PHPUnit_Framework_TestCase
+class IntegrationTestCase extends TestCase
 {
-    public function createReflector(string $source)
+    public function createReflector(string $source): Reflector
     {
         $locator = new StringSourceLocator(SourceCode::fromString($source));
         $reflector = new Reflector($locator);
@@ -30,5 +33,12 @@ class IntegrationTestCase extends \PHPUnit_Framework_TestCase
         }
 
         $filesystem->mkdir($this->workspaceDir());
+    }
+
+    protected function parseSource(string $source): SourceFileNode
+    {
+        $parser = new Parser();
+
+        return $parser->parseSourceFile($source);
     }
 }
