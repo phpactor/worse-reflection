@@ -55,7 +55,7 @@ final class ReflectionMethod extends AbstractReflectedNode
         $this->reflector = $reflector;
         $this->node = $node;
         $this->docblockResolver = new DocblockResolver($reflector);
-        $this->frameBuilder = new FrameBuilder(new NodeValueResolver($reflector), $reflector->logger());
+        $this->frameBuilder = new FrameBuilder(new NodeValueResolver($reflector));
     }
 
     public function name(): string

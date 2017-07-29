@@ -40,10 +40,10 @@ class NodeValueResolver
      */
     private $logger;
 
-    public function __construct(Reflector $reflector, Logger $logger = null)
+    public function __construct(Reflector $reflector)
     {
         $this->reflector = $reflector;
-        $this->logger = $logger ?: new ArrayLogger();
+        $this->logger = $reflector->logger();
     }
 
     public function resolveNode(Frame $frame, Node $node): Value

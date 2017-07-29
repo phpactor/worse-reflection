@@ -12,7 +12,7 @@ use Microsoft\PhpParser\Node\SourceFileNode;
 
 class IntegrationTestCase extends TestCase
 {
-    public function createReflector(string $source)
+    public function createReflector(string $source): Reflector
     {
         $locator = new StringSourceLocator(SourceCode::fromString($source));
         $reflector = new Reflector($locator);

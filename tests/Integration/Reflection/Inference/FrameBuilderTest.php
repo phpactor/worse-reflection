@@ -108,39 +108,45 @@ EOT
                 $this->assertEquals('World', (string) $value->type());
                 $this->assertEquals('test', (string) $value->value());
             }],
-        ];
-    }
-
-    private function abc()
-    {
-        return [
             'It returns type for $this' => [
                 <<<'EOT'
 <?php
-
-namespace Foobar\Barfoo;
-
-use Acme\Factory;
 
 class Foobar
 {
     public function hello(World $world)
     {
-        $this;
     }
 }
 
 EOT
-                , 126, Type::fromString('Foobar\Barfoo\Foobar')
-            ],
-            'It returns type for a property' => [
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $vars = $frame->locals()->byName('$this');
+                $this->assertCount(1, $vars);
+                $value = $vars->first()->value();
+                $this->assertEquals('Foobar', (string) $value->type());
+            }],
+            'It returns type for self' => [
                 <<<'EOT'
 <?php
 
-namespace Foobar\Barfoo;
+class Foobar
+{
+    public function hello(World $world)
+    {
+    }
+}
 
-use Acme\Factory;
-use Things\Response;
+EOT
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $vars = $frame->locals()->byName('self');
+                $this->assertCount(1, $vars);
+                $value = $vars->first()->value();
+                $this->assertEquals('Foobar', (string) $value->type());
+            }],
+            'It returns type for a property' => [
+                <<<'EOT'
+<?php
 
 class Foobar
 {
@@ -155,8 +161,18 @@ class Foobar
     }
 }
 EOT
-                , 215, Type::fromString('Hello\World')
-            ],
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $vars = $frame->properties()->byName('foobar');
+                $this->assertCount(1, $vars);
+                $value = $vars->first()->value();
+                $this->assertEquals('Hello\World', (string) $value->type());
+            }],
+        ];
+    }
+
+    private function abc()
+    {
+        return [
             'It returns type for a variable assigned to an access expression' => [
                 <<<'EOT'
 <?php

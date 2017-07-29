@@ -7,10 +7,16 @@ use Phpactor\WorseReflection\Reflection\ReflectionSourceCode;
 use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Logger\ArrayLogger;
+use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
+use Phpactor\WorseReflection\Reflection\Inference\FrameBuilder;
 
 class Reflector
 {
     private $sourceLocator;
+
+    /**
+     * @var Parser
+     */
     private $parser;
     private $cache = [];
     private $logger;
@@ -51,6 +57,17 @@ class Reflector
         $node = $this->parser->parseSourceFile((string) $source);
 
         return ReflectionClassCollection::fromSourceFileNode($this, $node);
+    }
+
+    public function reflectOffset(SourceCode $source, Offset $offset)
+    {
+        $rootNode = $this->parser->parseSourceFile((string) $source);
+        $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
+
+        $resolver = new NodeValueResolver($this);
+        $frame = (new FrameBuilder($resolver))->buildForNode($node);
+
+        return $resolver->resolveNode($frame, $node);
     }
 
     public function logger(): Logger

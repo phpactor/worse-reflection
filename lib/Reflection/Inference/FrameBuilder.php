@@ -12,6 +12,8 @@ use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
 use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Reflection\Inference\Value;
 use Phpactor\WorseReflection\Offset;
+use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
+use Microsoft\PhpParser\Node\SourceFileNode;
 
 final class FrameBuilder
 {
@@ -30,6 +32,15 @@ final class FrameBuilder
         $frame = new Frame();
         $this->walkNode($frame, $node, $node->getEndPosition());
         return $frame;
+    }
+
+    public function buildForNode(Node $node)
+    {
+        $frame = new Frame();
+        $this->walkNode($frame, $node, $node->getEndPosition());
+
+        $scopeNode = $node->getFirstAncestor(MethodDeclaration::class, FunctionDeclaration::class, SourceFileNode::class);
+        return $this->buildFromNode($scopeNode);
     }
 
     private function walkNode(Frame $frame, Node $node, int $endPosition)
