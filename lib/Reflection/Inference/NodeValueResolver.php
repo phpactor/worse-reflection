@@ -130,6 +130,7 @@ class NodeValueResolver
         $ancestors[] = $node;
         $ancestors = array_reverse($ancestors);
 
+        $value = Value::none();
         $parent = null;
         foreach ($ancestors as $ancestor) {
             if ($parent === null) {
