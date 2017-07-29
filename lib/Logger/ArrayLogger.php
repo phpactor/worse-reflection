@@ -1,6 +1,8 @@
 <?php
 
-namespace Phpactor\WorseReflection\Reflection\Inference;
+namespace Phpactor\WorseReflection\Logger;
+
+use Phpactor\WorseReflection\Logger;
 
 class ArrayLogger implements Logger
 {

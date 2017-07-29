@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Reflection\Inference\LocalAssignments;
-use Phpactor\WorseReflection\Reflection\Inference\ArrayLogger;
+use Phpactor\WorseReflection\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Reflection\Inference\Variable;
 use Phpactor\WorseReflection\Reflection\Inference\Value;
 use Phpactor\WorseReflection\Offset;

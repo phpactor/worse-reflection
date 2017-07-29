@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Reflection\Inference;
+namespace Phpactor\WorseReflection;
 
 interface Logger
 {

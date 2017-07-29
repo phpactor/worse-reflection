@@ -6,17 +6,20 @@ use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflection\ReflectionSourceCode;
 use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Logger\ArrayLogger;
 
 class Reflector
 {
     private $sourceLocator;
     private $parser;
     private $cache = [];
+    private $logger;
 
-    public function __construct(SourceCodeLocator $sourceLocator, Parser $parser = null)
+    public function __construct(SourceCodeLocator $sourceLocator, Parser $parser = null, Logger $logger = null)
     {
         $this->sourceLocator = $sourceLocator;
         $this->parser = $parser ?: new Parser();
+        $this->logger = $logger ?: new ArrayLogger();
     }
 
     public function reflectClass(ClassName $className): AbstractReflectionClass
@@ -48,5 +51,10 @@ class Reflector
         $node = $this->parser->parseSourceFile((string) $source);
 
         return ReflectionClassCollection::fromSourceFileNode($this, $node);
+    }
+
+    public function logger(): Logger
+    {
+        return $this->logger;
     }
 }

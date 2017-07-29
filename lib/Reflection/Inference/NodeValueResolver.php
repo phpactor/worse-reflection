@@ -21,11 +21,12 @@ use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Exception\ClassNotFound;
-use Phpactor\WorseReflection\Reflection\Inference\Logger;
+use Phpactor\WorseReflection\Logger;
 use Phpactor\WorseReflection\Reflection\Inference\Value;
 use Phpactor\WorseReflection\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Type;
+use Phpactor\WorseReflection\Logger\ArrayLogger;
 
 class NodeValueResolver
 {
