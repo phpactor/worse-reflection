@@ -21,13 +21,13 @@ use Phpactor\WorseReflection\Type;
 final class FrameBuilder
 {
     /**
-     * @var NodeTypeResolver
+     * @var NodeValueResolver
      */
-    private $typeResolver;
+    private $valueResolver;
 
-    public function __construct(NodeValueResolver $typeResolver)
+    public function __construct(NodeValueResolver $valueResolver)
     {
-        $this->typeResolver = $typeResolver;
+        $this->valueResolver = $valueResolver;
     }
 
     public function buildFromNode(Node $node)
@@ -81,7 +81,7 @@ final class FrameBuilder
     private function processParserVariable(Frame $frame, AssignmentExpression $node)
     {
         $name = $node->leftOperand->name->getText($node->getFileContents());
-        $value = $this->typeResolver->resolveNode($frame, $node->rightOperand);
+        $value = $this->valueResolver->resolveNode($frame, $node->rightOperand);
 
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
@@ -100,7 +100,7 @@ final class FrameBuilder
         }
 
         $memberName = $node->leftOperand->memberName->getText($node->getFileContents());
-        $value = $this->typeResolver->resolveNode($frame, $node->rightOperand);
+        $value = $this->valueResolver->resolveNode($frame, $node->rightOperand);
 
         $frame->properties()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
@@ -117,10 +117,11 @@ final class FrameBuilder
             InterfaceDeclaration::class,
             TraitDeclaration::class
         );
-        $classType = $this->typeResolver->resolveNode($frame, $classNode);
+        $classType = $this->valueResolver->resolveNode($frame, $classNode)->type();
 
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), '$this', Value::fromType($classType->type())));
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), 'self', Value::fromType($classType->type())));
+        // add this and self
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), '$this', Value::fromType($classType)));
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), 'self', Value::fromType($classType)));
 
         if (null === $node->parameters) {
             return;
@@ -128,7 +129,7 @@ final class FrameBuilder
 
         foreach ($node->parameters->getElements() as $parameterNode) {
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
-            $value = $this->typeResolver->resolveNode($frame, $parameterNode);
+            $value = $this->valueResolver->resolveNode($frame, $parameterNode);
             $frame->locals()->add(
                 Variable::fromOffsetNameAndValue(
                     Offset::fromInt($parameterNode->getStart()),
@@ -151,7 +152,7 @@ final class FrameBuilder
                 Offset::fromInt($node->getStart()),
                 '$' . $matches[1],
                 Value::fromType(
-                    $this->typeResolver->resolveQualifiedName($node, $matches[2])
+                    $this->valueResolver->resolveQualifiedName($node, $matches[2])
                 )
             ));
         }
