@@ -341,5 +341,7 @@ class NodeValueResolver
                 return Value::fromTypeAndValue(Type::fromValue($value), $value);
             }
         }
+
+        return Value::none();
     }
 }

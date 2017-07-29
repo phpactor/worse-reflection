@@ -39,6 +39,11 @@ final class Variable
         return $this->type;
     }
 
+    public function offset(): Offset
+    {
+        return $this->offset;
+    }
+
     public function name(): string
     {
         return $this->name;

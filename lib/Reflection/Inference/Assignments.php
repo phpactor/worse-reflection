@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Reflection\Inference;
 
 use Phpactor\WorseReflection\Reflection\Inference\Value;
 
-abstract class Assignments implements \Countable
+abstract class Assignments implements \Countable, \IteratorAggregate
 {
     /**
      * @var array
@@ -50,5 +50,9 @@ abstract class Assignments implements \Countable
     {
         return count($this->variables);
     }
-}
 
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->variables);
+    }
+}
