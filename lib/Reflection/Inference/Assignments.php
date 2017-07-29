@@ -30,6 +30,13 @@ abstract class Assignments implements \Countable, \IteratorAggregate
         }));
     }
 
+    public function lessThanOrEqualTo(int $offset): Assignments
+    {
+        return new static(array_filter($this->variables, function (Variable $variable) use ($offset) {
+            return $variable->offset()->toInt() <= $offset;
+        }));
+    }
+
     public function first(): Variable
     {
         $first = reset($this->variables);

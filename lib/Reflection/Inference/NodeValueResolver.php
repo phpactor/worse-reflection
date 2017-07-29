@@ -69,7 +69,7 @@ class NodeValueResolver
         }
 
         if ($node instanceof Variable) {
-            return $this->resolveVariable($frame, $node->getText());
+            return $this->resolveVariable($frame, $node);
         }
 
         if ($node instanceof MemberAccessExpression || $node instanceof CallExpression) {
@@ -112,18 +112,23 @@ class NodeValueResolver
         return Value::none();
     }
 
-    private function resolveVariable(Frame $frame, string $name)
+    private function resolveVariable(Frame $frame, Variable $node)
     {
-        if (0 === $frame->locals()->byName($name)->count()) {
+        $name = $node->getText();
+        $offset = $node->getFullStart();
+        $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($name);
+
+        if (0 === $variables->count()) {
             return Value::none();
         }
 
-        return $frame->locals()->byName($name)->first()->value();
+        return $variables->first()->value();
     }
 
     private function resolveMemberAccess(Frame $frame, Expression $node, $list = [])
     {
         $ancestors = [];
+
         while ($node instanceof MemberAccessExpression || $node instanceof CallExpression) {
             if ($node instanceof CallExpression) {
                 $node = $node->callableExpression;
@@ -141,7 +146,9 @@ class NodeValueResolver
         $parent = null;
         foreach ($ancestors as $ancestor) {
             if ($parent === null) {
-                $parent = $this->_resolveNode($frame, $ancestor);
+
+                $value = $parent = $this->_resolveNode($frame, $ancestor);
+
                 // TODO: This is not tested.
                 if (Type::unknown() == $parent->type()) {
                     return Value::none();
@@ -157,7 +164,7 @@ class NodeValueResolver
         return $value;
     }
 
-    private function resolveMemberType(Value $parent, $node): Value
+    private function resolveMemberType(Value $parent, Node $node): Value
     {
         $memberName = $node->memberName->getText($node->getFileContents());
 
@@ -360,6 +367,7 @@ class NodeValueResolver
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node)
     {
         $classType = $this->resolveQualifiedName($node, $node->scopeResolutionQualifier->getText());
+
         $memberName = $node->memberName->getText($node->getFileContents());
         $returnType = $this->methodType($classType, $memberName);
 
