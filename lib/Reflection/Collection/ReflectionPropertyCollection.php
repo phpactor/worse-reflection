@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use Phpactor\WorseReflection\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
@@ -10,7 +10,7 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 
 class ReflectionPropertyCollection extends AbstractReflectionCollection
 {
-    public static function fromClassDeclaration(Reflector $reflector, ClassDeclaration $class)
+    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class)
     {
         $properties = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
             return $member instanceof PropertyDeclaration;
@@ -23,12 +23,12 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
                     if (false === $variable instanceof Variable) {
                         continue;
                     }
-                    $items[$variable->getName()] = new ReflectionProperty($reflector, $property, $variable);
+                    $items[$variable->getName()] = new ReflectionProperty($serviceLocator, $property, $variable);
                 }
             }
         }
 
-        return new static($reflector, $items);
+        return new static($serviceLocator, $items);
     }
 
     public function byVisibilities(array $visibilities)
@@ -44,6 +44,6 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
             }
         }
 
-        return new static($this->reflector, $items);
+        return new static($this->serviceLocator, $items);
     }
 }

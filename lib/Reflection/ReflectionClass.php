@@ -22,13 +22,14 @@ use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Position;
 use Microsoft\PhpParser\TokenKind;
+use Phpactor\WorseReflection\ServiceLocator;
 
 class ReflectionClass extends AbstractReflectionClass
 {
     /**
-     * @var Reflector
+     * @var ServiceLocator
      */
-    private $reflector;
+    private $serviceLocator;
 
     /**
      * @var ClassLike
@@ -36,11 +37,11 @@ class ReflectionClass extends AbstractReflectionClass
     private $node;
 
     public function __construct(
-        Reflector $reflector,
+        ServiceLocator $serviceLocator,
         ClassDeclaration $node
     )
     {
-        $this->reflector = $reflector;
+        $this->serviceLocator = $serviceLocator;
         $this->node = $node;
     }
 
@@ -67,7 +68,7 @@ class ReflectionClass extends AbstractReflectionClass
             $parentConstants = $this->parent()->constants();
         }
 
-        $constants = ReflectionConstantCollection::fromClassDeclaration($this->reflector, $this->node);
+        $constants = ReflectionConstantCollection::fromClassDeclaration($this->serviceLocator, $this->node);
 
         if ($parentConstants) {
             return $parentConstants->merge($constants);
@@ -83,16 +84,11 @@ class ReflectionClass extends AbstractReflectionClass
         }
 
         try {
-            return $this->reflector()->reflectClass(
+            return $this->serviceLocator->reflector()->reflectClass(
                 ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
             );
         } catch (ClassNotFound $e) {
         }
-    }
-
-    protected function reflector(): Reflector
-    {
-        return $this->reflector;
     }
 
     public function properties(): ReflectionPropertyCollection
@@ -102,7 +98,7 @@ class ReflectionClass extends AbstractReflectionClass
             $parentProperties = $this->parent()->properties()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
         }
 
-        $properties = ReflectionPropertyCollection::fromClassDeclaration($this->reflector, $this->node);
+        $properties = ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node);
 
         if ($parentProperties) {
             return $parentProperties->merge($properties);
@@ -118,7 +114,7 @@ class ReflectionClass extends AbstractReflectionClass
             $parentMethods = $this->parent()->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
         }
 
-        $methods = ReflectionMethodCollection::fromClassDeclaration($this->reflector, $this->node);
+        $methods = ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node);
 
         if ($parentMethods) {
             return $parentMethods->merge($methods);
@@ -129,7 +125,7 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function interfaces(): ReflectionInterfaceCollection
     {
-        return ReflectionInterfaceCollection::fromClassDeclaration($this->reflector, $this->node);
+        return ReflectionInterfaceCollection::fromClassDeclaration($this->serviceLocator, $this->node);
     }
 
     public function memberListPosition(): Position

@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Reflection;
 
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use PhpParser\Node\Stmt\ClassLike;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\NamespacedNameInterface;
@@ -16,9 +16,9 @@ use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
 class ReflectionInterface extends AbstractReflectionClass
 {
     /**
-     * @var Reflector
+     * @var ServiceLocator
      */
-    private $reflector;
+    private $serviceLocator;
 
     /**
      * @var ClassLike
@@ -26,21 +26,16 @@ class ReflectionInterface extends AbstractReflectionClass
     private $node;
 
     public function __construct(
-        Reflector $reflector,
+        ServiceLocator $serviceLocator,
         InterfaceDeclaration $node
     ) {
-        $this->reflector = $reflector;
+        $this->serviceLocator = $serviceLocator;
         $this->node = $node;
     }
 
     protected function node(): Node
     {
         return $this->node;
-    }
-
-    protected function reflector(): Reflector
-    {
-        return $this->reflector;
     }
 
     public function constants(): ReflectionConstantCollection
@@ -52,15 +47,15 @@ class ReflectionInterface extends AbstractReflectionClass
             }
         }
 
-        $parentConstants = ReflectionConstantCollection::fromReflectionConstants($this->reflector, $parentConstants);
-        $constants = ReflectionConstantCollection::fromInterfaceDeclaration($this->reflector(), $this->node);
+        $parentConstants = ReflectionConstantCollection::fromReflectionConstants($this->serviceLocator, $parentConstants);
+        $constants = ReflectionConstantCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
 
         return $parentConstants->merge($constants);
     }
 
     public function parents(): ReflectionInterfaceCollection
     {
-        return ReflectionInterfaceCollection::fromInterfaceDeclaration($this->reflector, $this->node);
+        return ReflectionInterfaceCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
     }
 
     public function methods(): ReflectionMethodCollection
@@ -72,8 +67,8 @@ class ReflectionInterface extends AbstractReflectionClass
             }
         }
 
-        $parentMethods = ReflectionMethodCollection::fromReflectionMethods($this->reflector, $parentMethods);
-        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->reflector, $this->node);
+        $parentMethods = ReflectionMethodCollection::fromReflectionMethods($this->serviceLocator, $parentMethods);
+        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
 
         return $parentMethods->merge($methods);
     }

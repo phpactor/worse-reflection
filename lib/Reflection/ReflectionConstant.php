@@ -9,15 +9,12 @@ use Microsoft\PhpParser\Node;
 
 final class ReflectionConstant extends AbstractReflectedNode
 {
-    private $reflector;
     private $node;
 
     public function __construct(
-        Reflector $reflector,
         ConstElement $node
     )
     {
-        $this->reflector = $reflector;
         $this->node = $node;
     }
     public function name()

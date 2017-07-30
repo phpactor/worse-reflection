@@ -5,19 +5,19 @@ namespace Phpactor\WorseReflection\Reflection;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Phpactor\WorseReflection\ClassName;
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node;
 
 class ReflectionSourceCode extends AbstractReflectedNode
 {
-    private $reflector;
+    private $serviceLocator;
     private $node;
 
-    public function __construct(Reflector $reflector, SourceFileNode $node)
+    public function __construct(ServiceLocator $serviceLocator, SourceFileNode $node)
     {
         $this->node = $node;
-        $this->reflector = $reflector;
+        $this->serviceLocator = $serviceLocator;
     }
 
     public function findClass(ClassName $name)
@@ -32,10 +32,10 @@ class ReflectionSourceCode extends AbstractReflectedNode
 
             if ((string) $child->getNamespacedName() === (string) $name) {
                 if ($child instanceof InterfaceDeclaration) {
-                    return new ReflectionInterface($this->reflector, $child);
+                    return new ReflectionInterface($this->serviceLocator, $child);
                 }
 
-                return new ReflectionClass($this->reflector, $child);
+                return new ReflectionClass($this->serviceLocator, $child);
             }
         }
     }

@@ -5,24 +5,23 @@ namespace Phpactor\WorseReflection\Reflection;
 use Phpactor\WorseReflection\Visibility;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node;
 
 class ReflectionProperty extends AbstractReflectedNode
 {
-    private $reflector;
+    private $serviceLocator;
     private $propertyDeclaration;
     private $variable;
     private $docblockResolver;
 
-    public function __construct(Reflector $reflector, PropertyDeclaration $propertyDeclaration, Variable $variable)
+    public function __construct(ServiceLocator $serviceLocator, PropertyDeclaration $propertyDeclaration, Variable $variable)
     {
-        $this->reflector = $reflector;
+        $this->serviceLocator = $serviceLocator;
         $this->propertyDeclaration = $propertyDeclaration;
         $this->variable = $variable;
-        $this->docblockResolver = new DocblockResolver($reflector);
     }
 
     public function name()
@@ -47,7 +46,7 @@ class ReflectionProperty extends AbstractReflectedNode
 
     public function type()
     {
-        return $this->docblockResolver->propertyType($this->propertyDeclaration);
+        return $this->serviceLocator->docblockResolver()->propertyType($this->propertyDeclaration);
     }
 
     public function isStatic(): bool

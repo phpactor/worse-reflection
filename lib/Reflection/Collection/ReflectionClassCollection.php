@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use Phpactor\WorseReflection\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
@@ -14,7 +14,7 @@ use Phpactor\WorseReflection\Reflection\ReflectionClass;
 
 class ReflectionClassCollection extends AbstractReflectionCollection
 {
-    public static function fromSourceFileNode(Reflector $reflector, SourceFileNode $source)
+    public static function fromSourceFileNode(ServiceLocator $serviceLocator, SourceFileNode $source)
     {
         $items = [];
 
@@ -27,19 +27,19 @@ class ReflectionClassCollection extends AbstractReflectionCollection
             }
 
             if ($child instanceof InterfaceDeclaration) {
-                $items[(string) $child->getNamespacedName()] =  new ReflectionInterface($reflector, $child);
+                $items[(string) $child->getNamespacedName()] =  new ReflectionInterface($serviceLocator, $child);
                 continue;
             }
 
-            $items[(string) $child->getNamespacedName()] = new ReflectionClass($reflector, $child);
+            $items[(string) $child->getNamespacedName()] = new ReflectionClass($serviceLocator, $child);
         }
 
-        return new static($reflector, $items);
+        return new static($serviceLocator, $items);
     }
 
     public function concrete()
     {
-        return new self($this->reflector, array_filter($this->items, function ($item) {
+        return new self($this->serviceLocator, array_filter($this->items, function ($item) {
             return $item->isConcrete();
         }));
     }

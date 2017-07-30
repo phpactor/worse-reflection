@@ -16,8 +16,6 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode
 
     abstract protected function constants(): ReflectionConstantCollection;
 
-    abstract protected function reflector(): Reflector;
-
     abstract protected function methods(): ReflectionMethodCollection;
 
     public function isInterface()

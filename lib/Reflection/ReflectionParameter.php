@@ -5,7 +5,7 @@ namespace Phpactor\WorseReflection\Reflection;
 use Phpactor\WorseReflection\Visibility;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node\Parameter;
@@ -24,15 +24,13 @@ use Phpactor\WorseReflection\Reflection\Inference\Value;
 
 class ReflectionParameter extends AbstractReflectedNode
 {
-    private $reflector;
+    private $serviceLocator;
     private $parameter;
-    private $valueResolver;
 
-    public function __construct(Reflector $reflector, Parameter $parameter)
+    public function __construct(ServiceLocator $serviceLocator, Parameter $parameter)
     {
-        $this->reflector = $reflector;
+        $this->serviceLocator = $serviceLocator;
         $this->parameter = $parameter;
-        $this->valueResolver = new NodeValueResolver($reflector);
     }
 
     public function name(): string
@@ -60,7 +58,7 @@ class ReflectionParameter extends AbstractReflectedNode
             return DefaultValue::undefined();
         }
 
-        return DefaultValue::fromValue($this->valueResolver->resolveNode(new Frame(), $this->parameter)->value());
+        return DefaultValue::fromValue($this->serviceLocator->nodeValueResolver()->resolveNode(new Frame(), $this->parameter)->value());
     }
 
     protected function node(): Node

@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Reflection;
 
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use Phpactor\WorseReflection\Visibility;
 use Phpactor\WorseReflection\Type;
 use Microsoft\PhpParser\Node\MethodDeclaration;
@@ -24,9 +24,9 @@ use Phpactor\WorseReflection\Reflection\Inference\Frame;
 final class ReflectionMethod extends AbstractReflectedNode
 {
     /**
-     * @var Reflector
+     * @var ServiceLocator
      */
-    private $reflector;
+    private $serviceLocator;
 
     /**
      * @var ClassMethod
@@ -49,13 +49,11 @@ final class ReflectionMethod extends AbstractReflectedNode
     private $frameBuilder;
 
     public function __construct(
-        Reflector $reflector,
+        ServiceLocator $serviceLocator,
         MethodDeclaration $node
     ) {
-        $this->reflector = $reflector;
+        $this->serviceLocator = $serviceLocator;
         $this->node = $node;
-        $this->docblockResolver = new DocblockResolver($reflector);
-        $this->frameBuilder = new FrameBuilder(new NodeValueResolver($reflector));
     }
 
     public function name(): string
@@ -65,14 +63,14 @@ final class ReflectionMethod extends AbstractReflectedNode
 
     public function frame(): Frame
     {
-        return $this->frameBuilder->buildFromNode($this->node);
+        return $this->serviceLocator->frameBuilder()->buildFromNode($this->node);
     }
 
     public function class(): AbstractReflectionClass
     {
         $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
 
-        return $this->reflector->reflectClass(ClassName::fromString($class));
+        return $this->serviceLocator->reflector()->reflectClass(ClassName::fromString($class));
     }
 
     public function isAbstract(): bool
@@ -93,7 +91,7 @@ final class ReflectionMethod extends AbstractReflectedNode
 
     public function parameters(): ReflectionParameterCollection
     {
-        return ReflectionParameterCollection::fromMethodDeclaration($this->reflector, $this->node);
+        return ReflectionParameterCollection::fromMethodDeclaration($this->serviceLocator, $this->node);
     }
 
     public function docblock(): Docblock
@@ -122,7 +120,7 @@ final class ReflectionMethod extends AbstractReflectedNode
     public function inferredReturnType(): Type
     {
         if (!$this->node->returnType) {
-            return $this->docblockResolver->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+            return $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
         }
 
         return $this->returnType();

@@ -21,7 +21,7 @@ class StubSourceLocatorTest extends IntegrationTestCase
         $this->initWorkspace();
 
         $locator = new StringSourceLocator(SourceCode::fromString(''));
-        $reflector = new Reflector($locator);
+        $reflector = Reflector::create($locator);
         $this->cacheBuilder = new StubSourceLocator(
             $reflector,
             __DIR__ . '/stubs',

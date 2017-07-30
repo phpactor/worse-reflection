@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 use Phpactor\WorseReflection\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
@@ -13,7 +13,7 @@ use Phpactor\WorseReflection\Reflection\ReflectionConstant;
 
 class ReflectionConstantCollection extends AbstractReflectionCollection
 {
-    public static function fromClassDeclaration(Reflector $reflector, ClassDeclaration $class)
+    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class)
     {
         $items = [];
         foreach ($class->classMembers->classMemberDeclarations as $member) {
@@ -22,20 +22,20 @@ class ReflectionConstantCollection extends AbstractReflectionCollection
             }
 
             foreach ($member->constElements->children as $constElement) {
-                $items[$constElement->getName()] = new ReflectionConstant($reflector, $constElement);
+                $items[$constElement->getName()] = new ReflectionConstant($constElement);
             }
         }
 
-        return new static($reflector, $items);
+        return new static($serviceLocator, $items);
     }
 
-    public static function fromReflectionConstants(Reflector $reflector, array $constants)
+    public static function fromReflectionConstants(ServiceLocator $serviceLocator, array $constants)
     {
-        return new static($reflector, $constants);
+        return new static($serviceLocator, $constants);
     }
 
 
-    public static function fromInterfaceDeclaration(Reflector $reflector, InterfaceDeclaration $interface)
+    public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface)
     {
         $items = [];
         foreach ($interface->interfaceMembers->interfaceMemberDeclarations as $member) {
@@ -44,9 +44,9 @@ class ReflectionConstantCollection extends AbstractReflectionCollection
             }
 
             foreach ($member->constElements->children as $constElement) {
-                $items[$constElement->getName()] = new ReflectionConstant($reflector, $constElement);
+                $items[$constElement->getName()] = new ReflectionConstant($constElement);
             }
         }
-        return new static($reflector, $items);
+        return new static($serviceLocator, $items);
     }
 }

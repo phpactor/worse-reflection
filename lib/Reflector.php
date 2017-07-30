@@ -13,20 +13,22 @@ use Phpactor\WorseReflection\Reflection\ReflectionOffset;
 
 class Reflector
 {
-    private $sourceLocator;
-
     /**
-     * @var Parser
+     * @var ServiceLocator
      */
-    private $parser;
-    private $cache = [];
-    private $logger;
+    private $services;
 
-    public function __construct(SourceCodeLocator $sourceLocator, Parser $parser = null, Logger $logger = null)
+    private $cache = [];
+
+    public function __construct(ServiceLocator $services)
     {
-        $this->sourceLocator = $sourceLocator;
-        $this->parser = $parser ?: new Parser();
-        $this->logger = $logger ?: new ArrayLogger();
+        $this->services = $services;
+    }
+
+    public static function create(SourceCodeLocator $locator, Logger $logger = null): Reflector
+    {
+        $logger = $logger ?: new ArrayLogger();
+        return (new ServiceLocator($locator, $logger))->reflector();
     }
 
     public function reflectClass(ClassName $className): AbstractReflectionClass
@@ -35,7 +37,7 @@ class Reflector
             return $this->cache[(string) $className];
         }
 
-        $source = $this->sourceLocator->locate($className);
+        $source = $this->services->sourceLocator()->locate($className);
         $classes = $this->reflectClassesIn($source);
 
         try {
@@ -55,24 +57,19 @@ class Reflector
 
     public function reflectClassesIn(SourceCode $source): ReflectionClassCollection
     {
-        $node = $this->parser->parseSourceFile((string) $source);
+        $node = $this->services->parser()->parseSourceFile((string) $source);
 
-        return ReflectionClassCollection::fromSourceFileNode($this, $node);
+        return ReflectionClassCollection::fromSourceFileNode($this->services, $node);
     }
 
     public function reflectOffset(SourceCode $source, Offset $offset): ReflectionOffset
     {
-        $rootNode = $this->parser->parseSourceFile((string) $source);
+        $rootNode = $this->services->parser()->parseSourceFile((string) $source);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
-        $resolver = new NodeValueResolver($this);
-        $frame = (new FrameBuilder($resolver))->buildForNode($node);
+        $resolver = $this->services->nodeValueResolver();
+        $frame = $this->services->frameBuilder()->buildForNode($node);
 
         return ReflectionOffset::fromFrameAndValue($frame, $resolver->resolveNode($frame, $node));
-    }
-
-    public function logger(): Logger
-    {
-        return $this->logger;
     }
 }

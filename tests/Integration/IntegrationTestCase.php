@@ -15,9 +15,7 @@ class IntegrationTestCase extends TestCase
     public function createReflector(string $source): Reflector
     {
         $locator = new StringSourceLocator(SourceCode::fromString($source));
-        $reflector = new Reflector($locator);
-
-        return $reflector;
+        return Reflector::create($locator);
     }
 
     protected function workspaceDir(): string

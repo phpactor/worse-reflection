@@ -2,16 +2,16 @@
 
 namespace Phpactor\WorseReflection\Reflection\Collection;
 
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ServiceLocator;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     protected $items = [];
-    protected $reflector;
+    protected $serviceLocator;
 
-    protected function __construct(Reflector $reflector, array $items)
+    protected function __construct(ServiceLocator $serviceLocator, array $items)
     {
-        $this->reflector = $reflector;
+        $this->serviceLocator = $serviceLocator;
         $this->items = $items;
     }
 
@@ -25,9 +25,9 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return array_keys($this->items);
     }
 
-    public static function fromReflections(Reflector $reflector, array $reflections)
+    public static function fromReflections(ServiceLocator $serviceLocator, array $reflections)
     {
-        return new static($reflector, $reflections);
+        return new static($serviceLocator, $reflections);
     }
 
     public function merge(AbstractReflectionCollection $collection)
@@ -45,7 +45,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
             $items[$key] = $value;
         }
 
-        return new static($this->reflector, $items);
+        return new static($this->serviceLocator, $items);
     }
 
     public function get(string $name)
