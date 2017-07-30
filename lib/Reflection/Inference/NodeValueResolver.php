@@ -149,9 +149,10 @@ class NodeValueResolver
         $value = Value::none();
         $parent = null;
         foreach ($ancestors as $ancestor) {
-            if ($parent === null) {
+            if (null === $parent) {
 
                 $value = $parent = $this->_resolveNode($frame, $ancestor);
+                $this->logger->warning(sprintf('Resolved "%s" for "%s"', (string) $value->type(), $ancestor->getText()));
 
                 // TODO: This is not tested.
                 if (Type::unknown() == $parent->type()) {
@@ -162,6 +163,7 @@ class NodeValueResolver
             }
 
             $value = $this->resolveMemberType($parent, $ancestor);
+            $this->logger->warning(sprintf('Resolved "%s" for member "%s" for class "%s"', (string) $value->type(), $ancestor->getText(), (string) $parent->type()));
             $parent = $value;
         }
 
@@ -237,9 +239,7 @@ class NodeValueResolver
             return Type::unknown();
         }
 
-        $type = $method->inferredReturnType()->className() ?: (string) $method->inferredReturnType();
-
-        return Type::fromString($type);
+        return $method->inferredReturnType();
     }
 
     private function propertyType(Type $type, string $name): Type
