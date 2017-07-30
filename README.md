@@ -1,7 +1,7 @@
 Worse Reflection
 ==================
 
-[![Build Status](https://travis-ci.org/dantleech/worse-reflection.svg?branch=master)](https://travis-ci.org/dantleech/worse-reflection)
+[![Build Status](https://travis-ci.org/phpactor/worse-reflection.svg?branch=master)](https://travis-ci.org/phpactor/worse-reflection)
 
 This library aims to provide a light class-based AST based "reflection" library.
 
@@ -9,6 +9,7 @@ This library aims to provide a light class-based AST based "reflection" library.
 
 It is influenced by [BetterReflection](https://github.com/Roave/BetterReflection), diffrerences are as follows:
 
+- Can reflect types at offsets.
 - Does not aim to implement built-in PHP reflection API.
 - Focuses on class reflection.
 - Uses the amazing [Tolerant Parser](https://github.com/Microsoft/tolerant-php-parser).
