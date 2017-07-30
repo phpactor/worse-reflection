@@ -30,6 +30,7 @@ use Phpactor\WorseReflection\Type;
 use Phpactor\WorseReflection\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Exception\SourceNotFound;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
+use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 
 class NodeValueResolver
 {
@@ -121,8 +122,12 @@ class NodeValueResolver
             return $this->resolveArrayCreationExpression($frame, $node);
         }
 
+        if ($node instanceof ArgumentExpression) {
+            return $this->_resolveNode($frame, $node->expression);
+        }
+
         $this->logger->warning(sprintf(
-            'Did not know how to resolve node of type "%s"', get_class($node)
+            'Did not know how to resolve node of type "%s" with text "%s"', get_class($node), $node->getText()
         ));
 
         return Value::none();
