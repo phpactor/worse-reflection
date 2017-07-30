@@ -13,6 +13,11 @@ class ArrayLogger implements Logger
         $this->messages[] = $message;
     }
 
+    public function debug(string $message)
+    {
+        $this->messages[] = $message;
+    }
+
     public function messages(): array
     {
         return $this->messages;

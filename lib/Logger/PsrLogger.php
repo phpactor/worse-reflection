@@ -21,4 +21,9 @@ final class PsrLogger implements Logger
     {
         $this->logger->warning($message);
     }
+
+    public function debug(string $message)
+    {
+        $this->logger->debug($message);
+    }
 }

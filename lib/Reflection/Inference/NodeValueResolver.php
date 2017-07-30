@@ -51,6 +51,14 @@ class NodeValueResolver
 
     public function resolveNode(Frame $frame, Node $node): Value
     {
+        // traverse to the root expression.
+        if ($node instanceof MemberAccessExpression) {
+            while ($node->getParent() instanceof Expression) {
+                $node = $node->getParent();
+            }
+        }
+
+        // jump to the container for SubscriptExpression (array access)
         if ($node->getParent() instanceof SubscriptExpression) {
             return $this->resolveNode($frame, $node->getParent());
         }
@@ -72,8 +80,12 @@ class NodeValueResolver
             return $this->resolveVariable($frame, $node);
         }
 
-        if ($node instanceof MemberAccessExpression || $node instanceof CallExpression) {
-            return $this->resolveMemberAccess($frame, $node);
+        if ($node instanceof MemberAccessExpression) {
+            return $this->resolveMemberAccessExpression($frame, $node);
+        }
+
+        if ($node instanceof CallExpression) {
+            return $this->resolveCallExpression($frame, $node);
         }
 
         if ($node instanceof ScopedPropertyAccessExpression) {
@@ -129,60 +141,58 @@ class NodeValueResolver
         return $variables->first()->value();
     }
 
-    private function resolveMemberAccess(Frame $frame, Expression $node, $list = [])
+    private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): Value
     {
-        $ancestors = [];
+        $parent = $this->_resolveNode($frame, $node->dereferencableExpression);
+        $memberName = $node->memberName->getText($node->getFileContents());
+        $type = $this->propertyType($parent->type(), $memberName);
 
-        while ($node instanceof MemberAccessExpression || $node instanceof CallExpression) {
-            if ($node instanceof CallExpression) {
-                $node = $node->callableExpression;
-                continue;
-            }
+        $this->logger->debug(sprintf(
+            'Resolved type "%s" for property "%s" of class "%s"',
+            (string) $type,
+            $memberName,
+            (string) $parent->type()
+        ));
 
-            $ancestors[] = $node;
-            $node = $node->dereferencableExpression;
+        return Value::fromType($type);
+    }
+
+    private function resolveCallExpression(Frame $frame, CallExpression $node): Value
+    {
+        $resolvableNode = $node->callableExpression;
+
+        // We don't want to resolve the "member access" expression, skip 
+        if ($node->callableExpression instanceof MemberAccessExpression) {
+            $resolvableNode = $node->callableExpression->dereferencableExpression;
         }
 
-        $ancestors[] = $node;
-        $ancestors = array_reverse($ancestors);
+        $parent = $this->_resolveNode($frame, $resolvableNode);
+        $memberName = $node->callableExpression->memberName->getText($node->getFileContents());
+        $type = $this->methodType($parent->type(), $memberName);
 
-        $value = Value::none();
-        $parent = null;
-        foreach ($ancestors as $ancestor) {
-            if (null === $parent) {
+        $this->logger->debug(sprintf(
+            'Resolved type "%s" for method "%s" of class "%s"',
+            (string) $type,
+            $memberName,
+            (string) $parent->type()
+        ));
 
-                $value = $parent = $this->_resolveNode($frame, $ancestor);
-                $this->logger->warning(sprintf('Resolved "%s" for "%s"', (string) $value->type(), $ancestor->getText()));
-
-                // TODO: This is not tested.
-                if (Type::unknown() == $parent->type()) {
-                    return Value::none();
-                }
-
-                continue;
-            }
-
-            $value = $this->resolveMemberType($parent, $ancestor);
-            $this->logger->warning(sprintf('Resolved "%s" for member "%s" for class "%s"', (string) $value->type(), $ancestor->getText(), (string) $parent->type()));
-            $parent = $value;
-        }
-
-        return $value;
+        return Value::fromType($type);
     }
 
     private function resolveMemberType(Value $parent, Node $node): Value
     {
-        $memberName = $node->memberName->getText($node->getFileContents());
+        $memberNode = $node instanceof CallExpression ? $node->callableExpression : $node;
+        $memberName = $memberNode->memberName->getText($node->getFileContents());
 
-        $type = $this->methodType($parent->type(), $memberName);
+        if ($node instanceof MemberAccessExpression) {
+            $type = $this->propertyType($parent->type(), $memberName);
 
-        if (Type::unknown() != $type) {
             return Value::fromType($type);
         }
 
-        $type = $this->propertyType($parent->type(), $memberName);
+        return Value::fromType($this->methodType($parent->type(), $memberName));
 
-        return Value::fromType($type);
     }
 
     public function resolveQualifiedName(Node $node, string $name = null): Type

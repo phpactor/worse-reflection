@@ -282,6 +282,38 @@ EOT
                 '$this' => Type::fromString('Foobar\Barfoo\Foobar'),
             ], 384, Value::fromType(Type::fromString('Foobar\Barfoo\Type3')),
             ],
+            'It returns type for a property access when class has method of same name' => [
+                <<<'EOT'
+<?php
+
+class Type1
+{
+    public function asString(): string
+    {
+    }
+}
+
+class Foobar
+{
+    /**
+     * @var Type1
+     */
+    private $foobar;
+
+    private function foobar(): Hello
+    {
+    }
+
+    public function hello()
+    {
+        $this->foobar->asString();
+    }
+}
+EOT
+            , [
+                '$this' => Type::fromString('Foobar'),
+            ], 247, Value::fromType(Type::string()),
+            ],
             'It returns type for a new instantiation' => [
                 <<<'EOT'
 <?php
