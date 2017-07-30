@@ -17,16 +17,23 @@ use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\DocblockResolver;
 use Phpactor\WorseReflection\Type;
+use Phpactor\WorseReflection\Logger;
 
 final class FrameBuilder
 {
+    /**
+     * @var Logger
+     */
+    private $logger;
+
     /**
      * @var NodeValueResolver
      */
     private $valueResolver;
 
-    public function __construct(NodeValueResolver $valueResolver)
+    public function __construct(NodeValueResolver $valueResolver, Logger $logger)
     {
+        $this->logger = $logger;
         $this->valueResolver = $valueResolver;
     }
 
@@ -34,6 +41,7 @@ final class FrameBuilder
     {
         $frame = new Frame();
         $this->walkNode($frame, $node, $node->getEndPosition());
+
         return $frame;
     }
 
@@ -76,6 +84,10 @@ final class FrameBuilder
         if ($node->leftOperand instanceof MemberAccessExpression) {
             return $this->processMemberAccessExpression($frame, $node);
         }
+
+        $this->logger->warning(sprintf(
+            'Do not know how to assign to left operand "%s"', get_class($node->leftOperand)
+        ));
     }
 
     private function processParserVariable(Frame $frame, AssignmentExpression $node)
@@ -158,4 +170,3 @@ final class FrameBuilder
         }
     }
 }
-

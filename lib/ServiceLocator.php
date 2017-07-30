@@ -40,7 +40,7 @@ class ServiceLocator
         $this->logger = $logger;
         $this->reflector = new Reflector($this);
         $this->nodeValueResolver = new NodeValueResolver($this->reflector, $this->logger);
-        $this->frameBuilder = new FrameBuilder($this->nodeValueResolver);
+        $this->frameBuilder = new FrameBuilder($this->nodeValueResolver, $this->logger);
         $this->parser = new Parser();
         $this->docblockResolver = new DocblockResolver();
     }

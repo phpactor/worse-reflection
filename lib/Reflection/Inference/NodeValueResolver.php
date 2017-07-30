@@ -109,6 +109,10 @@ class NodeValueResolver
             return $this->resolveArrayCreationExpression($frame, $node);
         }
 
+        $this->logger->warning(sprintf(
+            'Did not know how to resolve node of type "%s"', get_class($node)
+        ));
+
         return Value::none();
     }
 
@@ -313,6 +317,8 @@ class NodeValueResolver
             return Value::fromTypeAndValue(Type::bool(), true);
         }
 
+        $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+
         // TODO: Not tested
         return Value::none();
     }
@@ -347,6 +353,10 @@ class NodeValueResolver
         }
 
         if ($subject->type() != Type::array()) {
+            $this->logger->warning(sprintf(
+                'Not resolving access expression of type "%s"',
+                (string) $subject->type()
+            ));
             return Value::none();
         }
 
@@ -360,6 +370,10 @@ class NodeValueResolver
                 return Value::fromTypeAndValue(Type::fromValue($value), $value);
             }
         }
+
+        $this->logger->warning(sprintf(
+            'Did not resolve access expression for node type "%s"', get_class($node)
+        ));
 
         return Value::none();
     }
