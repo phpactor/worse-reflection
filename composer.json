@@ -9,12 +9,6 @@
             "email": "daniel@dantleech.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/microsoft/tolerant-php-parser"
-        }
-    ],
     "require": {
         "microsoft/tolerant-php-parser": "dev-master",
         "jetbrains/phpstorm-stubs": "dev-master",
