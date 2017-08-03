@@ -214,7 +214,6 @@ class NodeValueResolver
         try {
             $class = $this->reflector->reflectClass(ClassName::fromString((string) $type));
         } catch (SourceNotFound $e) {
-            die('d');
         } catch (ClassNotFound $e) {
         }
 
