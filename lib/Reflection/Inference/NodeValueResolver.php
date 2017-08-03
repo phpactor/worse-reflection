@@ -69,6 +69,7 @@ class NodeValueResolver
 
     private function _resolveNode(Frame $frame, Node $node)
     {
+        $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
         if ($node instanceof QualifiedName) {
             return Value::fromType($this->resolveQualifiedName($node));
         }
@@ -148,13 +149,18 @@ class NodeValueResolver
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): Value
     {
+        $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
+
         $parent = $this->_resolveNode($frame, $node->dereferencableExpression);
         $memberName = $node->memberName->getText($node->getFileContents());
-        $type = $this->propertyType($parent->type(), $memberName);
+
+        // if the parent is a call expression, then this is a method call
+        $type = $this->{$memberType . 'Type'}($parent->type(), $memberName);
 
         $this->logger->debug(sprintf(
-            'Resolved type "%s" for property "%s" of class "%s"',
+            'Resolved type "%s" for %s "%s" of class "%s"',
             (string) $type,
+            $memberType,
             $memberName,
             (string) $parent->type()
         ));
@@ -165,24 +171,7 @@ class NodeValueResolver
     private function resolveCallExpression(Frame $frame, CallExpression $node): Value
     {
         $resolvableNode = $node->callableExpression;
-
-        // We don't want to resolve the "member access" expression, skip 
-        if ($node->callableExpression instanceof MemberAccessExpression) {
-            $resolvableNode = $node->callableExpression->dereferencableExpression;
-        }
-
-        $parent = $this->_resolveNode($frame, $resolvableNode);
-        $memberName = $node->callableExpression->memberName->getText($node->getFileContents());
-        $type = $this->methodType($parent->type(), $memberName);
-
-        $this->logger->debug(sprintf(
-            'Resolved type "%s" for method "%s" of class "%s"',
-            (string) $type,
-            $memberName,
-            (string) $parent->type()
-        ));
-
-        return Value::fromType($type);
+        return $this->_resolveNode($frame, $resolvableNode);
     }
 
     private function resolveMemberType(Value $parent, Node $node): Value
@@ -238,6 +227,7 @@ class NodeValueResolver
         try {
             $class = $this->reflector->reflectClass(ClassName::fromString((string) $type));
         } catch (SourceNotFound $e) {
+            die('d');
         } catch (ClassNotFound $e) {
         }
 

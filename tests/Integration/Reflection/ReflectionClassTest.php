@@ -23,6 +23,21 @@ class ReflectionClassTest extends IntegrationTestCase
      */
     public function testReflectClass(string $source, string $class, \Closure $assertion)
     {
+
+        $reflected = Reflector::createFromSource(<<<'EOT'
+<?php
+
+class Foobar {
+    public function hello()
+    {
+    }
+}
+EOT
+        );
+
+        $reflected->classes()->first()->name() // foobar
+
+
         $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
         $assertion($class);
     }

@@ -15,11 +15,19 @@ use Phpactor\WorseReflection\Offset;
 
 class NodeValueResolverTest extends IntegrationTestCase
 {
+    /**
+     * @var ArrayLogger
+     */
     private $logger;
 
     public function setUp()
     {
         $this->logger = new ArrayLogger();
+    }
+
+    public function tearDown()
+    {
+        var_dump($this->logger->messages());
     }
 
     /**
@@ -238,7 +246,7 @@ class Foobar
 EOT
                 , [ '$world' => Type::fromString('World') ], 127, Value::fromType(Type::fromString('World'))
             ],
-            'It returns type for a member access expression' => [
+            'It returns type for a call access expression' => [
                 <<<'EOT'
 <?php
 
@@ -378,6 +386,23 @@ EOT
 EOT
                 , [], 8, Value::fromTypeAndValue(Type::array(), [ 'one' => 'two', 'three' => 3]),
             ],
+            'ScopedPropertyAccess' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public static function foobar(): Hello {}
+}
+
+Foobar::foobar();
+
+class Hello
+{
+}
+EOT
+                , [], 86, Value::fromType(Type::fromString('Hello')),
+            ],
         ];
 
     }
@@ -446,6 +471,78 @@ EOT
                 ], 18, Value::fromTypeAndValue(Type::int(), 777)
             ],
         ];
+    }
+
+    /**
+     * @dataProvider provideNotResolvableClass
+     */
+    public function testNotResolvableClass(string $source, int $offset)
+    {
+        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
+            Variable::fromOffsetNameAndValue(
+                Offset::fromInt(0),
+                '$this',
+                Value::fromType(Type::fromString('Foobar'))
+            ),
+        ]), $source, $offset);
+        $this->assertEquals(Value::none(), $value);
+    }
+
+    public function provideNotResolvableClass()
+    {
+        return [
+            'Calling property method for non-existing class' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    /**
+     * @var NonExisting
+     */
+    private $hello;
+
+    public function hello()
+    {
+        $this->hello->foobar();
+    }
+} 
+EOT
+        , 147
+        ],
+        'Class extends non-existing class' => [
+            <<<'EOT'
+<?php
+
+class Foobar extends NonExisting
+{
+    public function hello()
+    {
+        $hello = $this->foobar();
+    }
+}
+EOT
+        , 126
+        ],
+        'Method returns non-existing class' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    private function hai(): Hai
+    {
+    }
+
+    public function hello()
+    {
+        $this->hai()->foo();
+    }
+}
+EOT
+        , 119
+        ],
+    ];
     }
 
     private function resolveNodeAtOffset(LocalAssignments $assignments, string $source, int $offset)
