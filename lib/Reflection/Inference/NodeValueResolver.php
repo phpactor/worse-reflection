@@ -214,7 +214,7 @@ class NodeValueResolver
         try {
             $class = $this->reflector->reflectClass(ClassName::fromString((string) $type));
         } catch (SourceNotFound $e) {
-        } catch (ClassNotFound $e) {
+            // TODO: Test this here!!
         }
 
         if (null === $class) {
