@@ -386,7 +386,20 @@ EOT
 EOT
                 , [], 8, Value::fromTypeAndValue(Type::array(), [ 'one' => 'two', 'three' => 3]),
             ],
-            'ScopedPropertyAccess' => [
+//            'It type for a class constant' => [
+//                <<<'EOT'
+//<?php
+//
+//$foo = Foobar::HELLO;
+//
+//class Foobar
+//{
+//    const HELLO = 'string';
+//}
+//EOT
+//                , [], 25, Value::fromType(Type::string()),
+//            ],
+            'Static method access' => [
                 <<<'EOT'
 <?php
 
@@ -402,6 +415,19 @@ class Hello
 }
 EOT
                 , [], 86, Value::fromType(Type::fromString('Hello')),
+            ],
+            'Static constant access' => [
+                <<<'EOT'
+<?php
+
+Foobar::HELLO_CONSTANT;
+
+class Foobar
+{
+    const HELLO_CONSTANT = 'hello';
+}
+EOT
+                , [], 19, Value::fromType(Type::fromString('Hello')),
             ],
         ];
 
@@ -541,6 +567,21 @@ class Foobar
 }
 EOT
         , 119
+        ],
+        'Static method returns non-existing class' => [
+            <<<'EOT'
+<?php
+
+ArrGoo::hai()->foo();
+
+class Foobar
+{
+    public static function hai(): Foo
+    {
+    }
+}
+EOT
+        , 27
         ],
     ];
     }

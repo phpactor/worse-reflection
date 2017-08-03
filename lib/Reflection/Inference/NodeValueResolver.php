@@ -149,23 +149,10 @@ class NodeValueResolver
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): Value
     {
-        $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
 
         $parent = $this->_resolveNode($frame, $node->dereferencableExpression);
-        $memberName = $node->memberName->getText($node->getFileContents());
 
-        // if the parent is a call expression, then this is a method call
-        $type = $this->{$memberType . 'Type'}($parent->type(), $memberName);
-
-        $this->logger->debug(sprintf(
-            'Resolved type "%s" for %s "%s" of class "%s"',
-            (string) $type,
-            $memberType,
-            $memberName,
-            (string) $parent->type()
-        ));
-
-        return Value::fromType($type);
+        return $this->_typeFromMemberAccess($parent->type(), $node);
     }
 
     private function resolveCallExpression(Frame $frame, CallExpression $node): Value
@@ -253,7 +240,6 @@ class NodeValueResolver
         try {
             $class = $this->reflector->reflectClass(ClassName::fromString((string) $type));
         } catch (SourceNotFound $e) {
-        } catch (ClassNotFound $e) {
         }
 
         if (null === $class) {
@@ -272,6 +258,14 @@ class NodeValueResolver
                 'Class "%s" has no property named "%s"',
                 (string) $type, $name
             ));
+
+            if ($class->constants()->has($name)) {
+                $this->logger->warning(sprintf(
+                    'Do not know how to resolve types of constants',
+                    (string) $type, $name
+                ));
+                return Type::unknown();
+            }
 
             return Type::unknown();
         }
@@ -385,11 +379,27 @@ class NodeValueResolver
 
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node)
     {
-        $classType = $this->resolveQualifiedName($node, $node->scopeResolutionQualifier->getText());
+        $parent = $this->resolveQualifiedName($node, $node->scopeResolutionQualifier->getText());
 
+        return $this->_typeFromMemberAccess($parent, $node);
+    }
+
+    private function _typeFromMemberAccess(Type $parent, Node $node)
+    {
+        $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
         $memberName = $node->memberName->getText($node->getFileContents());
-        $returnType = $this->methodType($classType, $memberName);
 
-        return Value::fromType($returnType);
+        // if the parent is a call expression, then this is a method call
+        $type = $this->{$memberType . 'Type'}($parent, $memberName);
+
+        $this->logger->debug(sprintf(
+            'Resolved type "%s" for %s "%s" of class "%s"',
+            (string) $type,
+            $memberType,
+            $memberName,
+            (string) $parent
+        ));
+
+        return Value::fromType($type);
     }
 }
