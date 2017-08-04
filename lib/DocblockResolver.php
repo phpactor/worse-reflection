@@ -8,6 +8,7 @@ use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
+use Phpactor\WorseReflection\Type;
 
 class DocblockResolver
 {
@@ -51,6 +52,13 @@ class DocblockResolver
         }
 
         $typeString = trim($matches[1], '\\');
+
+        $type = Type::fromString($typeString);
+
+        if ($type->isPrimitive()) {
+            return $type;
+        }
+
         $parts = explode('\\', $typeString);
 
         $importTable = $node->getImportTablesForCurrentScope()[0];
@@ -63,7 +71,7 @@ class DocblockResolver
         $namespace = $node->getRoot()->getFirstChildNode(NamespaceDefinition::class);
 
         if (null === $namespace) {
-            return Type::fromString($matches[1]);
+            return $type;
         }
 
         return Type::fromArray([(string) $namespace->name, $matches[1]]);

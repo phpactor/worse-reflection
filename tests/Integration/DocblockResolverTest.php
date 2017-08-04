@@ -91,6 +91,17 @@ $foobar;
 EOT
                 , 77, Type::fromString('Acme\Bar\Barfoo')
             ],
+            'Returns a scalar type in a namespace' => [
+                <<<'EOT'
+<?php
+
+namespace Hello;
+
+/** @var string */
+$foobar;
+EOT
+                , 45, Type::string()
+            ],
         ];
     }
 }
