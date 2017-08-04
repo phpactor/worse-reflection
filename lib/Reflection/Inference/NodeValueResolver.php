@@ -214,7 +214,7 @@ class NodeValueResolver
         try {
             $class = $this->reflector->reflectClass(ClassName::fromString((string) $type));
         } catch (SourceNotFound $e) {
-            // TODO: Test this here!!
+        } catch (ClassNotFound $e) {
         }
 
         if (null === $class) {
@@ -225,12 +225,19 @@ class NodeValueResolver
         }
 
         try {
-            $method = $class->methods()->get($name);
-        } catch (\InvalidArgumentException $e) {
-            return Type::unknown();
+            if (false === $class->methods()->has($name)) {
+                $this->logger->warning(sprintf(
+                    'Class "%s" has no method named "%s"',
+                    (string) $type, $name
+                ));
+                return Type::undefined();
+            }
+        } catch (SourceNotFound $e) {
+            $this->logger->warning($e->getMessage());
+            return Type::undefined();
         }
 
-        return $method->inferredReturnType();
+        return $class->methods()->get($name)->inferredReturnType();
     }
 
     private function propertyType(Type $type, string $name): Type
@@ -239,6 +246,7 @@ class NodeValueResolver
         try {
             $class = $this->reflector->reflectClass(ClassName::fromString((string) $type));
         } catch (SourceNotFound $e) {
+        } catch (ClassNotFound $e) {
         }
 
         if (null === $class) {
@@ -248,25 +256,22 @@ class NodeValueResolver
             return Type::unknown();
         }
 
+        // in the case that the class is an interface
         if (!$class instanceof ReflectionClass) {
             return Type::unknown();
         }
 
-        if (false === $class->properties()->has($name)) {
-            $this->logger->warning(sprintf(
-                'Class "%s" has no property named "%s"',
-                (string) $type, $name
-            ));
-
-            if ($class->constants()->has($name)) {
+        try {
+            if (false === $class->properties()->has($name)) {
                 $this->logger->warning(sprintf(
-                    'Do not know how to resolve types of constants',
+                    'Class "%s" has no property named "%s"',
                     (string) $type, $name
                 ));
-                return Type::unknown();
+                return Type::undefined();
             }
-
-            return Type::unknown();
+        } catch (SourceNotFound $e) {
+            $this->logger->warning($e->getMessage());
+            return Type::undefined();
         }
 
         return $class->properties()->get($name)->type();
