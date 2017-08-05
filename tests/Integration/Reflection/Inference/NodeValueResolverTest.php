@@ -27,7 +27,7 @@ class NodeValueResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-       //var_dump($this->logger->messages());
+       var_dump($this->logger->messages());
     }
 
     /**
@@ -115,7 +115,23 @@ class Foobar
 EOT
                 , [], 77, Value::fromType(Type::fromString('Foobar\Barfoo\Barfoo'))
             ],
-            'It returns the type of a scalar parameter' => [
+            'It returns the type and value of a scalar method parameter' => [
+                <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+class Foobar
+{
+    public function foobar(string $barfoo = 'test')
+    {
+    }
+}
+
+EOT
+                , [], 77, Value::fromTypeAndValue(Type::string(), 'test')
+            ],
+            'It returns the value of a method parameter with a constant' => [
                 <<<'EOT'
 <?php
 
@@ -386,19 +402,19 @@ EOT
 EOT
                 , [], 8, Value::fromTypeAndValue(Type::array(), [ 'one' => 'two', 'three' => 3]),
             ],
-//            'It type for a class constant' => [
-//                <<<'EOT'
-//<?php
-//
-//$foo = Foobar::HELLO;
-//
-//class Foobar
-//{
-//    const HELLO = 'string';
-//}
-//EOT
-//                , [], 25, Value::fromType(Type::string()),
-//            ],
+            'It type for a class constant' => [
+                <<<'EOT'
+<?php
+
+$foo = Foobar::HELLO;
+
+class Foobar
+{
+    const HELLO = 'string';
+}
+EOT
+                , [], 25, Value::fromType(Type::string()),
+            ],
             'Static method access' => [
                 <<<'EOT'
 <?php
@@ -414,21 +430,21 @@ class Hello
 {
 }
 EOT
-                , [], 86, Value::fromType(Type::fromString('Hello')),
+              , [], 86, Value::fromType(Type::fromString('Hello')),
+          ],
+            'Static constant access' => [
+                <<<'EOT'
+<?php
+
+Foobar::HELLO_CONSTANT;
+
+class Foobar
+{
+    const HELLO_CONSTANT = 'hello';
+}
+EOT
+                , [], 19, Value::fromType(Type::fromString('Hello')),
             ],
-//            'Static constant access' => [
-//                <<<'EOT'
-//<?php
-//
-//Foobar::HELLO_CONSTANT;
-//
-//class Foobar
-//{
-//    const HELLO_CONSTANT = 'hello';
-//}
-//EOT
-//                , [], 19, Value::fromType(Type::fromString('Hello')),
-//            ],
         ];
 
     }
