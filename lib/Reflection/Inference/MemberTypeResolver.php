@@ -31,7 +31,7 @@ class MemberTypeResolver
 
     public function methodType(Type $ownerType, string $name): Type
     {
-        $class = $this->reflectClassOrNull($ownerType);
+        $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
             return Type::unknown();
@@ -55,7 +55,7 @@ class MemberTypeResolver
 
     public function constantType(Type $ownerType, string $name): Type
     {
-        $class = $this->reflectClassOrNull($ownerType);
+        $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
             return Type::unknown();
@@ -79,7 +79,7 @@ class MemberTypeResolver
 
     public function propertyType(Type $ownerType, string $name): Type
     {
-        $class = $this->reflectClassOrNull($ownerType);
+        $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
             return Type::unknown();
@@ -106,7 +106,7 @@ class MemberTypeResolver
         return $class->properties()->get($name)->type();
     }
 
-    private function reflectClassOrNull(Type $ownerType)
+    private function reflectClassOrNull(Type $ownerType, string $name)
     {
         try {
             return $this->reflector->reflectClass(ClassName::fromString((string) $ownerType));

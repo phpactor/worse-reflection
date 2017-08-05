@@ -27,7 +27,7 @@ class NodeValueResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-       var_dump($this->logger->messages());
+        //var_dump($this->logger->messages());
     }
 
     /**
@@ -443,7 +443,7 @@ class Foobar
     const HELLO_CONSTANT = 'hello';
 }
 EOT
-                , [], 19, Value::fromType(Type::fromString('Hello')),
+                , [], 19, Value::fromType(Type::string()),
             ],
         ];
 
