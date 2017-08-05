@@ -9,13 +9,22 @@ use Phpactor\WorseReflection\ServiceLocator;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\DocblockResolver;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Type;
 
 class ReflectionProperty extends AbstractReflectedNode
 {
+    /**
+     * @var ServiceLocator
+     */
     private $serviceLocator;
+    /**
+     * @var PropertyDeclaration
+     */
     private $propertyDeclaration;
+    /**
+     * @var Variable
+     */
     private $variable;
-    private $docblockResolver;
 
     public function __construct(ServiceLocator $serviceLocator, PropertyDeclaration $propertyDeclaration, Variable $variable)
     {
@@ -24,12 +33,12 @@ class ReflectionProperty extends AbstractReflectedNode
         $this->variable = $variable;
     }
 
-    public function name()
+    public function name(): string
     {
         return (string) $this->variable->getName();
     }
 
-    public function visibility()
+    public function visibility(): Visibility
     {
         foreach ($this->propertyDeclaration->modifiers as $token) {
             if ($token->kind === TokenKind::PrivateKeyword) {
@@ -44,7 +53,7 @@ class ReflectionProperty extends AbstractReflectedNode
         return Visibility::public();
     }
 
-    public function type()
+    public function type(): Type
     {
         return $this->serviceLocator->docblockResolver()->propertyType($this->propertyDeclaration);
     }
@@ -59,3 +68,4 @@ class ReflectionProperty extends AbstractReflectedNode
         return $this->variable;
     }
 }
+
