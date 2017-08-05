@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\ClassName;
 use Phpactor\WorseReflection\Exception\SourceNotFound;
 use Phpactor\WorseReflection\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Exception\NotFound;
 
 class MemberTypeResolver
 {
@@ -30,17 +31,9 @@ class MemberTypeResolver
 
     public function methodType(Type $ownerType, string $name): Type
     {
-        $class = null;
-        try {
-            $class = $this->reflector->reflectClass(ClassName::fromString((string) $ownerType));
-        } catch (SourceNotFound $e) {
-        } catch (ClassNotFound $e) {
-        }
+        $class = $this->reflectClassOrNull($ownerType);
 
         if (null === $class) {
-            $this->logger->warning(sprintf(
-                'Unable to locate class "%s" for method "%s"', (string) $ownerType, $name
-            ));
             return Type::unknown();
         }
 
@@ -52,7 +45,7 @@ class MemberTypeResolver
                 ));
                 return Type::undefined();
             }
-        } catch (SourceNotFound $e) {
+        } catch (NotFound $e) {
             $this->logger->warning($e->getMessage());
             return Type::undefined();
         }
@@ -62,27 +55,38 @@ class MemberTypeResolver
 
     public function constantType(Type $ownerType, string $name): Type
     {
-        return Type::unknown();
+        $class = $this->reflectClassOrNull($ownerType);
+
+        if (null === $class) {
+            return Type::unknown();
+        }
+
+        try {
+            if (false === $class->constants()->has($name)) {
+                $this->logger->warning(sprintf(
+                    'Class "%s" has no constant named "%s"',
+                    (string) $ownerType, $name
+                ));
+                return Type::undefined();
+            }
+        } catch (NotFound $e) {
+            $this->logger->warning($e->getMessage());
+            return Type::undefined();
+        }
+
+        return $class->constants()->get($name)->type();
     }
 
     public function propertyType(Type $ownerType, string $name): Type
     {
-        $class = null;
-        try {
-            $class = $this->reflector->reflectClass(ClassName::fromString((string) $ownerType));
-        } catch (SourceNotFound $e) {
-        } catch (ClassNotFound $e) {
-        }
+        $class = $this->reflectClassOrNull($ownerType);
 
         if (null === $class) {
-            $this->logger->warning(sprintf(
-                'Unable to locate class "%s" for property "%s"', (string) $ownerType, $name
-            ));
             return Type::unknown();
         }
 
-        // in the case that the class is an interface
-        if (!$class instanceof ReflectionClass) {
+        // interfaces do not have properties...
+        if (false === $class instanceof ReflectionClass) {
             return Type::unknown();
         }
 
@@ -94,11 +98,22 @@ class MemberTypeResolver
                 ));
                 return Type::undefined();
             }
-        } catch (SourceNotFound $e) {
+        } catch (NotFound $e) {
             $this->logger->warning($e->getMessage());
             return Type::undefined();
         }
 
         return $class->properties()->get($name)->type();
+    }
+
+    private function reflectClassOrNull(Type $ownerType)
+    {
+        try {
+            return $this->reflector->reflectClass(ClassName::fromString((string) $ownerType));
+        } catch (NotFound $e) {
+            $this->logger->warning(sprintf(
+                'Unable to locate class "%s" for method "%s"', (string) $ownerType, $name
+            ));
+        }
     }
 }
