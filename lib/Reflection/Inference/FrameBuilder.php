@@ -132,8 +132,26 @@ final class FrameBuilder
         $classType = $this->valueResolver->resolveNode($frame, $classNode)->type();
 
         // add this and self
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), '$this', Value::fromType($classType)));
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(Offset::fromInt($node->getStart()), 'self', Value::fromType($classType)));
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt($node->getStart()),
+            '$this',
+            Value::fromType($classType)
+        ));
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt($node->getStart()),
+            'self',
+            Value::fromType($classType)
+        ));
+
+        if ($classNode->classBaseClause) {
+            $frame->locals()->add(Variable::fromOffsetNameAndValue(
+                Offset::fromInt($node->getStart()),
+                'parent',
+                Value::fromType(
+                    $this->valueResolver->resolveQualifiedName($node, $classNode->classBaseClause->baseClass->getText())
+                )
+            ));
+        }
 
         if (null === $node->parameters) {
             return;

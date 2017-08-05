@@ -27,7 +27,7 @@ class NodeValueResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-        // var_dump($this->logger->messages());
+       //var_dump($this->logger->messages());
     }
 
     /**
