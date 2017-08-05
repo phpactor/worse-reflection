@@ -125,7 +125,18 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function interfaces(): ReflectionInterfaceCollection
     {
-        return ReflectionInterfaceCollection::fromClassDeclaration($this->serviceLocator, $this->node);
+        $parentInterfaces = null;
+        if ($this->parent()) {
+            $parentInterfaces = $this->parent()->interfaces();
+        }
+
+        $interfaces = ReflectionInterfaceCollection::fromClassDeclaration($this->serviceLocator, $this->node);
+
+        if ($parentInterfaces) {
+            return $parentInterfaces->merge($interfaces);
+        }
+
+        return $interfaces;
     }
 
     public function memberListPosition(): Position

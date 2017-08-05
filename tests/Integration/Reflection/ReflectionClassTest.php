@@ -158,6 +158,50 @@ EOT
                     $this->assertEquals(20, $class->memberListPosition()->start());
                 },
             ],
+            'It provides list of its interfaces' => [
+                <<<'EOT'
+<?php
+
+interface InterfaceOne
+{
+}
+
+class Class2 implements InterfaceOne
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(1, $class->interfaces()->count());
+                    $this->assertEquals('InterfaceOne', $class->interfaces()->first()->name());
+                },
+            ],
+            'It list of interfaces includes interfaces from parent classes' => [
+                <<<'EOT'
+<?php
+
+interface InterfaceOne
+{
+}
+
+class Class1 implements InterfaceOne
+{
+}
+
+class Class2 extends Class1
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(1, $class->interfaces()->count());
+                    $this->assertEquals('InterfaceOne', $class->interfaces()->first()->name());
+                },
+            ],
         ];
     }
 }
