@@ -24,7 +24,14 @@ use Phpactor\WorseReflection\Reflection\Inference\Value;
 
 class ReflectionParameter extends AbstractReflectedNode
 {
+    /**
+     * @var ServiceLocator
+     */
     private $serviceLocator;
+
+    /**
+     * @var Parameter
+     */
     private $parameter;
 
     public function __construct(ServiceLocator $serviceLocator, Parameter $parameter)
@@ -66,3 +73,4 @@ class ReflectionParameter extends AbstractReflectedNode
         return $this->node;
     }
 }
+

@@ -11,8 +11,15 @@ use Microsoft\PhpParser\Node;
 
 class ReflectionSourceCode extends AbstractReflectedNode
 {
-    private $serviceLocator;
+    /**
+     * @var SourceFileNode
+     */
     private $node;
+
+    /**
+     * @var ServiceLocator
+     */
+    private $serviceLocator;
 
     public function __construct(ServiceLocator $serviceLocator, SourceFileNode $node)
     {
@@ -45,3 +52,4 @@ class ReflectionSourceCode extends AbstractReflectedNode
         return $this->node;
     }
 }
+

@@ -17,10 +17,12 @@ class ReflectionProperty extends AbstractReflectedNode
      * @var ServiceLocator
      */
     private $serviceLocator;
+
     /**
      * @var PropertyDeclaration
      */
     private $propertyDeclaration;
+
     /**
      * @var Variable
      */

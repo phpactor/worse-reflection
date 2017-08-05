@@ -7,7 +7,13 @@ use Phpactor\WorseReflection\Reflection\Inference\Frame;
 
 final class ReflectionOffset
 {
+    /**
+     * @var Frame
+     */
     private $frame;
+    /**
+     * @var Value
+     */
     private $value;
 
     private function __construct(Frame $frame, Value $value)
@@ -31,3 +37,4 @@ final class ReflectionOffset
         return $this->value;
     }
 }
+
