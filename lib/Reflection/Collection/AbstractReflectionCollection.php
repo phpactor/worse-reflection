@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Reflection\Collection;
 
 use Phpactor\WorseReflection\ServiceLocator;
+use Phpactor\WorseReflection\Exception\ItemNotFound;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
@@ -51,7 +52,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
     public function get(string $name)
     {
         if (!isset($this->items[$name])) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new ItemNotFound(sprintf(
                 'Unknown item "%s", known items: "%s"',
                 $name, implode('", "', array_keys($this->items))
             ));

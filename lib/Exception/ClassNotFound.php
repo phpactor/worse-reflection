@@ -2,6 +2,6 @@
 
 namespace Phpactor\WorseReflection\Exception;
 
-class ClassNotFound extends \Exception
+class ClassNotFound extends NotFound
 {
 }

@@ -2,6 +2,6 @@
 
 namespace Phpactor\WorseReflection\Exception;
 
-class SourceNotFound extends NotFound
+class ItemNotFound extends NotFound
 {
 }

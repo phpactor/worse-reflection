@@ -40,16 +40,14 @@ class Reflector
         $source = $this->services->sourceLocator()->locate($className);
         $classes = $this->reflectClassesIn($source);
 
-        try {
-            $class = $classes->get((string) $className);
-        } catch (\InvalidArgumentException $e) {
+        if (false === $classes->has((string) $className)) {
             throw new Exception\ClassNotFound(sprintf(
                 'Unable to locate class "%s"',
                 $className->full()
-            ), null, $e);
+            ));
         }
 
-
+        $class = $classes->get((string) $className);
         $this->cache[(string) $className] = $class;
 
         return $class;
