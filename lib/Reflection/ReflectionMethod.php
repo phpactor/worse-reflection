@@ -20,6 +20,7 @@ use Phpactor\WorseReflection\Reflection\Formatted\MethodHeader;
 use Phpactor\WorseReflection\Reflection\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\NodeText;
 
 final class ReflectionMethod extends AbstractReflectedNode
 {
@@ -137,6 +138,15 @@ final class ReflectionMethod extends AbstractReflectedNode
         }
 
         return Type::fromString($this->node->returnType->getResolvedName());
+    }
+
+    public function body(): NodeText
+    {
+        $statements = $this->node->compoundStatementOrSemicolon->statements;
+        return NodeText::fromString(implode(PHP_EOL, array_reduce($statements, function ($acc, $statement) {
+            $acc[] = (string) $statement->getText();
+            return $acc;
+        }, [])));
     }
 
     protected function node(): Node

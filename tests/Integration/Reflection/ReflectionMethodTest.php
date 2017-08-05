@@ -292,6 +292,24 @@ EOT
                     $this->assertTrue($methods->get('barfoo')->isStatic());
                 },
             ],
+            'It returns the method body' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function barfoo()
+    {
+        echo "Hello!";
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals('echo "Hello!";', (string) $methods->get('barfoo')->body());
+                },
+            ],
         ];
     }
 }
