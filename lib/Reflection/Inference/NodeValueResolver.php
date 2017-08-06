@@ -328,7 +328,7 @@ class NodeValueResolver
     private function resolveObjectCreationExpression(Frame $frame, $node)
     {
         if (!$node->classTypeDesignator instanceof Node) {
-            $this->logger->warning('Could not create object from "%s"', get_class($node));
+            $this->logger->warning(sprintf('Could not create object from "%s"', get_class($node)));
             return Value::none();
         }
 
