@@ -8,6 +8,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\ClassName;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 
 class ReflectionMethodCollection extends AbstractReflectionCollection
 {
@@ -28,6 +29,20 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
     public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface)
     {
         $methods = array_filter($interface->interfaceMembers->interfaceMemberDeclarations, function ($member) {
+            return $member instanceof MethodDeclaration;
+        });
+
+        $items = [];
+        foreach ($methods as $method) {
+            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $method);
+        }
+
+        return new static($serviceLocator, $items);
+    }
+
+    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait)
+    {
+        $methods = array_filter($trait->traitMembers->traitMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
         });
 

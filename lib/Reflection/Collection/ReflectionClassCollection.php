@@ -11,6 +11,8 @@ use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Reflection\ReflectionClass;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Phpactor\WorseReflection\Reflection\ReflectionTrait;
 
 class ReflectionClassCollection extends AbstractReflectionCollection
 {
@@ -21,8 +23,14 @@ class ReflectionClassCollection extends AbstractReflectionCollection
         foreach ($source->getChildNodes() as $child) {
             if (
                 false === $child instanceof ClassDeclaration &&
-                false === $child instanceof InterfaceDeclaration
+                false === $child instanceof InterfaceDeclaration &&
+                false === $child instanceof TraitDeclaration
             ) {
+                continue;
+            }
+
+            if ($child instanceof TraitDeclaration) {
+                $items[(string) $child->getNamespacedName()] =  new ReflectionTrait($serviceLocator, $child);
                 continue;
             }
 

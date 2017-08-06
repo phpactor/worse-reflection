@@ -25,4 +25,8 @@ class SourceCodeTest extends TestCase
     {
         SourceCode::fromPath('Improbable_Path_62.xyz');
     }
+
+    public function testLineAtOffset()
+    {
+    }
 }

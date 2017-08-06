@@ -202,6 +202,27 @@ EOT
                     $this->assertEquals('InterfaceOne', $class->interfaces()->first()->name());
                 },
             ],
+            'It provides list of its traits' => [
+                <<<'EOT'
+<?php
+
+trait TraitNUMBERone
+{
+}
+
+class Class2
+{
+    use TraitNUMBERone;
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(1, $class->traits()->count());
+                    $this->assertEquals('TraitNUMBERone', $class->traits()->first()->name());
+                },
+            ],
         ];
     }
 }

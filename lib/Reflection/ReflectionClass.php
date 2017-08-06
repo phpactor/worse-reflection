@@ -2,27 +2,28 @@
 
 namespace Phpactor\WorseReflection\Reflection;
 
-use Phpactor\WorseReflection\Reflector;
-use PhpParser\Node\Stmt\ClassLike;
-use Phpactor\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassMethod;
-use Phpactor\WorseReflection\ClassName;
-use PhpParser\Node\Stmt\Property;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\NamespacedNameInterface;
-use Microsoft\PhpParser\Node\QualifiedName;
-use Microsoft\PhpParser\Node\MethodDeclaration;
-use Phpactor\WorseReflection\Exception\ClassNotFound;
-use Phpactor\WorseReflection\Visibility;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Position;
+use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\Node\QualifiedName;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\TokenKind;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Exception\ClassNotFound;
+use Phpactor\WorseReflection\Position;
+use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionTraitCollection;
+use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\ServiceLocator;
+use Phpactor\WorseReflection\SourceContext;
+use Phpactor\WorseReflection\Visibility;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -138,6 +139,23 @@ class ReflectionClass extends AbstractReflectionClass
 
         return $interfaces;
     }
+
+    public function traits(): ReflectionTraitCollection
+    {
+        $parentTraits = null;
+        if ($this->parent()) {
+            $parentTraits = $this->parent()->traits();
+        }
+
+        $traits = ReflectionTraitCollection::fromClassDeclaration($this->serviceLocator, $this->node);
+
+        if ($parentTraits) {
+            return $parentTraits->merge($traits);
+        }
+
+        return $traits;
+    }
+
 
     public function memberListPosition(): Position
     {
