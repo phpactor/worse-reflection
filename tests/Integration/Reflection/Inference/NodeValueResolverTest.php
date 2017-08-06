@@ -346,6 +346,16 @@ new Bar();
 EOT
                 , [], 9, Value::fromType(Type::fromString('Bar')),
             ],
+            'It returns type for a new instantiation from a variable' => [
+                <<<'EOT'
+<?php
+
+new $foobar;
+EOT
+        , [
+                '$foobar' => Type::fromString('Foobar'),
+        ], 9, Value::fromType(Type::fromString('Foobar')),
+            ],
             'It returns type for string literal' => [
                 <<<'EOT'
 <?php

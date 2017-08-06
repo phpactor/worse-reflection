@@ -105,7 +105,7 @@ class NodeValueResolver
         }
 
         if ($node instanceof ObjectCreationExpression) {
-            return Value::fromType($this->resolveQualifiedName($node->classTypeDesignator));
+            return $this->resolveObjectCreationExpression($frame, $node);
         }
 
         if ($node instanceof SubscriptExpression) {
@@ -324,6 +324,17 @@ class NodeValueResolver
 
         return $this->_valueFromMemberAccess($parent, $node);
     }
+
+    private function resolveObjectCreationExpression(Frame $frame, $node)
+    {
+        if (!$node->classTypeDesignator instanceof Node) {
+            $this->logger->warning('Could not create object from "%s"', get_class($node));
+            return Value::none();
+        }
+
+        return $this->_resolveNode($frame, $node->classTypeDesignator);
+    }
+
 
     private function _valueFromMemberAccess(Type $parent, Node $node)
     {
