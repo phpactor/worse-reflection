@@ -110,16 +110,21 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function methods(): ReflectionMethodCollection
     {
-        $parentMethods = null;
+        $methods = ReflectionMethodCollection::empty($this->serviceLocator);
+
+        if ($this->traits()->count() > 0) {
+            foreach ($this->traits() as $trait) {
+                $methods = $methods->merge($trait->methods());
+            }
+        }
+
         if ($this->parent()) {
-            $parentMethods = $this->parent()->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
+            $methods = $methods->merge(
+                $this->parent()->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
         }
 
-        $methods = ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node);
-
-        if ($parentMethods) {
-            return $parentMethods->merge($methods);
-        }
+        $methods = $methods->merge(ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node));
 
         return $methods;
     }
