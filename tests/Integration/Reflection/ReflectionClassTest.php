@@ -223,6 +223,31 @@ EOT
                     $this->assertEquals('TraitNUMBERone', $class->traits()->first()->name());
                 },
             ],
+            'Traits are inherited from parent classes (?)' => [
+                <<<'EOT'
+<?php
+
+trait TraitNUMBERone
+{
+}
+
+class Class2
+{
+    use TraitNUMBERone;
+}
+
+class Class1 extends Class2
+{
+}
+
+EOT
+                ,
+                'Class1',
+                function ($class) {
+                    $this->assertEquals(1, $class->traits()->count());
+                    $this->assertEquals('TraitNUMBERone', $class->traits()->first()->name());
+                },
+            ],
             'Get methods includes trait methods' => [
                 <<<'EOT'
 <?php
