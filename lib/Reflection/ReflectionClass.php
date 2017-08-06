@@ -94,16 +94,21 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function properties(): ReflectionPropertyCollection
     {
-        $parentProperties = null;
+        $properties = ReflectionPropertyCollection::empty($this->serviceLocator);
+
+        if ($this->traits()->count() > 0) {
+            foreach ($this->traits() as $trait) {
+                $properties = $properties->merge($trait->properties());
+            }
+        }
+
         if ($this->parent()) {
-            $parentProperties = $this->parent()->properties()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
+            $properties = $properties->merge(
+                $this->parent()->properties()->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
         }
 
-        $properties = ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node);
-
-        if ($parentProperties) {
-            return $parentProperties->merge($properties);
-        }
+        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node));
 
         return $properties;
     }

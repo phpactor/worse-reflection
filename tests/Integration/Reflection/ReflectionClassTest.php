@@ -251,6 +251,30 @@ EOT
                     $this->assertEquals('traitMethod', $class->methods()->first()->name());
                 },
             ],
+            'Get properties includes trait methods' => [
+                <<<'EOT'
+<?php
+
+trait TraitNUMBERone
+{
+    public $foobar;
+}
+
+class Class2
+{
+    use TraitNUMBERone;
+
+    private $notAFoobar;
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(2, $class->properties()->count());
+                    $this->assertEquals('foobar', $class->properties()->first()->name());
+                },
+            ],
         ];
     }
 }
