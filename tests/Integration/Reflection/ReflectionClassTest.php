@@ -202,6 +202,104 @@ EOT
                     $this->assertEquals('InterfaceOne', $class->interfaces()->first()->name());
                 },
             ],
+            'It provides list of its traits' => [
+                <<<'EOT'
+<?php
+
+trait TraitNUMBERone
+{
+}
+
+class Class2
+{
+    use TraitNUMBERone;
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(1, $class->traits()->count());
+                    $this->assertEquals('TraitNUMBERone', $class->traits()->first()->name());
+                },
+            ],
+            'Traits are inherited from parent classes (?)' => [
+                <<<'EOT'
+<?php
+
+trait TraitNUMBERone
+{
+}
+
+class Class2
+{
+    use TraitNUMBERone;
+}
+
+class Class1 extends Class2
+{
+}
+
+EOT
+                ,
+                'Class1',
+                function ($class) {
+                    $this->assertEquals(1, $class->traits()->count());
+                    $this->assertEquals('TraitNUMBERone', $class->traits()->first()->name());
+                },
+            ],
+            'Get methods includes trait methods' => [
+                <<<'EOT'
+<?php
+
+trait TraitNUMBERone
+{
+    public function traitMethod()
+    {
+    }
+}
+
+class Class2
+{
+    use TraitNUMBERone;
+
+    public function notATrait()
+    {
+    }
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(2, $class->methods()->count());
+                    $this->assertEquals('traitMethod', $class->methods()->first()->name());
+                },
+            ],
+            'Get properties includes trait methods' => [
+                <<<'EOT'
+<?php
+
+trait TraitNUMBERone
+{
+    public $foobar;
+}
+
+class Class2
+{
+    use TraitNUMBERone;
+
+    private $notAFoobar;
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(2, $class->properties()->count());
+                    $this->assertEquals('foobar', $class->properties()->first()->name());
+                },
+            ],
         ];
     }
 }

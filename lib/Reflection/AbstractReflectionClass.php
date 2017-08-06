@@ -14,13 +14,16 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode
 {
     abstract public function name(): ClassName;
 
-    abstract protected function constants(): ReflectionConstantCollection;
-
     abstract protected function methods(): ReflectionMethodCollection;
 
     public function isInterface()
     {
         return $this instanceof ReflectionInterface;
+    }
+
+    public function isTrait()
+    {
+        return $this instanceof ReflectionTrait;
     }
 
     public function isConcrete()

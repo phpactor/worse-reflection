@@ -2,27 +2,28 @@
 
 namespace Phpactor\WorseReflection\Reflection;
 
-use Phpactor\WorseReflection\Reflector;
-use PhpParser\Node\Stmt\ClassLike;
-use Phpactor\WorseReflection\SourceContext;
-use PhpParser\Node\Stmt\ClassMethod;
-use Phpactor\WorseReflection\ClassName;
-use PhpParser\Node\Stmt\Property;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\NamespacedNameInterface;
-use Microsoft\PhpParser\Node\QualifiedName;
-use Microsoft\PhpParser\Node\MethodDeclaration;
-use Phpactor\WorseReflection\Exception\ClassNotFound;
-use Phpactor\WorseReflection\Visibility;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Position;
+use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\Node\QualifiedName;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\TokenKind;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Exception\ClassNotFound;
+use Phpactor\WorseReflection\Position;
+use Phpactor\WorseReflection\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionConstantCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionPropertyCollection;
+use Phpactor\WorseReflection\Reflection\Collection\ReflectionTraitCollection;
+use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\ServiceLocator;
+use Phpactor\WorseReflection\SourceContext;
+use Phpactor\WorseReflection\Visibility;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -93,32 +94,42 @@ class ReflectionClass extends AbstractReflectionClass
 
     public function properties(): ReflectionPropertyCollection
     {
-        $parentProperties = null;
+        $properties = ReflectionPropertyCollection::empty($this->serviceLocator);
+
+        if ($this->traits()->count() > 0) {
+            foreach ($this->traits() as $trait) {
+                $properties = $properties->merge($trait->properties());
+            }
+        }
+
         if ($this->parent()) {
-            $parentProperties = $this->parent()->properties()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
+            $properties = $properties->merge(
+                $this->parent()->properties()->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
         }
 
-        $properties = ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node);
-
-        if ($parentProperties) {
-            return $parentProperties->merge($properties);
-        }
+        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node));
 
         return $properties;
     }
 
     public function methods(): ReflectionMethodCollection
     {
-        $parentMethods = null;
+        $methods = ReflectionMethodCollection::empty($this->serviceLocator);
+
+        if ($this->traits()->count() > 0) {
+            foreach ($this->traits() as $trait) {
+                $methods = $methods->merge($trait->methods());
+            }
+        }
+
         if ($this->parent()) {
-            $parentMethods = $this->parent()->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ]);
+            $methods = $methods->merge(
+                $this->parent()->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
         }
 
-        $methods = ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node);
-
-        if ($parentMethods) {
-            return $parentMethods->merge($methods);
-        }
+        $methods = $methods->merge(ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node));
 
         return $methods;
     }
@@ -138,6 +149,23 @@ class ReflectionClass extends AbstractReflectionClass
 
         return $interfaces;
     }
+
+    public function traits(): ReflectionTraitCollection
+    {
+        $parentTraits = null;
+        if ($this->parent()) {
+            $parentTraits = $this->parent()->traits();
+        }
+
+        $traits = ReflectionTraitCollection::fromClassDeclaration($this->serviceLocator, $this->node);
+
+        if ($parentTraits) {
+            return $parentTraits->merge($traits);
+        }
+
+        return $traits;
+    }
+
 
     public function memberListPosition(): Position
     {
