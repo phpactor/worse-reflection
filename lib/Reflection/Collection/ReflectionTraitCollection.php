@@ -11,6 +11,7 @@ use Microsoft\PhpParser\Node\QualifiedName;
 use Phpactor\WorseReflection\ClassName;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\TraitUseClause;
+use Phpactor\WorseReflection\Tolerant\TolerantQualifiedNameResolver;
 
 class ReflectionTraitCollection extends AbstractReflectionCollection
 {
@@ -24,8 +25,9 @@ class ReflectionTraitCollection extends AbstractReflectionCollection
             }
 
             foreach ($memberDeclaration->traitNameList->getValues() as $traitName) {
-                $traitName = (string) $traitName->getNamespacedName();
+                $traitName = TolerantQualifiedNameResolver::getResolvedName($traitName);
             }
+
             $items[] = $serviceLocator->reflector()->reflectClass(ClassName::fromString($traitName));
         }
 
