@@ -336,7 +336,7 @@ class Foobar
 EOT
             , [
                 '$this' => Type::fromString('Foobar'),
-            ], 247, Value::fromType(Type::string()),
+            ], 263, Value::fromType(Type::string()),
             ],
             'It returns type for a new instantiation' => [
                 <<<'EOT'
@@ -596,7 +596,7 @@ class Foobar
     }
 }
 EOT
-        , 119
+        , 128
         ],
         'Method returns class which extends non-existing class' => [
             <<<'EOT'
@@ -618,7 +618,7 @@ class Hai extends NonExisting
 {
 }
 EOT
-        , 119
+        , 128
         ],
         'Static method returns non-existing class' => [
             <<<'EOT'

@@ -58,13 +58,6 @@ class NodeValueResolver
 
     public function resolveNode(Frame $frame, Node $node): Value
     {
-        // traverse to the root expression.
-        if ($node instanceof MemberAccessExpression) {
-            while ($node->getParent() instanceof Expression) {
-                $node = $node->getParent();
-            }
-        }
-
         // jump to the container for SubscriptExpression (array access)
         if ($node->getParent() instanceof SubscriptExpression) {
             return $this->resolveNode($frame, $node->getParent());
