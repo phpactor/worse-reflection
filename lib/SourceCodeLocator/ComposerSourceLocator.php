@@ -22,7 +22,7 @@ class ComposerSourceLocator implements SourceCodeLocator
      */
     public function locate(ClassName $className): SourceCode
     {
-        $path = $this->classLoader->findFile($className->getFqn());
+        $path = $this->classLoader->findFile((string) $className);
 
         if (false === $path) {
             throw new SourceNotFound(sprintf(
@@ -31,6 +31,6 @@ class ComposerSourceLocator implements SourceCodeLocator
             ));
         }
 
-        return SourceCode::fromFilepath($path);
+        return SourceCode::fromPath($path);
     }
 }

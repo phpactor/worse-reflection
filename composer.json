@@ -16,7 +16,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",
-        "symfony/filesystem": "^3.3"
+        "symfony/filesystem": "^3.3",
+        "phpbench/phpbench": "^0.13.0"
     },
     "autoload": {
         "psr-4": {
