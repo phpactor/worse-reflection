@@ -47,10 +47,8 @@ final class FrameBuilder
 
     public function buildForNode(Node $node)
     {
-        $frame = new Frame();
-        $this->walkNode($frame, $node, $node->getEndPosition());
-
         $scopeNode = $node->getFirstAncestor(MethodDeclaration::class, FunctionDeclaration::class, SourceFileNode::class);
+
         return $this->buildFromNode($scopeNode);
     }
 
