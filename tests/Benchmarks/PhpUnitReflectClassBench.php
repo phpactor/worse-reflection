@@ -32,6 +32,7 @@ class PhpUnitReflectClassBench extends BaseBenchCase
         /** @var $method ReflectionMethod */
         foreach ($class->methods() as $method) {
             foreach ($method->parameters() as $parameter) {
+                $method->returnType();
             }
         }
 
