@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Core\Offset;
-
 final class Offset
 {
     private $offset;
@@ -22,7 +20,7 @@ final class Offset
 
     public static function fromInt(int $offset): Offset
     {
-         return new self($offset);
+        return new self($offset);
     }
 
     public function toInt()

@@ -2,13 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Microsoft\PhpParser\NamespacedNameInterface;
-use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectedNode;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode
 {

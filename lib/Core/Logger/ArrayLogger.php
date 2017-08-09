@@ -23,4 +23,3 @@ class ArrayLogger implements Logger
         return $this->messages;
     }
 }
-

@@ -8,9 +8,6 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectedNode;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
 class ReflectionSourceCode extends AbstractReflectedNode
 {
@@ -55,4 +52,3 @@ class ReflectionSourceCode extends AbstractReflectedNode
         return $this->node;
     }
 }
-

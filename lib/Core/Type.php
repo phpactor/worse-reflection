@@ -2,9 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Type;
-
 class Type
 {
     const TYPE_ARRAY = 'array';
@@ -12,7 +9,7 @@ class Type
     const TYPE_STRING = 'string';
     const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
-    const TYPE_CLASS = 'object'; 
+    const TYPE_CLASS = 'object';
     const TYPE_NULL = 'null';
 
     private $type;

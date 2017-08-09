@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Stub\CacheBuilder;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StubSourceLocator;
 use Phpactor\WorseReflection\Tests\Integration\Core\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;

@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection;
 
 use Phpactor\WorseReflection\Tests\Integration\Core\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
 use Phpactor\WorseReflection\Core\ClassName;
 
 class ReflectionTraitTest extends IntegrationTestCase

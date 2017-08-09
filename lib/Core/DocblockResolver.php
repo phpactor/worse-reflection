@@ -3,12 +3,10 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
-use Phpactor\WorseReflection\Core\Type;
 
 class DocblockResolver
 {

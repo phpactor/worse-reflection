@@ -2,10 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
-use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
-use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Tests\Benchmarks\Examples\MethodClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 
@@ -53,4 +50,3 @@ class ReflectMethodBench extends BaseBenchCase
         $this->class->methods()->get('methodWithDocblockReturnType')->inferredReturnType();
     }
 }
-

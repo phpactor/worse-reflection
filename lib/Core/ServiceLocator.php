@@ -5,8 +5,6 @@ namespace Phpactor\WorseReflection\Core;
 use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Core\Reflection\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
-use Phpactor\WorseReflection\Core\DocblockResolver;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Reflector;
 
 class ServiceLocator

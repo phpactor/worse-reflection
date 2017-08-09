@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core;
 
-use Phpactor\WorseReflection\Tests\Integration\Core\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Core\SourceCode;
 

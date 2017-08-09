@@ -23,8 +23,7 @@ final class Position
         int $fullStart,
         int $start,
         int $end
-    )
-    {
+    ) {
         $this->fullStart = $fullStart;
         $this->start = $start;
         $this->end = $end;
@@ -65,4 +64,3 @@ final class Position
         return $this->end - $this->fullStart;
     }
 }
-

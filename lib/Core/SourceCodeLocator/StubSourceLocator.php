@@ -42,7 +42,8 @@ final class StubSourceLocator implements SourceCodeLocator
 
         throw new SourceNotFound(sprintf(
             'Could not find source for "%s" in stub directory "%s"',
-            (string) $className, $this->stubPath
+            (string) $className,
+            $this->stubPath
         ));
     }
 
@@ -59,7 +60,7 @@ final class StubSourceLocator implements SourceCodeLocator
     private function buildCache()
     {
         $map = [];
-        foreach($this->fileIterator() as $file) {
+        foreach ($this->fileIterator() as $file) {
             if ($file->isDir()) {
                 continue;
             }
@@ -97,5 +98,3 @@ final class StubSourceLocator implements SourceCodeLocator
         );
     }
 }
-
-

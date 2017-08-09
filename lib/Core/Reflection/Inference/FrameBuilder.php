@@ -9,16 +9,11 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
-use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
 use Phpactor\WorseReflection\Core\Offset;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
-use Phpactor\WorseReflection\Core\DocblockResolver;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Logger;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 
 final class FrameBuilder
 {
@@ -85,7 +80,8 @@ final class FrameBuilder
         }
 
         $this->logger->warning(sprintf(
-            'Do not know how to assign to left operand "%s"', get_class($node->leftOperand)
+            'Do not know how to assign to left operand "%s"',
+            get_class($node->leftOperand)
         ));
     }
 

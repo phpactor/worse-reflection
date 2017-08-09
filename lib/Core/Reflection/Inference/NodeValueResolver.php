@@ -18,21 +18,13 @@ use Microsoft\PhpParser\Node\ReservedWord;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
-use Microsoft\PhpParser\Parser;
 use Microsoft\PhpParser\Token;
-use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Logger;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
-use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
-use Phpactor\WorseReflection\Core\Reflection\Inference\MemberTypeResolver;
 
 class NodeValueResolver
 {
@@ -129,7 +121,9 @@ class NodeValueResolver
         }
 
         $this->logger->warning(sprintf(
-            'Did not know how to resolve node of type "%s" with text "%s"', get_class($node), $node->getText()
+            'Did not know how to resolve node of type "%s" with text "%s"',
+            get_class($node),
+            $node->getText()
         ));
 
         return Value::none();
@@ -173,7 +167,6 @@ class NodeValueResolver
         }
 
         return Value::fromType($this->memberTypeResolver->methodType($parent->type(), $memberName));
-
     }
 
     public function resolveQualifiedName(Node $node, string $name = null): Type
@@ -306,7 +299,8 @@ class NodeValueResolver
         }
 
         $this->logger->warning(sprintf(
-            'Did not resolve access expression for node type "%s"', get_class($node)
+            'Did not resolve access expression for node type "%s"',
+            get_class($node)
         ));
 
         return Value::none();

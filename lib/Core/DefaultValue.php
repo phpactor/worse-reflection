@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Core\DefaultValue;
-
 final class DefaultValue
 {
     private $value;

@@ -37,4 +37,3 @@ final class ReflectionOffset
         return $this->value;
     }
 }
-

@@ -2,26 +2,13 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Phpactor\WorseReflection\Core\Visibility;
-use Microsoft\PhpParser\Node\Expression\Variable;
-use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Core\ServiceLocator;
-use Microsoft\PhpParser\TokenKind;
-use Phpactor\WorseReflection\Core\DocblockResolver;
 use Microsoft\PhpParser\Node\Parameter;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Token;
-use Microsoft\PhpParser\Node\StringLiteral;
-use Microsoft\PhpParser\Node\NumericLiteral;
-use Microsoft\PhpParser\Node\ReservedWord;
-use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
-use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\DefaultValue;
-use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectedNode;
 
 class ReflectionParameter extends AbstractReflectedNode
 {
@@ -74,4 +61,3 @@ class ReflectionParameter extends AbstractReflectedNode
         return $this->node;
     }
 }
-

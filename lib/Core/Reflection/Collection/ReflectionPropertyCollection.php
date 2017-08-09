@@ -8,7 +8,6 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
-use Phpactor\WorseReflection\Core\Reflection\Collection\AbstractReflectionCollection;
 
 class ReflectionPropertyCollection extends AbstractReflectionCollection
 {

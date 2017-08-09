@@ -2,27 +2,19 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\Node\MethodDeclaration;
-use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\TokenKind;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Position;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
-use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\ServiceLocator;
-use Phpactor\WorseReflection\SourceContext;
 use Phpactor\WorseReflection\Core\Visibility;
 
 class ReflectionClass extends AbstractReflectionClass
@@ -40,8 +32,7 @@ class ReflectionClass extends AbstractReflectionClass
     public function __construct(
         ServiceLocator $serviceLocator,
         ClassDeclaration $node
-    )
-    {
+    ) {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
     }

@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection;
 use Phpactor\WorseReflection\Tests\Integration\Core\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
-use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 
 class ReflectionParameterTest extends IntegrationTestCase
@@ -61,7 +60,8 @@ class ReflectionParameterTest extends IntegrationTestCase
                 function ($method) {
                     $this->assertTrue($method->parameters()->get('foobar')->default()->isDefined());
                     $this->assertEquals(
-                        'foo', $method->parameters()->get('foobar')->default()->value()
+                        'foo',
+                        $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -69,7 +69,8 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = 1234',
                 function ($method) {
                     $this->assertEquals(
-                        1234, $method->parameters()->get('foobar')->default()->value()
+                        1234,
+                        $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -77,7 +78,8 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = [ "foobar" ]',
                 function ($method) {
                     $this->assertEquals(
-                        ['foobar'], $method->parameters()->get('foobar')->default()->value()
+                        ['foobar'],
+                        $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -85,7 +87,8 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = null',
                 function ($method) {
                     $this->assertEquals(
-                        null, $method->parameters()->get('foobar')->default()->value()
+                        null,
+                        $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],
@@ -94,7 +97,8 @@ class ReflectionParameterTest extends IntegrationTestCase
                 function ($method) {
                     $foobar = $method->parameters()->get('foobar');
                     $this->assertEquals(
-                        [], $foobar->default()->value()
+                        [],
+                        $foobar->default()->value()
                     );
                 },
             ],
@@ -102,7 +106,8 @@ class ReflectionParameterTest extends IntegrationTestCase
                 '$foobar = false',
                 function ($method) {
                     $this->assertEquals(
-                        false, $method->parameters()->get('foobar')->default()->value()
+                        false,
+                        $method->parameters()->get('foobar')->default()->value()
                     );
                 },
             ],

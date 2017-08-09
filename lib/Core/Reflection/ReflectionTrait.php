@@ -7,11 +7,8 @@ use PhpParser\Node\Stmt\ClassLike;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectionClass;
 
 class ReflectionTrait extends AbstractReflectionClass
 {
@@ -56,4 +53,3 @@ class ReflectionTrait extends AbstractReflectionClass
         return ClassName::fromString((string) $this->node()->getNamespacedName());
     }
 }
-

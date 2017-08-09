@@ -6,7 +6,7 @@ use Phpactor\WorseReflection\Core\Logger;
 use Psr\Log\LoggerInterface;
 
 final class PsrLogger implements Logger
-{ 
+{
     /**
      * @var LoggerInterface
      */

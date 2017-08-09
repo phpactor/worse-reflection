@@ -2,9 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\Assignments;
-use Phpactor\WorseReflection\Core\Reflection\Inference\LocalAssignments;
-
 final class LocalAssignments extends Assignments
 {
     public static function create()
@@ -16,5 +13,4 @@ final class LocalAssignments extends Assignments
     {
         return new self($assignments);
     }
-
 }

@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\Assignments;
-
 final class Frame
 {
     /**
@@ -19,8 +17,7 @@ final class Frame
     public function __construct(
         LocalAssignments $locals = null,
         PropretyAssignments $properties = null
-    )
-    {
+    ) {
         $this->properties = $properties ?: PropertyAssignments::create();
         $this->locals = $locals ?: LocalAssignments::create();
     }
@@ -35,4 +32,3 @@ final class Frame
         return $this->properties;
     }
 }
-

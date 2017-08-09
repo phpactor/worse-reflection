@@ -7,10 +7,8 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\TokenKind;
-use Phpactor\WorseReflection\Core\DocblockResolver;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectedNode;
 
 class ReflectionProperty extends AbstractReflectedNode
 {
@@ -71,4 +69,3 @@ class ReflectionProperty extends AbstractReflectedNode
         return $this->variable;
     }
 }
-

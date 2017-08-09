@@ -17,7 +17,8 @@ class TolerantQualifiedNameResolver
     /**
      * @see \Microsoft\PhpParser\Node\QualifiedName::getResolvedName
      */
-    public static function getResolvedName($node, $namespaceDefinition = null) {
+    public static function getResolvedName($node, $namespaceDefinition = null)
+    {
         // Name resolution not applicable to constructs that define symbol names or aliases.
         if (($node->parent instanceof Node\Statement\NamespaceDefinition && $node->parent->name->getStart() === $node->getStart()) ||
             $node->parent instanceof Node\Statement\NamespaceUseDeclaration ||
@@ -87,13 +88,14 @@ class TolerantQualifiedNameResolver
      * @param bool $isCaseSensitive
      * @return null
      */
-    private static function tryResolveFromImportTable($node, $importTable, bool $isCaseSensitive = false) {
+    private static function tryResolveFromImportTable($node, $importTable, bool $isCaseSensitive = false)
+    {
         $content = $node->getFileContents();
         $index = $node->nameParts[0]->getText($content);
-//        if (!$isCaseSensitive) {
-//            $index = strtolower($index);
-//        }
-        if(isset($importTable[$index])) {
+        //        if (!$isCaseSensitive) {
+        //            $index = strtolower($index);
+        //        }
+        if (isset($importTable[$index])) {
             $resolvedName = $importTable[$index];
             $resolvedName->addNameParts(\array_slice($node->nameParts, 1), $content);
             return $resolvedName;
@@ -101,7 +103,8 @@ class TolerantQualifiedNameResolver
         return null;
     }
 
-    private static function isConstantName($node) : bool {
+    private static function isConstantName($node) : bool
+    {
         return
             ($node->parent instanceof Node\Statement\ExpressionStatement || $node->parent instanceof Expression) &&
             !(
@@ -112,5 +115,3 @@ class TolerantQualifiedNameResolver
             );
     }
 }
-
-

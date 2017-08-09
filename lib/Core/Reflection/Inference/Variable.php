@@ -2,10 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
 
 final class Variable
 {
@@ -33,7 +30,7 @@ final class Variable
 
     public static function fromOffsetNameAndValue(Offset $offset, string $name, Value $value): Variable
     {
-         return new self($name, $offset, $value);
+        return new self($name, $offset, $value);
     }
 
     public function __toString()

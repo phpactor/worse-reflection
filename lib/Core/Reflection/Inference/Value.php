@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
 
 final class Value
 {
@@ -25,7 +24,7 @@ final class Value
 
     public static function fromTypeAndValue(Type $type, $value): Value
     {
-         return new self($type, $value);
+        return new self($type, $value);
     }
 
     public static function fromType(Type $type)
@@ -53,4 +52,3 @@ final class Value
         return $this->value;
     }
 }
-

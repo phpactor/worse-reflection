@@ -5,14 +5,12 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use PhpParser\Node\Stmt\ClassLike;
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectionClass;
 
 class ReflectionInterface extends AbstractReflectionClass
 {

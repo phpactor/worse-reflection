@@ -13,16 +13,12 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Core\Docblock;
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Reflection\Formatted\MethodHeader;
 use Phpactor\WorseReflection\Core\Reflection\Inference\FrameBuilder;
-use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectedNode;
 
 final class ReflectionMethod extends AbstractReflectedNode
 {
@@ -75,7 +71,8 @@ final class ReflectionMethod extends AbstractReflectedNode
 
         if (null === $class) {
             throw new \InvalidArgumentException(sprintf(
-                'Could not locate class-like ancestor node for method "%s"', $this->name()
+                'Could not locate class-like ancestor node for method "%s"',
+                $this->name()
             ));
         }
 

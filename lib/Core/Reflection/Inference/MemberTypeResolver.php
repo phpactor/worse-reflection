@@ -6,8 +6,6 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
-use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 
@@ -41,7 +39,8 @@ class MemberTypeResolver
             if (false === $class->methods()->has($name)) {
                 $this->logger->warning(sprintf(
                     'Class "%s" has no method named "%s"',
-                    (string) $ownerType, $name
+                    (string) $ownerType,
+                    $name
                 ));
                 return Type::undefined();
             }
@@ -65,7 +64,8 @@ class MemberTypeResolver
             if (false === $class->constants()->has($name)) {
                 $this->logger->warning(sprintf(
                     'Class "%s" has no constant named "%s"',
-                    (string) $ownerType, $name
+                    (string) $ownerType,
+                    $name
                 ));
                 return Type::undefined();
             }
@@ -94,7 +94,8 @@ class MemberTypeResolver
             if (false === $class->properties()->has($name)) {
                 $this->logger->warning(sprintf(
                     'Class "%s" has no property named "%s"',
-                    (string) $ownerType, $name
+                    (string) $ownerType,
+                    $name
                 ));
                 return Type::undefined();
             }
@@ -112,7 +113,9 @@ class MemberTypeResolver
             return $this->reflector->reflectClass(ClassName::fromString((string) $ownerType));
         } catch (NotFound $e) {
             $this->logger->warning(sprintf(
-                'Unable to locate class "%s" for method "%s"', (string) $ownerType, $name
+                'Unable to locate class "%s" for method "%s"',
+                (string) $ownerType,
+                $name
             ));
         }
     }

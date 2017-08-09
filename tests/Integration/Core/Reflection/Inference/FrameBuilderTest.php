@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection\Inference;
 
-use Microsoft\PhpParser\Parser;
-use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Tests\Integration\Core\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
