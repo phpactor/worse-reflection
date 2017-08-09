@@ -21,6 +21,9 @@ class Reflector
      */
     private $services;
 
+    /**
+     * @var array
+     */
     private $cache = [];
 
     public function __construct(ServiceLocator $services)
@@ -28,12 +31,23 @@ class Reflector
         $this->services = $services;
     }
 
+    /**
+     * Create a new instance of the reflector using the given source locator
+     * and optionally, a logger.
+     */
     public static function create(SourceCodeLocator $locator, Logger $logger = null): Reflector
     {
         $logger = $logger ?: new ArrayLogger();
         return (new ServiceLocator($locator, $logger))->reflector();
     }
 
+    /**
+     * Reflect a class, trait or interface by its name.
+     *
+     * If the class it not found an exception will be thrown.
+     *
+     * @throws ClassNotFound
+     */
     public function reflectClass(ClassName $className): AbstractReflectionClass
     {
         if (isset($this->cache[(string) $className])) {
@@ -56,6 +70,9 @@ class Reflector
         return $class;
     }
 
+    /**
+     * Reflect all classes (or class-likes) in the given source code.
+     */
     public function reflectClassesIn(SourceCode $source): ReflectionClassCollection
     {
         $node = $this->services->parser()->parseSourceFile((string) $source);
@@ -63,6 +80,10 @@ class Reflector
         return ReflectionClassCollection::fromSourceFileNode($this->services, $node);
     }
 
+    /**
+     * Return the information for the given offset in the given file, including the value
+     * and type of a variable and the frame information.
+     */
     public function reflectOffset(SourceCode $source, Offset $offset): ReflectionOffset
     {
         $rootNode = $this->services->parser()->parseSourceFile((string) $source);
