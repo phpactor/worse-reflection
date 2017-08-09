@@ -25,7 +25,7 @@ use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Exception\SourceNotFound;

@@ -2,8 +2,8 @@
 
 namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
-use Phpactor\WorseReflection\Core\SourceCodeLocator\ComposerSourceLocator;
-use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Bridge\Composer\ComposerSourceLocator;
+use Phpactor\WorseReflection\Reflector;
 
 abstract class BaseBenchCase
 {

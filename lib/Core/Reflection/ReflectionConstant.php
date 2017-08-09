@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
 use Microsoft\PhpParser\Node;

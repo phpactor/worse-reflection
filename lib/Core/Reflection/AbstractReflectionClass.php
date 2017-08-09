@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Microsoft\PhpParser\NamespacedNameInterface;
-use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;

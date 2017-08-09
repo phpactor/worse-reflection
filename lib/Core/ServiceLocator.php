@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Core\DocblockResolver;
 use Phpactor\WorseReflection\Core\Logger;
-use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Reflector;
 
 class ServiceLocator
 {

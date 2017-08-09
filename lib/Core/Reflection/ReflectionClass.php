@@ -20,7 +20,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceColle
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
-use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\SourceContext;
 use Phpactor\WorseReflection\Core\Visibility;

@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
