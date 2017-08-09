@@ -21,6 +21,7 @@ use Phpactor\WorseReflection\Reflection\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\NodeText;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 
 final class ReflectionMethod extends AbstractReflectedNode
 {
@@ -69,7 +70,13 @@ final class ReflectionMethod extends AbstractReflectedNode
 
     public function class(): AbstractReflectionClass
     {
-        $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class)->getNamespacedName();
+        $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class)->getNamespacedName();
+
+        if (null === $class) {
+            throw new \InvalidArgumentException(sprintf(
+                'Could not locate class-like ancestor node for method "%s"', $this->name()
+            ));
+        }
 
         return $this->serviceLocator->reflector()->reflectClass(ClassName::fromString($class));
     }

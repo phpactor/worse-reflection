@@ -310,6 +310,44 @@ EOT
                     $this->assertEquals('echo "Hello!";', (string) $methods->get('barfoo')->body());
                 },
             ],
+            'It reflects a method from an inteface' => [
+                <<<'EOT'
+<?php
+
+interface Foobar
+{
+    public function barfoo()
+    {
+        echo "Hello!";
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertTrue($methods->has('barfoo'));
+                    $this->assertEquals('Foobar', (string) $methods->get('barfoo')->class()->name());
+                },
+            ],
+            'It reflects a method from a trait' => [
+                <<<'EOT'
+<?php
+
+trait Foobar
+{
+    public function barfoo()
+    {
+        echo "Hello!";
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertTrue($methods->has('barfoo'));
+                    $this->assertEquals('Foobar', (string) $methods->get('barfoo')->class()->name());
+                },
+            ],
         ];
     }
 }
