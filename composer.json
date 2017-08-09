@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "microsoft/tolerant-php-parser": "dev-master",
+        "microsoft/tolerant-php-parser": "@dev",
         "jetbrains/phpstorm-stubs": "dev-master",
         "psr/log": "^1.0@dev"
     },
