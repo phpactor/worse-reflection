@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Integration\Core;
+namespace Phpactor\WorseReflection\Tests\Integration;
 
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCode;

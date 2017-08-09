@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Tests\Integration\Core\IntegrationTestCase;
+use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;

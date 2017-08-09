@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection\Inference;
 
 use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
-use Phpactor\WorseReflection\Tests\Integration\Core\IntegrationTestCase;
+use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\Inference\LocalAssignments;

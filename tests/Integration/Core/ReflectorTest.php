@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core;
 
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 
 class ReflectorTest extends IntegrationTestCase
 {
