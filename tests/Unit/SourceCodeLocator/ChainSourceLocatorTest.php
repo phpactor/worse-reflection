@@ -3,11 +3,11 @@
 namespace Phpactor\WorseReflection\Tests\Unit\SourceCodeLocator;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\SourceCodeLocator;
-use Phpactor\WorseReflection\ClassName;
-use Phpactor\WorseReflection\SourceCodeLocator\ChainSourceLocator;
-use Phpactor\WorseReflection\SourceCode;
-use Phpactor\WorseReflection\Exception\SourceNotFound;
+use Phpactor\WorseReflection\Core\SourceCodeLocator;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
+use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
 
 class ChainSourceLocatorTest extends TestCase
 {
@@ -23,7 +23,7 @@ class ChainSourceLocatorTest extends TestCase
 
     /**
      * @testdox It throws an exception if no loaders found.
-     * @expectedException Phpactor\WorseReflection\Exception\SourceNotFound
+     * @expectedException Phpactor\WorseReflection\Core\Exception\SourceNotFound
      */
     public function testNoLocators()
     {
@@ -68,7 +68,7 @@ class ChainSourceLocatorTest extends TestCase
 
     /**
      * @testdox It throws an exception if all fail
-     * @expectedException Phpactor\WorseReflection\Exception\SourceNotFound
+     * @expectedException Phpactor\WorseReflection\Core\Exception\SourceNotFound
      * @expectedExceptionMessage Could not find source with "Foobar"
      */
     public function testAllFail()

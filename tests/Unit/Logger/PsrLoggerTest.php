@@ -4,8 +4,8 @@ namespace Phpactor\WorseReflection\Tests\Unit\Logger;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Phpactor\WorseReflection\Logger;
-use Phpactor\WorseReflection\Logger\PsrLogger;
+use Phpactor\WorseReflection\Core\Logger;
+use Phpactor\WorseReflection\Core\Logger\PsrLogger;
 
 class PsrLoggerTest extends TestCase
 {

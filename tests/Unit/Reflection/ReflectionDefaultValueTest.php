@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\DefaultValue;
+use Phpactor\WorseReflection\Core\DefaultValue;
 
 class ReflectionDefaultValueTest extends TestCase
 {

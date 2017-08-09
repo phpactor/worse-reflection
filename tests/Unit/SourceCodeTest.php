@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\SourceCode;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 class SourceCodeTest extends TestCase
 {

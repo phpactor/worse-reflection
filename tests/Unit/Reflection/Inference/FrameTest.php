@@ -2,11 +2,11 @@
 
 namespace Phpactor\WorseReflection\Tests\Unit\Reflection\Inference;
 
-use Phpactor\WorseReflection\Reflection\Inference\Assignments;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Assignments;
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Reflection\Inference\Frame;
-use Phpactor\WorseReflection\Reflection\Inference\LocalAssignments;
-use Phpactor\WorseReflection\Reflection\Inference\PropertyAssignments;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Reflection\Inference\LocalAssignments;
+use Phpactor\WorseReflection\Core\Reflection\Inference\PropertyAssignments;
 
 class FrameTest extends TestCase
 {

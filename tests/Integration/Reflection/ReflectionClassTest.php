@@ -3,15 +3,15 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Reflection;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\ClassName;
-use Phpactor\WorseReflection\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Reflection\ReflectionInterface;
-use Phpactor\WorseReflection\Reflection\ReflectionConstant;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
 
 class ReflectionClassTest extends IntegrationTestCase
 {
     /**
-     * @expectedException Phpactor\WorseReflection\Exception\ClassNotFound
+     * @expectedException Phpactor\WorseReflection\Core\Exception\ClassNotFound
      */
     public function testExceptionOnClassNotFound()
     {

@@ -3,8 +3,8 @@
 namespace Phpactor\WorseReflection\Tests\Integration;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\Offset;
-use Phpactor\WorseReflection\SourceCode;
+use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 class ReflectorTest extends IntegrationTestCase
 {

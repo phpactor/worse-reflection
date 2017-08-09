@@ -3,8 +3,8 @@
 namespace Phpactor\WorseReflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Type;
-use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\ClassName;
 
 class TypeTest extends TestCase
 {

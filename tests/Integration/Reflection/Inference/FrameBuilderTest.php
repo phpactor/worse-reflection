@@ -3,11 +3,11 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Reflection\Inference;
 
 use Microsoft\PhpParser\Parser;
-use Phpactor\WorseReflection\Reflection\Inference\NodeValueResolver;
+use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\Type;
-use Phpactor\WorseReflection\ClassName;
-use Phpactor\WorseReflection\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 
 class FrameBuilderTest extends IntegrationTestCase
 {

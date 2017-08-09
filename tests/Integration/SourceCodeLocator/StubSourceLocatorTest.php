@@ -2,13 +2,13 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\SourceCodeLocator;
 
-use Phpactor\WorseReflection\SourceCode;
-use Phpactor\WorseReflection\SourceCodeLocator\StringSourceLocator;
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
+use Phpactor\WorseReflection\Core\Reflector;
 use Phpactor\WorseReflection\Stub\CacheBuilder;
-use Phpactor\WorseReflection\SourceCodeLocator\StubSourceLocator;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\StubSourceLocator;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\ClassName;
+use Phpactor\WorseReflection\Core\ClassName;
 
 class StubSourceLocatorTest extends IntegrationTestCase
 {

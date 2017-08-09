@@ -3,10 +3,10 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Reflection;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\ClassName;
-use Phpactor\WorseReflection\Reflection\ReflectionProperty;
-use Phpactor\WorseReflection\Visibility;
-use Phpactor\WorseReflection\Type;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
+use Phpactor\WorseReflection\Core\Visibility;
+use Phpactor\WorseReflection\Core\Type;
 
 class ReflectionPropertyTest extends IntegrationTestCase
 {

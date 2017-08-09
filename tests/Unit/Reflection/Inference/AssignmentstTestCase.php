@@ -3,11 +3,11 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Reflection\Inference;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Type;
-use Phpactor\WorseReflection\Reflection\Inference\Assignments;
-use Phpactor\WorseReflection\Reflection\Inference\Value;
-use Phpactor\WorseReflection\Reflection\Inference\Variable;
-use Phpactor\WorseReflection\Offset;
+use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Assignments;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
+use Phpactor\WorseReflection\Core\Offset;
 
 abstract class AssignmentstTestCase extends TestCase
 {

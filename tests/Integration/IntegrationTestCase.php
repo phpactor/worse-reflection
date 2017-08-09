@@ -2,9 +2,9 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration;
 
-use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\SourceCode;
-use Phpactor\WorseReflection\SourceCodeLocator\StringSourceLocator;
+use Phpactor\WorseReflection\Core\Reflector;
+use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;

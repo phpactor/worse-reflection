@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Reflection\Formatted;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Docblock;
+use Phpactor\WorseReflection\Core\Docblock;
 
 class DocblockTest extends TestCase
 {

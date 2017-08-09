@@ -3,11 +3,11 @@
 namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\ClassName;
-use Phpactor\WorseReflection\Reflection\ReflectionMethod;
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflector;
 use Phpactor\WorseReflection\Tests\Benchmarks\Examples\MethodClass;
-use Phpactor\WorseReflection\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 
 /**
  * @Iterations(10)

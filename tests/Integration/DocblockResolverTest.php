@@ -2,8 +2,8 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration;
 
-use Phpactor\WorseReflection\DocblockResolver;
-use Phpactor\WorseReflection\Type;
+use Phpactor\WorseReflection\Core\DocblockResolver;
+use Phpactor\WorseReflection\Core\Type;
 
 class DocblockResolverTest extends IntegrationTestCase
 {

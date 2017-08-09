@@ -3,9 +3,9 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Reflection\Collection;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Reflection\Collection\ReflectionClassCollection;
-use Phpactor\WorseReflection\ServiceLocator;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Core\ServiceLocator;
 
 class ReflectionClassCollectionTest extends TestCase
 {
