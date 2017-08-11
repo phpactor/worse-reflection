@@ -299,6 +299,25 @@ EOT
                     $this->assertEquals('foobar', $class->properties()->first()->name());
                 },
             ],
+            'If it extends an interface, then ignore' => [
+                <<<'EOT'
+<?php
+
+interface SomeInterface
+{
+}
+
+class Class2 extends SomeInterface
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(0, $class->methods()->count());
+                },
+            ],
         ];
     }
 }
