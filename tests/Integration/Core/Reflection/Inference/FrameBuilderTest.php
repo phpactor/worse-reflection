@@ -25,7 +25,7 @@ class FrameBuilderTest extends IntegrationTestCase
     public function provideForMethod()
     {
         return [
-            'It returns this and self' => [
+            'It returns this' => [
                 <<<'EOT'
 <?php
 
@@ -43,32 +43,7 @@ class Foobar
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertCount(1, $frame->locals()->byName('self'));
                 $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->value()->type());
-            }],
-            'It returns type for parent' => [
-                <<<'EOT'
-<?php
-
-namespace Foobar\Barfoo;
-
-use Acme\Factory;
-
-class Foobar extends Barfoo
-{
-    public function hello()
-    {
-    }
-}
-
-class Barfoo {}
-EOT
-            , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('parent'));
-                $this->assertEquals(
-                    Type::fromString('Foobar\Barfoo\Barfoo'),
-                    $frame->locals()->byName('parent')->first()->value()->type()
-                );
             }],
             'It returns method arguments' => [
                 <<<'EOT'
@@ -88,7 +63,6 @@ class Foobar
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertCount(1, $frame->locals()->byName('self'));
                 $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->value()->type());
             }],
             'It registers string assignments' => [
@@ -144,24 +118,6 @@ class Foobar
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
                 $vars = $frame->locals()->byName('$this');
-                $this->assertCount(1, $vars);
-                $value = $vars->first()->value();
-                $this->assertEquals('Foobar', (string) $value->type());
-            }],
-            'It returns type for self' => [
-                <<<'EOT'
-<?php
-
-class Foobar
-{
-    public function hello(World $world)
-    {
-    }
-}
-
-EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('self');
                 $this->assertCount(1, $vars);
                 $value = $vars->first()->value();
                 $this->assertEquals('Foobar', (string) $value->type());
