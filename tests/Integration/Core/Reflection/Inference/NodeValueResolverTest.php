@@ -520,6 +520,36 @@ EOT
                     )
                 ], 18, Value::fromTypeAndValue(Type::int(), 777)
             ],
+            'It returns type for self' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function foobar(Barfoo $barfoo = 'test')
+    {
+        self::
+    }
+}
+EOT
+                , [], 90, Value::fromType(Type::fromString('Foobar'))
+            ],
+            'It returns type for parent' => [
+                <<<'EOT'
+<?php
+
+class ParentClass {}
+
+class Foobar extends ParentClass
+{
+    public function foobar(Barfoo $barfoo = 'test')
+    {
+        parent::
+    }
+}
+EOT
+                , [], 134, Value::fromType(Type::fromString('ParentClass'))
+            ],
         ];
     }
 

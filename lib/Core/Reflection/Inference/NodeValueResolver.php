@@ -183,6 +183,24 @@ class NodeValueResolver
             return Type::fromString($class->getNamespacedName());
         }
 
+        if ($name == 'parent') {
+            /** @var $class ClassDeclaration */
+            $class = $node->getFirstAncestor(ClassDeclaration::class);
+
+            if (null === $class) {
+                $this->logger->warning('"parent" keyword used outside of class scope');
+                return Type::unknown();
+            }
+
+            if (null === $class->classBaseClause) {
+                $this->logger->warning('"parent" keyword used but class does not extend anything');
+                return Type::unknown();
+            }
+            
+
+            return Type::fromString($class->classBaseClause->baseClass->getNamespacedName());
+        }
+
         $imports = $node->getImportTablesForCurrentScope();
         $classImports = $imports[0];
 
