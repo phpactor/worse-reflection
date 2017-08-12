@@ -203,7 +203,7 @@ class NodeValueResolver
             }
             
 
-            return Type::fromString($class->classBaseClause->baseClass->getNamespacedName());
+            return Type::fromString($class->classBaseClause->baseClass->getResolvedName());
         }
 
         $imports = $node->getImportTablesForCurrentScope();
