@@ -25,6 +25,7 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
+use Microsoft\PhpParser\Node\Expression\TernaryExpression;
 
 class NodeValueResolver
 {
@@ -60,7 +61,7 @@ class NodeValueResolver
         return $this->_resolveNode($frame, $node);
     }
 
-    private function _resolveNode(Frame $frame, Node $node)
+    private function _resolveNode(Frame $frame, Node $node): Value
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
         if ($node instanceof QualifiedName) {
@@ -118,6 +119,10 @@ class NodeValueResolver
 
         if ($node instanceof ArgumentExpression) {
             return $this->_resolveNode($frame, $node->expression);
+        }
+
+        if ($node instanceof TernaryExpression) {
+            return $this->resolveTernaryExpression($frame, $node);
         }
 
         $this->logger->warning(sprintf(
@@ -334,7 +339,7 @@ class NodeValueResolver
 
     private function resolveObjectCreationExpression(Frame $frame, $node)
     {
-        if (!$node->classTypeDesignator instanceof Node) {
+        if (false === $node->classTypeDesignator instanceof Node) {
             $this->logger->warning(sprintf('Could not create object from "%s"', get_class($node)));
             return Value::none();
         }
@@ -342,6 +347,26 @@ class NodeValueResolver
         return $this->_resolveNode($frame, $node->classTypeDesignator);
     }
 
+    private function resolveTernaryExpression(Frame $frame, TernaryExpression $node)
+    {
+        // assume true
+        if ($node->ifExpression) {
+            $ifValue = $this->_resolveNode($frame, $node->ifExpression);
+
+            if ($ifValue->type()->isDefined()) {
+                return $ifValue;
+            }
+        }
+
+        // if expression was not defined, fallback to condition
+        $conditionValue = $this->_resolveNode($frame, $node->condition);
+
+        if ($conditionValue->type()->isDefined()) {
+            return $conditionValue;
+        }
+
+        return Value::none();
+    }
 
     private function _valueFromMemberAccess(Type $parent, Node $node)
     {

@@ -550,6 +550,30 @@ class Foobar extends ParentClass
 EOT
                 , [], 134, Value::fromType(Type::fromString('ParentClass'))
             ],
+            'It assumes true for ternary expressions' => [
+                <<<'EOT'
+<?php
+
+$barfoo ? 'foobar' : 'barfoo';
+EOT
+                , [], 16, Value::fromTypeAndValue(Type::string(), 'foobar')
+            ],
+            'It uses condition value if ternery "if" is empty' => [
+                <<<'EOT'
+<?php
+
+'string' ?: new \stdClass();
+EOT
+                , [], 17, Value::fromTypeAndValue(Type::string(), 'string')
+            ],
+            'It returns unknown for ternary expressions with unknown condition values' => [
+                <<<'EOT'
+<?php
+
+$barfoo ?: new \stdClass();
+EOT
+                , [], 16, Value::fromType(Type::unknown())
+            ],
         ];
     }
 
