@@ -27,12 +27,33 @@ use this one.
 
 ```php
 $reflector = new Reflector(new StringSourceLocator(SourceCode::fromString('<?php ...')));
+
 $class = $reflector->reflectClass('Foobar');
-$class->methods()->get('foobar')->visiblity() == Visibility::public();
+
+$class->methods()->get('foobar')->visiblity()    == Visibility::public();
 $class->properties()->get('barbar')->visiblity() == Visibility::public();
 
 /** @var ReflectionMethod */
 foreach ($class->methods() as $method) {
-    echo $method->name();
+    echo $method->name();                        // methodName
+    echo $method->returnType()->short();         // Foobar
+    echo (string) $method->returnType();         // This\Is\Foobar
+    echo (string) $method->inferredReturnType(); // from docblock if it exists
+
+    foreach ($method->parameters() as $parameter) {
+        $parameter->name();                      // paramName
+        (string) $parameter->inferredType();     // Fully\Qualified\ParamType
+    }
+
+}
+
+foreach ($class->traits() as $trait) {
+    // ...
+}
+
+foreach ($class->interfaes() as $interface) {
+    // ...
 }
 ```
+
+See tests for more examples...
