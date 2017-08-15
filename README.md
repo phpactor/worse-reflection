@@ -10,8 +10,9 @@ This library aims to provide a light class-based AST based "reflection" library.
 It is influenced by [BetterReflection](https://github.com/Roave/BetterReflection), diffrerences are as follows:
 
 - Can reflect types at offsets.
+- Can reflect frames (i.e. all variables in a method).
 - Does not aim to implement built-in PHP reflection API.
-- Focuses on class reflection.
+- Only reflects classes and similar, not functions.
 - Uses the amazing [Tolerant Parser](https://github.com/Microsoft/tolerant-php-parser).
 - Uses the PHPStorm stubs to provide reflections of internal classes.
 
