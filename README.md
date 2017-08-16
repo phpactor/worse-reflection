@@ -55,6 +55,21 @@ foreach ($class->traits() as $trait) {
 foreach ($class->interfaes() as $interface) {
     // ...
 }
+
+foreach ($class->method('foobar')->frame() as $variable) {
+    $variable->offset()->asInt(); // byte offset
+    $variable->type();            // variable type (if available )
+    $variable->value();           // variable value (if available)
+}
+
+$offset = $reflection->reflectOffset(
+    SourceCode::fromString('...'), 
+    Offset::fromInt(1234)
+);
+
+$offset->value()->type();    // type at offset (if available)
+$offset->value()->value();   // value (e.g. 1234)
+$offset->frame();            // return frame
 ```
 
 See tests for more examples...
