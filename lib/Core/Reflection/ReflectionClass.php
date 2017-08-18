@@ -180,4 +180,17 @@ class ReflectionClass extends AbstractReflectionClass
     {
         return ClassName::fromString((string) $this->node()->getNamespacedName());
     }
+
+    public function isInstanceOf(ClassName $className): bool
+    {
+        if ($className == $this->name()) {
+            return true;
+        }
+
+        if ($this->parent()) {
+            return $this->parent()->isInstanceOf($className);
+        }
+
+        return $this->interfaces()->has((string) $className);
+    }
 }
