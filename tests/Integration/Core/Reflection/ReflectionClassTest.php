@@ -299,6 +299,7 @@ EOT
                     $this->assertEquals('foobar', $class->properties()->first()->name());
                 },
             ],
+
             'If it extends an interface, then ignore' => [
                 <<<'EOT'
 <?php
@@ -316,6 +317,78 @@ EOT
                 'Class2',
                 function ($class) {
                     $this->assertEquals(0, $class->methods()->count());
+                },
+            ],
+
+            'isInstanceOf returns false when it is not an instance of' => [
+                <<<'EOT'
+<?php
+
+class Class2
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertFalse($class->isInstanceOf(ClassName::fromString('Foobar')));
+                },
+            ],
+
+            'isInstanceOf returns true for itself' => [
+                <<<'EOT'
+<?php
+
+class Class2
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertTrue($class->isInstanceOf(ClassName::fromString('Class2')));
+                },
+            ],
+
+            'isInstanceOf returns true when it is not an instance of an interface' => [
+                <<<'EOT'
+<?php
+
+interface SomeInterface
+{
+}
+
+class Class2 implements SomeInterface
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertTrue($class->isInstanceOf(ClassName::fromString('SomeInterface')));
+                },
+            ],
+
+            'isInstanceOf returns true for a parent class' => [
+                <<<'EOT'
+<?php
+
+class SomeParent
+{
+}
+
+class Class2 extends SomeParent
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertTrue($class->isInstanceOf(ClassName::fromString('SomeParent')));
                 },
             ],
         ];
