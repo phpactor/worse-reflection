@@ -3,8 +3,9 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
-final class Value
+final class SymbolInformation
 {
     /**
      * @var mixed
@@ -22,7 +23,7 @@ final class Value
         $this->value = $value;
     }
 
-    public static function fromTypeAndValue(Type $type, $value): Value
+    public static function fromTypeAndValue(Type $type, $value): SymbolInformation
     {
         return new self($type, $value);
     }

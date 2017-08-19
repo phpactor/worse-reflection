@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 
 final class ReflectionOffset
@@ -16,7 +16,7 @@ final class ReflectionOffset
      */
     private $value;
 
-    private function __construct(Frame $frame, Value $value)
+    private function __construct(Frame $frame, SymbolInformation $value)
     {
         $this->frame = $frame;
         $this->value = $value;
@@ -32,7 +32,17 @@ final class ReflectionOffset
         return $this->frame;
     }
 
-    public function value(): Value
+    public function symbol(): Symbol
+    {
+        return $this->value;
+    }
+
+    public function type(): Type
+    {
+        return $this->type;
+    }
+
+    public function value(): SymbolInformation
     {
         return $this->value;
     }

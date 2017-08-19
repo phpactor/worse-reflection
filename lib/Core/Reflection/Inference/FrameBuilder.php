@@ -14,6 +14,7 @@ use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Logger;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
 final class FrameBuilder
 {
@@ -130,7 +131,7 @@ final class FrameBuilder
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->getStart()),
             '$this',
-            Value::fromType($classType)
+            SymbolInformation::fromType($classType)
         ));
 
         if (null === $node->parameters) {
@@ -144,7 +145,7 @@ final class FrameBuilder
                 Variable::fromOffsetNameAndValue(
                     Offset::fromInt($parameterNode->getStart()),
                     $parameterName,
-                    Value::fromTypeAndValue(
+                    SymbolInformation::fromTypeAndValue(
                         $value->type(),
                         $value->value()
                     )
@@ -161,7 +162,7 @@ final class FrameBuilder
             $frame->locals()->add(Variable::fromOffsetNameAndValue(
                 Offset::fromInt($node->getStart()),
                 '$' . $matches[1],
-                Value::fromType(
+                SymbolInformation::fromType(
                     $this->valueResolver->resolveQualifiedName($node, $matches[2])
                 )
             ));

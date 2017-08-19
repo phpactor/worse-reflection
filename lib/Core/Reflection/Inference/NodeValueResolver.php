@@ -26,6 +26,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
 class NodeValueResolver
 {
@@ -51,7 +52,7 @@ class NodeValueResolver
         $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger);
     }
 
-    public function resolveNode(Frame $frame, Node $node): Value
+    public function resolveNode(Frame $frame, Node $node): SymbolInformation
     {
         // jump to the container for SubscriptExpression (array access)
         if ($node->getParent() instanceof SubscriptExpression) {
@@ -61,11 +62,11 @@ class NodeValueResolver
         return $this->_resolveNode($frame, $node);
     }
 
-    private function _resolveNode(Frame $frame, Node $node): Value
+    private function _resolveNode(Frame $frame, Node $node): SymbolInformation
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
         if ($node instanceof QualifiedName) {
-            return Value::fromType($this->resolveQualifiedName($node));
+            return SymbolInformation::fromType($this->resolveQualifiedName($node));
         }
 
         if ($node instanceof Parameter) {
@@ -89,7 +90,7 @@ class NodeValueResolver
         }
 
         if ($node instanceof ClassDeclaration || $node instanceof InterfaceDeclaration) {
-            return Value::fromType(Type::fromString($node->getNamespacedName()));
+            return SymbolInformation::fromType(Type::fromString($node->getNamespacedName()));
         }
 
         if ($node instanceof ObjectCreationExpression) {
@@ -102,7 +103,7 @@ class NodeValueResolver
         }
 
         if ($node instanceof StringLiteral) {
-            return Value::fromTypeAndValue(Type::string(), (string) $node->getStringContentsText());
+            return SymbolInformation::fromTypeAndValue(Type::string(), (string) $node->getStringContentsText());
         }
 
         if ($node instanceof NumericLiteral) {
@@ -131,7 +132,7 @@ class NodeValueResolver
             $node->getText()
         ));
 
-        return Value::none();
+        return SymbolInformation::none();
     }
 
     private function resolveVariable(Frame $frame, Variable $node)
@@ -141,26 +142,26 @@ class NodeValueResolver
         $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($name);
 
         if (0 === $variables->count()) {
-            return Value::none();
+            return SymbolInformation::none();
         }
 
         return $variables->first()->value();
     }
 
-    private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): Value
+    private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation
     {
         $parent = $this->_resolveNode($frame, $node->dereferencableExpression);
 
         return $this->_valueFromMemberAccess($parent->type(), $node);
     }
 
-    private function resolveCallExpression(Frame $frame, CallExpression $node): Value
+    private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolInformation
     {
         $resolvableNode = $node->callableExpression;
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    private function resolveMemberType(Value $parent, Node $node): Value
+    private function resolveMemberType(SymbolInformation $parent, Node $node): SymbolInformation
     {
         $memberNode = $node instanceof CallExpression ? $node->callableExpression : $node;
         $memberName = $memberNode->memberName->getText($node->getFileContents());
@@ -168,10 +169,10 @@ class NodeValueResolver
         if ($node instanceof MemberAccessExpression) {
             $type = $this->propertyType($parent->type(), $memberName);
 
-            return Value::fromType($type);
+            return SymbolInformation::fromType($type);
         }
 
-        return Value::fromType($this->memberTypeResolver->methodType($parent->type(), $memberName));
+        return SymbolInformation::fromType($this->memberTypeResolver->methodType($parent->type(), $memberName));
     }
 
     public function resolveQualifiedName(Node $node, string $name = null): Type
@@ -239,10 +240,10 @@ class NodeValueResolver
 
         if ($node->default) {
             $value = $this->_resolveNode($frame, $node->default);
-            return Value::fromTypeAndValue($type, $value->value());
+            return SymbolInformation::fromTypeAndValue($type, $value->value());
         }
 
-        return Value::fromType($type);
+        return SymbolInformation::fromType($type);
     }
 
     private function resolveNumericLiteral(Node $node)
@@ -250,27 +251,27 @@ class NodeValueResolver
         // note hack to cast to either an int or a float
         $value = $node->getText() + 0;
 
-        return Value::fromTypeAndValue(is_float($value) ? Type::float() : Type::int(), $value);
+        return SymbolInformation::fromTypeAndValue(is_float($value) ? Type::float() : Type::int(), $value);
     }
 
     private function resolveReservedWord(Node $node)
     {
         if ('null' === $node->getText()) {
-            return Value::fromTypeAndValue(Type::null(), null);
+            return SymbolInformation::fromTypeAndValue(Type::null(), null);
         }
 
         if ('false' === $node->getText()) {
-            return Value::fromTypeAndValue(Type::bool(), false);
+            return SymbolInformation::fromTypeAndValue(Type::bool(), false);
         }
 
         if ('true' === $node->getText()) {
-            return Value::fromTypeAndValue(Type::bool(), true);
+            return SymbolInformation::fromTypeAndValue(Type::bool(), true);
         }
 
         $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
 
         // TODO: Not tested
-        return Value::none();
+        return SymbolInformation::none();
     }
 
     private function resolveArrayCreationExpression(Frame $frame, Node $node)
@@ -278,7 +279,7 @@ class NodeValueResolver
         $array  = [];
 
         if (null === $node->arrayElements) {
-            return Value::fromTypeAndValue(Type::array(), []);
+            return SymbolInformation::fromTypeAndValue(Type::array(), []);
         }
 
         foreach ($node->arrayElements->getElements() as $element) {
@@ -292,14 +293,14 @@ class NodeValueResolver
             $array[] = $value;
         }
 
-        return Value::fromTypeAndValue(Type::array(), $array);
+        return SymbolInformation::fromTypeAndValue(Type::array(), $array);
     }
 
-    private function resolveAccessExpression(Frame $frame, Value $subject, Node $node): Value
+    private function resolveAccessExpression(Frame $frame, SymbolInformation $subject, Node $node): SymbolInformation
     {
         // TODO: test me
-        if ($subject->value() == Value::none()) {
-            return Value::none();
+        if ($subject->value() == SymbolInformation::none()) {
+            return SymbolInformation::none();
         }
 
         if ($subject->type() != Type::array()) {
@@ -307,7 +308,7 @@ class NodeValueResolver
                 'Not resolving access expression of type "%s"',
                 (string) $subject->type()
             ));
-            return Value::none();
+            return SymbolInformation::none();
         }
 
         $subjectValue = $subject->value();
@@ -317,7 +318,7 @@ class NodeValueResolver
 
             if (array_key_exists($string->value(), $subjectValue)) {
                 $value = $subjectValue[$string->value()];
-                return Value::fromTypeAndValue(Type::fromValue($value), $value);
+                return SymbolInformation::fromTypeAndValue(Type::fromValue($value), $value);
             }
         }
 
@@ -326,7 +327,7 @@ class NodeValueResolver
             get_class($node)
         ));
 
-        return Value::none();
+        return SymbolInformation::none();
     }
 
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node)
@@ -341,7 +342,7 @@ class NodeValueResolver
     {
         if (false === $node->classTypeDesignator instanceof Node) {
             $this->logger->warning(sprintf('Could not create object from "%s"', get_class($node)));
-            return Value::none();
+            return SymbolInformation::none();
         }
 
         return $this->_resolveNode($frame, $node->classTypeDesignator);
@@ -365,7 +366,7 @@ class NodeValueResolver
             return $conditionValue;
         }
 
-        return Value::none();
+        return SymbolInformation::none();
     }
 
     private function _valueFromMemberAccess(Type $parent, Node $node)
@@ -388,6 +389,6 @@ class NodeValueResolver
             (string) $parent
         ));
 
-        return Value::fromType($type);
+        return SymbolInformation::fromType($type);
     }
 }
