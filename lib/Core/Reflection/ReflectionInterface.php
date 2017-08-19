@@ -57,6 +57,23 @@ class ReflectionInterface extends AbstractReflectionClass
         return ReflectionInterfaceCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
     }
 
+    public function isInstanceOf(ClassName $className): bool
+    {
+        if ($className == $this->name()) {
+            return true;
+        }
+
+        if ($this->parents()) {
+            foreach ($this->parents() as $parent) {
+                if ($parent->isInstanceOf($className)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function methods(): ReflectionMethodCollection
     {
         $parentMethods = [];
