@@ -32,16 +32,16 @@ class NodeValueResolverTest extends IntegrationTestCase
     /**
      * @dataProvider provideTests
      */
-    public function testResolver(string $source, array $locals, int $offset, SymbolInformation $expectedValue)
+    public function testResolver(string $source, array $locals, int $offset, array $expectedInformation)
     {
         $variables = [];
         foreach ($locals as $name => $type) {
             $variables[] = Variable::fromOffsetNameAndValue(Offset::fromInt(0), $name, SymbolInformation::fromType($type));
         }
 
-        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
+        $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
 
-        $this->assertEquals($expectedValue, $value);
+        $this->assertExpectedInformation($expectedInformation, $symbolInfo);
     }
 
     public function provideTests()
@@ -50,7 +50,7 @@ class NodeValueResolverTest extends IntegrationTestCase
             'It should return none value for whitespace' => [
                 '    ', [],
                 1,
-                SymbolInformation::none()
+                ['type' => '<unknown>'],
             ],
             'It should return the name of a class' => [
                 <<<'EOT'
@@ -59,7 +59,7 @@ class NodeValueResolverTest extends IntegrationTestCase
 $foo = new ClassName();
 
 EOT
-                , [], 23, SymbolInformation::fromType(Type::fromString('ClassName'))
+                , [], 23, ['type' => 'ClassName']
             ],
             'It should return the fully qualified name of a class' => [
                 <<<'EOT'
@@ -70,7 +70,7 @@ namespace Foobar\Barfoo;
 $foo = new ClassName();
 
 EOT
-                , [], 47, SymbolInformation::fromType(Type::fromString('Foobar\Barfoo\ClassName'))
+                , [], 47, ['type' => 'Foobar\Barfoo\ClassName']
             ],
             'It should return the fully qualified name of a with an imported name.' => [
                 <<<'EOT'
@@ -83,7 +83,7 @@ use BarBar\ClassName();
 $foo = new ClassName();
 
 EOT
-                , [], 70, SymbolInformation::fromType(Type::fromString('BarBar\ClassName'))
+                , [], 70, ['type' => 'BarBar\ClassName']
             ],
             'It should return the fully qualified name of a use definition' => [
                 <<<'EOT'
@@ -96,7 +96,7 @@ use BarBar\ClassName();
 $foo = new ClassName();
 
 EOT
-                , [], 46, SymbolInformation::fromType(Type::fromString('BarBar\ClassName'))
+                , [], 46, ['type' => 'BarBar\ClassName']
             ],
             'It returns the FQN of a method parameter' => [
                 <<<'EOT'
@@ -112,7 +112,7 @@ class Foobar
 }
 
 EOT
-                , [], 77, SymbolInformation::fromType(Type::fromString('Foobar\Barfoo\Barfoo'))
+                , [], 77, ['type' => 'Foobar\Barfoo\Barfoo']
             ],
             'It returns the type and value of a scalar method parameter' => [
                 <<<'EOT'
@@ -128,7 +128,7 @@ class Foobar
 }
 
 EOT
-                , [], 77, SymbolInformation::fromTypeAndValue(Type::string(), 'test')
+                , [], 77, ['type' => 'string', 'value' => 'test']
             ],
             'It returns the value of a method parameter with a constant' => [
                 <<<'EOT'
@@ -144,7 +144,7 @@ class Foobar
 }
 
 EOT
-                , [], 77, SymbolInformation::fromTypeAndValue(Type::string(), 'test')
+                , [], 77, ['type' => 'string', 'value' => 'test']
             ],
             'It returns the FQN of a method parameter in an interface' => [
                 <<<'EOT'
@@ -160,7 +160,7 @@ interface Foobar
 }
 
 EOT
-                , [], 102, SymbolInformation::fromType(Type::fromString('Foobar\Barfoo\World'))
+                , [], 102, ['type' => 'Foobar\Barfoo\World']
             ],
             'It returns the FQN of a method parameter in a trait' => [
                 <<<'EOT'
@@ -178,7 +178,7 @@ trait Foobar
 }
 
 EOT
-                , [], 94, SymbolInformation::fromType(Type::fromString('Foobar\Barfoo\World'))
+                , [], 94, ['type' => 'Foobar\Barfoo\World']
             ],
             'It returns the value of a method parameter' => [
                 <<<'EOT'
@@ -194,7 +194,7 @@ class Foobar
 }
 
 EOT
-                , [], 77, SymbolInformation::fromTypeAndValue(Type::string(), 'test')
+                , [], 77, ['type' => 'string', 'value' => 'test']
             ],
             'It returns the FQN of a static call' => [
                 <<<'EOT'
@@ -207,7 +207,7 @@ use Acme\Factory;
 $foo = Factory::create();
 
 EOT
-                , [], 63, SymbolInformation::fromType(Type::fromString('Acme\Factory'))
+                , [], 63, ['type' => 'Acme\Factory']
             ],
             'It returns the type of a static call' => [
                 <<<'EOT'
@@ -222,7 +222,7 @@ class Factory
 
 Factory::create();
 EOT
-                , [], 92, SymbolInformation::fromType(Type::string())
+                , [], 92, ['type' => 'string']
             ],
             'It returns the FQN of a method parameter' => [
                 <<<'EOT'
@@ -240,7 +240,7 @@ class Foobar
 }
 
 EOT
-                , [], 102, SymbolInformation::fromType(Type::fromString('Foobar\Barfoo\World'))
+                , [], 102, ['type' => 'Foobar\Barfoo\World']
             ],
             'It returns the FQN of variable assigned in frame' => [
                 <<<'EOT'
@@ -259,7 +259,7 @@ class Foobar
 }
 
 EOT
-                , [ '$world' => Type::fromString('World') ], 127, SymbolInformation::fromType(Type::fromString('World'))
+                , [ '$world' => Type::fromString('World') ], 127, ['type' => 'World']
             ],
             'It returns type for a call access expression' => [
                 <<<'EOT'
@@ -303,7 +303,7 @@ class Foobar
 EOT
             , [
                 '$this' => Type::fromString('Foobar\Barfoo\Foobar'),
-            ], 384, SymbolInformation::fromType(Type::fromString('Foobar\Barfoo\Type3')),
+            ], 384, ['type' => 'Foobar\Barfoo\Type3'],
             ],
             'It returns type for a property access when class has method of same name' => [
                 <<<'EOT'
@@ -335,7 +335,7 @@ class Foobar
 EOT
             , [
                 '$this' => Type::fromString('Foobar'),
-            ], 263, SymbolInformation::fromType(Type::string()),
+            ], 263, ['type' => 'string'],
             ],
             'It returns type for a new instantiation' => [
                 <<<'EOT'
@@ -343,7 +343,7 @@ EOT
 
 new Bar();
 EOT
-                , [], 9, SymbolInformation::fromType(Type::fromString('Bar')),
+                , [], 9, ['type' => 'Bar'],
             ],
             'It returns type for a new instantiation from a variable' => [
                 <<<'EOT'
@@ -353,7 +353,7 @@ new $foobar;
 EOT
         , [
                 '$foobar' => Type::fromString('Foobar'),
-        ], 9, SymbolInformation::fromType(Type::fromString('Foobar')),
+        ], 9, ['type' => 'Foobar'],
             ],
             'It returns type for string literal' => [
                 <<<'EOT'
@@ -361,7 +361,7 @@ EOT
 
 'bar';
 EOT
-                , [], 9, SymbolInformation::fromTypeAndValue(Type::string(), 'bar')
+                , [], 9, ['type' => 'string', 'value' => 'bar']
             ],
             'It returns type for float' => [
                 <<<'EOT'
@@ -369,7 +369,7 @@ EOT
 
 1.2;
 EOT
-                , [], 9, SymbolInformation::fromTypeAndValue(Type::float(), 1.2),
+                , [], 9, ['type' => 'float', 'value' => 1.2],
             ],
             'It returns type for integer' => [
                 <<<'EOT'
@@ -377,7 +377,7 @@ EOT
 
 12;
 EOT
-                , [], 9, SymbolInformation::fromTypeAndValue(Type::int(), 12),
+                , [], 9, ['type' => 'int', 'value' => 12],
             ],
             'It returns type for bool true' => [
                 <<<'EOT'
@@ -385,7 +385,7 @@ EOT
 
 true;
 EOT
-                , [], 9, SymbolInformation::fromTypeAndValue(Type::bool(), true),
+                , [], 9, ['type' => 'bool', 'value' => true],
             ],
             'It returns type for bool false' => [
                 <<<'EOT'
@@ -393,7 +393,7 @@ EOT
 
 false;
 EOT
-                , [], 9, SymbolInformation::fromTypeAndValue(Type::bool(), false),
+                , [], 9, ['type' => 'bool', 'value' => false],
             ],
             'It returns type for bool false' => [
                 <<<'EOT'
@@ -401,7 +401,7 @@ EOT
 
 null;
 EOT
-                , [], 9, SymbolInformation::fromTypeAndValue(Type::null(), null),
+                , [], 9, ['type' => 'null', 'value' => null],
             ],
             'It returns type and value for an array' => [
                 <<<'EOT'
@@ -409,7 +409,7 @@ EOT
 
 [ 'one' => 'two', 'three' => 3 ];
 EOT
-                , [], 8, SymbolInformation::fromTypeAndValue(Type::array(), [ 'one' => 'two', 'three' => 3]),
+                , [], 8, ['type' => 'array', 'value' => [ 'one' => 'two', 'three' => 3]],
             ],
             'It type for a class constant' => [
                 <<<'EOT'
@@ -422,7 +422,7 @@ class Foobar
     const HELLO = 'string';
 }
 EOT
-                , [], 25, SymbolInformation::fromType(Type::string()),
+                , [], 25, ['type' => 'string'],
             ],
             'Static method access' => [
                 <<<'EOT'
@@ -439,7 +439,7 @@ class Hello
 {
 }
 EOT
-              , [], 86, SymbolInformation::fromType(Type::fromString('Hello')),
+              , [], 86, ['type' => 'Hello'],
           ],
             'Static constant access' => [
                 <<<'EOT'
@@ -452,7 +452,7 @@ class Foobar
     const HELLO_CONSTANT = 'hello';
 }
 EOT
-                , [], 19, SymbolInformation::fromType(Type::string()),
+                , [], 19, ['type' => 'string'],
             ],
         ];
     }
@@ -460,10 +460,10 @@ EOT
     /**
      * @dataProvider provideValues
      */
-    public function testValues(string $source, array $variables, int $offset, SymbolInformation $expectedValue)
+    public function testValues(string $source, array $variables, int $offset, array $expected)
     {
-        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
-        $this->assertEquals($expectedValue, $value);
+        $information = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
+        $this->assertExpectedInformation($expected, $information);
     }
 
     public function provideValues()
@@ -484,7 +484,7 @@ EOT
                             ['test' => 'tock']
                         )
                     )
-                ], 8, SymbolInformation::fromTypeAndValue(Type::string(), 'tock')
+                ], 8, ['type' => 'string', 'value' => 'tock']
             ],
             'It returns type for an array assignment' => [
                 <<<'EOT'
@@ -501,7 +501,7 @@ EOT
                             ['barfoo' => 'tock']
                         )
                     )
-                ], 18, SymbolInformation::fromTypeAndValue(Type::string(), 'tock')
+                ], 18, ['type' => 'string', 'value' => 'tock']
             ],
             'It returns nested array value' => [
                 <<<'EOT'
@@ -518,7 +518,7 @@ EOT
                             ['barfoo' => [ 'tock' => 777 ]]
                         )
                     )
-                ], 18, SymbolInformation::fromTypeAndValue(Type::int(), 777)
+                ], 18, ['type' => 'int', 'value' => 777]
             ],
             'It returns type for self' => [
                 <<<'EOT'
@@ -532,7 +532,7 @@ class Foobar
     }
 }
 EOT
-                , [], 90, SymbolInformation::fromType(Type::fromString('Foobar'))
+                , [], 90, ['type' => 'Foobar']
             ],
             'It returns type for parent' => [
                 <<<'EOT'
@@ -548,7 +548,7 @@ class Foobar extends ParentClass
     }
 }
 EOT
-                , [], 134, SymbolInformation::fromType(Type::fromString('ParentClass'))
+                , [], 134, ['type' => 'ParentClass']
             ],
             'It assumes true for ternary expressions' => [
                 <<<'EOT'
@@ -556,7 +556,7 @@ EOT
 
 $barfoo ? 'foobar' : 'barfoo';
 EOT
-                , [], 16, SymbolInformation::fromTypeAndValue(Type::string(), 'foobar')
+                , [], 16, ['type' => 'string', 'value' => 'foobar']
             ],
             'It uses condition value if ternery "if" is empty' => [
                 <<<'EOT'
@@ -564,7 +564,7 @@ EOT
 
 'string' ?: new \stdClass();
 EOT
-                , [], 17, SymbolInformation::fromTypeAndValue(Type::string(), 'string')
+                , [], 17, ['type' => 'string', 'value' => 'string']
             ],
             'It returns unknown for ternary expressions with unknown condition values' => [
                 <<<'EOT'
@@ -572,7 +572,7 @@ EOT
 
 $barfoo ?: new \stdClass();
 EOT
-                , [], 16, SymbolInformation::fromType(Type::unknown())
+                , [], 16, ['type' => '<unknown>']
             ],
         ];
     }
@@ -697,5 +697,15 @@ EOT
         $typeResolver = new NodeValueResolver($this->createReflector($source), $this->logger);
 
         return $typeResolver->resolveNode($frame, $node);
+    }
+
+    private function assertExpectedInformation(array $expectedInformation, SymbolInformation $information)
+    {
+        foreach ($expectedInformation as $name => $value) {
+            switch ($name) {
+                case 'type':
+                    $this->assertEquals($value, (string) $information->type());
+            }
+        }
     }
 }
