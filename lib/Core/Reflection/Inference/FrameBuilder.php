@@ -104,6 +104,7 @@ final class FrameBuilder
                     'token' => $node->leftOperand->name,
                     'symbol_type' => Symbol::VARIABLE,
                     'type' => $symbolInformation->type(),
+                    'value' => $symbolInformation->value(),
                 ]
             )
         ));
@@ -129,6 +130,7 @@ final class FrameBuilder
                     'member_type' => Symbol::VARIABLE,
                     'token' => $node->leftOperand->memberName,
                     'type' => $symbolInformation->type(),
+                    'value' => $symbolInformation->value(),
                 ]
             )
         ));

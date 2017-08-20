@@ -58,6 +58,12 @@ class SymbolInformationResolver
 
     public function resolveNode(Frame $frame, Node $node): SymbolInformation
     {
+        // jump to the container for SubscriptExpression (array access)
+        // TODO: this is strange and proably wrong.
+        if ($node->getParent() instanceof SubscriptExpression) {
+            return $this->resolveNode($frame, $node->getParent());
+        }
+
         return $this->_resolveNode($frame, $node);
     }
 
@@ -147,7 +153,7 @@ class SymbolInformationResolver
             return SymbolInformation::none();
         }
 
-        return $variables->first()->value();
+        return $variables->first()->symbolInformation();
     }
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation

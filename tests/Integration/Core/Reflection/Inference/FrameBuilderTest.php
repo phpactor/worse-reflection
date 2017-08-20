@@ -43,7 +43,7 @@ class Foobar
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->value()->type());
+                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->symbolInformation()->type());
             }],
             'It returns method arguments' => [
                 <<<'EOT'
@@ -63,7 +63,7 @@ class Foobar
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->value()->type());
+                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->symbolInformation()->type());
             }],
             'It registers string assignments' => [
                 <<<'EOT'
@@ -80,9 +80,9 @@ class Foobar
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$foobar'));
-                $value = $frame->locals()->byName('$foobar')->first()->value();
-                $this->assertEquals('string', (string) $value->type());
-                $this->assertEquals('foobar', (string) $value->value());
+                $symbolInformation = $frame->locals()->byName('$foobar')->first()->symbolInformation();
+                $this->assertEquals('string', (string) $symbolInformation->type());
+                $this->assertEquals('foobar', (string) $symbolInformation->value());
             }],
             'It returns types for reassigned variables' => [
                 <<<'EOT'
@@ -100,9 +100,9 @@ EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
                 $vars = $frame->locals()->byName('$foobar');
                 $this->assertCount(1, $vars);
-                $value = $vars->first()->value();
-                $this->assertEquals('World', (string) $value->type());
-                $this->assertEquals('test', (string) $value->value());
+                $symbolInformation = $vars->first()->symbolInformation();
+                $this->assertEquals('World', (string) $symbolInformation->type());
+                $this->assertEquals('test', (string) $symbolInformation->value());
             }],
             'It returns type for $this' => [
                 <<<'EOT'
@@ -119,8 +119,8 @@ EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
                 $vars = $frame->locals()->byName('$this');
                 $this->assertCount(1, $vars);
-                $value = $vars->first()->value();
-                $this->assertEquals('Foobar', (string) $value->type());
+                $symbolInformation = $vars->first()->symbolInformation();
+                $this->assertEquals('Foobar', (string) $symbolInformation->type());
             }],
             'It tracks assigned properties' => [
                 <<<'EOT'
@@ -137,9 +137,9 @@ EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
                 $vars = $frame->properties()->byName('foobar');
                 $this->assertCount(1, $vars);
-                $value = $vars->first()->value();
-                $this->assertEquals('string', (string) $value->type());
-                $this->assertEquals('foobar', (string) $value->value());
+                $symbolInformation = $vars->first()->symbolInformation();
+                $this->assertEquals('string', (string) $symbolInformation->type());
+                $this->assertEquals('foobar', (string) $symbolInformation->value());
             }],
             'It returns type for a for each member (with a docblock)' => [
                 <<<'EOT'
@@ -159,8 +159,8 @@ EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
                 $vars = $frame->locals()->byName('$foobar');
                 $this->assertCount(1, $vars);
-                $value = $vars->first()->value();
-                $this->assertEquals('Foobar', (string) $value->type());
+                $symbolInformation = $vars->first()->symbolInformation();
+                $this->assertEquals('Foobar', (string) $symbolInformation->type());
             }],
         ];
     }

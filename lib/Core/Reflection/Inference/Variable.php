@@ -3,10 +3,8 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
-/**
- * TODO: This class is now potentially redundant as all of it's information is contained within SymbolInformation
- */
 final class Variable
 {
     /**
@@ -22,23 +20,23 @@ final class Variable
     /**
      * @var mixed
      */
-    private $value;
+    private $symbolInformation;
 
-    private function __construct(string $name, Offset $offset, SymbolInformation $value)
+    private function __construct(string $name, Offset $offset, SymbolInformation $symbolInformation)
     {
         $this->name = $name;
         $this->offset = $offset;
-        $this->value = $value;
+        $this->symbolInformation = $symbolInformation;
     }
 
-    public static function fromOffsetNameAndValue(Offset $offset, string $name, SymbolInformation $value): Variable
+    public static function fromOffsetNameAndValue(Offset $offset, string $name, SymbolInformation $symbolInformation): Variable
     {
-        return new self($name, $offset, $value);
+        return new self($name, $offset, $symbolInformation);
     }
 
     public function __toString()
     {
-        return $this->name;
+        return $this->type;
     }
 
     public function offset(): Offset
@@ -51,8 +49,8 @@ final class Variable
         return $this->name;
     }
 
-    public function value(): SymbolInformation
+    public function symbolInformation(): SymbolInformation
     {
-        return $this->value;
+        return $this->symbolInformation;
     }
 }
