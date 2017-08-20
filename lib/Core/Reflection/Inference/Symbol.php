@@ -76,4 +76,9 @@ final class Symbol
     {
         return $this->name;
     }
+
+    public function position(): Position
+    {
+        return $this->position;
+    }
 }

@@ -58,11 +58,6 @@ class SymbolInformationResolver
 
     public function resolveNode(Frame $frame, Node $node): SymbolInformation
     {
-        // jump to the container for SubscriptExpression (array access)
-        if ($node->getParent() instanceof SubscriptExpression) {
-            return $this->resolveNode($frame, $node->getParent());
-        }
-
         return $this->_resolveNode($frame, $node);
     }
 
