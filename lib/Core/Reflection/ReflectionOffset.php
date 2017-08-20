@@ -11,20 +11,21 @@ final class ReflectionOffset
      * @var Frame
      */
     private $frame;
-    /**
-     * @var Value
-     */
-    private $value;
 
-    private function __construct(Frame $frame, SymbolInformation $value)
+    /**
+     * @var SymbolInformation
+     */
+    private $symbolInformation;
+
+    private function __construct(Frame $frame, SymbolInformation $symbolInformation)
     {
         $this->frame = $frame;
-        $this->value = $value;
+        $this->symbolInformation = $symbolInformation;
     }
 
-    public static function fromFrameAndValue($frame, $value)
+    public static function fromFrameAndValue($frame, $symbolInformation)
     {
-        return new self($frame, $value);
+        return new self($frame, $symbolInformation);
     }
 
     public function frame(): Frame
@@ -34,16 +35,11 @@ final class ReflectionOffset
 
     public function symbol(): Symbol
     {
-        return $this->value;
+        return $this->symbolInformation;
     }
 
-    public function type(): Type
+    public function symbolInformation(): SymbolInformation
     {
-        return $this->type;
-    }
-
-    public function value(): SymbolInformation
-    {
-        return $this->value;
+        return $this->symbolInformation;
     }
 }

@@ -28,7 +28,7 @@ use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
 use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
-class NodeValueResolver
+class SymbolInformationResolver
 {
     /**
      * @var MemberTypeResolver

@@ -15,6 +15,7 @@ use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformationResolver;
 
 final class FrameBuilder
 {
@@ -28,7 +29,7 @@ final class FrameBuilder
      */
     private $valueResolver;
 
-    public function __construct(NodeValueResolver $valueResolver, Logger $logger)
+    public function __construct(SymbolInformationResolver $valueResolver, Logger $logger)
     {
         $this->logger = $logger;
         $this->valueResolver = $valueResolver;

@@ -52,7 +52,7 @@ class ReflectionParameter extends AbstractReflectedNode
         if (null === $this->parameter->default) {
             return DefaultValue::undefined();
         }
-        $value = $this->serviceLocator->nodeValueResolver()->resolveNode(new Frame(), $this->parameter)->value();
+        $value = $this->serviceLocator->symbolInformationResolver()->resolveNode(new Frame(), $this->parameter)->value();
 
         return DefaultValue::fromValue($value);
     }

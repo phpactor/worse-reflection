@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformationResolver;
 use Phpactor\WorseReflection\Core\Reflection\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflector;
@@ -32,15 +32,15 @@ class ServiceLocator
     /**
      * @var NodeValueResolver
      */
-    private $nodeValueResolver;
+    private $symbolInformationResolver;
 
     public function __construct(SourceCodeLocator $sourceLocator, Logger $logger)
     {
         $this->sourceLocator = $sourceLocator;
         $this->logger = $logger;
         $this->reflector = new Reflector($this);
-        $this->nodeValueResolver = new NodeValueResolver($this->reflector, $this->logger);
-        $this->frameBuilder = new FrameBuilder($this->nodeValueResolver, $this->logger);
+        $this->symbolInformationResolver = new SymbolInformationResolver($this->reflector, $this->logger);
+        $this->frameBuilder = new FrameBuilder($this->symbolInformationResolver, $this->logger);
         $this->parser = new Parser();
         $this->docblockResolver = new DocblockResolver();
     }
@@ -60,9 +60,9 @@ class ServiceLocator
         return $this->sourceLocator;
     }
 
-    public function nodeValueResolver(): NodeValueResolver
+    public function symbolInformationResolver(): SymbolInformationResolver
     {
-        return $this->nodeValueResolver;
+        return $this->symbolInformationResolver;
     }
 
     public function frameBuilder(): FrameBuilder

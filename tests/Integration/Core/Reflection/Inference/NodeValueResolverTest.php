@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformationResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
@@ -689,7 +689,7 @@ EOT
         $source = substr($source, 0, $offset) . substr($source, $offset + 2);
 
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
-        $typeResolver = new NodeValueResolver($this->createReflector($source), $this->logger);
+        $typeResolver = new SymbolInformationResolver($this->createReflector($source), $this->logger);
 
         return $typeResolver->resolveNode($frame, $node);
     }
