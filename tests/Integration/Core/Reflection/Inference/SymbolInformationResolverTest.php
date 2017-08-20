@@ -14,7 +14,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Core\Position;
 
-class NodeValueResolverTest extends IntegrationTestCase
+class SymbolInformationResolverTest extends IntegrationTestCase
 {
     /**
      * @var ArrayLogger
@@ -28,6 +28,7 @@ class NodeValueResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
+        // var_dump($this->logger);
     }
 
     /**
@@ -322,7 +323,12 @@ class Foobar
 EOT
             , [
                 '$this' => Type::fromString('Foobar\Barfoo\Foobar'),
-            ], ['type' => 'Foobar\Barfoo\Type3', 'symbol_type' => Symbol::METHOD, 'symbol_name' => 'type3'],
+            ], [
+                'type' => 'Foobar\Barfoo\Type3',
+                'symbol_type' => Symbol::METHOD,
+                'symbol_name' => 'type3',
+                'class_type' => 'Foobar\Barfoo\Type2',
+            ],
             ],
             'It returns type for a property access when class has method of same name' => [
                 <<<'EOT'
@@ -710,6 +716,9 @@ EOT
                     continue;
                 case 'symbol_name':
                     $this->assertEquals($value, $information->symbol()->name());
+                    continue;
+                case 'class_type':
+                    $this->assertEquals($value, (string) $information->classType());
                     continue;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));

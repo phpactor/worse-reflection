@@ -20,7 +20,6 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
-
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
@@ -158,9 +157,9 @@ class SymbolInformationResolver
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation
     {
-        $parent = $this->_resolveNode($frame, $node->dereferencableExpression);
+        $class = $this->_resolveNode($frame, $node->dereferencableExpression);
 
-        return $this->_valueFromMemberAccess($parent->type(), $node);
+        return $this->_valueFromMemberAccess($class->type(), $node);
     }
 
     private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolInformation
@@ -368,7 +367,7 @@ class SymbolInformationResolver
         return SymbolInformation::none();
     }
 
-    private function _valueFromMemberAccess(Type $parent, Node $node)
+    private function _valueFromMemberAccess(Type $classType, Node $node)
     {
         $memberName = $node->memberName->getText($node->getFileContents());
         $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
@@ -377,20 +376,21 @@ class SymbolInformationResolver
             $memberType = 'constant';
         }
 
-        // if the parent is a call expression, then this is a method call
-        $type = $this->memberTypeResolver->{$memberType . 'Type'}($parent, $memberName);
+        // if the classType is a call expression, then this is a method call
+        $type = $this->memberTypeResolver->{$memberType . 'Type'}($classType, $memberName);
 
         $this->logger->debug(sprintf(
             'Resolved type "%s" for %s "%s" of class "%s"',
             (string) $type,
             $memberType,
             $memberName,
-            (string) $parent
+            (string) $classType
         ));
 
         return $this->symbolFactory->information(
             $node,
             [
+                'class_type' => $classType,
                 'type' => $type,
                 'symbol_type' => $memberType,
                 'token' => $node->memberName,

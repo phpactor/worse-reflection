@@ -21,11 +21,17 @@ final class SymbolInformation
      */
     private $symbol;
 
-    private function __construct(Symbol $symbol, Type $type, $value = null)
+    /**
+     * @var Type
+     */
+    private $classType;
+
+    private function __construct(Symbol $symbol, Type $type, $value = null, Type $classType = null)
     {
         $this->type = $type;
         $this->value = $value;
         $this->symbol = $symbol;
+        $this->classType = $classType;
     }
 
     public static function for(Symbol $symbol): SymbolInformation
@@ -56,12 +62,17 @@ final class SymbolInformation
 
     public function withValue($value)
     {
-        return new self($this->symbol, $this->type, $value);
+        return new self($this->symbol, $this->type, $value, $this->classType);
     }
 
-    public function withType($type)
+    public function withClassType($classType)
     {
-        return new self($this->symbol, $type, $this->value);
+        return new self($this->symbol, $this->type, $this->value, $classType);
+    }
+
+    public function withType(Type $type)
+    {
+        return new self($this->symbol, $type, $this->value, $this->classType);
     }
 
     public function type(): Type
@@ -78,4 +89,13 @@ final class SymbolInformation
     {
         return $this->symbol;
     }
+
+    /**
+     * @return Type
+     */
+    public function classType()
+    {
+        return $this->classType;
+    }
 }
+
