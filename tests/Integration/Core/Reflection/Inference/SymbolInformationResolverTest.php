@@ -28,7 +28,7 @@ class SymbolInformationResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-        // var_dump($this->logger);
+        //var_dump($this->logger);
     }
 
     /**
@@ -590,6 +590,20 @@ $barfoo ?:<> new \stdClass();
 EOT
                 , [], ['type' => '<unknown>']
             ],
+
+            'It shows the symbol name for a method declartion' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function me<>thod()
+    {
+    }
+}
+EOT
+                , [], ['symbol_type' => Symbol::METHOD, 'symbol_name' => 'method']
+            ],
         ];
     }
 
@@ -665,6 +679,7 @@ class Hai extends NonExisting
 }
 EOT
         ],
+
         'Static method returns non-existing class' => [
             <<<'EOT'
 <?php

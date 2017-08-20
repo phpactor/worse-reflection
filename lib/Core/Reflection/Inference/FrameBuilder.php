@@ -14,6 +14,7 @@ use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Logger;
+use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 
 final class FrameBuilder
 {
@@ -49,7 +50,7 @@ final class FrameBuilder
 
     public function buildForNode(Node $node)
     {
-        $scopeNode = $node->getFirstAncestor(MethodDeclaration::class, FunctionDeclaration::class, SourceFileNode::class);
+        $scopeNode = $node->getFirstAncestor(MethodDeclaration::class, FunctionDeclaration::class, AnonymousFunctionCreationExpression::class, SourceFileNode::class);
 
         return $this->buildFromNode($scopeNode);
     }

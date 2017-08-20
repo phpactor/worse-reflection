@@ -25,6 +25,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
+use Microsoft\PhpParser\Node\MethodDeclaration;
 
 class SymbolInformationResolver
 {
@@ -132,6 +133,10 @@ class SymbolInformationResolver
 
         if ($node instanceof TernaryExpression) {
             return $this->resolveTernaryExpression($frame, $node);
+        }
+
+        if ($node instanceof MethodDeclaration) {
+            return $this->resolveMethodDeclaration($frame, $node);
         }
 
         $this->logger->warning(sprintf(
@@ -366,6 +371,19 @@ class SymbolInformationResolver
         }
 
         return SymbolInformation::none();
+    }
+
+    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $methodDeclaration)
+    {
+        $classNode = $methodDeclaration->getFirstAncestor(ClassDeclaration::class);
+        $classSymbolInformation = $this->_resolveNode($frame, $classNode);
+        return $this->symbolFactory->information(
+            $methodDeclaration, [
+                'token' => $methodDeclaration->name,
+                'class_type' => $classSymbolInformation->type(),
+                'symbol_type' => Symbol::METHOD,
+            ]
+        );
     }
 
     private function _valueFromMemberAccess(Type $classType, Node $node)

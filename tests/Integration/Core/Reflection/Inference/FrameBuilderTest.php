@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Symbol;
 
 class FrameBuilderTest extends IntegrationTestCase
 {
@@ -44,6 +45,7 @@ EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$this'));
                 $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->symbolInformation()->type());
+                $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('$this')->first()->symbolInformation()->symbol()->symbolType());
             }],
             'It returns method arguments' => [
                 <<<'EOT'
