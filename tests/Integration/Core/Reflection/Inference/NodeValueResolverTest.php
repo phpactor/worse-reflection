@@ -682,7 +682,8 @@ EOT
 
         if (!$offset = strpos($source, '<>')) {
             throw new \InvalidArgumentException(sprintf(
-                'Could not find offset <> in example code: %s', $source
+                'Could not find offset <> in example code: %s',
+                $source
             ));
         }
 
@@ -712,7 +713,7 @@ EOT
                     continue;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));
-            } 
+            }
         }
     }
 }

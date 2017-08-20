@@ -38,4 +38,3 @@ class ClassToFileSourceLocatorTest extends IntegrationTestCase
         $this->locator->locate(ClassName::fromString('asdDSA'));
     }
 }
-
