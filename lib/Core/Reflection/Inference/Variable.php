@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
 use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
 final class Variable
 {

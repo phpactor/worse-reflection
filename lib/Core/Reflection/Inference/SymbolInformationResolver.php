@@ -26,7 +26,6 @@ use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
 class SymbolInformationResolver
 {
@@ -72,7 +71,7 @@ class SymbolInformationResolver
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
         if ($node instanceof QualifiedName) {
-            return $this->symbolFactory->information($node,  [
+            return $this->symbolFactory->information($node, [
                 'type' => $this->resolveQualifiedName($node),
                 'symbol_type' => Symbol::CLASS_,
             ]);
@@ -390,7 +389,8 @@ class SymbolInformationResolver
         ));
 
         return $this->symbolFactory->information(
-            $node, [
+            $node,
+            [
                 'type' => $type,
                 'symbol_type' => $memberType,
                 'token' => $node->memberName,
@@ -398,4 +398,3 @@ class SymbolInformationResolver
         );
     }
 }
-

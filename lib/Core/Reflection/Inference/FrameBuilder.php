@@ -14,8 +14,6 @@ use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Logger;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformationResolver;
 
 final class FrameBuilder
 {

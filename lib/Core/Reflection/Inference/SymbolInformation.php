@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
 final class SymbolInformation
 {
@@ -80,4 +79,3 @@ final class SymbolInformation
         return $this->symbol;
     }
 }
-

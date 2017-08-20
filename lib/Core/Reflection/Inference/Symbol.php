@@ -54,7 +54,8 @@ final class Symbol
         if (false === in_array($symbolType, self::VALID_SYMBOLS)) {
             throw new \InvalidArgumentException(sprintf(
                 'Invalid symbol type "%s", valid symbol names: "%s"',
-                $symbolType, implode('", "', self::VALID_SYMBOLS)
+                $symbolType,
+                implode('", "', self::VALID_SYMBOLS)
             ));
         }
 
@@ -76,4 +77,3 @@ final class Symbol
         return $this->name;
     }
 }
-

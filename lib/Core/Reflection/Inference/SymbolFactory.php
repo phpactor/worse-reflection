@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Position;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 
 class SymbolFactory
 {

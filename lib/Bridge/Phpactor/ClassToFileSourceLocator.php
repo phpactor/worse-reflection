@@ -41,4 +41,3 @@ class ClassToFileSourceLocator implements SourceCodeLocator
         throw new SourceNotFound($className);
     }
 }
-
