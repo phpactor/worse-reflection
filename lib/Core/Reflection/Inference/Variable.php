@@ -4,6 +4,9 @@ namespace Phpactor\WorseReflection\Core\Reflection\Inference;
 
 use Phpactor\WorseReflection\Core\Offset;
 
+/**
+ * TODO: This class is now potentially redundant as all of it's information is contained within SymbolInformation
+ */
 final class Variable
 {
     /**
@@ -35,7 +38,7 @@ final class Variable
 
     public function __toString()
     {
-        return $this->type;
+        return $this->name;
     }
 
     public function offset(): Offset
