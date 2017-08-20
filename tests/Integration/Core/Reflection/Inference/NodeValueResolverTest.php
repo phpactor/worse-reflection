@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\Inference\LocalAssignments;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Offset;
 
@@ -59,7 +60,7 @@ class NodeValueResolverTest extends IntegrationTestCase
 $foo = new ClassName();
 
 EOT
-                , [], 23, ['type' => 'ClassName']
+                , [], 23, ['type' => 'ClassName', 'symbol_type' => Symbol::CLASS_]
             ],
             'It should return the fully qualified name of a class' => [
                 <<<'EOT'
@@ -98,7 +99,7 @@ $foo = new ClassName();
 EOT
                 , [], 46, ['type' => 'BarBar\ClassName']
             ],
-            'It returns the FQN of a method parameter' => [
+            'It returns the FQN of a method parameter with a default' => [
                 <<<'EOT'
 <?php
 
@@ -112,7 +113,7 @@ class Foobar
 }
 
 EOT
-                , [], 77, ['type' => 'Foobar\Barfoo\Barfoo']
+                , [], 83, ['type' => 'Foobar\Barfoo\Barfoo', 'symbol_type' => Symbol::VARIABLE]
             ],
             'It returns the type and value of a scalar method parameter' => [
                 <<<'EOT'
@@ -705,7 +706,16 @@ EOT
             switch ($name) {
                 case 'type':
                     $this->assertEquals($value, (string) $information->type());
-            }
+                    continue;
+                case 'value':
+                    $this->assertEquals($value, $information->value());
+                    continue;
+                case 'symbol_type':
+                    $this->assertEquals($value, $information->symbol()->symbolType());
+                    continue;
+                default:
+                    throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));
+            } 
         }
     }
 }

@@ -28,6 +28,7 @@ class SymbolFactory
             'symbol_type' => null,
             'token' => null,
             'type' => null,
+            'value' => null,
         ], $options);
 
         $symbol = $this->symbol($node, [
@@ -39,6 +40,10 @@ class SymbolFactory
 
         if ($options['type']) {
             $information = $information->withType($options['type']);
+        }
+
+        if ($options['value']) {
+            $information = $information->withValue($options['value']);
         }
 
         return $information;

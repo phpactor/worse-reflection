@@ -51,7 +51,7 @@ final class SymbolInformation
 
     public function withValue($value)
     {
-        return self::fromTypeAndValue($this->symbol, $this->type, $value);
+        return new self($this->symbol, $this->type, $value);
     }
 
     public function withType($type)
@@ -67,6 +67,11 @@ final class SymbolInformation
     public function value()
     {
         return $this->value;
+    }
+
+    public function symbol(): Symbol
+    {
+        return $this->symbol;
     }
 }
 

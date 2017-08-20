@@ -7,9 +7,11 @@ use Phpactor\WorseReflection\Core\Position;
 final class Symbol
 {
     const CLASS_ = 'class';
+    const VARIABLE = 'variable';
 
     const VALID_SYMBOLS = [
         self::CLASS_,
+        self::VARIABLE,
     ];
 
     /**
@@ -54,6 +56,11 @@ final class Symbol
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function symbolType(): string
+    {
+        return $this->symbolType;
     }
 }
 

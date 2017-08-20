@@ -247,12 +247,16 @@ class NodeValueResolver
             $type = Type::fromString($typeDeclaration->getText($node->getFileContents()));
         }
 
+        $value = null;
         if ($node->default) {
-            $value = $this->_resolveNode($frame, $node->default);
-            return SymbolInformation::fromTypeAndValue($type, $value->value());
+            $value = $this->_resolveNode($frame, $node->default)->value();
         }
 
-        return SymbolInformation::fromType($type);
+        return $this->symbolFactory->information($node, [
+            'type' => $type,
+            'value' => $value,
+            'symbol_type' => Symbol::VARIABLE,
+        ]);
     }
 
     private function resolveNumericLiteral(Node $node)
