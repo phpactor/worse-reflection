@@ -34,11 +34,17 @@ final class SymbolInformation
         return new self($symbol, Type::unknown());
     }
 
+    /**
+     * @deprecated
+     */
     public static function fromTypeAndValue(Type $type, $value): SymbolInformation
     {
         return new self(Symbol::unknown(), $type, $value);
     }
 
+    /**
+     * @deprecated
+     */
     public static function fromType(Type $type)
     {
         return new self(Symbol::unknown(), $type);

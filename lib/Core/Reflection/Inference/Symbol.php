@@ -11,10 +11,12 @@ final class Symbol
     const METHOD = 'method';
     const PROPERTY = 'property';
     const CONSTANT = 'constant';
+    const UNKNOWN = '<unknown>';
 
     const VALID_SYMBOLS = [
         self::CLASS_,
         self::VARIABLE,
+        self::UNKNOWN,
         self::PROPERTY,
         self::CONSTANT,
         self::METHOD,

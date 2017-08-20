@@ -12,7 +12,7 @@ class SymbolFactory
     public function symbol(Node $node, array $options): Symbol
     {
         $options = array_merge([
-            'symbol_type' => null,
+            'symbol_type' => Symbol::UNKNOWN,
             'token' => null,
         ], $options);
 
@@ -25,7 +25,7 @@ class SymbolFactory
     public function information(Node $node, array $options): SymbolInformation
     {
         $options = array_merge([
-            'symbol_type' => null,
+            'symbol_type' => Symbol::UNKNOWN,
             'token' => null,
             'type' => null,
             'value' => null,

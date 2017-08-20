@@ -99,7 +99,7 @@ class NodeValueResolver
         }
 
         if ($node instanceof ClassDeclaration || $node instanceof InterfaceDeclaration) {
-            return SymbolInformation::fromType(Type::fromString($node->getNamespacedName()));
+            return $this->symbolFactory->information($node, [ 'type' => Type::fromString($node->getNamespacedName()) ]);
         }
 
         if ($node instanceof ObjectCreationExpression) {
@@ -112,7 +112,7 @@ class NodeValueResolver
         }
 
         if ($node instanceof StringLiteral) {
-            return SymbolInformation::fromTypeAndValue(Type::string(), (string) $node->getStringContentsText());
+            return $this->symbolFactory->information($node, [ 'type' => Type::string(), 'value' => (string) $node->getStringContentsText()]);
         }
 
         if ($node instanceof NumericLiteral) {
@@ -251,21 +251,21 @@ class NodeValueResolver
         // note hack to cast to either an int or a float
         $value = $node->getText() + 0;
 
-        return SymbolInformation::fromTypeAndValue(is_float($value) ? Type::float() : Type::int(), $value);
+        return $this->symbolFactory->information($node, [ 'type' => is_float($value) ? Type::float() : Type::int(), 'value' => $value ]);
     }
 
     private function resolveReservedWord(Node $node)
     {
         if ('null' === $node->getText()) {
-            return SymbolInformation::fromTypeAndValue(Type::null(), null);
+            return $this->symbolFactory->information($node, [ 'type' => Type::null(), 'value' => null ]);
         }
 
         if ('false' === $node->getText()) {
-            return SymbolInformation::fromTypeAndValue(Type::bool(), false);
+            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => false ]);
         }
 
         if ('true' === $node->getText()) {
-            return SymbolInformation::fromTypeAndValue(Type::bool(), true);
+            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => true ]);
         }
 
         $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
@@ -279,7 +279,7 @@ class NodeValueResolver
         $array  = [];
 
         if (null === $node->arrayElements) {
-            return SymbolInformation::fromTypeAndValue(Type::array(), []);
+            return $this->symbolFactory->information($node, [ 'type' => Type::array(), 'value' => [] ]);
         }
 
         foreach ($node->arrayElements->getElements() as $element) {
@@ -293,7 +293,7 @@ class NodeValueResolver
             $array[] = $value;
         }
 
-        return SymbolInformation::fromTypeAndValue(Type::array(), $array);
+        return $this->symbolFactory->information($node, [ 'type' => Type::array(), 'value' => $array ]);
     }
 
     private function resolveAccessExpression(Frame $frame, SymbolInformation $subject, Node $node): SymbolInformation
@@ -318,7 +318,7 @@ class NodeValueResolver
 
             if (array_key_exists($string->value(), $subjectValue)) {
                 $value = $subjectValue[$string->value()];
-                return SymbolInformation::fromTypeAndValue(Type::fromValue($value), $value);
+                return $this->symbolFactory->information($node, [ 'type' => Type::fromValue($value), 'value' => $value ]);
             }
         }
 
