@@ -26,7 +26,7 @@ abstract class AssignmentstTestCase extends TestCase
             SymbolInformation::fromTypeAndValue(Type::fromString('Foobar'), 'goodbye')
         ));
 
-        $this->assertEquals($value, $assignments->byName('hello')->first()->value());
+        $this->assertEquals($value, $assignments->byName('hello')->first()->symbolInformation());
     }
 
     public function testByName()

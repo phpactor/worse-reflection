@@ -14,6 +14,7 @@ use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Logger;
+use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 
 final class FrameBuilder
 {
@@ -25,12 +26,18 @@ final class FrameBuilder
     /**
      * @var NodeValueResolver
      */
-    private $valueResolver;
+    private $symbolInformationResolver;
 
-    public function __construct(SymbolInformationResolver $valueResolver, Logger $logger)
+    /**
+     * @var SymbolFactory
+     */
+    private $symbolFactory;
+
+    public function __construct(SymbolInformationResolver $symbolInformationResolver, Logger $logger)
     {
         $this->logger = $logger;
-        $this->valueResolver = $valueResolver;
+        $this->symbolInformationResolver = $symbolInformationResolver;
+        $this->symbolFactory = new SymbolFactory();
     }
 
     public function buildFromNode(Node $node)
@@ -43,7 +50,7 @@ final class FrameBuilder
 
     public function buildForNode(Node $node)
     {
-        $scopeNode = $node->getFirstAncestor(MethodDeclaration::class, FunctionDeclaration::class, SourceFileNode::class);
+        $scopeNode = $node->getFirstAncestor(MethodDeclaration::class, FunctionDeclaration::class, AnonymousFunctionCreationExpression::class, SourceFileNode::class);
 
         return $this->buildFromNode($scopeNode);
     }
@@ -88,12 +95,19 @@ final class FrameBuilder
     private function processParserVariable(Frame $frame, AssignmentExpression $node)
     {
         $name = $node->leftOperand->name->getText($node->getFileContents());
-        $value = $this->valueResolver->resolveNode($frame, $node->rightOperand);
+        $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
 
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
             $name,
-            $value
+            $this->symbolFactory->information(
+                $node, [
+                    'token' => $node->leftOperand->name,
+                    'symbol_type' => Symbol::VARIABLE,
+                    'type' => $symbolInformation->type(),
+                    'value' => $symbolInformation->value(),
+                ]
+            )
         ));
     }
 
@@ -107,12 +121,19 @@ final class FrameBuilder
         }
 
         $memberName = $node->leftOperand->memberName->getText($node->getFileContents());
-        $value = $this->valueResolver->resolveNode($frame, $node->rightOperand);
+        $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
 
         $frame->properties()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
             $memberName,
-            $value
+            $this->symbolFactory->information(
+                $node, [
+                    'member_type' => Symbol::VARIABLE,
+                    'token' => $node->leftOperand->memberName,
+                    'type' => $symbolInformation->type(),
+                    'value' => $symbolInformation->value(),
+                ]
+            )
         ));
     }
 
@@ -124,13 +145,18 @@ final class FrameBuilder
             InterfaceDeclaration::class,
             TraitDeclaration::class
         );
-        $classType = $this->valueResolver->resolveNode($frame, $classNode)->type();
+        $classType = $this->symbolInformationResolver->resolveNode($frame, $classNode)->type();
 
         // add this and self
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->getStart()),
             '$this',
-            SymbolInformation::fromType($classType)
+            $this->symbolFactory->information(
+                $node, [
+                    'type' => $classType,
+                    'symbol_type' => Symbol::VARIABLE,
+                ]
+            )
         ));
 
         if (null === $node->parameters) {
@@ -139,14 +165,17 @@ final class FrameBuilder
 
         foreach ($node->parameters->getElements() as $parameterNode) {
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
-            $value = $this->valueResolver->resolveNode($frame, $parameterNode);
+            $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $parameterNode);
             $frame->locals()->add(
                 Variable::fromOffsetNameAndValue(
                     Offset::fromInt($parameterNode->getStart()),
                     $parameterName,
-                    SymbolInformation::fromTypeAndValue(
-                        $value->type(),
-                        $value->value()
+                    $this->symbolFactory->information(
+                        $parameterNode, [
+                            'symbol_type' => Symbol::VARIABLE,
+                            'type' => $symbolInformation->type(),
+                            'value' => $symbolInformation->value(),
+                        ]
                     )
                 )
             );
@@ -161,8 +190,11 @@ final class FrameBuilder
             $frame->locals()->add(Variable::fromOffsetNameAndValue(
                 Offset::fromInt($node->getStart()),
                 '$' . $matches[1],
-                SymbolInformation::fromType(
-                    $this->valueResolver->resolveQualifiedName($node, $matches[2])
+                $this->symbolFactory->information(
+                    $node, [
+                        'symbol_type' => Symbol::VARIABLE,
+                        'type' => $this->symbolInformationResolver->resolveQualifiedName($node, $matches[2])
+                    ]
                 )
             ));
         }

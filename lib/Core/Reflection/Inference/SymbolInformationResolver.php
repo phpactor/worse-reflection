@@ -25,6 +25,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
+use Microsoft\PhpParser\Node\MethodDeclaration;
 
 class SymbolInformationResolver
 {
@@ -59,6 +60,7 @@ class SymbolInformationResolver
     public function resolveNode(Frame $frame, Node $node): SymbolInformation
     {
         // jump to the container for SubscriptExpression (array access)
+        // TODO: this is strange and proably wrong.
         if ($node->getParent() instanceof SubscriptExpression) {
             return $this->resolveNode($frame, $node->getParent());
         }
@@ -133,6 +135,10 @@ class SymbolInformationResolver
             return $this->resolveTernaryExpression($frame, $node);
         }
 
+        if ($node instanceof MethodDeclaration) {
+            return $this->resolveMethodDeclaration($frame, $node);
+        }
+
         $this->logger->warning(sprintf(
             'Did not know how to resolve node of type "%s" with text "%s"',
             get_class($node),
@@ -152,7 +158,7 @@ class SymbolInformationResolver
             return SymbolInformation::none();
         }
 
-        return $variables->first()->value();
+        return $variables->first()->symbolInformation();
     }
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation
@@ -365,6 +371,19 @@ class SymbolInformationResolver
         }
 
         return SymbolInformation::none();
+    }
+
+    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $methodDeclaration)
+    {
+        $classNode = $methodDeclaration->getFirstAncestor(ClassDeclaration::class);
+        $classSymbolInformation = $this->_resolveNode($frame, $classNode);
+        return $this->symbolFactory->information(
+            $methodDeclaration, [
+                'token' => $methodDeclaration->name,
+                'class_type' => $classSymbolInformation->type(),
+                'symbol_type' => Symbol::METHOD,
+            ]
+        );
     }
 
     private function _valueFromMemberAccess(Type $classType, Node $node)
