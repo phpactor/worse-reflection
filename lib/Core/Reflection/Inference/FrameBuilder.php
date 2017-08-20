@@ -27,7 +27,7 @@ final class FrameBuilder
      */
     private $valueResolver;
 
-    public function __construct(NodeValueResolver $valueResolver, Logger $logger)
+    public function __construct(SymbolInformationResolver $valueResolver, Logger $logger)
     {
         $this->logger = $logger;
         $this->valueResolver = $valueResolver;
@@ -130,7 +130,7 @@ final class FrameBuilder
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->getStart()),
             '$this',
-            Value::fromType($classType)
+            SymbolInformation::fromType($classType)
         ));
 
         if (null === $node->parameters) {
@@ -144,7 +144,7 @@ final class FrameBuilder
                 Variable::fromOffsetNameAndValue(
                     Offset::fromInt($parameterNode->getStart()),
                     $parameterName,
-                    Value::fromTypeAndValue(
+                    SymbolInformation::fromTypeAndValue(
                         $value->type(),
                         $value->value()
                     )
@@ -161,7 +161,7 @@ final class FrameBuilder
             $frame->locals()->add(Variable::fromOffsetNameAndValue(
                 Offset::fromInt($node->getStart()),
                 '$' . $matches[1],
-                Value::fromType(
+                SymbolInformation::fromType(
                     $this->valueResolver->resolveQualifiedName($node, $matches[2])
                 )
             ));

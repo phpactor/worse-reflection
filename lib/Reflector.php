@@ -89,7 +89,7 @@ class Reflector
         $rootNode = $this->services->parser()->parseSourceFile((string) $source);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
-        $resolver = $this->services->nodeValueResolver();
+        $resolver = $this->services->symbolInformationResolver();
         $frame = $this->services->frameBuilder()->buildForNode($node);
 
         return ReflectionOffset::fromFrameAndValue($frame, $resolver->resolveNode($frame, $node));

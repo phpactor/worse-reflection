@@ -2,17 +2,19 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\NodeValueResolver;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformationResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\Inference\LocalAssignments;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Value;
+use Phpactor\WorseReflection\Core\Reflection\Inference\Symbol;
+use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Position;
 
-class NodeValueResolverTest extends IntegrationTestCase
+class SymbolInformationResolverTest extends IntegrationTestCase
 {
     /**
      * @var ArrayLogger
@@ -26,40 +28,73 @@ class NodeValueResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-        //var_dump($this->logger->messages());
+        // var_dump($this->logger);
     }
 
     /**
-     * @dataProvider provideTests
+     * @dataProvider provideGeneral
      */
-    public function testResolver(string $source, array $locals, int $offset, Value $expectedValue)
+    public function testGeneral(string $source, array $locals, array $expectedInformation)
     {
         $variables = [];
         foreach ($locals as $name => $type) {
-            $variables[] = Variable::fromOffsetNameAndValue(Offset::fromInt(0), $name, Value::fromType($type));
+            $variables[] = Variable::fromOffsetNameAndValue(
+                Offset::fromInt(0),
+                $name,
+                SymbolInformation::for(
+                    Symbol::fromTypeNameAndPosition('variable', $name, Position::fromStartAndEnd(0, 0))
+                )->withType($type)
+            );
         }
 
-        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
+        $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
 
-        $this->assertEquals($expectedValue, $value);
+        $this->assertExpectedInformation($expectedInformation, $symbolInfo);
     }
 
-    public function provideTests()
+    /**
+     * @dataProvider provideValues
+     */
+    public function testValues(string $source, array $variables, array $expected)
+    {
+        $information = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
+        $this->assertExpectedInformation($expected, $information);
+    }
+
+    /**
+     * These tests test the case where a class in the resolution tree was not found, however
+     * their usefulness is limited because we use the StringSourceLocator for these tests which
+     * "always" finds the source.
+     *
+     * @dataProvider provideNotResolvableClass
+     */
+    public function testNotResolvableClass(string $source)
+    {
+        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
+            Variable::fromOffsetNameAndValue(
+                Offset::fromInt(0),
+                '$this',
+                SymbolInformation::fromType(Type::fromString('Foobar'))
+            ),
+        ]), $source);
+        $this->assertEquals(Type::unknown(), $value->type());
+    }
+
+    public function provideGeneral()
     {
         return [
             'It should return none value for whitespace' => [
-                '    ', [],
-                1,
-                Value::none()
+                '  <>  ', [],
+                ['type' => '<unknown>'],
             ],
             'It should return the name of a class' => [
                 <<<'EOT'
 <?php
 
-$foo = new ClassName();
+$foo = new Cl<>assName();
 
 EOT
-                , [], 23, Value::fromType(Type::fromString('ClassName'))
+                , [], ['type' => 'ClassName', 'symbol_type' => Symbol::CLASS_]
             ],
             'It should return the fully qualified name of a class' => [
                 <<<'EOT'
@@ -67,10 +102,10 @@ EOT
 
 namespace Foobar\Barfoo;
 
-$foo = new ClassName();
+$foo = new Cl<>assName();
 
 EOT
-                , [], 47, Value::fromType(Type::fromString('Foobar\Barfoo\ClassName'))
+                , [], ['type' => 'Foobar\Barfoo\ClassName']
             ],
             'It should return the fully qualified name of a with an imported name.' => [
                 <<<'EOT'
@@ -80,10 +115,10 @@ namespace Foobar\Barfoo;
 
 use BarBar\ClassName();
 
-$foo = new ClassName();
+$foo = new Clas<>sName();
 
 EOT
-                , [], 70, Value::fromType(Type::fromString('BarBar\ClassName'))
+                , [], ['type' => 'BarBar\ClassName', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'ClassName']
             ],
             'It should return the fully qualified name of a use definition' => [
                 <<<'EOT'
@@ -91,14 +126,14 @@ EOT
 
 namespace Foobar\Barfoo;
 
-use BarBar\ClassName();
+use BarBar\Clas<>sName();
 
 $foo = new ClassName();
 
 EOT
-                , [], 46, Value::fromType(Type::fromString('BarBar\ClassName'))
+                , [], ['type' => 'BarBar\ClassName']
             ],
-            'It returns the FQN of a method parameter' => [
+            'It returns the FQN of a method parameter with a default' => [
                 <<<'EOT'
 <?php
 
@@ -106,13 +141,13 @@ namespace Foobar\Barfoo;
 
 class Foobar
 {
-    public function foobar(Barfoo $barfoo = 'test')
+    public function foobar(Barfoo $<>barfoo = 'test')
     {
     }
 }
 
 EOT
-                , [], 77, Value::fromType(Type::fromString('Foobar\Barfoo\Barfoo'))
+                , [], ['type' => 'Foobar\Barfoo\Barfoo', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => '$barfoo']
             ],
             'It returns the type and value of a scalar method parameter' => [
                 <<<'EOT'
@@ -122,13 +157,13 @@ namespace Foobar\Barfoo;
 
 class Foobar
 {
-    public function foobar(string $barfoo = 'test')
+    public function foobar(string $b<>arfoo = 'test')
     {
     }
 }
 
 EOT
-                , [], 77, Value::fromTypeAndValue(Type::string(), 'test')
+                , [], ['type' => 'string', 'value' => 'test']
             ],
             'It returns the value of a method parameter with a constant' => [
                 <<<'EOT'
@@ -138,13 +173,13 @@ namespace Foobar\Barfoo;
 
 class Foobar
 {
-    public function foobar(string $barfoo = 'test')
+    public function foobar(string $ba<>rfoo = 'test')
     {
     }
 }
 
 EOT
-                , [], 77, Value::fromTypeAndValue(Type::string(), 'test')
+                , [], ['type' => 'string', 'value' => 'test']
             ],
             'It returns the FQN of a method parameter in an interface' => [
                 <<<'EOT'
@@ -156,11 +191,11 @@ use Acme\Factory;
 
 interface Foobar
 {
-    public function hello(World $world);
+    public function hello(World $wor<>ld);
 }
 
 EOT
-                , [], 102, Value::fromType(Type::fromString('Foobar\Barfoo\World'))
+                , [], ['type' => 'Foobar\Barfoo\World']
             ],
             'It returns the FQN of a method parameter in a trait' => [
                 <<<'EOT'
@@ -172,13 +207,13 @@ use Acme\Factory;
 
 trait Foobar
 {
-    public function hello(World $world)
+    public function hello(<>World $world)
     {
     }
 }
 
 EOT
-                , [], 94, Value::fromType(Type::fromString('Foobar\Barfoo\World'))
+                , [], ['type' => 'Foobar\Barfoo\World', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'World']
             ],
             'It returns the value of a method parameter' => [
                 <<<'EOT'
@@ -188,13 +223,13 @@ namespace Foobar\Barfoo;
 
 class Foobar
 {
-    public function foobar(string $barfoo = 'test')
+    public function foobar(string $<>barfoo = 'test')
     {
     }
 }
 
 EOT
-                , [], 77, Value::fromTypeAndValue(Type::string(), 'test')
+                , [], ['type' => 'string', 'value' => 'test']
             ],
             'It returns the FQN of a static call' => [
                 <<<'EOT'
@@ -204,25 +239,10 @@ namespace Foobar\Barfoo;
 
 use Acme\Factory;
 
-$foo = Factory::create();
+$foo = Fac<>tory::create();
 
 EOT
-                , [], 63, Value::fromType(Type::fromString('Acme\Factory'))
-            ],
-            'It returns the type of a static call' => [
-                <<<'EOT'
-<?php
-
-class Factory
-{
-    public static function create(): string
-    {
-    }
-}
-
-Factory::create();
-EOT
-                , [], 92, Value::fromType(Type::string())
+                , [], ['type' => 'Acme\Factory', 'symbol_type' => Symbol::CLASS_]
             ],
             'It returns the FQN of a method parameter' => [
                 <<<'EOT'
@@ -234,13 +254,13 @@ use Acme\Factory;
 
 class Foobar
 {
-    public function hello(World $world)
+    public function hello(W<>orld $world)
     {
     }
 }
 
 EOT
-                , [], 102, Value::fromType(Type::fromString('Foobar\Barfoo\World'))
+                , [], ['type' => 'Foobar\Barfoo\World']
             ],
             'It returns the FQN of variable assigned in frame' => [
                 <<<'EOT'
@@ -254,12 +274,12 @@ class Foobar
 {
     public function hello(World $world)
     {
-        echo $world;
+        echo $w<>orld;
     }
 }
 
 EOT
-                , [ '$world' => Type::fromString('World') ], 127, Value::fromType(Type::fromString('World'))
+                , [ '$world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => '$world']
             ],
             'It returns type for a call access expression' => [
                 <<<'EOT'
@@ -297,13 +317,18 @@ class Foobar
 
     public function hello(Barfoo $world)
     {
-        $this->foobar->type2()->type3();
+        $this->foobar->type2()->type3(<>);
     }
 }
 EOT
             , [
                 '$this' => Type::fromString('Foobar\Barfoo\Foobar'),
-            ], 384, Value::fromType(Type::fromString('Foobar\Barfoo\Type3')),
+            ], [
+                'type' => 'Foobar\Barfoo\Type3',
+                'symbol_type' => Symbol::METHOD,
+                'symbol_name' => 'type3',
+                'class_type' => 'Foobar\Barfoo\Type2',
+            ],
             ],
             'It returns type for a property access when class has method of same name' => [
                 <<<'EOT'
@@ -329,100 +354,100 @@ class Foobar
 
     public function hello()
     {
-        $this->foobar->asString();
+        $this->foobar->asString(<>);
     }
 }
 EOT
             , [
                 '$this' => Type::fromString('Foobar'),
-            ], 263, Value::fromType(Type::string()),
+            ], ['type' => 'string'],
             ],
             'It returns type for a new instantiation' => [
                 <<<'EOT'
 <?php
 
-new Bar();
+new <>Bar();
 EOT
-                , [], 9, Value::fromType(Type::fromString('Bar')),
+                , [], ['type' => 'Bar'],
             ],
             'It returns type for a new instantiation from a variable' => [
                 <<<'EOT'
 <?php
 
-new $foobar;
+new $<>foobar;
 EOT
         , [
                 '$foobar' => Type::fromString('Foobar'),
-        ], 9, Value::fromType(Type::fromString('Foobar')),
+        ], ['type' => 'Foobar'],
             ],
             'It returns type for string literal' => [
                 <<<'EOT'
 <?php
 
-'bar';
+'bar<>';
 EOT
-                , [], 9, Value::fromTypeAndValue(Type::string(), 'bar')
+                , [], ['type' => 'string', 'value' => 'bar']
             ],
             'It returns type for float' => [
                 <<<'EOT'
 <?php
 
-1.2;
+1.<>2;
 EOT
-                , [], 9, Value::fromTypeAndValue(Type::float(), 1.2),
+                , [], ['type' => 'float', 'value' => 1.2],
             ],
             'It returns type for integer' => [
                 <<<'EOT'
 <?php
 
-12;
+12<>;
 EOT
-                , [], 9, Value::fromTypeAndValue(Type::int(), 12),
+                , [], ['type' => 'int', 'value' => 12],
             ],
             'It returns type for bool true' => [
                 <<<'EOT'
 <?php
 
-true;
+tr<>ue;
 EOT
-                , [], 9, Value::fromTypeAndValue(Type::bool(), true),
+                , [], ['type' => 'bool', 'value' => true],
             ],
             'It returns type for bool false' => [
                 <<<'EOT'
 <?php
 
-false;
+<>false;
 EOT
-                , [], 9, Value::fromTypeAndValue(Type::bool(), false),
+                , [], ['type' => 'bool', 'value' => false],
             ],
-            'It returns type for bool false' => [
+            'It returns type null' => [
                 <<<'EOT'
 <?php
 
-null;
+n<>ull;
 EOT
-                , [], 9, Value::fromTypeAndValue(Type::null(), null),
+                , [], ['type' => 'null', 'value' => null],
             ],
             'It returns type and value for an array' => [
                 <<<'EOT'
 <?php
 
-[ 'one' => 'two', 'three' => 3 ];
+[ 'one' => 'two', 'three' => 3 <>];
 EOT
-                , [], 8, Value::fromTypeAndValue(Type::array(), [ 'one' => 'two', 'three' => 3]),
+                , [], ['type' => 'array', 'value' => [ 'one' => 'two', 'three' => 3]],
             ],
             'It type for a class constant' => [
                 <<<'EOT'
 <?php
 
-$foo = Foobar::HELLO;
+$foo = Foobar::HELL<>O;
 
 class Foobar
 {
     const HELLO = 'string';
 }
 EOT
-                , [], 25, Value::fromType(Type::string()),
+                , [], ['type' => 'string'],
             ],
             'Static method access' => [
                 <<<'EOT'
@@ -433,37 +458,28 @@ class Foobar
     public static function foobar(): Hello {}
 }
 
-Foobar::foobar();
+Foobar::fooba<>r();
 
 class Hello
 {
 }
 EOT
-              , [], 86, Value::fromType(Type::fromString('Hello')),
+              , [], ['type' => 'Hello'],
           ],
             'Static constant access' => [
                 <<<'EOT'
 <?php
 
-Foobar::HELLO_CONSTANT;
+Foobar::HELLO_<>CONSTANT;
 
 class Foobar
 {
     const HELLO_CONSTANT = 'hello';
 }
 EOT
-                , [], 19, Value::fromType(Type::string()),
+                , [], ['type' => 'string'],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider provideValues
-     */
-    public function testValues(string $source, array $variables, int $offset, Value $expectedValue)
-    {
-        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, $offset);
-        $this->assertEquals($expectedValue, $value);
     }
 
     public function provideValues()
@@ -473,52 +489,52 @@ EOT
                 <<<'EOT'
 <?php
 
-$array['test'];
+$array['test'<>];
 EOT
                 , [
                     Variable::fromOffsetNameAndValue(
                         Offset::fromInt(0),
                         '$array',
-                        Value::fromTypeAndValue(
+                        SymbolInformation::fromTypeAndValue(
                             Type::array(),
                             ['test' => 'tock']
                         )
                     )
-                ], 8, Value::fromTypeAndValue(Type::string(), 'tock')
+                ], ['type' => 'string', 'value' => 'tock']
             ],
             'It returns type for an array assignment' => [
                 <<<'EOT'
 <?php
 
-$hello = $array['barfoo'];
+$hello = $ar<>ray['barfoo'];
 EOT
                 , [
                     Variable::fromOffsetNameAndValue(
                         Offset::fromInt(0),
                         '$array',
-                        Value::fromTypeAndValue(
+                        SymbolInformation::fromTypeAndValue(
                             Type::array(),
                             ['barfoo' => 'tock']
                         )
                     )
-                ], 18, Value::fromTypeAndValue(Type::string(), 'tock')
+                ], ['type' => 'string', 'value' => 'tock']
             ],
             'It returns nested array value' => [
                 <<<'EOT'
 <?php
 
-$hello = $array['barfoo']['tock'];
+$hello = $arr<>ay['barfoo']['tock'];
 EOT
                 , [
                     Variable::fromOffsetNameAndValue(
                         Offset::fromInt(0),
                         '$array',
-                        Value::fromTypeAndValue(
+                        SymbolInformation::fromTypeAndValue(
                             Type::array(),
                             ['barfoo' => [ 'tock' => 777 ]]
                         )
                     )
-                ], 18, Value::fromTypeAndValue(Type::int(), 777)
+                ], ['type' => 'int', 'value' => 777]
             ],
             'It returns type for self' => [
                 <<<'EOT'
@@ -528,11 +544,11 @@ class Foobar
 {
     public function foobar(Barfoo $barfoo = 'test')
     {
-        self::
+        sel<>f::
     }
 }
 EOT
-                , [], 90, Value::fromType(Type::fromString('Foobar'))
+                , [], ['type' => 'Foobar']
             ],
             'It returns type for parent' => [
                 <<<'EOT'
@@ -544,56 +560,37 @@ class Foobar extends ParentClass
 {
     public function foobar(Barfoo $barfoo = 'test')
     {
-        parent::
+        pare<>nt::
     }
 }
 EOT
-                , [], 134, Value::fromType(Type::fromString('ParentClass'))
+                , [], ['type' => 'ParentClass']
             ],
             'It assumes true for ternary expressions' => [
                 <<<'EOT'
 <?php
 
-$barfoo ? 'foobar' : 'barfoo';
+$barfoo ? <>'foobar' : 'barfoo';
 EOT
-                , [], 16, Value::fromTypeAndValue(Type::string(), 'foobar')
+                , [], ['type' => 'string', 'value' => 'foobar']
             ],
             'It uses condition value if ternery "if" is empty' => [
                 <<<'EOT'
 <?php
 
-'string' ?: new \stdClass();
+'string' ?:<> new \stdClass();
 EOT
-                , [], 17, Value::fromTypeAndValue(Type::string(), 'string')
+                , [], ['type' => 'string', 'value' => 'string']
             ],
             'It returns unknown for ternary expressions with unknown condition values' => [
                 <<<'EOT'
 <?php
 
-$barfoo ?: new \stdClass();
+$barfoo ?:<> new \stdClass();
 EOT
-                , [], 16, Value::fromType(Type::unknown())
+                , [], ['type' => '<unknown>']
             ],
         ];
-    }
-
-    /**
-     * These tests test the case where a class in the resolution tree was not found, however
-     * their usefulness is limited because we use the StringSourceLocator for these tests which
-     * "always" finds the source.
-     *
-     * @dataProvider provideNotResolvableClass
-     */
-    public function testNotResolvableClass(string $source, int $offset)
-    {
-        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
-            Variable::fromOffsetNameAndValue(
-                Offset::fromInt(0),
-                '$this',
-                Value::fromType(Type::fromString('Foobar'))
-            ),
-        ]), $source, $offset);
-        $this->assertEquals(Value::none(), $value);
     }
 
     public function provideNotResolvableClass()
@@ -612,11 +609,10 @@ class Foobar
 
     public function hello()
     {
-        $this->hello->foobar();
+        $this->hello->foobar(<>);
     }
 } 
 EOT
-        , 147
         ],
         'Class extends non-existing class' => [
             <<<'EOT'
@@ -626,11 +622,10 @@ class Foobar extends NonExisting
 {
     public function hello()
     {
-        $hello = $this->foobar();
+        $hello = $this->foobar(<>);
     }
 }
 EOT
-        , 126
         ],
         'Method returns non-existing class' => [
             <<<'EOT'
@@ -644,11 +639,10 @@ class Foobar
 
     public function hello()
     {
-        $this->hai()->foo();
+        $this->hai()->foo(<>);
     }
 }
 EOT
-        , 128
         ],
         'Method returns class which extends non-existing class' => [
             <<<'EOT'
@@ -662,7 +656,7 @@ class Foobar
 
     public function hello()
     {
-        $this->hai()->foo();
+        $this->hai()->foo(<>);
     }
 }
 
@@ -670,13 +664,12 @@ class Hai extends NonExisting
 {
 }
 EOT
-        , 128
         ],
         'Static method returns non-existing class' => [
             <<<'EOT'
 <?php
 
-ArrGoo::hai()->foo();
+ArrGoo::hai()->foo(<>);
 
 class Foobar
 {
@@ -685,17 +678,51 @@ class Foobar
     }
 }
 EOT
-        , 27
         ],
     ];
     }
 
-    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source, int $offset)
+    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source)
     {
         $frame = new Frame($assignments);
+
+        if (!$offset = strpos($source, '<>')) {
+            throw new \InvalidArgumentException(sprintf(
+                'Could not find offset <> in example code: %s',
+                $source
+            ));
+        }
+
+        $source = substr($source, 0, $offset) . substr($source, $offset + 2);
+
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
-        $typeResolver = new NodeValueResolver($this->createReflector($source), $this->logger);
+        $typeResolver = new SymbolInformationResolver($this->createReflector($source), $this->logger);
 
         return $typeResolver->resolveNode($frame, $node);
+    }
+
+    private function assertExpectedInformation(array $expectedInformation, SymbolInformation $information)
+    {
+        foreach ($expectedInformation as $name => $value) {
+            switch ($name) {
+                case 'type':
+                    $this->assertEquals($value, (string) $information->type());
+                    continue;
+                case 'value':
+                    $this->assertEquals($value, $information->value());
+                    continue;
+                case 'symbol_type':
+                    $this->assertEquals($value, $information->symbol()->symbolType());
+                    continue;
+                case 'symbol_name':
+                    $this->assertEquals($value, $information->symbol()->name());
+                    continue;
+                case 'class_type':
+                    $this->assertEquals($value, (string) $information->classType());
+                    continue;
+                default:
+                    throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));
+            }
+        }
     }
 }

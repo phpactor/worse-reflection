@@ -22,7 +22,7 @@ EOT
         ;
 
         $offset = $this->createReflector($source)->reflectOffset(SourceCode::fromString($source), Offset::fromInt(27));
-        $this->assertEquals('string', (string) $offset->value()->type());
+        $this->assertEquals('string', (string) $offset->symbolInformation()->type());
         $this->assertEquals('Hello', $offset->frame()->locals()->byName('$foobar')->first()->value()->value());
     }
 }

@@ -35,7 +35,7 @@ final class ReflectionConstant extends AbstractReflectedNode
 
     public function type(): Type
     {
-        $value = $this->serviceLocator->nodeValueResolver()->resolveNode(new Frame(), $this->node->assignment);
+        $value = $this->serviceLocator->symbolInformationResolver()->resolveNode(new Frame(), $this->node->assignment);
         return $value->type();
     }
 
