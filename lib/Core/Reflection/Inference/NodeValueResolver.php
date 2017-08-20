@@ -45,11 +45,17 @@ class NodeValueResolver
      */
     private $logger;
 
-    public function __construct(Reflector $reflector, Logger $logger)
+    /**
+     * @var SymbolFactory
+     */
+    private $symbolFactory;
+
+    public function __construct(Reflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
     {
         $this->reflector = $reflector;
         $this->logger = $logger;
         $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger);
+        $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
     }
 
     public function resolveNode(Frame $frame, Node $node): SymbolInformation
@@ -66,7 +72,10 @@ class NodeValueResolver
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
         if ($node instanceof QualifiedName) {
-            return SymbolInformation::fromType($this->resolveQualifiedName($node));
+            return $this->symbolFactory->information($node,  [
+                'type' => $this->resolveQualifiedName($node),
+                'symbol_type' => Symbol::CLASS_,
+            ]);
         }
 
         if ($node instanceof Parameter) {
@@ -392,3 +401,4 @@ class NodeValueResolver
         return SymbolInformation::fromType($type);
     }
 }
+

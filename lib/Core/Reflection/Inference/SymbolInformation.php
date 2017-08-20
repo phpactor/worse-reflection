@@ -17,30 +17,46 @@ final class SymbolInformation
      */
     private $type;
 
-    private function __construct(Type $type, $value = null)
+    /**
+     * @var Symbol
+     */
+    private $symbol;
+
+    private function __construct(Symbol $symbol, Type $type, $value = null)
     {
         $this->type = $type;
         $this->value = $value;
+        $this->symbol = $symbol;
+    }
+
+    public static function for(Symbol $symbol): SymbolInformation
+    {
+        return new self($symbol, Type::unknown());
     }
 
     public static function fromTypeAndValue(Type $type, $value): SymbolInformation
     {
-        return new self($type, $value);
+        return new self(Symbol::unknown(), $type, $value);
     }
 
     public static function fromType(Type $type)
     {
-        return new self($type);
+        return new self(Symbol::unknown(), $type);
     }
 
     public static function none()
     {
-        return new self(Type::undefined());
+        return new self(Symbol::unknown(), Type::undefined());
     }
 
     public function withValue($value)
     {
-        return self::fromTypeAndValue($this->type, $value);
+        return self::fromTypeAndValue($this->symbol, $this->type, $value);
+    }
+
+    public function withType($type)
+    {
+        return new self($this->symbol, $type, $this->value);
     }
 
     public function type(): Type
@@ -53,3 +69,4 @@ final class SymbolInformation
         return $this->value;
     }
 }
+
