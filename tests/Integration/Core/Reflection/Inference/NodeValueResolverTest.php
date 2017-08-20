@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Position;
 
 class NodeValueResolverTest extends IntegrationTestCase
 {
@@ -27,17 +28,22 @@ class NodeValueResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-        //var_dump($this->logger->messages());
     }
 
     /**
-     * @dataProvider provideTests
+     * @dataProvider provideGeneral
      */
-    public function testResolver(string $source, array $locals, array $expectedInformation)
+    public function testGeneral(string $source, array $locals, array $expectedInformation)
     {
         $variables = [];
         foreach ($locals as $name => $type) {
-            $variables[] = Variable::fromOffsetNameAndValue(Offset::fromInt(0), $name, SymbolInformation::fromType($type));
+            $variables[] = Variable::fromOffsetNameAndValue(
+                Offset::fromInt(0),
+                $name,
+                SymbolInformation::for(
+                    Symbol::fromTypeNameAndPosition('variable', $name, Position::fromStartAndEnd(0, 0))
+                )->withType($type)
+            );
         }
 
         $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
@@ -45,7 +51,35 @@ class NodeValueResolverTest extends IntegrationTestCase
         $this->assertExpectedInformation($expectedInformation, $symbolInfo);
     }
 
-    public function provideTests()
+    /**
+     * @dataProvider provideValues
+     */
+    public function testValues(string $source, array $variables, array $expected)
+    {
+        $information = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
+        $this->assertExpectedInformation($expected, $information);
+    }
+
+    /**
+     * These tests test the case where a class in the resolution tree was not found, however
+     * their usefulness is limited because we use the StringSourceLocator for these tests which
+     * "always" finds the source.
+     *
+     * @dataProvider provideNotResolvableClass
+     */
+    public function testNotResolvableClass(string $source)
+    {
+        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
+            Variable::fromOffsetNameAndValue(
+                Offset::fromInt(0),
+                '$this',
+                SymbolInformation::fromType(Type::fromString('Foobar'))
+            ),
+        ]), $source);
+        $this->assertEquals(Type::unknown(), $value->type());
+    }
+
+    public function provideGeneral()
     {
         return [
             'It should return none value for whitespace' => [
@@ -83,7 +117,7 @@ use BarBar\ClassName();
 $foo = new Clas<>sName();
 
 EOT
-                , [], ['type' => 'BarBar\ClassName']
+                , [], ['type' => 'BarBar\ClassName', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'ClassName']
             ],
             'It should return the fully qualified name of a use definition' => [
                 <<<'EOT'
@@ -112,7 +146,7 @@ class Foobar
 }
 
 EOT
-                , [], ['type' => 'Foobar\Barfoo\Barfoo', 'symbol_type' => Symbol::VARIABLE]
+                , [], ['type' => 'Foobar\Barfoo\Barfoo', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => '$barfoo']
             ],
             'It returns the type and value of a scalar method parameter' => [
                 <<<'EOT'
@@ -178,7 +212,7 @@ trait Foobar
 }
 
 EOT
-                , [], ['type' => 'Foobar\Barfoo\World']
+                , [], ['type' => 'Foobar\Barfoo\World', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'World']
             ],
             'It returns the value of a method parameter' => [
                 <<<'EOT'
@@ -207,7 +241,7 @@ use Acme\Factory;
 $foo = Fac<>tory::create();
 
 EOT
-                , [], ['type' => 'Acme\Factory']
+                , [], ['type' => 'Acme\Factory', 'symbol_type' => Symbol::CLASS_]
             ],
             'It returns the FQN of a method parameter' => [
                 <<<'EOT'
@@ -244,7 +278,7 @@ class Foobar
 }
 
 EOT
-                , [ '$world' => Type::fromString('World') ], ['type' => 'World']
+                , [ '$world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => '$world']
             ],
             'It returns type for a call access expression' => [
                 <<<'EOT'
@@ -288,7 +322,7 @@ class Foobar
 EOT
             , [
                 '$this' => Type::fromString('Foobar\Barfoo\Foobar'),
-            ], ['type' => 'Foobar\Barfoo\Type3'],
+            ], ['type' => 'Foobar\Barfoo\Type3', 'symbol_type' => Symbol::METHOD, 'symbol_name' => 'type3'],
             ],
             'It returns type for a property access when class has method of same name' => [
                 <<<'EOT'
@@ -442,15 +476,6 @@ EOT
         ];
     }
 
-    /**
-     * @dataProvider provideValues
-     */
-    public function testValues(string $source, array $variables, array $expected)
-    {
-        $information = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
-        $this->assertExpectedInformation($expected, $information);
-    }
-
     public function provideValues()
     {
         return [
@@ -560,25 +585,6 @@ EOT
                 , [], ['type' => '<unknown>']
             ],
         ];
-    }
-
-    /**
-     * These tests test the case where a class in the resolution tree was not found, however
-     * their usefulness is limited because we use the StringSourceLocator for these tests which
-     * "always" finds the source.
-     *
-     * @dataProvider provideNotResolvableClass
-     */
-    public function testNotResolvableClass(string $source)
-    {
-        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
-            Variable::fromOffsetNameAndValue(
-                Offset::fromInt(0),
-                '$this',
-                SymbolInformation::fromType(Type::fromString('Foobar'))
-            ),
-        ]), $source);
-        $this->assertEquals(SymbolInformation::none(), $value);
     }
 
     public function provideNotResolvableClass()
@@ -700,6 +706,9 @@ EOT
                     continue;
                 case 'symbol_type':
                     $this->assertEquals($value, $information->symbol()->symbolType());
+                    continue;
+                case 'symbol_name':
+                    $this->assertEquals($value, $information->symbol()->name());
                     continue;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));

@@ -8,10 +8,16 @@ final class Symbol
 {
     const CLASS_ = 'class';
     const VARIABLE = 'variable';
+    const METHOD = 'method';
+    const PROPERTY = 'property';
+    const CONSTANT = 'constant';
 
     const VALID_SYMBOLS = [
         self::CLASS_,
         self::VARIABLE,
+        self::PROPERTY,
+        self::CONSTANT,
+        self::METHOD,
     ];
 
     /**
@@ -61,6 +67,11 @@ final class Symbol
     public function symbolType(): string
     {
         return $this->symbolType;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
     }
 }
 

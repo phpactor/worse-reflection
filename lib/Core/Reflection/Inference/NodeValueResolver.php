@@ -170,20 +170,6 @@ class NodeValueResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    private function resolveMemberType(SymbolInformation $parent, Node $node): SymbolInformation
-    {
-        $memberNode = $node instanceof CallExpression ? $node->callableExpression : $node;
-        $memberName = $memberNode->memberName->getText($node->getFileContents());
-
-        if ($node instanceof MemberAccessExpression) {
-            $type = $this->propertyType($parent->type(), $memberName);
-
-            return SymbolInformation::fromType($type);
-        }
-
-        return SymbolInformation::fromType($this->memberTypeResolver->methodType($parent->type(), $memberName));
-    }
-
     public function resolveQualifiedName(Node $node, string $name = null): Type
     {
         $name = $name ?: $node->getText();
@@ -254,6 +240,7 @@ class NodeValueResolver
 
         return $this->symbolFactory->information($node, [
             'type' => $type,
+            'token' => $node->variableName,
             'value' => $value,
             'symbol_type' => Symbol::VARIABLE,
         ]);
@@ -402,7 +389,13 @@ class NodeValueResolver
             (string) $parent
         ));
 
-        return SymbolInformation::fromType($type);
+        return $this->symbolFactory->information(
+            $node, [
+                'type' => $type,
+                'symbol_type' => $memberType,
+                'token' => $node->memberName,
+            ]
+        );
     }
 }
 

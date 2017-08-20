@@ -42,7 +42,7 @@ class SymbolFactory
             $information = $information->withType($options['type']);
         }
 
-        if ($options['value']) {
+        if (null !== $options['value']) {
             $information = $information->withValue($options['value']);
         }
 
