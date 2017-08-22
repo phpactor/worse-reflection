@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
@@ -16,7 +17,7 @@ class ReflectionMethodTest extends IntegrationTestCase
     public function testReflectMethod(string $source, string $class, \Closure $assertion)
     {
         $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
-        $assertion($class->methods());
+        $assertion($class->methods(), $this->logger());
     }
 
     public function provideReflectionMethod()
@@ -223,6 +224,27 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertCount(3, $methods->get('barfoo')->parameters());
+                },
+            ],
+            'It tolerantes and logs method parameters with missing variables parameter' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function barfoo(Barfoo = null)
+    {
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods, ArrayLogger $logger) {
+                    $this->assertEquals('', $methods->get('barfoo')->parameters()->first()->name());
+                    $this->assertContains(
+                        'Parameter has no variable',
+                        $logger->messages()[0]
+                    );
                 },
             ],
             'It returns the raw docblock' => [

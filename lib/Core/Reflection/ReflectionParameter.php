@@ -30,6 +30,13 @@ class ReflectionParameter extends AbstractReflectedNode
 
     public function name(): string
     {
+        if (null === $this->parameter->getName()) {
+            $this->serviceLocator->logger()->warning(sprintf(
+                'Parameter has no variable at offset', $this->parameter->getStart()
+            ));
+            return '';
+        }
+
         return $this->parameter->getName();
     }
 

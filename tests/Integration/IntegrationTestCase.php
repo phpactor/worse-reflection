@@ -9,18 +9,35 @@ use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;
 use Microsoft\PhpParser\Node\SourceFileNode;
+use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
 class IntegrationTestCase extends TestCase
 {
+    /**
+     * @var ArrayLogger
+     */
+    private $logger;
+
+    public function setUp()
+    {
+        $this->logger = new ArrayLogger();
+    }
+
     public function createReflector(string $source): Reflector
     {
         $locator = new StringSourceLocator(SourceCode::fromString($source));
-        return Reflector::create($locator);
+
+        return Reflector::create($locator, $this->logger);
     }
 
     protected function workspaceDir(): string
     {
         return __DIR__ . '/../Workspace';
+    }
+
+    protected function logger(): ArrayLogger
+    {
+        return $this->logger;
     }
 
     protected function initWorkspace()
