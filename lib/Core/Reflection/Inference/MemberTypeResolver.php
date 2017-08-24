@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 
 class MemberTypeResolver
 {
@@ -21,18 +22,19 @@ class MemberTypeResolver
      */
     private $logger;
 
-    public function __construct(Reflector $reflector, Logger $logger)
+    public function __construct(Reflector $reflector, Logger $logger, SymbolFactory $factory)
     {
         $this->reflector = $reflector;
         $this->logger = $logger;
     }
 
-    public function methodType(Type $ownerType, string $name): Type
+    public function methodType(Type $ownerType, SymbolInformation $info): SymbolInformation
     {
+        $name = $info->symbol()->name();
         $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
-            return Type::unknown();
+            return $info;
         }
 
         try {
@@ -42,22 +44,29 @@ class MemberTypeResolver
                     (string) $ownerType,
                     $name
                 ));
-                return Type::undefined();
+                return $info;
             }
         } catch (NotFound $e) {
             $this->logger->warning($e->getMessage());
-            return Type::undefined();
+            return $info;
         }
 
-        return $class->methods()->get($name)->inferredReturnType();
+        /** @var $method ReflectionMethod */
+        $method = $class->methods()->get($name);
+        $declaringClass = $method->class();
+
+        return $info
+            ->withClassType(Type::class($declaringClass->name()))
+            ->withType($method->inferredReturnType());
     }
 
-    public function constantType(Type $ownerType, string $name): Type
+    public function constantType(Type $ownerType, SymbolInformation $info): SymbolInformation
     {
+        $name = $info->symbol()->name();
         $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
-            return Type::unknown();
+            return $info;
         }
 
         try {
@@ -67,27 +76,33 @@ class MemberTypeResolver
                     (string) $ownerType,
                     $name
                 ));
-                return Type::undefined();
+                return $info;
             }
         } catch (NotFound $e) {
             $this->logger->warning($e->getMessage());
-            return Type::undefined();
+            return $info;
         }
 
-        return $class->constants()->get($name)->type();
+        $constant = $class->constants()->get($name);
+        $declaringClass = $constant->class();
+
+        return $info
+            ->withClassType(Type::class($declaringClass->name()))
+            ->withType($constant->type());
     }
 
-    public function propertyType(Type $ownerType, string $name): Type
+    public function propertyType(Type $ownerType, SymbolInformation $info): SymbolInformation
     {
+        $name = $info->symbol()->name();
         $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
-            return Type::unknown();
+            return $info;
         }
 
         // interfaces do not have properties...
         if (false === $class instanceof ReflectionClass) {
-            return Type::unknown();
+            return $info;
         }
 
         try {
@@ -97,16 +112,24 @@ class MemberTypeResolver
                     (string) $ownerType,
                     $name
                 ));
-                return Type::undefined();
+                return $info;
             }
         } catch (NotFound $e) {
             $this->logger->warning($e->getMessage());
-            return Type::undefined();
+            return $info;
         }
 
-        return $class->properties()->get($name)->type();
+        $property = $class->properties()->get($name);
+        $declaringClass = $property->class();
+
+        return $info
+            ->withClassType(Type::class($declaringClass->name()))
+            ->withType($property->type());
     }
 
+    /**
+     * @return ReflectionClass
+     */
     private function reflectClassOrNull(Type $ownerType, string $name)
     {
         try {

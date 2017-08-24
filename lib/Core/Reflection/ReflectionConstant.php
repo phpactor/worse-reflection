@@ -7,6 +7,10 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Phpactor\WorseReflection\Core\ClassName;
 
 final class ReflectionConstant extends AbstractReflectedNode
 {
@@ -26,6 +30,20 @@ final class ReflectionConstant extends AbstractReflectedNode
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
+    }
+
+    public function class(): AbstractReflectionClass
+    {
+        $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class)->getNamespacedName();
+
+        if (null === $class) {
+            throw new \InvalidArgumentException(sprintf(
+                'Could not locate class-like ancestor node for method "%s"',
+                $this->name()
+            ));
+        }
+
+        return $this->serviceLocator->reflector()->reflectClass(ClassName::fromString($class));
     }
 
     public function name()

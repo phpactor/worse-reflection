@@ -53,8 +53,8 @@ class SymbolInformationResolver
     {
         $this->reflector = $reflector;
         $this->logger = $logger;
-        $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger);
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
+        $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger, $this->symbolFactory);
     }
 
     public function resolveNode(Frame $frame, Node $node): SymbolInformation
@@ -395,25 +395,26 @@ class SymbolInformationResolver
             $memberType = 'constant';
         }
 
+        $information = $this->symbolFactory->information(
+            $node,
+            [
+                'symbol_type' => $memberType,
+                'token' => $node->memberName,
+            ]
+        );
+
         // if the classType is a call expression, then this is a method call
-        $type = $this->memberTypeResolver->{$memberType . 'Type'}($classType, $memberName);
+        $info = $this->memberTypeResolver->{$memberType . 'Type'}($classType, $information);
 
         $this->logger->debug(sprintf(
             'Resolved type "%s" for %s "%s" of class "%s"',
-            (string) $type,
+            (string) $info->type(),
             $memberType,
             $memberName,
             (string) $classType
         ));
 
-        return $this->symbolFactory->information(
-            $node,
-            [
-                'class_type' => $classType,
-                'type' => $type,
-                'symbol_type' => $memberType,
-                'token' => $node->memberName,
-            ]
-        );
+        return $info;
+
     }
 }

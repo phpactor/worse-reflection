@@ -60,17 +60,17 @@ final class SymbolInformation
         return new self(Symbol::unknown(), Type::undefined());
     }
 
-    public function withValue($value)
+    public function withValue($value): SymbolInformation
     {
         return new self($this->symbol, $this->type, $value, $this->classType);
     }
 
-    public function withClassType($classType)
+    public function withClassType($classType): SymbolInformation
     {
         return new self($this->symbol, $this->type, $this->value, $classType);
     }
 
-    public function withType(Type $type)
+    public function withType(Type $type): SymbolInformation
     {
         return new self($this->symbol, $type, $this->value, $this->classType);
     }

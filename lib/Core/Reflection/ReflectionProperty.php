@@ -9,6 +9,10 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\TokenKind;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Type;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Phpactor\WorseReflection\Core\ClassName;
 
 class ReflectionProperty extends AbstractReflectedNode
 {
@@ -32,6 +36,20 @@ class ReflectionProperty extends AbstractReflectedNode
         $this->serviceLocator = $serviceLocator;
         $this->propertyDeclaration = $propertyDeclaration;
         $this->variable = $variable;
+    }
+
+    public function class(): AbstractReflectionClass
+    {
+        $class = $this->propertyDeclaration->getFirstAncestor(ClassDeclaration::class, TraitDeclaration::class)->getNamespacedName();
+
+        if (null === $class) {
+            throw new \InvalidArgumentException(sprintf(
+                'Could not locate class-like ancestor node for method "%s"',
+                $this->name()
+            ));
+        }
+
+        return $this->serviceLocator->reflector()->reflectClass(ClassName::fromString($class));
     }
 
     public function name(): string

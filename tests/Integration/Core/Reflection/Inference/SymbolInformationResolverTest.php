@@ -330,6 +330,41 @@ EOT
                 'class_type' => 'Foobar\Barfoo\Type2',
             ],
             ],
+            'It returns class type for parent class for parent method' => [
+                <<<'EOT'
+<?php
+
+class Type3 {}
+
+class Barfoo
+{
+    public function type3(): Type3
+    {
+    }
+}
+
+class Foobar extends Barfoo
+{
+    /**
+     * @var Type1
+     */
+    private $foobar;
+
+    public function hello(Barfoo $world)
+    {
+        $this->type3(<>);
+    }
+}
+EOT
+            , [
+                '$this' => Type::fromString('Foobar'),
+            ], [
+                'type' => 'Type3',
+                'symbol_type' => Symbol::METHOD,
+                'symbol_name' => 'type3',
+                'class_type' => 'Barfoo',
+            ],
+            ],
             'It returns type for a property access when class has method of same name' => [
                 <<<'EOT'
 <?php

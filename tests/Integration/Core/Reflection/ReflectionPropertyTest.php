@@ -152,6 +152,21 @@ EOT
                     $this->assertTrue($properties->get('property1')->isStatic());
                 },
             ],
+            'Returns declaring class' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    private $property1;
+}
+EOT
+                ,
+                'Foobar',
+                function ($properties) {
+                    $this->assertEquals('Foobar', $properties->get('property1')->class()->name()->__toString());
+                },
+            ],
         ];
     }
 }
