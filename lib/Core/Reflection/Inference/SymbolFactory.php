@@ -53,7 +53,7 @@ class SymbolFactory
         return $information;
     }
 
-    private function name(Node $node, Token $token = null)
+    private function name(Node $node, $token = null)
     {
         if ($token) {
             return $token->getText($node->getFileContents());
@@ -62,9 +62,9 @@ class SymbolFactory
         return $node->getText();
     }
 
-    private function position(Node $node, Token $token = null)
+    private function position(Node $node, $token = null)
     {
-        if ($token) {
+        if ($token && $token instanceof Token) {
             return Position::fromStartAndEnd($token->start, $token->start + $token->length);
         }
 
