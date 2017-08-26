@@ -33,6 +33,11 @@ class Docblock
         return $this->docblock;
     }
 
+    public function  __toString()
+    {
+        return $this->raw();
+    }
+
     public function formatted(): string
     {
         $lines = explode(PHP_EOL, $this->docblock);

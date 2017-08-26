@@ -164,6 +164,26 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnType());
                 },
             ],
+            'Return type from class @method annotation' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+/**
+ * @method Post method1()
+ */
+class Foobar
+{
+    function method1() {}
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnType());
+                },
+            ],
             'Return type from inherited docblock' => [
                 <<<'EOT'
 <?php

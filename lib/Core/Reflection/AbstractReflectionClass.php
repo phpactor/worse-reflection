@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Docblock;
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode
 {
@@ -28,5 +29,10 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode
         }
 
         return false === $this->isAbstract();
+    }
+
+    public function docblock(): Docblock
+    {
+        return Docblock::fromNode($this->node());
     }
 }

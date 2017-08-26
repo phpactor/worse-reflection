@@ -17,11 +17,19 @@ class DocblockResolver
         }
 
         if (preg_match('#inheritdoc#i', $node->getLeadingCommentAndWhitespaceText())) {
-            if ($class->parent()) {
-                if ($class->parent()->methods()->has($node->getName())) {
-                    return $class->parent()->methods()->get($node->getName())->inferredReturnType();
-                }
+            if (!$class->parent()) {
+                return Type::unknown();
             }
+
+            $parentMethods = $class->parent()->methods();
+            if ($parentMethods->has($node->getName())) {
+                return $parentMethods->get($node->getName())->inferredReturnType();
+            }
+        }
+
+        $methodName = $node->name->getText($node->getFileContents());
+        if (preg_match('{@method ([\w\\\]+) ' . $methodName . '\(}', (string) $class->docblock(), $matches)) {
+            return $this->typeFromString($node, $matches[1]);
         }
 
         return Type::unknown();
@@ -44,12 +52,17 @@ class DocblockResolver
         if (!preg_match(sprintf('{@%s ([\w+\\\]+)}', $tag), $comment, $matches)) {
             return Type::unknown();
         }
+        
+        return $this->typeFromString($node, $matches[1]);
+    }
 
-        if (substr($matches[1], 0, 1) == '\\') {
-            return Type::fromString($matches[1]);
+    private function typeFromString(Node $node, string $typeString)
+    {
+        if (substr($typeString, 0, 1) == '\\') {
+            return Type::fromString($typeString);
         }
 
-        $typeString = trim($matches[1], '\\');
+        $typeString = trim($typeString, '\\');
 
         $type = Type::fromString($typeString);
 
@@ -72,6 +85,6 @@ class DocblockResolver
             return $type;
         }
 
-        return Type::fromArray([(string) $namespace->name, $matches[1]]);
+        return Type::fromArray([(string) $namespace->name, $typeString]);
     }
 }
