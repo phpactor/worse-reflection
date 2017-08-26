@@ -15,6 +15,13 @@ class SymbolFactory
             'token' => null,
         ], $options);
 
+        if (null !== $options['token'] && false === $options['token'] instanceof Token) {
+            throw new \InvalidArgumentException(sprintf(
+                'Token must be of type %s, got %s',
+                Token::class, get_class($options['token'])
+            ));
+        }
+
         $name = $this->name($node, $options['token']);
         $position = $this->position($node, $options['token']);
 

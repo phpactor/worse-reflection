@@ -514,6 +514,20 @@ class Foobar
 EOT
                 , [], ['type' => 'string'],
             ],
+            'Member access with variable' => [
+                <<<'EOT'
+<?php
+
+$foobar = new Foobar();
+$foobar->$barfoo(<>);
+
+class Foobar
+{
+    const HELLO_CONSTANT = 'hello';
+}
+EOT
+                , [], ['type' => '<unknown>'],
+            ],
         ];
     }
 

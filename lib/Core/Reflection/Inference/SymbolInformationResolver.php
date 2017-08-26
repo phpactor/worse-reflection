@@ -399,7 +399,7 @@ class SymbolInformationResolver
             $node,
             [
                 'symbol_type' => $memberType,
-                'token' => $node->memberName,
+                'token' => $node->memberName instanceof Token ? $node->memberName : null,
             ]
         );
 
