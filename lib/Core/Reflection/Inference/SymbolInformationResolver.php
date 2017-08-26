@@ -165,7 +165,7 @@ class SymbolInformationResolver
     {
         $class = $this->_resolveNode($frame, $node->dereferencableExpression);
 
-        return $this->_valueFromMemberAccess($class->type(), $node);
+        return $this->_valueFromMemberAccess($frame, $class->type(), $node);
     }
 
     private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolInformation
@@ -339,7 +339,7 @@ class SymbolInformationResolver
         $name = $node->scopeResolutionQualifier->getText();
         $parent = $this->resolveQualifiedName($node, $name);
 
-        return $this->_valueFromMemberAccess($parent, $node);
+        return $this->_valueFromMemberAccess($frame, $parent, $node);
     }
 
     private function resolveObjectCreationExpression(Frame $frame, $node)
@@ -386,10 +386,17 @@ class SymbolInformationResolver
         );
     }
 
-    private function _valueFromMemberAccess(Type $classType, Node $node)
+    private function _valueFromMemberAccess(Frame $frame, Type $classType, Node $node)
     {
         $memberName = $node->memberName->getText($node->getFileContents());
         $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
+
+        if ($node->memberName instanceof Node) {
+            $memberNameInfo = $this->_resolveNode($frame, $node->memberName);
+            if (is_string($memberNameInfo->value())) {
+                $memberName = $memberNameInfo->value();
+            }
+        }
 
         if ('property' === $memberType && $node instanceof ScopedPropertyAccessExpression && substr($memberName, 0, 1) !== '$') {
             $memberType = 'constant';
@@ -404,7 +411,7 @@ class SymbolInformationResolver
         );
 
         // if the classType is a call expression, then this is a method call
-        $info = $this->memberTypeResolver->{$memberType . 'Type'}($classType, $information);
+        $info = $this->memberTypeResolver->{$memberType . 'Type'}($classType, $information, $memberName);
 
         $this->logger->debug(sprintf(
             'Resolved type "%s" for %s "%s" of class "%s"',

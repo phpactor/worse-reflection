@@ -37,13 +37,17 @@ class SymbolInformationResolverTest extends IntegrationTestCase
     public function testGeneral(string $source, array $locals, array $expectedInformation)
     {
         $variables = [];
-        foreach ($locals as $name => $type) {
+        foreach ($locals as $name => $varSymbolInfo) {
+            if ($varSymbolInfo instanceof Type) {
+                $varSymbolInfo = SymbolInformation::for(
+                    Symbol::fromTypeNameAndPosition('variable', $name, Position::fromStartAndEnd(0, 0))
+                )->withType($varSymbolInfo);
+            }
+
             $variables[] = Variable::fromOffsetNameAndValue(
                 Offset::fromInt(0),
                 $name,
-                SymbolInformation::for(
-                    Symbol::fromTypeNameAndPosition('variable', $name, Position::fromStartAndEnd(0, 0))
-                )->withType($type)
+                $varSymbolInfo
             );
         }
 
@@ -523,10 +527,22 @@ $foobar->$barfoo(<>);
 
 class Foobar
 {
-    const HELLO_CONSTANT = 'hello';
 }
 EOT
                 , [], ['type' => '<unknown>'],
+            ],
+            'Member access with valued variable' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello(): string {}
+}
+
+$foobar->$barfoo(<>);
+EOT
+                , [ '$foobar' => Type::fromString('Foobar'), '$barfoo' => SymbolInformation::fromTypeAndValue(Type::string(), 'hello') ], ['type' => 'string'],
             ],
         ];
     }

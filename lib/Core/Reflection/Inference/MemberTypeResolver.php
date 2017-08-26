@@ -28,9 +28,8 @@ class MemberTypeResolver
         $this->logger = $logger;
     }
 
-    public function methodType(Type $ownerType, SymbolInformation $info): SymbolInformation
+    public function methodType(Type $ownerType, SymbolInformation $info, string $name): SymbolInformation
     {
-        $name = $info->symbol()->name();
         $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
@@ -60,9 +59,8 @@ class MemberTypeResolver
             ->withType($method->inferredReturnType());
     }
 
-    public function constantType(Type $ownerType, SymbolInformation $info): SymbolInformation
+    public function constantType(Type $ownerType, SymbolInformation $info, string $name): SymbolInformation
     {
-        $name = $info->symbol()->name();
         $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
@@ -91,9 +89,8 @@ class MemberTypeResolver
             ->withType($constant->type());
     }
 
-    public function propertyType(Type $ownerType, SymbolInformation $info): SymbolInformation
+    public function propertyType(Type $ownerType, SymbolInformation $info, string $name): SymbolInformation
     {
-        $name = $info->symbol()->name();
         $class = $this->reflectClassOrNull($ownerType, $name);
 
         if (null === $class) {
