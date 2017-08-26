@@ -48,6 +48,19 @@ abstract class Assignments implements \Countable, \IteratorAggregate
         return $first;
     }
 
+    public function last(): Variable
+    {
+        $last = end($this->variables);
+
+        if (!$last) {
+            throw new \RuntimeException(
+                'Variable collection is empty'
+            );
+        }
+
+        return $last;
+    }
+
     /**
      * {@inheritDoc}
      */

@@ -7,6 +7,9 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Symbol;
+use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
+use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 class FrameBuilderTest extends IntegrationTestCase
 {
@@ -54,6 +57,7 @@ EOT
 namespace Foobar\Barfoo;
 
 use Acme\Factory;
+use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
 class Foobar
 {
@@ -184,6 +188,69 @@ EOT
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('Foobar', (string) $symbolInformation->type());
             }],
+        ];
+    }
+
+    /**
+     * @dataProvider provideBuildForNode
+     */
+    public function testBuildForNode(string $source, \Closure $assertion)
+    {
+        list($source, $offset) = CodeHelper::offsetFromCode($source);
+        $reflector = $this->createReflector($source);
+        $offset = $reflector->reflectOffset(SourceCode::fromString($source), Offset::fromInt($offset));
+        $assertion($offset->frame());
+    }
+
+    public function provideBuildForNode()
+    {
+        return [
+            'Respects closure scope' => [
+                <<<'EOT'
+<?php
+$foo = 'bar';
+
+$hello = function () {
+    $bar = 'foo';
+    <>
+};
+EOT
+                , 
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$bar'));
+                    $this->assertCount(0, $frame->locals()->byName('$foo'));
+                }
+            ],
+            'Injects closure parameters' => [
+                <<<'EOT'
+<?php
+$foo = 'bar';
+
+$hello = function (Foobar $foo) {
+    <>
+};
+EOT
+                , 
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$foo'));
+                }
+            ],
+            'Injects imported closure parent scope variables' => [
+                <<<'EOT'
+<?php
+$zed = 'zed';
+$art = 'art';
+
+$hello = function () use ($zed) {
+    <>
+};
+EOT
+                , 
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$zed'));
+                    $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->first()->symbolInformation()->type());
+                }
+            ]
         ];
     }
 }

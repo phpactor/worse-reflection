@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Position;
 
 class SymbolInformationResolverTest extends IntegrationTestCase
@@ -783,15 +784,7 @@ EOT
     {
         $frame = new Frame($assignments);
 
-        if (!$offset = strpos($source, '<>')) {
-            throw new \InvalidArgumentException(sprintf(
-                'Could not find offset <> in example code: %s',
-                $source
-            ));
-        }
-
-        $source = substr($source, 0, $offset) . substr($source, $offset + 2);
-
+        list($source, $offset) = CodeHelper::offsetFromCode($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
         $typeResolver = new SymbolInformationResolver($this->createReflector($source), $this->logger);
 

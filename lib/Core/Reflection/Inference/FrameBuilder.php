@@ -16,6 +16,7 @@ use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Logger;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Token;
+use Microsoft\PhpParser\FunctionLike;
 
 final class FrameBuilder
 {
@@ -41,19 +42,24 @@ final class FrameBuilder
         $this->symbolFactory = new SymbolFactory();
     }
 
-    public function buildFromNode(Node $node)
+    public function buildForNode(Node $node): Frame
+    {
+        $scopeNode = $node->getFirstAncestor(FunctionLike::class, SourceFileNode::class);
+
+        return $this->buildFromNode($scopeNode);
+    }
+
+    public function buildFromNode(Node $node): Frame
     {
         $frame = new Frame();
+
+        if ($node instanceof FunctionLike) {
+            $this->processFunctionLike($frame, $node);
+        }
+
         $this->walkNode($frame, $node, $node->getEndPosition());
 
         return $frame;
-    }
-
-    public function buildForNode(Node $node)
-    {
-        $scopeNode = $node->getFirstAncestor(MethodDeclaration::class, FunctionDeclaration::class, AnonymousFunctionCreationExpression::class, SourceFileNode::class);
-
-        return $this->buildFromNode($scopeNode);
     }
 
     private function walkNode(Frame $frame, Node $node, int $endPosition)
@@ -63,10 +69,6 @@ final class FrameBuilder
         }
 
         $this->processLeadingComment($frame, $node);
-
-        if ($node instanceof MethodDeclaration) {
-            $this->processMethodDeclaration($frame, $node);
-        }
 
         if ($node instanceof AssignmentExpression) {
             $this->processAssignment($frame, $node);
@@ -149,7 +151,7 @@ final class FrameBuilder
         ));
     }
 
-    private function processMethodDeclaration(Frame $frame, MethodDeclaration $node)
+    private function processFunctionLike(Frame $frame, FunctionLike $node)
     {
         $namespace = $node->getNamespaceDefinition();
         $classNode = $node->getFirstAncestor(
@@ -157,19 +159,26 @@ final class FrameBuilder
             InterfaceDeclaration::class,
             TraitDeclaration::class
         );
-        $classType = $this->symbolInformationResolver->resolveNode($frame, $classNode)->type();
 
-        // add this and self
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt($node->getStart()),
-            '$this',
-            $this->symbolFactory->information(
-                $node, [
-                    'type' => $classType,
-                    'symbol_type' => Symbol::VARIABLE,
-                ]
-            )
-        ));
+        // works for both closure and class method (we currently ignore binding)
+        if ($classNode) {
+            $classType = $this->symbolInformationResolver->resolveNode($frame, $classNode)->type();
+            // add this and self
+            $frame->locals()->add(Variable::fromOffsetNameAndValue(
+                Offset::fromInt($node->getStart()),
+                '$this',
+                $this->symbolFactory->information(
+                    $node, [
+                        'type' => $classType,
+                        'symbol_type' => Symbol::VARIABLE,
+                    ]
+                )
+            ));
+        }
+
+        if ($node instanceof AnonymousFunctionCreationExpression) {
+            $this->addAnonymousImports($frame, $node);
+        }
 
         if (null === $node->parameters) {
             return;
@@ -209,6 +218,59 @@ final class FrameBuilder
                     ]
                 )
             ));
+        }
+    }
+
+    private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
+    {
+        $useClause = $node->anonymousFunctionUseClause;
+
+        if (null === $useClause) {
+            return;
+        }
+
+        $parentNode = $node->getParent();
+
+        if (null === $parentNode) {
+            return;
+        }
+
+        $parentFrame = $this->buildForNode($parentNode);
+        $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStart());
+
+        foreach ($useClause->useVariableNameList->getElements() as $element) {
+            $varName = $element->variableName->getText($node->getFileContents());
+
+            $symbolInformation = $this->symbolFactory->information(
+                $element, [
+                    'symbol_type' => Symbol::VARIABLE,
+                ]
+            );
+
+            if (0 === $parentVars->byName($varName)->count()) {
+                $frame->locals()->add(
+                    Variable::fromOffsetNameAndValue(
+                        Offset::fromInt($element->getStart()),
+                        $varName,
+                        $symbolInformation
+                    )
+                );
+                continue;
+            }
+
+            $variable = $parentVars->byName($varName)->last();
+            $symbolInformation = $symbolInformation
+                ->withType($variable->symbolInformation()->type())
+                ->withValue($variable->symbolInformation()->value());
+
+            $frame->locals()->add(
+                Variable::fromOffsetNameAndValue(
+                    Offset::fromInt($node->getStart()),
+                    $varName,
+                    $symbolInformation
+                )
+            );
+
         }
     }
 }
