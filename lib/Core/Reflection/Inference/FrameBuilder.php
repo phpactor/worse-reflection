@@ -129,7 +129,7 @@ final class FrameBuilder
             $this->symbolFactory->information(
                 $node, [
                     'member_type' => Symbol::VARIABLE,
-                    'token' => $node->leftOperand->memberName,
+                    'token' => $node->leftOperand->memberName instanceof Token ? $node->leftOperand->memberNName : null,
                     'type' => $symbolInformation->type(),
                     'value' => $symbolInformation->value(),
                 ]
