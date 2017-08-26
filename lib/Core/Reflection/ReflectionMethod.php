@@ -133,7 +133,7 @@ final class ReflectionMethod extends AbstractReflectionClassMember
     public function inferredReturnType(): Type
     {
         if (!$this->node->returnType) {
-            return $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->declaringClass(), $this->node);
+            return $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
         }
 
         return $this->returnType();
@@ -161,6 +161,11 @@ final class ReflectionMethod extends AbstractReflectionClassMember
         }, [])));
     }
 
+    public function class(): AbstractReflectionClass
+    {
+        return $this->class;
+    }
+
     protected function node(): Node
     {
         return $this->node;
@@ -169,11 +174,6 @@ final class ReflectionMethod extends AbstractReflectionClassMember
     protected function serviceLocator(): ServiceLocator
     {
         return $this->serviceLocator;
-    }
-
-    public function class(): AbstractReflectionClass
-    {
-        return $this->class;
     }
 }
 

@@ -115,7 +115,7 @@ class ReflectionClass extends AbstractReflectionClass
         return $properties;
     }
 
-    public function methods(): ReflectionMethodCollection
+    public function methods(ReflectionClass $contextClass = null): ReflectionMethodCollection
     {
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);
 
@@ -127,11 +127,17 @@ class ReflectionClass extends AbstractReflectionClass
 
         if ($this->parent()) {
             $methods = $methods->merge(
-                $this->parent()->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ])
+                $this->parent()->methods($this)->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
         }
 
-        $methods = $methods->merge(ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node, $this));
+        $methods = $methods->merge(
+            ReflectionMethodCollection::fromClassDeclaration(
+                $this->serviceLocator,
+                $this->node,
+                $contextClass ?: $this
+            )
+        );
 
         return $methods;
     }

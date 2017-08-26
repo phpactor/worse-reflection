@@ -12,6 +12,11 @@ class DocblockResolver
 {
     public function methodReturnTypeFromNodeDocblock(AbstractReflectionClass $class, MethodDeclaration $node)
     {
+        $methodName = $node->name->getText($node->getFileContents());
+        if (preg_match('{@method ([\w\\\]+) ' . $methodName . '\(}', (string) $class->docblock(), $matches)) {
+            return $this->typeFromString($node, $matches[1]);
+        }
+
         if (Type::unknown() != $type = $this->typeFromNode($node, 'return')) {
             return $type;
         }
@@ -25,11 +30,6 @@ class DocblockResolver
             if ($parentMethods->has($node->getName())) {
                 return $parentMethods->get($node->getName())->inferredReturnType();
             }
-        }
-
-        $methodName = $node->name->getText($node->getFileContents());
-        if (preg_match('{@method ([\w\\\]+) ' . $methodName . '\(}', (string) $class->docblock(), $matches)) {
-            return $this->typeFromString($node, $matches[1]);
         }
 
         return Type::unknown();
