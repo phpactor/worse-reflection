@@ -143,6 +143,26 @@ EOT
                 $this->assertEquals('string', (string) $symbolInformation->type());
                 $this->assertEquals('foobar', (string) $symbolInformation->value());
             }],
+            'It tracks assigned from variable' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello(Barfoo $world)
+    {
+        $foobar = 'foobar';
+        $this->$foobar = 'foobar';
+    }
+}
+EOT
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $vars = $frame->properties()->byName('foobar');
+                $this->assertCount(1, $vars);
+                $symbolInformation = $vars->first()->symbolInformation();
+                $this->assertEquals('string', (string) $symbolInformation->type());
+                $this->assertEquals('foobar', (string) $symbolInformation->value());
+            }],
             'It returns type for a for each member (with a docblock)' => [
                 <<<'EOT'
 <?php

@@ -15,6 +15,7 @@ use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Logger;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
+use Microsoft\PhpParser\Token;
 
 final class FrameBuilder
 {
@@ -120,8 +121,19 @@ final class FrameBuilder
             return;
         }
 
-        $memberName = $node->leftOperand->memberName->getText($node->getFileContents());
+        $memberNameNode = $node->leftOperand->memberName;
         $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
+
+        // TODO: Sort out this mess.
+        if ($memberNameNode instanceof Token) {
+            $memberName = $memberNameNode->getText($node->getFileContents());
+        } else {
+            $memberNameInfo = $this->symbolInformationResolver->resolveNode($frame, $memberNameNode);
+            if (false === is_string($memberNameInfo->value())) {
+                return;
+            }
+            $memberName = $memberNameInfo->value();
+        }
 
         $frame->properties()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
@@ -129,7 +141,7 @@ final class FrameBuilder
             $this->symbolFactory->information(
                 $node, [
                     'member_type' => Symbol::VARIABLE,
-                    'token' => $node->leftOperand->memberName instanceof Token ? $node->leftOperand->memberNName : null,
+                    'token' => $memberNameNode instanceof Token ? $memberNameNode : null,
                     'type' => $symbolInformation->type(),
                     'value' => $symbolInformation->value(),
                 ]
