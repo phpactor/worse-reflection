@@ -8,10 +8,12 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 
 class ReflectionPropertyCollection extends AbstractReflectionCollection
 {
-    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class)
+    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
         $properties = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
             return $member instanceof PropertyDeclaration;
@@ -24,7 +26,7 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
                     if (false === $variable instanceof Variable) {
                         continue;
                     }
-                    $items[$variable->getName()] = new ReflectionProperty($serviceLocator, $property, $variable);
+                    $items[$variable->getName()] = new ReflectionProperty($serviceLocator, $reflectionClass, $property, $variable);
                 }
             }
         }
@@ -32,7 +34,7 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
         return new static($serviceLocator, $items);
     }
 
-    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait)
+    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, ReflectionTrait $reflectionTrait)
     {
         $properties = array_filter($trait->traitMembers->traitMemberDeclarations, function ($member) {
             return $member instanceof PropertyDeclaration;
@@ -45,7 +47,7 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
                     if (false === $variable instanceof Variable) {
                         continue;
                     }
-                    $items[$variable->getName()] = new ReflectionProperty($serviceLocator, $property, $variable);
+                    $items[$variable->getName()] = new ReflectionProperty($serviceLocator, $reflectionTrait, $property, $variable);
                 }
             }
         }

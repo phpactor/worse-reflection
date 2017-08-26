@@ -47,7 +47,7 @@ class ReflectionInterface extends AbstractReflectionClass
         }
 
         $parentConstants = ReflectionConstantCollection::fromReflectionConstants($this->serviceLocator, $parentConstants);
-        $constants = ReflectionConstantCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
+        $constants = ReflectionConstantCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node, $this);
 
         return $parentConstants->merge($constants);
     }
@@ -84,7 +84,7 @@ class ReflectionInterface extends AbstractReflectionClass
         }
 
         $parentMethods = ReflectionMethodCollection::fromReflectionMethods($this->serviceLocator, $parentMethods);
-        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
+        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node, $this);
 
         return $parentMethods->merge($methods);
     }

@@ -14,7 +14,7 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
 
-class ReflectionProperty extends AbstractReflectedNode
+class ReflectionProperty extends AbstractReflectionClassMember
 {
     /**
      * @var ServiceLocator
@@ -31,14 +31,25 @@ class ReflectionProperty extends AbstractReflectedNode
      */
     private $variable;
 
-    public function __construct(ServiceLocator $serviceLocator, PropertyDeclaration $propertyDeclaration, Variable $variable)
+    /**
+     * @var AbstractReflectionClass
+     */
+    private $class;
+
+    public function __construct(
+        ServiceLocator $serviceLocator,
+        AbstractReflectionClass $class,
+        PropertyDeclaration $propertyDeclaration,
+        Variable $variable
+    )
     {
         $this->serviceLocator = $serviceLocator;
         $this->propertyDeclaration = $propertyDeclaration;
         $this->variable = $variable;
+        $this->class = $class;
     }
 
-    public function class(): AbstractReflectionClass
+    public function declaringClass(): AbstractReflectionClass
     {
         $class = $this->propertyDeclaration->getFirstAncestor(ClassDeclaration::class, TraitDeclaration::class)->getNamespacedName();
 
@@ -86,4 +97,15 @@ class ReflectionProperty extends AbstractReflectedNode
     {
         return $this->variable;
     }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
+
+    public function class(): AbstractReflectionClass
+    {
+        return $this->class;
+    }
 }
+

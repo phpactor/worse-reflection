@@ -20,7 +20,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 
-final class ReflectionMethod extends AbstractReflectedNode
+final class ReflectionMethod extends AbstractReflectionClassMember
 {
     /**
      * @var ServiceLocator
@@ -47,12 +47,19 @@ final class ReflectionMethod extends AbstractReflectedNode
      */
     private $frameBuilder;
 
+    /**
+     * @var AbstractReflectionClass
+     */
+    private $class;
+
     public function __construct(
         ServiceLocator $serviceLocator,
+        AbstractReflectionClass $class,
         MethodDeclaration $node
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
+        $this->class = $class;
     }
 
     public function name(): string
@@ -65,7 +72,7 @@ final class ReflectionMethod extends AbstractReflectedNode
         return $this->serviceLocator->frameBuilder()->buildFromNode($this->node);
     }
 
-    public function class(): AbstractReflectionClass
+    public function declaringClass(): AbstractReflectionClass
     {
         $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class)->getNamespacedName();
 
@@ -126,7 +133,7 @@ final class ReflectionMethod extends AbstractReflectedNode
     public function inferredReturnType(): Type
     {
         if (!$this->node->returnType) {
-            return $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+            return $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->declaringClass(), $this->node);
         }
 
         return $this->returnType();
@@ -158,4 +165,15 @@ final class ReflectionMethod extends AbstractReflectedNode
     {
         return $this->node;
     }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
+
+    public function class(): AbstractReflectionClass
+    {
+        return $this->class;
+    }
 }
+

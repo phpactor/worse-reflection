@@ -60,7 +60,7 @@ class ReflectionClass extends AbstractReflectionClass
             $parentConstants = $this->parent()->constants();
         }
 
-        $constants = ReflectionConstantCollection::fromClassDeclaration($this->serviceLocator, $this->node);
+        $constants = ReflectionConstantCollection::fromClassDeclaration($this->serviceLocator, $this->node, $this);
 
         if ($parentConstants) {
             return $parentConstants->merge($constants);
@@ -110,7 +110,7 @@ class ReflectionClass extends AbstractReflectionClass
             );
         }
 
-        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node));
+        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node, $this));
 
         return $properties;
     }
@@ -131,7 +131,7 @@ class ReflectionClass extends AbstractReflectionClass
             );
         }
 
-        $methods = $methods->merge(ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node));
+        $methods = $methods->merge(ReflectionMethodCollection::fromClassDeclaration($this->serviceLocator, $this->node, $this));
 
         return $methods;
     }

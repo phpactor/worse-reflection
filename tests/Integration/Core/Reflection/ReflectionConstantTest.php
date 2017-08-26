@@ -34,7 +34,7 @@ EOT
                 ,
                 'Foobar',
                 function ($constants) {
-                    $this->assertEquals('Foobar', $constants->get('FOOBAR')->class()->name()->__toString());
+                    $this->assertEquals('Foobar', $constants->get('FOOBAR')->declaringClass()->name()->__toString());
                 },
             ],
         ];

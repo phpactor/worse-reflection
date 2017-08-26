@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Position;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Core\ServiceLocator;
 
 abstract class AbstractReflectedNode
 {

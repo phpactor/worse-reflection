@@ -164,7 +164,7 @@ EOT
                 ,
                 'Foobar',
                 function ($properties) {
-                    $this->assertEquals('Foobar', $properties->get('property1')->class()->name()->__toString());
+                    $this->assertEquals('Foobar', $properties->get('property1')->declaringClass()->name()->__toString());
                 },
             ],
         ];

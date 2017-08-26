@@ -52,7 +52,7 @@ class MemberTypeResolver
 
         /** @var $method ReflectionMethod */
         $method = $class->methods()->get($name);
-        $declaringClass = $method->class();
+        $declaringClass = $method->declaringClass();
 
         return $info
             ->withClassType(Type::class($declaringClass->name()))
@@ -82,7 +82,7 @@ class MemberTypeResolver
         }
 
         $constant = $class->constants()->get($name);
-        $declaringClass = $constant->class();
+        $declaringClass = $constant->declaringClass();
 
         return $info
             ->withClassType(Type::class($declaringClass->name()))
@@ -117,7 +117,7 @@ class MemberTypeResolver
         }
 
         $property = $class->properties()->get($name);
-        $declaringClass = $property->class();
+        $declaringClass = $property->declaringClass();
 
         return $info
             ->withClassType(Type::class($declaringClass->name()))

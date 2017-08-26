@@ -9,10 +9,13 @@ use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
 class ReflectionMethodCollection extends AbstractReflectionCollection
 {
-    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class)
+    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
         $methods = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
@@ -20,13 +23,13 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
 
         $items = [];
         foreach ($methods as $method) {
-            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $method);
+            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $reflectionClass, $method);
         }
 
         return new static($serviceLocator, $items);
     }
 
-    public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface)
+    public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface, ReflectionInterface $reflectionInterface)
     {
         $methods = array_filter($interface->interfaceMembers->interfaceMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
@@ -34,13 +37,13 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
 
         $items = [];
         foreach ($methods as $method) {
-            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $method);
+            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $reflectionInterface, $method);
         }
 
         return new static($serviceLocator, $items);
     }
 
-    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait)
+    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, ReflectionTrait $reflectionTrait)
     {
         $methods = array_filter($trait->traitMembers->traitMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
@@ -48,7 +51,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
 
         $items = [];
         foreach ($methods as $method) {
-            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $method);
+            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $reflectionTrait, $method);
         }
 
         return new static($serviceLocator, $items);

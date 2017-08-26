@@ -37,12 +37,12 @@ class ReflectionTrait extends AbstractReflectionClass
 
     public function methods(): ReflectionMethodCollection
     {
-        return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node);
+        return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $this);
     }
 
     public function properties(): ReflectionPropertyCollection
     {
-        $properties = ReflectionPropertyCollection::fromTraitDeclaration($this->serviceLocator, $this->node);
+        $properties = ReflectionPropertyCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $this);
 
         return $properties;
     }

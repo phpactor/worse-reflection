@@ -184,6 +184,33 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnType());
                 },
             ],
+            'Return type from overridden @method annotation' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+class Barfoo
+{
+    /**
+     * @return AbstractPost
+     */
+    function method1() {}
+}
+
+/**
+ * @method Post method1()
+ */
+class Foobar extends Barfoo
+{
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnType());
+                },
+            ],
             'Return type from inherited docblock' => [
                 <<<'EOT'
 <?php
@@ -368,7 +395,7 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertTrue($methods->has('barfoo'));
-                    $this->assertEquals('Foobar', (string) $methods->get('barfoo')->class()->name());
+                    $this->assertEquals('Foobar', (string) $methods->get('barfoo')->declaringClass()->name());
                 },
             ],
             'It reflects a method from a trait' => [
@@ -387,7 +414,7 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertTrue($methods->has('barfoo'));
-                    $this->assertEquals('Foobar', (string) $methods->get('barfoo')->class()->name());
+                    $this->assertEquals('Foobar', (string) $methods->get('barfoo')->declaringClass()->name());
                 },
             ],
         ];
