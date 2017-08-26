@@ -317,6 +317,15 @@ class SymbolInformationResolver
 
         $subjectValue = $subject->value();
 
+        if (false === is_array($subjectValue )) {
+            $this->logger->debug(sprintf(
+                'Array value for symbol "%s" is not an array, is a "%s"',
+                (string) $subject->symbol(),
+                gettype($subjectValue)
+            ));
+            return SymbolInformation::none();
+        }
+
         if ($node instanceof StringLiteral) {
             $string = $this->_resolveNode($frame, $node);
 

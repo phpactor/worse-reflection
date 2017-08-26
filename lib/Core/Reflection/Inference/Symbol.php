@@ -64,7 +64,7 @@ final class Symbol
 
     public function __toString()
     {
-        return $this->name;
+        return sprintf('%s:%s [%s] %s', $this->position->start(), $this->position->end(), $this->symbolType, $this->name);
     }
 
     public function symbolType(): string
