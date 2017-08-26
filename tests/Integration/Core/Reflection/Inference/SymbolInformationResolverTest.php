@@ -567,6 +567,23 @@ EOT
                     )
                 ], ['type' => 'string', 'value' => 'tock']
             ],
+            'It tolerates array with null value' => [
+                <<<'EOT'
+<?php
+
+$array['hello'<>];
+EOT
+                , [
+                    Variable::fromOffsetNameAndValue(
+                        Offset::fromInt(0),
+                        '$array',
+                        SymbolInformation::fromTypeAndValue(
+                            Type::array(),
+                            null
+                        )
+                    )
+                ], ['type' => '<unknown>', 'log' => 'is not an array']
+            ],
             'It returns type for an array assignment' => [
                 <<<'EOT'
 <?php
@@ -799,6 +816,9 @@ EOT
                     continue;
                 case 'class_type':
                     $this->assertEquals($value, (string) $information->classType());
+                    continue;
+                case 'log':
+                    $this->assertContains($value, implode(' ', $this->logger->messages()));
                     continue;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));
