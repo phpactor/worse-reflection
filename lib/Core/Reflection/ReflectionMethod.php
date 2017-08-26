@@ -132,8 +132,9 @@ final class ReflectionMethod extends AbstractReflectionClassMember
      */
     public function inferredReturnType(): Type
     {
-        if (!$this->node->returnType) {
-            return $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+        $type = $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+        if (Type::unknown() != $type) {
+            return $type;
         }
 
         return $this->returnType();
