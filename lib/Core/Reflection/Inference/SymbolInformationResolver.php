@@ -158,7 +158,7 @@ class SymbolInformationResolver
             return SymbolInformation::none();
         }
 
-        return $variables->first()->symbolInformation();
+        return $variables->last()->symbolInformation();
     }
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation

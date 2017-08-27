@@ -188,6 +188,25 @@ EOT
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('Foobar', (string) $symbolInformation->type());
             }],
+            'Redeclared variables' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello()
+    {
+        $foobar = new Foobar();
+        $foobar = new \stdClass();
+    }
+}
+EOT
+            , [ 'Foobar', 'hello' ], function (Frame $frame) {
+                $vars = $frame->locals()->byName('$foobar');
+                $this->assertCount(2, $vars);
+                $this->assertEquals('Foobar', (string) $vars->first()->symbolInformation()->type()->className());
+                $this->assertEquals('stdClass', (string) $vars->last()->symbolInformation()->type()->className());
+            }],
         ];
     }
 
