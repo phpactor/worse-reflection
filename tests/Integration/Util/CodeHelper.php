@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Util;
 
 class CodeHelper
 {
-    public function offsetFromCode($source)
+    public static function offsetFromCode($source)
     {
         $offset = $offset = strpos($source, '<>');
         if (!$offset) {
