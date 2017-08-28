@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
@@ -415,6 +416,45 @@ EOT
                 function ($methods) {
                     $this->assertTrue($methods->has('barfoo'));
                     $this->assertEquals('Foobar', (string) $methods->get('barfoo')->declaringClass()->name());
+                },
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideReflectionMethodCollection
+     */
+    public function testReflectCollection(string $source, string $class, \Closure $assertion)
+    {
+        $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
+        $assertion($class);
+    }
+
+    public function provideReflectionMethodCollection()
+    {
+        return [
+            'Only methods belonging to a given class' => [
+                <<<'EOT'
+<?php
+
+class ParentClass
+{
+    public function method1() {}
+}
+
+class Foobar extends ParentClass
+{
+    public function method4() {}
+}
+EOT
+                ,
+                'Foobar',
+                function (ReflectionClass $class) {
+                    $methods = $class->methods()->belongingTo($class->name());
+                    $this->assertEquals(
+                        ['method4'],
+                        $methods->keys()
+                    );
                 },
             ],
         ];

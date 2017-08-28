@@ -81,7 +81,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection
     public function belongingTo(ClassName $class)
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) use ($class) {
-            return $item->class()->name() == $class;
+            return $item->declaringClass()->name() == $class;
         }));
     }
 
