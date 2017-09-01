@@ -97,11 +97,6 @@ class MemberTypeResolver
             return $info;
         }
 
-        // interfaces do not have properties...
-        if (false === $class instanceof ReflectionClass) {
-            return $info;
-        }
-
         try {
             if (false === $class->properties()->has($name)) {
                 $this->logger->warning(sprintf(
@@ -130,7 +125,7 @@ class MemberTypeResolver
     private function reflectClassOrNull(Type $ownerType, string $name)
     {
         try {
-            return $this->reflector->reflectClassLike(ClassName::fromString((string) $ownerType));
+            return $this->reflector->reflectClass(ClassName::fromString((string) $ownerType));
         } catch (NotFound $e) {
             $this->logger->warning(sprintf(
                 'Unable to locate class "%s" for method "%s"',

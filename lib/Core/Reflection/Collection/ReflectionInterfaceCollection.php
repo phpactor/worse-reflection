@@ -33,7 +33,7 @@ class ReflectionInterfaceCollection extends AbstractReflectionCollection
             }
 
             try {
-                $interface = $serviceLocator->reflector()->reflectClassLike(
+                $interface = $serviceLocator->reflector()->reflectInterface(
                     ClassName::fromString((string) $name->getResolvedName())
                 );
                 $items[$interface->name()->full()] = $interface;

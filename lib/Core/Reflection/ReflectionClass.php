@@ -82,7 +82,7 @@ class ReflectionClass extends AbstractReflectionClass
 
             if (!$reflectedClass instanceof ReflectionClass) {
                 $this->serviceLocator->logger()->warning(sprintf(
-                    'Class cannot extend interface. Class "%s" extends interface "%s"',
+                    'Class cannot extend interface. Class "%s" extends interface or trait "%s"',
                     $this->name(),
                     $reflectedClass->name()
                 ));
