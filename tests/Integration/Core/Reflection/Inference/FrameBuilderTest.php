@@ -23,7 +23,7 @@ class FrameBuilderTest extends IntegrationTestCase
         $method = $reflector->reflectClass(ClassName::fromString($className))->methods()->get($methodName);
         $frame = $method->frame();
 
-        $assertion($frame);
+        $assertion($frame, $this->logger());
     }
 
     public function provideForMethod()
@@ -206,6 +206,21 @@ EOT
                 $this->assertCount(2, $vars);
                 $this->assertEquals('Foobar', (string) $vars->first()->symbolInformation()->type()->className());
                 $this->assertEquals('stdClass', (string) $vars->last()->symbolInformation()->type()->className());
+            }],
+            'Tolerates missing tokens' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello()
+    {
+        $reflection = )>classReflector->reflect(TestCase::class);
+    }
+}
+EOT
+            , [ 'Foobar', 'hello' ], function (Frame $frame, $logger) {
+                $this->assertContains('Non-node class passed to resolveNode, got', implode('', $logger->messages()));
             }],
         ];
     }

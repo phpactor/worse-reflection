@@ -57,8 +57,16 @@ class SymbolInformationResolver
         $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger, $this->symbolFactory);
     }
 
-    public function resolveNode(Frame $frame, Node $node): SymbolInformation
+    /**
+     * @param Node $node
+     */
+    public function resolveNode(Frame $frame, $node): SymbolInformation
     {
+        if (false === $node instanceof Node) {
+            $this->logger->warning(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
+            return SymbolInformation::none();
+        }
+
         // jump to the container for SubscriptExpression (array access)
         // TODO: this is strange and proably wrong.
         if ($node->getParent() instanceof SubscriptExpression) {
