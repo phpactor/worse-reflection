@@ -9,7 +9,7 @@ use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ObjectCreationExpression;
 use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
-use Microsoft\PhpParser\Node\Expression\Variable;
+use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
 use Microsoft\PhpParser\Node\NamespaceUseClause;
 use Microsoft\PhpParser\Node\NumericLiteral;
 use Microsoft\PhpParser\Node\Parameter;
@@ -90,7 +90,7 @@ class SymbolInformationResolver
             return $this->resolveParameter($frame, $node);
         }
 
-        if ($node instanceof Variable) {
+        if ($node instanceof ParserVariable) {
             return $this->resolveVariable($frame, $node);
         }
 
@@ -156,7 +156,7 @@ class SymbolInformationResolver
         return SymbolInformation::none();
     }
 
-    private function resolveVariable(Frame $frame, Variable $node)
+    private function resolveVariable(Frame $frame, ParserVariable $node)
     {
         $name = $node->getText();
         $offset = $node->getFullStart();
