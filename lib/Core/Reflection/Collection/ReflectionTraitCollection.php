@@ -23,7 +23,7 @@ class ReflectionTraitCollection extends AbstractReflectionCollection
                 $traitName = TolerantQualifiedNameResolver::getResolvedName($traitName);
             }
 
-            $items[] = $serviceLocator->reflector()->reflectClass(ClassName::fromString($traitName));
+            $items[] = $serviceLocator->reflector()->reflectClassLike(ClassName::fromString($traitName));
         }
 
         return new static($serviceLocator, $items);

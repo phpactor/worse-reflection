@@ -130,7 +130,7 @@ class MemberTypeResolver
     private function reflectClassOrNull(Type $ownerType, string $name)
     {
         try {
-            return $this->reflector->reflectClass(ClassName::fromString((string) $ownerType));
+            return $this->reflector->reflectClassLike(ClassName::fromString((string) $ownerType));
         } catch (NotFound $e) {
             $this->logger->warning(sprintf(
                 'Unable to locate class "%s" for method "%s"',

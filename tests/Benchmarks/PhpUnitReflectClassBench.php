@@ -19,7 +19,7 @@ class PhpUnitReflectClassBench extends BaseBenchCase
      */
     public function test_case()
     {
-        $class = $this->getReflector()->reflectClass(ClassName::fromString(TestCase::class));
+        $class = $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
     }
 
     /**
@@ -27,17 +27,13 @@ class PhpUnitReflectClassBench extends BaseBenchCase
      */
     public function test_case_methods_and_properties()
     {
-        $class = $this->getReflector()->reflectClass(ClassName::fromString(TestCase::class));
+        $class = $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
 
         /** @var $method ReflectionMethod */
         foreach ($class->methods() as $method) {
             foreach ($method->parameters() as $parameter) {
                 $method->returnType();
             }
-        }
-
-        foreach ($class->properties() as $property) {
-            $property->type();
         }
     }
 }

@@ -76,7 +76,7 @@ class ReflectionClass extends AbstractReflectionClass
         }
 
         try {
-            $reflectedClass = $this->serviceLocator->reflector()->reflectClass(
+            $reflectedClass = $this->serviceLocator->reflector()->reflectClassLike(
                 ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
             );
 

@@ -23,7 +23,7 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
             ));
         }
 
-        return $this->serviceLocator()->reflector()->reflectClass(ClassName::fromString($class));
+        return $this->serviceLocator()->reflector()->reflectClassLike(ClassName::fromString($class));
     }
 
     abstract public function class(): AbstractReflectionClass;

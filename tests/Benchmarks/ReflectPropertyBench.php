@@ -20,7 +20,7 @@ class ReflectPropertyBench extends BaseBenchCase
 
     public function before()
     {
-        $this->class = $this->getReflector()->reflectClass(ClassName::fromString(PropertyClass::class));
+        $this->class = $this->getReflector()->reflectClassLike(ClassName::fromString(PropertyClass::class));
     }
 
     /**

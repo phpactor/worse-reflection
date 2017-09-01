@@ -60,7 +60,7 @@ class ReflectionProperty extends AbstractReflectionClassMember
             ));
         }
 
-        return $this->serviceLocator->reflector()->reflectClass(ClassName::fromString($class));
+        return $this->serviceLocator->reflector()->reflectClassLike(ClassName::fromString($class));
     }
 
     public function name(): string
