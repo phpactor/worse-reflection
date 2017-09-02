@@ -20,7 +20,7 @@ class ReflectMethodBench extends BaseBenchCase
 
     public function before()
     {
-        $this->class = $this->getReflector()->reflectClass(ClassName::fromString(MethodClass::class));
+        $this->class = $this->getReflector()->reflectClassLike(ClassName::fromString(MethodClass::class));
     }
 
     /**

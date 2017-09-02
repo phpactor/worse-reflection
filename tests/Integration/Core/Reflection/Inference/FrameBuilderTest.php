@@ -20,7 +20,7 @@ class FrameBuilderTest extends IntegrationTestCase
     {
         list($className, $methodName) = $classAndMethod;
         $reflector = $this->createReflector($source);
-        $method = $reflector->reflectClass(ClassName::fromString($className))->methods()->get($methodName);
+        $method = $reflector->reflectClassLike(ClassName::fromString($className))->methods()->get($methodName);
         $frame = $method->frame();
 
         $assertion($frame, $this->logger());

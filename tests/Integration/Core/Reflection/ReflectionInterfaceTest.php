@@ -14,7 +14,7 @@ class ReflectionInterfaceTest extends IntegrationTestCase
      */
     public function testReflectInterface(string $source, string $class, \Closure $assertion)
     {
-        $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
+        $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class);
     }
 

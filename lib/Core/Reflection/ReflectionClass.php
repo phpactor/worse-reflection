@@ -76,13 +76,13 @@ class ReflectionClass extends AbstractReflectionClass
         }
 
         try {
-            $reflectedClass = $this->serviceLocator->reflector()->reflectClass(
+            $reflectedClass = $this->serviceLocator->reflector()->reflectClassLike(
                 ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
             );
 
             if (!$reflectedClass instanceof ReflectionClass) {
                 $this->serviceLocator->logger()->warning(sprintf(
-                    'Class cannot extend interface. Class "%s" extends interface "%s"',
+                    'Class cannot extend interface. Class "%s" extends interface or trait "%s"',
                     $this->name(),
                     $reflectedClass->name()
                 ));

@@ -13,6 +13,9 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
 class Reflector
 {
@@ -42,13 +45,73 @@ class Reflector
     }
 
     /**
+     * Reflect class.
+     *
+     * @throws ClassNotFound If the class was not found, or the class found was
+     *         an interface or trait.
+     */
+    public function reflectClass(ClassName $className): ReflectionClass
+    {
+        $class = $this->reflectClassLike($className);
+
+        if (false === $class instanceof ReflectionClass) {
+            throw new ClassNotFound(sprintf(
+                '"%s" is not a class, it is a "%s"',
+                $className->full(), get_class($class)
+            ));
+        }
+
+        return $class;
+    }
+
+    /**
+     * Reflect an interface.
+     *
+     * @throws ClassNotFound If the class was not found, or the found class
+     *         was not a trait.
+     */
+    public function reflectInterface(ClassName $className): ReflectionInterface
+    {
+        $class = $this->reflectClassLike($className);
+
+        if (false === $class instanceof ReflectionInterface) {
+            throw new ClassNotFound(sprintf(
+                '"%s" is not an interface, it is a "%s"',
+                $className->full(), get_class($class)
+            ));
+        }
+
+        return $class;
+    }
+
+    /**
+     * Reflect a trait
+     *
+     * @throws ClassNotFound If the class was not found, or the found class
+     *         was not a trait.
+     */
+    public function reflectTrait(ClassName $className): ReflectionTrait
+    {
+        $class = $this->reflectClassLike($className);
+
+        if (false === $class instanceof ReflectionTrait) {
+            throw new ClassNotFound(sprintf(
+                '"%s" is not a trait, it is a "%s"',
+                $className->full(), get_class($class)
+            ));
+        }
+
+        return $class;
+    }
+
+    /**
      * Reflect a class, trait or interface by its name.
      *
      * If the class it not found an exception will be thrown.
      *
      * @throws ClassNotFound
      */
-    public function reflectClass(ClassName $className): AbstractReflectionClass
+    public function reflectClassLike(ClassName $className): AbstractReflectionClass
     {
         if (isset($this->cache[(string) $className])) {
             return $this->cache[(string) $className];

@@ -97,11 +97,6 @@ class MemberTypeResolver
             return $info;
         }
 
-        // interfaces do not have properties...
-        if (false === $class instanceof ReflectionClass) {
-            return $info;
-        }
-
         try {
             if (false === $class->properties()->has($name)) {
                 $this->logger->warning(sprintf(

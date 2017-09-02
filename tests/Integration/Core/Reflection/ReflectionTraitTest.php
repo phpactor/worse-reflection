@@ -13,7 +13,7 @@ class ReflectionTraitTest extends IntegrationTestCase
      */
     public function testReflectTrait(string $source, string $class, \Closure $assertion)
     {
-        $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
+        $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class);
     }
 

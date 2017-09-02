@@ -15,7 +15,7 @@ class ReflectionParameterTest extends IntegrationTestCase
     public function testReflectParameter(string $source, \Closure $assertion)
     {
         $source = sprintf('<?php namespace Acme; class Foobar { public function method(%s) }', $source);
-        $class = $this->createReflector($source)->reflectClass(ClassName::fromString('Acme\Foobar'));
+        $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString('Acme\Foobar'));
         $assertion($class->methods()->get('method'));
     }
 
