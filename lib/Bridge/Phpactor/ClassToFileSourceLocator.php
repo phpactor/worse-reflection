@@ -34,7 +34,7 @@ class ClassToFileSourceLocator implements SourceCodeLocator
 
         foreach ($candidates as $candidate) {
             if (file_exists((string) $candidate)) {
-                return SourceCode::fromString(file_get_contents((string) $candidate));
+                return SourceCode::fromPath((string) $candidate);
             }
         }
 

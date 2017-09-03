@@ -4,11 +4,20 @@ namespace Phpactor\WorseReflection\Core;
 
 class SourceCode
 {
+    /**
+     * @var string
+     */
     private $source;
 
-    private function __construct(string $source)
+    /**
+     * @var string
+     */
+    private $path;
+
+    private function __construct(string $source, string $path = null)
     {
         $this->source = $source;
+        $this->path = $path;
     }
 
     public static function fromString($string)
@@ -25,7 +34,12 @@ class SourceCode
             ));
         }
 
-        return new self(file_get_contents($filePath));
+        return new self(file_get_contents($filePath), $filePath);
+    }
+
+    public function path()
+    {
+        return $this->path;
     }
 
     public function __toString()
@@ -33,3 +47,4 @@ class SourceCode
         return $this->source;
     }
 }
+
