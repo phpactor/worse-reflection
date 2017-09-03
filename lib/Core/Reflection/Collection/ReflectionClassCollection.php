@@ -10,14 +10,17 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 class ReflectionClassCollection extends AbstractReflectionCollection
 {
-    public static function fromSourceFileNode(ServiceLocator $serviceLocator, SourceFileNode $source)
+    public static function fromSource(ServiceLocator $serviceLocator, SourceCode $source)
     {
+        $node = $serviceLocator->parser()->parseSourceFile((string) $source);
+
         $items = [];
 
-        foreach ($source->getChildNodes() as $child) {
+        foreach ($node->getChildNodes() as $child) {
             if (
                 false === $child instanceof ClassDeclaration &&
                 false === $child instanceof InterfaceDeclaration &&
@@ -27,16 +30,16 @@ class ReflectionClassCollection extends AbstractReflectionCollection
             }
 
             if ($child instanceof TraitDeclaration) {
-                $items[(string) $child->getNamespacedName()] =  new ReflectionTrait($serviceLocator, $child);
+                $items[(string) $child->getNamespacedName()] =  new ReflectionTrait($serviceLocator, $source, $child);
                 continue;
             }
 
             if ($child instanceof InterfaceDeclaration) {
-                $items[(string) $child->getNamespacedName()] =  new ReflectionInterface($serviceLocator, $child);
+                $items[(string) $child->getNamespacedName()] =  new ReflectionInterface($serviceLocator, $source, $child);
                 continue;
             }
 
-            $items[(string) $child->getNamespacedName()] = new ReflectionClass($serviceLocator, $child);
+            $items[(string) $child->getNamespacedName()] = new ReflectionClass($serviceLocator, $source, $child);
         }
 
         return new static($serviceLocator, $items);

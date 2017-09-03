@@ -5,12 +5,15 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode
 {
     abstract public function name(): ClassName;
 
     abstract protected function methods(): ReflectionMethodCollection;
+
+    abstract public function sourceCode(): SourceCode;
 
     public function isInterface()
     {

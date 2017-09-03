@@ -3,6 +3,8 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\ServiceLocator;
+use Phpactor\WorseReflection\Core\SourceCode;
+
 use PhpParser\Node\Stmt\ClassLike;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
@@ -24,12 +26,19 @@ class ReflectionInterface extends AbstractReflectionClass
      */
     private $node;
 
+    /**
+     * @var SourceCode
+     */
+    private $sourceCode;
+
     public function __construct(
         ServiceLocator $serviceLocator,
+        SourceCode $sourceCode,
         InterfaceDeclaration $node
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
+        $this->sourceCode = $sourceCode;
     }
 
     protected function node(): Node
@@ -93,4 +102,10 @@ class ReflectionInterface extends AbstractReflectionClass
     {
         return ClassName::fromString((string) $this->node()->getNamespacedName());
     }
+
+    public function sourceCode(): SourceCode
+    {
+        return $this->sourceCode;
+    }
 }
+

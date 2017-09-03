@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollec
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Visibility;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 class ReflectionClass extends AbstractReflectionClass
 {
@@ -29,12 +30,19 @@ class ReflectionClass extends AbstractReflectionClass
      */
     private $node;
 
+    /**
+     * @var SourceCode
+     */
+    private $sourceCode;
+
     public function __construct(
         ServiceLocator $serviceLocator,
+        SourceCode $sourceCode,
         ClassDeclaration $node
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
+        $this->sourceCode = $sourceCode;
     }
 
     protected function node(): Node
@@ -202,4 +210,10 @@ class ReflectionClass extends AbstractReflectionClass
 
         return $this->interfaces()->has((string) $className);
     }
+
+    public function sourceCode(): SourceCode
+    {
+        return $this->sourceCode;
+    }
 }
+

@@ -3,6 +3,8 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\ServiceLocator;
+use Phpactor\WorseReflection\Core\SourceCode;
+
 use PhpParser\Node\Stmt\ClassLike;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
@@ -22,12 +24,19 @@ class ReflectionTrait extends AbstractReflectionClass
      */
     private $node;
 
+    /**
+     * @var SourceCode
+     */
+    private $sourceCode;
+
     public function __construct(
         ServiceLocator $serviceLocator,
+        SourceCode $sourceCode,
         TraitDeclaration $node
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
+        $this->sourceCode = $sourceCode;
     }
 
     protected function node(): Node
@@ -52,4 +61,10 @@ class ReflectionTrait extends AbstractReflectionClass
     {
         return ClassName::fromString((string) $this->node()->getNamespacedName());
     }
+
+    public function sourceCode(): SourceCode
+    {
+        return $this->sourceCode;
+    }
 }
+

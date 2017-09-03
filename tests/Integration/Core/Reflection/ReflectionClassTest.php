@@ -391,6 +391,21 @@ EOT
                     $this->assertTrue($class->isInstanceOf(ClassName::fromString('SomeParent')));
                 },
             ],
+            'Returns source code' => [
+                <<<'EOT'
+<?php
+
+class Class2
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertContains('class Class2', (string) $class->sourceCode());
+                },
+            ],
         ];
     }
 }

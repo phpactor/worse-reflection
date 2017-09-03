@@ -138,9 +138,7 @@ class Reflector
      */
     public function reflectClassesIn(SourceCode $source): ReflectionClassCollection
     {
-        $node = $this->services->parser()->parseSourceFile((string) $source);
-
-        return ReflectionClassCollection::fromSourceFileNode($this->services, $node);
+        return ReflectionClassCollection::fromSource($this->services, $source);
     }
 
     /**
