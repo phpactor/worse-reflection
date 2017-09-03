@@ -90,6 +90,11 @@ final class SymbolInformation
         return $this->symbol;
     }
 
+    public function hasClassType(): bool
+    {
+        return null !== $this->classType;
+    }
+
     /**
      * @return Type
      */

@@ -20,7 +20,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 
-final class ReflectionMethod extends AbstractReflectionClassMember
+class ReflectionMethod extends AbstractReflectionClassMember
 {
     /**
      * @var ServiceLocator

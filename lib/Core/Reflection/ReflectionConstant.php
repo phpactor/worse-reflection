@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 
-final class ReflectionConstant extends AbstractReflectionClassMember
+class ReflectionConstant extends AbstractReflectionClassMember
 {
     /**
      * @var ServiceLocator

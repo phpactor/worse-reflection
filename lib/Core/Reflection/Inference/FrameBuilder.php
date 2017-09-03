@@ -46,6 +46,10 @@ final class FrameBuilder
     {
         $scopeNode = $node->getFirstAncestor(FunctionLike::class, SourceFileNode::class);
 
+        if (null === $scopeNode) {
+            $scopeNode = $node;
+        }
+
         return $this->buildFromNode($scopeNode);
     }
 

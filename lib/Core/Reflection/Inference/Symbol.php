@@ -49,7 +49,7 @@ final class Symbol
         return new self('<unknown>', '<unknown>', Position::fromStartAndEnd(0, 0));
     }
 
-    public static function fromTypeNameAndPosition(string $symbolType, string $name, Position $position): Symbol
+    public static function assertValidSymbolType(string $symbolType)
     {
         if (false === in_array($symbolType, self::VALID_SYMBOLS)) {
             throw new \InvalidArgumentException(sprintf(
@@ -58,7 +58,11 @@ final class Symbol
                 implode('", "', self::VALID_SYMBOLS)
             ));
         }
+    }
 
+    public static function fromTypeNameAndPosition(string $symbolType, string $name, Position $position): Symbol
+    {
+        self::assertValidSymbolType($symbolType);
         return new self($symbolType, $name, $position);
     }
 
