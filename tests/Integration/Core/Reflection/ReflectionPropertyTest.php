@@ -135,6 +135,23 @@ EOT
                     $this->assertFalse($properties->get('property1')->isStatic());
                 },
             ],
+            'Property with assignment' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+class Foobar
+{
+    private $property1 = 'bar';
+}
+EOT
+                ,
+                'Foobar',
+                function ($properties) {
+                    $this->assertTrue($properties->has('property1'));
+                },
+            ],
             'Return true if property is static' => [
                 <<<'EOT'
 <?php

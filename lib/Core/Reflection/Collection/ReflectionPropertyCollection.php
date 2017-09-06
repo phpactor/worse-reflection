@@ -10,6 +10,7 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 
 class ReflectionPropertyCollection extends AbstractReflectionCollection
 {
@@ -23,6 +24,11 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection
         foreach ($properties as $property) {
             foreach ($property->propertyElements as $propertyElement) {
                 foreach ($propertyElement as $variable) {
+
+                    if ($variable instanceof AssignmentExpression) {
+                        $variable = $variable->leftOperand;
+                    }
+
                     if (false === $variable instanceof Variable) {
                         continue;
                     }
