@@ -190,7 +190,7 @@ class SymbolInformationResolver
             return Type::fromString($name);
         }
 
-        if ($name == 'self') {
+        if (in_array($name, ['self', 'static'])) {
             $class = $node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class);
 
             return Type::fromString($class->getNamespacedName());

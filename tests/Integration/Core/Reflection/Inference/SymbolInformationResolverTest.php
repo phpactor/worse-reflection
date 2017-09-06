@@ -633,6 +633,20 @@ class Foobar
 EOT
                 , [], ['type' => 'Foobar']
             ],
+            'It returns type for static' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function foobar(Barfoo $barfoo = 'test')
+    {
+        stat<>ic::
+    }
+}
+EOT
+                , [], ['type' => 'Foobar']
+            ],
             'It returns type for parent' => [
                 <<<'EOT'
 <?php
