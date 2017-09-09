@@ -9,12 +9,13 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ServiceLocator;
+use Microsoft\PhpParser\ClassLike;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 {
     public function declaringClass(): AbstractReflectionClass
     {
-        $class = $this->node()->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class)->getNamespacedName();
+        $class = $this->node()->getFirstAncestor(ClassLike::class)->getNamespacedName();
 
         if (null === $class) {
             throw new \InvalidArgumentException(sprintf(

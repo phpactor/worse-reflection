@@ -19,6 +19,7 @@ use Phpactor\WorseReflection\Core\Reflection\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Microsoft\PhpParser\ClassLike;
 
 class ReflectionMethod extends AbstractReflectionClassMember
 {
@@ -74,7 +75,7 @@ class ReflectionMethod extends AbstractReflectionClassMember
 
     public function declaringClass(): AbstractReflectionClass
     {
-        $class = $this->node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class)->getNamespacedName();
+        $class = $this->node->getFirstAncestor(ClassLike::class)->getNamespacedName();
 
         if (null === $class) {
             throw new \InvalidArgumentException(sprintf(

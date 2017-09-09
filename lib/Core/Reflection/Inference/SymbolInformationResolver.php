@@ -26,6 +26,7 @@ use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
 use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\ClassLike;
 
 class SymbolInformationResolver
 {
@@ -191,7 +192,7 @@ class SymbolInformationResolver
         }
 
         if (in_array($name, ['self', 'static'])) {
-            $class = $node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class);
+            $class = $node->getFirstAncestor(ClassLike::class);
 
             return Type::fromString($class->getNamespacedName());
         }
@@ -392,7 +393,7 @@ class SymbolInformationResolver
 
     private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $methodDeclaration)
     {
-        $classNode = $methodDeclaration->getFirstAncestor(ClassDeclaration::class);
+        $classNode = $methodDeclaration->getFirstAncestor(ClassLike::class);
         $classSymbolInformation = $this->_resolveNode($frame, $classNode);
         return $this->symbolFactory->information(
             $methodDeclaration, [
