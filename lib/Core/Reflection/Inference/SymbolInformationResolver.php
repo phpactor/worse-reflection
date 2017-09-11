@@ -59,14 +59,10 @@ class SymbolInformationResolver
     }
 
     /**
-     * @param Node $node
+     * External interface
      */
     public function resolveNode(Frame $frame, $node): SymbolInformation
     {
-        if (false === $node instanceof Node) {
-            $this->logger->warning(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
-            return SymbolInformation::none();
-        }
 
         // jump to the container for SubscriptExpression (array access)
         // TODO: this is strange and proably wrong.
@@ -77,7 +73,20 @@ class SymbolInformationResolver
         return $this->_resolveNode($frame, $node);
     }
 
-    private function _resolveNode(Frame $frame, Node $node): SymbolInformation
+    /**
+     * Internal interface
+     */
+    public function _resolveNode(Frame $frame, $node): SymbolInformation
+    {
+        if (false === $node instanceof Node) {
+            $this->logger->warning(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
+            return SymbolInformation::none();
+        }
+
+        return $this->__resolveNode($frame, $node);
+    }
+
+    private function __resolveNode(Frame $frame, Node $node): SymbolInformation
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
         if ($node instanceof QualifiedName) {
@@ -117,7 +126,7 @@ class SymbolInformationResolver
 
         if ($node instanceof SubscriptExpression) {
             $variableValue = $this->_resolveNode($frame, $node->postfixExpression);
-            return $this->resolveAccessExpression($frame, $variableValue, $node->accessExpression);
+            return $this->resolveSubscriptExpression($frame, $variableValue, $node);
         }
 
         if ($node instanceof StringLiteral) {
@@ -309,8 +318,16 @@ class SymbolInformationResolver
         return $this->symbolFactory->information($node, [ 'type' => Type::array(), 'value' => $array ]);
     }
 
-    private function resolveAccessExpression(Frame $frame, SymbolInformation $subject, Node $node): SymbolInformation
+    private function resolveSubscriptExpression(Frame $frame, SymbolInformation $subject, SubscriptExpression $node = null): SymbolInformation
     {
+        if (null === $node->accessExpression) {
+            $this->logger->warning(sprintf(
+                'Subscript expression "%s" is incomplete',
+                (string) $node->getText()
+            ));
+        }
+
+        $node = $node->accessExpression;
         // TODO: test me
         if ($subject->value() == SymbolInformation::none()) {
             return SymbolInformation::none();
@@ -318,7 +335,7 @@ class SymbolInformationResolver
 
         if ($subject->type() != Type::array()) {
             $this->logger->warning(sprintf(
-                'Not resolving access expression of type "%s"',
+                'Not resolving subscript expression of type "%s"',
                 (string) $subject->type()
             ));
             return SymbolInformation::none();
