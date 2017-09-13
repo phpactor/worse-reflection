@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Core\Logger;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\FunctionLike;
+use Microsoft\PhpParser\Node\CatchClause;
 
 final class FrameBuilder
 {
@@ -78,9 +79,34 @@ final class FrameBuilder
             $this->processAssignment($frame, $node);
         }
 
+        if ($node instanceof CatchClause) {
+            $this->processExceptionCatch($frame, $node);
+        }
+
         foreach ($node->getChildNodes() as $node) {
             $this->walkNode($frame, $node, $endPosition);
         }
+    }
+
+    private function processExceptionCatch(Frame $frame, CatchClause $node)
+    {
+        if (!$node->qualifiedName) {
+            return;
+        }
+
+        $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->qualifiedName);
+        $name = $node->variableName->getText($node->getFileContents());
+
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt($node->variableName->start),
+            $name,
+            $this->symbolFactory->information(
+                $node, [
+                    'symbol_type' => Symbol::VARIABLE,
+                    'type' => $symbolInformation->type(),
+                ]
+            )
+        ));
     }
 
     private function processAssignment(Frame $frame, AssignmentExpression $node)

@@ -239,6 +239,20 @@ EOT
     public function provideBuildForNode()
     {
         return [
+            'Exceptions' => [
+                <<<'EOT'
+<?php
+try {
+} catch (\Exception $exception) {
+        <>
+}
+
+EOT
+                , 
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$exception'));
+                }
+            ],
             'Respects closure scope' => [
                 <<<'EOT'
 <?php

@@ -18,7 +18,7 @@ class SymbolFactory
         if (null !== $options['token'] && false === $options['token'] instanceof Token) {
             throw new \InvalidArgumentException(sprintf(
                 'Token must be of type %s, got %s',
-                Token::class, get_class($options['token'])
+                Token::class, is_object($options['token']) ? get_class($options['token']) : gettype($options['token'])
             ));
         }
 
