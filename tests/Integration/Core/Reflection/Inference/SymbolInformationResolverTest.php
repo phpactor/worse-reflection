@@ -29,7 +29,7 @@ class SymbolInformationResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-        //var_dump($this->logger);
+        ///var_dump($this->logger);
     }
 
     /**
@@ -700,6 +700,16 @@ class Foobar
 }
 EOT
                 , [], ['symbol_type' => Symbol::METHOD, 'symbol_name' => 'method']
+            ],
+            'Class name' => [
+                <<<'EOT'
+<?php
+
+class Fo<>obar
+{
+}
+EOT
+                , [], ['type' => 'Foobar', 'symbol_type' => Symbol::CLASS_],
             ],
         ];
     }

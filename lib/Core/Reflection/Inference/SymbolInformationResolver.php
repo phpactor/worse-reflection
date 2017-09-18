@@ -88,6 +88,7 @@ class SymbolInformationResolver
     private function __resolveNode(Frame $frame, Node $node): SymbolInformation
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
+
         if ($node instanceof QualifiedName) {
             return $this->symbolFactory->information($node, [
                 'type' => $this->resolveQualifiedName($node),
@@ -116,7 +117,10 @@ class SymbolInformationResolver
         }
 
         if ($node instanceof ClassDeclaration || $node instanceof InterfaceDeclaration) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::fromString($node->getNamespacedName()) ]);
+            return $this->symbolFactory->information($node, [
+                'symbol_type' => Symbol::CLASS_,
+                'type' => Type::fromString($node->getNamespacedName())
+            ]);
         }
 
         if ($node instanceof ObjectCreationExpression) {
