@@ -12,6 +12,9 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 
+/**
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty get()
+ */
 class ReflectionPropertyCollection extends AbstractReflectionCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)

@@ -10,6 +10,9 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
+/**
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant get()
+ */
 class ReflectionConstantCollection extends AbstractReflectionCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)

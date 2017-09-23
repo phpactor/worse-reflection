@@ -12,6 +12,9 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\SourceCode;
 
+/**
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
+ */
 class ReflectionClassCollection extends AbstractReflectionCollection
 {
     public static function fromSource(ServiceLocator $serviceLocator, SourceCode $source)

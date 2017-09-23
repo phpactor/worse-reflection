@@ -8,6 +8,9 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\TraitUseClause;
 use Phpactor\WorseReflection\Core\Tolerant\TolerantQualifiedNameResolver;
 
+/**
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionTrait get()
+ */
 class ReflectionTraitCollection extends AbstractReflectionCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class)

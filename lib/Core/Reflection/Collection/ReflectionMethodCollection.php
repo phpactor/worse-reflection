@@ -13,6 +13,9 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
+/**
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod get()
+ */
 class ReflectionMethodCollection extends AbstractReflectionCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)

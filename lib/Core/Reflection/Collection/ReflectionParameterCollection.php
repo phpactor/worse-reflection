@@ -6,6 +6,9 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
 
+/**
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
+ */
 class ReflectionParameterCollection extends AbstractReflectionCollection
 {
     public static function fromMethodDeclaration(ServiceLocator $serviceLocator, MethodDeclaration $method)
