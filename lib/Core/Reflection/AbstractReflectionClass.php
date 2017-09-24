@@ -3,8 +3,9 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\SourceCode;
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode
@@ -15,19 +16,24 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode
 
     abstract public function sourceCode(): SourceCode;
 
-    public function isInterface()
+    public function isInterface(): bool
     {
         return $this instanceof ReflectionInterface;
     }
 
-    public function isTrait()
+    public function isTrait(): bool
     {
         return $this instanceof ReflectionTrait;
     }
 
+    public function isClass(): bool
+    {
+        return $this instanceof ReflectionClass;
+    }
+
     public function isConcrete()
     {
-        if ($this instanceof ReflectionInterface) {
+        if (false === $this->isClass()) {
             return false;
         }
 
