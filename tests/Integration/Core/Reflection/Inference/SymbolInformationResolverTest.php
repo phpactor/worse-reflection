@@ -29,7 +29,7 @@ class SymbolInformationResolverTest extends IntegrationTestCase
 
     public function tearDown()
     {
-        ///var_dump($this->logger);
+        //var_dump($this->logger);
     }
 
     /**
@@ -333,6 +333,36 @@ EOT
                 'symbol_type' => Symbol::METHOD,
                 'symbol_name' => 'type3',
                 'class_type' => 'Foobar\Barfoo\Type2',
+            ],
+            ],
+            'It returns type for a method which returns an interface type' => [
+                <<<'EOT'
+<?php
+
+interface Barfoo
+{
+    public function foo(): string;
+}
+
+class Foobar
+{
+    public function hello(): Barfoo
+    {
+    }
+
+    public function goodbye()
+    {
+        $this->hello()->foo(<>);
+    }
+}
+EOT
+            , [
+                '$this' => Type::fromString('Foobar'),
+            ], [
+                'type' => 'string',
+                'symbol_type' => Symbol::METHOD,
+                'symbol_name' => 'foo',
+                'class_type' => 'Barfoo',
             ],
             ],
             'It returns class type for parent class for parent method' => [
