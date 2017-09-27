@@ -97,6 +97,10 @@ class MemberTypeResolver
             return $info;
         }
 
+        if ($class->isInterface()) {
+            return $info;
+        }
+
         try {
             if (false === $class->properties()->has($name)) {
                 $this->logger->warning(sprintf(
