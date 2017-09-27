@@ -237,18 +237,28 @@ final class FrameBuilder
     {
         $comment = $node->getLeadingCommentAndWhitespaceText();
 
-        if (preg_match('{var \$(\w+) (\w+)}', $comment, $matches)) {
-            $frame->locals()->add(Variable::fromOffsetNameAndValue(
-                Offset::fromInt($node->getStart()),
-                '$' . $matches[1],
-                $this->symbolFactory->information(
-                    $node, [
-                        'symbol_type' => Symbol::VARIABLE,
-                        'type' => $this->symbolInformationResolver->resolveQualifiedName($node, $matches[2])
-                    ]
-                )
-            ));
+        if (!preg_match('{var (\$?\w+) (\$?\w+)}', $comment, $matches)) {
+            return;
         }
+
+        $type = $matches[1];
+        $varName = $matches[2];
+
+        // detect non-standard
+        if (substr($type, 0, 1) == '$') {
+            list($varName, $type) = [$type, $varName];
+        }
+
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt($node->getStart()),
+            $varName,
+            $this->symbolFactory->information(
+                $node, [
+                    'symbol_type' => Symbol::VARIABLE,
+                    'type' => $this->symbolInformationResolver->resolveQualifiedName($node, $type)
+                ]
+            )
+        ));
     }
 
     private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)

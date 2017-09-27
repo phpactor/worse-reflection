@@ -298,6 +298,32 @@ EOT
                     $this->assertCount(1, $frame->locals()->byName('$zed'));
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->first()->symbolInformation()->type());
                 }
+            ],
+            'Injects variables with @var (non-standard)' => [
+                <<<'EOT'
+<?php
+/** @var $zed string */
+$zed;
+<>
+EOT
+                , 
+                function (Frame $frame) {
+                    $this->assertCount(2, $frame->locals()->byName('$zed'));
+                    $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
+                }
+            ],
+            'Injects variables with @var (standard)' => [
+                <<<'EOT'
+<?php
+/** @var string $zed */
+$zed;
+<>
+EOT
+                , 
+                function (Frame $frame) {
+                    $this->assertCount(2, $frame->locals()->byName('$zed'));
+                    $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
+                }
             ]
         ];
     }
