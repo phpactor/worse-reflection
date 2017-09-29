@@ -103,6 +103,7 @@ class SymbolInformationResolver
             return $this->symbolFactory->information($node, [
                 'token' => $node->name,
                 'symbol_type' => Symbol::CONSTANT,
+                'class_type' => $this->classTypeFromMember($node)
             ]);
         }
 
@@ -203,7 +204,9 @@ class SymbolInformationResolver
     private function resolvePropertyVariable(ParserVariable $node)
     {
         return $this->symbolFactory->information($node, [
-            'symbol_type' => Symbol::PROPERTY
+            'token' => $node->name,
+            'symbol_type' => Symbol::PROPERTY,
+            'class_type' => $this->classTypeFromMember($node)
         ]);
     }
 
@@ -494,5 +497,16 @@ class SymbolInformationResolver
         ));
 
         return $info;
+    }
+
+    private function classTypeFromMember(Node $node)
+    {
+        $classNode = $node->getFirstAncestor(ClassLike::class);
+
+        if (null === $classNode) {
+            return;
+        }
+
+        return Type::fromString($classNode->getNamespacedName());
     }
 }

@@ -750,7 +750,7 @@ class Foobar
     private $a<>aa = 'asd';
 }
 EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => '$aaa'],
+                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => '$aaa', 'class_type' => 'Foobar'],
             ],
             'Constant name' => [
                 <<<'EOT'
@@ -761,7 +761,7 @@ class Foobar
     const AA<>A = 'aaa';
 }
 EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::CONSTANT, 'symbol_name' => 'AAA'],
+                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::CONSTANT, 'symbol_name' => 'AAA', 'class_type' => 'Foobar'],
             ],
         ];
     }
