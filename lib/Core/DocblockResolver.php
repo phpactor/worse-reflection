@@ -22,6 +22,11 @@ class DocblockResolver
         }
 
         if (preg_match('#inheritdoc#i', $node->getLeadingCommentAndWhitespaceText())) {
+            if ($class->isTrait()) {
+                // TODO: Warn about inherit block on trait
+                return Type::unknown();
+            }
+
             if (!$class->parent()) {
                 return Type::unknown();
             }

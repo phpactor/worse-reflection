@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Type;
 
 class ReflectionTraitTest extends IntegrationTestCase
 {
@@ -95,6 +96,26 @@ EOT
                 function ($class) {
                     $this->assertCount(2, $class->properties());
                     $this->assertEquals('foobar', $class->properties()->first()->name());
+                },
+            ],
+            'Ignores inherit docs on trait' => [
+                <<<'EOT'
+<?php
+
+trait Int1
+{
+    /**
+     * {@inheritDoc()
+     */
+    public function foo()
+    {
+    }
+}
+EOT
+                ,
+                'Int1',
+                function (ReflectionTrait $class) {
+                    $this->assertEquals(Type::unknown(), $class->methods()->first()->inferredReturnType());
                 },
             ],
         ];
