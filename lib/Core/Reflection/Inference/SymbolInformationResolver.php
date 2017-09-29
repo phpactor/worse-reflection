@@ -27,6 +27,9 @@ use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\ClassLike;
+use Microsoft\PhpParser\Node\DelimitedList\ExpressionList;
+use Microsoft\PhpParser\Node\PropertyDeclaration;
+use Microsoft\PhpParser\Node\ConstElement;
 
 class SymbolInformationResolver
 {
@@ -96,6 +99,13 @@ class SymbolInformationResolver
             ]);
         }
 
+        if ($node instanceof ConstElement) {
+            return $this->symbolFactory->information($node, [
+                'token' => $node->name,
+                'symbol_type' => Symbol::CONSTANT,
+            ]);
+        }
+
         if ($node instanceof Parameter) {
             return $this->resolveParameter($frame, $node);
         }
@@ -118,6 +128,7 @@ class SymbolInformationResolver
 
         if ($node instanceof ClassDeclaration || $node instanceof InterfaceDeclaration) {
             return $this->symbolFactory->information($node, [
+                'token' => $node->name,
                 'symbol_type' => Symbol::CLASS_,
                 'type' => Type::fromString($node->getNamespacedName())
             ]);
@@ -133,7 +144,10 @@ class SymbolInformationResolver
         }
 
         if ($node instanceof StringLiteral) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::string(), 'value' => (string) $node->getStringContentsText()]);
+            return $this->symbolFactory->information(
+                $node,
+                [ 'type' => Type::string(), 'value' => (string) $node->getStringContentsText()]
+            );
         }
 
         if ($node instanceof NumericLiteral) {
@@ -171,6 +185,10 @@ class SymbolInformationResolver
 
     private function resolveVariable(Frame $frame, ParserVariable $node)
     {
+        if ($node->getFirstAncestor(PropertyDeclaration::class)) {
+            return $this->resolvePropertyVariable($node);
+        }
+
         $name = $node->getText();
         $offset = $node->getFullStart();
         $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($name);
@@ -180,6 +198,13 @@ class SymbolInformationResolver
         }
 
         return $variables->last()->symbolInformation();
+    }
+
+    private function resolvePropertyVariable(ParserVariable $node)
+    {
+        return $this->symbolFactory->information($node, [
+            'symbol_type' => Symbol::PROPERTY
+        ]);
     }
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation
@@ -276,7 +301,10 @@ class SymbolInformationResolver
         // note hack to cast to either an int or a float
         $value = $node->getText() + 0;
 
-        return $this->symbolFactory->information($node, [ 'type' => is_float($value) ? Type::float() : Type::int(), 'value' => $value ]);
+        return $this->symbolFactory->information($node, [
+            'type' => is_float($value) ? Type::float() : Type::int(),
+            'value' => $value
+        ]);
     }
 
     private function resolveReservedWord(Node $node)
@@ -304,7 +332,10 @@ class SymbolInformationResolver
         $array  = [];
 
         if (null === $node->arrayElements) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::array(), 'value' => [] ]);
+            return $this->symbolFactory->information($node, [
+                'type' => Type::array(),
+                'value' => []
+            ]);
         }
 
         foreach ($node->arrayElements->getElements() as $element) {
@@ -360,7 +391,10 @@ class SymbolInformationResolver
 
             if (array_key_exists($string->value(), $subjectValue)) {
                 $value = $subjectValue[$string->value()];
-                return $this->symbolFactory->information($node, [ 'type' => Type::fromValue($value), 'value' => $value ]);
+                return $this->symbolFactory->information($node, [
+                    'type' => Type::fromValue($value),
+                    'value' => $value
+                ]);
             }
         }
 
@@ -460,6 +494,5 @@ class SymbolInformationResolver
         ));
 
         return $info;
-
     }
 }

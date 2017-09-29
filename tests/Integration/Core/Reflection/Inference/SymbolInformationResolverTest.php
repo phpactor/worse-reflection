@@ -739,7 +739,29 @@ class Fo<>obar
 {
 }
 EOT
-                , [], ['type' => 'Foobar', 'symbol_type' => Symbol::CLASS_],
+                , [], ['type' => 'Foobar', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'Foobar'],
+            ],
+            'Property name' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    private $a<>aa = 'asd';
+}
+EOT
+                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => '$aaa'],
+            ],
+            'Constant name' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    const AA<>A = 'aaa';
+}
+EOT
+                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::CONSTANT, 'symbol_name' => 'AAA'],
             ],
         ];
     }
