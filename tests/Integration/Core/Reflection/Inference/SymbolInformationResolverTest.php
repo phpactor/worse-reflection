@@ -884,7 +884,7 @@ EOT
                     $this->assertEquals($value, $information->symbol()->name());
                     continue;
                 case 'class_type':
-                    $this->assertEquals($value, (string) $information->classType());
+                    $this->assertEquals($value, (string) $information->containerType());
                     continue;
                 case 'log':
                     $this->assertContains($value, implode(' ', $this->logger->messages()));

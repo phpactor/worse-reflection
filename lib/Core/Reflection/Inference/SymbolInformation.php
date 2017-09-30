@@ -24,14 +24,14 @@ final class SymbolInformation
     /**
      * @var Type
      */
-    private $classType;
+    private $containerType;
 
     private function __construct(Symbol $symbol, Type $type, $value = null, Type $classType = null)
     {
         $this->type = $type;
         $this->value = $value;
         $this->symbol = $symbol;
-        $this->classType = $classType;
+        $this->containerType = $classType;
     }
 
     public static function for(Symbol $symbol): SymbolInformation
@@ -62,7 +62,7 @@ final class SymbolInformation
 
     public function withValue($value): SymbolInformation
     {
-        return new self($this->symbol, $this->type, $value, $this->classType);
+        return new self($this->symbol, $this->type, $value, $this->containerType);
     }
 
     public function withClassType($classType): SymbolInformation
@@ -72,7 +72,7 @@ final class SymbolInformation
 
     public function withType(Type $type): SymbolInformation
     {
-        return new self($this->symbol, $type, $this->value, $this->classType);
+        return new self($this->symbol, $type, $this->value, $this->containerType);
     }
 
     public function type(): Type
@@ -92,15 +92,15 @@ final class SymbolInformation
 
     public function hasClassType(): bool
     {
-        return null !== $this->classType;
+        return null !== $this->containerType;
     }
 
     /**
      * @return Type
      */
-    public function classType()
+    public function containerType()
     {
-        return $this->classType;
+        return $this->containerType;
     }
 }
 
