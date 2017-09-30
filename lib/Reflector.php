@@ -153,6 +153,6 @@ class Reflector
         $resolver = $this->services->symbolInformationResolver();
         $frame = $this->services->frameBuilder()->buildForNode($node);
 
-        return ReflectionOffset::fromFrameAndValue($frame, $resolver->resolveNode($frame, $node));
+        return ReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
     }
 }

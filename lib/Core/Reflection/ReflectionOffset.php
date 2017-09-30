@@ -23,7 +23,7 @@ final class ReflectionOffset
         $this->symbolInformation = $symbolInformation;
     }
 
-    public static function fromFrameAndValue($frame, $symbolInformation)
+    public static function fromFrameAndSymbolInformation($frame, $symbolInformation)
     {
         return new self($frame, $symbolInformation);
     }
