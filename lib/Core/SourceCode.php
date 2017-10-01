@@ -20,14 +20,14 @@ class SourceCode
         $this->path = $path;
     }
 
-    public static function fromString($string)
+    public static function fromString($source)
     {
-        return new self($string);
+        return new self($source);
     }
 
     public static function fromPath(string $filePath)
     {
-        if (!file_Exists($filePath)) {
+        if (!file_exists($filePath)) {
             throw new \InvalidArgumentException(sprintf(
                 'File "%s" does not exist',
                 $filePath
@@ -35,6 +35,11 @@ class SourceCode
         }
 
         return new self(file_get_contents($filePath), $filePath);
+    }
+
+    public static function fromPathAndString(string $filePath, string $source)
+    {
+        return new self($source, $filePath);
     }
 
     public function path()

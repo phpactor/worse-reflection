@@ -152,7 +152,7 @@ class Foobar
 }
 
 EOT
-                , [], ['type' => 'Foobar\Barfoo\Barfoo', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => '$barfoo']
+                , [], ['type' => 'Foobar\Barfoo\Barfoo', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'barfoo']
             ],
             'It returns the type and value of a scalar method parameter' => [
                 <<<'EOT'
@@ -750,7 +750,7 @@ class Foobar
     private $a<>aa = 'asd';
 }
 EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => '$aaa', 'class_type' => 'Foobar'],
+                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'class_type' => 'Foobar'],
             ],
             'Constant name' => [
                 <<<'EOT'

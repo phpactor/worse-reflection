@@ -62,6 +62,11 @@ class SymbolFactory
 
     private function name(Node $node, $token = null)
     {
+        return ltrim($this->rawName($node, $token), '$');
+    }
+
+    private function rawName(Node $node, $token = null)
+    {
         if ($token) {
             return $token->getText($node->getFileContents());
         }
