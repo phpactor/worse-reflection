@@ -54,7 +54,7 @@ abstract class Assignments implements \Countable, \IteratorAggregate
 
         if (!$last) {
             throw new \RuntimeException(
-                'Variable collection is empty'
+                'Cannot get last, variable collection is empty'
             );
         }
 

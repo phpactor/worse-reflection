@@ -324,6 +324,22 @@ EOT
                     $this->assertCount(2, $frame->locals()->byName('$zed'));
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
                 }
+            ],
+            'Handles array assignments' => [
+                <<<'EOT'
+<?php
+$foo = [ 'foo' => 'bar' ];
+$bar = $foo['foo'];
+<>
+EOT
+                , 
+                function (Frame $frame) {
+                    $this->assertCount(2, $frame->locals());
+                    $this->assertEquals('array', (string) $frame->locals()->first()->symbolInformation()->type());
+                    $this->assertEquals(['foo' => 'bar'], $frame->locals()->first()->symbolInformation()->value());
+                    $this->assertEquals('string', (string) $frame->locals()->last()->symbolInformation()->type());
+                    $this->assertEquals('bar', (string) $frame->locals()->last()->symbolInformation()->value());
+                }
             ]
         ];
     }
