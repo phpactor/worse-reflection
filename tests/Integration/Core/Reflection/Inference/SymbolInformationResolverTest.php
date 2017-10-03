@@ -456,7 +456,7 @@ EOT
 
 'bar<>';
 EOT
-                , [], ['type' => 'string', 'value' => 'bar']
+                , [], ['type' => 'string', 'value' => 'bar', 'symbol_type' => Symbol::STRING ]
             ],
             'It returns type for float' => [
                 <<<'EOT'
@@ -464,7 +464,7 @@ EOT
 
 1.<>2;
 EOT
-                , [], ['type' => 'float', 'value' => 1.2],
+                , [], ['type' => 'float', 'value' => 1.2, 'symbol_type' => Symbol::NUMBER],
             ],
             'It returns type for integer' => [
                 <<<'EOT'
@@ -472,7 +472,7 @@ EOT
 
 12<>;
 EOT
-                , [], ['type' => 'int', 'value' => 12],
+                , [], ['type' => 'int', 'value' => 12, 'symbol_type' => Symbol::NUMBER],
             ],
             'It returns type for bool true' => [
                 <<<'EOT'
@@ -480,7 +480,7 @@ EOT
 
 tr<>ue;
 EOT
-                , [], ['type' => 'bool', 'value' => true],
+                , [], ['type' => 'bool', 'value' => true, 'symbol_type' => Symbol::BOOLEAN],
             ],
             'It returns type for bool false' => [
                 <<<'EOT'
@@ -488,7 +488,7 @@ EOT
 
 <>false;
 EOT
-                , [], ['type' => 'bool', 'value' => false],
+                , [], ['type' => 'bool', 'value' => false, 'symbol_type' => Symbol::BOOLEAN],
             ],
             'It returns type null' => [
                 <<<'EOT'

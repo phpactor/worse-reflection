@@ -103,7 +103,7 @@ class SymbolInformationResolver
             return $this->symbolFactory->information($node, [
                 'token' => $node->name,
                 'symbol_type' => Symbol::CONSTANT,
-                'class_type' => $this->classTypeFromMember($node)
+                'class_type' => $this->classTypeFromNode($node)
             ]);
         }
 
@@ -147,7 +147,12 @@ class SymbolInformationResolver
         if ($node instanceof StringLiteral) {
             return $this->symbolFactory->information(
                 $node,
-                [ 'type' => Type::string(), 'value' => (string) $node->getStringContentsText()]
+                [
+                    'symbol_type' => Symbol::STRING,
+                    'type' => Type::string(),
+                    'value' => (string) $node->getStringContentsText(),
+                    'class_type' => $this->classTypeFromNode($node)
+                ]
             );
         }
 
@@ -206,7 +211,7 @@ class SymbolInformationResolver
         return $this->symbolFactory->information($node, [
             'token' => $node->name,
             'symbol_type' => Symbol::PROPERTY,
-            'class_type' => $this->classTypeFromMember($node)
+            'class_type' => $this->classTypeFromNode($node)
         ]);
     }
 
@@ -305,6 +310,7 @@ class SymbolInformationResolver
         $value = $node->getText() + 0;
 
         return $this->symbolFactory->information($node, [
+            'symbol_type' => Symbol::NUMBER,
             'type' => is_float($value) ? Type::float() : Type::int(),
             'value' => $value
         ]);
@@ -313,15 +319,15 @@ class SymbolInformationResolver
     private function resolveReservedWord(Node $node)
     {
         if ('null' === $node->getText()) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::null(), 'value' => null ]);
+            return $this->symbolFactory->information($node, [ 'type' => Type::null(), 'value' => null, 'symbol_type' => Symbol::BOOLEAN ]);
         }
 
         if ('false' === $node->getText()) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => false ]);
+            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => false, 'symbol_type' => Symbol::BOOLEAN ]);
         }
 
         if ('true' === $node->getText()) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => true ]);
+            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => true, 'symbol_type' => Symbol::BOOLEAN ]);
         }
 
         $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
@@ -499,7 +505,7 @@ class SymbolInformationResolver
         return $info;
     }
 
-    private function classTypeFromMember(Node $node)
+    private function classTypeFromNode(Node $node)
     {
         $classNode = $node->getFirstAncestor(ClassLike::class);
 

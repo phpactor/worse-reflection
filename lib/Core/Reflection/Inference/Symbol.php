@@ -11,6 +11,10 @@ final class Symbol
     const METHOD = 'method';
     const PROPERTY = 'property';
     const CONSTANT = 'constant';
+    const STRING = 'string';
+    const NUMBER = 'number';
+    const BOOLEAN = 'boolean';
+    const ARRAY = 'array';
     const UNKNOWN = '<unknown>';
 
     const VALID_SYMBOLS = [
@@ -20,6 +24,10 @@ final class Symbol
         self::PROPERTY,
         self::CONSTANT,
         self::METHOD,
+        self::STRING,
+        self::NUMBER,
+        self::BOOLEAN,
+        self::ARRAY,
     ];
 
     /**
