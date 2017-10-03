@@ -90,7 +90,7 @@ final class SymbolInformation
         return $this->symbol;
     }
 
-    public function hasClassType(): bool
+    public function hasContainerType(): bool
     {
         return null !== $this->containerType;
     }
