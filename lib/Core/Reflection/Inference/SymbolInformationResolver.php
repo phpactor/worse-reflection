@@ -103,7 +103,7 @@ class SymbolInformationResolver
             return $this->symbolFactory->information($node, [
                 'token' => $node->name,
                 'symbol_type' => Symbol::CONSTANT,
-                'class_type' => $this->classTypeFromNode($node)
+                'container_type' => $this->classTypeFromNode($node)
             ]);
         }
 
@@ -151,7 +151,7 @@ class SymbolInformationResolver
                     'symbol_type' => Symbol::STRING,
                     'type' => Type::string(),
                     'value' => (string) $node->getStringContentsText(),
-                    'class_type' => $this->classTypeFromNode($node)
+                    'container_type' => $this->classTypeFromNode($node)
                 ]
             );
         }
@@ -211,7 +211,7 @@ class SymbolInformationResolver
         return $this->symbolFactory->information($node, [
             'token' => $node->name,
             'symbol_type' => Symbol::PROPERTY,
-            'class_type' => $this->classTypeFromNode($node)
+            'container_type' => $this->classTypeFromNode($node)
         ]);
     }
 
@@ -477,7 +477,7 @@ class SymbolInformationResolver
         return $this->symbolFactory->information(
             $methodDeclaration, [
                 'token' => $methodDeclaration->name,
-                'class_type' => $classSymbolInformation->type(),
+                'container_type' => $classSymbolInformation->type(),
                 'symbol_type' => Symbol::METHOD,
             ]
         );

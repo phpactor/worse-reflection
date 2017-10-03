@@ -31,7 +31,7 @@ class SymbolFactory
     public function information(Node $node, array $options): SymbolInformation
     {
         $options = array_merge([
-            'class_type' => null,
+            'container_type' => null,
             'symbol_type' => Symbol::UNKNOWN,
             'token' => null,
             'type' => null,
@@ -49,8 +49,8 @@ class SymbolFactory
             $information = $information->withType($options['type']);
         }
 
-        if ($options['class_type']) {
-            $information = $information->withClassType($options['class_type']);
+        if ($options['container_type']) {
+            $information = $information->withContainerType($options['container_type']);
         }
 
         if (null !== $options['value']) {

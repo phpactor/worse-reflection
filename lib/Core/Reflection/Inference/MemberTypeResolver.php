@@ -55,7 +55,7 @@ class MemberTypeResolver
         $declaringClass = $method->declaringClass();
 
         return $info
-            ->withClassType(Type::class($declaringClass->name()))
+            ->withContainerType(Type::class($declaringClass->name()))
             ->withType($method->inferredReturnType());
     }
 
@@ -85,7 +85,7 @@ class MemberTypeResolver
         $declaringClass = $constant->declaringClass();
 
         return $info
-            ->withClassType(Type::class($declaringClass->name()))
+            ->withContainerType(Type::class($declaringClass->name()))
             ->withType($constant->type());
     }
 
@@ -119,7 +119,7 @@ class MemberTypeResolver
         $declaringClass = $property->declaringClass();
 
         return $info
-            ->withClassType(Type::class($declaringClass->name()))
+            ->withContainerType(Type::class($declaringClass->name()))
             ->withType($property->type());
     }
 

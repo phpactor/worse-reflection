@@ -65,7 +65,7 @@ final class SymbolInformation
         return new self($this->symbol, $this->type, $value, $this->containerType);
     }
 
-    public function withClassType($classType): SymbolInformation
+    public function withContainerType($classType): SymbolInformation
     {
         return new self($this->symbol, $this->type, $this->value, $classType);
     }
