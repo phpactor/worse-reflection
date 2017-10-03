@@ -312,22 +312,38 @@ class SymbolInformationResolver
         return $this->symbolFactory->information($node, [
             'symbol_type' => Symbol::NUMBER,
             'type' => is_float($value) ? Type::float() : Type::int(),
-            'value' => $value
+            'value' => $value,
+            'container_type' => $this->classTypeFromNode($node)
         ]);
     }
 
     private function resolveReservedWord(Node $node)
     {
         if ('null' === $node->getText()) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::null(), 'value' => null, 'symbol_type' => Symbol::BOOLEAN ]);
+            return $this->symbolFactory->information($node, [
+                'type' => Type::null(),
+                'value' => null,
+                'symbol_type' => Symbol::BOOLEAN,
+                'container_type' => $this->classTypeFromNode($node)
+            ]);
         }
 
         if ('false' === $node->getText()) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => false, 'symbol_type' => Symbol::BOOLEAN ]);
+            return $this->symbolFactory->information($node, [
+                'type' => Type::bool(),
+                'value' => false,
+                'symbol_type' => Symbol::BOOLEAN,
+                'container_type' => $this->classTypeFromNode($node)
+            ]);
         }
 
         if ('true' === $node->getText()) {
-            return $this->symbolFactory->information($node, [ 'type' => Type::bool(), 'value' => true, 'symbol_type' => Symbol::BOOLEAN ]);
+            return $this->symbolFactory->information($node, [
+                'type' => Type::bool(),
+                'value' => true,
+                'symbol_type' => Symbol::BOOLEAN,
+                'container_type' => $this->classTypeFromNode($node)
+            ]);
         }
 
         $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
