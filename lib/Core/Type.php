@@ -181,6 +181,9 @@ class Type
         return $this->type;
     }
 
+    /**
+     * @return ClassName
+     */
     public function className()
     {
         return $this->className;

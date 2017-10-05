@@ -18,6 +18,7 @@ use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\FunctionLike;
 use Microsoft\PhpParser\Node\CatchClause;
+use Microsoft\PhpParser\Node\Parameter;
 
 final class FrameBuilder
 {
@@ -214,6 +215,7 @@ final class FrameBuilder
             return;
         }
 
+        /** @var Parameter $parameterNode */
         foreach ($node->parameters->getElements() as $parameterNode) {
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
             $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $parameterNode);
@@ -223,6 +225,7 @@ final class FrameBuilder
                     $parameterName,
                     $this->symbolFactory->information(
                         $parameterNode, [
+                            'token' => $parameterNode->variableName,
                             'symbol_type' => Symbol::VARIABLE,
                             'type' => $symbolInformation->type(),
                             'value' => $symbolInformation->value(),
