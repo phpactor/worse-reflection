@@ -52,4 +52,3 @@ class SourceCode
         return $this->source;
     }
 }
-

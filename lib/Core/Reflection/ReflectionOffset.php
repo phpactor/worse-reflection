@@ -2,44 +2,14 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 
-final class ReflectionOffset
+interface ReflectionOffset
 {
-    /**
-     * @var Frame
-     */
-    private $frame;
+    public static function fromFrameAndSymbolInformation($frame, $symbolInformation);
 
-    /**
-     * @var SymbolInformation
-     */
-    private $symbolInformation;
+    public function frame(): Frame;
 
-    private function __construct(Frame $frame, SymbolInformation $symbolInformation)
-    {
-        $this->frame = $frame;
-        $this->symbolInformation = $symbolInformation;
-    }
-
-    public static function fromFrameAndSymbolInformation($frame, $symbolInformation)
-    {
-        return new self($frame, $symbolInformation);
-    }
-
-    public function frame(): Frame
-    {
-        return $this->frame;
-    }
-
-    public function symbol(): Symbol
-    {
-        return $this->symbolInformation;
-    }
-
-    public function symbolInformation(): SymbolInformation
-    {
-        return $this->symbolInformation;
-    }
+    public function symbolInformation(): SymbolInformation;
 }

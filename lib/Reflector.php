@@ -7,15 +7,16 @@ use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectionClass;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset as TolerantReflectionOffset;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 class Reflector
 {
@@ -57,7 +58,8 @@ class Reflector
         if (false === $class instanceof ReflectionClass) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not a class, it is a "%s"',
-                $className->full(), get_class($class)
+                $className->full(),
+                get_class($class)
             ));
         }
 
@@ -77,7 +79,8 @@ class Reflector
         if (false === $class instanceof ReflectionInterface) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not an interface, it is a "%s"',
-                $className->full(), get_class($class)
+                $className->full(),
+                get_class($class)
             ));
         }
 
@@ -97,7 +100,8 @@ class Reflector
         if (false === $class instanceof ReflectionTrait) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not a trait, it is a "%s"',
-                $className->full(), get_class($class)
+                $className->full(),
+                get_class($class)
             ));
         }
 
@@ -111,7 +115,7 @@ class Reflector
      *
      * @throws ClassNotFound
      */
-    public function reflectClassLike(ClassName $className): AbstractReflectionClass
+    public function reflectClassLike(ClassName $className): ReflectionClassLike
     {
         if (isset($this->cache[(string) $className])) {
             return $this->cache[(string) $className];
@@ -153,6 +157,6 @@ class Reflector
         $resolver = $this->services->symbolInformationResolver();
         $frame = $this->services->frameBuilder()->buildForNode($node);
 
-        return ReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
+        return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
     }
 }

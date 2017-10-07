@@ -2,15 +2,15 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformationResolver;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
-use Phpactor\WorseReflection\Core\Reflection\Inference\LocalAssignments;
+use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\LocalAssignments;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Symbol;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\Variable;
+use Phpactor\WorseReflection\Core\Inference\Symbol;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Position;

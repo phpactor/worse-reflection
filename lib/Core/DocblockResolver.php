@@ -5,7 +5,7 @@ namespace Phpactor\WorseReflection\Core;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
-use Phpactor\WorseReflection\Core\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
 
 class DocblockResolver

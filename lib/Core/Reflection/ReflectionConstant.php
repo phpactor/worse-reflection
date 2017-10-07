@@ -2,63 +2,18 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Microsoft\PhpParser\Node\ConstElement;
-use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\ServiceLocator;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
 
-class ReflectionConstant extends AbstractReflectionClassMember
+interface ReflectionConstant
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
+    public function position(): Position;
 
-    /**
-     * @var ConstElement
-     */
-    private $node;
+    public function declaringClass(): ReflectionClassLike;
 
-    /**
-     * @var AbstractReflectionClass
-     */
-    private $class;
+    public function class(): ReflectionClassLike;
 
-    public function __construct(
-        ServiceLocator $serviceLocator,
-        AbstractReflectionClass $class,
-        ConstElement $node
-    ) {
-        $this->serviceLocator = $serviceLocator;
-        $this->node = $node;
-        $this->class = $class;
-    }
+    public function name();
 
-    public function name()
-    {
-        return $this->node->getName();
-    }
-
-    public function type(): Type
-    {
-        $value = $this->serviceLocator->symbolInformationResolver()->resolveNode(new Frame(), $this->node->assignment);
-        return $value->type();
-    }
-
-    protected function node(): Node
-    {
-        return $this->node;
-    }
-
-    protected function serviceLocator(): ServiceLocator
-    {
-        return $this->serviceLocator;
-    }
-
-    public function class(): AbstractReflectionClass
-    {
-        return $this->class;
-    }
+    public function type(): Type;
 }
-
