@@ -12,21 +12,24 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionTraitCollection;
 
-interface ReflectionClass extends ReflectionClassLike
+interface ReflectionClassLike
 {
-    public function isAbstract(): bool;
+    public function position(): Position;
 
-    public function constants(): ReflectionConstantCollection;
+    public function name(): ClassName;
 
-    public function parent();
+    public function methods(ReflectionClass $contextClass = null): ReflectionMethodCollection;
 
-    public function properties(): ReflectionPropertyCollection;
+    public function sourceCode(): SourceCode;
 
-    public function interfaces(): ReflectionInterfaceCollection;
+    public function isInterface(): bool;
 
-    public function traits(): ReflectionTraitCollection;
+    public function isTrait(): bool;
 
-    public function memberListPosition(): Position;
+    public function isClass(): bool;
 
-    public function isInstanceOf(ClassName $className): bool;
+    public function isConcrete();
+
+    public function docblock(): Docblock;
 }
+
