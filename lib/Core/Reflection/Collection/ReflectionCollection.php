@@ -2,21 +2,17 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 
-use array;
-use bool;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 use Phpactor\WorseReflection\Core\SourceCode;
 
-interface ReflectionClassCollection
+interface ReflectionCollection
 {
     public function count();
 
     public function keys(): array;
 
-    public function fromReflections(ServiceLocator $serviceLocator, array $reflections);
-
-    public function empty(ServiceLocator $serviceLocator);
+    public static function empty(ServiceLocator $serviceLocator);
 
     public function merge(AbstractReflectionCollection $collection);
 
@@ -37,8 +33,4 @@ interface ReflectionClassCollection
     public function offsetUnset($name);
 
     public function offsetExists($name);
-
-    public function fromSource(ServiceLocator $serviceLocator, SourceCode $source);
-
-    public function concrete();
 }

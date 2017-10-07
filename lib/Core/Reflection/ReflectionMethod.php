@@ -3,19 +3,18 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Position;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Docblock;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\NodeText;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 
 interface ReflectionMethod
 {
     public function position(): Position;
 
-    public function declaringClass(): AbstractReflectionClass;
+    public function declaringClass(): ReflectionClassLike;
 
     public function class(): AbstractReflectionClass;
 

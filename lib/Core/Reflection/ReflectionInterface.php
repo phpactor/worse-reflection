@@ -4,11 +4,10 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Docblock;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
 
 interface ReflectionInterface extends ReflectionClassLike
 {

@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Position;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 
@@ -11,7 +10,7 @@ interface ReflectionProperty
 {
     public function position(): Position;
 
-    public function declaringClass(): AbstractReflectionClass;
+    public function declaringClass(): ReflectionClassLike;
 
     public function class(): AbstractReflectionClass;
 
