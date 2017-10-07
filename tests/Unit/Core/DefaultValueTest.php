@@ -1,11 +1,11 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflection;
+namespace Phpactor\WorseReflection\Tests\Unit\Core;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\DefaultValue;
 
-class ReflectionDefaultValueTest extends TestCase
+class DefaultValueTest extends TestCase
 {
     /**
      * @testdox It creates an undefined default value.

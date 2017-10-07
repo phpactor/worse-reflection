@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Tests\Unit\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Inference\Assignments;
 use PHPUnit\Framework\TestCase;

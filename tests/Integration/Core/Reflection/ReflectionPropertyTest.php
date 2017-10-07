@@ -4,9 +4,9 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 
 class ReflectionPropertyTest extends IntegrationTestCase
 {
