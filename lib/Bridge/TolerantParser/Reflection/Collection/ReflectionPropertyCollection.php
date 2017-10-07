@@ -12,11 +12,12 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty get()
  */
-class ReflectionPropertyCollection extends AbstractReflectionCollection
+class ReflectionPropertyCollection extends AbstractReflectionCollection implements CoreReflectionPropertyCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {

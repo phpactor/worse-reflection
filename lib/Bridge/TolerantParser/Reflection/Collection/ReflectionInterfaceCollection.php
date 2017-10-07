@@ -8,11 +8,12 @@ use Microsoft\PhpParser\Node\QualifiedName;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionInterface get()
  */
-class ReflectionInterfaceCollection extends AbstractReflectionCollection
+class ReflectionInterfaceCollection extends AbstractReflectionCollection implements CoreReflectionInterfaceCollection
 {
     public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface)
     {

@@ -6,11 +6,12 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionParameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
  */
-class ReflectionParameterCollection extends AbstractReflectionCollection
+class ReflectionParameterCollection extends AbstractReflectionCollection implements CoreReflectionParameterCollection
 {
     public static function fromMethodDeclaration(ServiceLocator $serviceLocator, MethodDeclaration $method)
     {

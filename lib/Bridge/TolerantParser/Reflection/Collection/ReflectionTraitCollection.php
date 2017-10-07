@@ -8,11 +8,12 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\TraitUseClause;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Patch\TolerantQualifiedNameResolver;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection as CoreReflectionTraitCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionTrait get()
  */
-class ReflectionTraitCollection extends AbstractReflectionCollection
+class ReflectionTraitCollection extends AbstractReflectionCollection implements CoreReflectionTraitCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class)
     {

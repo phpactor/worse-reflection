@@ -10,11 +10,12 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionConstant
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection as CoreReflectionConstantCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant get()
  */
-class ReflectionConstantCollection extends AbstractReflectionCollection
+class ReflectionConstantCollection extends AbstractReflectionCollection implements CoreReflectionConstantCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {

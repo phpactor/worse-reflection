@@ -13,11 +13,12 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod get()
  */
-class ReflectionMethodCollection extends AbstractReflectionCollection
+class ReflectionMethodCollection extends AbstractReflectionCollection implements CoreReflectionMethodCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
