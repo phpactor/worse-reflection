@@ -6,19 +6,25 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\TokenKind;
 use PhpParser\Node\Stmt\ClassLike;
-use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
-use Phpactor\WorseReflection\Core\Position;
+
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionTraitCollection;
-use Phpactor\WorseReflection\Core\ServiceLocator;
-use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\SourceCode;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
+
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection as CoreReflectionConstantCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection as CoreReflectionTraitCollection;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
+use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass as CoreReflectionClass;
+use Phpactor\WorseReflection\Core\ServiceLocator;
+use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\Visibility;
 
 class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
@@ -63,7 +69,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $modifier->kind === TokenKind::AbstractKeyword;
     }
 
-    public function constants(): ReflectionConstantCollection
+    public function constants(): CoreReflectionConstantCollection
     {
         $parentConstants = null;
         if ($this->parent()) {
@@ -104,7 +110,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
     }
 
-    public function properties(): ReflectionPropertyCollection
+    public function properties(): CoreReflectionPropertyCollection
     {
         $properties = ReflectionPropertyCollection::empty($this->serviceLocator);
 
@@ -125,7 +131,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $properties;
     }
 
-    public function methods(CoreReflectionClass $contextClass = null): ReflectionMethodCollection
+    public function methods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
     {
         $contextClass = $contextClass ?: $this;
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);
@@ -153,7 +159,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $methods;
     }
 
-    public function interfaces(): ReflectionInterfaceCollection
+    public function interfaces(): CoreReflectionInterfaceCollection
     {
         $parentInterfaces = null;
         if ($this->parent()) {
@@ -169,7 +175,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $interfaces;
     }
 
-    public function traits(): ReflectionTraitCollection
+    public function traits(): CoreReflectionTraitCollection
     {
         $parentTraits = null;
         if ($this->parent()) {

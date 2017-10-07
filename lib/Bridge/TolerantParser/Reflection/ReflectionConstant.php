@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClassMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant as CoreReflectionConstant;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant
 {
@@ -59,7 +60,7 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
         return $this->serviceLocator;
     }
 
-    public function class(): AbstractReflectionClass
+    public function class(): ReflectionClassLike
     {
         return $this->class;
     }

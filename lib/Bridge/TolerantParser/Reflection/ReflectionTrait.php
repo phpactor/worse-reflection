@@ -2,16 +2,17 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use PhpParser\Node\Stmt\ClassLike;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait as CoreReflectionTrait;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
-use PhpParser\Node\Stmt\ClassLike;
-use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
-use Phpactor\WorseReflection\Core\ClassName;
-use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait as CoreReflectionTrait;
 
 class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionTrait
 {
@@ -45,12 +46,12 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
         return $this->node;
     }
 
-    public function methods(): ReflectionMethodCollection
+    public function methods(): CoreReflectionMethodCollection
     {
         return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $this);
     }
 
-    public function properties(): ReflectionPropertyCollection
+    public function properties(): CoreReflectionPropertyCollection
     {
         $properties = ReflectionPropertyCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $this);
 

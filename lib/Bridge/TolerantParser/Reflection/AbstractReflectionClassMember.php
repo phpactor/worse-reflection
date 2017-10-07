@@ -12,10 +12,11 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedNode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 {
-    public function declaringClass(): AbstractReflectionClass
+    public function declaringClass(): ReflectionClassLike
     {
         $class = $this->node()->getFirstAncestor(ClassLike::class)->getNamespacedName();
 
@@ -28,8 +29,6 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 
         return $this->serviceLocator()->reflector()->reflectClassLike(ClassName::fromString($class));
     }
-
-    abstract public function class(): AbstractReflectionClass;
 
     abstract protected function serviceLocator(): ServiceLocator;
 }

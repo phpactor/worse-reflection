@@ -2,27 +2,27 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
-use Phpactor\WorseReflection\Core\ServiceLocator;
-use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Type;
-use Microsoft\PhpParser\Node\MethodDeclaration;
-use Microsoft\PhpParser\TokenKind;
-use Microsoft\PhpParser\Token;
-use Phpactor\WorseReflection\Core\DocblockResolver;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
-use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
-use Phpactor\WorseReflection\Core\Docblock;
-use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
-use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\NodeText;
-use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\ClassLike;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClassMember;
+use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Microsoft\PhpParser\Token;
+use Microsoft\PhpParser\TokenKind;
+use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocblockResolver;
+use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
+use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
+use Phpactor\WorseReflection\Core\ServiceLocator;
+use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Visibility;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -76,7 +76,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return $this->serviceLocator->frameBuilder()->buildFromNode($this->node);
     }
 
-    public function declaringClass(): AbstractReflectionClass
+    public function declaringClass(): ReflectionClassLike
     {
         $class = $this->node->getFirstAncestor(ClassLike::class)->getNamespacedName();
 
@@ -106,7 +106,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return $this->node->isStatic();
     }
 
-    public function parameters(): ReflectionParameterCollection
+    public function parameters(): CoreReflectionParameterCollection
     {
         return ReflectionParameterCollection::fromMethodDeclaration($this->serviceLocator, $this->node);
     }
@@ -166,7 +166,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         }, [])));
     }
 
-    public function class(): AbstractReflectionClass
+    public function class(): ReflectionClassLike
     {
         return $this->class;
     }

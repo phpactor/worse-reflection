@@ -5,10 +5,15 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use PhpParser\Node\Stmt\ClassLike;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
+
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
+
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection as CoreReflectionConstantCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
+
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
@@ -47,7 +52,7 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return $this->node;
     }
 
-    public function constants(): ReflectionConstantCollection
+    public function constants(): CoreReflectionConstantCollection
     {
         $parentConstants = [];
         foreach ($this->parents() as $parent) {
@@ -62,7 +67,7 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return $parentConstants->merge($constants);
     }
 
-    public function parents(): ReflectionInterfaceCollection
+    public function parents(): CoreReflectionInterfaceCollection
     {
         return ReflectionInterfaceCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
     }
@@ -84,7 +89,7 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return false;
     }
 
-    public function methods(): ReflectionMethodCollection
+    public function methods(): CoreReflectionMethodCollection
     {
         $parentMethods = [];
         foreach ($this->parents() as $parent) {

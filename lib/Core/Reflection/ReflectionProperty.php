@@ -12,7 +12,7 @@ interface ReflectionProperty
 
     public function declaringClass(): ReflectionClassLike;
 
-    public function class(): AbstractReflectionClass;
+    public function class(): ReflectionClassLike;
 
     public function name(): string;
 

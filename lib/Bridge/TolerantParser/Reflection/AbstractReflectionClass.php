@@ -11,12 +11,6 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedN
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode
 {
-    abstract public function name(): ClassName;
-
-    abstract protected function methods(): ReflectionMethodCollection;
-
-    abstract public function sourceCode(): SourceCode;
-
     public function isInterface(): bool
     {
         return $this instanceof ReflectionInterface;

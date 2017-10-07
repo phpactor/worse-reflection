@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClassMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty as CoreReflectionProperty;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -52,7 +53,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         $this->class = $class;
     }
 
-    public function declaringClass(): AbstractReflectionClass
+    public function declaringClass(): ReflectionClassLike
     {
         $class = $this->propertyDeclaration->getFirstAncestor(ClassDeclaration::class, TraitDeclaration::class)->getNamespacedName();
 
@@ -106,7 +107,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return $this->serviceLocator;
     }
 
-    public function class(): AbstractReflectionClass
+    public function class(): ReflectionClassLike
     {
         return $this->class;
     }
