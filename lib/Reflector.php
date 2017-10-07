@@ -9,13 +9,14 @@ use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset as TolerantReflectionOffset;
 
 class Reflector
 {
@@ -153,6 +154,6 @@ class Reflector
         $resolver = $this->services->symbolInformationResolver();
         $frame = $this->services->frameBuilder()->buildForNode($node);
 
-        return ReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
+        return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
     }
 }
