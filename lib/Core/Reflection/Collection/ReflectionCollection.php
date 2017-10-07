@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 
-use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 
 interface ReflectionCollection
@@ -10,8 +9,6 @@ interface ReflectionCollection
     public function count();
 
     public function keys(): array;
-
-    public static function empty(ServiceLocator $serviceLocator);
 
     public function merge(AbstractReflectionCollection $collection);
 

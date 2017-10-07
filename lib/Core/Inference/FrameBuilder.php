@@ -4,38 +4,19 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Microsoft\PhpParser\FunctionLike;
 use Microsoft\PhpParser\Node;
-<<<<<<< HEAD
 use Microsoft\PhpParser\Node\CatchClause;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
-use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\Node\SourceFileNode;
-=======
->>>>>>> CS fix
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
-<<<<<<< HEAD
 use Microsoft\PhpParser\Token;
-use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Offset;
-=======
-use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
-use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
-use Phpactor\WorseReflection\Core\Offset;
-use Microsoft\PhpParser\Node\SourceFileNode;
-use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
-use Phpactor\WorseReflection\Core\Logger;
-use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
-use Microsoft\PhpParser\Token;
-use Microsoft\PhpParser\FunctionLike;
-use Microsoft\PhpParser\Node\CatchClause;
->>>>>>> CS fix
 
 final class FrameBuilder
 {
@@ -245,7 +226,8 @@ final class FrameBuilder
                     Offset::fromInt($parameterNode->getStart()),
                     $parameterName,
                     $this->symbolFactory->information(
-                        $parameterNode, [
+                        $parameterNode,
+                        [
                             'token' => $parameterNode->variableName,
                             'symbol_type' => Symbol::VARIABLE,
                             'type' => $symbolInformation->type(),
