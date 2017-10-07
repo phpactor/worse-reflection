@@ -1,8 +1,10 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Inference\Symbol;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 
 final class SymbolInformation
 {

@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\DefaultValue;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\Frame;
 
 class ReflectionParameter extends AbstractReflectedNode
 {

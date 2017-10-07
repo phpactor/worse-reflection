@@ -2,8 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\Frame;
 
 final class ReflectionOffset
 {

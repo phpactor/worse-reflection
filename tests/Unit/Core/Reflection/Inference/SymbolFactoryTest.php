@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflection\Inference;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolFactory;
+use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node\Expression\Variable;

@@ -1,6 +1,8 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Core\Inference;
+
+use Phpactor\WorseReflection\Core\Inference\Assignments;
 
 final class Frame
 {

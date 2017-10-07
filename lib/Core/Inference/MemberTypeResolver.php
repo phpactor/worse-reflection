@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Logger;

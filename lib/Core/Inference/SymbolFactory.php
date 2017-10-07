@@ -1,10 +1,11 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Core\Inference;
 
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Position;
+use Phpactor\WorseReflection\Core\Inference\Symbol;
 
 class SymbolFactory
 {

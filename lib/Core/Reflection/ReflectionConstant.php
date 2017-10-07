@@ -6,7 +6,7 @@ use Microsoft\PhpParser\Node\ConstElement;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ServiceLocator;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\Frame;
 
 class ReflectionConstant extends AbstractReflectionClassMember
 {

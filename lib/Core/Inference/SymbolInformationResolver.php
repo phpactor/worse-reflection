@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Core\Inference;
 
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression;
@@ -30,6 +30,11 @@ use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\DelimitedList\ExpressionList;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
+use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
+use Phpactor\WorseReflection\Core\Inference\Symbol;
+use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 
 class SymbolInformationResolver
 {

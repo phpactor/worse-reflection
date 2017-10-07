@@ -2,8 +2,8 @@
 
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflection\Inference;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\Assignments;
-use Phpactor\WorseReflection\Core\Reflection\Inference\LocalAssignments;
+use Phpactor\WorseReflection\Core\Inference\Assignments;
+use Phpactor\WorseReflection\Core\Inference\LocalAssignments;
 
 class LocalAssignmentsTest extends AssignmentstTestCase
 {

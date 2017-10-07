@@ -15,8 +15,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterColle
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Core\Docblock;
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Core\Reflection\Inference\FrameBuilder;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
+use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\ClassLike;

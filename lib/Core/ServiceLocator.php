@@ -2,8 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformationResolver;
-use Phpactor\WorseReflection\Core\Reflection\Inference\FrameBuilder;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflector;
 

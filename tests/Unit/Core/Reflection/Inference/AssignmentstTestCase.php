@@ -4,9 +4,9 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflection\Inference;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Assignments;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
-use Phpactor\WorseReflection\Core\Reflection\Inference\Variable;
+use Phpactor\WorseReflection\Core\Inference\Assignments;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Offset;
 
 abstract class AssignmentstTestCase extends TestCase

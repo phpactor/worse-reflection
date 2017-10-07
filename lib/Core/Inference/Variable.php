@@ -1,9 +1,10 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Core\Reflection\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\Variable;
 
 final class Variable
 {
