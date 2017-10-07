@@ -18,7 +18,7 @@ interface ReflectionClassLike
 
     public function name(): ClassName;
 
-    public function methods(ReflectionClass $contextClass = null): ReflectionMethodCollection;
+    public function methods(): ReflectionMethodCollection;
 
     public function sourceCode(): SourceCode;
 

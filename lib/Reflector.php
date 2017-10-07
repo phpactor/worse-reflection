@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset as TolerantReflectionOffset;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 class Reflector
 {
@@ -112,7 +113,7 @@ class Reflector
      *
      * @throws ClassNotFound
      */
-    public function reflectClassLike(ClassName $className): AbstractReflectionClass
+    public function reflectClassLike(ClassName $className): ReflectionClassLike
     {
         if (isset($this->cache[(string) $className])) {
             return $this->cache[(string) $className];
