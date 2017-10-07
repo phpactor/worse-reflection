@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
@@ -8,6 +8,9 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedNode;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 
 class ReflectionSourceCode extends AbstractReflectedNode
 {

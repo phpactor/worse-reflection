@@ -1,12 +1,13 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Collection;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionInterface get()

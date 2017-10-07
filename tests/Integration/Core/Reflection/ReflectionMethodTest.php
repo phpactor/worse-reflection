@@ -4,11 +4,11 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {

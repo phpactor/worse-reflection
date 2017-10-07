@@ -1,15 +1,17 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Docblock;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedNode;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 {

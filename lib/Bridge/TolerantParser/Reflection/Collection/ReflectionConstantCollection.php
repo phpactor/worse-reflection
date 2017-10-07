@@ -1,14 +1,15 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection\Collection;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionConstant;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant get()

@@ -1,12 +1,13 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Docblock;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedNode;
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode
 {

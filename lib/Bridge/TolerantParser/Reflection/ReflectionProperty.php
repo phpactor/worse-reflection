@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Reflection;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Visibility;
 use Microsoft\PhpParser\Node\Expression\Variable;
@@ -13,6 +13,8 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClassMember;
 
 class ReflectionProperty extends AbstractReflectionClassMember
 {

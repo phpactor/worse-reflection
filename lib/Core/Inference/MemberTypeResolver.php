@@ -6,9 +6,9 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 
 class MemberTypeResolver
 {

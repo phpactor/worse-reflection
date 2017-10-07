@@ -3,8 +3,8 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflection\Collection;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 
 class ReflectionClassCollectionTest extends TestCase
