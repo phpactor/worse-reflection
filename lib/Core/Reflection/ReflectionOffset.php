@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 
 interface ReflectionOffset
 {
-    public function fromFrameAndSymbolInformation($frame, $symbolInformation);
+    public static function fromFrameAndSymbolInformation($frame, $symbolInformation);
 
     public function frame(): Frame;
 

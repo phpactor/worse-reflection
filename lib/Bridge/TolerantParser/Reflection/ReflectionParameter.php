@@ -10,8 +10,9 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedNode;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
 
-class ReflectionParameter extends AbstractReflectedNode
+class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
 {
     /**
      * @var ServiceLocator

@@ -18,9 +18,9 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass as CoreReflectionClass;
 
-class ReflectionClass extends AbstractReflectionClass
+class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
     /**
      * @var ServiceLocator
@@ -90,7 +90,7 @@ class ReflectionClass extends AbstractReflectionClass
                 ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
             );
 
-            if (!$reflectedClass instanceof ReflectionClass) {
+            if (!$reflectedClass instanceof CoreReflectionClass) {
                 $this->serviceLocator->logger()->warning(sprintf(
                     'Class cannot extend interface. Class "%s" extends interface or trait "%s"',
                     $this->name(),
@@ -125,7 +125,7 @@ class ReflectionClass extends AbstractReflectionClass
         return $properties;
     }
 
-    public function methods(ReflectionClass $contextClass = null): ReflectionMethodCollection
+    public function methods(CoreReflectionClass $contextClass = null): ReflectionMethodCollection
     {
         $contextClass = $contextClass ?: $this;
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);

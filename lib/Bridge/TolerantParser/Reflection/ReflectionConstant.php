@@ -9,8 +9,9 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClassMember;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant as CoreReflectionConstant;
 
-class ReflectionConstant extends AbstractReflectionClassMember
+class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant
 {
     /**
      * @var ServiceLocator

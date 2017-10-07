@@ -11,8 +11,9 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedNode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionSourceCode as CoreReflectionSourceCode;
 
-class ReflectionSourceCode extends AbstractReflectedNode
+class ReflectionSourceCode extends AbstractReflectedNode implements CoreReflectionSourceCode
 {
     /**
      * @var SourceFileNode

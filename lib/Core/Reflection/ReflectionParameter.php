@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Position;
-use string;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DefaultValue;
 

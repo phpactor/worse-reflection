@@ -15,8 +15,9 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClassMember;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty as CoreReflectionProperty;
 
-class ReflectionProperty extends AbstractReflectionClassMember
+class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
     /**
      * @var ServiceLocator
