@@ -28,4 +28,3 @@ interface ReflectionClassLike
 
     public function docblock(): Docblock;
 }
-

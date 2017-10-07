@@ -248,7 +248,7 @@ try {
 }
 
 EOT
-                , 
+                ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$exception'));
                 }
@@ -263,7 +263,7 @@ $hello = function () {
     <>
 };
 EOT
-                , 
+                ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$bar'));
                     $this->assertCount(0, $frame->locals()->byName('$foo'));
@@ -278,7 +278,7 @@ $hello = function (Foobar $foo) {
     <>
 };
 EOT
-                , 
+                ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$foo'));
                 }
@@ -293,7 +293,7 @@ $hello = function () use ($zed) {
     <>
 };
 EOT
-                , 
+                ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$zed'));
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->first()->symbolInformation()->type());
@@ -306,7 +306,7 @@ EOT
 $zed;
 <>
 EOT
-                , 
+                ,
                 function (Frame $frame) {
                     $this->assertCount(2, $frame->locals()->byName('$zed'));
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
@@ -319,7 +319,7 @@ EOT
 $zed;
 <>
 EOT
-                , 
+                ,
                 function (Frame $frame) {
                     $this->assertCount(2, $frame->locals()->byName('$zed'));
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
@@ -332,7 +332,7 @@ $foo = [ 'foo' => 'bar' ];
 $bar = $foo['foo'];
 <>
 EOT
-                , 
+                ,
                 function (Frame $frame) {
                     $this->assertCount(2, $frame->locals());
                     $this->assertEquals('array', (string) $frame->locals()->first()->symbolInformation()->type());

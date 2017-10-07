@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Microsoft\PhpParser\FunctionLike;
 use Microsoft\PhpParser\Node;
+<<<<<<< HEAD
 use Microsoft\PhpParser\Node\CatchClause;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
@@ -12,14 +13,29 @@ use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\Node\SourceFileNode;
+=======
+>>>>>>> CS fix
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+<<<<<<< HEAD
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Offset;
+=======
+use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
+use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
+use Phpactor\WorseReflection\Core\Offset;
+use Microsoft\PhpParser\Node\SourceFileNode;
+use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
+use Phpactor\WorseReflection\Core\Logger;
+use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
+use Microsoft\PhpParser\Token;
+use Microsoft\PhpParser\FunctionLike;
+use Microsoft\PhpParser\Node\CatchClause;
+>>>>>>> CS fix
 
 final class FrameBuilder
 {
@@ -103,7 +119,8 @@ final class FrameBuilder
             Offset::fromInt($node->variableName->start),
             $name,
             $this->symbolFactory->information(
-                $node, [
+                $node,
+                [
                     'symbol_type' => Symbol::VARIABLE,
                     'type' => $symbolInformation->type(),
                 ]
@@ -136,7 +153,8 @@ final class FrameBuilder
             Offset::fromInt($node->leftOperand->getStart()),
             $name,
             $this->symbolFactory->information(
-                $node, [
+                $node,
+                [
                     'token' => $node->leftOperand->name,
                     'symbol_type' => Symbol::VARIABLE,
                     'type' => $symbolInformation->type(),
@@ -173,7 +191,8 @@ final class FrameBuilder
             Offset::fromInt($node->leftOperand->getStart()),
             $memberName,
             $this->symbolFactory->information(
-                $node, [
+                $node,
+                [
                     'member_type' => Symbol::VARIABLE,
                     'token' => $memberNameNode instanceof Token ? $memberNameNode : null,
                     'type' => $symbolInformation->type(),
@@ -200,7 +219,8 @@ final class FrameBuilder
                 Offset::fromInt($node->getStart()),
                 '$this',
                 $this->symbolFactory->information(
-                    $node, [
+                    $node,
+                    [
                         'type' => $classType,
                         'symbol_type' => Symbol::VARIABLE,
                     ]
@@ -257,7 +277,8 @@ final class FrameBuilder
             Offset::fromInt($node->getStart()),
             $varName,
             $this->symbolFactory->information(
-                $node, [
+                $node,
+                [
                     'symbol_type' => Symbol::VARIABLE,
                     'type' => $this->symbolInformationResolver->resolveQualifiedName($node, $type)
                 ]
@@ -286,7 +307,8 @@ final class FrameBuilder
             $varName = $element->variableName->getText($node->getFileContents());
 
             $symbolInformation = $this->symbolFactory->information(
-                $element, [
+                $element,
+                [
                     'symbol_type' => Symbol::VARIABLE,
                 ]
             );
@@ -314,7 +336,6 @@ final class FrameBuilder
                     $symbolInformation
                 )
             );
-
         }
     }
 }

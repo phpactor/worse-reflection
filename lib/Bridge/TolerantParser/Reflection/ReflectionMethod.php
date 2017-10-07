@@ -5,9 +5,6 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\MethodDeclaration;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
-use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -181,4 +178,3 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return $this->serviceLocator;
     }
 }
-

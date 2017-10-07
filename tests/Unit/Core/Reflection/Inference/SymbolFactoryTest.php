@@ -75,4 +75,3 @@ class SymbolFactoryTest extends TestCase
         ]);
     }
 }
-

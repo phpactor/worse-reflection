@@ -114,4 +114,3 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return $this->sourceCode;
     }
 }
-

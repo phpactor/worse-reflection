@@ -11,7 +11,6 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
 
 /**
@@ -29,7 +28,6 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection implemen
         foreach ($properties as $property) {
             foreach ($property->propertyElements as $propertyElement) {
                 foreach ($propertyElement as $variable) {
-
                     if ($variable instanceof AssignmentExpression) {
                         $variable = $variable->leftOperand;
                     }

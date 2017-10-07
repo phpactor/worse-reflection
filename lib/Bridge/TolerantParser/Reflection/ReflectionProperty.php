@@ -10,11 +10,8 @@ use Microsoft\PhpParser\TokenKind;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClassMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty as CoreReflectionProperty;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
@@ -45,8 +42,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         AbstractReflectionClass $class,
         PropertyDeclaration $propertyDeclaration,
         Variable $variable
-    )
-    {
+    ) {
         $this->serviceLocator = $serviceLocator;
         $this->propertyDeclaration = $propertyDeclaration;
         $this->variable = $variable;
@@ -112,4 +108,3 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return $this->class;
     }
 }
-

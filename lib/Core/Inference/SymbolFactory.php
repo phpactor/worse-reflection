@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Position;
-use Phpactor\WorseReflection\Core\Inference\Symbol;
 
 class SymbolFactory
 {
@@ -19,7 +18,8 @@ class SymbolFactory
         if (null !== $options['token'] && false === $options['token'] instanceof Token) {
             throw new \InvalidArgumentException(sprintf(
                 'Token must be of type %s, got %s',
-                Token::class, is_object($options['token']) ? get_class($options['token']) : gettype($options['token'])
+                Token::class,
+                is_object($options['token']) ? get_class($options['token']) : gettype($options['token'])
             ));
         }
 

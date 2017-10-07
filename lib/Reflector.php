@@ -7,7 +7,6 @@ use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
@@ -59,7 +58,8 @@ class Reflector
         if (false === $class instanceof ReflectionClass) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not a class, it is a "%s"',
-                $className->full(), get_class($class)
+                $className->full(),
+                get_class($class)
             ));
         }
 
@@ -79,7 +79,8 @@ class Reflector
         if (false === $class instanceof ReflectionInterface) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not an interface, it is a "%s"',
-                $className->full(), get_class($class)
+                $className->full(),
+                get_class($class)
             ));
         }
 
@@ -99,7 +100,8 @@ class Reflector
         if (false === $class instanceof ReflectionTrait) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not a trait, it is a "%s"',
-                $className->full(), get_class($class)
+                $className->full(),
+                get_class($class)
             ));
         }
 

@@ -27,14 +27,8 @@ use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\ClassLike;
-use Microsoft\PhpParser\Node\DelimitedList\ExpressionList;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
-use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
-use Phpactor\WorseReflection\Core\Inference\Symbol;
-use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 
 class SymbolInformationResolver
 {
@@ -401,7 +395,7 @@ class SymbolInformationResolver
 
         $subjectValue = $subject->value();
 
-        if (false === is_array($subjectValue )) {
+        if (false === is_array($subjectValue)) {
             $this->logger->debug(sprintf(
                 'Array value for symbol "%s" is not an array, is a "%s"',
                 (string) $subject->symbol(),
@@ -474,7 +468,8 @@ class SymbolInformationResolver
         $classNode = $methodDeclaration->getFirstAncestor(ClassLike::class);
         $classSymbolInformation = $this->_resolveNode($frame, $classNode);
         return $this->symbolFactory->information(
-            $methodDeclaration, [
+            $methodDeclaration,
+            [
                 'token' => $methodDeclaration->name,
                 'container_type' => $classSymbolInformation->type(),
                 'symbol_type' => Symbol::METHOD,

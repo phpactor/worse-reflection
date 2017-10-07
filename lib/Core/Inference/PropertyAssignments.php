@@ -2,9 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-use Phpactor\WorseReflection\Core\Inference\Assignments;
-use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
-
 class PropertyAssignments extends Assignments
 {
     public static function create()

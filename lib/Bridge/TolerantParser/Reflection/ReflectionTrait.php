@@ -69,4 +69,3 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
         return $this->sourceCode;
     }
 }
-

@@ -19,5 +19,4 @@ class CodeHelper
 
         return [$source, $offset];
     }
-
 }

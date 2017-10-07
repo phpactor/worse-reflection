@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-use Phpactor\WorseReflection\Core\Inference\Assignments;
-
 abstract class Assignments implements \Countable, \IteratorAggregate
 {
     /**

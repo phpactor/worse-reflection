@@ -4,8 +4,8 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionConstant;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
 
 class ReflectionClassTest extends IntegrationTestCase
 {

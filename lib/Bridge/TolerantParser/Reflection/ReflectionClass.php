@@ -224,4 +224,3 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $this->sourceCode;
     }
 }
-

@@ -9,7 +9,6 @@ use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectedNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
 
 class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
@@ -34,7 +33,8 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     {
         if (null === $this->parameter->getName()) {
             $this->serviceLocator->logger()->warning(sprintf(
-                'Parameter has no variable at offset', $this->parameter->getStart()
+                'Parameter has no variable at offset',
+                $this->parameter->getStart()
             ));
             return '';
         }
