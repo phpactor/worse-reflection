@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Tolerant;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Patch;
 
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\ResolvedName;

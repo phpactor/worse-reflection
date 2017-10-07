@@ -6,7 +6,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\TraitUseClause;
-use Phpactor\WorseReflection\Core\Tolerant\TolerantQualifiedNameResolver;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Patch\TolerantQualifiedNameResolver;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 
 /**

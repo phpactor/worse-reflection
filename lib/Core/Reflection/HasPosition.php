@@ -1,10 +1,10 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
+namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\WorseReflection\Core\Position;
 
-interface HasPosition
+interface Reflection
 {
     public function position(): Position;
 }
