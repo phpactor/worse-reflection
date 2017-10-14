@@ -32,7 +32,7 @@ class NodeReflector
             return $this->reflectScopedPropertyAccessExpression($frame, $node);
         }
 
-        throw new RuntimeException(sprintf(
+        throw new \RuntimeException(sprintf(
             'Did not know how to reflect node of type "%s"',
             get_class($node)
         ));
