@@ -19,7 +19,7 @@ class ReflectorTest extends IntegrationTestCase
      */
     public function testReflectClassSuccess(string $source, string $class, string $method, string $expectedType)
     {
-        $reflection = $this->createReflector($source)->$method(ClassName::fromString($class));
+        $reflection = $this->createReflector($source)->$method($class);
         $this->assertInstanceOf($expectedType, $reflection);
     }
 
@@ -55,7 +55,7 @@ class ReflectorTest extends IntegrationTestCase
         $this->expectException(ClassNotFound::class);
         $this->expectExceptionMessage($expectedErrorMessage);
 
-        $this->createReflector($source)->$method(ClassName::fromString($class));
+        $this->createReflector($source)->$method($class);
     }
 
     public function provideReflectClassNotCorrectType()
@@ -95,7 +95,7 @@ $foobar;
 EOT
         ;
 
-        $offset = $this->createReflector($source)->reflectOffset(SourceCode::fromString($source), Offset::fromInt(27));
+        $offset = $this->createReflector($source)->reflectOffset($source, 27);
         $this->assertEquals('string', (string) $offset->symbolInformation()->type());
         $this->assertEquals('Hello', $offset->frame()->locals()->byName('$foobar')->first()->symbolInformation()->value());
     }
@@ -116,7 +116,7 @@ EOT
 
         list($source, $offset) = CodeHelper::offsetFromCode($source);
 
-        $offset = $this->createReflector($source)->reflectOffset(SourceCode::fromString($source), Offset::fromInt($offset));
+        $offset = $this->createReflector($source)->reflectOffset($source, $offset);
         $this->assertEquals('int', (string) $offset->symbolInformation()->type());
     }
 }

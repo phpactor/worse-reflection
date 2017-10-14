@@ -20,6 +20,22 @@ class SourceCode
         $this->path = $path;
     }
 
+    public static function fromUnknown($value)
+    {
+        if ($value instanceof SourceCode) {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            return self::fromString($value);
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Do not know how to create source code from type "%s"',
+            is_object($value) ? get_class($value) : gettype($value)
+        ));
+    }
+
     public static function fromString($source)
     {
         return new self($source);

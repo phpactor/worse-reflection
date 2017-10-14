@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset as TolerantReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 
 class Reflector
 {
@@ -39,9 +40,11 @@ class Reflector
      * Create a new instance of the reflector using the given source locator
      * and optionally, a logger.
      */
-    public static function create(SourceCodeLocator $locator, Logger $logger = null): Reflector
+    public static function create(SourceCodeLocator $locator = null, Logger $logger = null): Reflector
     {
         $logger = $logger ?: new ArrayLogger();
+        $locator = $locator ?: new StringSourceLocator('');
+
         return (new ServiceLocator($locator, $logger))->reflector();
     }
 
@@ -51,8 +54,10 @@ class Reflector
      * @throws ClassNotFound If the class was not found, or the class found was
      *         an interface or trait.
      */
-    public function reflectClass(ClassName $className): ReflectionClass
+    public function reflectClass($className): ReflectionClass
     {
+        $className = ClassName::fromUnknown($className);
+
         $class = $this->reflectClassLike($className);
 
         if (false === $class instanceof ReflectionClass) {
@@ -69,11 +74,15 @@ class Reflector
     /**
      * Reflect an interface.
      *
+     * @param ClassName|string $className
+     *
      * @throws ClassNotFound If the class was not found, or the found class
      *         was not a trait.
      */
-    public function reflectInterface(ClassName $className): ReflectionInterface
+    public function reflectInterface($className): ReflectionInterface
     {
+        $className = ClassName::fromUnknown($className);
+
         $class = $this->reflectClassLike($className);
 
         if (false === $class instanceof ReflectionInterface) {
@@ -90,11 +99,15 @@ class Reflector
     /**
      * Reflect a trait
      *
+     * @param ClassName|string $className
+     *
      * @throws ClassNotFound If the class was not found, or the found class
      *         was not a trait.
      */
-    public function reflectTrait(ClassName $className): ReflectionTrait
+    public function reflectTrait($className): ReflectionTrait
     {
+        $className = ClassName::fromUnknown($className);
+
         $class = $this->reflectClassLike($className);
 
         if (false === $class instanceof ReflectionTrait) {
@@ -115,8 +128,10 @@ class Reflector
      *
      * @throws ClassNotFound
      */
-    public function reflectClassLike(ClassName $className): ReflectionClassLike
+    public function reflectClassLike($className): ReflectionClassLike
     {
+        $className = ClassName::fromUnknown($className);
+
         if (isset($this->cache[(string) $className])) {
             return $this->cache[(string) $className];
         }
@@ -140,18 +155,24 @@ class Reflector
     /**
      * Reflect all classes (or class-likes) in the given source code.
      */
-    public function reflectClassesIn(SourceCode $source): ReflectionClassCollection
+    public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
-        return ReflectionClassCollection::fromSource($this->services, $source);
+        return ReflectionClassCollection::fromSource($this->services, SourceCode::fromUnknown($sourceCode));
     }
 
     /**
      * Return the information for the given offset in the given file, including the value
      * and type of a variable and the frame information.
+     *
+     * @param SourceCode|string $sourceCode
+     * @param Offset|int $offset
      */
-    public function reflectOffset(SourceCode $source, Offset $offset): ReflectionOffset
+    public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
-        $rootNode = $this->services->parser()->parseSourceFile((string) $source);
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $offset = Offset::fromUnknown($offset);
+
+        $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
         $resolver = $this->services->symbolInformationResolver();

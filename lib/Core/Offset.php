@@ -18,6 +18,22 @@ final class Offset
         $this->offset = $offset;
     }
 
+    public static function fromUnknown($value)
+    {
+        if ($value instanceof Offset) {
+            return $value;
+        }
+
+        if (is_int($value)) {
+            return self::fromInt($value);
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Do not know how to create offset from type "%s"',
+            is_object($value) ? get_class($value) : gettype($value)
+        ));
+    }
+
     public static function fromInt(int $offset): Offset
     {
         return new self($offset);

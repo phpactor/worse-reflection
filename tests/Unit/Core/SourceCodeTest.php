@@ -7,6 +7,8 @@ use Phpactor\WorseReflection\Core\SourceCode;
 
 class SourceCodeTest extends TestCase
 {
+    const SOURCE_CODE = 'source code';
+
     /**
      * @testdox It can load source code from a file.
      */
@@ -25,4 +27,26 @@ class SourceCodeTest extends TestCase
     {
         SourceCode::fromPath('Improbable_Path_62.xyz');
     }
+
+    public function testFromUnknownReturnsSourceCodeIfGivenSourceCode()
+    {
+        $givenSource = SourceCode::fromString(self::SOURCE_CODE);
+        $sourceCode = SourceCode::fromUnknown($givenSource);
+
+        $this->assertSame($givenSource, $sourceCode);
+    }
+
+    public function testFromUnknownString()
+    {
+        $sourceCode = SourceCode::fromUnknown(self::SOURCE_CODE);
+
+        $this->assertEquals(SourceCode::fromString(self::SOURCE_CODE), $sourceCode);
+    }
+
+    public function testFromUnknownInvalid()
+    {
+        $this->expectExceptionMessage('Do not know how to create source code');
+        SourceCode::fromUnknown(new \stdClass);
+    }
 }
+
