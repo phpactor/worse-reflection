@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection;
 
 interface ReflectionMethodCall
 {
@@ -20,9 +21,5 @@ interface ReflectionMethodCall
 
     public function isStatic(): bool;
 
-    public function parameters(): ReflectionParameterCollection;
-
-    public function visibility(): Visibility;
-
-    public function inferredReturnType(): Type;
+    public function arguments(): ReflectionArgumentCollection;
 }
