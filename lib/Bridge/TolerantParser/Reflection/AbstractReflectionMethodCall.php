@@ -60,6 +60,10 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 
     public function arguments(): ReflectionArgumentCollection
     {
+        if (null === $this->callExpression()->argumentExpressionList) {
+            return ReflectionArgumentCollection::empty($this->services);
+        }
+
         return ReflectionArgumentCollection::fromArgumentListAndFrame(
             $this->services,
             $this->callExpression()->argumentExpressionList,
