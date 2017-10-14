@@ -5,9 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Phpactor\WorseReflection\Core\Position;
 
-use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\Expression\Variable;

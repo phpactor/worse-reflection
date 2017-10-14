@@ -4,8 +4,6 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
-use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 
 class ReflectionMethodCall extends AbstractReflectionMethodCall
@@ -28,4 +26,3 @@ class ReflectionMethodCall extends AbstractReflectionMethodCall
         return false;
     }
 }
-

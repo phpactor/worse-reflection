@@ -4,15 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
-use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Inference\NodeReflector;
-use Phpactor\WorseReflection\Core\Inference\LocalAssignments;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Position;
 
@@ -114,27 +106,7 @@ EOT
                     $this->assertEquals(ClassName::fromString('AAA'), $method->class()->name());
                 },
             ],
-            'It the arguments' => [
-                <<<'EOT'
-<?php
-
-class AAA
-{
-}
-
-$a = 1;
-$foo = new AAA();
-$foo->b<>ar($a);
-
-EOT
-                , [
-                ],
-                function (ReflectionMethodCall $method) {
-                    $this->assertInstanceOf(Position::class, $method->position());
-                    $this->assertEquals('a', $method->arguments()->first()->name());
-                },
-            ],
-            'It the arguments' => [
+            'It has arguments' => [
                 <<<'EOT'
 <?php
 

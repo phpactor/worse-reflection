@@ -5,15 +5,9 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall as CoreReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
-use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
-use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection as TolerantReflectionParameterCollection;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -83,4 +77,3 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
         return $this->node->parent;
     }
 }
-

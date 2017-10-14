@@ -30,4 +30,3 @@ class OffsetTest extends TestCase
         Offset::fromUnknown(new \stdClass);
     }
 }
-

@@ -30,4 +30,3 @@ class ClassNameTest extends TestCase
         ClassName::fromUnknown(new \stdClass);
     }
 }
-

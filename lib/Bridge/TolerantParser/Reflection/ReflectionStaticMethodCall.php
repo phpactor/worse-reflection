@@ -2,10 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
-use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
-use Phpactor\WorseReflection\Reflector;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 
@@ -24,4 +21,3 @@ class ReflectionStaticMethodCall extends AbstractReflectionMethodCall
         return true;
     }
 }
-
