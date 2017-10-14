@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
+namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Phpactor\WorseReflection\Core\Position;
@@ -49,7 +49,8 @@ class ReflectionArgument implements CoreReflectionArgument
         }
 
         if ($this->type()->isDefined()) {
-            return lcfirst((string) $this->type());
+            $typeName = $this->type()->isClass() ? (string) $this->type()->className()->short() : (string) $this->type();
+            return lcfirst($typeName);
         }
 
 

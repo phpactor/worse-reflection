@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
 use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionArgument;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
