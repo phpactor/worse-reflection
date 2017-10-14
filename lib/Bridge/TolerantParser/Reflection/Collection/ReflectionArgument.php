@@ -10,8 +10,9 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionArgument as CoreReflectionArgument;
 
-class ReflectionArgument
+class ReflectionArgument implements CoreReflectionArgument
 {
     /**
      * @var ServiceLocator

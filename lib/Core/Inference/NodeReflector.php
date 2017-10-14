@@ -31,6 +31,11 @@ class NodeReflector
         if ($node instanceof ScopedPropertyAccessExpression) {
             return $this->reflectScopedPropertyAccessExpression($frame, $node);
         }
+
+        throw new RuntimeException(sprintf(
+            'Did not know how to reflect node of type "%s"',
+            get_class($node)
+        ));
     }
 
     private function reflectScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node)

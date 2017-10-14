@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
+use Phpactor\WorseReflection\Core\Exception\UnexpectedReflectionType;
 
 class ReflectorTest extends IntegrationTestCase
 {
