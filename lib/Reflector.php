@@ -18,6 +18,8 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset as TolerantReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
+use Phpactor\WorseReflection\Core\Inference\NodeReflector;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 
 class Reflector
 {
@@ -179,5 +181,33 @@ class Reflector
         $frame = $this->services->frameBuilder()->buildForNode($node);
 
         return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
+    }
+
+    public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
+    {
+        $reflection = $this->reflectNode($sourceCode, $offset);
+
+        if (false === $reflection instanceof ReflectionMethodCall) {
+            throw new \RuntimeException(sprintf(
+                'Expected method call, got "%s"',
+                get_class($reflection)
+            ));
+        }
+
+        return $reflection;
+    }
+
+    private function reflectNode($sourceCode, $offset)
+    {
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $offset = Offset::fromUnknown($offset);
+
+        $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
+        $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
+
+        $frame = $this->services->frameBuilder()->buildForNode($node);
+        $nodeReflector = new NodeReflector($this->services);
+
+        return $nodeReflector->reflectNode($frame, $node);
     }
 }

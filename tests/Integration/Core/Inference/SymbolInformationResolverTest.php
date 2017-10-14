@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Integration\Core\Reflection\Inference;
+namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;

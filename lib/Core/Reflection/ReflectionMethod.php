@@ -32,9 +32,6 @@ interface ReflectionMethod
 
     public function visibility(): Visibility;
 
-    /**
-     * If type not explicitly set, try and infer it from the docblock.
-     */
     public function inferredReturnType(): Type;
 
     public function returnType(): Type;

@@ -49,4 +49,3 @@ class SourceCodeTest extends TestCase
         SourceCode::fromUnknown(new \stdClass);
     }
 }
-
