@@ -76,6 +76,7 @@ class MemberTypeResolver
                     (string) $ownerType,
                     $name
                 ));
+                $info = $info->withContainerType(Type::class($class->name()));
                 return $info;
             }
         } catch (NotFound $e) {
@@ -110,6 +111,7 @@ class MemberTypeResolver
                     (string) $ownerType,
                     $name
                 ));
+                $info = $info->withContainerType(Type::class($class->name()));
                 return $info;
             }
         } catch (NotFound $e) {

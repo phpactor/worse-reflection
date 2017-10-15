@@ -54,14 +54,13 @@ class SymbolInformationResolver
 
     public function __construct(Reflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
     {
-        $this->reflector = $reflector;
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
         $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger, $this->symbolFactory);
     }
 
     /**
-     * External interface
+    ace
      */
     public function resolveNode(Frame $frame, $node): SymbolInformation
     {
@@ -201,11 +200,16 @@ class SymbolInformationResolver
 
     private function resolvePropertyVariable(ParserVariable $node)
     {
-        return $this->symbolFactory->information($node, [
-            'token' => $node->name,
+        $info = $this->symbolFactory->information($node, [
             'symbol_type' => Symbol::PROPERTY,
-            'container_type' => $this->classTypeFromNode($node)
+            'token' => $node->name,
         ]);
+
+        return $this->memberTypeResolver->propertyType(
+            $this->classTypeFromNode($node),
+            $info,
+            $info->symbol()->name()
+        );
     }
 
     private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation
