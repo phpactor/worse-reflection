@@ -575,6 +575,20 @@ $foobar->$barfoo(<>);
 EOT
                 , [ '$foobar' => Type::fromString('Foobar'), '$barfoo' => SymbolInformation::fromTypeAndValue(Type::string(), 'hello') ], ['type' => 'string'],
             ],
+            'It returns type of property' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    /**
+     * @var stdClass
+     */
+    private $std<>Class;
+}
+EOT
+                , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
+            ],
         ];
     }
 
