@@ -17,7 +17,8 @@
         "phpunit/phpunit": "^6.0@stable",
         "symfony/filesystem": "^3.3",
         "phpbench/phpbench": "^0.13.0",
-        "phpactor/class-to-file": "^1.0@dev"
+        "phpactor/class-to-file": "^1.0@dev",
+        "phpactor/source-code-filesystem": "@dev"
     },
     "autoload": {
         "psr-4": {
