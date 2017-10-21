@@ -709,6 +709,14 @@ class Foobar
 EOT
                 , [], ['type' => '<unknown>', 'symbol_type' => Symbol::CONSTANT, 'symbol_name' => 'AAA', 'class_type' => 'Foobar'],
             ],
+            'Function name' => [
+                <<<'EOT'
+<?php
+
+function_<>call();
+EOT
+                , [], ['type' => '<unknown>'],
+            ],
         ];
     }
 

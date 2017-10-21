@@ -86,7 +86,7 @@ class SymbolInformationResolver
 
         if ($node instanceof QualifiedName) {
             return $this->symbolFactory->information($node, [
-                'type' => $this->resolveQualifiedName($node),
+                'type' => $this->resolveQualifiedNameType($node),
                 'symbol_type' => Symbol::CLASS_,
             ]);
         }
@@ -225,9 +225,13 @@ class SymbolInformationResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    public function resolveQualifiedName(Node $node, string $name = null): Type
+    public function resolveQualifiedNameType(Node $node, string $name = null): Type
     {
         $name = $name ?: $node->getText();
+
+        if (!$node instanceof ScopedPropertyAccessExpression && $node->parent instanceof CallExpression) {
+            return Type::unknown();
+        }
 
         if (substr($name, 0, 1) === '\\') {
             return Type::fromString($name);
@@ -281,7 +285,7 @@ class SymbolInformationResolver
         $type = Type::unknown();
 
         if ($typeDeclaration instanceof QualifiedName) {
-            $type = $this->resolveQualifiedName($node->typeDeclaration);
+            $type = $this->resolveQualifiedNameType($node->typeDeclaration);
         }
         
         if ($typeDeclaration instanceof Token) {
@@ -431,7 +435,7 @@ class SymbolInformationResolver
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node)
     {
         $name = $node->scopeResolutionQualifier->getText();
-        $parent = $this->resolveQualifiedName($node, $name);
+        $parent = $this->resolveQualifiedNameType($node, $name);
 
         return $this->_valueFromMemberAccess($frame, $parent, $node);
     }

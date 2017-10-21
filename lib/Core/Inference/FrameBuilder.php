@@ -26,14 +26,14 @@ final class FrameBuilder
     private $logger;
 
     /**
-     * @var NodeValueResolver
-     */
-    private $symbolInformationResolver;
-
-    /**
      * @var SymbolFactory
      */
     private $symbolFactory;
+
+    /**
+     * @var SymbolInformationResolver
+     */
+    private $symbolInformationResolver;
 
     public function __construct(SymbolInformationResolver $symbolInformationResolver, Logger $logger)
     {
@@ -262,7 +262,7 @@ final class FrameBuilder
                 $node,
                 [
                     'symbol_type' => Symbol::VARIABLE,
-                    'type' => $this->symbolInformationResolver->resolveQualifiedName($node, $type)
+                    'type' => $this->symbolInformationResolver->resolveQualifiedNameType($node, $type)
                 ]
             )
         ));
@@ -321,3 +321,4 @@ final class FrameBuilder
         }
     }
 }
+
