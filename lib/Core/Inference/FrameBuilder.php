@@ -26,14 +26,19 @@ final class FrameBuilder
     private $logger;
 
     /**
+     * @var NodeValueResolver
+     */
+    private $symbolInformationResolver;
+
+    /**
      * @var SymbolFactory
      */
     private $symbolFactory;
 
     /**
-     * @var SymbolInformationResolver
+     * @var array
      */
-    private $symbolInformationResolver;
+    private $injectedTypes = [];
 
     public function __construct(SymbolInformationResolver $symbolInformationResolver, Logger $logger)
     {
@@ -73,6 +78,10 @@ final class FrameBuilder
         }
 
         $this->processLeadingComment($frame, $node);
+
+        if ($node instanceof ParserVariable) {
+            $this->processVariable($frame, $node);
+        }
 
         if ($node instanceof AssignmentExpression) {
             $this->processAssignment($frame, $node);
@@ -255,17 +264,7 @@ final class FrameBuilder
             list($varName, $type) = [$type, $varName];
         }
 
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt($node->getStart()),
-            $varName,
-            $this->symbolFactory->information(
-                $node,
-                [
-                    'symbol_type' => Symbol::VARIABLE,
-                    'type' => $this->symbolInformationResolver->resolveQualifiedNameType($node, $type)
-                ]
-            )
-        ));
+        $this->injectedTypes[$varName] = $this->symbolInformationResolver->resolveQualifiedNameType($node, $type);
     }
 
     private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
@@ -320,5 +319,30 @@ final class FrameBuilder
             );
         }
     }
-}
 
+    private function processVariable(Frame $frame, Node $node)
+    {
+        if (false === $node->name instanceof Token) {
+            return;
+        }
+
+        $name = $node->name->getText($node->getFileContents());
+
+        if (false === isset($this->injectedTypes[$name])) {
+            return;
+        }
+        $frame->locals()->add(Variable::fromOffsetNameAndValue(
+            Offset::fromInt($node->getStart()),
+            $name,
+            $this->symbolFactory->information(
+                $node,
+                [
+                    'symbol_type' => Symbol::VARIABLE,
+                    'type' => $this->injectedTypes[$name],
+                ]
+            )
+        ));
+
+        unset($this->injectedTypes[$name]);
+    }
+}

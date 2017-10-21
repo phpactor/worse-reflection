@@ -308,7 +308,7 @@ $zed;
 EOT
                 ,
                 function (Frame $frame) {
-                    $this->assertCount(2, $frame->locals()->byName('$zed'));
+                    $this->assertCount(1, $frame->locals()->byName('$zed'));
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
                 }
             ],
@@ -321,7 +321,7 @@ $zed;
 EOT
                 ,
                 function (Frame $frame) {
-                    $this->assertCount(2, $frame->locals()->byName('$zed'));
+                    $this->assertCount(1, $frame->locals()->byName('$zed'));
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
                 }
             ],
