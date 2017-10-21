@@ -717,6 +717,16 @@ function_<>call();
 EOT
                 , [], ['type' => '<unknown>'],
             ],
+            'Trait name' => [
+                <<<'EOT'
+<?php
+
+trait Bar<>bar
+{
+}
+EOT
+                , [], ['symbol_type' => 'class', 'symbol_name' => 'Barbar', 'type' => 'Barbar' ],
+            ],
         ];
     }
 

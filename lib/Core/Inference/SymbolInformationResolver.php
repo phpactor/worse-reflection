@@ -119,7 +119,7 @@ class SymbolInformationResolver
             return $this->resolveScopedPropertyAccessExpression($frame, $node);
         }
 
-        if ($node instanceof ClassDeclaration || $node instanceof InterfaceDeclaration) {
+        if ($node instanceof ClassLike) {
             return $this->symbolFactory->information($node, [
                 'token' => $node->name,
                 'symbol_type' => Symbol::CLASS_,
