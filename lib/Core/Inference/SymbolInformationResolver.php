@@ -192,7 +192,9 @@ class SymbolInformationResolver
         $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($name);
 
         if (0 === $variables->count()) {
-            return SymbolInformation::none();
+            return $this->symbolFactory->information($node, [
+                'symbol_type' => Symbol::VARIABLE,
+            ]);
         }
 
         return $variables->last()->symbolInformation();
