@@ -6,6 +6,8 @@ use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 
 class ServiceLocator
 {
@@ -55,9 +57,16 @@ class ServiceLocator
         return $this->logger;
     }
 
-    public function sourceLocator(): SourceCodeLocator
+    public function sourceLocator(SourceCode $sourceCode = null): SourceCodeLocator
     {
-        return $this->sourceLocator;
+        if (null === $sourceCode) {
+            return $this->sourceLocator;
+        }
+
+        return new ChainSourceLocator([
+            new StringSourceLocator($sourceCode),
+            $this->sourceLocator()
+        ]);
     }
 
     public function symbolInformationResolver(): SymbolInformationResolver

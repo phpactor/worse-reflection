@@ -23,9 +23,9 @@ class IntegrationTestCase extends TestCase
         $this->logger = new ArrayLogger();
     }
 
-    public function createReflector(string $source): Reflector
+    public function createReflector(string $source = null): Reflector
     {
-        $locator = new StringSourceLocator(SourceCode::fromString($source));
+        $locator = new StringSourceLocator(SourceCode::fromString($source ?: ''));
 
         return Reflector::create($locator, $this->logger);
     }

@@ -53,19 +53,20 @@ class Reflector
     /**
      * Reflect class.
      *
+     * @param ClassName|string $className
+     * @param SourceCode|string $sourceCode
+     *
      * @throws ClassNotFound If the class was not found, or the class found was
      *         an interface or trait.
      */
-    public function reflectClass($className): ReflectionClass
+    public function reflectClass($className, $source = null): ReflectionClass
     {
-        $className = ClassName::fromUnknown($className);
-
-        $class = $this->reflectClassLike($className);
+        $class = $this->reflectClassLike($className, $source);
 
         if (false === $class instanceof ReflectionClass) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not a class, it is a "%s"',
-                $className->full(),
+                $className,
                 get_class($class)
             ));
         }
@@ -77,20 +78,19 @@ class Reflector
      * Reflect an interface.
      *
      * @param ClassName|string $className
+     * @param SourceCode|string $sourceCode
      *
      * @throws ClassNotFound If the class was not found, or the found class
      *         was not a trait.
      */
-    public function reflectInterface($className): ReflectionInterface
+    public function reflectInterface($className, $source = null): ReflectionInterface
     {
-        $className = ClassName::fromUnknown($className);
-
-        $class = $this->reflectClassLike($className);
+        $class = $this->reflectClassLike($className, $source);
 
         if (false === $class instanceof ReflectionInterface) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not an interface, it is a "%s"',
-                $className->full(),
+                $className,
                 get_class($class)
             ));
         }
@@ -102,20 +102,19 @@ class Reflector
      * Reflect a trait
      *
      * @param ClassName|string $className
+     * @param SourceCode|string $sourceCode
      *
      * @throws ClassNotFound If the class was not found, or the found class
      *         was not a trait.
      */
-    public function reflectTrait($className): ReflectionTrait
+    public function reflectTrait($className, $source = null): ReflectionTrait
     {
-        $className = ClassName::fromUnknown($className);
-
-        $class = $this->reflectClassLike($className);
+        $class = $this->reflectClassLike($className, $source);
 
         if (false === $class instanceof ReflectionTrait) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not a trait, it is a "%s"',
-                $className->full(),
+                $className,
                 get_class($class)
             ));
         }
@@ -130,21 +129,25 @@ class Reflector
      *
      * @throws ClassNotFound
      */
-    public function reflectClassLike($className): ReflectionClassLike
+    public function reflectClassLike($className, $sourceCode = null): ReflectionClassLike
     {
         $className = ClassName::fromUnknown($className);
+
+        if ($sourceCode) {
+            $sourceCode = SourceCode::fromUnknown($sourceCode);
+        }
 
         if (isset($this->cache[(string) $className])) {
             return $this->cache[(string) $className];
         }
 
-        $source = $this->services->sourceLocator()->locate($className);
+        $source = $this->services->sourceLocator($sourceCode)->locate($className);
         $classes = $this->reflectClassesIn($source);
 
         if (false === $classes->has((string) $className)) {
             throw new ClassNotFound(sprintf(
                 'Unable to locate class "%s"',
-                $className->full()
+                $className
             ));
         }
 

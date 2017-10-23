@@ -18,7 +18,7 @@ class ReflectorTest extends IntegrationTestCase
      */
     public function testReflectClassSuccess(string $source, string $class, string $method, string $expectedType)
     {
-        $reflection = $this->createReflector($source)->$method($class);
+        $reflection = $this->createReflector()->$method($class, $source);
         $this->assertInstanceOf($expectedType, $reflection);
     }
 
