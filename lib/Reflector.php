@@ -141,7 +141,23 @@ class Reflector
             return $this->cache[(string) $className];
         }
 
-        $source = $this->services->sourceLocator($sourceCode)->locate($className);
+        $class = $this->reflectClassIn($className, $sourceCode);
+        $this->cache[(string) $className] = $class;
+
+        return $class;
+    }
+
+    private function reflectClassIn(ClassName $className, SourceCode $sourceCode = null): ReflectionClassLike
+    {
+        if ($sourceCode) {
+            $classes = $this->reflectClassesIn($sourceCode);
+
+            if ($classes->has($className)) {
+                return $classes->get($className);
+            }
+        }
+
+        $source = $this->services->sourceLocator()->locate($className);
         $classes = $this->reflectClassesIn($source);
 
         if (false === $classes->has((string) $className)) {
@@ -151,10 +167,7 @@ class Reflector
             ));
         }
 
-        $class = $classes->get((string) $className);
-        $this->cache[(string) $className] = $class;
-
-        return $class;
+        return $classes->get((string) $className);
     }
 
     /**
@@ -214,3 +227,4 @@ class Reflector
         return $nodeReflector->reflectNode($frame, $node);
     }
 }
+

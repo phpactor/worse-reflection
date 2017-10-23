@@ -59,14 +59,7 @@ class ServiceLocator
 
     public function sourceLocator(SourceCode $sourceCode = null): SourceCodeLocator
     {
-        if (null === $sourceCode) {
-            return $this->sourceLocator;
-        }
-
-        return new ChainSourceLocator([
-            new StringSourceLocator($sourceCode),
-            $this->sourceLocator()
-        ]);
+        return $this->sourceLocator;
     }
 
     public function symbolInformationResolver(): SymbolInformationResolver
