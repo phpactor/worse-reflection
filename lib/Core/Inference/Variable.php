@@ -56,4 +56,11 @@ final class Variable
     {
         return $this->symbolInformation;
     }
+
+    public function isNamed(string $name)
+    {
+        $name = ltrim($name, '$');
+
+        return $this->name == $name;
+    }
 }
