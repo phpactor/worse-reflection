@@ -87,27 +87,4 @@ class SymbolFactory
 
         return $information;
     }
-
-    private function name(Node $node, $token = null)
-    {
-        return ltrim($this->rawName($node, $token), '$');
-    }
-
-    private function rawName(Node $node, $token = null)
-    {
-        if ($token) {
-            return $token->getText($node->getFileContents());
-        }
-
-        return $node->getText();
-    }
-
-    private function position(Node $node, $token = null)
-    {
-        if ($token && $token instanceof Token) {
-            return Position::fromStartAndEnd($token->start, $token->start + $token->length);
-        }
-
-        return Position::fromStartAndEnd($node->getStart(), $node->getEndPosition());
-    }
 }

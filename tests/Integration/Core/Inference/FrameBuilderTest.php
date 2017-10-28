@@ -46,9 +46,9 @@ class Foobar
 
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->symbolInformation()->type());
-                $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('$this')->first()->symbolInformation()->symbol()->symbolType());
+                $this->assertCount(1, $frame->locals()->byName('this'));
+                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolInformation()->type());
+                $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolInformation()->symbol()->symbolType());
             }],
             'It returns method arguments' => [
                 <<<'EOT'
@@ -68,10 +68,10 @@ class Foobar
 
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$this'));
+                $this->assertCount(1, $frame->locals()->byName('this'));
                 $this->assertEquals(
                     Type::fromString('Foobar\Barfoo\Foobar'),
-                    $frame->locals()->byName('$this')->first()->symbolInformation()->type()
+                    $frame->locals()->byName('this')->first()->symbolInformation()->type()
                 );
             }],
             'It registers string assignments' => [
@@ -88,8 +88,8 @@ class Foobar
 
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$foobar'));
-                $symbolInformation = $frame->locals()->byName('$foobar')->first()->symbolInformation();
+                $this->assertCount(1, $frame->locals()->byName('foobar'));
+                $symbolInformation = $frame->locals()->byName('foobar')->first()->symbolInformation();
                 $this->assertEquals('string', (string) $symbolInformation->type());
                 $this->assertEquals('foobar', (string) $symbolInformation->value());
             }],
@@ -107,7 +107,7 @@ class Foobar
 
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('$foobar');
+                $vars = $frame->locals()->byName('foobar');
                 $this->assertCount(1, $vars);
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('World', (string) $symbolInformation->type());
@@ -126,7 +126,7 @@ class Foobar
 
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('$this');
+                $vars = $frame->locals()->byName('this');
                 $this->assertCount(1, $vars);
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('Foobar', (string) $symbolInformation->type());
@@ -186,7 +186,7 @@ class Foobar
 }
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('$foobar');
+                $vars = $frame->locals()->byName('foobar');
                 $this->assertCount(1, $vars);
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('Foobar', (string) $symbolInformation->type());

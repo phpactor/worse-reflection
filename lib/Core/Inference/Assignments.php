@@ -23,6 +23,7 @@ abstract class Assignments implements \Countable, \IteratorAggregate
 
     public function byName(string $name): Assignments
     {
+        $name = ltrim($name, '$');
         return new static(array_filter($this->variables, function (Variable $variable) use ($name) {
             return $variable->name() === $name;
         }));

@@ -78,7 +78,7 @@ class SymbolInformationResolverTest extends IntegrationTestCase
         $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
             Variable::fromOffsetNameAndValue(
                 Offset::fromInt(0),
-                '$this',
+                'this',
                 SymbolInformation::fromType(Type::fromString('Foobar'))
             ),
         ]), $source);
@@ -284,7 +284,7 @@ class Foobar
 }
 
 EOT
-                , [ '$world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => '$world']
+                , [ 'world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'world']
             ],
             'It returns type for a call access expression' => [
                 <<<'EOT'
@@ -327,7 +327,7 @@ class Foobar
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar\Barfoo\Foobar'),
+                'this' => Type::fromString('Foobar\Barfoo\Foobar'),
             ], [
                 'type' => 'Foobar\Barfoo\Type3',
                 'symbol_type' => Symbol::METHOD,
@@ -357,7 +357,7 @@ class Foobar
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar'),
+                'this' => Type::fromString('Foobar'),
             ], [
                 'type' => 'string',
                 'symbol_type' => Symbol::METHOD,
@@ -392,7 +392,7 @@ class Foobar extends Barfoo
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar'),
+                'this' => Type::fromString('Foobar'),
             ], [
                 'type' => 'Type3',
                 'symbol_type' => Symbol::METHOD,
@@ -429,7 +429,7 @@ class Foobar
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar'),
+                'this' => Type::fromString('Foobar'),
             ], ['type' => 'string'],
             ],
             'It returns type for a new instantiation' => [
@@ -447,7 +447,7 @@ EOT
 new $<>foobar;
 EOT
         , [
-                '$foobar' => Type::fromString('Foobar'),
+                'foobar' => Type::fromString('Foobar'),
         ], ['type' => 'Foobar'],
             ],
             'It returns type for string literal' => [
@@ -581,7 +581,10 @@ class Foobar
 
 $foobar->$barfoo(<>);
 EOT
-                , [ '$foobar' => Type::fromString('Foobar'), '$barfoo' => SymbolInformation::fromTypeAndValue(Type::string(), 'hello') ], ['type' => 'string'],
+                , [
+                    'foobar' => Type::fromString('Foobar'),
+                    'barfoo' => SymbolInformation::fromTypeAndValue(Type::string(), 'hello')
+                ], ['type' => 'string'],
             ],
             'It returns type of property' => [
                 <<<'EOT'

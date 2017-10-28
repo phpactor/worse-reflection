@@ -207,6 +207,7 @@ class SymbolInformationResolver
         }
 
         $name = $node->getText();
+        $name = ltrim($name, '$');
         $offset = $node->getFullStart();
         $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($name);
 
@@ -328,7 +329,7 @@ class SymbolInformationResolver
         }
 
         return $this->symbolFactory->information(
-            ltrim($node->variableName->getText($node->getFileContents()), '$'),
+            $node->variableName->getText($node->getFileContents()),
             $node->variableName->getStartPosition(),
             $node->variableName->getEndPosition(),
             [

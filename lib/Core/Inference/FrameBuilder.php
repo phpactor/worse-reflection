@@ -104,6 +104,7 @@ final class FrameBuilder
 
         $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->qualifiedName);
         $name = $node->variableName->getText($node->getFileContents());
+        $name = ltrim($name, '$');
 
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->variableName->start),
@@ -140,20 +141,21 @@ final class FrameBuilder
     {
         $name = $node->leftOperand->name->getText($node->getFileContents());
         $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
+        $information = $this->symbolFactory->information(
+            $name,
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+                'type' => $symbolInformation->type(),
+                'value' => $symbolInformation->value(),
+            ]
+        );
 
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
-            $name,
-            $this->symbolFactory->information(
-                $node->getText(),
-                $node->getStart(),
-                $node->getEndPosition(),
-                [
-                    'symbol_type' => Symbol::VARIABLE,
-                    'type' => $symbolInformation->type(),
-                    'value' => $symbolInformation->value(),
-                ]
-            )
+            $information->symbol()->name(),
+            $information
         ));
     }
 
@@ -184,19 +186,21 @@ final class FrameBuilder
             $memberName = $memberNameInfo->value();
         }
 
+        $information = $this->symbolFactory->information(
+            $memberName,
+            $symbolInformation->symbol()->position()->start(),
+            $symbolInformation->symbol()->position()->end(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+                'type' => $symbolInformation->type(),
+                'value' => $symbolInformation->value(),
+            ]
+        );
+
         $frame->properties()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->leftOperand->getStart()),
-            $memberName,
-            $this->symbolFactory->information(
-                $node->getStart(),
-                $symbolInformation->symbol()->position()->start(),
-                $symbolInformation->symbol()->position()->end(),
-                [
-                    'symbol_type' => Symbol::VARIABLE,
-                    'type' => $symbolInformation->type(),
-                    'value' => $symbolInformation->value(),
-                ]
-            )
+            $information->symbol()->name(),
+            $information
         ));
     }
 
@@ -215,9 +219,9 @@ final class FrameBuilder
             // add this and self
             $frame->locals()->add(Variable::fromOffsetNameAndValue(
                 Offset::fromInt($node->getStart()),
-                '$this',
+                'this',
                 $this->symbolFactory->information(
-                    '$this',
+                    'this',
                     $node->getStart(),
                     $node->getEndPosition(),
                     [
@@ -239,21 +243,25 @@ final class FrameBuilder
         /** @var Parameter $parameterNode */
         foreach ($node->parameters->getElements() as $parameterNode) {
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
+
             $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $parameterNode);
+
+            $information = $this->symbolFactory->information(
+                $parameterName,
+                $parameterNode->getStart(),
+                $parameterNode->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::VARIABLE,
+                    'type' => $symbolInformation->type(),
+                    'value' => $symbolInformation->value(),
+                ]
+            );
+
             $frame->locals()->add(
                 Variable::fromOffsetNameAndValue(
                     Offset::fromInt($parameterNode->getStart()),
-                    $parameterName,
-                    $this->symbolFactory->information(
-                        $parameterName,
-                        $parameterNode->getStart(),
-                        $parameterNode->getEndPosition(),
-                        [
-                            'symbol_type' => Symbol::VARIABLE,
-                            'type' => $symbolInformation->type(),
-                            'value' => $symbolInformation->value(),
-                        ]
-                    )
+                    $information->symbol()->name(),
+                    $information
                 )
             );
         }
@@ -274,6 +282,8 @@ final class FrameBuilder
         if (substr($type, 0, 1) == '$') {
             list($varName, $type) = [$type, $varName];
         }
+
+        $varName = ltrim($varName, '$');
 
         $this->injectedTypes[$varName] = $this->symbolInformationResolver->resolveQualifiedNameType($node, $type);
     }
@@ -306,6 +316,7 @@ final class FrameBuilder
                     'symbol_type' => Symbol::VARIABLE,
                 ]
             );
+            $varName = $symbolInformation->symbol()->name();
 
             if (0 === $parentVars->byName($varName)->count()) {
                 $frame->locals()->add(
@@ -341,6 +352,7 @@ final class FrameBuilder
         }
 
         $name = $node->name->getText($node->getFileContents());
+        $name = ltrim($name, '$');
 
         if (false === isset($this->injectedTypes[$name])) {
             return;

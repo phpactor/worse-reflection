@@ -48,7 +48,7 @@ final class Symbol
     private function __construct(string $symbolType, string $name, Position $position)
     {
         $this->symbolType = $symbolType;
-        $this->name = $name;
+        $this->name = ltrim($name, '$');
         $this->position = $position;
     }
 
