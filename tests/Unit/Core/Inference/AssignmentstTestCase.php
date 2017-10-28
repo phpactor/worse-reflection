@@ -8,6 +8,8 @@ use Phpactor\WorseReflection\Core\Inference\Assignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Inference\Symbol;
+use Phpactor\WorseReflection\Core\Position;
 
 abstract class AssignmentstTestCase extends TestCase
 {
@@ -18,31 +20,29 @@ abstract class AssignmentstTestCase extends TestCase
         $assignments = $this->assignments();
         $this->assertCount(0, $assignments->byName('hello'));
 
-        $value = SymbolInformation::fromTypeAndValue(Type::fromString('Foobar'), 'goodbye');
+        $information = SymbolInformation::for(
+            Symbol::fromTypeNameAndPosition(
+                Symbol::VARIABLE, 'hello', Position::fromStartAndEnd(0, 0)
+            )
+        );
 
-        $assignments->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt(0),
-            'hello',
-            SymbolInformation::fromTypeAndValue(Type::fromString('Foobar'), 'goodbye')
-        ));
+        $assignments->add(Variable::fromSymbolInformation($information));
 
-        $this->assertEquals($value, $assignments->byName('hello')->first()->symbolInformation());
+        $this->assertEquals($information, $assignments->byName('hello')->first()->symbolInformation());
     }
 
-    public function testByName()
+    public function testMultipleByName()
     {
         $assignments = $this->assignments();
-        $assignments->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt(0),
-            'hello',
-            SymbolInformation::fromTypeAndValue(Type::fromString('string'), 'goodbye')
-        ));
 
-        $assignments->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt(10),
-            'hello',
-            SymbolInformation::fromTypeAndValue(Type::fromString('string'), 'hello')
-        ));
+        $information = SymbolInformation::for(
+            Symbol::fromTypeNameAndPosition(
+                Symbol::VARIABLE, 'hello', Position::fromStartAndEnd(0, 0)
+            )
+        );
+
+        $assignments->add(Variable::fromSymbolInformation($information));
+        $assignments->add(Variable::fromSymbolInformation($information));
 
         $this->assertCount(2, $assignments->byName('hello'));
     }

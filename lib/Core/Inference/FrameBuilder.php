@@ -102,23 +102,18 @@ final class FrameBuilder
             return;
         }
 
-        $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->qualifiedName);
-        $name = $node->variableName->getText($node->getFileContents());
-        $name = ltrim($name, '$');
+        $typeInformation = $this->symbolInformationResolver->resolveNode($frame, $node->qualifiedName);
+        $information = $this->symbolFactory->information(
+            $node->variableName->getText($node->getFileContents()),
+            $node->variableName->getStartPosition(),
+            $node->variableName->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+                'type' => $typeInformation->type(),
+            ]
+        );
 
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt($node->variableName->start),
-            $name,
-            $this->symbolFactory->information(
-                $name,
-                $node->variableName->getStartPosition(),
-                $node->variableName->getEndPosition(),
-                [
-                    'symbol_type' => Symbol::VARIABLE,
-                    'type' => $symbolInformation->type(),
-                ]
-            )
-        ));
+        $frame->locals()->add(Variable::fromSymbolInformation($information));
     }
 
     private function processAssignment(Frame $frame, AssignmentExpression $node)
@@ -143,8 +138,8 @@ final class FrameBuilder
         $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
         $information = $this->symbolFactory->information(
             $name,
-            $node->getStart(),
-            $node->getEndPosition(),
+            $node->leftOperand->getStart(),
+            $node->leftOperand->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
                 'type' => $symbolInformation->type(),
@@ -152,11 +147,7 @@ final class FrameBuilder
             ]
         );
 
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt($node->leftOperand->getStart()),
-            $information->symbol()->name(),
-            $information
-        ));
+        $frame->locals()->add(Variable::fromSymbolInformation($information));
     }
 
     private function processMemberAccessExpression(Frame $frame, AssignmentExpression $node)
@@ -169,7 +160,7 @@ final class FrameBuilder
         }
 
         $memberNameNode = $node->leftOperand->memberName;
-        $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
+        $typeInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
 
         // TODO: Sort out this mess.
         //       If the node is not a token (e.g. it is a variable) then
@@ -188,20 +179,16 @@ final class FrameBuilder
 
         $information = $this->symbolFactory->information(
             $memberName,
-            $symbolInformation->symbol()->position()->start(),
-            $symbolInformation->symbol()->position()->end(),
+            $node->leftOperand->getStart(),
+            $node->leftOperand->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
-                'type' => $symbolInformation->type(),
-                'value' => $symbolInformation->value(),
+                'type' => $typeInformation->type(),
+                'value' => $typeInformation->value(),
             ]
         );
 
-        $frame->properties()->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt($node->leftOperand->getStart()),
-            $information->symbol()->name(),
-            $information
-        ));
+        $frame->properties()->add(Variable::fromSymbolInformation($information));
     }
 
     private function processFunctionLike(Frame $frame, FunctionLike $node)
@@ -216,20 +203,19 @@ final class FrameBuilder
         // works for both closure and class method (we currently ignore binding)
         if ($classNode) {
             $classType = $this->symbolInformationResolver->resolveNode($frame, $classNode)->type();
-            // add this and self
-            $frame->locals()->add(Variable::fromOffsetNameAndValue(
-                Offset::fromInt($node->getStart()),
+            $information = $this->symbolFactory->information(
                 'this',
-                $this->symbolFactory->information(
-                    'this',
-                    $node->getStart(),
-                    $node->getEndPosition(),
-                    [
-                        'type' => $classType,
-                        'symbol_type' => Symbol::VARIABLE,
-                    ]
-                )
-            ));
+                $node->getStart(),
+                $node->getEndPosition(),
+                [
+                    'type' => $classType,
+                    'symbol_type' => Symbol::VARIABLE,
+                ]
+            );
+
+            // add this and self
+            // TODO: self is NOT added here - does it work?
+            $frame->locals()->add(Variable::fromSymbolInformation($information));
         }
 
         if ($node instanceof AnonymousFunctionCreationExpression) {
@@ -257,13 +243,7 @@ final class FrameBuilder
                 ]
             );
 
-            $frame->locals()->add(
-                Variable::fromOffsetNameAndValue(
-                    Offset::fromInt($parameterNode->getStart()),
-                    $information->symbol()->name(),
-                    $information
-                )
-            );
+            $frame->locals()->add(Variable::fromSymbolInformation($information));
         }
     }
 
@@ -308,7 +288,7 @@ final class FrameBuilder
         foreach ($useClause->useVariableNameList->getElements() as $element) {
             $varName = $element->variableName->getText($node->getFileContents());
 
-            $symbolInformation = $this->symbolFactory->information(
+            $variableInformation = $this->symbolFactory->information(
                 $varName,
                 $element->getStart(),
                 $element->getEndPosition(),
@@ -316,62 +296,48 @@ final class FrameBuilder
                     'symbol_type' => Symbol::VARIABLE,
                 ]
             );
-            $varName = $symbolInformation->symbol()->name();
+            $varName = $variableInformation->symbol()->name();
 
+            // if not in parent scope, then we know nothing about it
+            // add it with above information and continue
+            // TODO: Do we infer the type hint??
             if (0 === $parentVars->byName($varName)->count()) {
-                $frame->locals()->add(
-                    Variable::fromOffsetNameAndValue(
-                        Offset::fromInt($element->getStart()),
-                        $varName,
-                        $symbolInformation
-                    )
-                );
+                $frame->locals()->add(Variable::fromSymbolInformation($variableInformation));
                 continue;
             }
 
             $variable = $parentVars->byName($varName)->last();
 
-            $symbolInformation = $symbolInformation
+            $variableInformation = $variableInformation
                 ->withType($variable->symbolInformation()->type())
                 ->withValue($variable->symbolInformation()->value());
 
-            $frame->locals()->add(
-                Variable::fromOffsetNameAndValue(
-                    Offset::fromInt($node->getStart()),
-                    $varName,
-                    $symbolInformation
-                )
-            );
+            $frame->locals()->add(Variable::fromSymbolInformation($variableInformation));
         }
     }
 
-    private function processVariable(Frame $frame, Node $node)
+    private function processVariable(Frame $frame, ParserVariable $node)
     {
         if (false === $node->name instanceof Token) {
             return;
         }
 
-        $name = $node->name->getText($node->getFileContents());
-        $name = ltrim($name, '$');
+        $information = $this->symbolFactory->information(
+            $node->name->getText($node->getFileContents()),
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+            ]
+        );
 
-        if (false === isset($this->injectedTypes[$name])) {
+        $symbolName = $information->symbol()->name();
+        if (false === isset($this->injectedTypes[$symbolName])) {
             return;
         }
 
-        $frame->locals()->add(Variable::fromOffsetNameAndValue(
-            Offset::fromInt($node->getStart()),
-            $name,
-            $this->symbolFactory->information(
-                $name,
-                $node->getStart(),
-                $node->getEndPosition(),
-                [
-                    'symbol_type' => Symbol::VARIABLE,
-                    'type' => $this->injectedTypes[$name],
-                ]
-            )
-        ));
-
-        unset($this->injectedTypes[$name]);
+        $information  =$information->withType($this->injectedTypes[$symbolName]);
+        $frame->locals()->add(Variable::fromSymbolInformation($information));
+        unset($this->injectedTypes[$symbolName]);
     }
 }

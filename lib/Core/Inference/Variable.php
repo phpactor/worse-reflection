@@ -28,9 +28,13 @@ final class Variable
         $this->symbolInformation = $symbolInformation;
     }
 
-    public static function fromOffsetNameAndValue(Offset $offset, string $name, SymbolInformation $symbolInformation): Variable
+    public static function fromSymbolInformation(SymbolInformation $symbolInformation)
     {
-        return new self($name, $offset, $symbolInformation);
+        return new self(
+            $symbolInformation->symbol()->name(),
+            Offset::fromInt($symbolInformation->symbol()->position()->start()),
+            $symbolInformation
+        );
     }
 
     public function __toString()

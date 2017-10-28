@@ -41,15 +41,15 @@ class SymbolInformationResolverTest extends IntegrationTestCase
         foreach ($locals as $name => $varSymbolInfo) {
             if ($varSymbolInfo instanceof Type) {
                 $varSymbolInfo = SymbolInformation::for(
-                    Symbol::fromTypeNameAndPosition('variable', $name, Position::fromStartAndEnd(0, 0))
+                    Symbol::fromTypeNameAndPosition(
+                        'variable',
+                        $name,
+                        Position::fromStartAndEnd(0, 0)
+                    )
                 )->withType($varSymbolInfo);
             }
 
-            $variables[] = Variable::fromOffsetNameAndValue(
-                Offset::fromInt(0),
-                $name,
-                $varSymbolInfo
-            );
+            $variables[] = Variable::fromSymbolInformation($varSymbolInfo);
         }
 
         $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
@@ -76,10 +76,12 @@ class SymbolInformationResolverTest extends IntegrationTestCase
     public function testNotResolvableClass(string $source)
     {
         $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
-            Variable::fromOffsetNameAndValue(
-                Offset::fromInt(0),
-                'this',
-                SymbolInformation::fromType(Type::fromString('Foobar'))
+            Variable::fromSymbolInformation(
+                SymbolInformation::for(Symbol::fromTypeNameAndPosition(
+                    Symbol::CLASS_,
+                    'bar',
+                    Position::fromStartAndEnd(0, 0)
+                ))->withType(Type::fromString('Foobar'))
             ),
         ]), $source);
         $this->assertEquals(Type::unknown(), $value->type());
@@ -583,7 +585,10 @@ $foobar->$barfoo(<>);
 EOT
                 , [
                     'foobar' => Type::fromString('Foobar'),
-                    'barfoo' => SymbolInformation::fromTypeAndValue(Type::string(), 'hello')
+                    'barfoo' => SymbolInformation::for(
+                        Symbol::fromTypeNameAndPosition(Symbol::STRING, 'barfoo', Position::fromStartAndEnd(0, 0))
+                    )
+                    ->withType(Type::string())->withValue('hello')
                 ], ['type' => 'string'],
             ],
             'It returns type of property' => [
