@@ -46,9 +46,9 @@ class Foobar
 
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->symbolInformation()->type());
-                $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('$this')->first()->symbolInformation()->symbol()->symbolType());
+                $this->assertCount(1, $frame->locals()->byName('this'));
+                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolInformation()->type());
+                $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolInformation()->symbol()->symbolType());
             }],
             'It returns method arguments' => [
                 <<<'EOT'
@@ -68,8 +68,11 @@ class Foobar
 
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->symbolInformation()->type());
+                $this->assertCount(1, $frame->locals()->byName('this'));
+                $this->assertEquals(
+                    Type::fromString('Foobar\Barfoo\Foobar'),
+                    $frame->locals()->byName('this')->first()->symbolInformation()->type()
+                );
             }],
             'It registers string assignments' => [
                 <<<'EOT'
@@ -85,8 +88,8 @@ class Foobar
 
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$foobar'));
-                $symbolInformation = $frame->locals()->byName('$foobar')->first()->symbolInformation();
+                $this->assertCount(1, $frame->locals()->byName('foobar'));
+                $symbolInformation = $frame->locals()->byName('foobar')->first()->symbolInformation();
                 $this->assertEquals('string', (string) $symbolInformation->type());
                 $this->assertEquals('foobar', (string) $symbolInformation->value());
             }],
@@ -104,7 +107,7 @@ class Foobar
 
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('$foobar');
+                $vars = $frame->locals()->byName('foobar');
                 $this->assertCount(1, $vars);
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('World', (string) $symbolInformation->type());
@@ -123,7 +126,7 @@ class Foobar
 
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('$this');
+                $vars = $frame->locals()->byName('this');
                 $this->assertCount(1, $vars);
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('Foobar', (string) $symbolInformation->type());
@@ -183,7 +186,7 @@ class Foobar
 }
 EOT
             , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('$foobar');
+                $vars = $frame->locals()->byName('foobar');
                 $this->assertCount(1, $vars);
                 $symbolInformation = $vars->first()->symbolInformation();
                 $this->assertEquals('Foobar', (string) $symbolInformation->type());
@@ -251,6 +254,8 @@ EOT
                 ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$exception'));
+                    $exception = $frame->locals()->byName('$exception')->first();
+                    $this->assertEquals(Type::fromString('Exception'), $exception->symbolInformation()->type());
                 }
             ],
             'Respects closure scope' => [
@@ -281,6 +286,8 @@ EOT
                 ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$foo'));
+                    $variable = $frame->locals()->byName('$foo')->first();
+                    $this->assertEquals(Type::fromString('Foobar'), $variable->symbolInformation()->type());
                 }
             ],
             'Injects imported closure parent scope variables' => [
@@ -296,7 +303,9 @@ EOT
                 ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->first()->symbolInformation()->type());
+                    $zed = $frame->locals()->byName('$zed')->first();
+                    $this->assertEquals('string', (string) $zed->symbolInformation()->type());
+                    $this->assertEquals(Symbol::VARIABLE, $zed->symbolInformation()->symbol()->symbolType());
                 }
             ],
             'Injects variables with @var (non-standard)' => [

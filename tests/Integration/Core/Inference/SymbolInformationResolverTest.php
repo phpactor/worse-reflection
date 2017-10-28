@@ -41,15 +41,15 @@ class SymbolInformationResolverTest extends IntegrationTestCase
         foreach ($locals as $name => $varSymbolInfo) {
             if ($varSymbolInfo instanceof Type) {
                 $varSymbolInfo = SymbolInformation::for(
-                    Symbol::fromTypeNameAndPosition('variable', $name, Position::fromStartAndEnd(0, 0))
+                    Symbol::fromTypeNameAndPosition(
+                        'variable',
+                        $name,
+                        Position::fromStartAndEnd(0, 0)
+                    )
                 )->withType($varSymbolInfo);
             }
 
-            $variables[] = Variable::fromOffsetNameAndValue(
-                Offset::fromInt(0),
-                $name,
-                $varSymbolInfo
-            );
+            $variables[] = Variable::fromSymbolInformation($varSymbolInfo);
         }
 
         $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
@@ -76,10 +76,12 @@ class SymbolInformationResolverTest extends IntegrationTestCase
     public function testNotResolvableClass(string $source)
     {
         $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
-            Variable::fromOffsetNameAndValue(
-                Offset::fromInt(0),
-                '$this',
-                SymbolInformation::fromType(Type::fromString('Foobar'))
+            Variable::fromSymbolInformation(
+                SymbolInformation::for(Symbol::fromTypeNameAndPosition(
+                    Symbol::CLASS_,
+                    'bar',
+                    Position::fromStartAndEnd(0, 0)
+                ))->withType(Type::fromString('Foobar'))
             ),
         ]), $source);
         $this->assertEquals(Type::unknown(), $value->type());
@@ -284,7 +286,7 @@ class Foobar
 }
 
 EOT
-                , [ '$world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => '$world']
+                , [ 'world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'world']
             ],
             'It returns type for a call access expression' => [
                 <<<'EOT'
@@ -327,12 +329,12 @@ class Foobar
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar\Barfoo\Foobar'),
+                'this' => Type::fromString('Foobar\Barfoo\Foobar'),
             ], [
                 'type' => 'Foobar\Barfoo\Type3',
                 'symbol_type' => Symbol::METHOD,
                 'symbol_name' => 'type3',
-                'class_type' => 'Foobar\Barfoo\Type2',
+                'container_type' => 'Foobar\Barfoo\Type2',
             ],
             ],
             'It returns type for a method which returns an interface type' => [
@@ -357,12 +359,12 @@ class Foobar
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar'),
+                'this' => Type::fromString('Foobar'),
             ], [
                 'type' => 'string',
                 'symbol_type' => Symbol::METHOD,
                 'symbol_name' => 'foo',
-                'class_type' => 'Barfoo',
+                'container_type' => 'Barfoo',
             ],
             ],
             'It returns class type for parent class for parent method' => [
@@ -392,12 +394,12 @@ class Foobar extends Barfoo
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar'),
+                'this' => Type::fromString('Foobar'),
             ], [
                 'type' => 'Type3',
                 'symbol_type' => Symbol::METHOD,
                 'symbol_name' => 'type3',
-                'class_type' => 'Barfoo',
+                'container_type' => 'Barfoo',
             ],
             ],
             'It returns type for a property access when class has method of same name' => [
@@ -429,7 +431,7 @@ class Foobar
 }
 EOT
             , [
-                '$this' => Type::fromString('Foobar'),
+                'this' => Type::fromString('Foobar'),
             ], ['type' => 'string'],
             ],
             'It returns type for a new instantiation' => [
@@ -447,7 +449,7 @@ EOT
 new $<>foobar;
 EOT
         , [
-                '$foobar' => Type::fromString('Foobar'),
+                'foobar' => Type::fromString('Foobar'),
         ], ['type' => 'Foobar'],
             ],
             'It returns type for string literal' => [
@@ -505,6 +507,14 @@ EOT
 [ 'one' => 'two', 'three' => 3 <>];
 EOT
                 , [], ['type' => 'array', 'value' => [ 'one' => 'two', 'three' => 3]],
+            ],
+            'Empty array' => [
+                <<<'EOT'
+<?php
+
+[  <>];
+EOT
+                , [], ['type' => 'array', 'value' => [ ]],
             ],
             'It type for a class constant' => [
                 <<<'EOT'
@@ -573,7 +583,13 @@ class Foobar
 
 $foobar->$barfoo(<>);
 EOT
-                , [ '$foobar' => Type::fromString('Foobar'), '$barfoo' => SymbolInformation::fromTypeAndValue(Type::string(), 'hello') ], ['type' => 'string'],
+                , [
+                    'foobar' => Type::fromString('Foobar'),
+                    'barfoo' => SymbolInformation::for(
+                        Symbol::fromTypeNameAndPosition(Symbol::STRING, 'barfoo', Position::fromStartAndEnd(0, 0))
+                    )
+                    ->withType(Type::string())->withValue('hello')
+                ], ['type' => 'string'],
             ],
             'It returns type of property' => [
                 <<<'EOT'
@@ -675,7 +691,11 @@ class Foobar
     }
 }
 EOT
-                , [], ['symbol_type' => Symbol::METHOD, 'symbol_name' => 'method']
+                , [], [
+                    'symbol_type' => Symbol::METHOD,
+                    'symbol_name' => 'method',
+                    'container_type' => 'Foobar',
+                ]
             ],
             'Class name' => [
                 <<<'EOT'
@@ -696,7 +716,7 @@ class Foobar
     private $a<>aa = 'asd';
 }
 EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'class_type' => 'Foobar'],
+                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'container_type' => 'Foobar'],
             ],
             'Constant name' => [
                 <<<'EOT'
@@ -707,7 +727,12 @@ class Foobar
     const AA<>A = 'aaa';
 }
 EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::CONSTANT, 'symbol_name' => 'AAA', 'class_type' => 'Foobar'],
+                , [], [
+                    'type' => '<unknown>',
+                    'symbol_type' => Symbol::CONSTANT,
+                    'symbol_name' => 'AAA',
+                    'container_type' => 'Foobar'
+                ],
             ],
             'Function name' => [
                 <<<'EOT'
@@ -847,7 +872,7 @@ EOT
                 case 'symbol_name':
                     $this->assertEquals($value, $information->symbol()->name());
                     continue;
-                case 'class_type':
+                case 'container_type':
                     $this->assertEquals($value, (string) $information->containerType());
                     continue;
                 case 'log':

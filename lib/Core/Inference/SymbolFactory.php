@@ -5,6 +5,9 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Position;
+use Webmozart\Assert\Assert;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Type;
 
 class SymbolFactory
 {
@@ -29,58 +32,59 @@ class SymbolFactory
         return Symbol::fromTypeNameAndPosition($options['symbol_type'], $name, $position);
     }
 
-    public function information(Node $node, array $options): SymbolInformation
+    public function information(string $symbolName, int $start, int $end, array $config = []): SymbolInformation
     {
-        $options = array_merge([
-            'container_type' => null,
+        $defaultConfig = [
             'symbol_type' => Symbol::UNKNOWN,
-            'token' => null,
+            'container_type' => null,
             'type' => null,
             'value' => null,
-        ], $options);
+        ];
 
-        $symbol = $this->symbol($node, [
-            'symbol_type' => $options['symbol_type'],
-            'token' => $options['token'],
-        ]);
+        if ($diff = array_diff(array_keys($config), array_keys($defaultConfig))) {
+            throw new \RuntimeException(sprintf(
+                'Invalid keys "%s", valid keys "%s"',
+                implode('", "', $diff), implode('", "', array_keys($defaultConfig))
+            ));
+        }
 
+        $config = array_merge($defaultConfig, $config);
+        $position = Position::fromStartAndEnd($start, $end);
+        $symbol = Symbol::fromTypeNameAndPosition(
+            $config['symbol_type'],
+            $symbolName,
+            $position
+        );
+
+        return $this->informationFromParameters(
+            $symbol,
+            $config['type'],
+            $config['container_type'],
+            $config['value']
+        );
+    }
+
+    private function informationFromParameters(
+        Symbol $symbol,
+        Type $type = null,
+        Type $containerType = null,
+        $value = null
+    ): SymbolInformation
+    {
         $information = SymbolInformation::for($symbol);
 
-        if ($options['type']) {
-            $information = $information->withType($options['type']);
+        if ($type) {
+            $information = $information->withType($type);
         }
 
-        if ($options['container_type']) {
-            $information = $information->withContainerType($options['container_type']);
+        if ($containerType) {
+            $information = $information->withContainerType($containerType);
         }
 
-        if (null !== $options['value']) {
-            $information = $information->withValue($options['value']);
+        if (null !== $value) {
+            $information = $information->withValue($value);
         }
 
         return $information;
-    }
-
-    private function name(Node $node, $token = null)
-    {
-        return ltrim($this->rawName($node, $token), '$');
-    }
-
-    private function rawName(Node $node, $token = null)
-    {
-        if ($token) {
-            return $token->getText($node->getFileContents());
-        }
-
-        return $node->getText();
-    }
-
-    private function position(Node $node, $token = null)
-    {
-        if ($token && $token instanceof Token) {
-            return Position::fromStartAndEnd($token->start, $token->start + $token->length);
-        }
-
-        return Position::fromStartAndEnd($node->getStart(), $node->getEndPosition());
     }
 }

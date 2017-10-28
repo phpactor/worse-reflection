@@ -84,19 +84,30 @@ class SymbolInformationResolver
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
 
+        /** @var QualifiedName $node */
         if ($node instanceof QualifiedName) {
-            return $this->symbolFactory->information($node, [
-                'type' => $this->resolveQualifiedNameType($node),
-                'symbol_type' => Symbol::CLASS_,
-            ]);
+            return $this->symbolFactory->information(
+                $node->getText(),
+                $node->getStart(),
+                $node->getEndPosition(),
+                [
+                    'type' => $this->resolveQualifiedNameType($node),
+                    'symbol_type' => Symbol::CLASS_
+                ]
+            );
         }
 
+        /** @var ConstElement $node */
         if ($node instanceof ConstElement) {
-            return $this->symbolFactory->information($node, [
-                'token' => $node->name,
-                'symbol_type' => Symbol::CONSTANT,
-                'container_type' => $this->classTypeFromNode($node)
-            ]);
+            return $this->symbolFactory->information(
+                $node->getName(),
+                $node->getStart(),
+                $node->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::CONSTANT,
+                    'container_type' => $this->classTypeFromNode($node)
+                ]
+            );
         }
 
         if ($node instanceof Parameter) {
@@ -119,12 +130,17 @@ class SymbolInformationResolver
             return $this->resolveScopedPropertyAccessExpression($frame, $node);
         }
 
+        /** @var ClassDeclaration $node */
         if ($node instanceof ClassLike) {
-            return $this->symbolFactory->information($node, [
-                'token' => $node->name,
-                'symbol_type' => Symbol::CLASS_,
-                'type' => Type::fromString($node->getNamespacedName())
-            ]);
+            return $this->symbolFactory->information(
+                $node->name->getText($node->getFileContents()),
+                $node->name->getEndPosition(),
+                $node->name->getStartPosition(),
+                [
+                    'symbol_type' => Symbol::CLASS_,
+                    'type' => Type::fromString($node->getNamespacedName())
+                ]
+            );
         }
 
         if ($node instanceof ObjectCreationExpression) {
@@ -136,9 +152,12 @@ class SymbolInformationResolver
             return $this->resolveSubscriptExpression($frame, $variableValue, $node);
         }
 
+        /** @var StringLiteral $node */
         if ($node instanceof StringLiteral) {
             return $this->symbolFactory->information(
-                $node,
+                (string) $node->getStringContentsText(),
+                $node->getStart(),
+                $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::STRING,
                     'type' => Type::string(),
@@ -188,13 +207,19 @@ class SymbolInformationResolver
         }
 
         $name = $node->getText();
+        $name = ltrim($name, '$');
         $offset = $node->getFullStart();
         $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($name);
 
         if (0 === $variables->count()) {
-            return $this->symbolFactory->information($node, [
-                'symbol_type' => Symbol::VARIABLE,
-            ]);
+            return $this->symbolFactory->information(
+                $node->name->getText($node->getFileContents()),
+                $node->getStart(),
+                $node->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::VARIABLE
+                ]
+            );
         }
 
         return $variables->last()->symbolInformation();
@@ -202,10 +227,14 @@ class SymbolInformationResolver
 
     private function resolvePropertyVariable(ParserVariable $node)
     {
-        $info = $this->symbolFactory->information($node, [
-            'symbol_type' => Symbol::PROPERTY,
-            'token' => $node->name,
-        ]);
+        $info = $this->symbolFactory->information(
+            $node->getName(),
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::PROPERTY,
+            ]
+        );
 
         return $this->memberTypeResolver->propertyType(
             $this->classTypeFromNode($node),
@@ -299,71 +328,93 @@ class SymbolInformationResolver
             $value = $this->_resolveNode($frame, $node->default)->value();
         }
 
-        return $this->symbolFactory->information($node, [
-            'type' => $type,
-            'token' => $node->variableName,
-            'value' => $value,
-            'symbol_type' => Symbol::VARIABLE,
-        ]);
+        return $this->symbolFactory->information(
+            $node->variableName->getText($node->getFileContents()),
+            $node->variableName->getStartPosition(),
+            $node->variableName->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+                'type' => $type,
+                'value' => $value,
+            ]
+        );
     }
 
-    private function resolveNumericLiteral(Node $node)
+    private function resolveNumericLiteral(NumericLiteral $node)
     {
         // note hack to cast to either an int or a float
         $value = $node->getText() + 0;
 
-        return $this->symbolFactory->information($node, [
-            'symbol_type' => Symbol::NUMBER,
-            'type' => is_float($value) ? Type::float() : Type::int(),
-            'value' => $value,
-            'container_type' => $this->classTypeFromNode($node)
-        ]);
+        return $this->symbolFactory->information(
+            $node->getText(),
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::NUMBER,
+                'type' => is_float($value) ? Type::float() : Type::int(),
+                'value' => $value,
+                'container_type' => $this->classTypeFromNode($node)
+            ]
+        );
     }
 
     private function resolveReservedWord(Node $node)
     {
+        $symbolType = $containerType = $type = $value = null;
+
         if ('null' === $node->getText()) {
-            return $this->symbolFactory->information($node, [
-                'type' => Type::null(),
-                'value' => null,
-                'symbol_type' => Symbol::BOOLEAN,
-                'container_type' => $this->classTypeFromNode($node)
-            ]);
+            $type = Type::null();
+            $symbolType = Symbol::BOOLEAN;
+            $containerType = $this->classTypeFromNode($node);
         }
 
         if ('false' === $node->getText()) {
-            return $this->symbolFactory->information($node, [
-                'type' => Type::bool(),
-                'value' => false,
-                'symbol_type' => Symbol::BOOLEAN,
-                'container_type' => $this->classTypeFromNode($node)
-            ]);
+            $value = false;
+            $type = Type::bool();
+            $symbolType = Symbol::BOOLEAN;
+            $containerType = $this->classTypeFromNode($node);
         }
 
         if ('true' === $node->getText()) {
-            return $this->symbolFactory->information($node, [
-                'type' => Type::bool(),
-                'value' => true,
-                'symbol_type' => Symbol::BOOLEAN,
-                'container_type' => $this->classTypeFromNode($node)
-            ]);
+            $type = Type::bool();
+            $value = true;
+            $symbolType = Symbol::BOOLEAN;
+            $containerType = $this->classTypeFromNode($node);
         }
 
-        $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+        $information = $this->symbolFactory->information(
+            $node->getText(),
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'value' => $value,
+                'type' => $type,
+                'symbol_type' => $symbolType,
+                'container_type' => $containerType,
+            ]
+        );
 
-        // TODO: Not tested
-        return SymbolInformation::none();
+        if (null === $type) {
+            $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+        }
+
+        return $information;
     }
 
-    private function resolveArrayCreationExpression(Frame $frame, Node $node)
+    private function resolveArrayCreationExpression(Frame $frame, ArrayCreationExpression $node)
     {
         $array  = [];
 
         if (null === $node->arrayElements) {
-            return $this->symbolFactory->information($node, [
-                'type' => Type::array(),
-                'value' => []
-            ]);
+            return $this->symbolFactory->information(
+                $node->getText(),
+                $node->getStart(),
+                $node->getEndPosition(),
+                [
+                    'type' => Type::array(),
+                    'value' => []
+                ]
+            );
         }
 
         foreach ($node->arrayElements->getElements() as $element) {
@@ -377,10 +428,22 @@ class SymbolInformationResolver
             $array[] = $value;
         }
 
-        return $this->symbolFactory->information($node, [ 'type' => Type::array(), 'value' => $array ]);
+        return $this->symbolFactory->information(
+            $node->getText(),
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'type' => Type::array(),
+                'value' => $array
+            ]
+        );
     }
 
-    private function resolveSubscriptExpression(Frame $frame, SymbolInformation $subject, SubscriptExpression $node = null): SymbolInformation
+    private function resolveSubscriptExpression(
+        Frame $frame,
+        SymbolInformation $subject,
+        SubscriptExpression $node = null
+    ): SymbolInformation
     {
         if (null === $node->accessExpression) {
             $this->logger->warning(sprintf(
@@ -419,10 +482,7 @@ class SymbolInformationResolver
 
             if (array_key_exists($string->value(), $subjectValue)) {
                 $value = $subjectValue[$string->value()];
-                return $this->symbolFactory->information($node, [
-                    'type' => Type::fromValue($value),
-                    'value' => $value
-                ]);
+                return $string->withValue($value);
             }
         }
 
@@ -473,14 +533,16 @@ class SymbolInformationResolver
         return SymbolInformation::none();
     }
 
-    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $methodDeclaration)
+    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $node)
     {
-        $classNode = $methodDeclaration->getFirstAncestor(ClassLike::class);
+        $classNode = $node->getFirstAncestor(ClassLike::class);
         $classSymbolInformation = $this->_resolveNode($frame, $classNode);
+
         return $this->symbolFactory->information(
-            $methodDeclaration,
+            $node->name->getText($node->getFileContents()),
+            $node->name->getStartPosition(),
+            $node->name->getEndPosition(),
             [
-                'token' => $methodDeclaration->name,
                 'container_type' => $classSymbolInformation->type(),
                 'symbol_type' => Symbol::METHOD,
             ]
@@ -504,10 +566,11 @@ class SymbolInformationResolver
         }
 
         $information = $this->symbolFactory->information(
-            $node,
+            $memberName,
+            $node->getStart(),
+            $node->getEndPosition(),
             [
                 'symbol_type' => $memberType,
-                'token' => $node->memberName instanceof Token ? $node->memberName : null,
             ]
         );
 
