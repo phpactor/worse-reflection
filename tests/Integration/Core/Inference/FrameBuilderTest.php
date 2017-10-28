@@ -69,7 +69,10 @@ class Foobar
 EOT
             , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$this'));
-                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('$this')->first()->symbolInformation()->type());
+                $this->assertEquals(
+                    Type::fromString('Foobar\Barfoo\Foobar'),
+                    $frame->locals()->byName('$this')->first()->symbolInformation()->type()
+                );
             }],
             'It registers string assignments' => [
                 <<<'EOT'
@@ -251,6 +254,8 @@ EOT
                 ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$exception'));
+                    $exception = $frame->locals()->byName('$exception')->first();
+                    $this->assertEquals(Type::fromString('Exception'), $exception->symbolInformation()->type());
                 }
             ],
             'Respects closure scope' => [
@@ -281,6 +286,8 @@ EOT
                 ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$foo'));
+                    $variable = $frame->locals()->byName('$foo')->first();
+                    $this->assertEquals(Type::fromString('Foobar'), $variable->symbolInformation()->type());
                 }
             ],
             'Injects imported closure parent scope variables' => [
@@ -296,7 +303,9 @@ EOT
                 ,
                 function (Frame $frame) {
                     $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->first()->symbolInformation()->type());
+                    $zed = $frame->locals()->byName('$zed')->first();
+                    $this->assertEquals('string', (string) $zed->symbolInformation()->type());
+                    $this->assertEquals(Symbol::VARIABLE, $zed->symbolInformation()->symbol()->symbolType());
                 }
             ],
             'Injects variables with @var (non-standard)' => [

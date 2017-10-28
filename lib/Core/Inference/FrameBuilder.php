@@ -109,7 +109,9 @@ final class FrameBuilder
             Offset::fromInt($node->variableName->start),
             $name,
             $this->symbolFactory->information(
-                $node,
+                $name,
+                $node->variableName->getStartPosition(),
+                $node->variableName->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,
                     'type' => $symbolInformation->type(),
@@ -143,9 +145,10 @@ final class FrameBuilder
             Offset::fromInt($node->leftOperand->getStart()),
             $name,
             $this->symbolFactory->information(
-                $node,
+                $node->getText(),
+                $node->getStart(),
+                $node->getEndPosition(),
                 [
-                    'token' => $node->leftOperand->name,
                     'symbol_type' => Symbol::VARIABLE,
                     'type' => $symbolInformation->type(),
                     'value' => $symbolInformation->value(),
@@ -167,13 +170,17 @@ final class FrameBuilder
         $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
 
         // TODO: Sort out this mess.
+        //       If the node is not a token (e.g. it is a variable) then
+        //       evaluate the variable (e.g. $this->$foobar);
         if ($memberNameNode instanceof Token) {
             $memberName = $memberNameNode->getText($node->getFileContents());
         } else {
             $memberNameInfo = $this->symbolInformationResolver->resolveNode($frame, $memberNameNode);
+
             if (false === is_string($memberNameInfo->value())) {
                 return;
             }
+
             $memberName = $memberNameInfo->value();
         }
 
@@ -181,10 +188,11 @@ final class FrameBuilder
             Offset::fromInt($node->leftOperand->getStart()),
             $memberName,
             $this->symbolFactory->information(
-                $node,
+                $node->getStart(),
+                $symbolInformation->symbol()->position()->start(),
+                $symbolInformation->symbol()->position()->end(),
                 [
-                    'member_type' => Symbol::VARIABLE,
-                    'token' => $memberNameNode instanceof Token ? $memberNameNode : null,
+                    'symbol_type' => Symbol::VARIABLE,
                     'type' => $symbolInformation->type(),
                     'value' => $symbolInformation->value(),
                 ]
@@ -209,7 +217,9 @@ final class FrameBuilder
                 Offset::fromInt($node->getStart()),
                 '$this',
                 $this->symbolFactory->information(
-                    $node,
+                    '$this',
+                    $node->getStart(),
+                    $node->getEndPosition(),
                     [
                         'type' => $classType,
                         'symbol_type' => Symbol::VARIABLE,
@@ -235,9 +245,10 @@ final class FrameBuilder
                     Offset::fromInt($parameterNode->getStart()),
                     $parameterName,
                     $this->symbolFactory->information(
-                        $parameterNode,
+                        $parameterName,
+                        $parameterNode->getStart(),
+                        $parameterNode->getEndPosition(),
                         [
-                            'token' => $parameterNode->variableName,
                             'symbol_type' => Symbol::VARIABLE,
                             'type' => $symbolInformation->type(),
                             'value' => $symbolInformation->value(),
@@ -288,7 +299,9 @@ final class FrameBuilder
             $varName = $element->variableName->getText($node->getFileContents());
 
             $symbolInformation = $this->symbolFactory->information(
-                $element,
+                $varName,
+                $element->getStart(),
+                $element->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,
                 ]
@@ -306,6 +319,7 @@ final class FrameBuilder
             }
 
             $variable = $parentVars->byName($varName)->last();
+
             $symbolInformation = $symbolInformation
                 ->withType($variable->symbolInformation()->type())
                 ->withValue($variable->symbolInformation()->value());
@@ -331,11 +345,14 @@ final class FrameBuilder
         if (false === isset($this->injectedTypes[$name])) {
             return;
         }
+
         $frame->locals()->add(Variable::fromOffsetNameAndValue(
             Offset::fromInt($node->getStart()),
             $name,
             $this->symbolFactory->information(
-                $node,
+                $name,
+                $node->getStart(),
+                $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,
                     'type' => $this->injectedTypes[$name],

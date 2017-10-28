@@ -7,6 +7,9 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node\Expression\Variable;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\Symbol;
+use Phpactor\WorseReflection\Core\Type;
 
 class SymbolFactoryTest extends TestCase
 {
@@ -27,51 +30,40 @@ class SymbolFactoryTest extends TestCase
         $this->node = $this->prophesize(Node::class);
     }
 
-    /**
-     * @testdox Creates Symbol information from node
-     */
-    public function testFromNode()
+    public function testInformationInvalidKeys()
     {
-        $this->node->getText()->willReturn('hello');
-        $this->node->getStart()->willReturn(10);
-        $this->node->getEndPosition()->willReturn(20);
-        $information = $this->factory->information($this->node->reveal(), []);
-
-        $this->assertEquals('hello', $information->symbol()->name());
-        $this->assertEquals(10, $information->symbol()->position()->start());
-        $this->assertEquals(20, $information->symbol()->position()->end());
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid keys "asd"');
+        $this->factory->information('hello', 10, 20, [ 'asd' => 'asd' ]);
     }
 
-    /**
-     * @testdox Creates Symbol information
-     */
-    public function testFromNodeAndToken()
+    public function testInformation()
     {
-        $this->node->getText()->willReturn('hello');
-        $this->node->getStart()->willReturn(10);
-        $this->node->getEndPosition()->willReturn(20);
-        $this->node->getFileContents()->willReturn('$foo->barbar');
-        $token = new Token(1, 6, 6, 4);
-        $information = $this->factory->information($this->node->reveal(), [
-            'token' => $token,
-        ]);
+        $information = $this->factory->information('hello', 10, 20);
+        $this->assertInstanceOf(SymbolInformation::class, $information);
+        $symbol = $information->symbol();
 
-        $this->assertEquals('barb', $information->symbol()->name());
-        $this->assertEquals(6, $information->symbol()->position()->start());
-        $this->assertEquals(10, $information->symbol()->position()->end());
+        $this->assertEquals('hello', $symbol->name());
+        $this->assertEquals(10, $symbol->position()->start());
+        $this->assertEquals(20, $symbol->position()->end());
     }
 
-    /**
-     * @testdox Throws exception if non-token given as token
-     */
-    public function testFromNodeAndVariable()
+    public function testInformationOptions()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Token');
-        $variable = new Variable();
-        $variable->name = '$hello';
-        $this->factory->information($this->node->reveal(), [
-            'token' => $variable,
+        $containerType = Type::fromString('container');
+        $type = Type::fromString('type');
+
+        $information = $this->factory->information('hello', 10, 20, [
+            'symbol_type' => Symbol::ARRAY,
+            'container_type' => $containerType,
+            'type' => $type,
+            'value' => 1234
         ]);
+
+        $this->assertInstanceOf(SymbolInformation::class, $information);
+        $this->assertSame($information->type(), $type);
+        $this->assertSame($information->containerType(), $containerType);
+        $this->assertEquals(1234, $information->value());
+        $this->assertEquals(Symbol::ARRAY, $information->symbol()->symbolType());
     }
 }

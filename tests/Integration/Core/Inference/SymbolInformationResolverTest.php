@@ -332,7 +332,7 @@ EOT
                 'type' => 'Foobar\Barfoo\Type3',
                 'symbol_type' => Symbol::METHOD,
                 'symbol_name' => 'type3',
-                'class_type' => 'Foobar\Barfoo\Type2',
+                'container_type' => 'Foobar\Barfoo\Type2',
             ],
             ],
             'It returns type for a method which returns an interface type' => [
@@ -362,7 +362,7 @@ EOT
                 'type' => 'string',
                 'symbol_type' => Symbol::METHOD,
                 'symbol_name' => 'foo',
-                'class_type' => 'Barfoo',
+                'container_type' => 'Barfoo',
             ],
             ],
             'It returns class type for parent class for parent method' => [
@@ -397,7 +397,7 @@ EOT
                 'type' => 'Type3',
                 'symbol_type' => Symbol::METHOD,
                 'symbol_name' => 'type3',
-                'class_type' => 'Barfoo',
+                'container_type' => 'Barfoo',
             ],
             ],
             'It returns type for a property access when class has method of same name' => [
@@ -505,6 +505,14 @@ EOT
 [ 'one' => 'two', 'three' => 3 <>];
 EOT
                 , [], ['type' => 'array', 'value' => [ 'one' => 'two', 'three' => 3]],
+            ],
+            'Empty array' => [
+                <<<'EOT'
+<?php
+
+[  <>];
+EOT
+                , [], ['type' => 'array', 'value' => [ ]],
             ],
             'It type for a class constant' => [
                 <<<'EOT'
@@ -675,7 +683,11 @@ class Foobar
     }
 }
 EOT
-                , [], ['symbol_type' => Symbol::METHOD, 'symbol_name' => 'method']
+                , [], [
+                    'symbol_type' => Symbol::METHOD,
+                    'symbol_name' => 'method',
+                    'container_type' => 'Foobar',
+                ]
             ],
             'Class name' => [
                 <<<'EOT'
@@ -696,7 +708,7 @@ class Foobar
     private $a<>aa = 'asd';
 }
 EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'class_type' => 'Foobar'],
+                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'container_type' => 'Foobar'],
             ],
             'Constant name' => [
                 <<<'EOT'
@@ -707,7 +719,12 @@ class Foobar
     const AA<>A = 'aaa';
 }
 EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::CONSTANT, 'symbol_name' => 'AAA', 'class_type' => 'Foobar'],
+                , [], [
+                    'type' => '<unknown>',
+                    'symbol_type' => Symbol::CONSTANT,
+                    'symbol_name' => 'AAA',
+                    'container_type' => 'Foobar'
+                ],
             ],
             'Function name' => [
                 <<<'EOT'
@@ -847,7 +864,7 @@ EOT
                 case 'symbol_name':
                     $this->assertEquals($value, $information->symbol()->name());
                     continue;
-                case 'class_type':
+                case 'container_type':
                     $this->assertEquals($value, (string) $information->containerType());
                     continue;
                 case 'log':
