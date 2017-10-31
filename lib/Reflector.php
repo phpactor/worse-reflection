@@ -16,10 +16,12 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset as TolerantReflectionOffset;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionSourceCode as TolerantReflectionSourceCode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionSourceCode;
 
 class Reflector
 {
@@ -160,6 +162,15 @@ class Reflector
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
         return ReflectionClassCollection::fromSource($this->services, SourceCode::fromUnknown($sourceCode));
+    }
+
+    public function reflectSourceCode($sourceCode): ReflectionSourceCode
+    {
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+
+        $rootNode = $this->services->parser()->parseSourceFile($sourceCode);
+
+        return new TolerantReflectionSourceCode($this->services, $sourceCode, $rootNode);
     }
 
     /**

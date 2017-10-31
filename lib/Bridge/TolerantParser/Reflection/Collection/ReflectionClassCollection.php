@@ -11,6 +11,8 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection as CoreReflectionClassCollection;
+use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
@@ -21,6 +23,15 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
     {
         $node = $serviceLocator->parser()->parseSourceFile((string) $source);
 
+        return self::fromNode($serviceLocator, $source, $node);
+    }
+
+    public static function fromNamespaceDefinition(ServiceLocator $serviceLocator, SourceCode $sourceCode, NamespaceDefinition $node)
+    {
+    }
+
+    public static function fromNode(ServiceLocator $serviceLocator, SourceCode $source, Node $node)
+    {
         $items = [];
 
         foreach ($node->getChildNodes() as $child) {

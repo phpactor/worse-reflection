@@ -9,6 +9,9 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionSourceCode as CoreReflectionSourceCode;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionNamespaceCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionNamespaceCollection as TolerantReflectionNamespaceCollection;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 class ReflectionSourceCode extends AbstractReflectedNode implements CoreReflectionSourceCode
 {
@@ -22,34 +25,25 @@ class ReflectionSourceCode extends AbstractReflectedNode implements CoreReflecti
      */
     private $serviceLocator;
 
-    public function __construct(ServiceLocator $serviceLocator, SourceFileNode $node)
+    /**
+     * @var SourceCode
+     */
+    private $sourceCode;
+
+    public function __construct(ServiceLocator $serviceLocator, SourceCode $sourceCode, SourceFileNode $node )
     {
         $this->node = $node;
         $this->serviceLocator = $serviceLocator;
-    }
-
-    public function findClass(ClassName $name)
-    {
-        foreach ($this->node->getChildNodes() as $child) {
-            if (
-                false === $child instanceof ClassDeclaration &&
-                false === $child instanceof InterfaceDeclaration
-            ) {
-                continue;
-            }
-
-            if ((string) $child->getNamespacedName() === (string) $name) {
-                if ($child instanceof InterfaceDeclaration) {
-                    return new ReflectionInterface($this->serviceLocator, $child);
-                }
-
-                return new ReflectionClass($this->serviceLocator, $child);
-            }
-        }
+        $this->sourceCode = $sourceCode;
     }
 
     protected function node(): Node
     {
         return $this->node;
+    }
+
+    public function namespaces(): ReflectionNamespaceCollection
+    {
+        return TolerantReflectionNamespaceCollection::fromSourceNode($this->serviceLocator, $this->sourceCode, $this->node);
     }
 }
