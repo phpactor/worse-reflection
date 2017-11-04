@@ -500,6 +500,14 @@ n<>ull;
 EOT
                 , [], ['type' => 'null', 'value' => null],
             ],
+            'It returns type null case insensitive' => [
+                <<<'EOT'
+<?php
+
+N<>ULL;
+EOT
+                , [], ['type' => 'null', 'value' => null],
+            ],
             'It returns type and value for an array' => [
                 <<<'EOT'
 <?php

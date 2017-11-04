@@ -361,25 +361,31 @@ class SymbolInformationResolver
     private function resolveReservedWord(Node $node)
     {
         $symbolType = $containerType = $type = $value = null;
+        $word = strtolower($node->getText());
 
-        if ('null' === $node->getText()) {
+        if ('null' === $word) {
             $type = Type::null();
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
         }
 
-        if ('false' === $node->getText()) {
+        if ('false' === $word) {
             $value = false;
             $type = Type::bool();
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
         }
 
-        if ('true' === $node->getText()) {
+        if ('true' === $word) {
             $type = Type::bool();
             $value = true;
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
+        }
+
+        if (null === $symbolType) {
+            $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+            $symbolType = Symbol::UNKNOWN;
         }
 
         $information = $this->symbolFactory->information(
