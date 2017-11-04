@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionArgument as CoreReflectionArgument;
+use RuntimeException;
 
 class ReflectionArgument implements CoreReflectionArgument
 {

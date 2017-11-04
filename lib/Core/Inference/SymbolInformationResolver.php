@@ -56,7 +56,7 @@ class SymbolInformationResolver
     {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
-        $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger, $this->symbolFactory);
+        $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger);
     }
 
     /**

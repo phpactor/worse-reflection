@@ -22,7 +22,7 @@ class MemberTypeResolver
      */
     private $logger;
 
-    public function __construct(Reflector $reflector, Logger $logger, SymbolFactory $factory)
+    public function __construct(Reflector $reflector, Logger $logger)
     {
         $this->reflector = $reflector;
         $this->logger = $logger;

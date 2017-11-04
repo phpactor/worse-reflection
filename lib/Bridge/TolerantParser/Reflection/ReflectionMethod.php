@@ -29,7 +29,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     private $serviceLocator;
 
     /**
-     * @var ClassMethod
+     * @var MethodDeclaration
      */
     private $node;
 

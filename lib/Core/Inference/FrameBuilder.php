@@ -26,7 +26,7 @@ final class FrameBuilder
     private $logger;
 
     /**
-     * @var NodeValueResolver
+     * @var SymbolInformationResolver
      */
     private $symbolInformationResolver;
 

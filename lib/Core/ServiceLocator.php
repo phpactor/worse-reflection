@@ -10,7 +10,7 @@ use Phpactor\WorseReflection\Reflector;
 class ServiceLocator
 {
     /**
-     * @var SouceCodeLocator
+     * @var SourceCodeLocator
      */
     private $sourceLocator;
 
@@ -30,9 +30,19 @@ class ServiceLocator
     private $frameBuilder;
 
     /**
-     * @var NodeValueResolver
+     * @var SymbolInformationResolver
      */
     private $symbolInformationResolver;
+
+    /**
+     * @var Parser
+     */
+    private $parser;
+
+    /**
+     * @var DocblockResolver
+     */
+    private $docblockResolver;
 
     public function __construct(SourceCodeLocator $sourceLocator, Logger $logger)
     {

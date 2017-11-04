@@ -223,4 +223,13 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     {
         return $this->sourceCode;
     }
+
+    public function isConcrete(): bool
+    {
+        if (false === $this->isClass()) {
+            return false;
+        }
+
+        return false === $this->isAbstract();
+    }
 }

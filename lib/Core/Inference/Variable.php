@@ -39,7 +39,7 @@ final class Variable
 
     public function __toString()
     {
-        return $this->type;
+        return $this->name;
     }
 
     public function offset(): Offset

@@ -11,6 +11,6 @@ class PropertyAssignments extends Assignments
 
     public static function fromArray(array $assignments): PropertyAssignments
     {
-        return self::_fromArray($assignments);
+        return self::fromArray($assignments);
     }
 }

@@ -5,6 +5,11 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Patch;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\ResolvedName;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
+use Microsoft\PhpParser\Node\TraitSelectOrAliasClause;
+use Microsoft\PhpParser\TokenKind;
+use Microsoft\PhpParser\Node\Expression;
+use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
+use Microsoft\PhpParser\Node\Expression\ObjectCreationExpression;
 
 /**
  * This is a hack to allow resolving trait use clauses, which are for some reason

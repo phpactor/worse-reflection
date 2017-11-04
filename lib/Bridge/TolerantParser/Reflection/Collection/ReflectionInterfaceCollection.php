@@ -8,6 +8,7 @@ use Microsoft\PhpParser\Node\QualifiedName;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionInterface get()

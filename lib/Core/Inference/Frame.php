@@ -5,7 +5,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 final class Frame
 {
     /**
-     * @var PropretyAssignments
+     * @var PropertyAssignments
      */
     private $properties;
 
@@ -16,7 +16,7 @@ final class Frame
 
     public function __construct(
         LocalAssignments $locals = null,
-        PropretyAssignments $properties = null
+        PropertyAssignments $properties = null
     ) {
         $this->properties = $properties ?: PropertyAssignments::create();
         $this->locals = $locals ?: LocalAssignments::create();

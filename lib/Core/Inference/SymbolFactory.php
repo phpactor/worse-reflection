@@ -11,27 +11,6 @@ use Phpactor\WorseReflection\Core\Type;
 
 class SymbolFactory
 {
-    public function symbol(Node $node, array $options): Symbol
-    {
-        $options = array_merge([
-            'symbol_type' => Symbol::UNKNOWN,
-            'token' => null,
-        ], $options);
-
-        if (null !== $options['token'] && false === $options['token'] instanceof Token) {
-            throw new \InvalidArgumentException(sprintf(
-                'Token must be of type %s, got %s',
-                Token::class,
-                is_object($options['token']) ? get_class($options['token']) : gettype($options['token'])
-            ));
-        }
-
-        $name = $this->name($node, $options['token']);
-        $position = $this->position($node, $options['token']);
-
-        return Symbol::fromTypeNameAndPosition($options['symbol_type'], $name, $position);
-    }
-
     public function information(string $symbolName, int $start, int $end, array $config = []): SymbolInformation
     {
         $defaultConfig = [

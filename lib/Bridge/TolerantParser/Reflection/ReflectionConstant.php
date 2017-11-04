@@ -37,7 +37,7 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
         $this->class = $class;
     }
 
-    public function name()
+    public function name(): string
     {
         return $this->node->getName();
     }

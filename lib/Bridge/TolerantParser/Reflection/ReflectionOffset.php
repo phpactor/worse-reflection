@@ -34,11 +34,6 @@ final class ReflectionOffset implements CoreReflectionOffset
         return $this->frame;
     }
 
-    public function symbol(): Symbol
-    {
-        return $this->symbolInformation;
-    }
-
     public function symbolInformation(): SymbolInformation
     {
         return $this->symbolInformation;
