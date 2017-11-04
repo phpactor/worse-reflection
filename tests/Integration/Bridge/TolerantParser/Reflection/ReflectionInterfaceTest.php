@@ -29,8 +29,7 @@ interface Barfoo
 {
 }
 EOT
-                ,
-                'Barfoo',
+                , 'Barfoo',
                 function ($class) {
                     $this->assertEquals('Barfoo', (string) $class->name()->short());
                     $this->assertInstanceOf(ReflectionInterface::class, $class);
@@ -151,6 +150,25 @@ EOT
                     $this->assertCount(3, $class->constants());
                     $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('FOOBAR'));
                     $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('EEEBAR'));
+                },
+            ],
+            'instanceof' => [
+                <<<'EOT'
+<?php
+interface Interface1
+{
+}
+
+interface Interface2 extends Interface1
+{
+}
+EOT
+                ,
+                'Interface2',
+                function ($class) {
+                    $this->assertTrue($class->isInstanceOf(ClassName::fromString('Interface2')));
+                    $this->assertTrue($class->isInstanceOf(ClassName::fromString('Interface1')));
+                    $this->assertFalse($class->isInstanceOf(ClassName::fromString('Interface3')));
                 },
             ],
         ];

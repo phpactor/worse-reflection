@@ -118,6 +118,20 @@ EOT
                     $this->assertEquals(Type::unknown(), $class->methods()->first()->inferredReturnType());
                 },
             ],
+            'instanceof' => [
+                <<<'EOT'
+<?php
+trait Trait1
+{
+}
+EOT
+                ,
+                'Trait1',
+                function ($class) {
+                    $this->assertTrue($class->isInstanceOf(ClassName::fromString('Trait1')));
+                    $this->assertFalse($class->isInstanceOf(ClassName::fromString('Interface1')));
+                },
+            ],
         ];
     }
 }

@@ -20,6 +20,8 @@ interface ReflectionClassLike
 
     public function isInterface(): bool;
 
+    public function isInstanceOf(ClassName $className): bool;
+
     public function isTrait(): bool;
 
     public function isClass(): bool;

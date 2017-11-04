@@ -68,4 +68,13 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     {
         return $this->sourceCode;
     }
+
+    public function isInstanceOf(ClassName $className): bool
+    {
+        if ($className == $this->name()) {
+            return true;
+        }
+
+        return false;
+    }
 }

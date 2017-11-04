@@ -24,6 +24,4 @@ interface ReflectionClass extends ReflectionClassLike
     public function traits(): ReflectionTraitCollection;
 
     public function memberListPosition(): Position;
-
-    public function isInstanceOf(ClassName $className): bool;
 }
