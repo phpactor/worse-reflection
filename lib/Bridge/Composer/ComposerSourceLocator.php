@@ -27,7 +27,7 @@ class ComposerSourceLocator implements SourceCodeLocator
         if (false === $path) {
             throw new SourceNotFound(sprintf(
                 'Composer could not locate file for class "%s"',
-                $className->getFqn()
+                $className->full()
             ));
         }
 

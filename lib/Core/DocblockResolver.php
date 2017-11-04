@@ -7,6 +7,9 @@ use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use InvalidArgumentException;
 
 class DocblockResolver
 {
@@ -27,13 +30,13 @@ class DocblockResolver
                 return Type::unknown();
             }
 
-            if (!$class->parent()) {
-                return Type::unknown();
-            }
+            $parents = $this->classParents($class);
 
-            $parentMethods = $class->parent()->methods();
-            if ($parentMethods->has($node->getName())) {
-                return $parentMethods->get($node->getName())->inferredReturnType();
+            foreach ($parents as $parent) {
+                $parentMethods = $parent->methods();
+                if ($parentMethods->has($node->getName())) {
+                    return $parentMethods->get($node->getName())->inferredReturnType();
+                }
             }
         }
 
@@ -91,5 +94,23 @@ class DocblockResolver
         }
 
         return Type::fromArray([(string) $namespace->name, $typeString]);
+    }
+
+    private function classParents(AbstractReflectionClass $class)
+    {
+        if ($class->isClass()) {
+            /** @var ReflectionClass $class */
+            return [ $class->parent() ];
+        }
+
+        if ($class->isInterface()) {
+            /** @var ReflectionInterface $class */
+            return $class->parents();
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'Do not know how to get parents for "%s"',
+            get_class($class)
+        ));
     }
 }
