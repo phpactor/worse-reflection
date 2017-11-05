@@ -240,6 +240,30 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnType());
                 },
             ],
+            'Return type from inherited docblock with no parent class' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+class Foobar
+{
+    /**
+     * {@inheritdoc}
+     */
+    function method1() {}
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods, $logger) {
+                    $this->assertEquals(Type::unknown(), $methods->get('method1')->inferredReturnType());
+                    $this->assertContains(
+                        'inheritdoc used on class "Foobar", but class has no parent',
+                        $logger->messages()[0]
+                    );
+                },
+            ],
             'It reflects an abstract method' => [
                 <<<'EOT'
 <?php

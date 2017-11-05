@@ -10,9 +10,22 @@ use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
+use Phpactor\WorseReflection\Core\Logger;
+use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
 class DocblockResolver
 {
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    public function __construct(Logger $logger = null)
+    {
+        $this->logger = $logger ?: new ArrayLogger();
+    }
+
     public function methodReturnTypeFromNodeDocblock(AbstractReflectionClass $class, MethodDeclaration $node)
     {
         $methodName = $node->name->getText($node->getFileContents());
@@ -100,7 +113,17 @@ class DocblockResolver
     {
         if ($class->isClass()) {
             /** @var ReflectionClass $class */
-            return [ $class->parent() ];
+            $parent = $class->parent();
+
+            if (null === $parent) {
+                $this->logger->warning(sprintf(
+                    'inheritdoc used on class "%s", but class has no parent',
+                    $class->name()->full()
+                ));
+                return [];
+            }
+
+            return [ $parent ];
         }
 
         if ($class->isInterface()) {

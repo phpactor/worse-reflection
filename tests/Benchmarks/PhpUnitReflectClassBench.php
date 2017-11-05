@@ -24,6 +24,9 @@ class PhpUnitReflectClassBench extends BaseBenchCase
 
     /**
      * @Subject()
+     * @Assert(6, time_unit="seconds", mode="throughput", comparator=">", tolerance=1)
+     * @OutputTimeUnit("seconds", precision=2)
+     * @OutputMode("throughput", precision=2)
      */
     public function test_case_methods_and_properties()
     {

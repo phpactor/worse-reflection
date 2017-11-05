@@ -52,7 +52,7 @@ class ServiceLocator
         $this->symbolInformationResolver = new SymbolInformationResolver($this->reflector, $this->logger);
         $this->frameBuilder = new FrameBuilder($this->symbolInformationResolver, $this->logger);
         $this->parser = new Parser();
-        $this->docblockResolver = new DocblockResolver();
+        $this->docblockResolver = new DocblockResolver($logger);
     }
 
     public function reflector(): Reflector
