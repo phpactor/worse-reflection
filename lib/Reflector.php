@@ -45,7 +45,7 @@ class Reflector
     public static function create(SourceCodeLocator $locator = null, Logger $logger = null): Reflector
     {
         $logger = $logger ?: new ArrayLogger();
-        $locator = $locator ?: new StringSourceLocator('');
+        $locator = $locator ?: new StringSourceLocator(SourceCode::fromString(''));
 
         return (new ServiceLocator($locator, $logger))->reflector();
     }
