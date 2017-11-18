@@ -299,6 +299,27 @@ EOT
                     $this->assertEquals('foobar', $class->properties()->first()->name());
                 },
             ],
+            'Get properties for belonging to' => [
+                <<<'EOT'
+<?php
+
+class Class1
+{
+    public $foobar;
+}
+
+class Class2 extends Class1
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertCount(1, $class->properties()->belongingTo(ClassName::fromString('Class1')));
+                    $this->assertCount(0, $class->properties()->belongingTo(ClassName::fromString('Class2')));
+                },
+            ],
 
             'If it extends an interface, then ignore' => [
                 <<<'EOT'
