@@ -13,6 +13,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollec
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant last()
  */
 class ReflectionConstantCollection extends AbstractReflectionCollection implements CoreReflectionConstantCollection
 {

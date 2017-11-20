@@ -11,6 +11,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollectio
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionTrait get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionTrait first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionTrait last()
  */
 class ReflectionTraitCollection extends AbstractReflectionCollection implements CoreReflectionTraitCollection
 {

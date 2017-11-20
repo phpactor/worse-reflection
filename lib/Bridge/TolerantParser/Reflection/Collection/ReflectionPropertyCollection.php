@@ -16,6 +16,8 @@ use Phpactor\WorseReflection\Core\ClassName;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty last()
  */
 class ReflectionPropertyCollection extends AbstractReflectionCollection implements CoreReflectionPropertyCollection
 {

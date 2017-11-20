@@ -12,6 +12,8 @@ use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionInterface get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionInterface first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionInterface last()
  */
 class ReflectionInterfaceCollection extends AbstractReflectionCollection implements CoreReflectionInterfaceCollection
 {

@@ -16,6 +16,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollecti
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod last()
  */
 class ReflectionMethodCollection extends AbstractReflectionCollection implements CoreReflectionMethodCollection
 {

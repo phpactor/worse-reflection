@@ -10,6 +10,8 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionArgument
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter last()
  */
 class ReflectionArgumentCollection extends AbstractReflectionCollection implements CoreReflectionParameterCollection
 {

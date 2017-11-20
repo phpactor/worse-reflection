@@ -9,6 +9,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterColle
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter last()
  */
 class ReflectionParameterCollection extends AbstractReflectionCollection implements CoreReflectionParameterCollection
 {

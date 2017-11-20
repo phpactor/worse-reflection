@@ -14,6 +14,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollectio
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass last()
  */
 class ReflectionClassCollection extends AbstractReflectionCollection implements CoreReflectionClassCollection
 {
