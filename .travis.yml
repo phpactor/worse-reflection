@@ -1,4 +1,7 @@
 language: php
+env:
+  global:
+    secure: seKySOPs0H8hbneH9tDpEbUOqoAkk4KKzLI37FgPI7myMCqVv6Ih5Xv6ReP/sAMlhq52UeCY7W2xFgiXBW9VQsFr4WCjZ2i8SG7e29NRxeFW5LIHqqYtXpqAxoIs+vqARcpCzM9IxqlZ6C5BbH4+lAQ0SLf0Tk5op3ijVKuzrE8iKgK2b7cnMGMctmJOK1GfQ64k5m6glJe1RH06eAzkMoKisI08cKvIuND+171Pw50nyqzW3j19LuB1Msa4E4Wy30+drqBS+I8x72xO3dIHNofSlrsweJ6BJa27/JDq/4dhhF5Vm+1/8njEMmydYc5UoIwvQ+bnlzxNd6bIlTvCHVkv0hG+ruuQ4aIyWpHT6f/eqz2SkWXFtnMcQxJpTcTd1o2KAk5KJ78vwgnNrajfLVy6WBpTe9Tau8vWruPQYFPvi7dDAP8ih0bwrx+RoRkYM2kFSssvF0F2mvJrruAJtgD6Fi7QY1R6IQn6E99fS8uSBG5xoLY+RdWYbLEQeC0gLwMxbbtkGx3mIyUsh3XWzoLdX6IyNktvimUWaaQhjyccnrTjMr4PMxz7XEX6AksR1qlQkD6NYkU6FP2+mTpfRUfnU6kHUNt9VJ0I0plFICp+XscklTPq2mhmB3StdBmwefoQ4LRX1zLl4VJ5Mdho1ALLRkhIshCoOwO6pTzbWbw=
 
 php:
   - 7.0
@@ -16,4 +19,4 @@ before_script:
 script:
   - vendor/bin/phpstan analyze lib/
   - vendor/bin/phpunit
-  - vendor/bin/phpbench run --report=aggregate --progress=travis
+  - vendor/bin/phpbench run --report=aggregate --progress=travis --store

@@ -1,0 +1,12 @@
+{
+    "storage": "reports",
+    "storage.reports.connection": {
+        "base_url": "https://phpbench.dantleech.com"
+    },
+    "storage.reports.store_iterations": true,
+    "extensions": [
+        "PhpBench\\Extension\\ReportsExtension"
+    ],
+    "bootstrap": "vendor/autoload.php",
+    "path": "tests/Benchmarks"
+}
