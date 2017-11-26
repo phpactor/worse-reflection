@@ -1,10 +1,10 @@
 {
-    "storage": "xml",
+    "storage": "reports",
     "storage.reports.connection": {
         "base_url": "phpbench.dantleech.com"
     },
     "extensions": [
-        "PhpBench\\Extensions\\Elastic\\ElasticExtension"
+        "PhpBench\\Extension\\ReportsExtension"
     ],
     "bootstrap": "vendor/autoload.php",
     "path": "tests/Benchmarks"
