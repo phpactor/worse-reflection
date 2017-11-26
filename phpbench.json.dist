@@ -1,7 +1,7 @@
 {
     "storage": "reports",
     "storage.reports.connection": {
-        "base_url": "phpbench.dantleech.com"
+        "base_url": "https://phpbench.dantleech.com"
     },
     "storage.reports.store_iterations": true,
     "extensions": [
