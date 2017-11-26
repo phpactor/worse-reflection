@@ -3,6 +3,7 @@
     "storage.reports.connection": {
         "base_url": "phpbench.dantleech.com"
     },
+    "storage.reports.store_iterations": true,
     "extensions": [
         "PhpBench\\Extension\\ReportsExtension"
     ],
