@@ -13,6 +13,7 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+use Microsoft\PhpParser\ClassLike;
 
 class DocblockResolver
 {
@@ -29,11 +30,12 @@ class DocblockResolver
     public function methodReturnTypeFromNodeDocblock(AbstractReflectionClass $class, MethodDeclaration $node)
     {
         $methodName = $node->name->getText($node->getFileContents());
-        if (preg_match('{@method ([\w\\\]+) ' . $methodName . '\(}', (string) $class->docblock(), $matches)) {
-            return $this->typeFromString($node, $matches[1]);
+
+        if ($type = $this->classLevelMethodReturnTypeOverride($class, $methodName)) {
+            return $this->typeFromString($node, $type);
         }
 
-        if (Type::unknown() != $type = $this->typeFromNode($node, 'return')) {
+        if ($type = $this->typeFromMethod($node)) {
             return $type;
         }
 
@@ -70,7 +72,7 @@ class DocblockResolver
     {
         $comment = $node->getLeadingCommentAndWhitespaceText();
 
-        if (!preg_match(sprintf('{@%s ([\w+\\\]+)}', $tag), $comment, $matches)) {
+        if (!preg_match(sprintf('{@%s (\$?[\w+\\\]+)}', $tag), $comment, $matches)) {
             return Type::unknown();
         }
         
@@ -79,6 +81,16 @@ class DocblockResolver
 
     private function typeFromString(Node $node, string $typeString)
     {
+        if (in_array($typeString, ['$this', 'static'])) {
+            $classDeclaration = $node->getFirstAncestor(ClassLike::class);
+
+            if (null === $classDeclaration) {
+                return Type::unknown();
+            }
+
+            return Type::fromString((string) $classDeclaration->getNamespacedName());
+        }
+
         if (substr($typeString, 0, 1) == '\\') {
             return Type::fromString($typeString);
         }
@@ -135,5 +147,25 @@ class DocblockResolver
             'Do not know how to get parents for "%s"',
             get_class($class)
         ));
+    }
+
+    private function classLevelMethodReturnTypeOverride(AbstractReflectionClass $class, $methodName)
+    {
+        if (preg_match('{@method ([\w\\\]+) ' . $methodName . '\(}', (string) $class->docblock(), $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
+    private function typeFromMethod(Node $node)
+    {
+        $type = $this->typeFromNode($node, 'return');
+
+        if (Type::unknown() == $type) {
+            return null;
+        }
+
+        return $type;
     }
 }

@@ -165,6 +165,30 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnType());
                 },
             ],
+            'Return type from docblock this and static' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    /**
+     * @return $this
+     */
+    function method1() {}
+
+    /**
+     * @return static
+     */
+    function method2() {}
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredReturnType());
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredReturnType());
+                },
+            ],
             'Return type from class @method annotation' => [
                 <<<'EOT'
 <?php
