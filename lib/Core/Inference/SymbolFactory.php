@@ -2,11 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-use Microsoft\PhpParser\Token;
-use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Position;
-use Webmozart\Assert\Assert;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 use Phpactor\WorseReflection\Core\Type;
 
 class SymbolFactory
@@ -23,7 +19,8 @@ class SymbolFactory
         if ($diff = array_diff(array_keys($config), array_keys($defaultConfig))) {
             throw new \RuntimeException(sprintf(
                 'Invalid keys "%s", valid keys "%s"',
-                implode('", "', $diff), implode('", "', array_keys($defaultConfig))
+                implode('", "', $diff),
+                implode('", "', array_keys($defaultConfig))
             ));
         }
 
@@ -48,8 +45,7 @@ class SymbolFactory
         Type $type = null,
         Type $containerType = null,
         $value = null
-    ): SymbolInformation
-    {
+    ): SymbolInformation {
         $information = SymbolInformation::for($symbol);
 
         if ($type) {

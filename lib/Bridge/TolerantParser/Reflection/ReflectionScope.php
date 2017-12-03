@@ -8,7 +8,6 @@ use Phpactor\WorseReflection\Core\NameImports;
 use Phpactor\WorseReflection\Core\Name;
 use Microsoft\PhpParser\ResolvedName;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 
 class ReflectionScope implements CoreReflectionScope
 {

@@ -16,7 +16,6 @@ use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\ReservedWord;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
@@ -449,8 +448,7 @@ class SymbolInformationResolver
         Frame $frame,
         SymbolInformation $subject,
         SubscriptExpression $node = null
-    ): SymbolInformation
-    {
+    ): SymbolInformation {
         if (null === $node->accessExpression) {
             $this->logger->warning(sprintf(
                 'Subscript expression "%s" is incomplete',

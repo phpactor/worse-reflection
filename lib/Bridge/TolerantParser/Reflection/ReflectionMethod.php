@@ -20,7 +20,6 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodReturnTypeResolver;
 use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
 

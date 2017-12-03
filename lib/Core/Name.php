@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Core\Name;
-
 class Name
 {
     protected $parts;

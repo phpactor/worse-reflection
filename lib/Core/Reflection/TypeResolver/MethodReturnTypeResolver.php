@@ -71,7 +71,7 @@ class MethodReturnTypeResolver
     private function isOverriding()
     {
         if (
-            false === $this->method->class()->isClass() && 
+            false === $this->method->class()->isClass() &&
             false === $this->method->class()->isInterface()
         ) {
             return false;

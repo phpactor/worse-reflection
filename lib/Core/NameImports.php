@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Core\NameImports;
-use Phpactor\WorseReflection\Core\Name;
 use RuntimeException;
 
 final class NameImports implements \IteratorAggregate
@@ -19,7 +17,7 @@ final class NameImports implements \IteratorAggregate
 
     public static function fromNames(array $nameImports): NameImports
     {
-         return new self($nameImports);
+        return new self($nameImports);
     }
 
     public function getIterator()
@@ -37,7 +35,8 @@ final class NameImports implements \IteratorAggregate
         if (!isset($this->nameImports[$alias])) {
             throw new RuntimeException(sprintf(
                 'Unknown alias "%s", known aliases: "%s"',
-                $alias, implode('", "', array_keys($this->nameImports))
+                $alias,
+                implode('", "', array_keys($this->nameImports))
             ));
         }
 

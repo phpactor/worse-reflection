@@ -3,15 +3,8 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 use Microsoft\PhpParser\Node\Statement\NamespaceDefinition;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use InvalidArgumentException;
-use Psr\Log\LoggerInterface;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Microsoft\PhpParser\ClassLike;
 

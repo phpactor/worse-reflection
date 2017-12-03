@@ -3,8 +3,6 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Type;
-use RuntimeException;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 
 final class Types implements \IteratorAggregate
 {
@@ -24,7 +22,7 @@ final class Types implements \IteratorAggregate
 
     public static function fromInferredTypes(array $inferredTypes): Types
     {
-         return new self($inferredTypes);
+        return new self($inferredTypes);
     }
 
     public function getIterator()
