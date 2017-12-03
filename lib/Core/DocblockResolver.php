@@ -15,6 +15,9 @@ use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Microsoft\PhpParser\ClassLike;
 
+/**
+ * TODO: Remove this class.
+ */
 class DocblockResolver
 {
     /**
@@ -88,53 +91,5 @@ class DocblockResolver
         }
 
         return Type::fromArray([(string) $namespace->name, $typeString]);
-    }
-
-    private function classParents(AbstractReflectionClass $class)
-    {
-        if ($class->isClass()) {
-            /** @var ReflectionClass $class */
-            $parent = $class->parent();
-
-            if (null === $parent) {
-                $this->logger->warning(sprintf(
-                    'inheritdoc used on class "%s", but class has no parent',
-                    $class->name()->full()
-                ));
-                return [];
-            }
-
-            return [ $parent ];
-        }
-
-        if ($class->isInterface()) {
-            /** @var ReflectionInterface $class */
-            return $class->parents();
-        }
-
-        throw new InvalidArgumentException(sprintf(
-            'Do not know how to get parents for "%s"',
-            get_class($class)
-        ));
-    }
-
-    private function classLevelMethodReturnTypeOverride(AbstractReflectionClass $class, $methodName)
-    {
-        if (preg_match('{@method ([\w\\\]+) ' . $methodName . '\(}', (string) $class->docblock(), $matches)) {
-            return $matches[1];
-        }
-
-        return null;
-    }
-
-    private function typeFromMethod(Node $node)
-    {
-        $type = $this->typeFromNode($node, 'return');
-
-        if (Type::unknown() == $type) {
-            return null;
-        }
-
-        return $type;
     }
 }
