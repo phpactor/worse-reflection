@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Logger;
 
 class PropertyTypeResolver
 {
@@ -13,9 +14,15 @@ class PropertyTypeResolver
      */
     private $property;
 
-    public function __construct(ReflectionProperty $property)
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    public function __construct(ReflectionProperty $property, Logger $logger)
     {
         $this->property = $property;
+        $this->logger = $logger;
     }
 
     public function resolve(): Types
