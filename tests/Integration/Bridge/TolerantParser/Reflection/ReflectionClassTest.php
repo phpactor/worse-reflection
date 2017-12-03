@@ -4,8 +4,10 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
+use Phpactor\WorseReflection\Core\NameImports;
 
 class ReflectionClassTest extends IntegrationTestCase
 {
@@ -425,6 +427,27 @@ EOT
                 'Class2',
                 function ($class) {
                     $this->assertContains('class Class2', (string) $class->sourceCode());
+                },
+            ],
+            'Returns imported classes' => [
+                <<<'EOT'
+<?php
+
+use Foobar\Barfoo;
+use Barfoo\Foobaz as Carzatz;
+
+class Class2
+{
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(NameImports::fromNames([
+                        'Barfoo' => Name::fromString('Foobar\\Barfoo'),
+                        'Carzatz' => Name::fromString('Barfoo\\Foobaz'),
+                    ]), $class->scope()->nameImports());
                 },
             ],
         ];

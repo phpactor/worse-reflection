@@ -11,6 +11,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 
 interface ReflectionClassLike
 {
+    public function scope(): ReflectionScope;
+
     public function position(): Position;
 
     public function name(): ClassName;
