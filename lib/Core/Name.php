@@ -6,7 +6,7 @@ use Phpactor\WorseReflection\Core\Name;
 
 class Name
 {
-    private $parts;
+    protected $parts;
 
     public function __construct(array $parts)
     {

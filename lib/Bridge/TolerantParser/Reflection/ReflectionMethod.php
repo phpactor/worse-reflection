@@ -131,6 +131,8 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     /**
      * If type not explicitly set, try and infer it from the docblock.
+     *
+     * @deprecated Use inferredReturnTypes()
      */
     public function inferredReturnType(): Type
     {
@@ -146,6 +148,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         if ($this->returnType()->isDefined()) {
             return InferredTypes::fromInferredTypes([ $this->returnType() ]);
         }
+
         $classMethodOverrides = $this->class()->docblock()->methodTypes();
         if (isset($classMethodOverrides[$this->name()])) {
             $types = [ $classMethodOverrides[$this->name()] ];
@@ -154,10 +157,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         }
 
         $types = array_map(function (Type $type) {
-            if (in_array((string) $type, [ '$this', 'static', 'self' ])) {
-                return Type::class($this->class()->name());
-            }
-            return $this->scope()->resolveFullyQualifiedName($type);
+            return $this->scope()->resolveFullyQualifiedName($type, $this->class());
         }, $types);
 
         $types = InferredTypes::fromInferredTypes($types);

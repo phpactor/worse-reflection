@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\InferredTypes;
 
 interface ReflectionMethod
 {
@@ -32,7 +33,12 @@ interface ReflectionMethod
 
     public function visibility(): Visibility;
 
+    /**
+     * @deprecated Use inferredReturnTypes()
+     */
     public function inferredReturnType(): Type;
+
+    public function inferredReturnTypes(): InferredTypes;
 
     public function returnType(): Type;
 

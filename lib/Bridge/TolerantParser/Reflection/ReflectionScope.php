@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\NameImports;
 use Phpactor\WorseReflection\Core\Name;
 use Microsoft\PhpParser\ResolvedName;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 
 class ReflectionScope implements CoreReflectionScope
 {
@@ -44,10 +45,14 @@ class ReflectionScope implements CoreReflectionScope
         return Name::fromString($namespaceDefinition->name->getText());
     }
 
-    public function resolveFullyQualifiedName(string $type): Type
+    public function resolveFullyQualifiedName(string $type, AbstractReflectionClass $class): Type
     {
         if (substr($type, 0, 1) == '\\') {
             return Type::fromString($type);
+        }
+
+        if (in_array($type, [ '$this', 'static', 'self' ])) {
+            return Type::class($class->name());
         }
 
         $type = Type::fromString($type);
