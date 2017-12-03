@@ -163,7 +163,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         $types = Types::fromInferredTypes($types);
 
         if ($this->docblock()->inherits()) {
-            if (($this->class()->isClass() || $this->class()->isInterface()) && $this->class()->parent() && $this->class()->parent()->methods()->has($this->name())) {
+            if ($this->isOverriding()) {
                 $parentMethod = $this->class()->parent()->methods()->get($this->name());
                 $types = $types->merge($parentMethod->inferredReturnTypes());
             } else {
@@ -212,5 +212,16 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     protected function serviceLocator(): ServiceLocator
     {
         return $this->serviceLocator;
+    }
+
+    protected function isOverriding()
+    {
+        if (false === $this->class()->isClass() && false === $this->class()->isInterface()) {
+            return false;
+        }
+
+        $parent = $this->class()->parent();
+
+        return $parent && $parent->methods()->has($this->name());
     }
 }
