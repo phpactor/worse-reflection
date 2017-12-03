@@ -58,7 +58,7 @@ class MemberTypeResolver
 
         return $info
             ->withContainerType(Type::class($declaringClass->name()))
-            ->withType($method->inferredReturnType());
+            ->withTypes($method->inferredReturnTypes());
     }
 
     public function constantType(Type $ownerType, SymbolInformation $info, string $name): SymbolInformation

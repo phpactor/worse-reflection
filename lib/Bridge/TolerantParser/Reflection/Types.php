@@ -17,6 +17,11 @@ final class Types implements \IteratorAggregate
         }
     }
 
+    public static function empty()
+    {
+        return new self([]);
+    }
+
     public static function fromInferredTypes(array $inferredTypes): Types
     {
          return new self($inferredTypes);
