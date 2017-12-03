@@ -196,4 +196,9 @@ class Type
 
         return $instance;
     }
+
+    public function prependNamespace(Name $namespace)
+    {
+        return self::class(ClassName::fromString((string) $namespace . '\\' . (string) $this));
+    }
 }

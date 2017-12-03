@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Type;
+use RuntimeException;
 
 final class InferredTypes implements \IteratorAggregate
 {
@@ -23,6 +24,14 @@ final class InferredTypes implements \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->inferredTypes);
+    }
+
+    public function merge(InferredTypes $types) : InferredTypes
+    {
+        return new self(array_merge(
+            $this->inferredTypes,
+            $types->inferredTypes
+        ));
     }
 
     private function add(Type $item)

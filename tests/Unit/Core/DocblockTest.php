@@ -60,4 +60,36 @@ class DocblockTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider provideMethodTypes
+     */
+    public function testMethodTypes(string $docblock, array $expectedTypes)
+    {
+        $docblock = Docblock::fromString($docblock);
+        $types = $docblock->methodTypes();
+        $expectedTypes = array_map(function (string $type) {
+            return Type::fromString($type);
+        }, $expectedTypes);
+
+        $this->assertEquals($expectedTypes, $types);
+    }
+
+    public function provideMethodTypes()
+    {
+        return [
+            'None' => [
+                '/**  */',
+                [ ],
+            ],
+            'Single short' => [
+                '/** @method Foobar foobar() */',
+                [ 'foobar' => 'Foobar' ],
+            ],
+            'Single no parenthesis' => [
+                '/** @method Foobar foobar */',
+                [ 'foobar' => 'Foobar' ],
+            ],
+        ];
+    }
 }

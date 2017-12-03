@@ -27,37 +27,6 @@ class DocblockResolver
         $this->logger = $logger ?: new ArrayLogger();
     }
 
-    public function returnTypeFromNode(AbstractReflectionClass $class, MethodDeclaration $node)
-    {
-        $methodName = $node->name->getText($node->getFileContents());
-
-        if ($type = $this->classLevelMethodReturnTypeOverride($class, $methodName)) {
-            return $this->typeFromString($node, $type);
-        }
-
-        if ($type = $this->typeFromMethod($node)) {
-            return $type;
-        }
-
-        if (preg_match('#inheritdoc#i', $node->getLeadingCommentAndWhitespaceText())) {
-            if ($class->isTrait()) {
-                // TODO: Warn about inherit block on trait
-                return Type::unknown();
-            }
-
-            $parents = $this->classParents($class);
-
-            foreach ($parents as $parent) {
-                $parentMethods = $parent->methods();
-                if ($parentMethods->has($node->getName())) {
-                    return $parentMethods->get($node->getName())->inferredReturnType();
-                }
-            }
-        }
-
-        return Type::unknown();
-    }
-
     public function propertyType(PropertyDeclaration $node)
     {
         return $this->typeFromNode($node, 'var');

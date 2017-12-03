@@ -20,6 +20,7 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\InferredTypes;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -133,12 +134,47 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
      */
     public function inferredReturnType(): Type
     {
-        $type = $this->serviceLocator->docblockResolver()->returnTypeFromNode($this->class(), $this->node);
-        if (Type::unknown() != $type) {
+        foreach ($this->inferredReturnTypes() as $type) {
             return $type;
         }
 
-        return $this->returnType();
+        return Type::unknown();
+    }
+
+    public function inferredReturnTypes(): InferredTypes
+    {
+        if ($this->returnType()->isDefined()) {
+            return InferredTypes::fromInferredTypes([ $this->returnType() ]);
+        }
+        $classMethodOverrides = $this->class()->docblock()->methodTypes();
+        if (isset($classMethodOverrides[$this->name()])) {
+            $types = [ $classMethodOverrides[$this->name()] ];
+        } else {
+            $types = $this->docblock()->returnTypes();
+        }
+
+        $types = array_map(function (Type $type) {
+            if (in_array((string) $type, [ '$this', 'static', 'self' ])) {
+                return Type::class($this->class()->name());
+            }
+            return $this->scope()->resolveFullyQualifiedName($type);
+        }, $types);
+
+        $types = InferredTypes::fromInferredTypes($types);
+
+        if ($this->docblock()->inherits()) {
+            if (($this->class()->isClass() || $this->class()->isInterface()) && $this->class()->parent() && $this->class()->parent()->methods()->has($this->name())) {
+                $parentMethod = $this->class()->parent()->methods()->get($this->name());
+                $types = $types->merge($parentMethod->inferredReturnTypes());
+            } else {
+                $this->serviceLocator()->logger()->warning(sprintf(
+                    'inheritdoc used on class "%s", but class has no parent',
+                    $this->class()->name()->full()
+                ));
+            }
+        }
+
+        return $types;
     }
 
     public function returnType(): Type
