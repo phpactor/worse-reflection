@@ -69,4 +69,31 @@ class Docblock
 
         return implode(PHP_EOL, $formatted);
     }
+
+    public function returnTypes(): array
+    {
+        $types = [];
+        $tags = $this->tags('return');
+
+        foreach ($tags as $tag) {
+            $tag = str_replace('^', '|', $tag);
+            foreach (explode('|', $tag) as $type) {
+                $types[] = Type::fromString($type);
+            }
+        }
+
+        return $types;
+    }
+
+    private function tags(string $tag)
+    {
+        if (!preg_match_all(sprintf(
+            '{@%s ([\^|\$\w+\\\]+)}',
+            $tag
+        ), $this->docblock, $matches)) {
+            return [];
+        }
+
+        return $matches[1];
+    }
 }

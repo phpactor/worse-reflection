@@ -27,7 +27,7 @@ class DocblockResolver
         $this->logger = $logger ?: new ArrayLogger();
     }
 
-    public function methodReturnTypeFromNodeDocblock(AbstractReflectionClass $class, MethodDeclaration $node)
+    public function returnTypeFromNode(AbstractReflectionClass $class, MethodDeclaration $node)
     {
         $methodName = $node->name->getText($node->getFileContents());
 

@@ -133,7 +133,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
      */
     public function inferredReturnType(): Type
     {
-        $type = $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
+        $type = $this->serviceLocator->docblockResolver()->returnTypeFromNode($this->class(), $this->node);
         if (Type::unknown() != $type) {
             return $type;
         }
