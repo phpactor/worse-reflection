@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Docblock;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 
 class DocblockTest extends TestCase
 {
@@ -91,5 +92,14 @@ class DocblockTest extends TestCase
                 [ 'foobar' => 'Foobar' ],
             ],
         ];
+    }
+
+    public function testPropertyTypes()
+    {
+        $docblock = '/** @var Foobar */';
+        $docblock = Docblock::fromString($docblock);
+        $types = $docblock->varTypes();
+
+        $this->assertEquals([ Type::fromString('Foobar') ], $types);
     }
 }

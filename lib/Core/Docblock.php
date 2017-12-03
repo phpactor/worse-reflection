@@ -100,6 +100,21 @@ class Docblock
         return $types;
     }
 
+    public function varTypes(): array
+    {
+        $types = [];
+        $tags = $this->tags('var');
+
+        foreach ($tags as $varName => $tag) {
+            $tag = str_replace('^', '|', $tag);
+            foreach (explode('|', $tag) as $type) {
+                $types[] = Type::fromString($type);
+            }
+        }
+
+        return $types;
+    }
+
     private function tags(string $tag)
     {
         if (!preg_match_all(sprintf(
