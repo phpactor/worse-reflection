@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 
 interface ReflectionProperty
 {
@@ -19,7 +20,7 @@ interface ReflectionProperty
 
     public function visibility(): Visibility;
 
-    public function type(): Type;
+    public function types(): Types;
 
     public function isStatic(): bool;
 
