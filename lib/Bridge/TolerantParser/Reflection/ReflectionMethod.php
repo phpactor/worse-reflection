@@ -20,7 +20,7 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\InferredTypes;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -143,10 +143,10 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return Type::unknown();
     }
 
-    public function inferredReturnTypes(): InferredTypes
+    public function inferredReturnTypes(): Types
     {
         if ($this->returnType()->isDefined()) {
-            return InferredTypes::fromInferredTypes([ $this->returnType() ]);
+            return Types::fromInferredTypes([ $this->returnType() ]);
         }
 
         $classMethodOverrides = $this->class()->docblock()->methodTypes();
@@ -160,7 +160,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
             return $this->scope()->resolveFullyQualifiedName($type, $this->class());
         }, $types);
 
-        $types = InferredTypes::fromInferredTypes($types);
+        $types = Types::fromInferredTypes($types);
 
         if ($this->docblock()->inherits()) {
             if (($this->class()->isClass() || $this->class()->isInterface()) && $this->class()->parent() && $this->class()->parent()->methods()->has($this->name())) {

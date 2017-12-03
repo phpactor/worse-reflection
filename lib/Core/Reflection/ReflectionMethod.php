@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\InferredTypes;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 
 interface ReflectionMethod
 {
@@ -38,7 +38,7 @@ interface ReflectionMethod
      */
     public function inferredReturnType(): Type;
 
-    public function inferredReturnTypes(): InferredTypes;
+    public function inferredReturnTypes(): Types;
 
     public function returnType(): Type;
 

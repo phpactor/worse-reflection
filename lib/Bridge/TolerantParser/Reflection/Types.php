@@ -4,8 +4,9 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Type;
 use RuntimeException;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
 
-final class InferredTypes implements \IteratorAggregate
+final class Types implements \IteratorAggregate
 {
     private $inferredTypes = [];
 
@@ -16,7 +17,7 @@ final class InferredTypes implements \IteratorAggregate
         }
     }
 
-    public static function fromInferredTypes(array $inferredTypes): InferredTypes
+    public static function fromInferredTypes(array $inferredTypes): Types
     {
          return new self($inferredTypes);
     }
@@ -26,7 +27,7 @@ final class InferredTypes implements \IteratorAggregate
         return new \ArrayIterator($this->inferredTypes);
     }
 
-    public function merge(InferredTypes $types) : InferredTypes
+    public function merge(Types $types) : Types
     {
         return new self(array_merge(
             $this->inferredTypes,
