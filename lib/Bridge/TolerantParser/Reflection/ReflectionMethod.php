@@ -21,6 +21,8 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
+use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodReturnTypeResolver;
+use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -54,6 +56,11 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
      */
     private $class;
 
+    /**
+     * @var MemberTypeResolver
+     */
+    private $returnTypeResolver;
+
     public function __construct(
         ServiceLocator $serviceLocator,
         AbstractReflectionClass $class,
@@ -62,6 +69,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
         $this->class = $class;
+        $this->returnTypeResolver = new MethodReturnTypeResolver($this, $serviceLocator->logger());
     }
 
     public function name(): string
@@ -145,36 +153,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function inferredReturnTypes(): Types
     {
-        if ($this->returnType()->isDefined()) {
-            return Types::fromInferredTypes([ $this->returnType() ]);
-        }
-
-        $classMethodOverrides = $this->class()->docblock()->methodTypes();
-        if (isset($classMethodOverrides[$this->name()])) {
-            $types = [ $classMethodOverrides[$this->name()] ];
-        } else {
-            $types = $this->docblock()->returnTypes();
-        }
-
-        $types = array_map(function (Type $type) {
-            return $this->scope()->resolveFullyQualifiedName($type, $this->class());
-        }, $types);
-
-        $types = Types::fromInferredTypes($types);
-
-        if ($this->docblock()->inherits()) {
-            if ($this->isOverriding()) {
-                $parentMethod = $this->class()->parent()->methods()->get($this->name());
-                $types = $types->merge($parentMethod->inferredReturnTypes());
-            } else {
-                $this->serviceLocator()->logger()->warning(sprintf(
-                    'inheritdoc used on class "%s", but class has no parent',
-                    $this->class()->name()->full()
-                ));
-            }
-        }
-
-        return $types;
+        return $this->returnTypeResolver->resolve();
     }
 
     public function returnType(): Type
@@ -212,16 +191,5 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     protected function serviceLocator(): ServiceLocator
     {
         return $this->serviceLocator;
-    }
-
-    protected function isOverriding()
-    {
-        if (false === $this->class()->isClass() && false === $this->class()->isInterface()) {
-            return false;
-        }
-
-        $parent = $this->class()->parent();
-
-        return $parent && $parent->methods()->has($this->name());
     }
 }
