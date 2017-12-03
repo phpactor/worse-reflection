@@ -9,7 +9,6 @@ use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Docblock;
-use Phpactor\WorseReflection\Core\DocblockResolver;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\NodeText;
@@ -39,11 +38,6 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
      * @var Visibility
      */
     private $visibility;
-
-    /**
-     * @var DocblockResolver
-     */
-    private $docblockResolver;
 
     /**
      * @var FrameBuilder
