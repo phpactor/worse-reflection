@@ -76,8 +76,7 @@ class Docblock
         $tags = $this->tags('return');
 
         foreach ($tags as $tag) {
-            $tag = str_replace('^', '|', $tag);
-            foreach (explode('|', $tag) as $type) {
+            foreach ($this->explodeTypeString($tag) as $type) {
                 $types[] = Type::fromString($type);
             }
         }
@@ -91,8 +90,7 @@ class Docblock
         $tags = $this->tags('method');
 
         foreach ($tags as $methodName => $tag) {
-            $tag = str_replace('^', '|', $tag);
-            foreach (explode('|', $tag) as $type) {
+            foreach ($this->explodeTypeString($tag) as $type) {
                 $types[$methodName] = Type::fromString($type);
             }
         }
@@ -106,8 +104,7 @@ class Docblock
         $tags = $this->tags('var');
 
         foreach ($tags as $varName => $tag) {
-            $tag = str_replace('^', '|', $tag);
-            foreach (explode('|', $tag) as $type) {
+            foreach ($this->explodeTypeString($tag) as $type) {
                 $types[] = Type::fromString($type);
             }
         }
@@ -134,5 +131,12 @@ class Docblock
     public function inherits(): bool
     {
         return (bool)preg_match('#inheritdoc#i', $this->docblock);
+    }
+
+    private function explodeTypeString($typeString)
+    {
+        $typeString = str_replace('^', '|', $typeString);
+
+        return explode('|', $typeString);
     }
 }
