@@ -6,7 +6,7 @@ use Phpactor\WorseReflection\Core\Type;
 
 final class Types implements \IteratorAggregate
 {
-    private $inferredTypes = [];
+    private $types = [];
 
     private function __construct($inferredTypes)
     {
@@ -20,6 +20,15 @@ final class Types implements \IteratorAggregate
         return new self([]);
     }
 
+    public function guess(): Type
+    {
+        foreach ($this->types as $type) {
+            return $type;
+        }
+
+        return Type::unknown();
+    }
+
     public static function fromTypes(array $inferredTypes): Types
     {
         return new self($inferredTypes);
@@ -27,19 +36,19 @@ final class Types implements \IteratorAggregate
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->inferredTypes);
+        return new \ArrayIterator($this->types);
     }
 
     public function merge(Types $types) : Types
     {
         return new self(array_merge(
-            $this->inferredTypes,
-            $types->inferredTypes
+            $this->types,
+            $types->types
         ));
     }
 
     private function add(Type $item)
     {
-        $this->inferredTypes[] = $item;
+        $this->types[] = $item;
     }
 }

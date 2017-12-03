@@ -137,11 +137,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
      */
     public function inferredReturnType(): Type
     {
-        foreach ($this->inferredReturnTypes() as $type) {
-            return $type;
-        }
-
-        return Type::unknown();
+        return $this->inferredReturnTypes()->guess();
     }
 
     public function inferredReturnTypes(): Types

@@ -93,11 +93,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function type(): Type
     {
-        foreach ($this->types() as $type) {
-            return $type;
-        }
-
-        return Type::unknown();
+        return $this->types()->guess();
     }
 
     public function types(): Types
