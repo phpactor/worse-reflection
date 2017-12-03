@@ -130,16 +130,6 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return Visibility::public();
     }
 
-    /**
-     * If type not explicitly set, try and infer it from the docblock.
-     *
-     * @deprecated Use inferredReturnTypes()
-     */
-    public function inferredReturnType(): Type
-    {
-        return $this->inferredReturnTypes()->guess();
-    }
-
     public function inferredReturnTypes(): Types
     {
         return $this->returnTypeResolver->resolve();

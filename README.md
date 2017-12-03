@@ -36,10 +36,10 @@ $class->properties()->get('barbar')->visiblity() == Visibility::public();
 
 /** @var ReflectionMethod */
 foreach ($class->methods() as $method) {
-    echo $method->name();                        // methodName
-    echo $method->returnType()->short();         // Foobar
-    echo (string) $method->returnType();         // This\Is\Foobar
-    echo (string) $method->inferredReturnType(); // from docblock if it exists
+    echo $method->name();                                  // methodName
+    echo $method->returnType()->short();                   // Foobar
+    echo (string) $method->returnType();                   // This\Is\Foobar
+    echo (string) $method->inferredReturnTypes()->guess(); // from docblock if it exists
 
     foreach ($method->parameters() as $parameter) {
         $parameter->name();                      // paramName

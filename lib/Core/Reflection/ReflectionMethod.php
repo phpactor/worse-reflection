@@ -36,11 +36,6 @@ interface ReflectionMethod
 
     public function visibility(): Visibility;
 
-    /**
-     * @deprecated Use inferredReturnTypes()
-     */
-    public function inferredReturnType(): Type;
-
     public function inferredReturnTypes(): Types;
 
     public function returnType(): Type;
