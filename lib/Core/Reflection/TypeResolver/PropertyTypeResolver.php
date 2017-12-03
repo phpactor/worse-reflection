@@ -33,7 +33,7 @@ class PropertyTypeResolver
             return $this->property->scope()->resolveFullyQualifiedName($type, $this->property->class());
         }, $docblockTypes);
 
-        return Types::fromInferredTypes($resolvedTypes);
+        return Types::fromTypes($resolvedTypes);
     }
 
     private function getDocblockTypes()

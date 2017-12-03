@@ -20,7 +20,7 @@ final class Types implements \IteratorAggregate
         return new self([]);
     }
 
-    public static function fromInferredTypes(array $inferredTypes): Types
+    public static function fromTypes(array $inferredTypes): Types
     {
         return new self($inferredTypes);
     }

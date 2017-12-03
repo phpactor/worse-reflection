@@ -38,7 +38,7 @@ final class SymbolInformation
 
     public static function for(Symbol $symbol): SymbolInformation
     {
-        return new self($symbol, Types::fromInferredTypes([ Type::unknown() ]));
+        return new self($symbol, Types::fromTypes([ Type::unknown() ]));
     }
 
     /**
@@ -46,7 +46,7 @@ final class SymbolInformation
      */
     public static function fromTypeAndValue(Type $type, $value): SymbolInformation
     {
-        return new self(Symbol::unknown(), Types::fromInferredTypes([ $type ]), $value);
+        return new self(Symbol::unknown(), Types::fromTypes([ $type ]), $value);
     }
 
     /**
@@ -54,7 +54,7 @@ final class SymbolInformation
      */
     public static function fromType(Type $type)
     {
-        return new self(Symbol::unknown(), Types::fromInferredTypes([ $type ]));
+        return new self(Symbol::unknown(), Types::fromTypes([ $type ]));
     }
 
     public static function none()
@@ -77,7 +77,7 @@ final class SymbolInformation
      */
     public function withType(Type $type): SymbolInformation
     {
-        return new self($this->symbol, Types::fromInferredTypes([ $type ]), $this->value, $this->containerType);
+        return new self($this->symbol, Types::fromTypes([ $type ]), $this->value, $this->containerType);
     }
 
     public function withTypes(Types $types): SymbolInformation

@@ -28,7 +28,7 @@ class MethodReturnTypeResolver
     public function resolve(): Types
     {
         if ($this->method->returnType()->isDefined()) {
-            return Types::fromInferredTypes([ $this->method->returnType() ]);
+            return Types::fromTypes([ $this->method->returnType() ]);
         }
 
         $docblockTypes = $this->getDocblockTypes();
@@ -37,7 +37,7 @@ class MethodReturnTypeResolver
             return $this->method->scope()->resolveFullyQualifiedName($type, $this->method->class());
         }, $docblockTypes);
 
-        $resolvedTypes = Types::fromInferredTypes($resolvedTypes);
+        $resolvedTypes = Types::fromTypes($resolvedTypes);
 
         if (false === $this->method->docblock()->inherits()) {
             return $resolvedTypes;
