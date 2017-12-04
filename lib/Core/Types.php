@@ -5,7 +5,7 @@ namespace Phpactor\WorseReflection\Core;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 
-final class Types implements \IteratorAggregate
+final class Types implements \IteratorAggregate, \Countable
 {
     private $types = [];
 
@@ -46,6 +46,14 @@ final class Types implements \IteratorAggregate
             $this->types,
             $types->types
         ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function count()
+    {
+        return count($this->types);
     }
 
     private function add(Type $item)
