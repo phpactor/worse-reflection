@@ -47,6 +47,6 @@ class ReflectMethodBench extends BaseBenchCase
      */
     public function method_inferred_return_type()
     {
-        $this->class->methods()->get('methodWithDocblockReturnType')->inferredReturnType()->guess();
+        $this->class->methods()->get('methodWithDocblockReturnType')->inferredReturnType()->best();
     }
 }

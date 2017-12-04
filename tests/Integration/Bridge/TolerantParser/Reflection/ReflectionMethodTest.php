@@ -162,7 +162,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->guess());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
             'Return type from docblock this and static' => [
@@ -185,8 +185,8 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredReturnTypes()->guess());
-                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredReturnTypes()->guess());
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredReturnTypes()->best());
                 },
             ],
             'Return type from class @method annotation' => [
@@ -206,7 +206,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->guess());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
             'Return type from overridden @method annotation' => [
@@ -233,7 +233,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->guess());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
             'Return type from inherited docblock' => [
@@ -261,7 +261,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->guess());
+                    $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
             'Return type from inherited docblock with no parent class' => [
@@ -281,7 +281,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods, $logger) {
-                    $this->assertEquals(Type::unknown(), $methods->get('method1')->inferredReturnTypes()->guess());
+                    $this->assertEquals(Type::unknown(), $methods->get('method1')->inferredReturnTypes()->best());
                     $this->assertContains(
                         'inheritdoc used on class "Foobar", but class has no parent',
                         $logger->messages()[0]

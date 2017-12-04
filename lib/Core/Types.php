@@ -21,7 +21,7 @@ final class Types implements \IteratorAggregate
         return new self([]);
     }
 
-    public function guess(): Type
+    public function best(): Type
     {
         foreach ($this->types as $type) {
             return $type;

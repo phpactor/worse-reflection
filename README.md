@@ -39,7 +39,7 @@ foreach ($class->methods() as $method) {
     echo $method->name();                                  // methodName
     echo $method->returnType()->short();                   // Foobar
     echo (string) $method->returnType();                   // This\Is\Foobar
-    echo (string) $method->inferredReturnTypes()->guess(); // from docblock if it exists
+    echo (string) $method->inferredReturnTypes()->best(); // from docblock if it exists
 
     foreach ($method->parameters() as $parameter) {
         $parameter->name();                      // paramName
