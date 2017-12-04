@@ -43,8 +43,8 @@ class DocblockTest extends TestCase
                 '/** @return Foobar */',
                 [ 'Foobar' ],
             ],
-            'Itersection' => [
-                '/** @return Foobar^$this */',
+            'Intersection' => [
+                '/** @return Foobar&$this */',
                 [ 'Foobar', '$this' ],
             ],
             'Multiple short' => [

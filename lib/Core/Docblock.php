@@ -115,7 +115,7 @@ class Docblock
     private function tags(string $tag)
     {
         if (!preg_match_all(sprintf(
-            '{@%s ([\^|\$\w+\\\]+)\s?(\w+)?}',
+            '{@%s ([&|\$\w+\\\]+)\s?(\w+)?}',
             $tag
         ), $this->docblock, $matches)) {
             return [];
@@ -135,8 +135,11 @@ class Docblock
 
     private function explodeTypeString($typeString)
     {
-        $typeString = str_replace('^', '|', $typeString);
+        // treat intersection ("&") as union ("|")
+        $typeString = str_replace('&', '|', $typeString);
 
-        return explode('|', $typeString);
+        return array_map(function ($value) {
+            return trim($value);
+        }, explode('|', $typeString));
     }
 }
