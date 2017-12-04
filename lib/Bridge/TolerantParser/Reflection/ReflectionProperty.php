@@ -14,6 +14,9 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty as CoreReflectionProperty;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
+use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -37,6 +40,11 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
      */
     private $class;
 
+    /**
+     * @var PropertyTypeResolver
+     */
+    private $typeResolver;
+
     public function __construct(
         ServiceLocator $serviceLocator,
         AbstractReflectionClass $class,
@@ -47,6 +55,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         $this->propertyDeclaration = $propertyDeclaration;
         $this->variable = $variable;
         $this->class = $class;
+        $this->typeResolver = new PropertyTypeResolver($this, $this->serviceLocator->logger());
     }
 
     public function declaringClass(): ReflectionClassLike
@@ -83,9 +92,9 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return Visibility::public();
     }
 
-    public function type(): Type
+    public function inferredTypes(): Types
     {
-        return $this->serviceLocator->docblockResolver()->propertyType($this->propertyDeclaration);
+        return $this->typeResolver->resolve();
     }
 
     public function isStatic(): bool
@@ -106,5 +115,10 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     public function class(): ReflectionClassLike
     {
         return $this->class;
+    }
+
+    public function docblock(): Docblock
+    {
+        return Docblock::fromNode($this->propertyDeclaration);
     }
 }

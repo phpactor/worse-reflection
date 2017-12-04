@@ -16,7 +16,6 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
-use Phpactor\WorseReflection\Core\Offset;
 
 final class FrameBuilder
 {

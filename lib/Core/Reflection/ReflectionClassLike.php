@@ -7,10 +7,11 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Docblock;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 
 interface ReflectionClassLike
 {
+    public function scope(): ReflectionScope;
+
     public function position(): Position;
 
     public function name(): ClassName;

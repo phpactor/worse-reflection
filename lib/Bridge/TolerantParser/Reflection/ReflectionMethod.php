@@ -9,7 +9,6 @@ use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Docblock;
-use Phpactor\WorseReflection\Core\DocblockResolver;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\NodeText;
@@ -20,6 +19,9 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
+use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodReturnTypeResolver;
+use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
+use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -39,11 +41,6 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     private $visibility;
 
     /**
-     * @var DocblockResolver
-     */
-    private $docblockResolver;
-
-    /**
      * @var FrameBuilder
      */
     private $frameBuilder;
@@ -53,6 +50,11 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
      */
     private $class;
 
+    /**
+     * @var MemberTypeResolver
+     */
+    private $returnTypeResolver;
+
     public function __construct(
         ServiceLocator $serviceLocator,
         AbstractReflectionClass $class,
@@ -61,6 +63,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
         $this->class = $class;
+        $this->returnTypeResolver = new MethodReturnTypeResolver($this, $serviceLocator->logger());
     }
 
     public function name(): string
@@ -128,17 +131,9 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return Visibility::public();
     }
 
-    /**
-     * If type not explicitly set, try and infer it from the docblock.
-     */
-    public function inferredReturnType(): Type
+    public function inferredReturnTypes(): Types
     {
-        $type = $this->serviceLocator->docblockResolver()->methodReturnTypeFromNodeDocblock($this->class(), $this->node);
-        if (Type::unknown() != $type) {
-            return $type;
-        }
-
-        return $this->returnType();
+        return $this->returnTypeResolver->resolve();
     }
 
     public function returnType(): Type

@@ -39,11 +39,6 @@ class ServiceLocator
      */
     private $parser;
 
-    /**
-     * @var DocblockResolver
-     */
-    private $docblockResolver;
-
     public function __construct(SourceCodeLocator $sourceLocator, Logger $logger)
     {
         $this->sourceLocator = $sourceLocator;
@@ -52,7 +47,6 @@ class ServiceLocator
         $this->symbolInformationResolver = new SymbolInformationResolver($this->reflector, $this->logger);
         $this->frameBuilder = new FrameBuilder($this->symbolInformationResolver, $this->logger);
         $this->parser = new Parser();
-        $this->docblockResolver = new DocblockResolver($logger);
     }
 
     public function reflector(): Reflector
@@ -83,10 +77,5 @@ class ServiceLocator
     public function parser(): Parser
     {
         return $this->parser;
-    }
-
-    public function docblockResolver(): DocblockResolver
-    {
-        return $this->docblockResolver;
     }
 }

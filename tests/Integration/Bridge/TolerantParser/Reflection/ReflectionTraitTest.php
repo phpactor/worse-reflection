@@ -115,7 +115,7 @@ EOT
                 ,
                 'Int1',
                 function (ReflectionTrait $class) {
-                    $this->assertEquals(Type::unknown(), $class->methods()->first()->inferredReturnType());
+                    $this->assertEquals(Type::unknown(), $class->methods()->first()->inferredReturnTypes()->best());
                 },
             ],
             'instanceof' => [

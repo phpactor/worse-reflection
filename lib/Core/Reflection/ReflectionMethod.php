@@ -9,6 +9,8 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
+use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 
 interface ReflectionMethod
 {
@@ -30,9 +32,11 @@ interface ReflectionMethod
 
     public function docblock(): Docblock;
 
+    public function scope(): ReflectionScope;
+
     public function visibility(): Visibility;
 
-    public function inferredReturnType(): Type;
+    public function inferredReturnTypes(): Types;
 
     public function returnType(): Type;
 
