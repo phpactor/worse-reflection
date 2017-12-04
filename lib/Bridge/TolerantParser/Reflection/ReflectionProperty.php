@@ -91,7 +91,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return Visibility::public();
     }
 
-    public function types(): Types
+    public function inferredTypes(): Types
     {
         return $this->typeResolver->resolve();
     }

@@ -124,7 +124,7 @@ class MemberTypeResolver
 
         return $info
             ->withContainerType(Type::class($declaringClass->name()))
-            ->withTypes($property->types());
+            ->withTypes($property->inferredTypes());
     }
 
     /**

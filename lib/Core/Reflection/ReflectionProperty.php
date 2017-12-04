@@ -20,7 +20,7 @@ interface ReflectionProperty
 
     public function visibility(): Visibility;
 
-    public function types(): Types;
+    public function inferredTypes(): Types;
 
     public function isStatic(): bool;
 
