@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty as CoreReflectio
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {

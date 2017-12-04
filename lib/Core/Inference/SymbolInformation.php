@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
+use Phpactor\WorseReflection\Core\Types;
 
 final class SymbolInformation
 {

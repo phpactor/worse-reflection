@@ -5,7 +5,7 @@ namespace Phpactor\WorseReflection\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Docblock;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
+use Phpactor\WorseReflection\Core\Types;
 
 class DocblockTest extends TestCase
 {

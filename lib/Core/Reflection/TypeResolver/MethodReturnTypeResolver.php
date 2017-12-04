@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
 
 class MethodReturnTypeResolver

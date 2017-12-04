@@ -1,8 +1,9 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
+namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Types;
 
 final class Types implements \IteratorAggregate
 {

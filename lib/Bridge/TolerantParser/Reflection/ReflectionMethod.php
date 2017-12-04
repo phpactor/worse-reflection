@@ -21,6 +21,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodReturnTypeResolver;
 use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
+use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {

@@ -6,7 +6,7 @@ use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Docblock;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Types;
+use Phpactor\WorseReflection\Core\Types;
 
 interface ReflectionProperty
 {
