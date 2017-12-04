@@ -51,6 +51,7 @@ class ReflectionScope implements CoreReflectionScope
             return Type::fromString($type);
         }
 
+        // TODO: "self" is not the same as static / $this
         if (in_array($type, [ '$this', 'static', 'self' ])) {
             return Type::class($class->name());
         }
