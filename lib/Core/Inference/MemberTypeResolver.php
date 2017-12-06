@@ -21,15 +21,9 @@ class MemberTypeResolver
      */
     private $reflector;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    public function __construct(Reflector $reflector, Logger $logger)
+    public function __construct(Reflector $reflector)
     {
         $this->reflector = $reflector;
-        $this->logger = $logger;
     }
 
     public function methodType(Type $containerType, SymbolInformation $info, string $name): SymbolInformation
@@ -52,22 +46,20 @@ class MemberTypeResolver
      */
     private function reflectClassOrNull(Type $containerType, string $name)
     {
-        try {
-            return $this->reflector->reflectClassLike(ClassName::fromString((string) $containerType));
-        } catch (NotFound $e) {
-            $this->logger->warning(sprintf(
-                'Unable to locate class "%s" for method "%s"',
-                (string) $containerType,
-                $name
-            ));
-        }
+        return $this->reflector->reflectClassLike(ClassName::fromString((string) $containerType));
     }
 
     private function memberType(string $type, Type $containerType, SymbolInformation $info, string $name)
     {
-        $class = $this->reflectClassOrNull($containerType, $name);
+        try {
+            $class = $this->reflectClassOrNull($containerType, $name);
+        } catch (NotFound $e) {
+            $info = $info->withError(sprintf(
+                'Could not find container class "%s" for "%s"',
+                (string) $containerType,
+                $name
+            ));
 
-        if (null === $class) {
             return $info;
         }
 
@@ -75,16 +67,17 @@ class MemberTypeResolver
 
         try {
             if (false === $class->$type()->has($name)) {
-                $this->logger->warning(sprintf(
-                    'Class "%s" has no method named "%s"',
+                $info = $info->withError(sprintf(
+                    'Class "%s" has no %s member named "%s"',
                     (string) $containerType,
+                    $type,
                     $name
                 ));
 
                 return $info;
             }
         } catch (NotFound $e) {
-            $this->logger->warning($e->getMessage());
+            $info = $info->withError($e->getMessage());
             return $info;
         }
 
