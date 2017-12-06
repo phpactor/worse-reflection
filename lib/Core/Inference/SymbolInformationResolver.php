@@ -247,7 +247,7 @@ class SymbolInformationResolver
     {
         $class = $this->_resolveNode($frame, $node->dereferencableExpression);
 
-        return $this->_valueFromMemberAccess($frame, $class->type(), $node);
+        return $this->_infoFromMemberAccess($frame, $class->type(), $node);
     }
 
     private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolInformation
@@ -340,7 +340,7 @@ class SymbolInformationResolver
         );
     }
 
-    private function resolveNumericLiteral(NumericLiteral $node)
+    private function resolveNumericLiteral(NumericLiteral $node): SymbolInformation
     {
         // note hack to cast to either an int or a float
         $value = $node->getText() + 0;
@@ -358,7 +358,7 @@ class SymbolInformationResolver
         );
     }
 
-    private function resolveReservedWord(Node $node)
+    private function resolveReservedWord(Node $node): SymbolInformation
     {
         $symbolType = $containerType = $type = $value = null;
         $word = strtolower($node->getText());
@@ -406,7 +406,7 @@ class SymbolInformationResolver
         return $info;
     }
 
-    private function resolveArrayCreationExpression(Frame $frame, ArrayCreationExpression $node)
+    private function resolveArrayCreationExpression(Frame $frame, ArrayCreationExpression $node): SymbolInformation
     {
         $array  = [];
 
@@ -508,7 +508,7 @@ class SymbolInformationResolver
         $name = $node->scopeResolutionQualifier->getText();
         $parent = $this->resolveQualifiedNameType($node, $name);
 
-        return $this->_valueFromMemberAccess($frame, $parent, $node);
+        return $this->_infoFromMemberAccess($frame, $parent, $node);
     }
 
     private function resolveObjectCreationExpression(Frame $frame, $node): SymbolInformation
@@ -542,7 +542,7 @@ class SymbolInformationResolver
         return SymbolInformation::none();
     }
 
-    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $node)
+    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $node): SymbolInformation
     {
         $classNode = $node->getFirstAncestor(ClassLike::class);
         $classSymbolInformation = $this->_resolveNode($frame, $classNode);
@@ -558,7 +558,7 @@ class SymbolInformationResolver
         );
     }
 
-    private function _valueFromMemberAccess(Frame $frame, Type $classType, Node $node)
+    private function _infoFromMemberAccess(Frame $frame, Type $classType, Node $node): SymbolInformation
     {
         $memberName = $node->memberName->getText($node->getFileContents());
         $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
@@ -602,6 +602,7 @@ class SymbolInformationResolver
         $classNode = $node->getFirstAncestor(ClassLike::class);
 
         if (null === $classNode) {
+            // TODO: Wrning here
             return;
         }
 
