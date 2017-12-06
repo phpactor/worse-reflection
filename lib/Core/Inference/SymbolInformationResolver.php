@@ -28,6 +28,7 @@ use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
+use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 
 class SymbolInformationResolver
 {
@@ -72,9 +73,8 @@ class SymbolInformationResolver
     public function _resolveNode(Frame $frame, $node): SymbolInformation
     {
         if (false === $node instanceof Node) {
-            $this->logger->warning($message = sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
             $info = SymbolInformation::none()
-                ->withError($message);
+                ->withError(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
             return $info;
         }
 
@@ -192,16 +192,12 @@ class SymbolInformationResolver
             return $this->resolveMethodDeclaration($frame, $node);
         }
 
-        $this->logger->warning($message = sprintf(
+        return SymbolInformation::none()
+            ->withError(sprintf(
             'Did not know how to resolve node of type "%s" with text "%s"',
             get_class($node),
             $node->getText()
         ));
-
-        $info = SymbolInformation::none()
-            ->withError($message);
-
-        return $info;
     }
 
     private function resolveVariable(Frame $frame, ParserVariable $node)
@@ -314,7 +310,7 @@ class SymbolInformationResolver
         return Type::fromString($name);
     }
 
-    private function resolveParameter(Frame $frame, Node $node)
+    private function resolveParameter(Frame $frame, Node $node): SymbolInformation
     {
         $typeDeclaration = $node->typeDeclaration;
         $type = Type::unknown();
@@ -387,11 +383,6 @@ class SymbolInformationResolver
             $containerType = $this->classTypeFromNode($node);
         }
 
-        if (null === $symbolType) {
-            $this->logger->warning(sprintf('Could not resolve reserved word "%s"', $node->getText()));
-            $symbolType = Symbol::UNKNOWN;
-        }
-
         $info = $this->symbolFactory->information(
             $node->getText(),
             $node->getStart(),
@@ -399,14 +390,17 @@ class SymbolInformationResolver
             [
                 'value' => $value,
                 'type' => $type,
-                'symbol_type' => $symbolType,
+                'symbol_type' => $symbolType === null ? Symbol::UNKNOWN : $symbolType,
                 'container_type' => $containerType,
             ]
         );
 
+        if (null === $symbolType) {
+            $info = $info->withError(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+        }
+
         if (null === $type) {
-            $this->logger->warning($message = sprintf('Could not resolve reserved word "%s"', $node->getText()));
-            $info = $info->withError($message);
+            $info = $info->withError(sprintf('Could not resolve reserved word "%s"', $node->getText()));
         }
 
         return $info;
@@ -455,14 +449,13 @@ class SymbolInformationResolver
         SymbolInformation $subject,
         SubscriptExpression $node = null
     ): SymbolInformation {
-    $info = SymbolInformation::none();
+        $info = SymbolInformation::none();
 
         if (null === $node->accessExpression) {
-            $this->logger->warning($message = sprintf(
+            $info = $info->withError(sprintf(
                 'Subscript expression "%s" is incomplete',
                 (string) $node->getText()
             ));
-            $info = $info->withError($message);
             return $info;
         }
 
@@ -473,11 +466,10 @@ class SymbolInformationResolver
         }
 
         if ($subject->type() != Type::array()) {
-            $this->logger->warning($message = sprintf(
+            $info = $info->withError(sprintf(
                 'Not resolving subscript expression of type "%s"',
                 (string) $subject->type()
             ));
-            $info = $info->withError($message);
             return $info;
         }
 
@@ -503,16 +495,15 @@ class SymbolInformationResolver
             }
         }
 
-        $this->logger->warning($message = sprintf(
+        $info = $info->withError(sprintf(
             'Did not resolve access expression for node type "%s"',
             get_class($node)
         ));
-        $info = $info->withError($message);
 
         return $info;
     }
 
-    private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node)
+    private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolInformation
     {
         $name = $node->scopeResolutionQualifier->getText();
         $parent = $this->resolveQualifiedNameType($node, $name);
@@ -520,18 +511,17 @@ class SymbolInformationResolver
         return $this->_valueFromMemberAccess($frame, $parent, $node);
     }
 
-    private function resolveObjectCreationExpression(Frame $frame, $node)
+    private function resolveObjectCreationExpression(Frame $frame, $node): SymbolInformation
     {
         if (false === $node->classTypeDesignator instanceof Node) {
-            $this->logger->warning($message = sprintf('Could not create object from "%s"', get_class($node)));
             return SymbolInformation::none()
-                ->withError($message);
+                ->withError(sprintf('Could not create object from "%s"', get_class($node)));
         }
 
         return $this->_resolveNode($frame, $node->classTypeDesignator);
     }
 
-    private function resolveTernaryExpression(Frame $frame, TernaryExpression $node)
+    private function resolveTernaryExpression(Frame $frame, TernaryExpression $node): SymbolInformation
     {
         // assume true
         if ($node->ifExpression) {
