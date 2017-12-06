@@ -27,6 +27,11 @@ final class SymbolInformation
      */
     private $containerType;
 
+    /**
+     * @var string[]
+     */
+    private $errors = [];
+
     private function __construct(Symbol $symbol, Types $types, $value = null, Type $containerType = null)
     {
         $this->value = $value;
@@ -85,6 +90,14 @@ final class SymbolInformation
         return new self($this->symbol, $types, $this->value, $this->containerType);
     }
 
+    public function withError(string $message): SymbolInformation
+    {
+        $new = new self($this->symbol, $this->types, $this->value, $this->containerType);
+        $new->errors[] = $message;
+
+        return $new;
+    }
+
     /**
      * @deprecated
      */
@@ -123,5 +136,10 @@ final class SymbolInformation
     public function containerType()
     {
         return $this->containerType;
+    }
+
+    public function errors(): array
+    {
+        return $this->errors;
     }
 }

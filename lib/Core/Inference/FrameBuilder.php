@@ -16,6 +16,7 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
+use Phpactor\WorseReflection\Core\Errors;
 
 final class FrameBuilder
 {
@@ -39,11 +40,18 @@ final class FrameBuilder
      */
     private $injectedTypes = [];
 
+    private $errors = [];
+
     public function __construct(SymbolInformationResolver $symbolInformationResolver, Logger $logger)
     {
         $this->logger = $logger;
         $this->symbolInformationResolver = $symbolInformationResolver;
         $this->symbolFactory = new SymbolFactory();
+    }
+
+    public function errors(): Errors
+    {
+        return Errors::fromErrors($this->errors);
     }
 
     public function buildForNode(Node $node): Frame
@@ -101,7 +109,7 @@ final class FrameBuilder
             return;
         }
 
-        $typeInformation = $this->symbolInformationResolver->resolveNode($frame, $node->qualifiedName);
+        $typeInformation = $this->resolveNode($frame, $node->qualifiedName);
         $information = $this->symbolFactory->information(
             $node->variableName->getText($node->getFileContents()),
             $node->variableName->getStartPosition(),
@@ -134,7 +142,7 @@ final class FrameBuilder
     private function processParserVariable(Frame $frame, AssignmentExpression $node)
     {
         $name = $node->leftOperand->name->getText($node->getFileContents());
-        $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
+        $symbolInformation = $this->resolveNode($frame, $node->rightOperand);
         $information = $this->symbolFactory->information(
             $name,
             $node->leftOperand->getStart(),
@@ -159,7 +167,7 @@ final class FrameBuilder
         }
 
         $memberNameNode = $node->leftOperand->memberName;
-        $typeInformation = $this->symbolInformationResolver->resolveNode($frame, $node->rightOperand);
+        $typeInformation = $this->resolveNode($frame, $node->rightOperand);
 
         // TODO: Sort out this mess.
         //       If the node is not a token (e.g. it is a variable) then
@@ -167,7 +175,7 @@ final class FrameBuilder
         if ($memberNameNode instanceof Token) {
             $memberName = $memberNameNode->getText($node->getFileContents());
         } else {
-            $memberNameInfo = $this->symbolInformationResolver->resolveNode($frame, $memberNameNode);
+            $memberNameInfo = $this->resolveNode($frame, $memberNameNode);
 
             if (false === is_string($memberNameInfo->value())) {
                 return;
@@ -201,7 +209,7 @@ final class FrameBuilder
 
         // works for both closure and class method (we currently ignore binding)
         if ($classNode) {
-            $classType = $this->symbolInformationResolver->resolveNode($frame, $classNode)->type();
+            $classType = $this->resolveNode($frame, $classNode)->type();
             $information = $this->symbolFactory->information(
                 'this',
                 $node->getStart(),
@@ -229,7 +237,7 @@ final class FrameBuilder
         foreach ($node->parameters->getElements() as $parameterNode) {
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
 
-            $symbolInformation = $this->symbolInformationResolver->resolveNode($frame, $parameterNode);
+            $symbolInformation = $this->resolveNode($frame, $parameterNode);
 
             $information = $this->symbolFactory->information(
                 $parameterName,
@@ -338,5 +346,16 @@ final class FrameBuilder
         $information  =$information->withType($this->injectedTypes[$symbolName]);
         $frame->locals()->add(Variable::fromSymbolInformation($information));
         unset($this->injectedTypes[$symbolName]);
+    }
+
+    private function resolveNode(Frame $frame, $node)
+    {
+        $info = $this->symbolInformationResolver->resolveNode($frame, $node);
+
+        if ($info->errors()) {
+            $this->errors[] = $info;
+        }
+
+        return $info;
     }
 }
