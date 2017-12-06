@@ -40,18 +40,11 @@ final class FrameBuilder
      */
     private $injectedTypes = [];
 
-    private $errors = [];
-
     public function __construct(SymbolInformationResolver $symbolInformationResolver, Logger $logger)
     {
         $this->logger = $logger;
         $this->symbolInformationResolver = $symbolInformationResolver;
         $this->symbolFactory = new SymbolFactory();
-    }
-
-    public function errors(): Errors
-    {
-        return Errors::fromErrors($this->errors);
     }
 
     public function buildForNode(Node $node): Frame
@@ -351,10 +344,7 @@ final class FrameBuilder
     private function resolveNode(Frame $frame, $node)
     {
         $info = $this->symbolInformationResolver->resolveNode($frame, $node);
-
-        if ($info->errors()) {
-            $this->errors[] = $info;
-        }
+        $frame->problems()->add($info);
 
         return $info;
     }

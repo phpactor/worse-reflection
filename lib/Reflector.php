@@ -21,6 +21,7 @@ use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Errors;
+use Phpactor\WorseReflection\Core\Inference\Problems;
 
 class Reflector
 {
@@ -184,7 +185,7 @@ class Reflector
         return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
     }
 
-    public function lint($sourceCode): Errors
+    public function lint($sourceCode): Problems
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
 
@@ -192,7 +193,7 @@ class Reflector
         $resolver = $this->services->symbolInformationResolver();
         $frame = $this->services->frameBuilder()->buildFromNode($rootNode);
 
-        return $this->services->frameBuilder()->errors();
+        return $frame->problems();
     }
 
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall

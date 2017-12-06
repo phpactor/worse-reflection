@@ -1,40 +1,34 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core;
+namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\Problems;
 
-final class Errors implements \IteratorAggregate
+final class Problems implements \IteratorAggregate
 {
-    private $errors = [];
+    private $problems = [];
 
-    private function __construct($errors)
+    public static function create(): Problems
     {
-        foreach ($errors as $item) {
-            $this->add($item);
-        }
-    }
-
-    public static function fromErrors(array $errors): Errors
-    {
-         return new self($errors);
+        return new self();
     }
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->errors);
+        return new \ArrayIterator($this->problems);
     }
 
-    private function add(SymbolInformation $item)
+    public function add(SymbolInformation $item)
     {
-        $this->errors[] = $item;
+        $this->problems[] = $item;
     }
 
     public function __toString()
     {
         $lines = [];
         /** @var SymbolInformation $symbolInformation */
-        foreach ($this->errors as $symbolInformation) {
+        foreach ($this->problems as $symbolInformation) {
             $lines[] = sprintf(
                 '%s:%s %s',
                 $symbolInformation->symbol()->position()->start(),
