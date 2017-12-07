@@ -73,7 +73,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function frame(): Frame
     {
-        return $this->serviceLocator->frameBuilder()->buildFromNode($this->node);
+        return $this->serviceLocator->frameBuilder()->buildFromScope($this->node);
     }
 
     public function declaringClass(): ReflectionClassLike

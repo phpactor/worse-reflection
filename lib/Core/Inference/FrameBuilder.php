@@ -16,6 +16,7 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
+use RuntimeException;
 
 final class FrameBuilder
 {
@@ -54,11 +55,13 @@ final class FrameBuilder
             $scopeNode = $node;
         }
 
-        return $this->buildFromNode($scopeNode);
+        return $this->buildFromScope($scopeNode);
     }
 
-    public function buildFromNode(Node $node): Frame
+    public function buildFromScope(Node $node): Frame
     {
+        $this->assertIsScopeNode($node);
+
         $frame = new Frame();
 
         if ($node instanceof FunctionLike) {
@@ -349,5 +352,24 @@ final class FrameBuilder
         }
 
         return $info;
+    }
+
+    private function assertIsScopeNode(Node $node)
+    {
+        $types = [
+            SourceFileNode::class,
+            FunctionLike::class
+        ];
+
+        foreach ($types as $type) {
+            if ($node instanceof $type) {
+                return;
+            }
+        }
+
+        throw new RuntimeException(sprintf(
+            'Node must be one of "%s", got "%s"',
+            implode('", "', $types), get_class($node)
+        ));
     }
 }

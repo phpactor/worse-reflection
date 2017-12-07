@@ -190,7 +190,7 @@ class Reflector
 
         $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
         $resolver = $this->services->symbolInformationResolver();
-        $frame = $this->services->frameBuilder()->buildFromNode($rootNode);
+        $frame = $this->services->frameBuilder()->buildFromScope($rootNode);
 
         return $frame->problems();
     }
