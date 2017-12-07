@@ -49,52 +49,54 @@ final class FrameBuilder
 
     public function buildForNode(Node $node): Frame
     {
-        $scopeNode = $node->getFirstAncestor(FunctionLike::class, SourceFileNode::class);
+        $scopeNode = $node->getFirstAncestor(SourceFileNode::class);
 
         if (null === $scopeNode) {
             $scopeNode = $node;
         }
 
-        return $this->buildFromScope($scopeNode);
+        return $this->buildFromScope($scopeNode, $node);
     }
 
-    public function buildFromScope(Node $node): Frame
+    public function buildFromScope(Node $scopeNode, Node $targetNode = null): Frame
     {
-        $this->assertIsScopeNode($node);
+        $this->assertIsScopeNode($scopeNode);
+
+        $targetNode = $targetNode ?: $scopeNode;
 
         $frame = new Frame();
 
-        if ($node instanceof FunctionLike) {
-            $this->processFunctionLike($frame, $node);
+        if ($scopeNode instanceof FunctionLike) {
+            $this->processFunctionLike($frame, $scopeNode);
         }
 
-        $this->walkNode($frame, $node, $node->getEndPosition());
+        $this->walkNode($frame, $scopeNode, $targetNode);
 
         return $frame;
     }
 
-    private function walkNode(Frame $frame, Node $node, int $endPosition)
+    private function walkNode(Frame $frame, Node $scopeNode, Node $targetNode)
     {
-        if ($node->getStart() > $endPosition) {
+        if ($scopeNode->getStart() > $targetNode->getEndPosition()) {
             return;
         }
 
-        $this->processLeadingComment($frame, $node);
+        $this->processLeadingComment($frame, $scopeNode);
 
-        if ($node instanceof ParserVariable) {
-            $this->processVariable($frame, $node);
+        if ($scopeNode instanceof ParserVariable) {
+            $this->processVariable($frame, $scopeNode);
         }
 
-        if ($node instanceof AssignmentExpression) {
-            $this->processAssignment($frame, $node);
+        if ($scopeNode instanceof AssignmentExpression) {
+            $this->processAssignment($frame, $scopeNode);
         }
 
-        if ($node instanceof CatchClause) {
-            $this->processExceptionCatch($frame, $node);
+        if ($scopeNode instanceof CatchClause) {
+            $this->processExceptionCatch($frame, $scopeNode);
         }
 
-        foreach ($node->getChildNodes() as $node) {
-            $this->walkNode($frame, $node, $endPosition);
+        foreach ($scopeNode->getChildNodes() as $scopeNode) {
+            $this->walkNode($frame, $scopeNode, $targetNode);
         }
     }
 
