@@ -16,7 +16,6 @@ class CodeHelper
 
         $source = substr($source, 0, $offset) . substr($source, $offset + 2);
 
-
         return [$source, $offset];
     }
 }

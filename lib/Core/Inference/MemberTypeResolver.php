@@ -68,7 +68,7 @@ class MemberTypeResolver
         try {
             if (false === $class->$type()->has($name)) {
                 $info = $info->withError(sprintf(
-                    'Class "%s" has no %s member named "%s"',
+                    'Class "%s" has no %s named "%s"',
                     (string) $containerType,
                     $type,
                     $name

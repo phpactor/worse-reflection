@@ -344,7 +344,10 @@ final class FrameBuilder
     private function resolveNode(Frame $frame, $node)
     {
         $info = $this->symbolInformationResolver->resolveNode($frame, $node);
-        $frame->problems()->add($info);
+
+        if ($info->errors()) {
+            $frame->problems()->add($info);
+        }
 
         return $info;
     }

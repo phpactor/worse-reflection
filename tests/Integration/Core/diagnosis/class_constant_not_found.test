@@ -1,0 +1,9 @@
+<?php
+
+class Foo
+{
+}
+
+$bar = Foo::bar;
+<--->
+message: Class "Foo" has no constants named "bar"

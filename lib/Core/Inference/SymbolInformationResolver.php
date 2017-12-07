@@ -56,12 +56,9 @@ class SymbolInformationResolver
     {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
-        $this->memberTypeResolver = new MemberTypeResolver($reflector, $logger);
+        $this->memberTypeResolver = new MemberTypeResolver($reflector);
     }
 
-    /**
-    ace
-     */
     public function resolveNode(Frame $frame, $node): SymbolInformation
     {
         return $this->_resolveNode($frame, $node);
@@ -446,10 +443,9 @@ class SymbolInformationResolver
 
     private function resolveSubscriptExpression(
         Frame $frame,
-        SymbolInformation $subject,
+        SymbolInformation $info,
         SubscriptExpression $node = null
     ): SymbolInformation {
-        $info = SymbolInformation::none();
 
         if (null === $node->accessExpression) {
             $info = $info->withError(sprintf(
@@ -460,28 +456,23 @@ class SymbolInformationResolver
         }
 
         $node = $node->accessExpression;
-        // TODO: test me
-        if ($subject->value() == SymbolInformation::none()) {
-            return $info;
-        }
 
-        if ($subject->type() != Type::array()) {
+        if ($info->type() != Type::array()) {
             $info = $info->withError(sprintf(
                 'Not resolving subscript expression of type "%s"',
-                (string) $subject->type()
+                (string) $info->type()
             ));
             return $info;
         }
 
-        $subjectValue = $subject->value();
+        $subjectValue = $info->value();
 
         if (false === is_array($subjectValue)) {
-            $this->logger->debug($message = sprintf(
+            $info = $info->withError(sprintf(
                 'Array value for symbol "%s" is not an array, is a "%s"',
-                (string) $subject->symbol(),
+                (string) $info->symbol(),
                 gettype($subjectValue)
             ));
-            $info = $info->withError($message);
 
             return $info;
         }

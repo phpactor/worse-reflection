@@ -185,7 +185,7 @@ class Reflector
         return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
     }
 
-    public function lint($sourceCode): Problems
+    public function diagnose($sourceCode): Problems
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
 
