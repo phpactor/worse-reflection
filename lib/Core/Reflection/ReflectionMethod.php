@@ -10,7 +10,6 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Types;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 
 interface ReflectionMethod
 {

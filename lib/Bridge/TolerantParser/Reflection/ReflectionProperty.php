@@ -8,7 +8,6 @@ use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\TokenKind;
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;

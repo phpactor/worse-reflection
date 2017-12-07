@@ -28,7 +28,6 @@ use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
 
 class SymbolInformationResolver
 {
@@ -446,7 +445,6 @@ class SymbolInformationResolver
         SymbolInformation $info,
         SubscriptExpression $node = null
     ): SymbolInformation {
-
         if (null === $node->accessExpression) {
             $info = $info->withError(sprintf(
                 'Subscript expression "%s" is incomplete',

@@ -2,9 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
-use Phpactor\WorseReflection\Core\Inference\Problems;
-
 final class Problems implements \IteratorAggregate
 {
     private $problems = [];

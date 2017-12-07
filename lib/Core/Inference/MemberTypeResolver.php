@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;

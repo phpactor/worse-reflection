@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-use Phpactor\WorseReflection\Reflector;
-
 /**
  * @method ClassName fromString()
  * @method ClassName fromunknown()
