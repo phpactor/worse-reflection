@@ -14,12 +14,19 @@ final class Frame
      */
     private $locals;
 
+    /**
+     * @var Problems
+     */
+    private $problems;
+
     public function __construct(
         LocalAssignments $locals = null,
-        PropertyAssignments $properties = null
+        PropertyAssignments $properties = null,
+        Problems $problems = null
     ) {
         $this->properties = $properties ?: PropertyAssignments::create();
         $this->locals = $locals ?: LocalAssignments::create();
+        $this->problems = $problems ?: Problems::create();
     }
 
     public function locals(): Assignments
@@ -30,5 +37,10 @@ final class Frame
     public function properties(): Assignments
     {
         return $this->properties;
+    }
+
+    public function problems(): Problems
+    {
+        return $this->problems;
     }
 }

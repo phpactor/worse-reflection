@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\NameImports;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 interface ReflectionScope
 {

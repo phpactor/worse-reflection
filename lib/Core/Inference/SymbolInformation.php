@@ -27,6 +27,11 @@ final class SymbolInformation
      */
     private $containerType;
 
+    /**
+     * @var string[]
+     */
+    private $issues = [];
+
     private function __construct(Symbol $symbol, Types $types, $value = null, Type $containerType = null)
     {
         $this->value = $value;
@@ -57,7 +62,7 @@ final class SymbolInformation
         return new self(Symbol::unknown(), Types::fromTypes([ $type ]));
     }
 
-    public static function none()
+    public static function none(): SymbolInformation
     {
         return new self(Symbol::unknown(), Types::empty());
     }
@@ -83,6 +88,14 @@ final class SymbolInformation
     public function withTypes(Types $types): SymbolInformation
     {
         return new self($this->symbol, $types, $this->value, $this->containerType);
+    }
+
+    public function withIssue(string $message): SymbolInformation
+    {
+        $new = new self($this->symbol, $this->types, $this->value, $this->containerType);
+        $new->issues[] = $message;
+
+        return $new;
     }
 
     /**
@@ -123,5 +136,10 @@ final class SymbolInformation
     public function containerType()
     {
         return $this->containerType;
+    }
+
+    public function issues(): array
+    {
+        return $this->issues;
     }
 }
