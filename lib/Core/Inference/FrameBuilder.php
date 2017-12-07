@@ -70,33 +70,38 @@ final class FrameBuilder
             $this->processFunctionLike($frame, $scopeNode);
         }
 
-        $this->walkNode($frame, $scopeNode, $targetNode);
+        $this->walkNode($frame, $scopeNode, $scopeNode, $targetNode);
 
         return $frame;
     }
 
-    private function walkNode(Frame $frame, Node $scopeNode, Node $targetNode)
+    private function walkNode(Frame $frame, Node $scopeNode, Node $node, Node $targetNode)
     {
-        if ($scopeNode->getStart() > $targetNode->getEndPosition()) {
+        if ($node->getStart() > $targetNode->getEndPosition()) {
             return;
         }
 
-        $this->processLeadingComment($frame, $scopeNode);
+        $this->processLeadingComment($frame, $node);
 
-        if ($scopeNode instanceof ParserVariable) {
-            $this->processVariable($frame, $scopeNode);
+        if ($scopeNode !== $node && $node instanceof FunctionLike) {
+            $frame = $frame->new();
+            $this->processFunctionLike($frame, $node);
         }
 
-        if ($scopeNode instanceof AssignmentExpression) {
-            $this->processAssignment($frame, $scopeNode);
+        if ($node instanceof ParserVariable) {
+            $this->processVariable($frame, $node);
         }
 
-        if ($scopeNode instanceof CatchClause) {
-            $this->processExceptionCatch($frame, $scopeNode);
+        if ($node instanceof AssignmentExpression) {
+            $this->processAssignment($frame, $node);
         }
 
-        foreach ($scopeNode->getChildNodes() as $scopeNode) {
-            $this->walkNode($frame, $scopeNode, $targetNode);
+        if ($node instanceof CatchClause) {
+            $this->processExceptionCatch($frame, $node);
+        }
+
+        foreach ($node->getChildNodes() as $node) {
+            $this->walkNode($frame, $scopeNode, $node, $targetNode);
         }
     }
 
@@ -286,7 +291,7 @@ final class FrameBuilder
             return;
         }
 
-        $parentFrame = $this->buildForNode($parentNode);
+        $parentFrame = $frame->parent();
         $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStart());
 
         foreach ($useClause->useVariableNameList->getElements() as $element) {
