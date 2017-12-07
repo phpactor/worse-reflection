@@ -36,4 +36,9 @@ final class Problems implements \IteratorAggregate
 
         return implode(PHP_EOL, $lines);
     }
+
+    public function none(): bool
+    {
+        return count($this->problems) === 0;
+    }
 }
