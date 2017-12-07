@@ -30,7 +30,7 @@ final class Problems implements \IteratorAggregate
                 '%s:%s %s',
                 $symbolInformation->symbol()->position()->start(),
                 $symbolInformation->symbol()->position()->end(),
-                implode(', ', $symbolInformation->errors())
+                implode(', ', $symbolInformation->issues())
             );
         }
 

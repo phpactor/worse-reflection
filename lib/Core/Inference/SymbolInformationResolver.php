@@ -70,7 +70,7 @@ class SymbolInformationResolver
     {
         if (false === $node instanceof Node) {
             $info = SymbolInformation::none()
-                ->withError(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
+                ->withIssue(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
             return $info;
         }
 
@@ -189,7 +189,7 @@ class SymbolInformationResolver
         }
 
         return SymbolInformation::none()
-            ->withError(sprintf(
+            ->withIssue(sprintf(
             'Did not know how to resolve node of type "%s" with text "%s"',
             get_class($node),
             $node->getText()
@@ -392,11 +392,11 @@ class SymbolInformationResolver
         );
 
         if (null === $symbolType) {
-            $info = $info->withError(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+            $info = $info->withIssue(sprintf('Could not resolve reserved word "%s"', $node->getText()));
         }
 
         if (null === $type) {
-            $info = $info->withError(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+            $info = $info->withIssue(sprintf('Could not resolve reserved word "%s"', $node->getText()));
         }
 
         return $info;
@@ -446,7 +446,7 @@ class SymbolInformationResolver
         SubscriptExpression $node = null
     ): SymbolInformation {
         if (null === $node->accessExpression) {
-            $info = $info->withError(sprintf(
+            $info = $info->withIssue(sprintf(
                 'Subscript expression "%s" is incomplete',
                 (string) $node->getText()
             ));
@@ -456,7 +456,7 @@ class SymbolInformationResolver
         $node = $node->accessExpression;
 
         if ($info->type() != Type::array()) {
-            $info = $info->withError(sprintf(
+            $info = $info->withIssue(sprintf(
                 'Not resolving subscript expression of type "%s"',
                 (string) $info->type()
             ));
@@ -466,7 +466,7 @@ class SymbolInformationResolver
         $subjectValue = $info->value();
 
         if (false === is_array($subjectValue)) {
-            $info = $info->withError(sprintf(
+            $info = $info->withIssue(sprintf(
                 'Array value for symbol "%s" is not an array, is a "%s"',
                 (string) $info->symbol(),
                 gettype($subjectValue)
@@ -484,7 +484,7 @@ class SymbolInformationResolver
             }
         }
 
-        $info = $info->withError(sprintf(
+        $info = $info->withIssue(sprintf(
             'Did not resolve access expression for node type "%s"',
             get_class($node)
         ));

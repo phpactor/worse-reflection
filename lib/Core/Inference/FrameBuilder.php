@@ -344,7 +344,7 @@ final class FrameBuilder
     {
         $info = $this->symbolInformationResolver->resolveNode($frame, $node);
 
-        if ($info->errors()) {
+        if ($info->issues()) {
             $frame->problems()->add($info);
         }
 

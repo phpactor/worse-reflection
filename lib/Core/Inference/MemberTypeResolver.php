@@ -53,7 +53,7 @@ class MemberTypeResolver
         try {
             $class = $this->reflectClassOrNull($containerType, $name);
         } catch (NotFound $e) {
-            $info = $info->withError(sprintf(
+            $info = $info->withIssue(sprintf(
                 'Could not find container class "%s" for "%s"',
                 (string) $containerType,
                 $name
@@ -66,7 +66,7 @@ class MemberTypeResolver
 
         try {
             if (false === $class->$type()->has($name)) {
-                $info = $info->withError(sprintf(
+                $info = $info->withIssue(sprintf(
                     'Class "%s" has no %s named "%s"',
                     (string) $containerType,
                     $type,
@@ -76,7 +76,7 @@ class MemberTypeResolver
                 return $info;
             }
         } catch (NotFound $e) {
-            $info = $info->withError($e->getMessage());
+            $info = $info->withIssue($e->getMessage());
             return $info;
         }
 

@@ -30,7 +30,7 @@ final class SymbolInformation
     /**
      * @var string[]
      */
-    private $errors = [];
+    private $issues = [];
 
     private function __construct(Symbol $symbol, Types $types, $value = null, Type $containerType = null)
     {
@@ -62,7 +62,7 @@ final class SymbolInformation
         return new self(Symbol::unknown(), Types::fromTypes([ $type ]));
     }
 
-    public static function none()
+    public static function none(): SymbolInformation
     {
         return new self(Symbol::unknown(), Types::empty());
     }
@@ -90,10 +90,10 @@ final class SymbolInformation
         return new self($this->symbol, $types, $this->value, $this->containerType);
     }
 
-    public function withError(string $message): SymbolInformation
+    public function withIssue(string $message): SymbolInformation
     {
         $new = new self($this->symbol, $this->types, $this->value, $this->containerType);
-        $new->errors[] = $message;
+        $new->issues[] = $message;
 
         return $new;
     }
@@ -138,8 +138,8 @@ final class SymbolInformation
         return $this->containerType;
     }
 
-    public function errors(): array
+    public function issues(): array
     {
-        return $this->errors;
+        return $this->issues;
     }
 }
