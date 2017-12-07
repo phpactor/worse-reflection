@@ -8,7 +8,6 @@ use Phpactor\WorseReflection\Core\Inference\Problems;
 final class Problems implements \IteratorAggregate
 {
     private $problems = [];
-    public $traces = [];
 
     public static function create(): Problems
     {
@@ -23,8 +22,6 @@ final class Problems implements \IteratorAggregate
     public function add(SymbolInformation $problem)
     {
         $this->problems[] = $problem;
-        $trace = debug_backtrace();
-        $this->traces[] = array_splice($trace, 0, 2);
     }
 
     public function __toString()

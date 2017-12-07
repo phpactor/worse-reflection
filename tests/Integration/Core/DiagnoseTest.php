@@ -11,18 +11,17 @@ use SplFileInfo;
 class DiagnoseTest extends IntegrationTestCase
 {
     /**
-     * @dataProvider provideLinter
+     * @dataProvider provideDiagnose
      */
     public function testDiagnose(string $testName, string $source, array $assertions)
     {
-        $logger = $this->logger();
         $reflector = $this->createReflector($source);
         $problems = $reflector->diagnose($source);
 
         $this->assertContains($assertions['message'], (string) $problems, $testName);
     }
 
-    public function provideLinter()
+    public function provideDiagnose()
     {
         return $this->parseTests();
     }
