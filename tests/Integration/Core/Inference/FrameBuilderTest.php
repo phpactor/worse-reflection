@@ -270,8 +270,8 @@ $hello = function () {
 EOT
                 ,
                 function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$bar'));
-                    $this->assertCount(0, $frame->locals()->byName('$foo'));
+                    $this->assertCount(1, $frame->locals()->byName('$bar'), 'Scoped variable exists');
+                    $this->assertCount(0, $frame->locals()->byName('$foo'), 'Parent scoped variable doesnt exist');
                 }
             ],
             'Injects closure parameters' => [

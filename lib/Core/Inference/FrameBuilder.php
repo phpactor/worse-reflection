@@ -70,7 +70,7 @@ final class FrameBuilder
             $this->processFunctionLike($frame, $scopeNode);
         }
 
-        $this->walkNode($frame, $scopeNode, $scopeNode, $targetNode);
+        $frame = $this->walkNode($frame, $scopeNode, $scopeNode, $targetNode);
 
         return $frame;
     }
@@ -78,7 +78,7 @@ final class FrameBuilder
     private function walkNode(Frame $frame, Node $scopeNode, Node $node, Node $targetNode)
     {
         if ($node->getStart() > $targetNode->getEndPosition()) {
-            return;
+            return $frame;
         }
 
         $this->processLeadingComment($frame, $node);
@@ -101,8 +101,10 @@ final class FrameBuilder
         }
 
         foreach ($node->getChildNodes() as $node) {
-            $this->walkNode($frame, $scopeNode, $node, $targetNode);
+            $frame = $this->walkNode($frame, $scopeNode, $node, $targetNode);
         }
+
+        return $frame;
     }
 
     private function processExceptionCatch(Frame $frame, CatchClause $node)
@@ -282,12 +284,6 @@ final class FrameBuilder
         $useClause = $node->anonymousFunctionUseClause;
 
         if (null === $useClause) {
-            return;
-        }
-
-        $parentNode = $node->getParent();
-
-        if (null === $parentNode) {
             return;
         }
 
