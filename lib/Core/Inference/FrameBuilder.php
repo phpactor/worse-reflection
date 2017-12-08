@@ -47,7 +47,7 @@ final class FrameBuilder
         $this->symbolFactory = new SymbolFactory();
     }
 
-    public function buildForNode(Node $node): Frame
+    public function build(Node $node): Frame
     {
         if ($node instanceof SourceFileNode) {
             $scopeNode = $node;
@@ -65,11 +65,6 @@ final class FrameBuilder
         }
 
         return $this->walkNode($scopeNode, $node);
-    }
-
-    public function buildFromScope(Node $scopeNode): Frame
-    {
-        return $this->buildForNode($scopeNode);
     }
 
     private function walkNode(Node $node, Node $targetNode, Frame $frame = null)

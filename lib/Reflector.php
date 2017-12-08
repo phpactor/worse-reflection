@@ -179,7 +179,7 @@ class Reflector
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
         $resolver = $this->services->symbolInformationResolver();
-        $frame = $this->services->frameBuilder()->buildForNode($node);
+        $frame = $this->services->frameBuilder()->build($node);
 
         return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
     }
@@ -190,7 +190,7 @@ class Reflector
 
         $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
         $resolver = $this->services->symbolInformationResolver();
-        $frame = $this->services->frameBuilder()->buildFromScope($rootNode);
+        $frame = $this->services->frameBuilder()->build($rootNode);
 
         return $frame->problems();
     }
@@ -217,7 +217,7 @@ class Reflector
         $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
-        $frame = $this->services->frameBuilder()->buildForNode($node);
+        $frame = $this->services->frameBuilder()->build($node);
         $nodeReflector = new NodeReflector($this->services);
 
         return $nodeReflector->reflectNode($frame, $node);
