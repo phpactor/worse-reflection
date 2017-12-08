@@ -81,6 +81,17 @@ final class Frame
         return $this->render();
     }
 
+    public function reduce(\Closure $closure, $initial = null)
+    {
+        $initial = $closure($this, $initial);
+
+        foreach ($this->children as $childFrame) {
+            $initial = $childFrame->reduce($closure, $initial);
+        }
+
+        return $initial;
+    }
+
     public function root()
     {
         if (null === $this->parent) {
