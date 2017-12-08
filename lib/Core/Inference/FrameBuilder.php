@@ -102,14 +102,18 @@ final class FrameBuilder
         }
 
         foreach ($node->getChildNodes() as $childNode) {
-            $this->walkNode($childNode, $targetNode, $frame);
+            if ($found = $this->walkNode($childNode, $targetNode, $frame)) {
+                return $found;
+            }
         }
 
         if ($node === $targetNode) {
             return $frame;
         }
 
-        return $frame;
+        if ($node instanceof SourceFileNode) {
+            return $frame;
+        }
     }
 
     private function processExceptionCatch(Frame $frame, CatchClause $node)
