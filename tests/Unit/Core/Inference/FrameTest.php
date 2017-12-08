@@ -15,7 +15,7 @@ class FrameTest extends TestCase
      */
     public function testAssignments()
     {
-        $frame = new Frame();
+        $frame = new Frame('test');
         $this->assertInstanceOf(LocalAssignments::class, $frame->locals());
         $this->assertInstanceOf(PropertyAssignments::class, $frame->properties());
     }

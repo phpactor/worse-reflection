@@ -70,7 +70,7 @@ final class FrameBuilder
     private function walkNode(Node $node, Node $targetNode, Frame $frame = null)
     {
         if ($node instanceof SourceFileNode) {
-            $frame = new Frame();
+            $frame = new Frame($node->getNodeKindName());
         }
 
         if (null === $frame) {
@@ -80,7 +80,7 @@ final class FrameBuilder
         }
 
         if ($node instanceof FunctionLike) {
-            $frame = $frame->new();
+            $frame = $frame->new($node->getNodeKindName());
             $this->processFunctionLike($frame, $node);
         }
 
