@@ -17,6 +17,8 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
 use RuntimeException;
+use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
+use Microsoft\PhpParser\Node\MethodDeclaration;
 
 final class FrameBuilder
 {
@@ -80,7 +82,7 @@ final class FrameBuilder
         }
 
         if ($node instanceof FunctionLike) {
-            $frame = $frame->new($node->getNodeKindName());
+            $frame = $frame->new($node->getNodeKindName() . '#' . $this->functionName($node));
             $this->processFunctionLike($frame, $node);
         }
 
@@ -357,5 +359,22 @@ final class FrameBuilder
         }
 
         return $info;
+    }
+
+    private function functionName(FunctionLike $node)
+    {
+        if ($node instanceof MethodDeclaration) {
+            return $node->getName();
+        }
+
+        if ($node instanceof FunctionDeclaration) {
+            return $node->getName();
+        }
+
+        if ($node instanceof AnonymousFunctionCreationExpression) {
+            return '<anonymous>';
+        }
+
+        return '<unknown>';
     }
 }

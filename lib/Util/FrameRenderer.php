@@ -33,7 +33,7 @@ class FrameRenderer
 
         $indentation += 2;
         foreach ($frame->children() as $child) {
-            $output[] = $indent . '>: ' . $child->name();
+            $output[] = $indent . 'f: ' . $child->name();
             $output[] = $this->render($child, $indentation);
         }
 
@@ -43,7 +43,7 @@ class FrameRenderer
     private function formatLocal(Variable $local): string
     {
         return sprintf(
-            'l: %s:%s %s %s',
+            'v: %s:%s %s %s',
             $local->name(),
             $local->offset()->toInt(),
             (string) $local->symbolInformation()->type(),
