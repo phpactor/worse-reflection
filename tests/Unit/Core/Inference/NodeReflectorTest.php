@@ -14,7 +14,7 @@ class NodeReflectorTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Did not know how');
-        $frame = new Frame();
+        $frame = new Frame('test');
         $locator = $this->prophesize(ServiceLocator::class);
         $nodeReflector = new NodeReflector($locator->reveal());
 

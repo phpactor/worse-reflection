@@ -855,7 +855,7 @@ EOT
 
     private function resolveNodeAtOffset(LocalAssignments $assignments, string $source)
     {
-        $frame = new Frame($assignments);
+        $frame = new Frame('test', $assignments);
 
         list($source, $offset) = CodeHelper::offsetFromCode($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);

@@ -16,6 +16,9 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
+use RuntimeException;
+use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
+use Microsoft\PhpParser\Node\MethodDeclaration;
 
 final class FrameBuilder
 {
@@ -46,56 +49,61 @@ final class FrameBuilder
         $this->symbolFactory = new SymbolFactory();
     }
 
-    public function buildForNode(Node $node): Frame
+    public function build(Node $node): Frame
     {
-        $scopeNode = $node->getFirstAncestor(FunctionLike::class, SourceFileNode::class);
-
-        if (null === $scopeNode) {
-            $scopeNode = $node;
-        }
-
-        return $this->buildFromNode($scopeNode);
+        return $this->walkNode($this->resolveScopeNode($node), $node);
     }
 
-    public function buildFromNode(Node $node): Frame
+    private function walkNode(Node $node, Node $targetNode, Frame $frame = null)
     {
-        $frame = new Frame();
+        if ($node instanceof SourceFileNode) {
+            $frame = new Frame($node->getNodeKindName());
+        }
+
+        if (null === $frame) {
+            throw new RuntimeException(
+                'Walk node was not intiated with a SouceFileNode, this should never happen.'
+            );
+        }
 
         if ($node instanceof FunctionLike) {
-            $this->processFunctionLike($frame, $node);
+            // New scope, new frame.
+            $frame = $frame->new($node->getNodeKindName() . '#' . $this->functionName($node));
+            $this->walkFunctionLike($frame, $node);
         }
 
-        $this->walkNode($frame, $node, $node->getEndPosition());
-
-        return $frame;
-    }
-
-    private function walkNode(Frame $frame, Node $node, int $endPosition)
-    {
-        if ($node->getStart() > $endPosition) {
-            return;
-        }
-
-        $this->processLeadingComment($frame, $node);
+        $this->injectVariablesFromComment($frame, $node);
 
         if ($node instanceof ParserVariable) {
-            $this->processVariable($frame, $node);
+            $this->walkVariable($frame, $node);
         }
 
         if ($node instanceof AssignmentExpression) {
-            $this->processAssignment($frame, $node);
+            $this->walkAssignment($frame, $node);
         }
 
         if ($node instanceof CatchClause) {
-            $this->processExceptionCatch($frame, $node);
+            $this->walkExceptionCatch($frame, $node);
         }
 
-        foreach ($node->getChildNodes() as $node) {
-            $this->walkNode($frame, $node, $endPosition);
+        foreach ($node->getChildNodes() as $childNode) {
+            if ($found = $this->walkNode($childNode, $targetNode, $frame)) {
+                return $found;
+            }
+        }
+
+        // if we found what we were looking for then return it
+        if ($node === $targetNode) {
+            return $frame;
+        }
+
+        // we start with the source node and we finish with the source node.
+        if ($node instanceof SourceFileNode) {
+            return $frame;
         }
     }
 
-    private function processExceptionCatch(Frame $frame, CatchClause $node)
+    private function walkExceptionCatch(Frame $frame, CatchClause $node)
     {
         if (!$node->qualifiedName) {
             return;
@@ -115,14 +123,14 @@ final class FrameBuilder
         $frame->locals()->add(Variable::fromSymbolInformation($information));
     }
 
-    private function processAssignment(Frame $frame, AssignmentExpression $node)
+    private function walkAssignment(Frame $frame, AssignmentExpression $node)
     {
         if ($node->leftOperand instanceof ParserVariable) {
-            return $this->processParserVariable($frame, $node);
+            return $this->walkParserVariable($frame, $node);
         }
 
         if ($node->leftOperand instanceof MemberAccessExpression) {
-            return $this->processMemberAccessExpression($frame, $node);
+            return $this->walkMemberAccessExpression($frame, $node);
         }
 
         $this->logger->warning(sprintf(
@@ -131,7 +139,7 @@ final class FrameBuilder
         ));
     }
 
-    private function processParserVariable(Frame $frame, AssignmentExpression $node)
+    private function walkParserVariable(Frame $frame, AssignmentExpression $node)
     {
         $name = $node->leftOperand->name->getText($node->getFileContents());
         $symbolInformation = $this->resolveNode($frame, $node->rightOperand);
@@ -149,7 +157,7 @@ final class FrameBuilder
         $frame->locals()->add(Variable::fromSymbolInformation($information));
     }
 
-    private function processMemberAccessExpression(Frame $frame, AssignmentExpression $node)
+    private function walkMemberAccessExpression(Frame $frame, AssignmentExpression $node)
     {
         $variable = $node->leftOperand->dereferencableExpression;
 
@@ -190,7 +198,7 @@ final class FrameBuilder
         $frame->properties()->add(Variable::fromSymbolInformation($information));
     }
 
-    private function processFunctionLike(Frame $frame, FunctionLike $node)
+    private function walkFunctionLike(Frame $frame, FunctionLike $node)
     {
         $namespace = $node->getNamespaceDefinition();
         $classNode = $node->getFirstAncestor(
@@ -246,7 +254,7 @@ final class FrameBuilder
         }
     }
 
-    private function processLeadingComment(Frame $frame, Node $node)
+    private function injectVariablesFromComment(Frame $frame, Node $node)
     {
         $comment = $node->getLeadingCommentAndWhitespaceText();
 
@@ -275,13 +283,7 @@ final class FrameBuilder
             return;
         }
 
-        $parentNode = $node->getParent();
-
-        if (null === $parentNode) {
-            return;
-        }
-
-        $parentFrame = $this->buildForNode($parentNode);
+        $parentFrame = $frame->parent();
         $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStart());
 
         foreach ($useClause->useVariableNameList->getElements() as $element) {
@@ -315,7 +317,7 @@ final class FrameBuilder
         }
     }
 
-    private function processVariable(Frame $frame, ParserVariable $node)
+    private function walkVariable(Frame $frame, ParserVariable $node)
     {
         if (false === $node->name instanceof Token) {
             return;
@@ -349,5 +351,40 @@ final class FrameBuilder
         }
 
         return $info;
+    }
+
+    private function resolveScopeNode(Node $node): Node
+    {
+        if ($node instanceof SourceFileNode) {
+            return $node;
+        }
+
+        $scopeNode = $node->getFirstAncestor(SourceFileNode::class);
+
+        if (null === $scopeNode) {
+            throw new RuntimeException(sprintf(
+                'Could not find scope node for "%s", this should not happen.',
+                get_class($node)
+            ));
+        }
+
+        return $scopeNode;
+    }
+
+    private function functionName(FunctionLike $node)
+    {
+        if ($node instanceof MethodDeclaration) {
+            return $node->getName();
+        }
+
+        if ($node instanceof FunctionDeclaration) {
+            return $node->getName();
+        }
+
+        if ($node instanceof AnonymousFunctionCreationExpression) {
+            return '<anonymous>';
+        }
+
+        return '<unknown>';
     }
 }

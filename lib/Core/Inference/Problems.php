@@ -2,9 +2,14 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-final class Problems implements \IteratorAggregate
+final class Problems implements \IteratorAggregate, \Countable
 {
     private $problems = [];
+
+    private function __construct(array $problems = [])
+    {
+        $this->problems = $problems;
+    }
 
     public static function create(): Problems
     {
@@ -40,5 +45,23 @@ final class Problems implements \IteratorAggregate
     public function none(): bool
     {
         return count($this->problems) === 0;
+    }
+
+    public function count(): int
+    {
+        return count($this->problems);
+    }
+
+    public function toArray(): array
+    {
+        return $this->problems;
+    }
+
+    public function merge(Problems $problems)
+    {
+        return new self(array_merge(
+            $this->problems,
+            $problems->toArray()
+        ));
     }
 }

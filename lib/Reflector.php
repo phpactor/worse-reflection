@@ -20,7 +20,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
-use Phpactor\WorseReflection\Core\Inference\Problems;
+use Phpactor\WorseReflection\Core\Inference\Frame;
 
 class Reflector
 {
@@ -179,20 +179,18 @@ class Reflector
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
         $resolver = $this->services->symbolInformationResolver();
-        $frame = $this->services->frameBuilder()->buildForNode($node);
+        $frame = $this->services->frameBuilder()->build($node);
 
         return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
     }
 
-    public function diagnose($sourceCode): Problems
+    public function frame($sourceCode): Frame
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
 
         $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
-        $resolver = $this->services->symbolInformationResolver();
-        $frame = $this->services->frameBuilder()->buildFromNode($rootNode);
 
-        return $frame->problems();
+        return $this->services->frameBuilder()->build($rootNode);
     }
 
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
@@ -217,7 +215,7 @@ class Reflector
         $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
-        $frame = $this->services->frameBuilder()->buildForNode($node);
+        $frame = $this->services->frameBuilder()->build($node);
         $nodeReflector = new NodeReflector($this->services);
 
         return $nodeReflector->reflectNode($frame, $node);
