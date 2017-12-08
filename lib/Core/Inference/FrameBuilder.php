@@ -59,7 +59,7 @@ final class FrameBuilder
 
         if (null === $scopeNode) {
             throw new RuntimeException(sprintf(
-                'Could not find scope node for "%s"',
+                'Could not find scope node for "%s", this should not happen.',
                 get_class($node)
             ));
         }

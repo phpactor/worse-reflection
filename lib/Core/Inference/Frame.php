@@ -68,4 +68,32 @@ final class Frame
     {
         return $this->parent;
     }
+
+    public function __toString()
+    {
+        return $this->render();
+    }
+
+    public function render($indentation = 0)
+    {
+        $output = [];
+        $output[] = '+ frame';
+
+        /** @var Variable $local */
+        foreach ($this->locals as $local) {
+            $output[] = sprintf('   - %s:%s %s %s', $local->name(), $local->offset()->toInt(), (string) $local->symbolInformation()->type(), var_export($local->symbolInformation()->value(), true));
+        }
+
+        /** @var Variable $local */
+        foreach ($this->properties as $local) {
+            $output[] = sprintf('   + %s:%s %s %s', $local->name(), $local->offset()->toInt(), (string) $local->symbolInformation()->type(), var_export($local->symbolInformation()->value(), true));
+        }
+
+        $indentation += 2;
+        foreach ($this->children as $child) {
+            $output[] = $child->render($indentation);
+        }
+
+        return implode(PHP_EOL, $output);
+    }
 }
