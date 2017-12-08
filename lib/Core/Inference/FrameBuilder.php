@@ -83,11 +83,8 @@ final class FrameBuilder
 
         if ($node instanceof FunctionLike) {
             $frame = $frame->new($node->getNodeKindName() . '#' . $this->functionName($node));
+            $fuck = $frame;
             $this->processFunctionLike($frame, $node);
-        }
-
-        if ($node->getStart() > $targetNode->getEndPosition()) {
-            return $frame;
         }
 
         $this->processLeadingComment($frame, $node);
@@ -104,8 +101,12 @@ final class FrameBuilder
             $this->processExceptionCatch($frame, $node);
         }
 
-        foreach ($node->getChildNodes() as $node) {
-            $frame = $this->walkNode($node, $targetNode, $frame);
+        foreach ($node->getChildNodes() as $childNode) {
+            $this->walkNode($childNode, $targetNode, $frame);
+        }
+
+        if ($node === $targetNode) {
+            return $frame;
         }
 
         return $frame;
