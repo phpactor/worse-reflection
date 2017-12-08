@@ -49,44 +49,52 @@ final class FrameBuilder
 
     public function buildForNode(Node $node): Frame
     {
-        $scopeNode = $node->getFirstAncestor(SourceFileNode::class);
-
-        if (null === $scopeNode) {
+        if ($node instanceof SourceFileNode) {
             $scopeNode = $node;
         }
 
-        return $this->buildFromScope($scopeNode, $node);
-    }
-
-    public function buildFromScope(Node $scopeNode, Node $targetNode = null): Frame
-    {
-        $this->assertIsScopeNode($scopeNode);
-
-        $targetNode = $targetNode ?: $scopeNode;
-
-        $frame = new Frame();
-
-        if ($scopeNode instanceof FunctionLike) {
-            $this->processFunctionLike($frame, $scopeNode);
+        if (false === $node instanceof SourceFileNode) {
+            $scopeNode = $node->getFirstAncestor(SourceFileNode::class);
         }
 
-        $frame = $this->walkNode($frame, $scopeNode, $scopeNode, $targetNode);
+        if (null === $scopeNode) {
+            throw new RuntimeException(sprintf(
+                'Could not find scope node for "%s"',
+                get_class($node)
+            ));
+        }
 
-        return $frame;
+        return $this->walkNode($scopeNode, $node);
     }
 
-    private function walkNode(Frame $frame, Node $scopeNode, Node $node, Node $targetNode)
+    public function buildFromScope(Node $scopeNode): Frame
     {
+        return $this->buildForNode($scopeNode);
+    }
+
+    private function walkNode(Node $node, Node $targetNode, Frame $frame = null)
+    {
+        if ($node instanceof SourceFileNode) {
+            $frame = new Frame();
+        }
+
+        if (null === $frame) {
+            throw new RuntimeException(sprintf(
+                'No frame'
+            ));
+        }
+
+        if ($node instanceof FunctionLike) {
+            $frame = $frame->new();
+            $this->processFunctionLike($frame, $node);
+        }
+
         if ($node->getStart() > $targetNode->getEndPosition()) {
             return $frame;
         }
 
         $this->processLeadingComment($frame, $node);
 
-        if ($scopeNode !== $node && $node instanceof FunctionLike) {
-            $frame = $frame->new();
-            $this->processFunctionLike($frame, $node);
-        }
 
         if ($node instanceof ParserVariable) {
             $this->processVariable($frame, $node);
@@ -101,7 +109,7 @@ final class FrameBuilder
         }
 
         foreach ($node->getChildNodes() as $node) {
-            $frame = $this->walkNode($frame, $scopeNode, $node, $targetNode);
+            $frame = $this->walkNode($node, $targetNode, $frame);
         }
 
         return $frame;
