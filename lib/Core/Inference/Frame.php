@@ -74,26 +74,17 @@ final class Frame
         return $this->render();
     }
 
-    public function render($indentation = 0)
+    public function root()
     {
-        $output = [];
-        $output[] = '+ frame';
-
-        /** @var Variable $local */
-        foreach ($this->locals as $local) {
-            $output[] = sprintf('   - %s:%s %s %s', $local->name(), $local->offset()->toInt(), (string) $local->symbolInformation()->type(), var_export($local->symbolInformation()->value(), true));
+        if (null === $this->parent) {
+            return $this;
         }
 
-        /** @var Variable $local */
-        foreach ($this->properties as $local) {
-            $output[] = sprintf('   + %s:%s %s %s', $local->name(), $local->offset()->toInt(), (string) $local->symbolInformation()->type(), var_export($local->symbolInformation()->value(), true));
-        }
+        return $this->parent->root();
+    }
 
-        $indentation += 2;
-        foreach ($this->children as $child) {
-            $output[] = $child->render($indentation);
-        }
-
-        return implode(PHP_EOL, $output);
+    public function children(): array
+    {
+        return $this->children;
     }
 }

@@ -90,7 +90,6 @@ final class FrameBuilder
 
         $this->processLeadingComment($frame, $node);
 
-
         if ($node instanceof ParserVariable) {
             $this->processVariable($frame, $node);
         }
@@ -358,24 +357,5 @@ final class FrameBuilder
         }
 
         return $info;
-    }
-
-    private function assertIsScopeNode(Node $node)
-    {
-        $types = [
-            SourceFileNode::class,
-            FunctionLike::class
-        ];
-
-        foreach ($types as $type) {
-            if ($node instanceof $type) {
-                return;
-            }
-        }
-
-        throw new RuntimeException(sprintf(
-            'Node must be one of "%s", got "%s"',
-            implode('", "', $types), get_class($node)
-        ));
     }
 }
