@@ -4,8 +4,9 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
-final class SymbolInformation
+final class SymbolContext
 {
     /**
      * @var mixed
@@ -41,7 +42,7 @@ final class SymbolInformation
         $this->containerType = $containerType;
     }
 
-    public static function for(Symbol $symbol): SymbolInformation
+    public static function for(Symbol $symbol): SymbolContext
     {
         return new self($symbol, Types::fromTypes([ Type::unknown() ]));
     }
@@ -49,7 +50,7 @@ final class SymbolInformation
     /**
      * @deprecated
      */
-    public static function fromTypeAndValue(Type $type, $value): SymbolInformation
+    public static function fromTypeAndValue(Type $type, $value): SymbolContext
     {
         return new self(Symbol::unknown(), Types::fromTypes([ $type ]), $value);
     }
@@ -62,17 +63,17 @@ final class SymbolInformation
         return new self(Symbol::unknown(), Types::fromTypes([ $type ]));
     }
 
-    public static function none(): SymbolInformation
+    public static function none(): SymbolContext
     {
         return new self(Symbol::unknown(), Types::empty());
     }
 
-    public function withValue($value): SymbolInformation
+    public function withValue($value): SymbolContext
     {
         return new self($this->symbol, $this->types, $value, $this->containerType);
     }
 
-    public function withContainerType(Type $containerType): SymbolInformation
+    public function withContainerType(Type $containerType): SymbolContext
     {
         return new self($this->symbol, $this->types, $this->value, $containerType);
     }
@@ -80,17 +81,17 @@ final class SymbolInformation
     /**
      * @deprecated Types are plural
      */
-    public function withType(Type $type): SymbolInformation
+    public function withType(Type $type): SymbolContext
     {
         return new self($this->symbol, Types::fromTypes([ $type ]), $this->value, $this->containerType);
     }
 
-    public function withTypes(Types $types): SymbolInformation
+    public function withTypes(Types $types): SymbolContext
     {
         return new self($this->symbol, $types, $this->value, $this->containerType);
     }
 
-    public function withIssue(string $message): SymbolInformation
+    public function withIssue(string $message): SymbolContext
     {
         $new = new self($this->symbol, $this->types, $this->value, $this->containerType);
         $new->issues[] = $message;

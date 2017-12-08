@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node\Expression\Variable;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 
@@ -40,7 +40,7 @@ class SymbolFactoryTest extends TestCase
     public function testInformation()
     {
         $information = $this->factory->information('hello', 10, 20);
-        $this->assertInstanceOf(SymbolInformation::class, $information);
+        $this->assertInstanceOf(SymbolContext::class, $information);
         $symbol = $information->symbol();
 
         $this->assertEquals('hello', $symbol->name());
@@ -60,7 +60,7 @@ class SymbolFactoryTest extends TestCase
             'value' => 1234
         ]);
 
-        $this->assertInstanceOf(SymbolInformation::class, $information);
+        $this->assertInstanceOf(SymbolContext::class, $information);
         $this->assertSame($information->type(), $type);
         $this->assertSame($information->containerType(), $containerType);
         $this->assertEquals(1234, $information->value());

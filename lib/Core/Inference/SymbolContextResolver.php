@@ -28,8 +28,9 @@ use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
-class SymbolInformationResolver
+class SymbolContextResolver
 {
     /**
      * @var MemberTypeResolver
@@ -58,7 +59,7 @@ class SymbolInformationResolver
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
     }
 
-    public function resolveNode(Frame $frame, $node): SymbolInformation
+    public function resolveNode(Frame $frame, $node): SymbolContext
     {
         return $this->_resolveNode($frame, $node);
     }
@@ -66,10 +67,10 @@ class SymbolInformationResolver
     /**
      * Internal interface
      */
-    public function _resolveNode(Frame $frame, $node): SymbolInformation
+    public function _resolveNode(Frame $frame, $node): SymbolContext
     {
         if (false === $node instanceof Node) {
-            $info = SymbolInformation::none()
+            $info = SymbolContext::none()
                 ->withIssue(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
             return $info;
         }
@@ -77,7 +78,7 @@ class SymbolInformationResolver
         return $this->__resolveNode($frame, $node);
     }
 
-    private function __resolveNode(Frame $frame, Node $node): SymbolInformation
+    private function __resolveNode(Frame $frame, Node $node): SymbolContext
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
 
@@ -188,7 +189,7 @@ class SymbolInformationResolver
             return $this->resolveMethodDeclaration($frame, $node);
         }
 
-        return SymbolInformation::none()
+        return SymbolContext::none()
             ->withIssue(sprintf(
             'Did not know how to resolve node of type "%s" with text "%s"',
             get_class($node),
@@ -239,14 +240,14 @@ class SymbolInformationResolver
         );
     }
 
-    private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolInformation
+    private function resolveMemberAccessExpression(Frame $frame, MemberAccessExpression $node): SymbolContext
     {
         $class = $this->_resolveNode($frame, $node->dereferencableExpression);
 
         return $this->_infoFromMemberAccess($frame, $class->type(), $node);
     }
 
-    private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolInformation
+    private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolContext
     {
         $resolvableNode = $node->callableExpression;
         return $this->_resolveNode($frame, $resolvableNode);
@@ -306,7 +307,7 @@ class SymbolInformationResolver
         return Type::fromString($name);
     }
 
-    private function resolveParameter(Frame $frame, Node $node): SymbolInformation
+    private function resolveParameter(Frame $frame, Node $node): SymbolContext
     {
         $typeDeclaration = $node->typeDeclaration;
         $type = Type::unknown();
@@ -336,7 +337,7 @@ class SymbolInformationResolver
         );
     }
 
-    private function resolveNumericLiteral(NumericLiteral $node): SymbolInformation
+    private function resolveNumericLiteral(NumericLiteral $node): SymbolContext
     {
         // note hack to cast to either an int or a float
         $value = $node->getText() + 0;
@@ -354,7 +355,7 @@ class SymbolInformationResolver
         );
     }
 
-    private function resolveReservedWord(Node $node): SymbolInformation
+    private function resolveReservedWord(Node $node): SymbolContext
     {
         $symbolType = $containerType = $type = $value = null;
         $word = strtolower($node->getText());
@@ -402,7 +403,7 @@ class SymbolInformationResolver
         return $info;
     }
 
-    private function resolveArrayCreationExpression(Frame $frame, ArrayCreationExpression $node): SymbolInformation
+    private function resolveArrayCreationExpression(Frame $frame, ArrayCreationExpression $node): SymbolContext
     {
         $array  = [];
 
@@ -442,9 +443,9 @@ class SymbolInformationResolver
 
     private function resolveSubscriptExpression(
         Frame $frame,
-        SymbolInformation $info,
+        SymbolContext $info,
         SubscriptExpression $node = null
-    ): SymbolInformation {
+    ): SymbolContext {
         if (null === $node->accessExpression) {
             $info = $info->withIssue(sprintf(
                 'Subscript expression "%s" is incomplete',
@@ -492,7 +493,7 @@ class SymbolInformationResolver
         return $info;
     }
 
-    private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolInformation
+    private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolContext
     {
         $name = $node->scopeResolutionQualifier->getText();
         $parent = $this->resolveQualifiedNameType($node, $name);
@@ -500,17 +501,17 @@ class SymbolInformationResolver
         return $this->_infoFromMemberAccess($frame, $parent, $node);
     }
 
-    private function resolveObjectCreationExpression(Frame $frame, $node): SymbolInformation
+    private function resolveObjectCreationExpression(Frame $frame, $node): SymbolContext
     {
         if (false === $node->classTypeDesignator instanceof Node) {
-            return SymbolInformation::none()
+            return SymbolContext::none()
                 ->withError(sprintf('Could not create object from "%s"', get_class($node)));
         }
 
         return $this->_resolveNode($frame, $node->classTypeDesignator);
     }
 
-    private function resolveTernaryExpression(Frame $frame, TernaryExpression $node): SymbolInformation
+    private function resolveTernaryExpression(Frame $frame, TernaryExpression $node): SymbolContext
     {
         // assume true
         if ($node->ifExpression) {
@@ -528,26 +529,26 @@ class SymbolInformationResolver
             return $conditionValue;
         }
 
-        return SymbolInformation::none();
+        return SymbolContext::none();
     }
 
-    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $node): SymbolInformation
+    private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $node): SymbolContext
     {
         $classNode = $node->getFirstAncestor(ClassLike::class);
-        $classSymbolInformation = $this->_resolveNode($frame, $classNode);
+        $classSymbolContext = $this->_resolveNode($frame, $classNode);
 
         return $this->symbolFactory->information(
             $node->name->getText($node->getFileContents()),
             $node->name->getStartPosition(),
             $node->name->getEndPosition(),
             [
-                'container_type' => $classSymbolInformation->type(),
+                'container_type' => $classSymbolContext->type(),
                 'symbol_type' => Symbol::METHOD,
             ]
         );
     }
 
-    private function _infoFromMemberAccess(Frame $frame, Type $classType, Node $node): SymbolInformation
+    private function _infoFromMemberAccess(Frame $frame, Type $classType, Node $node): SymbolContext
     {
         $memberName = $node->memberName->getText($node->getFileContents());
         $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';

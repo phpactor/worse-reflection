@@ -19,6 +19,7 @@ use Phpactor\WorseReflection\Core\Logger;
 use RuntimeException;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
+use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 
 final class FrameBuilder
 {
@@ -28,9 +29,9 @@ final class FrameBuilder
     private $logger;
 
     /**
-     * @var SymbolInformationResolver
+     e @var SymbolContextResolver
      */
-    private $symbolInformationResolver;
+    private $symbolContextResolver;
 
     /**
      * @var SymbolFactory
@@ -42,10 +43,10 @@ final class FrameBuilder
      */
     private $injectedTypes = [];
 
-    public function __construct(SymbolInformationResolver $symbolInformationResolver, Logger $logger)
+    public function __construct(SymbolContextResolver $symbolInformationResolver, Logger $logger)
     {
         $this->logger = $logger;
-        $this->symbolInformationResolver = $symbolInformationResolver;
+        $this->symbolContextResolver = $symbolInformationResolver;
         $this->symbolFactory = new SymbolFactory();
     }
 
@@ -120,7 +121,7 @@ final class FrameBuilder
             ]
         );
 
-        $frame->locals()->add(Variable::fromSymbolInformation($information));
+        $frame->locals()->add(Variable::fromSymbolContext($information));
     }
 
     private function walkAssignment(Frame $frame, AssignmentExpression $node)
@@ -154,7 +155,7 @@ final class FrameBuilder
             ]
         );
 
-        $frame->locals()->add(Variable::fromSymbolInformation($information));
+        $frame->locals()->add(Variable::fromSymbolContext($information));
     }
 
     private function walkMemberAccessExpression(Frame $frame, AssignmentExpression $node)
@@ -195,7 +196,7 @@ final class FrameBuilder
             ]
         );
 
-        $frame->properties()->add(Variable::fromSymbolInformation($information));
+        $frame->properties()->add(Variable::fromSymbolContext($information));
     }
 
     private function walkFunctionLike(Frame $frame, FunctionLike $node)
@@ -222,7 +223,7 @@ final class FrameBuilder
 
             // add this and self
             // TODO: self is NOT added here - does it work?
-            $frame->locals()->add(Variable::fromSymbolInformation($information));
+            $frame->locals()->add(Variable::fromSymbolContext($information));
         }
 
         if ($node instanceof AnonymousFunctionCreationExpression) {
@@ -250,7 +251,7 @@ final class FrameBuilder
                 ]
             );
 
-            $frame->locals()->add(Variable::fromSymbolInformation($information));
+            $frame->locals()->add(Variable::fromSymbolContext($information));
         }
     }
 
@@ -272,7 +273,7 @@ final class FrameBuilder
 
         $varName = ltrim($varName, '$');
 
-        $this->injectedTypes[$varName] = $this->symbolInformationResolver->resolveQualifiedNameType($node, $type);
+        $this->injectedTypes[$varName] = $this->symbolContextResolver->resolveQualifiedNameType($node, $type);
     }
 
     private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
@@ -303,7 +304,7 @@ final class FrameBuilder
             // add it with above information and continue
             // TODO: Do we infer the type hint??
             if (0 === $parentVars->byName($varName)->count()) {
-                $frame->locals()->add(Variable::fromSymbolInformation($variableInformation));
+                $frame->locals()->add(Variable::fromSymbolContext($variableInformation));
                 continue;
             }
 
@@ -313,7 +314,7 @@ final class FrameBuilder
                 ->withType($variable->symbolInformation()->type())
                 ->withValue($variable->symbolInformation()->value());
 
-            $frame->locals()->add(Variable::fromSymbolInformation($variableInformation));
+            $frame->locals()->add(Variable::fromSymbolContext($variableInformation));
         }
     }
 
@@ -338,13 +339,13 @@ final class FrameBuilder
         }
 
         $information  =$information->withType($this->injectedTypes[$symbolName]);
-        $frame->locals()->add(Variable::fromSymbolInformation($information));
+        $frame->locals()->add(Variable::fromSymbolContext($information));
         unset($this->injectedTypes[$symbolName]);
     }
 
     private function resolveNode(Frame $frame, $node)
     {
-        $info = $this->symbolInformationResolver->resolveNode($frame, $node);
+        $info = $this->symbolContextResolver->resolveNode($frame, $node);
 
         if ($info->issues()) {
             $frame->problems()->add($info);

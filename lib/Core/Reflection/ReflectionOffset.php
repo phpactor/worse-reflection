@@ -3,13 +3,13 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 interface ReflectionOffset
 {
-    public static function fromFrameAndSymbolInformation($frame, $symbolInformation);
+    public static function fromFrameAndSymbolContext($frame, $symbolInformation);
 
     public function frame(): Frame;
 
-    public function symbolInformation(): SymbolInformation;
+    public function symbolInformation(): SymbolContext;
 }

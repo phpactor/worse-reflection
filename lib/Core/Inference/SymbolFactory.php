@@ -4,10 +4,11 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 class SymbolFactory
 {
-    public function information(string $symbolName, int $start, int $end, array $config = []): SymbolInformation
+    public function information(string $symbolName, int $start, int $end, array $config = []): SymbolContext
     {
         $defaultConfig = [
             'symbol_type' => Symbol::UNKNOWN,
@@ -45,8 +46,8 @@ class SymbolFactory
         Type $type = null,
         Type $containerType = null,
         $value = null
-    ): SymbolInformation {
-        $information = SymbolInformation::for($symbol);
+    ): SymbolContext {
+        $information = SymbolContext::for($symbol);
 
         if ($type) {
             $information = $information->withType($type);

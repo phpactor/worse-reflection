@@ -178,10 +178,10 @@ class Reflector
         $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
-        $resolver = $this->services->symbolInformationResolver();
+        $resolver = $this->services->symbolContextResolver();
         $frame = $this->services->frameBuilder()->build($node);
 
-        return TolerantReflectionOffset::fromFrameAndSymbolInformation($frame, $resolver->resolveNode($frame, $node));
+        return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $resolver->resolveNode($frame, $node));
     }
 
     public function frame($sourceCode): Frame

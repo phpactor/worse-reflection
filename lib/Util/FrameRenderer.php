@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Util;
 
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\Variable;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 class FrameRenderer
 {
@@ -21,7 +21,7 @@ class FrameRenderer
             $output[] = $this->formatProperty($local);
         }
 
-        /** @var SymbolInformation $problem */
+        /** @var SymbolContext $problem */
         foreach ($frame->problems() as $problem) {
             $output[] = $this->formatProblem($problem);
         }
@@ -62,7 +62,7 @@ class FrameRenderer
         );
     }
 
-    private function formatProblem(SymbolInformation $problem): string
+    private function formatProblem(SymbolContext $problem): string
     {
         return sprintf(
             'x: %s:%s',

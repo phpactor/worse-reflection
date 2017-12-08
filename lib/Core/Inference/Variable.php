@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 final class Variable
 {
@@ -21,14 +22,14 @@ final class Variable
      */
     private $symbolInformation;
 
-    private function __construct(string $name, Offset $offset, SymbolInformation $symbolInformation)
+    private function __construct(string $name, Offset $offset, SymbolContext $symbolInformation)
     {
         $this->name = $name;
         $this->offset = $offset;
         $this->symbolInformation = $symbolInformation;
     }
 
-    public static function fromSymbolInformation(SymbolInformation $symbolInformation)
+    public static function fromSymbolContext(SymbolContext $symbolInformation)
     {
         return new self(
             $symbolInformation->symbol()->name(),
@@ -52,7 +53,7 @@ final class Variable
         return $this->name;
     }
 
-    public function symbolInformation(): SymbolInformation
+    public function symbolInformation(): SymbolContext
     {
         return $this->symbolInformation;
     }

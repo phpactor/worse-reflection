@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 class MemberTypeResolver
 {
@@ -25,17 +26,17 @@ class MemberTypeResolver
         $this->reflector = $reflector;
     }
 
-    public function methodType(Type $containerType, SymbolInformation $info, string $name): SymbolInformation
+    public function methodType(Type $containerType, SymbolContext $info, string $name): SymbolContext
     {
         return $this->memberType(self::TYPE_METHODS, $containerType, $info, $name);
     }
 
-    public function constantType(Type $containerType, SymbolInformation $info, string $name): SymbolInformation
+    public function constantType(Type $containerType, SymbolContext $info, string $name): SymbolContext
     {
         return $this->memberType(self::TYPE_CONSTANTS, $containerType, $info, $name);
     }
 
-    public function propertyType(Type $containerType, SymbolInformation $info, string $name): SymbolInformation
+    public function propertyType(Type $containerType, SymbolContext $info, string $name): SymbolContext
     {
         return $this->memberType(self::TYPE_PROPERTIES, $containerType, $info, $name);
     }
@@ -48,7 +49,7 @@ class MemberTypeResolver
         return $this->reflector->reflectClassLike(ClassName::fromString((string) $containerType));
     }
 
-    private function memberType(string $type, Type $containerType, SymbolInformation $info, string $name)
+    private function memberType(string $type, Type $containerType, SymbolContext $info, string $name)
     {
         try {
             $class = $this->reflectClassOrNull($containerType, $name);

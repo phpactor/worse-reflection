@@ -44,7 +44,7 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
 
     public function type(): Type
     {
-        $value = $this->serviceLocator->symbolInformationResolver()->resolveNode(new Frame('test'), $this->node->assignment);
+        $value = $this->serviceLocator->symbolContextResolver()->resolveNode(new Frame('test'), $this->node->assignment);
         return $value->type();
     }
 

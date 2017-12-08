@@ -5,7 +5,7 @@ namespace Phpactor\WorseReflection\Tests\Unit\Util;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\Variable;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Util\FrameRenderer;
 
 class FrameRendererTest extends TestCase
@@ -15,14 +15,14 @@ class FrameRendererTest extends TestCase
         $frame = new Frame('foobar');
         $frame->new('child1');
 
-        $frame->locals()->add(Variable::fromSymbolInformation(SymbolInformation::none()));
-        $frame->properties()->add(Variable::fromSymbolInformation(SymbolInformation::none()));
-        $frame->problems()->add(SymbolInformation::none());
+        $frame->locals()->add(Variable::fromSymbolContext(SymbolContext::none()));
+        $frame->properties()->add(Variable::fromSymbolContext(SymbolContext::none()));
+        $frame->problems()->add(SymbolContext::none());
 
         $child = $frame->new('child2');
-        $child = $frame->locals()->add(Variable::fromSymbolInformation(SymbolInformation::none()));
-        $child = $frame->properties()->add(Variable::fromSymbolInformation(SymbolInformation::none()));
-        $child = $frame->problems()->add(SymbolInformation::none());
+        $child = $frame->locals()->add(Variable::fromSymbolContext(SymbolContext::none()));
+        $child = $frame->properties()->add(Variable::fromSymbolContext(SymbolContext::none()));
+        $child = $frame->problems()->add(SymbolContext::none());
 
         $renderer = new FrameRenderer();
 

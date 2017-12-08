@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
-use Phpactor\WorseReflection\Core\Inference\SymbolInformationResolver;
+use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -10,7 +10,7 @@ use Phpactor\WorseReflection\Core\Inference\LocalAssignments;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
-use Phpactor\WorseReflection\Core\Inference\SymbolInformation;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Position;
@@ -40,7 +40,7 @@ class SymbolInformationResolverTest extends IntegrationTestCase
         $variables = [];
         foreach ($locals as $name => $varSymbolInfo) {
             if ($varSymbolInfo instanceof Type) {
-                $varSymbolInfo = SymbolInformation::for(
+                $varSymbolInfo = SymbolContext::for(
                     Symbol::fromTypeNameAndPosition(
                         'variable',
                         $name,
@@ -49,7 +49,7 @@ class SymbolInformationResolverTest extends IntegrationTestCase
                 )->withType($varSymbolInfo);
             }
 
-            $variables[] = Variable::fromSymbolInformation($varSymbolInfo);
+            $variables[] = Variable::fromSymbolContext($varSymbolInfo);
         }
 
         $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
@@ -76,8 +76,8 @@ class SymbolInformationResolverTest extends IntegrationTestCase
     public function testNotResolvableClass(string $source)
     {
         $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
-            Variable::fromSymbolInformation(
-                SymbolInformation::for(Symbol::fromTypeNameAndPosition(
+            Variable::fromSymbolContext(
+                SymbolContext::for(Symbol::fromTypeNameAndPosition(
                     Symbol::CLASS_,
                     'bar',
                     Position::fromStartAndEnd(0, 0)
@@ -593,7 +593,7 @@ $foobar->$barfoo(<>);
 EOT
                 , [
                     'foobar' => Type::fromString('Foobar'),
-                    'barfoo' => SymbolInformation::for(
+                    'barfoo' => SymbolContext::for(
                         Symbol::fromTypeNameAndPosition(Symbol::STRING, 'barfoo', Position::fromStartAndEnd(0, 0))
                     )
                     ->withType(Type::string())->withValue('hello')
@@ -859,12 +859,12 @@ EOT
 
         list($source, $offset) = CodeHelper::offsetFromCode($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
-        $typeResolver = new SymbolInformationResolver($this->createReflector($source), $this->logger);
+        $typeResolver = new SymbolContextResolver($this->createReflector($source), $this->logger);
 
         return $typeResolver->resolveNode($frame, $node);
     }
 
-    private function assertExpectedInformation(array $expectedInformation, SymbolInformation $information)
+    private function assertExpectedInformation(array $expectedInformation, SymbolContext $information)
     {
         foreach ($expectedInformation as $name => $value) {
             switch ($name) {

@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
+
 final class Problems implements \IteratorAggregate, \Countable
 {
     private $problems = [];
@@ -21,7 +23,7 @@ final class Problems implements \IteratorAggregate, \Countable
         return new \ArrayIterator($this->problems);
     }
 
-    public function add(SymbolInformation $problem)
+    public function add(SymbolContext $problem)
     {
         $this->problems[] = $problem;
     }
@@ -29,7 +31,7 @@ final class Problems implements \IteratorAggregate, \Countable
     public function __toString()
     {
         $lines = [];
-        /** @var SymbolInformation $symbolInformation */
+        /** @var SymbolContext $symbolInformation */
         foreach ($this->problems as $symbolInformation) {
             $lines[] = sprintf(
                 '%s:%s %s',
