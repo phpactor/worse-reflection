@@ -40,7 +40,6 @@ f: child2
 EOT
         ;
 
-
         $this->assertEquals($expected, $renderer->render($frame));
     }
 }

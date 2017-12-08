@@ -20,7 +20,6 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
-use Phpactor\WorseReflection\Core\Inference\Problems;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 
 class Reflector

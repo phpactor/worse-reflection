@@ -76,11 +76,6 @@ final class Frame
         return $this->parent;
     }
 
-    public function __toString()
-    {
-        return $this->render();
-    }
-
     public function reduce(\Closure $closure, $initial = null)
     {
         $initial = $closure($this, $initial);
