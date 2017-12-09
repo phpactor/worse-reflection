@@ -15,7 +15,7 @@ use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Position;
 
-class SymbolInformationResolverTest extends IntegrationTestCase
+class SymbolContextResolverTest extends IntegrationTestCase
 {
     /**
      * @var ArrayLogger

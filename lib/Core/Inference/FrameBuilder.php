@@ -111,7 +111,7 @@ final class FrameBuilder
         }
 
         $typeInformation = $this->resolveNode($frame, $node->qualifiedName);
-        $information = $this->symbolFactory->information(
+        $information = $this->symbolFactory->context(
             $node->variableName->getText($node->getFileContents()),
             $node->variableName->getStartPosition(),
             $node->variableName->getEndPosition(),
@@ -144,7 +144,7 @@ final class FrameBuilder
     {
         $name = $node->leftOperand->name->getText($node->getFileContents());
         $symbolInformation = $this->resolveNode($frame, $node->rightOperand);
-        $information = $this->symbolFactory->information(
+        $information = $this->symbolFactory->context(
             $name,
             $node->leftOperand->getStart(),
             $node->leftOperand->getEndPosition(),
@@ -185,7 +185,7 @@ final class FrameBuilder
             $memberName = $memberNameInfo->value();
         }
 
-        $information = $this->symbolFactory->information(
+        $information = $this->symbolFactory->context(
             $memberName,
             $node->leftOperand->getStart(),
             $node->leftOperand->getEndPosition(),
@@ -211,7 +211,7 @@ final class FrameBuilder
         // works for both closure and class method (we currently ignore binding)
         if ($classNode) {
             $classType = $this->resolveNode($frame, $classNode)->type();
-            $information = $this->symbolFactory->information(
+            $information = $this->symbolFactory->context(
                 'this',
                 $node->getStart(),
                 $node->getEndPosition(),
@@ -240,7 +240,7 @@ final class FrameBuilder
 
             $symbolInformation = $this->resolveNode($frame, $parameterNode);
 
-            $information = $this->symbolFactory->information(
+            $information = $this->symbolFactory->context(
                 $parameterName,
                 $parameterNode->getStart(),
                 $parameterNode->getEndPosition(),
@@ -290,7 +290,7 @@ final class FrameBuilder
         foreach ($useClause->useVariableNameList->getElements() as $element) {
             $varName = $element->variableName->getText($node->getFileContents());
 
-            $variableInformation = $this->symbolFactory->information(
+            $variableInformation = $this->symbolFactory->context(
                 $varName,
                 $element->getStart(),
                 $element->getEndPosition(),
@@ -324,7 +324,7 @@ final class FrameBuilder
             return;
         }
 
-        $information = $this->symbolFactory->information(
+        $information = $this->symbolFactory->context(
             $node->name->getText($node->getFileContents()),
             $node->getStart(),
             $node->getEndPosition(),

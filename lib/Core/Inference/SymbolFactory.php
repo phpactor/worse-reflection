@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 class SymbolFactory
 {
-    public function information(string $symbolName, int $start, int $end, array $config = []): SymbolContext
+    public function context(string $symbolName, int $start, int $end, array $config = []): SymbolContext
     {
         $defaultConfig = [
             'symbol_type' => Symbol::UNKNOWN,

@@ -34,12 +34,12 @@ class SymbolFactoryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Invalid keys "asd"');
-        $this->factory->information('hello', 10, 20, [ 'asd' => 'asd' ]);
+        $this->factory->context('hello', 10, 20, [ 'asd' => 'asd' ]);
     }
 
     public function testInformation()
     {
-        $information = $this->factory->information('hello', 10, 20);
+        $information = $this->factory->context('hello', 10, 20);
         $this->assertInstanceOf(SymbolContext::class, $information);
         $symbol = $information->symbol();
 
@@ -53,7 +53,7 @@ class SymbolFactoryTest extends TestCase
         $containerType = Type::fromString('container');
         $type = Type::fromString('type');
 
-        $information = $this->factory->information('hello', 10, 20, [
+        $information = $this->factory->context('hello', 10, 20, [
             'symbol_type' => Symbol::ARRAY,
             'container_type' => $containerType,
             'type' => $type,
