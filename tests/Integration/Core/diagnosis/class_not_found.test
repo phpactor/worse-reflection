@@ -1,7 +1,0 @@
-<?php
-
-$foo = new Foo();
-$bar = $foo->asd;
-<--->
-message: Could not find container class "Foo" for "asd"
-

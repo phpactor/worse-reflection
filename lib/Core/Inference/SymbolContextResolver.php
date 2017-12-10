@@ -216,7 +216,7 @@ class SymbolContextResolver
                 [
                     'symbol_type' => Symbol::VARIABLE
                 ]
-            );
+            )->withIssue(sprintf('Variable "%s" is undefined', $name));
         }
 
         return $variables->last()->symbolInformation();

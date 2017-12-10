@@ -1,6 +1,0 @@
-<?php
-
-$arr = 1234;
-$foo = $arr['asd'];
-<--->
-message: Not resolving subscript expression of type "int"

@@ -21,6 +21,7 @@ use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Inference\Frame;
+use Microsoft\PhpParser\Node\Expression\Variable;
 
 class Reflector
 {
@@ -182,15 +183,6 @@ class Reflector
         $frame = $this->services->frameBuilder()->build($node);
 
         return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $resolver->resolveNode($frame, $node));
-    }
-
-    public function frame($sourceCode): Frame
-    {
-        $sourceCode = SourceCode::fromUnknown($sourceCode);
-
-        $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
-
-        return $this->services->frameBuilder()->build($rootNode);
     }
 
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall

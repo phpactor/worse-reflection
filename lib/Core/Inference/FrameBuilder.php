@@ -324,7 +324,7 @@ final class FrameBuilder
             return;
         }
 
-        $information = $this->symbolFactory->context(
+        $context = $this->symbolFactory->context(
             $node->name->getText($node->getFileContents()),
             $node->getStart(),
             $node->getEndPosition(),
@@ -333,13 +333,14 @@ final class FrameBuilder
             ]
         );
 
-        $symbolName = $information->symbol()->name();
+        $symbolName = $context->symbol()->name();
+
         if (false === isset($this->injectedTypes[$symbolName])) {
             return;
         }
 
-        $information  =$information->withType($this->injectedTypes[$symbolName]);
-        $frame->locals()->add(Variable::fromSymbolContext($information));
+        $context = $context->withType($this->injectedTypes[$symbolName]);
+        $frame->locals()->add(Variable::fromSymbolContext($context));
         unset($this->injectedTypes[$symbolName]);
     }
 

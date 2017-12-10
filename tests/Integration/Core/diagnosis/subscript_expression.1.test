@@ -1,5 +1,0 @@
-<?php
-
-$foo = $arr['asd;
-<--->
-message: Subscript expression "$arr[" is incomplete
