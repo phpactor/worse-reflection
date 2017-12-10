@@ -380,7 +380,11 @@ final class FrameBuilder
         }
 
         if ($node instanceof FunctionDeclaration) {
-            return $node->getName();
+            return array_reduce($node->getNameParts(), function ($accumulator, Token $part) {
+                return $accumulator 
+                    . '\\' . 
+                    $part->getText();
+            }, '');
         }
 
         if ($node instanceof AnonymousFunctionCreationExpression) {
