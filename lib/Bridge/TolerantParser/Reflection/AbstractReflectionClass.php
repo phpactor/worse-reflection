@@ -25,9 +25,4 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode
     {
         return false;
     }
-
-    public function docblock(): Docblock
-    {
-        return Docblock::fromNode($this->node());
-    }
 }
