@@ -33,7 +33,7 @@ class DocblockTest extends TestCase
     public function testMethodTypes()
     {
         $docblock = $this->create('/** @method Foo bar() */');
-        $this->assertEquals([ 'bar' => 'Foo' ], $docblock->methodTypes());
+        $this->assertEquals([ 'Foo' ], $docblock->methodTypes('bar'));
     }
 
     public function testVarTypes()

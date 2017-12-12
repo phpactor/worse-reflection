@@ -46,13 +46,17 @@ class Docblock implements CoreDocblock
         return $this->typesFromTag('return');
     }
 
-    public function methodTypes(): array
+    public function methodTypes(string $methodName): array
     {
         $types = [];
 
         foreach ($this->docblock->tags()->byName('method') as $tag) {
+            if ($tag->methodName() !== $methodName) {
+                continue;
+            }
+
             foreach ($tag->types() as $type) {
-                $types[$tag->methodName()] = Type::fromString((string) $type);
+                $types[] = Type::fromString((string) $type);
             }
         }
 

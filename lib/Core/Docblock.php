@@ -12,7 +12,7 @@ interface Docblock
 
     public function returnTypes(): array;
 
-    public function methodTypes(): array;
+    public function methodTypes(string $methodName): array;
 
     public function varTypes(): array;
 
