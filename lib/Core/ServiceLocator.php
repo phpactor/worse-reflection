@@ -41,6 +41,11 @@ class ServiceLocator
      */
     private $parser;
 
+    /**
+     * @var DocblockFactory
+     */
+    private $docblockFactory;
+
     public function __construct(SourceCodeLocator $sourceLocator, Logger $logger)
     {
         $this->sourceLocator = $sourceLocator;
