@@ -28,7 +28,7 @@ class Docblock implements CoreDocblock
 
     public function isDefined(): bool
     {
-        return $this->raw != '';
+        return trim($this->raw) != '';
     }
 
     public function raw(): string

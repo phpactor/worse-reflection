@@ -14,6 +14,9 @@ class DocblockTest extends TestCase
         $docblock = $this->create('');
         $this->assertFalse($docblock->isDefined());
 
+        $docblock = $this->create('    ');
+        $this->assertFalse($docblock->isDefined());
+
         $docblock = $this->create('/** Hello */');
         $this->assertTrue($docblock->isDefined());
     }
