@@ -118,6 +118,6 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function docblock(): Docblock
     {
-        return Docblock::fromNode($this->propertyDeclaration);
+        return $this->serviceLocator->docblockFactory()->create($this->propertyDeclaration->getLeadingCommentAndWhitespaceText());
     }
 }

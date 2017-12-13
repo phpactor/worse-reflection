@@ -6,6 +6,8 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryBridge;
+use Phpactor\WorseReflection\Core\DocblockFactory;
 
 class ServiceLocator
 {
@@ -39,6 +41,11 @@ class ServiceLocator
      */
     private $parser;
 
+    /**
+     * @var DocblockFactory
+     */
+    private $docblockFactory;
+
     public function __construct(SourceCodeLocator $sourceLocator, Logger $logger)
     {
         $this->sourceLocator = $sourceLocator;
@@ -47,6 +54,7 @@ class ServiceLocator
         $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
         $this->frameBuilder = new FrameBuilder($this->symbolContextResolver, $this->logger);
         $this->parser = new Parser();
+        $this->docblockFactory = new DocblockFactoryBridge();
     }
 
     public function reflector(): Reflector
@@ -77,5 +85,10 @@ class ServiceLocator
     public function parser(): Parser
     {
         return $this->parser;
+    }
+
+    public function docblockFactory(): DocblockFactory
+    {
+        return $this->docblockFactory;
     }
 }

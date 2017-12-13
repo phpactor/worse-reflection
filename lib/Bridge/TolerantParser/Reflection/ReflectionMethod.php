@@ -113,7 +113,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function docblock(): Docblock
     {
-        return Docblock::fromNode($this->node);
+        return $this->serviceLocator->docblockFactory()->create($this->node->getLeadingCommentAndWhitespaceText());
     }
 
     public function visibility(): Visibility

@@ -59,10 +59,10 @@ class MethodReturnTypeResolver
 
     private function getDocblockTypes()
     {
-        $classMethodOverrides = $this->method->class()->docblock()->methodTypes();
+        $classMethodOverrides = $this->method->class()->docblock()->methodTypes($this->method->name());
 
-        if (isset($classMethodOverrides[$this->method->name()])) {
-            return [ $classMethodOverrides[$this->method->name()] ];
+        if ($classMethodOverrides) {
+            return $classMethodOverrides;
         }
 
         return $this->method->docblock()->returnTypes();
