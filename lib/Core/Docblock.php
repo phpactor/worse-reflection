@@ -10,11 +10,11 @@ interface Docblock
 
     public function formatted(): string;
 
-    public function returnTypes(): array;
+    public function returnTypes(): DocblockTypes;
 
-    public function methodTypes(string $methodName): array;
+    public function methodTypes(string $methodName): DocblockTypes;
 
-    public function varTypes(): array;
+    public function varTypes(): DocblockTypes;
 
     public function inherits(): bool;
 }
