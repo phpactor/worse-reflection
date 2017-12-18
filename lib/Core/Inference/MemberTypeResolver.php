@@ -65,6 +65,16 @@ class MemberTypeResolver
 
         $info = $info->withContainerType(Type::class($class->name()));
 
+        if (!method_exists($class, $type)) {
+            $info = $info->withIssue(sprintf(
+                'Container class "%s" has no method "%s"',
+                (string) $containerType,
+                $type
+            ));
+
+            return $info;
+        }
+
         try {
             if (false === $class->$type()->has($name)) {
                 $info = $info->withIssue(sprintf(
