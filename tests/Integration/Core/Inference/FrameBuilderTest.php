@@ -334,6 +334,63 @@ EOT
                     $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
                 }
             ],
+            'Injects variables with @var namespaced' => [
+                <<<'EOT'
+<?php
+namespace Foo;
+/** @var Bar $zed */
+$zed;
+<>
+EOT
+                ,
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$zed'));
+                    $this->assertEquals('Foo\\Bar', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
+                }
+            ],
+            'Injects variables with @var namespaced and qualified name' => [
+                <<<'EOT'
+<?php
+namespace Foo;
+/** @var Bar\Baz $zed */
+$zed;
+<>
+EOT
+                ,
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$zed'));
+                    $this->assertEquals('Foo\\Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
+                }
+            ],
+            'Injects variables with @var namespaced with fully qualified name' => [
+                <<<'EOT'
+<?php
+namespace Foo;
+/** @var \Bar\Baz $zed */
+$zed;
+<>
+EOT
+                ,
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$zed'));
+                    $this->assertEquals('Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
+                }
+            ],
+            'Injects variables with @var with imported namespace' => [
+                <<<'EOT'
+<?php
+
+use Foo\Bar\Zed;
+/** @var Zed\Baz $zed */
+$zed;
+<>
+EOT
+                ,
+                function (Frame $frame) {
+                    $this->assertCount(1, $frame->locals()->byName('$zed'));
+                    $this->assertEquals('Foo\Bar\Zed\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolInformation()->type());
+                }
+            ],
             'Handles array assignments' => [
                 <<<'EOT'
 <?php

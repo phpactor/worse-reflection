@@ -260,9 +260,11 @@ class SymbolContextResolver
         if (!$node instanceof ScopedPropertyAccessExpression && $node->parent instanceof CallExpression) {
             return Type::unknown();
         }
+        
+        $type = Type::fromString($name);
 
         if (substr($name, 0, 1) === '\\') {
-            return Type::fromString($name);
+            return $type;
         }
 
         if (in_array($name, ['self', 'static'])) {
@@ -292,8 +294,19 @@ class SymbolContextResolver
         $imports = $node->getImportTablesForCurrentScope();
         $classImports = $imports[0];
 
+        if ($type->isPrimitive()) {
+            return $type;
+        }
+
+        $className = $type->className();
+
         if (isset($classImports[$name])) {
+            // class was imported
             return Type::fromString((string) $classImports[$name]);
+        }
+
+        if (isset($classImports[(string) $className->head()])) {
+            return Type::fromString((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
         }
 
         if ($node->getParent() instanceof NamespaceUseClause) {

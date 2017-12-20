@@ -259,7 +259,7 @@ final class FrameBuilder
     {
         $comment = $node->getLeadingCommentAndWhitespaceText();
 
-        if (!preg_match('{var (\$?\w+) (\$?\w+)}', $comment, $matches)) {
+        if (!preg_match('{var (\$?[\\\\\w]+) (\$?[\\\\\w]+)}', $comment, $matches)) {
             return;
         }
 
