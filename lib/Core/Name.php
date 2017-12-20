@@ -44,6 +44,24 @@ class Name
         return implode('\\', $this->parts);
     }
 
+    /**
+     * @return static
+     */
+    public function head()
+    {
+        return new self([ reset($this->parts) ]);
+    }
+
+    /**
+     * @return static
+     */
+    public function tail()
+    {
+        $parts = $this->parts;
+        array_shift($parts);
+        return new self($parts);
+    }
+
     public function full(): string
     {
         return $this->__toString();
