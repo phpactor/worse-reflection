@@ -52,11 +52,17 @@ class SymbolContextResolver
      */
     private $symbolFactory;
 
+    /**
+     * @var FullyQualifiedNameResolver
+     */
+    private $nameResolver;
+
     public function __construct(Reflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
     {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
+        $this->nameResolver = new FullyQualifiedNameResolver($logger);
     }
 
     public function resolveNode(Frame $frame, $node): SymbolContext
@@ -89,7 +95,7 @@ class SymbolContextResolver
                 $node->getStart(),
                 $node->getEndPosition(),
                 [
-                    'type' => $this->resolveQualifiedNameType($node),
+                    'type' => $this->nameResolver->resolve($node),
                     'symbol_type' => Symbol::CLASS_
                 ]
             );
@@ -253,80 +259,13 @@ class SymbolContextResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    public function resolveQualifiedNameType(Node $node, string $name = null): Type
-    {
-        $name = $name ?: $node->getText();
-
-        if (!$node instanceof ScopedPropertyAccessExpression && $node->parent instanceof CallExpression) {
-            return Type::unknown();
-        }
-        
-        $type = Type::fromString($name);
-
-        if (substr($name, 0, 1) === '\\') {
-            return $type;
-        }
-
-        if (in_array($name, ['self', 'static'])) {
-            $class = $node->getFirstAncestor(ClassLike::class);
-
-            return Type::fromString($class->getNamespacedName());
-        }
-
-        if ($name == 'parent') {
-            /** @var $class ClassDeclaration */
-            $class = $node->getFirstAncestor(ClassDeclaration::class);
-
-            if (null === $class) {
-                $this->logger->warning('"parent" keyword used outside of class scope');
-                return Type::unknown();
-            }
-
-            if (null === $class->classBaseClause) {
-                $this->logger->warning('"parent" keyword used but class does not extend anything');
-                return Type::unknown();
-            }
-            
-
-            return Type::fromString($class->classBaseClause->baseClass->getResolvedName());
-        }
-
-        $imports = $node->getImportTablesForCurrentScope();
-        $classImports = $imports[0];
-
-        if ($type->isPrimitive()) {
-            return $type;
-        }
-
-        $className = $type->className();
-
-        if (isset($classImports[$name])) {
-            // class was imported
-            return Type::fromString((string) $classImports[$name]);
-        }
-
-        if (isset($classImports[(string) $className->head()])) {
-            return Type::fromString((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
-        }
-
-        if ($node->getParent() instanceof NamespaceUseClause) {
-            return Type::fromString((string) $name);
-        }
-
-        if ($namespaceDefinition = $node->getNamespaceDefinition()) {
-            return Type::fromArray([$namespaceDefinition->name->getText(), $name]);
-        }
-
-        return Type::fromString($name);
-    }
-
     private function resolveParameter(Frame $frame, Node $node): SymbolContext
     {
         $typeDeclaration = $node->typeDeclaration;
         $type = Type::unknown();
 
         if ($typeDeclaration instanceof QualifiedName) {
-            $type = $this->resolveQualifiedNameType($node->typeDeclaration);
+            $type = $this->nameResolver->resolve($node->typeDeclaration);
         }
         
         if ($typeDeclaration instanceof Token) {
@@ -509,7 +448,7 @@ class SymbolContextResolver
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolContext
     {
         $name = $node->scopeResolutionQualifier->getText();
-        $parent = $this->resolveQualifiedNameType($node, $name);
+        $parent = $this->nameResolver->resolve($node, $name);
 
         return $this->_infoFromMemberAccess($frame, $parent, $node);
     }

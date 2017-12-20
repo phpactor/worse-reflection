@@ -20,6 +20,7 @@ use RuntimeException;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
+use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 
 final class FrameBuilder
 {
@@ -43,11 +44,17 @@ final class FrameBuilder
      */
     private $injectedTypes = [];
 
+    /**
+     * @var FullyQualifiedNameResolver
+     */
+    private $nameResolver;
+
     public function __construct(SymbolContextResolver $symbolInformationResolver, Logger $logger)
     {
         $this->logger = $logger;
         $this->symbolContextResolver = $symbolInformationResolver;
         $this->symbolFactory = new SymbolFactory();
+        $this->nameResolver = new FullyQualifiedNameResolver($logger);
     }
 
     public function build(Node $node): Frame
@@ -273,7 +280,7 @@ final class FrameBuilder
 
         $varName = ltrim($varName, '$');
 
-        $this->injectedTypes[$varName] = $this->symbolContextResolver->resolveQualifiedNameType($node, $type);
+        $this->injectedTypes[$varName] = $this->nameResolver->resolve($node, $type);
     }
 
     private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
