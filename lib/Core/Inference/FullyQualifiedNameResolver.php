@@ -29,61 +29,34 @@ class FullyQualifiedNameResolver
     {
         $name = $name ?: $node->getText();
 
-        if (!$node instanceof ScopedPropertyAccessExpression && $node->parent instanceof CallExpression) {
+        if ($this->isFunctionCall($node)) {
             return Type::unknown();
         }
         
+        if ($this->isUseDefinition($node)) {
+            return Type::fromString((string) $name);
+        }
+
         $type = Type::fromString($name);
-
-        if (substr($name, 0, 1) === '\\') {
-            return $type;
-        }
-
-        if (in_array($name, ['self', 'static'])) {
-            $class = $node->getFirstAncestor(ClassLike::class);
-
-            return Type::fromString($class->getNamespacedName());
-        }
-
-        if ($name == 'parent') {
-            /** @var $class ClassDeclaration */
-            $class = $node->getFirstAncestor(ClassDeclaration::class);
-
-            if (null === $class) {
-                $this->logger->warning('"parent" keyword used outside of class scope');
-                return Type::unknown();
-            }
-
-            if (null === $class->classBaseClause) {
-                $this->logger->warning('"parent" keyword used but class does not extend anything');
-                return Type::unknown();
-            }
-            
-
-            return Type::fromString($class->classBaseClause->baseClass->getResolvedName());
-        }
-
-        $imports = $node->getImportTablesForCurrentScope();
-        $classImports = $imports[0];
 
         if ($type->isPrimitive()) {
             return $type;
         }
 
-        $className = $type->className();
-
-        if (isset($classImports[$name])) {
-            // class was imported
-            return Type::fromString((string) $classImports[$name]);
+        if ($this->isFullyQualified($name)) {
+            return $type;
         }
 
-        if (isset($classImports[(string) $className->head()])) {
-            // namespace was imported
-            return Type::fromString((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
+        if (in_array($name, ['self', 'static'])) {
+            return $this->currentClass($node);
         }
 
-        if ($node->getParent() instanceof NamespaceUseClause) {
-            return Type::fromString((string) $name);
+        if ($name == 'parent') {
+            return $this->parentClass($node);
+        }
+
+        if ($type = $this->fromClassImports($node, $type)) {
+            return $type;
         }
 
         if ($namespaceDefinition = $node->getNamespaceDefinition()) {
@@ -91,5 +64,63 @@ class FullyQualifiedNameResolver
         }
 
         return Type::fromString($name);
+    }
+
+    private function isFunctionCall(Node $node)
+    {
+        return false === $node instanceof ScopedPropertyAccessExpression && 
+            $node->parent instanceof CallExpression;
+    }
+
+    private function isFullyQualified(string $name)
+    {
+        return substr($name, 0, 1) === '\\';
+    }
+
+    private function parentClass(Node $node)
+    {
+        /** @var $class ClassDeclaration */
+        $class = $node->getFirstAncestor(ClassDeclaration::class);
+
+        if (null === $class) {
+            $this->logger->warning('"parent" keyword used outside of class scope');
+            return Type::unknown();
+        }
+
+        if (null === $class->classBaseClause) {
+            $this->logger->warning('"parent" keyword used but class does not extend anything');
+            return Type::unknown();
+        }
+
+
+        return Type::fromString($class->classBaseClause->baseClass->getResolvedName());
+    }
+
+    private function currentClass(Node $node)
+    {
+        $class = $node->getFirstAncestor(ClassLike::class);
+        return Type::fromString($class->getNamespacedName());
+    }
+
+    private function isUseDefinition(Node $node)
+    {
+        return $node->getParent() instanceof NamespaceUseClause;
+    }
+
+    private function fromClassImports(Node $node, Type $type)
+    {
+        $imports = $node->getImportTablesForCurrentScope();
+        $classImports = $imports[0];
+        $className = $type->className();
+
+        if (isset($classImports[(string) $type])) {
+            // class was imported
+            return Type::fromString((string) $classImports[(string) $type]);
+        }
+
+        if (isset($classImports[(string) $className->head()])) {
+            // namespace was imported
+            return Type::fromString((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
+        }
     }
 }
