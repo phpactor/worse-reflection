@@ -6,6 +6,9 @@ use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
 class MethodReturnTypeResolver
 {
@@ -27,58 +30,77 @@ class MethodReturnTypeResolver
 
     public function resolve(): Types
     {
+        $resolvedTypes = $this->getDocblockTypesFromClassOrMethod($this->method);
+
+        if ($resolvedTypes->count()) {
+            return $resolvedTypes;
+        }
+
         if ($this->method->returnType()->isDefined()) {
             return Types::fromTypes([ $this->method->returnType() ]);
         }
 
-        $docblockTypes = $this->getDocblockTypes();
+        $resolvedTypes = $this->getTypesFromParentClass($this->method->class());
 
-        $resolvedTypes = array_map(function (Type $type) {
-            return $this->method->scope()->resolveFullyQualifiedName($type, $this->method->class());
-        }, $docblockTypes);
-
-        $resolvedTypes = Types::fromTypes($resolvedTypes);
-
-        if (false === $this->method->docblock()->inherits()) {
+        if ($resolvedTypes->count()) {
             return $resolvedTypes;
         }
 
-        if ($this->isOverriding()) {
-            $parentMethod = $this->method->class()->parent()->methods()->get($this->method->name());
-
-            return $resolvedTypes->merge($parentMethod->inferredReturnTypes());
-        }
-
-        $this->logger->warning(sprintf(
-            'inheritdoc used on class "%s", but class has no parent',
-            $this->method->class()->name()->full()
-        ));
-
-        return $resolvedTypes;
+        return $this->getTypesFromInterfaces($this->method->class());
     }
 
-    private function getDocblockTypes()
+    private function getDocblockTypesFromClassOrMethod(ReflectionMethod $method): Types
     {
-        $classMethodOverrides = $this->method->class()->docblock()->methodTypes($this->method->name());
-
+        $classMethodOverrides = $method->class()->docblock()->methodTypes($method->name());
         if ($classMethodOverrides) {
-            return $classMethodOverrides;
+            return $this->resolveTypes($classMethodOverrides);
         }
 
-        return $this->method->docblock()->returnTypes();
+        return $this->resolveTypes($method->docblock()->returnTypes());
     }
 
-    private function isOverriding()
+    private function resolveTypes(array $types): Types
     {
-        if (
-            false === $this->method->class()->isClass() &&
-            false === $this->method->class()->isInterface()
-        ) {
-            return false;
+        return Types::fromTypes(array_map(function (Type $type) {
+            return $this->method->scope()->resolveFullyQualifiedName($type, $this->method->class());
+        }, $types));
+    }
+
+    private function getTypesFromParentClass(ReflectionClassLike $reflectionClassLike): Types
+    {
+        if (false === $reflectionClassLike->isClass()) {
+            return Types::empty();
         }
 
-        $parent = $this->method->class()->parent();
+        if (null === $reflectionClassLike->parent()) {
+            return Types::empty();
+        }
 
-        return $parent && $parent->methods()->has($this->method->name());
+        /** @var ReflectionClass $reflectioClass */
+        $reflectionClass = $reflectionClassLike->parent();
+        if (false === $reflectionClass->methods()->has($this->method->name())) {
+            return Types::empty();
+        }
+
+        return $reflectionClass->methods()->get($this->method->name())->inferredReturnTypes();
+    }
+
+    private function getTypesFromInterfaces(ReflectionClassLike $reflectionClassLike): Types
+    {
+        if (false === $reflectionClassLike->isClass()) {
+            return Types::empty();
+        }
+
+        /** @var ReflectionClass $reflectionClass */
+        $reflectionClass = $reflectionClassLike;
+
+        /** @var ReflectionInterface $interface */
+        foreach ($reflectionClass->interfaces() as $interface) {
+            if ($interface->methods()->has($this->method->name())) {
+                return $interface->methods()->get($this->method->name())->inferredReturnTypes();
+            }
+        }
+
+        return Types::empty();
     }
 }

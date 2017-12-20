@@ -264,28 +264,34 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
-            'Return type from inherited docblock with no parent class' => [
+            'Return type from inherited docblock (from interface)' => [
                 <<<'EOT'
 <?php
 
 use Acme\Post;
 
-class Foobar
+interface Barbar
+{
+    /**
+     * @return \Articles\Blog
+     */
+    function method1();
+}
+
+class Foobar implements Barbar
 {
     /**
      * {@inheritdoc}
      */
-    function method1() {}
+    function method1()
+    {
+    }
 }
 EOT
                 ,
                 'Foobar',
-                function ($methods, $logger) {
-                    $this->assertEquals(Type::unknown(), $methods->get('method1')->inferredReturnTypes()->best());
-                    $this->assertContains(
-                        'inheritdoc used on class "Foobar", but class has no parent',
-                        $logger->messages()[0]
-                    );
+                function ($methods) {
+                    $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
             'It reflects an abstract method' => [
