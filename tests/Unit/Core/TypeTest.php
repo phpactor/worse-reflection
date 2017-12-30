@@ -51,6 +51,11 @@ class TypeTest extends TestCase
                 'array',
             ],
             [
+                'void',
+                'void',
+                'void',
+            ],
+            [
                 'Foobar',
                 'Foobar',
                 'object'

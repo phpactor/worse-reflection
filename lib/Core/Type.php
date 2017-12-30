@@ -11,6 +11,7 @@ class Type
     const TYPE_FLOAT = 'float';
     const TYPE_CLASS = 'object';
     const TYPE_NULL = 'null';
+    const TYPE_VOID = 'void';
 
     private $type;
     private $className;
@@ -87,6 +88,10 @@ class Type
             return self::null();
         }
 
+        if ($type === 'void') {
+            return self::void();
+        }
+
         return self::class(ClassName::fromString($type));
     }
 
@@ -98,6 +103,11 @@ class Type
     public static function mixed()
     {
         return new self();
+    }
+
+    public static function void()
+    {
+        return self::create(self::TYPE_VOID);
     }
 
     public static function array()
