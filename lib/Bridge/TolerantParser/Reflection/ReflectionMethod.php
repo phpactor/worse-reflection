@@ -55,6 +55,11 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
      */
     private $returnTypeResolver;
 
+    /**
+     * @var DeclaredMemberTypeResolver
+     */
+    private $memberTypeResolver;
+
     public function __construct(
         ServiceLocator $serviceLocator,
         AbstractReflectionClass $class,
