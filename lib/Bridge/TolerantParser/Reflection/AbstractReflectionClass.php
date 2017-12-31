@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
-use Phpactor\WorseReflection\Core\Docblock;
-
 abstract class AbstractReflectionClass extends AbstractReflectedNode
 {
     public function isInterface(): bool

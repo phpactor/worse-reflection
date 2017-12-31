@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 class SymbolFactory
 {

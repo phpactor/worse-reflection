@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
-use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 final class SymbolContext
 {

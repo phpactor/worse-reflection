@@ -8,7 +8,6 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
-use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 class MemberTypeResolver
 {

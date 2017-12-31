@@ -3,9 +3,7 @@
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
 use Phpactor\WorseReflection\Core\Docblock as CoreDocblock;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
-use Phpactor\Docblock\Tag\ReturnTag;
 use Phpactor\WorseReflection\Core\Type;
 
 class Docblock implements CoreDocblock

@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-use Phpactor\WorseReflection\Core\Inference\SymbolContext;
-
 final class Problems implements \IteratorAggregate, \Countable
 {
     private $problems = [];

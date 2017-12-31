@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\MethodDeclaration;
-use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Docblock;
@@ -22,6 +21,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterColle
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodReturnTypeResolver;
 use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -64,6 +64,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         $this->node = $node;
         $this->class = $class;
         $this->returnTypeResolver = new MethodReturnTypeResolver($this, $serviceLocator->logger());
+        $this->memberTypeResolver = new DeclaredMemberTypeResolver();
     }
 
     public function name(): string
@@ -108,7 +109,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function parameters(): CoreReflectionParameterCollection
     {
-        return ReflectionParameterCollection::fromMethodDeclaration($this->serviceLocator, $this->node);
+        return ReflectionParameterCollection::fromMethodDeclaration($this->serviceLocator, $this->node, $this);
     }
 
     public function docblock(): Docblock
@@ -138,15 +139,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function returnType(): Type
     {
-        if (null === $this->node->returnType) {
-            return Type::undefined();
-        }
-
-        if ($this->node->returnType instanceof Token) {
-            return Type::fromString($this->node->returnType->getText($this->node->getFileContents()));
-        }
-
-        return Type::fromString($this->node->returnType->getResolvedName());
+        return $this->memberTypeResolver->resolve($this->class()->name(), $this->node, $this->node->returnType);
     }
 
     public function body(): NodeText

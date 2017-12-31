@@ -19,8 +19,6 @@ use Phpactor\WorseReflection\Core\Logger;
 use RuntimeException;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
-use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
-use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 
 final class FrameBuilder
 {
@@ -388,8 +386,8 @@ final class FrameBuilder
 
         if ($node instanceof FunctionDeclaration) {
             return array_reduce($node->getNameParts(), function ($accumulator, Token $part) {
-                return $accumulator 
-                    . '\\' . 
+                return $accumulator
+                    . '\\' .
                     $part->getText();
             }, '');
         }

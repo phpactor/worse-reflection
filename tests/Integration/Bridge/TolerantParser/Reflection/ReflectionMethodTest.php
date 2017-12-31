@@ -101,6 +101,7 @@ class Foobar
     function method4(): array {}
     function method5(): Barfoo {}
     function method6(): Post {}
+    function method7(): self {}
 }
 EOT
                 ,
@@ -112,6 +113,7 @@ EOT
                     $this->assertEquals(Type::array(), $methods->get('method4')->returnType());
                     $this->assertEquals(Type::class(ClassName::fromString('Barfoo')), $methods->get('method5')->returnType());
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method6')->returnType());
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method7')->returnType());
                 },
             ],
             'Inherited methods' => [

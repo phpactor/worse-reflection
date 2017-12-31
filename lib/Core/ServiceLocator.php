@@ -7,7 +7,6 @@ use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryBridge;
-use Phpactor\WorseReflection\Core\DocblockFactory;
 
 class ServiceLocator
 {

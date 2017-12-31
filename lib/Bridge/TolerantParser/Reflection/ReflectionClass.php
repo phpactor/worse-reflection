@@ -238,5 +238,4 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     {
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
     }
-
 }

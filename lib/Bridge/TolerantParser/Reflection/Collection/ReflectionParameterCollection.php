@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionParameter;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
@@ -14,13 +15,13 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterColle
  */
 class ReflectionParameterCollection extends AbstractReflectionCollection implements CoreReflectionParameterCollection
 {
-    public static function fromMethodDeclaration(ServiceLocator $serviceLocator, MethodDeclaration $method)
+    public static function fromMethodDeclaration(ServiceLocator $serviceLocator, MethodDeclaration $method, ReflectionMethod $reflectionMethod)
     {
         $items = [];
 
         if ($method->parameters) {
             foreach ($method->parameters->getElements() as $parameter) {
-                $items[$parameter->getName()] = new ReflectionParameter($serviceLocator, $parameter);
+                $items[$parameter->getName()] = new ReflectionParameter($serviceLocator, $reflectionMethod, $parameter);
             }
         }
 

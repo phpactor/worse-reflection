@@ -5,11 +5,12 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Parameter;
 use Phpactor\WorseReflection\Core\Type;
-use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 
 class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
 {
@@ -23,10 +24,22 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
      */
     private $parameter;
 
-    public function __construct(ServiceLocator $serviceLocator, Parameter $parameter)
+    /**
+     * @var DeclaredMemberTypeResolver
+     */
+    private $memberTypeResolver;
+
+    /**
+     * @var ReflectionMethod
+     */
+    private $method;
+
+    public function __construct(ServiceLocator $serviceLocator, ReflectionMethod $method, Parameter $parameter)
     {
         $this->serviceLocator = $serviceLocator;
         $this->parameter = $parameter;
+        $this->memberTypeResolver = new DeclaredMemberTypeResolver();
+        $this->method = $method;
     }
 
     public function name(): string
@@ -44,16 +57,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
 
     public function type(): Type
     {
-        // TODO: Generalize this logic (also used in property)
-        if ($this->parameter->typeDeclaration instanceof Token) {
-            return Type::fromString($this->parameter->typeDeclaration->getText($this->parameter->getFileContents()));
-        }
-
-        if ($this->parameter->typeDeclaration) {
-            return Type::fromString($this->parameter->typeDeclaration->getResolvedName());
-        }
-
-        return Type::undefined();
+        return $this->memberTypeResolver->resolve($this->method->class()->name(), $this->parameter, $this->parameter->typeDeclaration);
     }
 
     public function default(): DefaultValue

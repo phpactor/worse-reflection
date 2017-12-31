@@ -20,8 +20,7 @@ class FullyQualifiedNameResolver
 
     public function __construct(
         Logger $logger
-    )
-    {
+    ) {
         $this->logger = $logger;
     }
 
@@ -68,7 +67,7 @@ class FullyQualifiedNameResolver
 
     private function isFunctionCall(Node $node)
     {
-        return false === $node instanceof ScopedPropertyAccessExpression && 
+        return false === $node instanceof ScopedPropertyAccessExpression &&
             $node->parent instanceof CallExpression;
     }
 
