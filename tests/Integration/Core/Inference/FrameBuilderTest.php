@@ -7,9 +7,9 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
-use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\TestUtils\ExtractOffset;
 
 class FrameBuilderTest extends IntegrationTestCase
 {
@@ -233,7 +233,7 @@ EOT
      */
     public function testBuildForNode(string $source, \Closure $assertion)
     {
-        list($source, $offset) = CodeHelper::offsetFromCode($source);
+        list($source, $offset) = ExtractOffset::fromSource($source);
         $reflector = $this->createReflector($source);
         $offset = $reflector->reflectOffset(SourceCode::fromString($source), Offset::fromInt($offset));
         $assertion($offset->frame());

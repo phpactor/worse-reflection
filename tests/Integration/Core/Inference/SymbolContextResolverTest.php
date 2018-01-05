@@ -12,8 +12,8 @@ use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Position;
+use Phpactor\TestUtils\ExtractOffset;
 
 class SymbolContextResolverTest extends IntegrationTestCase
 {
@@ -857,7 +857,7 @@ EOT
     {
         $frame = new Frame('test', $assignments);
 
-        list($source, $offset) = CodeHelper::offsetFromCode($source);
+        list($source, $offset) = ExtractOffset::fromSource($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
         $typeResolver = new SymbolContextResolver($this->createReflector($source), $this->logger);
 

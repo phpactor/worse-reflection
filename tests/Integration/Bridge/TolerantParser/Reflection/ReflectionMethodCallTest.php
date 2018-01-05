@@ -4,9 +4,9 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Position;
+use Phpactor\TestUtils\ExtractOffset;
 
 class ReflectionMethodCallTest extends IntegrationTestCase
 {
@@ -15,7 +15,7 @@ class ReflectionMethodCallTest extends IntegrationTestCase
      */
     public function testReflectMethodCall(string $source, array $frame, \Closure $assertion)
     {
-        list($source, $offset) = CodeHelper::offsetFromCode($source);
+        list($source, $offset) = ExtractOffset::fromSource($source);
         $reflection = $this->createReflector($source)->reflectMethodCall($source, $offset);
         $assertion($reflection);
     }

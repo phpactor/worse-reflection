@@ -4,12 +4,12 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core;
 
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Exception\UnexpectedReflectionType;
+use Phpactor\TestUtils\ExtractOffset;
 
 class ReflectorTest extends IntegrationTestCase
 {
@@ -113,7 +113,7 @@ $foob<>ar;
 EOT
         ;
 
-        list($source, $offset) = CodeHelper::offsetFromCode($source);
+        list($source, $offset) = ExtractOffset::fromSource($source);
 
         $offset = $this->createReflector($source)->reflectOffset($source, $offset);
         $this->assertEquals('int', (string) $offset->symbolInformation()->type());

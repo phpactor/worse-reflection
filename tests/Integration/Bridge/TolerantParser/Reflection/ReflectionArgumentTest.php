@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection;
+use Phpactor\TestUtils\ExtractOffset;
 
 class ReflectionArgumentTest extends IntegrationTestCase
 {
@@ -15,7 +16,7 @@ class ReflectionArgumentTest extends IntegrationTestCase
      */
     public function testReflectMethodCall(string $source, array $frame, \Closure $assertion)
     {
-        list($source, $offset) = CodeHelper::offsetFromCode($source);
+        list($source, $offset) = ExtractOffset::fromSource($source);
         $reflection = $this->createReflector($source)->reflectMethodCall($source, $offset);
         $assertion($reflection->arguments());
     }

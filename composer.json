@@ -19,7 +19,8 @@
         "symfony/filesystem": "^3.3",
         "phpbench/phpbench": "dev-master",
         "phpactor/class-to-file": "^1.0@dev",
-        "phpstan/phpstan": "^0.8.5"
+        "phpstan/phpstan": "^0.8.5",
+        "phpactor/test-utils": "@dev"
     },
     "autoload": {
         "psr-4": {
