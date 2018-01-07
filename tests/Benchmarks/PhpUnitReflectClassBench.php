@@ -8,12 +8,12 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 
 /**
  * @Iterations(4)
- * @Revs(10)
+ * @Revs(1)
+ * @Warmup(1)
  * @OutputTimeUnit("milliseconds", precision=2)
  */
 class PhpUnitReflectClassBench extends BaseBenchCase
 {
-
     /**
      * @Subject()
      */
@@ -34,7 +34,7 @@ class PhpUnitReflectClassBench extends BaseBenchCase
         /** @var $method ReflectionMethod */
         foreach ($class->methods() as $method) {
             foreach ($method->parameters() as $parameter) {
-                $method->returnType();
+                $method->inferredReturnTypes();
             }
         }
     }
