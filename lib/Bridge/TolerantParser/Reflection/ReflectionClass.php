@@ -26,6 +26,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
@@ -43,6 +44,21 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
      * @var SourceCode
      */
     private $sourceCode;
+
+    /**
+     * @var ReflectionInterface[]
+     */
+    private $interfaces;
+
+    /**
+     * @var ReflectionClassLike|null
+     */
+    private $parent;
+
+    /**
+     * @var ReflectionMethodCollection|null
+     */
+    private $methods;
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -88,6 +104,10 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
     public function parent()
     {
+        if ($this->parent) {
+            return $this->parent;
+        }
+
         if (!$this->node->classBaseClause) {
             return;
         }
@@ -105,6 +125,8 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
                 ));
                 return;
             }
+
+            $this->parent = $reflectedClass;
 
             return $reflectedClass;
         } catch (ClassNotFound $e) {
@@ -134,6 +156,12 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
     public function methods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
     {
+        $cacheKey = $contextClass ? (string) $contextClass->name() : '*_null_*';
+
+        if (isset($this->methods[$cacheKey])) {
+            return $this->methods[$cacheKey];
+        }
+
         $contextClass = $contextClass ?: $this;
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);
 
@@ -157,11 +185,17 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             )
         );
 
+        $this->methods[$cacheKey] = $methods;
+
         return $methods;
     }
 
     public function interfaces(): CoreReflectionInterfaceCollection
     {
+        if ($this->interfaces) {
+            return $this->interfaces;
+        }
+
         $parentInterfaces = null;
         if ($this->parent()) {
             $parentInterfaces = $this->parent()->interfaces();
@@ -170,8 +204,10 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $interfaces = ReflectionInterfaceCollection::fromClassDeclaration($this->serviceLocator, $this->node);
 
         if ($parentInterfaces) {
-            return $parentInterfaces->merge($interfaces);
+            $interfaces =  $parentInterfaces->merge($interfaces);
         }
+
+        $this->interfaces = $interfaces;
 
         return $interfaces;
     }
