@@ -37,6 +37,8 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
      * @var SourceCode
      */
     private $sourceCode;
+    private $parents;
+    private $methods;
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -70,7 +72,13 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
 
     public function parents(): CoreReflectionInterfaceCollection
     {
-        return ReflectionInterfaceCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
+        if ($this->parents) {
+            return $this->parents;
+        }
+
+        $this->parents = ReflectionInterfaceCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node);
+
+        return $this->parents;
     }
 
     public function isInstanceOf(ClassName $className): bool
@@ -92,6 +100,10 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
 
     public function methods(): CoreReflectionMethodCollection
     {
+        if ($this->methods) {
+            return $this->methods;
+        }
+
         $parentMethods = [];
         foreach ($this->parents() as $parent) {
             foreach ($parent->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ]) as $name => $method) {
@@ -102,7 +114,9 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         $parentMethods = ReflectionMethodCollection::fromReflectionMethods($this->serviceLocator, $parentMethods);
         $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node, $this);
 
-        return $parentMethods->merge($methods);
+        $this->methods =  $parentMethods->merge($methods);
+
+        return $this->methods;
     }
 
     public function name(): ClassName
