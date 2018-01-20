@@ -35,6 +35,27 @@ abstract class Assignments implements \Countable, \IteratorAggregate
         }));
     }
 
+    public function lessThan(int $offset): Assignments
+    {
+        return new static(array_filter($this->variables, function (Variable $variable) use ($offset) {
+            return $variable->offset()->toInt() < $offset;
+        }));
+    }
+
+    public function greaterThan(int $offset): Assignments
+    {
+        return new static(array_filter($this->variables, function (Variable $variable) use ($offset) {
+            return $variable->offset()->toInt() > $offset;
+        }));
+    }
+
+    public function greaterThanOrEqualTo(int $offset): Assignments
+    {
+        return new static(array_filter($this->variables, function (Variable $variable) use ($offset) {
+            return $variable->offset()->toInt() >= $offset;
+        }));
+    }
+
     public function first(): Variable
     {
         $first = reset($this->variables);
