@@ -277,6 +277,24 @@ EOT
                     $this->assertEquals('traitMethod', $class->methods()->first()->name());
                 },
             ],
+            'Get methods at offset' => [
+                <<<'EOT'
+<?php
+
+class Class2
+{
+    public function notATrait()
+    {
+    }
+}
+
+EOT
+                ,
+                'Class2',
+                function ($class) {
+                    $this->assertEquals(1, $class->methods()->atOffset(27)->count());
+                },
+            ],
             'Get properties includes trait methods' => [
                 <<<'EOT'
 <?php

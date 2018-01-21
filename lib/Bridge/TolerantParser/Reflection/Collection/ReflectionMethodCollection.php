@@ -35,7 +35,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
         return new static($serviceLocator, $items);
     }
 
-    public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface, ReflectionInterface $reflectionInterface)
+    public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface, ReflectionInterface $reflectionInterface): CoreReflectionMethodCollection
     {
         $methods = array_filter($interface->interfaceMembers->interfaceMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
@@ -49,7 +49,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
         return new static($serviceLocator, $items);
     }
 
-    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, ReflectionTrait $reflectionTrait)
+    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, ReflectionTrait $reflectionTrait): CoreReflectionMethodCollection
     {
         $methods = array_filter($trait->traitMembers->traitMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
@@ -63,12 +63,12 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
         return new static($serviceLocator, $items);
     }
 
-    public static function fromReflectionMethods(ServiceLocator $serviceLocator, array $methods)
+    public static function fromReflectionMethods(ServiceLocator $serviceLocator, array $methods): CoreReflectionMethodCollection
     {
         return new static($serviceLocator, $methods);
     }
 
-    public function byVisibilities(array $visibilities)
+    public function byVisibilities(array $visibilities): CoreReflectionMethodCollection
     {
         $items = [];
         foreach ($this->items as $key => $item) {
@@ -84,7 +84,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
         return new static($this->serviceLocator, $items);
     }
 
-    public function belongingTo(ClassName $class)
+    public function belongingTo(ClassName $class): CoreReflectionMethodCollection
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) use ($class) {
             return $item->declaringClass()->name() == $class;
@@ -95,6 +95,13 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) {
             return $item->isAbstract();
+        }));
+    }
+
+    public function atOffset(int $offset): ReflectionMethodCollection
+    {
+        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) use ($offset) {
+            return $item->position()->start() <= $offset && $item->position()->end() >= $offset;
         }));
     }
 }
