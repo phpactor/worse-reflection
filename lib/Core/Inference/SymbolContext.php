@@ -76,12 +76,18 @@ final class SymbolContext
 
     public function withValue($value): SymbolContext
     {
-        return new self($this->symbol, $this->types, $value, $this->containerType, $this->scope);
+        $new = clone $this;
+        $new->value = $value;
+
+        return $new;
     }
 
     public function withContainerType(Type $containerType): SymbolContext
     {
-        return new self($this->symbol, $this->types, $this->value, $containerType, $this->scope);
+        $new = clone $this;
+        $new->containerType = $containerType;
+
+        return $new;
     }
 
     /**
@@ -89,22 +95,31 @@ final class SymbolContext
      */
     public function withType(Type $type): SymbolContext
     {
-        return new self($this->symbol, Types::fromTypes([ $type ]), $this->value, $this->containerType, $this->scope);
+        $new = clone $this;
+        $new->types = Types::fromTypes([ $type ]);
+
+        return $new;
     }
 
     public function withTypes(Types $types): SymbolContext
     {
-        return new self($this->symbol, $types, $this->value, $this->containerType, $this->scope);
+        $new = clone $this;
+        $new->types = $types;
+
+        return $new;
     }
 
     public function withScope(ReflectionScope $scope)
     {
-        return new self($this->symbol, $this->types, $this->value, $this->containerType, $scope);
+        $new = clone $this;
+        $new->scope = $scope;
+
+        return $new;
     }
 
     public function withIssue(string $message): SymbolContext
     {
-        $new = new self($this->symbol, $this->types, $this->value, $this->containerType, $this->scope);
+        $new = clone $this;
         $new->issues[] = $message;
 
         return $new;
