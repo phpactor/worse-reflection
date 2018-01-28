@@ -11,6 +11,8 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection as CoreReflectionClassCollection;
+use Microsoft\PhpParser\ClassLike;
+use Microsoft\PhpParser\Node;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
@@ -25,12 +27,12 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
 
         $items = [];
 
-        foreach ($node->getChildNodes() as $child) {
-            if (
-                false === $child instanceof ClassDeclaration &&
-                false === $child instanceof InterfaceDeclaration &&
-                false === $child instanceof TraitDeclaration
-            ) {
+        $nodeCollection = $node->getDescendantNodes(function (Node $node) {
+            return false === $node instanceof ClassLike;
+        });
+
+        foreach ($nodeCollection as $child) {
+            if (false === $child instanceof ClassLike) {
                 continue;
             }
 
