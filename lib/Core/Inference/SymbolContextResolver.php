@@ -81,7 +81,7 @@ class SymbolContextResolver
         }
 
         $context = $this->__resolveNode($frame, $node);
-        $context->withScope(new ReflectionScope($node));
+        $context = $context->withScope(new ReflectionScope($node));
 
         return $context;
     }

@@ -853,15 +853,33 @@ EOT
     ];
     }
 
-    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source)
+    public function testAttachesScope()
+    {
+        $source = <<<'EOT'
+<?php
+
+namespace Hello;
+
+use Goodbye;
+use Adios;
+
+new Foob<>o;
+EOT
+        ;
+        $context = $this->resolveNodeAtOffset(LocalAssignments::create(), $source);
+        $this->assertCount(2, $context->scope()->nameImports());
+    }
+
+    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source): SymbolContext
     {
         $frame = new Frame('test', $assignments);
 
         list($source, $offset) = ExtractOffset::fromSource($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
-        $typeResolver = new SymbolContextResolver($this->createReflector($source), $this->logger);
 
-        return $typeResolver->resolveNode($frame, $node);
+        $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger);
+
+        return $resolver->resolveNode($frame, $node);
     }
 
     private function assertExpectedInformation(array $expectedInformation, SymbolContext $information)

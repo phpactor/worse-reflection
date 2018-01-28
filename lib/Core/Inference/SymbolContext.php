@@ -154,4 +154,9 @@ final class SymbolContext
     {
         return $this->issues;
     }
+
+    public function scope(): ReflectionScope
+    {
+        return $this->scope;
+    }
 }
