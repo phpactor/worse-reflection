@@ -28,7 +28,7 @@ abstract class AssignmentstTestCase extends TestCase
 
         $assignments->add(Variable::fromSymbolContext($information));
 
-        $this->assertEquals($information, $assignments->byName('hello')->first()->symbolInformation());
+        $this->assertEquals($information, $assignments->byName('hello')->first()->symbolContext());
     }
 
     public function testMultipleByName()

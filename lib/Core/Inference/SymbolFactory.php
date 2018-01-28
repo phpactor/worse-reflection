@@ -32,7 +32,7 @@ class SymbolFactory
             $position
         );
 
-        return $this->informationFromParameters(
+        return $this->contextFromParameters(
             $symbol,
             $config['type'],
             $config['container_type'],
@@ -40,7 +40,7 @@ class SymbolFactory
         );
     }
 
-    private function informationFromParameters(
+    private function contextFromParameters(
         Symbol $symbol,
         Type $type = null,
         Type $containerType = null,

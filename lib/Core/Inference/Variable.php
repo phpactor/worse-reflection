@@ -19,21 +19,21 @@ final class Variable
     /**
      * @var mixed
      */
-    private $symbolInformation;
+    private $symbolContext;
 
-    private function __construct(string $name, Offset $offset, SymbolContext $symbolInformation)
+    private function __construct(string $name, Offset $offset, SymbolContext $symbolContext)
     {
         $this->name = $name;
         $this->offset = $offset;
-        $this->symbolInformation = $symbolInformation;
+        $this->symbolContext = $symbolContext;
     }
 
-    public static function fromSymbolContext(SymbolContext $symbolInformation)
+    public static function fromSymbolContext(SymbolContext $symbolContext)
     {
         return new self(
-            $symbolInformation->symbol()->name(),
-            Offset::fromInt($symbolInformation->symbol()->position()->start()),
-            $symbolInformation
+            $symbolContext->symbol()->name(),
+            Offset::fromInt($symbolContext->symbol()->position()->start()),
+            $symbolContext
         );
     }
 
@@ -52,9 +52,9 @@ final class Variable
         return $this->name;
     }
 
-    public function symbolInformation(): SymbolContext
+    public function symbolContext(): SymbolContext
     {
-        return $this->symbolInformation;
+        return $this->symbolContext;
     }
 
     public function isNamed(string $name)

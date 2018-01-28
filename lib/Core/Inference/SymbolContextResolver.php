@@ -223,7 +223,7 @@ class SymbolContextResolver
             )->withIssue(sprintf('Variable "%s" is undefined', $name));
         }
 
-        return $variables->last()->symbolInformation();
+        return $variables->last()->symbolContext();
     }
 
     private function resolvePropertyVariable(ParserVariable $node)

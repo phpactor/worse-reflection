@@ -316,8 +316,8 @@ final class FrameBuilder
             $variable = $parentVars->byName($varName)->last();
 
             $variableInformation = $variableInformation
-                ->withType($variable->symbolInformation()->type())
-                ->withValue($variable->symbolInformation()->value());
+                ->withType($variable->symbolContext()->type())
+                ->withValue($variable->symbolContext()->value());
 
             $frame->locals()->add(Variable::fromSymbolContext($variableInformation));
         }

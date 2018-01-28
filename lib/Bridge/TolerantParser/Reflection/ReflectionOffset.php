@@ -16,17 +16,17 @@ final class ReflectionOffset implements CoreReflectionOffset
     /**
      * @var SymbolContext
      */
-    private $symbolInformation;
+    private $symbolContext;
 
-    private function __construct(Frame $frame, SymbolContext $symbolInformation)
+    private function __construct(Frame $frame, SymbolContext $symbolContext)
     {
         $this->frame = $frame;
-        $this->symbolInformation = $symbolInformation;
+        $this->symbolContext = $symbolContext;
     }
 
-    public static function fromFrameAndSymbolContext($frame, $symbolInformation)
+    public static function fromFrameAndSymbolContext($frame, $symbolContext)
     {
-        return new self($frame, $symbolInformation);
+        return new self($frame, $symbolContext);
     }
 
     public function frame(): Frame
@@ -34,8 +34,8 @@ final class ReflectionOffset implements CoreReflectionOffset
         return $this->frame;
     }
 
-    public function symbolInformation(): SymbolContext
+    public function symbolContext(): SymbolContext
     {
-        return $this->symbolInformation;
+        return $this->symbolContext;
     }
 }

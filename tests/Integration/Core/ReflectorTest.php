@@ -95,8 +95,8 @@ EOT
         ;
 
         $offset = $this->createReflector($source)->reflectOffset($source, 27);
-        $this->assertEquals('string', (string) $offset->symbolInformation()->type());
-        $this->assertEquals('Hello', $offset->frame()->locals()->byName('$foobar')->first()->symbolInformation()->value());
+        $this->assertEquals('string', (string) $offset->symbolContext()->type());
+        $this->assertEquals('Hello', $offset->frame()->locals()->byName('$foobar')->first()->symbolContext()->value());
     }
 
     /**
@@ -116,6 +116,6 @@ EOT
         list($source, $offset) = ExtractOffset::fromSource($source);
 
         $offset = $this->createReflector($source)->reflectOffset($source, $offset);
-        $this->assertEquals('int', (string) $offset->symbolInformation()->type());
+        $this->assertEquals('int', (string) $offset->symbolContext()->type());
     }
 }
