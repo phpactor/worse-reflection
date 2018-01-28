@@ -27,6 +27,7 @@ use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 
 class SymbolContextResolver
 {
@@ -79,7 +80,10 @@ class SymbolContextResolver
             return $info;
         }
 
-        return $this->__resolveNode($frame, $node);
+        $context = $this->__resolveNode($frame, $node);
+        $context->withScope(new ReflectionScope($node));
+
+        return $context;
     }
 
     private function __resolveNode(Frame $frame, Node $node): SymbolContext

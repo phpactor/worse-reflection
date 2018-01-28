@@ -46,20 +46,20 @@ class SymbolFactory
         Type $containerType = null,
         $value = null
     ): SymbolContext {
-        $information = SymbolContext::for($symbol);
+        $context = SymbolContext::for($symbol);
 
         if ($type) {
-            $information = $information->withType($type);
+            $context = $context->withType($type);
         }
 
         if ($containerType) {
-            $information = $information->withContainerType($containerType);
+            $context = $context->withContainerType($containerType);
         }
 
         if (null !== $value) {
-            $information = $information->withValue($value);
+            $context = $context->withValue($value);
         }
 
-        return $information;
+        return $context;
     }
 }
