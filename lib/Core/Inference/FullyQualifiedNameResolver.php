@@ -10,6 +10,7 @@ use Microsoft\PhpParser\ClassLike;
 use Phpactor\WorseReflection\Core\Logger;
 use Microsoft\PhpParser\Node\NamespaceUseClause;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\QualifiedName;
 
 class FullyQualifiedNameResolver
 {
@@ -58,7 +59,8 @@ class FullyQualifiedNameResolver
             return $type;
         }
 
-        if ($namespaceDefinition = $node->getNamespaceDefinition()) {
+        $namespaceDefinition = $node->getNamespaceDefinition();
+        if ($namespaceDefinition && $namespaceDefinition->name instanceof QualifiedName) {
             return Type::fromArray([$namespaceDefinition->name->getText(), $name]);
         }
 
