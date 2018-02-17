@@ -406,6 +406,19 @@ EOT
                     $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
                     $this->assertEquals('bar', (string) $frame->locals()->last()->symbolContext()->value());
                 }
+            ],
+            'Includes list assignments' => [
+                <<<'EOT'
+<?php
+list($foo, $bar) = [ 'foo', 'bar' ];
+<>
+EOT
+                ,
+                function (Frame $frame) {
+                    $this->assertCount(2, $frame->locals());
+                    $this->assertEquals('foo', $frame->locals()->first()->symbolContext()->value());
+                    $this->assertEquals('string', (string) $frame->locals()->first()->symbolContext()->type());
+                }
             ]
         ];
     }

@@ -19,6 +19,10 @@ use Phpactor\WorseReflection\Core\Logger;
 use RuntimeException;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\Node\Expression\ListIntrinsicExpression;
+use Microsoft\PhpParser\Node\ArrayElement;
+use Phpactor\WorseReflection\Core\Inference\Variable;
+use Phpactor\WorseReflection\Core\Type;
 
 final class FrameBuilder
 {
@@ -47,10 +51,10 @@ final class FrameBuilder
      */
     private $nameResolver;
 
-    public function __construct(SymbolContextResolver $symbolInformationResolver, Logger $logger)
+    public function __construct(SymbolContextResolver $symbolContextResolver, Logger $logger)
     {
         $this->logger = $logger;
-        $this->symbolContextResolver = $symbolInformationResolver;
+        $this->symbolContextResolver = $symbolContextResolver;
         $this->symbolFactory = new SymbolFactory();
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
     }
@@ -115,24 +119,28 @@ final class FrameBuilder
             return;
         }
 
-        $typeInformation = $this->resolveNode($frame, $node->qualifiedName);
-        $information = $this->symbolFactory->context(
+        $typeContext = $this->resolveNode($frame, $node->qualifiedName);
+        $context = $this->symbolFactory->context(
             $node->variableName->getText($node->getFileContents()),
             $node->variableName->getStartPosition(),
             $node->variableName->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
-                'type' => $typeInformation->type(),
+                'type' => $typeContext->type(),
             ]
         );
 
-        $frame->locals()->add(Variable::fromSymbolContext($information));
+        $frame->locals()->add(Variable::fromSymbolContext($context));
     }
 
     private function walkAssignment(Frame $frame, AssignmentExpression $node)
     {
         if ($node->leftOperand instanceof ParserVariable) {
             return $this->walkParserVariable($frame, $node);
+        }
+
+        if ($node->leftOperand instanceof ListIntrinsicExpression) {
+            return $this->walkList($frame, $node);
         }
 
         if ($node->leftOperand instanceof MemberAccessExpression) {
@@ -148,19 +156,19 @@ final class FrameBuilder
     private function walkParserVariable(Frame $frame, AssignmentExpression $node)
     {
         $name = $node->leftOperand->name->getText($node->getFileContents());
-        $symbolInformation = $this->resolveNode($frame, $node->rightOperand);
-        $information = $this->symbolFactory->context(
+        $symbolContext = $this->resolveNode($frame, $node->rightOperand);
+        $context = $this->symbolFactory->context(
             $name,
             $node->leftOperand->getStart(),
             $node->leftOperand->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
-                'type' => $symbolInformation->type(),
-                'value' => $symbolInformation->value(),
+                'type' => $symbolContext->type(),
+                'value' => $symbolContext->value(),
             ]
         );
 
-        $frame->locals()->add(Variable::fromSymbolContext($information));
+        $frame->locals()->add(Variable::fromSymbolContext($context));
     }
 
     private function walkMemberAccessExpression(Frame $frame, AssignmentExpression $node)
@@ -173,7 +181,7 @@ final class FrameBuilder
         }
 
         $memberNameNode = $node->leftOperand->memberName;
-        $typeInformation = $this->resolveNode($frame, $node->rightOperand);
+        $typeContext = $this->resolveNode($frame, $node->rightOperand);
 
         // TODO: Sort out this mess.
         //       If the node is not a token (e.g. it is a variable) then
@@ -190,18 +198,18 @@ final class FrameBuilder
             $memberName = $memberNameInfo->value();
         }
 
-        $information = $this->symbolFactory->context(
+        $context = $this->symbolFactory->context(
             $memberName,
             $node->leftOperand->getStart(),
             $node->leftOperand->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
-                'type' => $typeInformation->type(),
-                'value' => $typeInformation->value(),
+                'type' => $typeContext->type(),
+                'value' => $typeContext->value(),
             ]
         );
 
-        $frame->properties()->add(Variable::fromSymbolContext($information));
+        $frame->properties()->add(Variable::fromSymbolContext($context));
     }
 
     private function walkFunctionLike(Frame $frame, FunctionLike $node)
@@ -216,7 +224,7 @@ final class FrameBuilder
         // works for both closure and class method (we currently ignore binding)
         if ($classNode) {
             $classType = $this->resolveNode($frame, $classNode)->type();
-            $information = $this->symbolFactory->context(
+            $context = $this->symbolFactory->context(
                 'this',
                 $node->getStart(),
                 $node->getEndPosition(),
@@ -228,7 +236,7 @@ final class FrameBuilder
 
             // add this and self
             // TODO: self is NOT added here - does it work?
-            $frame->locals()->add(Variable::fromSymbolContext($information));
+            $frame->locals()->add(Variable::fromSymbolContext($context));
         }
 
         if ($node instanceof AnonymousFunctionCreationExpression) {
@@ -243,20 +251,20 @@ final class FrameBuilder
         foreach ($node->parameters->getElements() as $parameterNode) {
             $parameterName = $parameterNode->variableName->getText($node->getFileContents());
 
-            $symbolInformation = $this->resolveNode($frame, $parameterNode);
+            $symbolContext = $this->resolveNode($frame, $parameterNode);
 
-            $information = $this->symbolFactory->context(
+            $context = $this->symbolFactory->context(
                 $parameterName,
                 $parameterNode->getStart(),
                 $parameterNode->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,
-                    'type' => $symbolInformation->type(),
-                    'value' => $symbolInformation->value(),
+                    'type' => $symbolContext->type(),
+                    'value' => $symbolContext->value(),
                 ]
             );
 
-            $frame->locals()->add(Variable::fromSymbolContext($information));
+            $frame->locals()->add(Variable::fromSymbolContext($context));
         }
     }
 
@@ -295,7 +303,7 @@ final class FrameBuilder
         foreach ($useClause->useVariableNameList->getElements() as $element) {
             $varName = $element->variableName->getText($node->getFileContents());
 
-            $variableInformation = $this->symbolFactory->context(
+            $variableContext = $this->symbolFactory->context(
                 $varName,
                 $element->getStart(),
                 $element->getEndPosition(),
@@ -303,23 +311,23 @@ final class FrameBuilder
                     'symbol_type' => Symbol::VARIABLE,
                 ]
             );
-            $varName = $variableInformation->symbol()->name();
+            $varName = $variableContext->symbol()->name();
 
             // if not in parent scope, then we know nothing about it
-            // add it with above information and continue
+            // add it with above context and continue
             // TODO: Do we infer the type hint??
             if (0 === $parentVars->byName($varName)->count()) {
-                $frame->locals()->add(Variable::fromSymbolContext($variableInformation));
+                $frame->locals()->add(Variable::fromSymbolContext($variableContext));
                 continue;
             }
 
             $variable = $parentVars->byName($varName)->last();
 
-            $variableInformation = $variableInformation
+            $variableContext = $variableContext
                 ->withType($variable->symbolContext()->type())
                 ->withValue($variable->symbolContext()->value());
 
-            $frame->locals()->add(Variable::fromSymbolContext($variableInformation));
+            $frame->locals()->add(Variable::fromSymbolContext($variableContext));
         }
     }
 
@@ -397,5 +405,42 @@ final class FrameBuilder
         }
 
         return '<unknown>';
+    }
+
+    private function walkList(Frame $frame, AssignmentExpression $node)
+    {
+        $symbolContext = $this->resolveNode($frame, $node->rightOperand);
+        $value = $symbolContext->value();
+
+        foreach ($node->leftOperand->listElements as $elements) {
+            foreach ($elements as $index => $element) {
+                if (!$element instanceof ArrayElement) {
+                    continue;
+                }
+
+                $elementValue = $element->elementValue;
+
+                if (null === $elementValue || null === $elementValue->name) {
+                    continue;
+                }
+
+                $varName = $elementValue->name->getText($node->getFileContents());
+                $variableContext = $this->symbolFactory->context(
+                    $varName,
+                    $element->getStart(),
+                    $element->getEndPosition(),
+                    [
+                        'symbol_type' => Symbol::VARIABLE,
+                    ]
+                );
+
+                if (is_array($value) && isset($value[$index])) {
+                    $variableContext = $variableContext->withValue($value[$index]);
+                    $variableContext = $variableContext->withType(Type::fromString(gettype($value[$index])));
+                }
+
+                $frame->locals()->add(Variable::fromSymbolContext($variableContext));
+            }
+        }
     }
 }
