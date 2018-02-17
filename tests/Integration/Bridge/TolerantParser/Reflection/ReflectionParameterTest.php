@@ -111,6 +111,22 @@ class ReflectionParameterTest extends IntegrationTestCase
                     );
                 },
             ],
+            'Passed by reference' => [
+                '&$foobar',
+                function ($method) {
+                    $this->assertTrue(
+                        $method->parameters()->get('foobar')->byReference()
+                    );
+                },
+            ],
+            'Not passed by reference' => [
+                '$foobar',
+                function ($method) {
+                    $this->assertFalse(
+                        $method->parameters()->get('foobar')->byReference()
+                    );
+                },
+            ],
         ];
     }
 }

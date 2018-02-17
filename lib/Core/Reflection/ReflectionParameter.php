@@ -15,4 +15,6 @@ interface ReflectionParameter
     public function type(): Type;
 
     public function default(): DefaultValue;
+
+    public function byReference(): bool;
 }

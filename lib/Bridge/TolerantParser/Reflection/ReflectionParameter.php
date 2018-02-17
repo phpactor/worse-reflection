@@ -74,4 +74,9 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     {
         return $this->parameter;
     }
+
+    public function byReference(): bool
+    {
+        return (bool) $this->parameter->byRefToken;
+    }
 }
