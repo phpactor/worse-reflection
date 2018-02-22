@@ -23,19 +23,15 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
-use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
+use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 
-class CoreReflector implements Reflector
+class CoreReflector implements ClassReflector, SourceCodeReflector
 {
     /**
      * @var ServiceLocator
      */
     private $services;
-
-    /**
-     * @var array
-     */
-    private $cache = [];
 
     public function __construct(ServiceLocator $services)
     {
@@ -126,10 +122,6 @@ class CoreReflector implements Reflector
     {
         $className = ClassName::fromUnknown($className);
 
-        if (isset($this->cache[(string) $className])) {
-            return $this->cache[(string) $className];
-        }
-
         $source = $this->services->sourceLocator()->locate($className);
         $classes = $this->reflectClassesIn($source);
 
@@ -141,7 +133,6 @@ class CoreReflector implements Reflector
         }
 
         $class = $classes->get((string) $className);
-        $this->cache[(string) $className] = $class;
 
         return $class;
     }

@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 
 class MemberTypeResolver
 {
@@ -20,7 +21,7 @@ class MemberTypeResolver
      */
     private $reflector;
 
-    public function __construct(Reflector $reflector)
+    public function __construct(ClassReflector $reflector)
     {
         $this->reflector = $reflector;
     }

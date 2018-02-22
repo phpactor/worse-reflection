@@ -28,6 +28,7 @@ use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 
 class SymbolContextResolver
 {
@@ -56,7 +57,7 @@ class SymbolContextResolver
      */
     private $nameResolver;
 
-    public function __construct(Reflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
+    public function __construct(ClassReflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
     {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
