@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Bridge\Composer\ComposerSourceLocator;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StubSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
+use Phpactor\WorseReflection\ReflectorFactory;
 
 abstract class BaseBenchCase
 {
@@ -14,7 +15,7 @@ abstract class BaseBenchCase
         $composerLocator = new ComposerSourceLocator(include(__DIR__ . '/../../vendor/autoload.php'));
 
         $stubLocator = new StubSourceLocator(
-            Reflector::create(),
+            ReflectorFactory::create(),
             __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs',
             __DIR__ . '/../Workspace/cache'
         );
@@ -23,6 +24,6 @@ abstract class BaseBenchCase
             $composerLocator, $stubLocator
         ]);
 
-        return Reflector::create($chainLocator);
+        return ReflectorFactory::create($chainLocator);
     }
 }
