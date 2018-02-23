@@ -10,6 +10,9 @@ use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryB
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\Reflector\CompositeReflector;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedClassReflector;
+use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeReflector;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 
 class ServiceLocator
 {
@@ -48,17 +51,36 @@ class ServiceLocator
      */
     private $docblockFactory;
 
-    public function __construct(SourceCodeLocator $sourceLocator, Logger $logger)
+    public function __construct(
+        SourceCodeLocator $sourceLocator,
+        Logger $logger,
+        bool $enableCache = false,
+        bool $enableContextualLocation = false
+    )
     {
-        $this->sourceLocator = $sourceLocator;
         $this->logger = $logger;
-        $coreReflector = new CoreReflector($this);
+
+        $classReflector = $sourceReflector =  new CoreReflector($this);
+
+        if ($enableCache) {
+            $classReflector = new MemonizedClassReflector($classReflector);
+        }
+
+        if ($enableContextualLocation) {
+            $temporarySourceLocator = new TemporarySourceLocator();
+            $sourceLocator = new ChainSourceLocator([
+                $sourceLocator,
+                $temporarySourceLocator
+            ]);
+            $sourceReflector = new ContextualSourceCodeReflector($sourceReflector, $temporarySourceLocator);
+        }
 
         $this->reflector = new CompositeReflector(
-            new MemonizedClassReflector($coreReflector),
-            $coreReflector
+            $classReflector,
+            $sourceReflector
         );
 
+        $this->sourceLocator = $sourceLocator;
         $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
         $this->frameBuilder = new FrameBuilder($this->symbolContextResolver, $this->logger);
         $this->parser = new Parser();
