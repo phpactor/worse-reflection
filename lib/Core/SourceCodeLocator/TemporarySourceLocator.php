@@ -21,6 +21,7 @@ class TemporarySourceLocator implements SourceCodeLocator
 
     public function clear()
     {
+        var_dump('Clearing');
         $this->source = null;
     }
 

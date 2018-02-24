@@ -36,7 +36,6 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         $this->locator->setSourceCode($sourceCode);
 
         $collection = $this->innerReflector->reflectClassesIn($sourceCode);
-        $this->locator->clear();
 
         return $collection;
     }
@@ -50,7 +49,6 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         $this->locator->setSourceCode($sourceCode);
 
         $offset = $this->innerReflector->reflectOffset($sourceCode, $offset);
-        $this->locator->clear();
 
         return $offset;
     }
@@ -61,7 +59,6 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         $this->locator->setSourceCode($sourceCode);
 
         $offset = $this->innerReflector->reflectMethodCall($sourceCode, $offset);
-        $this->locator->clear();
 
         return $offset;
     }

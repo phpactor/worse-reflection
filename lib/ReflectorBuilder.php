@@ -86,7 +86,8 @@ final class ReflectorBuilder
         return (new ServiceLocator(
             $this->buildLocator(),
             $this->buildLogger(),
-            $this->enableCache
+            $this->enableCache,
+            $this->enableContextualSourceLocation
         ))->reflector();
     }
 
@@ -96,6 +97,10 @@ final class ReflectorBuilder
      * Enable WR to locate classes from any source code passed
      * to the SourceReflector (this is to enable property / class
      * reflection on the current class.
+     *
+     * WARNING: This makes the reflector stateful - any source code
+     *          passed to source reflector methods will be retained
+     *          for the duration of the process.
      */
     public function enableContextualSourceLocation(): ReflectorBuilder
     {
