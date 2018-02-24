@@ -67,7 +67,7 @@ class ServiceLocator
         }
 
         if ($enableContextualLocation) {
-            $temporarySourceLocator = new TemporarySourceLocator();
+            $temporarySourceLocator = new TemporarySourceLocator($sourceReflector);
             $sourceLocator = new ChainSourceLocator([
                 $temporarySourceLocator,
                 $sourceLocator,

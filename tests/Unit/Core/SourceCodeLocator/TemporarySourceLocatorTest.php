@@ -7,6 +7,8 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
+use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 
 class TemporarySourceLocatorTest extends TestCase
 {
@@ -17,15 +19,12 @@ class TemporarySourceLocatorTest extends TestCase
 
     public function setUp()
     {
-        $this->locator = new TemporarySourceLocator();
-    }
+        $this->reflector = $this->prophesize(SourceCodeReflector::class);
+        $this->locator = new TemporarySourceLocator(
+            $this->reflector->reveal()
+        );
 
-    public function testLocate()
-    {
-        $this->locator->setSourceCode(SourceCode::fromString('Hello'));
-        $source = $this->locator->locate(ClassName::fromString('Foobar'));
-
-        $this->assertEquals('Hello', (string) $source);
+        $this->classCollection = $this->prophesize(ReflectionClassCollection::class);
     }
 
     public function testThrowsExceptionWhenNoSourceSet()
@@ -34,12 +33,33 @@ class TemporarySourceLocatorTest extends TestCase
         $this->locator->locate(ClassName::fromString('Foobar'));
     }
 
-    public function testItCanClearThePreviouslySetSourceCode()
+    public function testThrowsExceptionWhenClassNotFound()
     {
+        $source = SourceCode::fromString('<?php class Boobar {}');
         $this->expectException(SourceNotFound::class);
+        $this->expectExceptionMessage('Class "Foobar" not found');
 
-        $this->locator->setSourceCode(SourceCode::fromString('Hello'));
-        $this->locator->clear();
+        $this->reflector->reflectClassesIn($source)->willReturn(
+            $this->classCollection->reveal()
+        );
+        $this->classCollection->has('Foobar')->willReturn(false);
+
+        $this->locator->setSourceCode($source);
+
         $this->locator->locate(ClassName::fromString('Foobar'));
+    }
+
+    public function testReturnsSourceIfClassIsInTheSource()
+    {
+        $code = 'class Foobar {}';
+
+        $this->reflector->reflectClassesIn($code)->willReturn(
+            $this->classCollection->reveal()
+        );
+        $this->classCollection->has('Foobar')->willReturn(true);
+
+        $this->locator->setSourceCode(SourceCode::fromString($code));
+        $source = $this->locator->locate(ClassName::fromString('Foobar'));
+        $this->assertEquals($code, (string) $source);
     }
 }

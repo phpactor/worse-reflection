@@ -7,7 +7,6 @@ use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
@@ -25,6 +24,8 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection as TolerantReflectionClassCollection;
 
 class CoreReflector implements ClassReflector, SourceCodeReflector
 {
@@ -142,7 +143,7 @@ class CoreReflector implements ClassReflector, SourceCodeReflector
      */
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
-        return ReflectionClassCollection::fromSource($this->services, SourceCode::fromUnknown($sourceCode));
+        return TolerantReflectionClassCollection::fromSource($this->services, SourceCode::fromUnknown($sourceCode));
     }
 
     /**

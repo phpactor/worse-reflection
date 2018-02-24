@@ -7,11 +7,11 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 
 class CompositeReflector implements Reflector
 {
