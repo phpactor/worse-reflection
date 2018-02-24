@@ -17,16 +17,6 @@ use Phpactor\TestUtils\ExtractOffset;
 
 class SymbolContextResolverTest extends IntegrationTestCase
 {
-    /**
-     * @var ArrayLogger
-     */
-    private $logger;
-
-    public function setUp()
-    {
-        $this->logger = new ArrayLogger();
-    }
-
     public function tearDown()
     {
         //var_dump($this->logger);
@@ -877,7 +867,7 @@ EOT
         list($source, $offset) = ExtractOffset::fromSource($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
 
-        $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger);
+        $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger());
 
         return $resolver->resolveNode($frame, $node);
     }

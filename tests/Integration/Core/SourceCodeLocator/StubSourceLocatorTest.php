@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StubSourceLocator;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\ReflectorBuilder;
 
 class StubSourceLocatorTest extends IntegrationTestCase
 {
@@ -20,7 +21,7 @@ class StubSourceLocatorTest extends IntegrationTestCase
         $this->initWorkspace();
 
         $locator = new StringSourceLocator(SourceCode::fromString(''));
-        $reflector = Reflector::create($locator);
+        $reflector = ReflectorBuilder::create()->addLocator($locator)->build();
         $this->cacheBuilder = new StubSourceLocator(
             $reflector,
             __DIR__ . '/stubs',

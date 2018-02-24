@@ -53,6 +53,11 @@ class SourceCode
         return new self(file_get_contents($filePath), $filePath);
     }
 
+    public static function empty()
+    {
+        return new self('');
+    }
+
     public static function fromPathAndString(string $filePath, string $source)
     {
         return new self($source, $filePath);

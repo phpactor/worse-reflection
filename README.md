@@ -27,7 +27,9 @@ use this one.
 ## Usage
 
 ```php
-$reflector = new Reflector(new StringSourceLocator(SourceCode::fromString('<?php ...')));
+$reflector = ReflectorBuilder::create()
+    ->addSource('<?php ...')
+    ->build();
 
 $class = $reflector->reflectClass('Foobar');
 

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+use Phpactor\WorseReflection\ReflectorBuilder;
 
 class IntegrationTestCase extends TestCase
 {
@@ -25,9 +26,7 @@ class IntegrationTestCase extends TestCase
 
     public function createReflector(string $source): Reflector
     {
-        $locator = new StringSourceLocator(SourceCode::fromString($source));
-
-        return Reflector::create($locator, $this->logger);
+        return ReflectorBuilder::create()->addSource($source)->withLogger($this->logger())->build();
     }
 
     protected function workspaceDir(): string
