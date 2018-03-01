@@ -116,6 +116,23 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method7')->returnType());
                 },
             ],
+            'Nullable return type' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+class Foobar
+{
+    function method1(): ?int {}
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals(Type::int(), $methods->get('method1')->returnType());
+                },
+            ],
             'Inherited methods' => [
                 <<<'EOT'
 <?php
@@ -328,6 +345,24 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertCount(3, $methods->get('barfoo')->parameters());
+                },
+            ],
+            'It returns the nullable parameter types' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function barfoo(?Barfoo $barfoo)
+    {
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertCount(1, $methods->get('barfoo')->parameters());
+                    $this->assertEquals('Barfoo', $methods->get('barfoo')->parameters()->first()->type());
                 },
             ],
             'It tolerantes and logs method parameters with missing variables parameter' => [
