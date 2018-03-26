@@ -28,9 +28,8 @@ class FrameBuilderTest extends IntegrationTestCase
 
     public function provideForMethod()
     {
-        return [
-            'It returns this' => [
-                <<<'EOT'
+        yield 'It returns this' => [
+            <<<'EOT'
 <?php
 
 namespace Foobar\Barfoo;
@@ -45,13 +44,14 @@ class Foobar
 }
 
 EOT
-            , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('this'));
-                $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolContext()->type());
-                $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolContext()->symbol()->symbolType());
-            }],
-            'It returns method arguments' => [
-                <<<'EOT'
+        , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
+            $this->assertCount(1, $frame->locals()->byName('this'));
+            $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolContext()->type());
+            $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolContext()->symbol()->symbolType());
+        }];
+
+        yield 'It returns method arguments' => [
+            <<<'EOT'
 <?php
 
 namespace Foobar\Barfoo;
@@ -67,15 +67,16 @@ class Foobar
 }
 
 EOT
-            , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('this'));
-                $this->assertEquals(
-                    Type::fromString('Foobar\Barfoo\Foobar'),
-                    $frame->locals()->byName('this')->first()->symbolContext()->type()
-                );
-            }],
-            'It registers string assignments' => [
-                <<<'EOT'
+        , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
+            $this->assertCount(1, $frame->locals()->byName('this'));
+            $this->assertEquals(
+                Type::fromString('Foobar\Barfoo\Foobar'),
+                $frame->locals()->byName('this')->first()->symbolContext()->type()
+            );
+        }];
+
+        yield 'It registers string assignments' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -87,14 +88,14 @@ class Foobar
 }
 
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('foobar'));
-                $symbolInformation = $frame->locals()->byName('foobar')->first()->symbolContext();
-                $this->assertEquals('string', (string) $symbolInformation->type());
-                $this->assertEquals('foobar', (string) $symbolInformation->value());
-            }],
-            'It returns types for reassigned variables' => [
-                <<<'EOT'
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $this->assertCount(1, $frame->locals()->byName('foobar'));
+            $symbolInformation = $frame->locals()->byName('foobar')->first()->symbolContext();
+            $this->assertEquals('string', (string) $symbolInformation->type());
+            $this->assertEquals('foobar', (string) $symbolInformation->value());
+        }];
+        yield 'It returns types for reassigned variables' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -106,15 +107,16 @@ class Foobar
 }
 
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('foobar');
-                $this->assertCount(1, $vars);
-                $symbolInformation = $vars->first()->symbolContext();
-                $this->assertEquals('World', (string) $symbolInformation->type());
-                $this->assertEquals('test', (string) $symbolInformation->value());
-            }],
-            'It returns type for $this' => [
-                <<<'EOT'
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->locals()->byName('foobar');
+            $this->assertCount(1, $vars);
+            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertEquals('World', (string) $symbolInformation->type());
+            $this->assertEquals('test', (string) $symbolInformation->value());
+        }];
+
+        yield 'It returns type for $this' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -125,14 +127,15 @@ class Foobar
 }
 
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('this');
-                $this->assertCount(1, $vars);
-                $symbolInformation = $vars->first()->symbolContext();
-                $this->assertEquals('Foobar', (string) $symbolInformation->type());
-            }],
-            'It tracks assigned properties' => [
-                <<<'EOT'
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->locals()->byName('this');
+            $this->assertCount(1, $vars);
+            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertEquals('Foobar', (string) $symbolInformation->type());
+        }];
+
+        yield 'It tracks assigned properties' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -143,15 +146,36 @@ class Foobar
     }
 }
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->properties()->byName('foobar');
-                $this->assertCount(1, $vars);
-                $symbolInformation = $vars->first()->symbolContext();
-                $this->assertEquals('string', (string) $symbolInformation->type());
-                $this->assertEquals('foobar', (string) $symbolInformation->value());
-            }],
-            'It tracks assigned from variable' => [
-                <<<'EOT'
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->properties()->byName('foobar');
+            $this->assertCount(1, $vars);
+            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertEquals('string', (string) $symbolInformation->type());
+            $this->assertEquals('foobar', (string) $symbolInformation->value());
+        }];
+
+        yield 'It tracks assigned array properties' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello()
+    {
+        $this->foobar[] = 'foobar';
+    }
+}
+EOT
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->properties()->byName('foobar');
+            $this->assertCount(1, $vars);
+            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertEquals('array', (string) $symbolInformation->type());
+            $this->assertEquals('foobar', (string) $symbolInformation->value());
+        }];
+
+        yield 'It tracks assigned from variable' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -163,15 +187,16 @@ class Foobar
     }
 }
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->properties()->byName('foobar');
-                $this->assertCount(1, $vars);
-                $symbolInformation = $vars->first()->symbolContext();
-                $this->assertEquals('string', (string) $symbolInformation->type());
-                $this->assertEquals('foobar', (string) $symbolInformation->value());
-            }],
-            'It returns type for a for each member (with a docblock)' => [
-                <<<'EOT'
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->properties()->byName('foobar');
+            $this->assertCount(1, $vars);
+            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertEquals('string', (string) $symbolInformation->type());
+            $this->assertEquals('foobar', (string) $symbolInformation->value());
+        }];
+
+        yield 'It returns type for a for each member (with a docblock)' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -185,14 +210,15 @@ class Foobar
     }
 }
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('foobar');
-                $this->assertCount(1, $vars);
-                $symbolInformation = $vars->first()->symbolContext();
-                $this->assertEquals('Foobar', (string) $symbolInformation->type());
-            }],
-            'Redeclared variables' => [
-                <<<'EOT'
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->locals()->byName('foobar');
+            $this->assertCount(1, $vars);
+            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertEquals('Foobar', (string) $symbolInformation->type());
+        }];
+
+        yield 'Redeclared variables' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -204,14 +230,15 @@ class Foobar
     }
 }
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame) {
-                $vars = $frame->locals()->byName('$foobar');
-                $this->assertCount(2, $vars);
-                $this->assertEquals('Foobar', (string) $vars->first()->symbolContext()->type()->className());
-                $this->assertEquals('stdClass', (string) $vars->last()->symbolContext()->type()->className());
-            }],
-            'Tolerates missing tokens' => [
-                <<<'EOT'
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->locals()->byName('$foobar');
+            $this->assertCount(2, $vars);
+            $this->assertEquals('Foobar', (string) $vars->first()->symbolContext()->type()->className());
+            $this->assertEquals('stdClass', (string) $vars->last()->symbolContext()->type()->className());
+        }];
+
+        yield 'Tolerates missing tokens' => [
+            <<<'EOT'
 <?php
 
 class Foobar
@@ -222,10 +249,9 @@ class Foobar
     }
 }
 EOT
-            , [ 'Foobar', 'hello' ], function (Frame $frame, $logger) {
-                $this->assertContains('Non-node class passed to resolveNode, got', (string) $frame->problems());
-            }],
-        ];
+        , [ 'Foobar', 'hello' ], function (Frame $frame, $logger) {
+            $this->assertContains('Non-node class passed to resolveNode, got', (string) $frame->problems());
+        }];
     }
 
     /**
@@ -241,9 +267,8 @@ EOT
 
     public function provideBuildForNode()
     {
-        return [
-            'Exceptions' => [
-                <<<'EOT'
+        yield 'Exceptions' => [
+            <<<'EOT'
 <?php
 try {
 } catch (\Exception $exception) {
@@ -251,15 +276,16 @@ try {
 }
 
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$exception'));
-                    $exception = $frame->locals()->byName('$exception')->first();
-                    $this->assertEquals(Type::fromString('Exception'), $exception->symbolContext()->type());
-                }
-            ],
-            'Respects closure scope' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$exception'));
+                $exception = $frame->locals()->byName('$exception')->first();
+                $this->assertEquals(Type::fromString('Exception'), $exception->symbolContext()->type());
+            }
+        ];
+
+        yield 'Respects closure scope' => [
+            <<<'EOT'
 <?php
 $foo = 'bar';
 
@@ -268,14 +294,15 @@ $hello = function () {
     <>
 };
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$bar'), 'Scoped variable exists');
-                    $this->assertCount(0, $frame->locals()->byName('$foo'), 'Parent scoped variable doesnt exist');
-                }
-            ],
-            'Injects closure parameters' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$bar'), 'Scoped variable exists');
+                $this->assertCount(0, $frame->locals()->byName('$foo'), 'Parent scoped variable doesnt exist');
+            }
+        ];
+
+        yield 'Injects closure parameters' => [
+            <<<'EOT'
 <?php
 $foo = 'bar';
 
@@ -283,15 +310,16 @@ $hello = function (Foobar $foo) {
     <>
 };
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$foo'));
-                    $variable = $frame->locals()->byName('$foo')->first();
-                    $this->assertEquals(Type::fromString('Foobar'), $variable->symbolContext()->type());
-                }
-            ],
-            'Injects imported closure parent scope variables' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$foo'));
+                $variable = $frame->locals()->byName('$foo')->first();
+                $this->assertEquals(Type::fromString('Foobar'), $variable->symbolContext()->type());
+            }
+        ];
+
+        yield 'Injects imported closure parent scope variables' => [
+            <<<'EOT'
 <?php
 $zed = 'zed';
 $art = 'art';
@@ -300,84 +328,90 @@ $hello = function () use ($zed) {
     <>
 };
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $zed = $frame->locals()->byName('$zed')->first();
-                    $this->assertEquals('string', (string) $zed->symbolContext()->type());
-                    $this->assertEquals(Symbol::VARIABLE, $zed->symbolContext()->symbol()->symbolType());
-                }
-            ],
-            'Injects variables with @var (non-standard)' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $zed = $frame->locals()->byName('$zed')->first();
+                $this->assertEquals('string', (string) $zed->symbolContext()->type());
+                $this->assertEquals(Symbol::VARIABLE, $zed->symbolContext()->symbol()->symbolType());
+            }
+        ];
+
+        yield 'Injects variables with @var (non-standard)' => [
+            <<<'EOT'
 <?php
 /** @var $zed string */
 $zed;
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
-                }
-            ],
-            'Injects variables with @var (standard)' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
+
+        yield 'Injects variables with @var (standard)' => [
+            <<<'EOT'
 <?php
 /** @var string $zed */
 $zed;
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
-                }
-            ],
-            'Injects variables with @var namespaced' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
+
+        yield 'Injects variables with @var namespaced' => [
+            <<<'EOT'
 <?php
 namespace Foo;
 /** @var Bar $zed */
 $zed;
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('Foo\\Bar', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
-                }
-            ],
-            'Injects variables with @var namespaced and qualified name' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('Foo\\Bar', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
+
+        yield 'Injects variables with @var namespaced and qualified name' => [
+            <<<'EOT'
 <?php
 namespace Foo;
 /** @var Bar\Baz $zed */
 $zed;
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('Foo\\Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
-                }
-            ],
-            'Injects variables with @var namespaced with fully qualified name' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('Foo\\Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
+
+        yield 'Injects variables with @var namespaced with fully qualified name' => [
+            <<<'EOT'
 <?php
 namespace Foo;
 /** @var \Bar\Baz $zed */
 $zed;
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
-                }
-            ],
-            'Injects variables with @var with imported namespace' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
+
+        yield 'Injects variables with @var with imported namespace' => [
+            <<<'EOT'
 <?php
 
 use Foo\Bar\Zed;
@@ -385,41 +419,42 @@ use Foo\Bar\Zed;
 $zed;
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(1, $frame->locals()->byName('$zed'));
-                    $this->assertEquals('Foo\Bar\Zed\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
-                }
-            ],
-            'Handles array assignments' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('Foo\Bar\Zed\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
+
+        yield 'Handles array assignments' => [
+            <<<'EOT'
 <?php
 $foo = [ 'foo' => 'bar' ];
 $bar = $foo['foo'];
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(2, $frame->locals());
-                    $this->assertEquals('array', (string) $frame->locals()->first()->symbolContext()->type());
-                    $this->assertEquals(['foo' => 'bar'], $frame->locals()->first()->symbolContext()->value());
-                    $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
-                    $this->assertEquals('bar', (string) $frame->locals()->last()->symbolContext()->value());
-                }
-            ],
-            'Includes list assignments' => [
-                <<<'EOT'
+        ,
+            function (Frame $frame) {
+                $this->assertCount(2, $frame->locals());
+                $this->assertEquals('array', (string) $frame->locals()->first()->symbolContext()->type());
+                $this->assertEquals(['foo' => 'bar'], $frame->locals()->first()->symbolContext()->value());
+                $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
+                $this->assertEquals('bar', (string) $frame->locals()->last()->symbolContext()->value());
+            }
+        ];
+
+        yield 'Includes list assignments' => [
+            <<<'EOT'
 <?php
 list($foo, $bar) = [ 'foo', 'bar' ];
 <>
 EOT
-                ,
-                function (Frame $frame) {
-                    $this->assertCount(2, $frame->locals());
-                    $this->assertEquals('foo', $frame->locals()->first()->symbolContext()->value());
-                    $this->assertEquals('string', (string) $frame->locals()->first()->symbolContext()->type());
-                }
-            ]
+        ,
+            function (Frame $frame) {
+                $this->assertCount(2, $frame->locals());
+                $this->assertEquals('foo', $frame->locals()->first()->symbolContext()->value());
+                $this->assertEquals('string', (string) $frame->locals()->first()->symbolContext()->type());
+            }
         ];
     }
 }
