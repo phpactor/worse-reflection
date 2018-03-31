@@ -154,6 +154,31 @@ EOT
             $this->assertEquals('foobar', (string) $symbolInformation->value());
         }];
 
+        yield 'It assigns property values to assignments' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    /** @var Foobar[] */
+    private $foobar;
+
+    public function hello(Barfoo $world)
+    {
+        $foobar = $this->foobar;
+        <>
+    }
+}
+EOT
+        , [ 'Foobar', 'hello' ], function (Frame $frame) {
+            $vars = $frame->locals()->byName('foobar');
+            $this->assertCount(1, $vars);
+            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertEquals('array', (string) $symbolInformation->type());
+            $this->assertEquals('Foobar', (string) $symbolInformation->type()->arrayType());
+        }];
+
+
         yield 'It tracks assigned array properties' => [
             <<<'EOT'
 <?php

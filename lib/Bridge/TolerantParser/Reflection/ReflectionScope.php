@@ -45,18 +45,25 @@ class ReflectionScope implements CoreReflectionScope
         return Name::fromString($namespaceDefinition->name->getText());
     }
 
-    public function resolveFullyQualifiedName(string $type, ReflectionClassLike $class): Type
+    public function resolveFullyQualifiedName($type, ReflectionClassLike $class): Type
     {
-        if (substr($type, 0, 1) == '\\') {
-            return Type::fromString($type);
+        /** @var Type $type */
+        $type instanceof Type ? $type : Type::fromString($type);
+
+        if ($type->arrayType()->isDefined()) {
+            $arrayType = $this->resolveFullyQualifiedName($type->arrayType(), $class);
+
+            return Type::array((string) $arrayType);
+        }
+
+        if ($type->className()->wasFullyQualified()) {
+            return $type;
         }
 
         // TODO: "self" is not the same as static / $this
-        if (in_array($type, [ '$this', 'static', 'self' ])) {
+        if (in_array((string) $type, [ '$this', 'static', 'self' ])) {
             return Type::class($class->name());
         }
-
-        $type = Type::fromString($type);
 
         if (false === $type->isClass()) {
             return $type;

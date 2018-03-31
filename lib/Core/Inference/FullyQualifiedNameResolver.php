@@ -34,6 +34,7 @@ class FullyQualifiedNameResolver
 
         if ($type->arrayType()->isDefined()) {
             $arrayType = $this->resolve($node, $type->arrayType());
+
             return Type::array((string) $arrayType);
         }
 

@@ -8,5 +8,5 @@ interface ReflectionScope
 {
     public function nameImports(): NameImports;
 
-    public function resolveFullyQualifiedName(string $type, ReflectionClassLike $classLike);
+    public function resolveFullyQualifiedName($type, ReflectionClassLike $classLike);
 }
