@@ -34,9 +34,7 @@ class PhpstanDocBlockFactory implements DocBlockFactory
         if (empty(trim($docblock))) {
             $docblock = '/** */';
         }
-        $tokens = new TokenIterator($this->lexer->tokenize($docblock));
-        $node = $this->phpDocParser->parse($tokens);
 
-        return new PhpstanDocBlock($docblock, $node);
+        return new PhpstanDocBlock($docblock, $this->phpDocParser, $this->lexer);
     }
 }

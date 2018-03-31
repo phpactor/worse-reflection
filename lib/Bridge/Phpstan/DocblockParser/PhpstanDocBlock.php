@@ -10,23 +10,34 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use Phpactor\WorseReflection\Core\Type;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\PhpDocParser\Lexer\Lexer;
 
 class PhpstanDocBlock implements DocBlock
 {
-    /**
-     * @var PhpDocNode
-     */
-    private $node;
-
     /**
      * @var string
      */
     private $raw;
 
-    public function __construct(string $raw, PhpDocNode $node)
+    /**
+     * @var PhpDocParser
+     */
+    private $parser;
+
+    private $node;
+
+    /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    public function __construct(string $raw, PhpDocParser $parser, Lexer $lexer)
     {
-        $this->node = $node;
         $this->raw = $raw;
+        $this->parser = $parser;
+        $this->lexer = $lexer;
     }
 
     public function isDefined(): bool
@@ -41,12 +52,12 @@ class PhpstanDocBlock implements DocBlock
 
     public function formatted(): string
     {
-        return implode(PHP_EOL, $this->node->children);
+        return implode(PHP_EOL, $this->node()->children);
     }
 
     public function returnTypes(): array
     {
-        $types = $this->node->getReturnTagValues();
+        $types = $this->node()->getReturnTagValues();
         return array_map(function (ReturnTagValueNode $node) {
             return Type::fromString((string) $node->type);
         }, $types);
@@ -54,7 +65,7 @@ class PhpstanDocBlock implements DocBlock
 
     public function methodTypes(string $methodName): array
     {
-        $methodValues = $this->node->getMethodTagValues();
+        $methodValues = $this->node()->getMethodTagValues();
 
         $types = array_filter($methodValues, function (MethodTagValueNode $node) use ($methodName) {
             return $methodName == $node->methodName;
@@ -67,7 +78,7 @@ class PhpstanDocBlock implements DocBlock
 
     public function vars(): DocBlockVars
     {
-        $types = $this->node->getVarTagValues();
+        $types = $this->node()->getVarTagValues();
         return new DocBlockVars(array_map(function (VarTagValueNode $node) {
             return DocBlockVar::fromVarNameAndType($node->variableName, (string) $node->type);
         }, $types));
@@ -76,5 +87,15 @@ class PhpstanDocBlock implements DocBlock
     public function inherits(): bool
     {
         return false !== stripos($this->raw, '{inheritDoc}');
+    }
+
+    private function node(): PhpDocNode
+    {
+        if (null === $this->node) {
+            $tokens = new TokenIterator($this->lexer->tokenize($this->raw));
+            $this->node = $this->parser->parse($tokens);
+        }
+
+        return $this->node;
     }
 }
