@@ -6,7 +6,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryBridge;
+use Phpactor\WorseReflection\Bridge\Phpstan\DocblockParser\PhpstanDocBlockFactory as DocblockFactoryBridge;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\Reflector\CompositeReflector;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedClassReflector;

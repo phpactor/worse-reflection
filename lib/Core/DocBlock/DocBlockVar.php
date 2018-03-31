@@ -31,4 +31,9 @@ class DocBlockVar
     {
         return $this->type;
     }
+
+    public static function fromVarNameAndType(string $varName, string $type)
+    {
+        return new self($varName, Type::fromString($type));
+    }
 }
