@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory;
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Type;
 
 class DocblockTest extends TestCase
@@ -42,7 +42,15 @@ class DocblockTest extends TestCase
     public function testVarTypes()
     {
         $docblock = $this->create('/** @var Foo $foo) */');
-        $this->assertEquals([ 'Foo' ], $docblock->varTypes());
+        $this->assertEquals('Foo', $docblock->vars()->types()->best()->className()->full());
+        $this->assertFalse($docblock->vars()->types()->best()->arrayType()->isDefined());
+    }
+
+    public function testArrayTypes()
+    {
+        $docblock = $this->create('/** @var Foo[] $foo) */');
+        $this->assertTrue($docblock->vars()->types()->best()->arrayType()->isDefined());
+        $this->assertEquals('Foo', $docblock->vars()->types()->best()->arrayType()->className()->full());
     }
 
     public function testInherits()
@@ -53,7 +61,7 @@ class DocblockTest extends TestCase
         $this->assertTrue($docblock->inherits());
     }
 
-    private function create($docblock): Docblock
+    private function create($docblock): DocBlock
     {
         $factory = new DocblockFactory();
         return $factory->create($docblock);

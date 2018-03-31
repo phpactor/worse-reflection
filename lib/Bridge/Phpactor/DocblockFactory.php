@@ -2,8 +2,8 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
-use Phpactor\WorseReflection\Core\DocblockFactory as CoreDocblockPhpactory;
-use Phpactor\WorseReflection\Core\Docblock as CoreDocblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory as CoreDocblockPhpactory;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\DocblockFactory as PhpactorDocblockFactory;
 
 class DocblockFactory implements CoreDocblockPhpactory

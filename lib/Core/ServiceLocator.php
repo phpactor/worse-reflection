@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedClassReflect
 use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeReflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 
 class ServiceLocator
 {
@@ -47,7 +48,7 @@ class ServiceLocator
     private $parser;
 
     /**
-     * @var DocblockFactory
+     * @var DocBlockFactory
      */
     private $docblockFactory;
 
@@ -81,10 +82,10 @@ class ServiceLocator
         );
 
         $this->sourceLocator = $sourceLocator;
-        $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
-        $this->frameBuilder = new FrameBuilder($this->symbolContextResolver, $this->logger);
-        $this->parser = new Parser();
         $this->docblockFactory = new DocblockFactoryBridge();
+        $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
+        $this->frameBuilder = new FrameBuilder($this->docblockFactory, $this->symbolContextResolver, $this->logger);
+        $this->parser = new Parser();
     }
 
     public function reflector(): Reflector
@@ -117,7 +118,7 @@ class ServiceLocator
         return $this->parser;
     }
 
-    public function docblockFactory(): DocblockFactory
+    public function docblockFactory(): DocBlockFactory
     {
         return $this->docblockFactory;
     }

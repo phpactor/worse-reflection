@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Position;
+use RuntimeException;
 
 abstract class AssignmentstTestCase extends TestCase
 {
@@ -83,6 +84,17 @@ abstract class AssignmentstTestCase extends TestCase
         $assignments->add($this->createVariable('hello', 10, 15));
 
         $this->assertCount(1, $assignments->byName('hello')->greaterThan(5));
+    }
+
+    public function testThrowsExceptionIfIndexNotExist()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No variable at index "5"');
+        $assignments = $this->assignments();
+
+        $assignments->add($this->createVariable('hello', 0, 5));
+
+        $this->assertCount(1, $assignments->atIndex(5));
     }
 
     private function createVariable(string $name, int $start, int $end): Variable

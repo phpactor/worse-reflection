@@ -9,6 +9,8 @@ use Phpactor\WorseReflection\Core\Name;
 use Microsoft\PhpParser\ResolvedName;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
+use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
 class ReflectionScope implements CoreReflectionScope
 {
@@ -45,27 +47,9 @@ class ReflectionScope implements CoreReflectionScope
         return Name::fromString($namespaceDefinition->name->getText());
     }
 
-    public function resolveFullyQualifiedName(string $type, ReflectionClassLike $class): Type
+    public function resolveFullyQualifiedName($type, ReflectionClassLike $class): Type
     {
-        if (substr($type, 0, 1) == '\\') {
-            return Type::fromString($type);
-        }
-
-        // TODO: "self" is not the same as static / $this
-        if (in_array($type, [ '$this', 'static', 'self' ])) {
-            return Type::class($class->name());
-        }
-
-        $type = Type::fromString($type);
-
-        if (false === $type->isClass()) {
-            return $type;
-        }
-
-        if ($this->nameImports()->hasAlias($type->short())) {
-            return Type::fromString((string) $this->nameImports()->getByAlias($type->short()));
-        }
-
-        return $type->prependNamespace($this->namespace());
+        $resolver = new FullyQualifiedNameResolver(new ArrayLogger());
+        return $resolver->resolve($this->node, $type);
     }
 }

@@ -14,7 +14,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty as CoreReflectionProperty;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
@@ -116,7 +116,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return $this->class;
     }
 
-    public function docblock(): Docblock
+    public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->propertyDeclaration->getLeadingCommentAndWhitespaceText());
     }

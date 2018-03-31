@@ -24,6 +24,9 @@ use Microsoft\PhpParser\Node\ArrayElement;
 use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
+use Microsoft\PhpParser\Node\Statement\ForeachStatement;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 
 final class FrameBuilder
 {
@@ -52,12 +55,18 @@ final class FrameBuilder
      */
     private $nameResolver;
 
-    public function __construct(SymbolContextResolver $symbolContextResolver, Logger $logger)
+    /**
+     * @var DocBlockFactory
+     */
+    private $docblockFactory;
+
+    public function __construct(DocBlockFactory $docblockFactory, SymbolContextResolver $symbolContextResolver, Logger $logger)
     {
         $this->logger = $logger;
         $this->symbolContextResolver = $symbolContextResolver;
         $this->symbolFactory = new SymbolFactory();
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
+        $this->docblockFactory = $docblockFactory;
     }
 
     public function build(Node $node): Frame
@@ -95,6 +104,10 @@ final class FrameBuilder
 
         if ($node instanceof CatchClause) {
             $this->walkExceptionCatch($frame, $node);
+        }
+
+        if ($node instanceof ForeachStatement) {
+            $this->walkForeachStatement($frame, $node);
         }
 
         foreach ($node->getChildNodes() as $childNode) {
@@ -277,22 +290,21 @@ final class FrameBuilder
     private function injectVariablesFromComment(Frame $frame, Node $node)
     {
         $comment = $node->getLeadingCommentAndWhitespaceText();
+        $docblock = $this->docblockFactory->create($comment);
 
-        if (!preg_match('{var (\$?[\\\\\w]+) (\$?[\\\\\w]+)}', $comment, $matches)) {
+        if (false === $docblock->isDefined()) {
             return;
         }
 
-        $type = $matches[1];
-        $varName = $matches[2];
+        $vars = $docblock->vars();
 
-        // detect non-standard
-        if (substr($type, 0, 1) == '$') {
-            list($varName, $type) = [$type, $varName];
+        /** @var DocBlockVar $var */
+        foreach ($docblock->vars() as $var) {
+            $this->injectedTypes[ltrim($var->name(), '$')] = $this->nameResolver->resolve(
+                $node,
+                $var->types()->best()
+            );
         }
-
-        $varName = ltrim($varName, '$');
-
-        $this->injectedTypes[$varName] = $this->nameResolver->resolve($node, $type);
     }
 
     private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
@@ -363,7 +375,7 @@ final class FrameBuilder
         unset($this->injectedTypes[$symbolName]);
     }
 
-    private function resolveNode(Frame $frame, $node)
+    private function resolveNode(Frame $frame, $node): SymbolContext
     {
         $info = $this->symbolContextResolver->resolveNode($frame, $node);
 
@@ -455,5 +467,29 @@ final class FrameBuilder
             $rightContext = $rightContext->withType(Type::array());
             $this->walkMemberAccessExpression($frame, $leftOperand->postfixExpression, $rightContext);
         }
+    }
+
+    private function walkForeachStatement(Frame $frame, ForeachStatement $node)
+    {
+        $collection = $this->resolveNode($frame, $node->forEachCollectionName);
+        $itemName = $node->foreachValue;
+        $itemName = $itemName->expression->name->getText($node->getFileContents());
+
+        $collectionType = $collection->types()->best();
+
+        $context = $this->symbolFactory->context(
+            $itemName,
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+            ]
+        );
+
+        if ($collectionType->arrayType()->isDefined()) {
+            $context = $context->withType($collectionType->arrayType());
+        }
+
+        $frame->locals()->add(Variable::fromSymbolContext($context));
     }
 }

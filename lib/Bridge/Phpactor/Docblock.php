@@ -2,9 +2,14 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
-use Phpactor\WorseReflection\Core\Docblock as CoreDocblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\Docblock\Tag\DocblockTypes;
+use Phpactor\Docblock\DocblockType;
+use Phpactor\WorseReflection\Core\Types;
 
 class Docblock implements CoreDocblock
 {
@@ -61,9 +66,14 @@ class Docblock implements CoreDocblock
         return $types;
     }
 
-    public function varTypes(): array
+    public function vars(): DocBlockVars
     {
-        return $this->typesFromTag('var');
+        $vars = [];
+        foreach ($this->docblock->tags()->byName('var') as $tag) {
+            $vars[] = new DocBlockVar($tag->varName() ?: '', $this->typesFromDocblockTypes($tag->types()));
+        }
+
+        return new DocBlockVars($vars);
     }
 
     public function inherits(): bool
@@ -76,11 +86,25 @@ class Docblock implements CoreDocblock
         $types = [];
 
         foreach ($this->docblock->tags()->byName($tag) as $tag) {
+
             foreach ($tag->types() as $type) {
                 $types[] = Type::fromString((string) $type);
             }
         }
 
         return $types;
+    }
+
+    private function typesFromDocblockTypes(DocblockTypes $types)
+    {
+        $types = array_map(function (DocblockType $type) {
+            if ($type->isArray()) {
+                return Type::array($type->__toString());
+            }
+
+            return Type::fromString($type->__toString());
+        }, iterator_to_array($types));
+
+        return Types::fromTypes($types);
     }
 }

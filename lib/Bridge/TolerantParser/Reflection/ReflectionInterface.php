@@ -19,7 +19,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface as CoreReflectionInterface;
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 
 class ReflectionInterface extends AbstractReflectionClass implements CoreReflectionInterface
 {
@@ -129,7 +129,7 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return $this->sourceCode;
     }
 
-    public function docblock(): Docblock
+    public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
     }

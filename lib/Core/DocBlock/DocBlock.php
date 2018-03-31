@@ -1,8 +1,8 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core;
+namespace Phpactor\WorseReflection\Core\DocBlock;
 
-interface Docblock
+interface DocBlock
 {
     public function isDefined(): bool;
 
@@ -14,7 +14,7 @@ interface Docblock
 
     public function methodTypes(string $methodName): array;
 
-    public function varTypes(): array;
+    public function vars(): DocBlockVars;
 
     public function inherits(): bool;
 }

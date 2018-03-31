@@ -31,13 +31,13 @@ class PropertyTypeResolver
 
         $resolvedTypes = array_map(function (Type $type) {
             return $this->property->scope()->resolveFullyQualifiedName($type, $this->property->class());
-        }, $docblockTypes);
+        }, iterator_to_array($docblockTypes));
 
         return Types::fromTypes($resolvedTypes);
     }
 
-    private function getDocblockTypes()
+    private function getDocblockTypes(): Types
     {
-        return $this->property->docblock()->varTypes();
+        return $this->property->docblock()->vars()->types();
     }
 }
