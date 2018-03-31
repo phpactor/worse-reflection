@@ -2,12 +2,12 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 
 interface ReflectionTrait extends ReflectionClassLike
 {
-    public function docblock(): Docblock;
+    public function docblock(): DocBlock;
 
     public function properties(): ReflectionPropertyCollection;
 }

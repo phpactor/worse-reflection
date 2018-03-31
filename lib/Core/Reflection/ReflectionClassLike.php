@@ -5,7 +5,7 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\SourceCode;
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 
 interface ReflectionClassLike
@@ -30,5 +30,5 @@ interface ReflectionClassLike
 
     public function isConcrete();
 
-    public function docblock(): Docblock;
+    public function docblock(): DocBlock;
 }

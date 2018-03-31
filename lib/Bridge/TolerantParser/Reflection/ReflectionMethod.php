@@ -7,7 +7,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\NodeText;
@@ -117,7 +117,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return ReflectionParameterCollection::fromMethodDeclaration($this->serviceLocator, $this->node, $this);
     }
 
-    public function docblock(): Docblock
+    public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->node->getLeadingCommentAndWhitespaceText());
     }

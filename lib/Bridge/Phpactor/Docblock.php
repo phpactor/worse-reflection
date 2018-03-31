@@ -2,9 +2,11 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
-use Phpactor\WorseReflection\Core\Docblock as CoreDocblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 
 class Docblock implements CoreDocblock
 {
@@ -61,9 +63,13 @@ class Docblock implements CoreDocblock
         return $types;
     }
 
-    public function varTypes(): array
+    public function vars(): DocBlockVars
     {
-        return $this->typesFromTag('var');
+        $types = $this->typesFromTag('var');
+
+        return new DocBlockVars(array_map(function (Type $type) {
+            return new DocBlockVar('name', $type);
+        }, $types));
     }
 
     public function inherits(): bool

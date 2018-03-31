@@ -13,7 +13,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollec
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait as CoreReflectionTrait;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 
 class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionTrait
 {
@@ -79,7 +79,7 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
         return false;
     }
 
-    public function docblock(): Docblock
+    public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
     }

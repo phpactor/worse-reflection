@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Docblock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Types;
 
 interface ReflectionProperty
@@ -23,5 +23,5 @@ interface ReflectionProperty
 
     public function isStatic(): bool;
 
-    public function docblock(): Docblock;
+    public function docblock(): DocBlock;
 }

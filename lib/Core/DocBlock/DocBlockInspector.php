@@ -1,8 +1,8 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core;
+namespace Phpactor\WorseReflection\Core\DocBlock;
 
-interface DocblockInspector
+interface DocBlockInspector
 {
     public function typesForMethod(string $docblock, string $methodName): array;
 }

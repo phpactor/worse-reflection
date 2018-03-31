@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedClassReflect
 use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeReflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 
 class ServiceLocator
 {
@@ -117,7 +118,7 @@ class ServiceLocator
         return $this->parser;
     }
 
-    public function docblockFactory(): DocblockFactory
+    public function docblockFactory(): DocBlockFactory
     {
         return $this->docblockFactory;
     }
