@@ -15,6 +15,7 @@ class Type
 
     private $type;
     private $className;
+    private $arrayType;
 
     public static function fromArray(array $parts): Type
     {
@@ -110,9 +111,18 @@ class Type
         return self::create(self::TYPE_VOID);
     }
 
-    public static function array()
+    public static function array(string $type = null)
     {
-        return self::create(self::TYPE_ARRAY);
+        $instance = self::create(self::TYPE_ARRAY);
+
+        if ($type) {
+            $instance->arrayType = Type::fromString($type);
+            return $instance;
+        }
+
+        $instance->arrayType = self::unknown();
+
+        return $instance;
     }
 
     public static function null()
@@ -210,5 +220,14 @@ class Type
     public function prependNamespace(Name $namespace)
     {
         return self::class(ClassName::fromString((string) $namespace . '\\' . (string) $this));
+    }
+
+    public function arrayType(): Type
+    {
+        if ($this->arrayType) {
+            return $this->arrayType;
+        }
+
+        return self::unknown();
     }
 }

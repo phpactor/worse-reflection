@@ -21,9 +21,14 @@ class DocBlockVars implements IteratorAggregate
 
     public function types(): Types
     {
-        return Types::fromTypes(array_map(function (DocBlockVar $var) {
-            return $var->type();
-        }, $this->vars));
+        $types = [];
+        foreach ($this->vars as $var) {
+            foreach ($var->types() as $type) {
+                $types[] = $type;
+            }
+        }
+
+        return Types::fromTypes($types);
     }
 
     /**
