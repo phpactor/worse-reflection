@@ -48,7 +48,7 @@ class ServiceLocator
     private $parser;
 
     /**
-     * @var DocblockFactory
+     * @var DocBlockFactory
      */
     private $docblockFactory;
 

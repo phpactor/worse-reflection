@@ -54,7 +54,7 @@ class FullyQualifiedNameResolver
             return $type;
         }
 
-        if (in_array((string) $type, ['self', 'static'])) {
+        if (in_array((string) $type, ['self', 'static', '$this'])) {
             return $this->currentClass($node);
         }
 
