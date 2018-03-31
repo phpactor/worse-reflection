@@ -44,12 +44,12 @@ class Docblock implements CoreDocblock
         return $this->docblock->prose();
     }
 
-    public function returnTypes(): array
+    public function returnTypes(): Types
     {
         return $this->typesFromTag('return');
     }
 
-    public function methodTypes(string $methodName): array
+    public function methodTypes(string $methodName): Types
     {
         $types = [];
 
@@ -63,7 +63,7 @@ class Docblock implements CoreDocblock
             }
         }
 
-        return $types;
+        return Types::fromTypes($types);
     }
 
     public function vars(): DocBlockVars
@@ -86,13 +86,11 @@ class Docblock implements CoreDocblock
         $types = [];
 
         foreach ($this->docblock->tags()->byName($tag) as $tag) {
-
-            foreach ($tag->types() as $type) {
-                $types[] = Type::fromString((string) $type);
-            }
+            return $this->typesFromDocblockTypes($tag->types());
         }
 
-        return $types;
+        return Types::empty();
+
     }
 
     private function typesFromDocblockTypes(DocblockTypes $types)

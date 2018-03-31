@@ -51,7 +51,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     private $class;
 
     /**
-     * @var MemberTypeResolver
+     * @var MethodReturnTypeResolver
      */
     private $returnTypeResolver;
 

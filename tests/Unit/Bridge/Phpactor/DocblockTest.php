@@ -30,13 +30,13 @@ class DocblockTest extends TestCase
     public function testReturnTypes()
     {
         $docblock = $this->create('/** @return Foo */');
-        $this->assertEquals([ 'Foo' ], $docblock->returnTypes());
+        $this->assertEquals([ 'Foo' ], iterator_to_array($docblock->returnTypes()));
     }
 
     public function testMethodTypes()
     {
         $docblock = $this->create('/** @method Foo bar() */');
-        $this->assertEquals([ 'Foo' ], $docblock->methodTypes('bar'));
+        $this->assertEquals([ 'Foo' ], iterator_to_array($docblock->methodTypes('bar')));
     }
 
     public function testVarTypes()

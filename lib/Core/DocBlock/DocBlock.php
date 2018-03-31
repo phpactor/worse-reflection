@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\DocBlock;
 
+use Phpactor\WorseReflection\Core\Types;
+
 interface DocBlock
 {
     public function isDefined(): bool;
@@ -10,9 +12,9 @@ interface DocBlock
 
     public function formatted(): string;
 
-    public function returnTypes(): array;
+    public function returnTypes(): Types;
 
-    public function methodTypes(string $methodName): array;
+    public function methodTypes(string $methodName): Types;
 
     public function vars(): DocBlockVars;
 

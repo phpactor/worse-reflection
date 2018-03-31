@@ -52,11 +52,12 @@ class MethodReturnTypeResolver
     private function getDocblockTypesFromClassOrMethod(ReflectionMethod $method): Types
     {
         $classMethodOverrides = $method->class()->docblock()->methodTypes($method->name());
-        if ($classMethodOverrides) {
-            return $this->resolveTypes($classMethodOverrides);
+
+        if (Types::empty() != $classMethodOverrides) {
+            return $this->resolveTypes(iterator_to_array($classMethodOverrides));
         }
 
-        return $this->resolveTypes($method->docblock()->returnTypes());
+        return $this->resolveTypes(iterator_to_array($method->docblock()->returnTypes()));
     }
 
     private function resolveTypes(array $types): Types

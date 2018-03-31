@@ -184,6 +184,26 @@ EOT
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
+            'Return type from array docblock' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+class Foobar
+{
+    /**
+     * @return Post[]
+     */
+    function method1(): array {}
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals(Type::array('Acme\Post'), $methods->get('method1')->inferredReturnTypes()->best());
+                },
+            ],
             'Return type from docblock this and static' => [
                 <<<'EOT'
 <?php

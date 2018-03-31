@@ -101,9 +101,12 @@ class Type
         return new self();
     }
 
+    /**
+     * TODO: Support "pseudo" types
+     */
     public static function mixed()
     {
-        return new self();
+        return self::create('');
     }
 
     public static function void()
