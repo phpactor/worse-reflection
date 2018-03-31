@@ -25,46 +25,45 @@ class FullyQualifiedNameResolver
         $this->logger = $logger;
     }
 
-    public function resolve(Node $node, string $name = null): Type
+    public function resolve(Node $node, $type = null): Type
     {
-        $name = $name ?: $node->getText();
+        $type = $type ?: $node->getText();
+        $type = $type instanceof Type ? $type : Type::fromString($type);
 
         if ($this->isFunctionCall($node)) {
             return Type::unknown();
         }
         
         if ($this->isUseDefinition($node)) {
-            return Type::fromString((string) $name);
+            return Type::fromString((string) $type);
         }
-
-        $type = Type::fromString($name);
 
         if ($type->isPrimitive()) {
             return $type;
         }
 
-        if ($this->isFullyQualified($name)) {
+        if ($type->className()->wasFullyQualified()) {
             return $type;
         }
 
-        if (in_array($name, ['self', 'static'])) {
+        if (in_array((string) $type, ['self', 'static'])) {
             return $this->currentClass($node);
         }
 
-        if ($name == 'parent') {
+        if ((string) $type == 'parent') {
             return $this->parentClass($node);
         }
 
-        if ($type = $this->fromClassImports($node, $type)) {
-            return $type;
+        if ($importedType = $this->fromClassImports($node, $type)) {
+            return $importedType;
         }
 
         $namespaceDefinition = $node->getNamespaceDefinition();
         if ($namespaceDefinition && $namespaceDefinition->name instanceof QualifiedName) {
-            return Type::fromArray([$namespaceDefinition->name->getText(), $name]);
+            return Type::fromArray([$namespaceDefinition->name->getText(), (string) $type]);
         }
 
-        return Type::fromString($name);
+        return $type;
     }
 
     private function isFunctionCall(Node $node)

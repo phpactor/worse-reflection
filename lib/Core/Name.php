@@ -5,22 +5,25 @@ namespace Phpactor\WorseReflection\Core;
 class Name
 {
     protected $parts;
+    private $wasFullyQualified;
 
-    public function __construct(array $parts)
+    final public function __construct(array $parts, bool $wasFullyQualified)
     {
         $this->parts = $parts;
+        $this->wasFullyQualified = $wasFullyQualified;
     }
 
     public static function fromParts(array $parts)
     {
-        return new static($parts);
+        return new static($parts, false);
     }
 
     public static function fromString(string $string)
     {
+        $fullyQualified = 0 === strpos($string, '\\');
         $parts = explode('\\', trim($string, '\\'));
 
-        return new static($parts);
+        return new static($parts, $fullyQualified);
     }
 
     public static function fromUnknown($value)
@@ -49,7 +52,7 @@ class Name
      */
     public function head()
     {
-        return new self([ reset($this->parts) ]);
+        return new self([ reset($this->parts) ], false);
     }
 
     /**
@@ -59,7 +62,7 @@ class Name
     {
         $parts = $this->parts;
         array_shift($parts);
-        return new self($parts);
+        return new self($parts, $this->wasFullyQualified);
     }
 
     public function full(): string
@@ -70,5 +73,10 @@ class Name
     public function short(): string
     {
         return end($this->parts);
+    }
+
+    public function wasFullyQualified(): bool
+    {
+        return $this->wasFullyQualified;
     }
 }

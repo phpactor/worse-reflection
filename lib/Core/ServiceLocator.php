@@ -82,10 +82,10 @@ class ServiceLocator
         );
 
         $this->sourceLocator = $sourceLocator;
-        $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
-        $this->frameBuilder = new FrameBuilder($this->symbolContextResolver, $this->logger);
-        $this->parser = new Parser();
         $this->docblockFactory = new DocblockFactoryBridge();
+        $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
+        $this->frameBuilder = new FrameBuilder($this->docblockFactory, $this->symbolContextResolver, $this->logger);
+        $this->parser = new Parser();
     }
 
     public function reflector(): Reflector

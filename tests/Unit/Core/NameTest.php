@@ -19,4 +19,10 @@ class NameTest extends TestCase
         $name = Name::fromString('Foo\\Bar\\Baz');
         $this->assertEquals('Bar\\Baz', (string) $name->tail());
     }
+
+    public function testIsFullyQualified()
+    {
+        $name = Name::fromString('\\Foo\\Bar\\Baz');
+        $this->assertTrue($name->wasFullyQualified());
+    }
 }

@@ -280,7 +280,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
             'Return type from inherited docblock (from interface)' => [
@@ -310,7 +310,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
                 },
             ],
             'It reflects an abstract method' => [

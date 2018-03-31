@@ -203,7 +203,7 @@ class Foobar
 {
     public function hello()
     {
-        /** @var $foobar Foobar */
+        /** @var Foobar $foobar */
         foreach ($collection as $foobar) {
             $foobar->foobar();
         }
@@ -212,8 +212,8 @@ class Foobar
 EOT
         , [ 'Foobar', 'hello' ], function (Frame $frame) {
             $vars = $frame->locals()->byName('foobar');
-            $this->assertCount(1, $vars);
-            $symbolInformation = $vars->first()->symbolContext();
+            $this->assertCount(2, $vars);
+            $symbolInformation = $vars->atIndex(1)->symbolContext();
             $this->assertEquals('Foobar', (string) $symbolInformation->type());
         }];
 
@@ -280,7 +280,7 @@ EOT
             function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$exception'));
                 $exception = $frame->locals()->byName('$exception')->first();
-                $this->assertEquals(Type::fromString('Exception'), $exception->symbolContext()->type());
+                $this->assertEquals(Type::fromString('\Exception'), $exception->symbolContext()->type());
             }
         ];
 
@@ -340,7 +340,7 @@ EOT
         yield 'Injects variables with @var (non-standard)' => [
             <<<'EOT'
 <?php
-/** @var $zed string */
+/** @var string $zed */
 $zed;
 <>
 EOT
@@ -457,7 +457,7 @@ EOT
             }
         ];
 
-        yield 'Understands foreach' => [
+        yield 'Assigns type to foreach item' => [
             <<<'EOT'
 <?php
 /** @var int[] $items */
@@ -469,7 +469,7 @@ foreach ($items as $item) {
 EOT
         ,
             function (Frame $frame) {
-                $this->assertCount(2, $frame->locals());
+                $this->assertCount(3, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('item'));
                 $this->assertEquals('int', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }

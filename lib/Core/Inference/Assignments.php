@@ -69,6 +69,18 @@ abstract class Assignments implements \Countable, \IteratorAggregate
         return $first;
     }
 
+    public function atIndex(int $index): Variable
+    {
+        if (!isset($this->variables[$index])) {
+            throw new \RuntimeException(sprintf(
+                'No variable at index "%s"',
+                $index
+            ));
+        }
+
+        return $this->variables[$index];
+    }
+
     public function last(): Variable
     {
         $last = end($this->variables);
