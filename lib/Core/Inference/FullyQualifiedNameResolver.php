@@ -28,7 +28,14 @@ class FullyQualifiedNameResolver
     public function resolve(Node $node, $type = null): Type
     {
         $type = $type ?: $node->getText();
+
+        /** @var Type $type */
         $type = $type instanceof Type ? $type : Type::fromString($type);
+
+        if ($type->arrayType()->isDefined()) {
+            $arrayType = $this->resolve($node, $type->arrayType());
+            return Type::array((string) $arrayType);
+        }
 
         if ($this->isFunctionCall($node)) {
             return Type::unknown();

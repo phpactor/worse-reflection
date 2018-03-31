@@ -474,5 +474,26 @@ EOT
                 $this->assertEquals('int', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
         ];
+
+        yield 'Assigns fully qualfied type to foreach item' => [
+            <<<'EOT'
+<?php
+
+namespace Foobar;
+
+/** @var Barfoo[] $items */
+$items = [];
+
+foreach ($items as $item) {
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(3, $frame->locals());
+                $this->assertCount(1, $frame->locals()->byName('item'));
+                $this->assertEquals('Foobar\\Barfoo', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
+            }
+        ];
     }
 }
