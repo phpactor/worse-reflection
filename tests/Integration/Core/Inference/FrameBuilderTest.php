@@ -456,5 +456,23 @@ EOT
                 $this->assertEquals('string', (string) $frame->locals()->first()->symbolContext()->type());
             }
         ];
+
+        yield 'Understands foreach' => [
+            <<<'EOT'
+<?php
+/** @var int[] $items */
+$items = [1, 2, 3, 4];
+
+foreach ($items as $item) {
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(2, $frame->locals());
+                $this->assertCount(1, $frame->locals()->byName('item'));
+                $this->assertEquals('int', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
+            }
+        ];
     }
 }

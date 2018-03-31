@@ -24,6 +24,7 @@ use Microsoft\PhpParser\Node\ArrayElement;
 use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
+use Microsoft\PhpParser\Node\Statement\ForeachStatement;
 
 final class FrameBuilder
 {
@@ -95,6 +96,10 @@ final class FrameBuilder
 
         if ($node instanceof CatchClause) {
             $this->walkExceptionCatch($frame, $node);
+        }
+
+        if ($node instanceof ForeachStatement) {
+            $this->walkForeachStatement($frame, $node);
         }
 
         foreach ($node->getChildNodes() as $childNode) {
@@ -363,7 +368,7 @@ final class FrameBuilder
         unset($this->injectedTypes[$symbolName]);
     }
 
-    private function resolveNode(Frame $frame, $node)
+    private function resolveNode(Frame $frame, $node): SymbolContext
     {
         $info = $this->symbolContextResolver->resolveNode($frame, $node);
 
@@ -455,5 +460,23 @@ final class FrameBuilder
             $rightContext = $rightContext->withType(Type::array());
             $this->walkMemberAccessExpression($frame, $leftOperand->postfixExpression, $rightContext);
         }
+    }
+
+    private function walkForeachStatement(Frame $frame, ForeachStatement $node)
+    {
+        $collection = $this->resolveNode($frame, $node->forEachCollectionName);
+        $itemName = $node->foreachValue;
+        $itemName = $itemName->expression->name->getText($node->getFileContents());
+
+        $context = $this->symbolFactory->context(
+            $itemName,
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+            ]
+        );
+
+        $frame->locals()->add(Variable::fromSymbolContext($context));
     }
 }
