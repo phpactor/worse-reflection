@@ -29,7 +29,7 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
     private $serviceLocator;
 
     /**
-     * @var ClassLike
+     * @var InterfaceDeclaration
      */
     private $node;
 
@@ -50,6 +50,9 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         $this->sourceCode = $sourceCode;
     }
 
+    /**
+     * @return InterfaceDeclaration
+     */
     protected function node(): Node
     {
         return $this->node;

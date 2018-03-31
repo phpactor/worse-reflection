@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Types;
 
-interface ReflectionProperty
+interface ReflectionProperty extends ReflectionNode
 {
     public function position(): Position;
 

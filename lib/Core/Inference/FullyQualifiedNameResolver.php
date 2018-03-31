@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Logger;
 use Microsoft\PhpParser\Node\NamespaceUseClause;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\QualifiedName;
+use Microsoft\PhpParser\NamespacedNameInterface;
 
 class FullyQualifiedNameResolver
 {
@@ -107,6 +108,8 @@ class FullyQualifiedNameResolver
     private function currentClass(Node $node)
     {
         $class = $node->getFirstAncestor(ClassLike::class);
+        assert($class instanceof NamespacedNameInterface);
+
         return Type::fromString($class->getNamespacedName());
     }
 

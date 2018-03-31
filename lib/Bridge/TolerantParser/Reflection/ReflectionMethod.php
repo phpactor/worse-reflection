@@ -22,6 +22,7 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodReturnTypeResolv
 use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
+use Microsoft\PhpParser\NamespacedNameInterface;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -84,7 +85,11 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function declaringClass(): ReflectionClassLike
     {
-        $class = $this->node->getFirstAncestor(ClassLike::class)->getNamespacedName();
+        $classDeclaration = $this->node->getFirstAncestor(ClassLike::class);
+
+        assert($classDeclaration instanceof NamespacedNameInterface);
+        $class = $classDeclaration->getNamespacedName();
+
 
         if (null === $class) {
             throw new \InvalidArgumentException(sprintf(

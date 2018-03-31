@@ -12,6 +12,7 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionArgument as CoreReflectionArgument;
 use RuntimeException;
+use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 
 class ReflectionArgument implements CoreReflectionArgument
 {
@@ -85,7 +86,11 @@ class ReflectionArgument implements CoreReflectionArgument
     private function index(): int
     {
         $index = 0;
-        foreach ($this->node->parent->getElements() as $element) {
+
+        /** @var ArgumentExpressionList $parent */
+        $parent = $this->node->parent;
+
+        foreach ($parent->getElements() as $element) {
             if ($element === $this->node) {
                 return $index;
             }

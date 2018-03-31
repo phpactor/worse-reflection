@@ -23,6 +23,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
+        /** @var MethodDeclaration[] $methods */
         $methods = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
         });
@@ -37,6 +38,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
 
     public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface, ReflectionInterface $reflectionInterface): CoreReflectionMethodCollection
     {
+        /** @var MethodDeclaration[] $methods */
         $methods = array_filter($interface->interfaceMembers->interfaceMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
         });
@@ -51,6 +53,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
 
     public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, ReflectionTrait $reflectionTrait): CoreReflectionMethodCollection
     {
+        /** @var MethodDeclaration[] $methods */
         $methods = array_filter($trait->traitMembers->traitMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
         });

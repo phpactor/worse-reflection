@@ -36,7 +36,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     private $serviceLocator;
 
     /**
-     * @var ClassLike
+     * @var ClassDeclaration
      */
     private $node;
 
@@ -77,6 +77,10 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
     public function isAbstract(): bool
     {
+        if (false === $this->node instanceof ClassDeclaration) {
+            return false;
+        }
+
         $modifier = $this->node->abstractOrFinalModifier;
 
         if (!$modifier) {
@@ -240,7 +244,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
     public function name(): ClassName
     {
-        return ClassName::fromString((string) $this->node()->getNamespacedName());
+        return ClassName::fromString((string) $this->node->getNamespacedName());
     }
 
     public function isInstanceOf(ClassName $className): bool

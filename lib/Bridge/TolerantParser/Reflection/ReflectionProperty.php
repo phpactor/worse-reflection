@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Types;
+use Microsoft\PhpParser\NamespacedNameInterface;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -59,7 +60,9 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function declaringClass(): ReflectionClassLike
     {
-        $class = $this->propertyDeclaration->getFirstAncestor(ClassDeclaration::class, TraitDeclaration::class)->getNamespacedName();
+        /** @var NamespacedNameInterface $classDeclaration */
+        $classDeclaration = $this->propertyDeclaration->getFirstAncestor(ClassDeclaration::class, TraitDeclaration::class);
+        $class = $classDeclaration->getNamespacedName();
 
         if (null === $class) {
             throw new \InvalidArgumentException(sprintf(

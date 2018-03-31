@@ -23,7 +23,7 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     private $serviceLocator;
 
     /**
-     * @var ClassLike
+     * @var TraitDeclaration
      */
     private $node;
 
@@ -42,6 +42,9 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
         $this->sourceCode = $sourceCode;
     }
 
+    /**
+     * @return TraitDeclaration
+     */
     protected function node(): Node
     {
         return $this->node;

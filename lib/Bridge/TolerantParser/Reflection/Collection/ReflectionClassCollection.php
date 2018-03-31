@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection as CoreReflectionClassCollection;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\NamespacedNameInterface;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
@@ -33,6 +34,10 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
 
         foreach ($nodeCollection as $child) {
             if (false === $child instanceof ClassLike) {
+                continue;
+            }
+
+            if (false === $child instanceof NamespacedNameInterface) {
                 continue;
             }
 

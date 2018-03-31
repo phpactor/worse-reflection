@@ -27,6 +27,7 @@ use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
 use Microsoft\PhpParser\Node\Statement\ForeachStatement;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Microsoft\PhpParser\Node\ForeachValue;
 
 final class FrameBuilder
 {
@@ -87,7 +88,7 @@ final class FrameBuilder
         }
 
         if ($node instanceof FunctionLike) {
-            // New scope, new frame.
+            assert($node instanceof Node);
             $frame = $frame->new($node->getNodeKindName() . '#' . $this->functionName($node));
             $this->walkFunctionLike($frame, $node);
         }
@@ -231,6 +232,9 @@ final class FrameBuilder
         $frame->properties()->add(Variable::fromSymbolContext($context));
     }
 
+    /**
+     * @param FunctionDeclaration|AnonymousFunctionCreationExpression $node
+     */
     private function walkFunctionLike(Frame $frame, FunctionLike $node)
     {
         $namespace = $node->getNamespaceDefinition();
@@ -437,6 +441,10 @@ final class FrameBuilder
 
                 $elementValue = $element->elementValue;
 
+                if (!$elementValue instanceof ParserVariable) {
+                    continue;
+                }
+
                 if (null === $elementValue || null === $elementValue->name) {
                     continue;
                 }
@@ -473,6 +481,15 @@ final class FrameBuilder
     {
         $collection = $this->resolveNode($frame, $node->forEachCollectionName);
         $itemName = $node->foreachValue;
+
+        if (!$itemName instanceof ForeachValue) {
+            return;
+        }
+
+        if (!$itemName->expression instanceof ParserVariable) {
+            return;
+        }
+
         $itemName = $itemName->expression->name->getText($node->getFileContents());
 
         $collectionType = $collection->types()->best();

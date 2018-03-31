@@ -8,10 +8,8 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 
-interface ReflectionClassLike
+interface ReflectionClassLike extends ReflectionNode
 {
-    public function scope(): ReflectionScope;
-
     public function position(): Position;
 
     public function name(): ClassName;
