@@ -106,7 +106,7 @@ class Type
      */
     public static function mixed()
     {
-        return self::create('');
+        return new self();
     }
 
     public static function void()
@@ -183,10 +183,10 @@ class Type
     public function short(): string
     {
         if ($this->isPrimitive()) {
-            return $this->type;
+            return (string) $this->type;
         }
 
-        return $this->className->short();
+        return (string) $this->className->short();
     }
 
     public function isPrimitive(): bool
