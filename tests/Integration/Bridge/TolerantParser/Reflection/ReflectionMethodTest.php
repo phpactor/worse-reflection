@@ -9,6 +9,8 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
@@ -365,6 +367,26 @@ EOT
                 'Foobar',
                 function ($methods) {
                     $this->assertCount(3, $methods->get('barfoo')->parameters());
+                },
+            ],
+            'It returns the overridden type information for a method parameters' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    /**
+     * @var Foobar[] $foobars
+     */
+    public function barfoo(array $foobars)
+    {
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function (ReflectionMethodCollection $methods) {
+                    $method = $methods->get('barfoo');
                 },
             ],
             'It returns the nullable parameter types' => [

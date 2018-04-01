@@ -171,6 +171,37 @@ EOT
                     $this->assertFalse($class->isInstanceOf(ClassName::fromString('Interface3')));
                 },
             ],
+            'Method class is of context class, not declaration class' => [
+                <<<'EOT'
+<?php
+
+namespace Acme;
+
+interface Barfoo
+{
+    function method1() {}
+}
+
+/**
+ * @method Bar method1()
+ */
+interface Foobar extends Barfoo
+{
+}
+EOT
+                ,
+                'Acme\Foobar',
+                function (ReflectionInterface $class) {
+                    $this->assertEquals(
+                        'Acme\Foobar',
+                        (string) $class->methods()->get('method1')->class()->name()
+                    );
+                    $this->assertEquals(
+                        'Acme\Barfoo',
+                        (string) $class->methods()->get('method1')->declaringClass()->name()
+                    );
+                },
+            ],
         ];
     }
 }
