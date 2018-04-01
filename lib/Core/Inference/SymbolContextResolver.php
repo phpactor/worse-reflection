@@ -33,6 +33,7 @@ use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 
 /**
  * @TODO: This class requires SERIOUS refactoring.
@@ -272,9 +273,9 @@ class SymbolContextResolver
     private function resolveParameter(Frame $frame, Parameter $node): SymbolContext
     {
         /** @var MethodDeclaration $method */
-        $method = $node->getFirstAncestor(MethodDeclaration::class);
+        $method = $node->getFirstAncestor(AnonymousFunctionCreationExpression::class, MethodDeclaration::class);
 
-        if ($method) {
+        if ($method instanceof MethodDeclaration) {
             return $this->resolveParameterFromReflection($frame, $method, $node);
         }
 
