@@ -30,6 +30,7 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection implemen
 
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
+        /** @var PropertyDeclaration[] $properties */
         $properties = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
             return $member instanceof PropertyDeclaration;
         });
@@ -55,6 +56,7 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection implemen
 
     public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, ReflectionTrait $reflectionTrait)
     {
+        /** @var PropertyDeclaration[] $properties */
         $properties = array_filter($trait->traitMembers->traitMemberDeclarations, function ($member) {
             return $member instanceof PropertyDeclaration;
         });

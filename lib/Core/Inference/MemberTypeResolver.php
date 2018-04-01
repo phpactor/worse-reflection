@@ -7,8 +7,10 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
 
 class MemberTypeResolver
 {
@@ -92,21 +94,21 @@ class MemberTypeResolver
         }
 
         /** @var $method ReflectionMethod */
-        $method = $class->$type()->get($name);
-        $declaringClass = $method->declaringClass();
+        $member = $class->$type()->get($name);
+        $declaringClass = $member->declaringClass();
 
         $info = $info->withContainerType(Type::class($declaringClass->name()));
 
-        if ($type === self::TYPE_METHODS) {
-            return $info->withTypes($method->inferredReturnTypes());
+        if ($member instanceof ReflectionMethod) {
+            return $info->withTypes($member->inferredReturnTypes());
         }
 
-        if ($type === self::TYPE_CONSTANTS) {
-            return $info->withType($method->type());
+        if ($member instanceof ReflectionConstant) {
+            return $info->withType($member->type());
         }
 
-        if ($type === self::TYPE_PROPERTIES) {
-            return $info->withTypes($method->inferredTypes());
+        if ($member instanceof ReflectionProperty) {
+            return $info->withTypes($member->inferredTypes());
         }
     }
 }

@@ -69,7 +69,7 @@ class MethodReturnTypeResolver
 
     private function getTypesFromParentClass(ReflectionClassLike $reflectionClassLike): Types
     {
-        if (false === $reflectionClassLike->isClass()) {
+        if (false === $reflectionClassLike instanceof ReflectionClass) {
             return Types::empty();
         }
 

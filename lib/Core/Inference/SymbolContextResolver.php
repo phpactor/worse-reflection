@@ -29,6 +29,9 @@ use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
+use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
+use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
+use Microsoft\PhpParser\NamespacedNameInterface;
 
 class SymbolContextResolver
 {
@@ -137,8 +140,7 @@ class SymbolContextResolver
             return $this->resolveScopedPropertyAccessExpression($frame, $node);
         }
 
-        /** @var ClassDeclaration $node */
-        if ($node instanceof ClassLike) {
+        if ($node instanceof ClassDeclaration || $node instanceof TraitDeclaration || $node instanceof InterfaceDeclaration) {
             return $this->symbolFactory->context(
                 $node->name->getText($node->getFileContents()),
                 $node->name->getEndPosition(),
@@ -262,7 +264,7 @@ class SymbolContextResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    private function resolveParameter(Frame $frame, Node $node): SymbolContext
+    private function resolveParameter(Frame $frame, Parameter $node): SymbolContext
     {
         $typeDeclaration = $node->typeDeclaration;
         $type = Type::unknown();
@@ -505,6 +507,8 @@ class SymbolContextResolver
 
     private function _infoFromMemberAccess(Frame $frame, Type $classType, Node $node): SymbolContext
     {
+        assert($node instanceof MemberAccessExpression || $node instanceof ScopedPropertyAccessExpression);
+
         $memberName = $node->memberName->getText($node->getFileContents());
         $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
 
@@ -550,6 +554,8 @@ class SymbolContextResolver
             // TODO: Wrning here
             return;
         }
+
+        assert($classNode instanceof NamespacedNameInterface);
 
         return Type::fromString($classNode->getNamespacedName());
     }

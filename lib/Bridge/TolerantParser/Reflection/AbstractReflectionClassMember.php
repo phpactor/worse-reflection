@@ -7,12 +7,19 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\NamespacedNameInterface;
+use RuntimeException;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 {
     public function declaringClass(): ReflectionClassLike
     {
-        $class = $this->node()->getFirstAncestor(ClassLike::class)->getNamespacedName();
+        $classDeclaration = $this->node()->getFirstAncestor(ClassLike::class);
+
+        assert($classDeclaration instanceof NamespacedNameInterface);
+
+        $class = $classDeclaration->getNamespacedName();
 
         if (null === $class) {
             throw new \InvalidArgumentException(sprintf(
