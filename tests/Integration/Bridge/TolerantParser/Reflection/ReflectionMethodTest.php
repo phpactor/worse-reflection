@@ -369,28 +369,6 @@ EOT
                     $this->assertCount(3, $methods->get('barfoo')->parameters());
                 },
             ],
-            'It returns the overridden type information for a method parameters' => [
-                <<<'EOT'
-<?php
-
-class Foobar
-{
-    /**
-     * @var Foobar[] $foobars
-     */
-    public function barfoo(array $foobars)
-    {
-    }
-}
-EOT
-                ,
-                'Foobar',
-                function (ReflectionMethodCollection $methods) {
-                    $method = $methods->get('barfoo');
-                    $this->assertEquals('array', (string) $method->parameters()->get('foobars')->type());
-                    $this->assertEquals('Foobar', (string) $method->parameters()->get('foobars')->type()->arrayType());
-                },
-            ],
             'It returns the nullable parameter types' => [
                 <<<'EOT'
 <?php

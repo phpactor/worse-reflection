@@ -5,9 +5,9 @@ namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 use Phpactor\WorseReflection\Core\ClassName;
 
 /**
- * @method ReflectionMethod first()
- * @method ReflectionMethod last()
- * @method ReflectionMethod get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod first()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod last()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod get()
  */
 interface ReflectionMethodCollection extends ReflectionCollection
 {

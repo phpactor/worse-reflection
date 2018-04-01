@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Types;
 
-interface ReflectionParameter
+interface ReflectionParameter extends ReflectionNode
 {
     public function position(): Position;
 

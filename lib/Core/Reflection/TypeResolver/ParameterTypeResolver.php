@@ -28,6 +28,13 @@ class ParameterTypeResolver
             return $this->parameter->scope()->resolveFullyQualifiedName($type, $this->parameter->method()->class());
         }, iterator_to_array($docblockTypes));
 
-        return Types::fromTypes($resolvedTypes);
+        if (count($resolvedTypes)) {
+            return Types::fromTypes($resolvedTypes);
+        }
+
+        if ($this->parameter->type()->isDefined()) {
+            return Types::fromTypes([ $this->parameter->type() ]);
+        }
+
     }
 }
