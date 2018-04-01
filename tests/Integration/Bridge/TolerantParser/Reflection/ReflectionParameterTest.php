@@ -160,5 +160,14 @@ class ReflectionParameterTest extends IntegrationTestCase
                 $this->assertEquals('Acme\Foobar', (string) $method->parameters()->get('foobar')->inferredTypes()->best());
             },
         ];
+
+        yield 'It returns unknown type when no type hinting is available' => [
+            '$foobar',
+            '/** */',
+            function ($method) {
+                $this->assertCount(1, $method->parameters());
+                $this->assertEquals(Type::unknown(), $method->parameters()->get('foobar')->inferredTypes()->best());
+            },
+        ];
     }
 }
