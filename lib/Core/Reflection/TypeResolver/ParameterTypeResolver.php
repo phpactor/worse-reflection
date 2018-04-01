@@ -36,5 +36,6 @@ class ParameterTypeResolver
             return Types::fromTypes([ $this->parameter->type() ]);
         }
 
+        return Types::empty();
     }
 }
