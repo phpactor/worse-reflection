@@ -128,6 +128,14 @@ class Type
         return $instance;
     }
 
+    public static function collection(string $type, string $iterableType)
+    {
+        $instance = self::create($type);
+        $instance->arrayType = self::fromString($iterableType);
+
+        return $instance;
+    }
+
     public static function null()
     {
         return self::create(self::TYPE_NULL);

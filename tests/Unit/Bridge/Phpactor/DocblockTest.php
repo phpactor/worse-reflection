@@ -53,6 +53,14 @@ class DocblockTest extends TestCase
         $this->assertEquals('Foo', $docblock->vars()->types()->best()->arrayType()->className()->full());
     }
 
+    public function testCollectionTypes()
+    {
+        $docblock = $this->create('/** @var Foo<Item> $foo) */');
+        $this->assertTrue($docblock->vars()->types()->best()->arrayType()->isDefined());
+        $this->assertEquals('Foo', (string) $docblock->vars()->types()->best());
+        $this->assertEquals('Item', $docblock->vars()->types()->best()->arrayType()->className()->full());
+    }
+
     public function testInherits()
     {
         $docblock = $this->create('/** Hello */');

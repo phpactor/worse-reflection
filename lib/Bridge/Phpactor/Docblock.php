@@ -100,6 +100,10 @@ class Docblock implements CoreDocblock
                 return Type::array($type->iteratedType());
             }
 
+            if ($type->isCollection()) {
+                return Type::collection((string) $type, $type->iteratedType());
+            }
+
             return Type::fromString($type->__toString());
         }, iterator_to_array($types));
 
