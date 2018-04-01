@@ -11,6 +11,8 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Reflection\TypeResolver\ParameterTypeResolver;
 
 class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
 {
@@ -57,7 +59,16 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
 
     public function type(): Type
     {
-        return $this->memberTypeResolver->resolve($this->method->class()->name(), $this->parameter, $this->parameter->typeDeclaration);
+        return $this->memberTypeResolver->resolve(
+            $this->method->class()->name(),
+            $this->parameter,
+            $this->parameter->typeDeclaration
+        );
+    }
+
+    public function inferredTypes(): Types
+    {
+        return (new ParameterTypeResolver($this))->resolve();
     }
 
     public function default(): DefaultValue
@@ -78,5 +89,10 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     public function byReference(): bool
     {
         return (bool) $this->parameter->byRefToken;
+    }
+
+    public function method(): ReflectionMethod
+    {
+        return $this->method;
     }
 }

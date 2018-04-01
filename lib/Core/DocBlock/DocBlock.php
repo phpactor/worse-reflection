@@ -16,6 +16,8 @@ interface DocBlock
 
     public function methodTypes(string $methodName): Types;
 
+    public function parameterTypes(string $paramName): Types;
+
     public function vars(): DocBlockVars;
 
     public function inherits(): bool;
