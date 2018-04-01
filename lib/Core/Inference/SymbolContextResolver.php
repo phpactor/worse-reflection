@@ -507,7 +507,7 @@ class SymbolContextResolver
 
     private function _infoFromMemberAccess(Frame $frame, Type $classType, Node $node): SymbolContext
     {
-        assert($node instanceof MemberAccessExpression && $node instanceof ScopedPropertyAccessExpression);
+        assert($node instanceof MemberAccessExpression || $node instanceof ScopedPropertyAccessExpression);
 
         $memberName = $node->memberName->getText($node->getFileContents());
         $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
@@ -549,12 +549,13 @@ class SymbolContextResolver
     private function classTypeFromNode(Node $node)
     {
         $classNode = $node->getFirstAncestor(ClassLike::class);
-        assert($classNode instanceof NamespacedNameInterface);
 
         if (null === $classNode) {
             // TODO: Wrning here
             return;
         }
+
+        assert($classNode instanceof NamespacedNameInterface);
 
         return Type::fromString($classNode->getNamespacedName());
     }
