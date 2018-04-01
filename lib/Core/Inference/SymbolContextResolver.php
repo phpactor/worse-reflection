@@ -322,6 +322,16 @@ class SymbolContextResolver
         /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
         $reflectionClass = $this->reflector->reflectClassLike($class->getNamespacedName()->__toString());
         $reflectionMethod = $reflectionClass->methods()->get($method->getName());
+
+        if (!$reflectionMethod->parameters()->has($node->getName())) {
+            return SymbolContext::none()
+                ->withIssue(sprintf(
+                'Cannot find parameter "%s" for method "%s" in class "%s"',
+                $node->getName(),
+                $reflectionMethod->name(),
+                $reflectionClass->name()
+            ));
+        }
         $reflectionParameter = $reflectionMethod->parameters()->get($node->getName());
 
         return $this->symbolFactory->context(
