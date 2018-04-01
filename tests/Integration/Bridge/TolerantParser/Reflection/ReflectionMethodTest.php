@@ -9,6 +9,8 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {

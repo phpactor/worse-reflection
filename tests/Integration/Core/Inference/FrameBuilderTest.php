@@ -75,6 +75,37 @@ EOT
             );
         }];
 
+        yield 'It injects method argument with inferred types' => [
+            <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+use Acme\Factory;
+use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+
+class Foobar
+{
+    /**
+     * @param World[] $worlds
+     * @param string $many
+     */
+    public function hello(array $worlds, $many)
+    {
+    }
+}
+
+EOT
+        , [ 'Foobar\Barfoo\Foobar', 'hello' ], function (Frame $frame) {
+            $this->assertCount(1, $frame->locals()->byName('many'));
+            $this->assertEquals('string', (string) $frame->locals()->byName('many')->first()->symbolContext()->types()->best());
+
+            $this->assertCount(1, $frame->locals()->byName('worlds'));
+            $this->assertEquals('array', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best());
+            $this->assertEquals('Foobar\Barfoo\World', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best()->arrayType());
+
+        }];
+
         yield 'It registers string assignments' => [
             <<<'EOT'
 <?php

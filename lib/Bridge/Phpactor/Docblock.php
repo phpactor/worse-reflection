@@ -49,6 +49,23 @@ class Docblock implements CoreDocblock
         return $this->typesFromTag('return');
     }
 
+    public function parameterTypes(string $paramName): Types
+    {
+        $types = [];
+
+        foreach ($this->docblock->tags()->byName('param') as $tag) {
+            if ($tag->varName() !== '$' . $paramName) {
+                continue;
+            }
+
+            foreach ($tag->types() as $type) {
+                $types[] = $this->typesFromDocblockType($type);
+            }
+        }
+
+        return Types::fromTypes($types);
+    }
+
     public function methodTypes(string $methodName): Types
     {
         $types = [];
@@ -59,7 +76,7 @@ class Docblock implements CoreDocblock
             }
 
             foreach ($tag->types() as $type) {
-                $types[] = Type::fromString((string) $type);
+                $types[] = $this->typesFromDocblockType($type);
             }
         }
 
@@ -96,17 +113,22 @@ class Docblock implements CoreDocblock
     private function typesFromDocblockTypes(DocblockTypes $types)
     {
         $types = array_map(function (DocblockType $type) {
-            if ($type->isArray()) {
-                return Type::array($type->iteratedType());
-            }
-
-            if ($type->isCollection()) {
-                return Type::collection((string) $type, $type->iteratedType());
-            }
-
-            return Type::fromString($type->__toString());
+            return $this->typesFromDocblockType($type);
         }, iterator_to_array($types));
 
         return Types::fromTypes($types);
+    }
+
+    private function typesFromDocblockType(DocblockType $type)
+    {
+        if ($type->isArray()) {
+            return Type::array($type->iteratedType());
+        }
+        
+        if ($type->isCollection()) {
+            return Type::collection((string) $type, $type->iteratedType());
+        }
+        
+        return Type::fromString($type->__toString());
     }
 }

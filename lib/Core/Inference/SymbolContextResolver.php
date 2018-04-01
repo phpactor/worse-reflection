@@ -32,7 +32,11 @@ use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 
+/**
+ * @TODO: This class requires SERIOUS refactoring.
+ */
 class SymbolContextResolver
 {
     /**
@@ -66,6 +70,7 @@ class SymbolContextResolver
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
+        $this->reflector = $reflector;
     }
 
     public function resolveNode(Frame $frame, $node): SymbolContext
@@ -266,6 +271,13 @@ class SymbolContextResolver
 
     private function resolveParameter(Frame $frame, Parameter $node): SymbolContext
     {
+        /** @var MethodDeclaration $method */
+        $method = $node->getFirstAncestor(MethodDeclaration::class);
+
+        if ($method) {
+            return $this->resolveParameterFromReflection($frame, $method, $node);
+        }
+
         $typeDeclaration = $node->typeDeclaration;
         $type = Type::unknown();
 
@@ -290,6 +302,36 @@ class SymbolContextResolver
                 'symbol_type' => Symbol::VARIABLE,
                 'type' => $type,
                 'value' => $value,
+            ]
+        );
+    }
+
+    private function resolveParameterFromReflection(Frame $frame, MethodDeclaration $method, Parameter $node): SymbolContext
+    {
+        /** @var ClassDeclaration|TraitDeclaration|InterfaceDeclaration $class  */
+        $class = $node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class);
+
+        if (null === $class) {
+            return SymbolContext::none()
+                ->withIssue(sprintf(
+                'Cannot find class context "%s" for parameter',
+                $node->getName()
+            ));
+        }
+
+        /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
+        $reflectionClass = $this->reflector->reflectClassLike($class->getNamespacedName()->__toString());
+        $reflectionMethod = $reflectionClass->methods()->get($method->getName());
+        $reflectionParameter = $reflectionMethod->parameters()->get($node->getName());
+
+        return $this->symbolFactory->context(
+            $node->variableName->getText($node->getFileContents()),
+            $node->variableName->getStartPosition(),
+            $node->variableName->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+                'type' => $reflectionParameter->inferredTypes()->best(),
+                'value' => $reflectionParameter->default()->value(),
             ]
         );
     }

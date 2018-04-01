@@ -282,7 +282,7 @@ final class FrameBuilder
                 $parameterNode->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,
-                    'type' => $symbolContext->type(),
+                    'type' => $symbolContext->types()->best(),
                     'value' => $symbolContext->value(),
                 ]
             );

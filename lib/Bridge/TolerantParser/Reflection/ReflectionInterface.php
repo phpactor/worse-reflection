@@ -101,7 +101,7 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return false;
     }
 
-    public function methods(): CoreReflectionMethodCollection
+    public function methods(ReflectionInterface $context = null): CoreReflectionMethodCollection
     {
         if ($this->methods) {
             return $this->methods;
@@ -109,13 +109,14 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
 
         $parentMethods = [];
         foreach ($this->parents() as $parent) {
-            foreach ($parent->methods()->byVisibilities([ Visibility::public(), Visibility::protected() ]) as $name => $method) {
+            foreach ($parent->methods($this)->byVisibilities([ Visibility::public(), Visibility::protected() ]) as $name => $method) {
                 $parentMethods[$method->name()] = $method;
             }
         }
 
+        $context = $context ?: $this;
         $parentMethods = ReflectionMethodCollection::fromReflectionMethods($this->serviceLocator, $parentMethods);
-        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node, $this);
+        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node, $context);
 
         $this->methods =  $parentMethods->merge($methods);
 
