@@ -3,8 +3,9 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
+use Iterator;
 
-interface ReflectionCollection
+interface ReflectionCollection extends Iterator
 {
     public function count();
 
