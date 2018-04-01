@@ -520,5 +520,27 @@ EOT
                 $this->assertEquals('Foobar\\Barfoo', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
         ];
+
+        yield 'Assigns fully qualfied type to foreach from collection' => [
+            <<<'EOT'
+<?php
+
+namespace Foobar;
+
+/** @var Collection<Item> $items */
+$items = new Collection();
+
+foreach ($items as $item) {
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(3, $frame->locals());
+                $this->assertCount(1, $frame->locals()->byName('item'));
+                $this->assertEquals('Foobar\\Collection', (string) $frame->locals()->byName('items')->first()->symbolContext()->types()->best());
+                $this->assertEquals('Foobar\\Item', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
+            }
+        ];
     }
 }

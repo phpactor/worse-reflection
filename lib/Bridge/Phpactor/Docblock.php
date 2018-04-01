@@ -97,7 +97,7 @@ class Docblock implements CoreDocblock
     {
         $types = array_map(function (DocblockType $type) {
             if ($type->isArray()) {
-                return Type::array($type->__toString());
+                return Type::array($type->iteratedType());
             }
 
             return Type::fromString($type->__toString());
