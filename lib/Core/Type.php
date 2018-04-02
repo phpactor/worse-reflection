@@ -131,6 +131,7 @@ class Type
     public static function collection(string $type, string $iterableType)
     {
         $instance = self::create($type);
+        $instance->className = ClassName::fromString($type);
         $instance->arrayType = self::fromString($iterableType);
 
         return $instance;

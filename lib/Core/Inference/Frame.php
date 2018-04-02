@@ -56,6 +56,9 @@ final class Frame
         return $frame;
     }
 
+    /**
+     * @return Assignments<Variable>
+     */
     public function locals(): Assignments
     {
         return $this->locals;

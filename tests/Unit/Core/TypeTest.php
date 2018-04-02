@@ -98,6 +98,10 @@ class TypeTest extends TestCase
         $type = Type::fromString('string');
         $this->assertFalse($type->isClass());
         $this->assertTrue($type->isPrimitive());
+
+        $type = Type::collection('MyCollection', 'string');
+        $this->assertTrue($type->isClass());
+        $this->assertFalse($type->isPrimitive());
     }
 
     /**
