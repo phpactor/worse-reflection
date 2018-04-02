@@ -573,5 +573,30 @@ EOT
                 $this->assertEquals('Foobar\\Item', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
         ];
+
+        yield 'From return type with docblock' => [
+            <<<'EOT'
+<?php
+
+namespace Foobar;
+
+class Foobar
+{
+    /**
+     * @return List<Collection>
+     */
+    public static function bar(): List
+}
+
+$list = Foobar::bar();
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals());
+                $this->assertEquals('List', $frame->locals()->byName('list')->first()->symbolContext()->types()->best()->short());
+            }
+        ];
     }
 }
