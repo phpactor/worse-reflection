@@ -580,22 +580,32 @@ EOT
 
 namespace Foobar;
 
-class Foobar
+use Foo\Lister;
+
+interface Barfoo
 {
     /**
-     * @return List<Collection>
+     * @return Lister<Collection>
      */
-    public static function bar(): List
+    public static function bar(): List;
 }
 
-$list = Foobar::bar();
+class Baz
+{
+    public function (Barfoo $barfoo)
+    {
+        $bar = $barfoo->bar();
+        <>
+    }
+}
 <>
 }
 EOT
         ,
             function (Frame $frame) {
-                $this->assertCount(1, $frame->locals());
-                $this->assertEquals('List', $frame->locals()->byName('list')->first()->symbolContext()->types()->best()->short());
+                $this->assertCount(3, $frame->locals());
+                $this->assertEquals('Foo\Lister', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best());
+                $this->assertEquals('Foobar\Collection', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best()->arrayType());
             }
         ];
     }

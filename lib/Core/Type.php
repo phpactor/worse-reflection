@@ -231,7 +231,10 @@ class Type
 
     public function prependNamespace(Name $namespace)
     {
-        return self::class(ClassName::fromString((string) $namespace . '\\' . (string) $this));
+        $clone = clone $this;
+        $clone->className = ClassName::fromString((string) $namespace . '\\' . (string) $this);
+
+        return $clone;
     }
 
     public function arrayType(): Type
@@ -247,6 +250,14 @@ class Type
     {
         $clone = clone $this;
         $clone->arrayType = $arrayType;
+        return $clone;
+    }
+
+    public function withClassName(string $className)
+    {
+        $clone = clone $this;
+        $clone->className = ClassName::fromString($className);
+
         return $clone;
     }
 }

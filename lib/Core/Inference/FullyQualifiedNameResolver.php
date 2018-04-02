@@ -12,6 +12,7 @@ use Microsoft\PhpParser\Node\NamespaceUseClause;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use Phpactor\WorseReflection\Core\Name;
 
 class FullyQualifiedNameResolver
 {
@@ -36,7 +37,7 @@ class FullyQualifiedNameResolver
         if ($type->arrayType()->isDefined()) {
             $arrayType = $this->resolve($node, $type->arrayType());
 
-            return $type->withArrayType($arrayType);
+            $type = $type->withArrayType($arrayType);
         }
 
         if ($this->isFunctionCall($node)) {
@@ -69,7 +70,7 @@ class FullyQualifiedNameResolver
 
         $namespaceDefinition = $node->getNamespaceDefinition();
         if ($namespaceDefinition && $namespaceDefinition->name instanceof QualifiedName) {
-            return Type::fromArray([$namespaceDefinition->name->getText(), (string) $type]);
+            return $type->prependNamespace(Name::fromString($namespaceDefinition->name->getText()));
         }
 
         return $type;
@@ -125,13 +126,12 @@ class FullyQualifiedNameResolver
         $className = $type->className();
 
         if (isset($classImports[(string) $type])) {
-            // class was imported
-            return Type::fromString((string) $classImports[(string) $type]);
+            return $type->withClassName((string) $classImports[(string) $type]);
         }
 
         if (isset($classImports[(string) $className->head()])) {
             // namespace was imported
-            return Type::fromString((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
+            return $type->withClassName((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
         }
     }
 }
