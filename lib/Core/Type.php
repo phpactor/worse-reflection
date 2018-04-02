@@ -242,4 +242,11 @@ class Type
 
         return self::unknown();
     }
+
+    public function withArrayType(Type $arrayType)
+    {
+        $clone = clone $this;
+        $clone->arrayType = $arrayType;
+        return $clone;
+    }
 }
