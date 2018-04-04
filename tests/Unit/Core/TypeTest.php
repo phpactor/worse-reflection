@@ -12,63 +12,75 @@ class TypeTest extends TestCase
      * @testdox It should __toString the given type.
      * @dataProvider provideToString
      */
-    public function testToString(Type $type, $expected, $primitive)
+    public function testToString(Type $type, $toString, $phpType)
     {
-        $this->assertEquals($expected, (string) $type);
+        $this->assertEquals($toString, (string) $type);
 
         if ($type->isDefined()) {
-            $this->assertEquals($primitive, $type->primitive());
+            $this->assertEquals($phpType, $type->primitive());
         }
     }
 
     public function provideToString()
     {
-        return [
-            [
-                Type::fromString('string'),
-                'string',
-                'string',
-            ],
-            [
-                Type::fromString('float'),
-                'float',
-                'float',
-            ],
-            [
-                Type::fromString('int'),
-                'int',
-                'int',
-            ],
-            [
-                Type::fromString('bool'),
-                'bool',
-                'bool',
-            ],
-            [
-                Type::fromString('array'),
-                'array',
-                'array',
-            ],
-            [
-                Type::fromString('void'),
-                'void',
-                'void',
-            ],
-            [
-                Type::fromString('Foobar'),
-                'Foobar',
-                'object'
-            ],
-            [
-                Type::fromString('mixed'),
-                '<unknown>',
-                '<unknown>'
-            ],
-            'Collection' => [
-                Type::collection('Foobar', Type::string()),
-                'Foobar<string>',
-                'object',
-            ],
+        yield [
+            Type::fromString('string'),
+            'string',
+            'string',
+        ];
+
+        yield [
+            Type::fromString('float'),
+            'float',
+            'float',
+        ];
+
+        yield [
+            Type::fromString('int'),
+            'int',
+            'int',
+        ];
+
+        yield [
+            Type::fromString('bool'),
+            'bool',
+            'bool',
+        ];
+
+        yield [
+            Type::fromString('array'),
+            'array',
+            'array',
+        ];
+
+        yield [
+            Type::fromString('void'),
+            'void',
+            'void',
+        ];
+
+        yield [
+            Type::fromString('Foobar'),
+            'Foobar',
+            'object'
+        ];
+
+        yield [
+            Type::fromString('mixed'),
+            '<unknown>',
+            '<unknown>'
+        ];
+
+        yield 'Collection' => [
+            Type::collection('Foobar', Type::string()),
+            'Foobar<string>',
+            'object',
+        ];
+
+        yield 'Typed array' => [
+            Type::array('string'),
+            'string[]',
+            'array',
         ];
     }
 
@@ -120,39 +132,44 @@ class TypeTest extends TestCase
 
     public function provideValues()
     {
-        return [
-            [
-                'string',
-                Type::string(),
-            ],
-            [
-                11,
-                Type::int(),
-            ],
-            [
-                11.2,
-                Type::float(),
-            ],
-            [
-                [],
-                Type::array(),
-            ],
-            [
-                true,
-                Type::bool(),
-            ],
-            [
-                false,
-                Type::bool(),
-            ],
-            [
-                null,
-                Type::null(),
-            ],
-            [
-                new \stdClass(),
-                Type::class(ClassName::fromString('stdClass')),
-            ],
+        yield [
+            'string',
+            Type::string(),
+        ];
+
+        yield [
+            11,
+            Type::int(),
+        ];
+
+        yield [
+            11.2,
+            Type::float(),
+        ];
+
+        yield [
+            [],
+            Type::array(),
+        ];
+
+        yield [
+            true,
+            Type::bool(),
+        ];
+
+        yield [
+            false,
+            Type::bool(),
+        ];
+
+        yield [
+            null,
+            Type::null(),
+        ];
+
+        yield [
+            new \stdClass(),
+            Type::class(ClassName::fromString('stdClass')),
         ];
     }
 }
