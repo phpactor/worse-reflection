@@ -130,7 +130,7 @@ class Type
 
     public static function collection(string $type, string $iterableType)
     {
-        $instance = self::create($type);
+        $instance = self::create(self::TYPE_CLASS);
         $instance->className = ClassName::fromString($type);
         $instance->arrayType = self::fromString($iterableType);
 
@@ -183,7 +183,21 @@ class Type
 
     public function __toString()
     {
-        return $this->className ? (string) $this->className : $this->type ?: '<unknown>';
+        $className = $this->className ? (string) $this->className : $this->type ?: '<unknown>';
+
+        if (null === $this->arrayType) {
+            return $className;
+        }
+
+        if ($this->isClass()) {
+            return $className . '<' . $this->arrayType->__toString() . '>';
+        }
+
+        if ($this->arrayType->isDefined()) {
+            return (string) $this->arrayType . '[]';
+        }
+
+        return $className;
     }
 
     /**

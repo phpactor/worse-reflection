@@ -12,9 +12,8 @@ class TypeTest extends TestCase
      * @testdox It should __toString the given type.
      * @dataProvider provideToString
      */
-    public function testToString($type, $expected, $primitive)
+    public function testToString(Type $type, $expected, $primitive)
     {
-        $type = Type::fromString($type);
         $this->assertEquals($expected, (string) $type);
 
         if ($type->isDefined()) {
@@ -26,44 +25,49 @@ class TypeTest extends TestCase
     {
         return [
             [
+                Type::fromString('string'),
                 'string',
                 'string',
-                'string',
             ],
             [
+                Type::fromString('float'),
                 'float',
                 'float',
-                'float',
             ],
             [
+                Type::fromString('int'),
                 'int',
                 'int',
-                'int',
             ],
             [
+                Type::fromString('bool'),
                 'bool',
                 'bool',
-                'bool',
             ],
             [
-                'array',
+                Type::fromString('array'),
                 'array',
                 'array',
             ],
             [
-                'void',
+                Type::fromString('void'),
                 'void',
                 'void',
             ],
             [
-                'Foobar',
+                Type::fromString('Foobar'),
                 'Foobar',
                 'object'
             ],
             [
-                'mixed',
+                Type::fromString('mixed'),
                 '<unknown>',
                 '<unknown>'
+            ],
+            'Collection' => [
+                Type::collection('Foobar', Type::string()),
+                'Foobar<string>',
+                'object',
             ],
         ];
     }

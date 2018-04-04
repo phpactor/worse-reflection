@@ -101,7 +101,7 @@ EOT
             $this->assertEquals('string', (string) $frame->locals()->byName('many')->first()->symbolContext()->types()->best());
 
             $this->assertCount(1, $frame->locals()->byName('worlds'));
-            $this->assertEquals('array', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best());
+            $this->assertEquals('Foobar\Barfoo\World[]', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best());
             $this->assertEquals('Foobar\Barfoo\World', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best()->arrayType());
 
         }];
@@ -205,7 +205,7 @@ EOT
             $vars = $frame->locals()->byName('foobar');
             $this->assertCount(1, $vars);
             $symbolInformation = $vars->first()->symbolContext();
-            $this->assertEquals('array', (string) $symbolInformation->type());
+            $this->assertEquals('Foobar[]', (string) $symbolInformation->type());
             $this->assertEquals('Foobar', (string) $symbolInformation->type()->arrayType());
         }];
 
@@ -604,7 +604,7 @@ EOT
         ,
             function (Frame $frame) {
                 $this->assertCount(3, $frame->locals());
-                $this->assertEquals('Foo\Lister', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best());
+                $this->assertEquals('Foo\Lister<Foobar\Collection>', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best());
                 $this->assertEquals('Foobar\Collection', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best()->arrayType());
             }
         ];
