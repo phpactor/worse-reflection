@@ -48,7 +48,7 @@ class MemberTypeResolver
      */
     private function reflectClassOrNull(Type $containerType, string $name)
     {
-        return $this->reflector->reflectClassLike(ClassName::fromString((string) $containerType));
+        return $this->reflector->reflectClassLike($containerType->className());
     }
 
     private function memberType(string $type, Type $containerType, SymbolContext $info, string $name)
