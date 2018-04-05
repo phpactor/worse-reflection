@@ -2,13 +2,22 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use RuntimeException;
+use InvalidArgumentException;
+
 class Name
 {
+    // see: http://php.net/manual/en/language.oop5.basic.php
+    const NAME_REGEX = '{^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-]+$}';
+
     protected $parts;
     private $wasFullyQualified;
 
     final public function __construct(array $parts, bool $wasFullyQualified)
     {
+        static $count;
+        echo $count++ . PHP_EOL;
+        $this->validateParts($parts);
         $this->parts = $parts;
         $this->wasFullyQualified = $wasFullyQualified;
     }
@@ -87,5 +96,17 @@ class Name
     {
         $name = Name::fromUnknown($name);
         return self::fromString(join('\\', [(string) $name, $this->__toString()]));
+    }
+
+    private function validateParts(array $parts)
+    {
+        array_map(function ($part) use ($parts) {
+            if (!preg_match(self::NAME_REGEX, $part)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid class name "%s"',
+                    implode('\\', $parts)
+                ));
+            }
+        }, $parts);
     }
 }

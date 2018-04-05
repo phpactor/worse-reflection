@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Name;
+use InvalidArgumentException;
 
 class NameTest extends TestCase
 {
@@ -24,5 +25,13 @@ class NameTest extends TestCase
     {
         $name = Name::fromString('\\Foo\\Bar\\Baz');
         $this->assertTrue($name->wasFullyQualified());
+    }
+
+    public function testThrowsExceptionOnInvalidName()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid class name "Foo<BAR>"');
+
+        Name::fromString('Foo<BAR>');
     }
 }
