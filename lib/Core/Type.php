@@ -246,7 +246,7 @@ class Type
     public function prependNamespace(Name $namespace)
     {
         $clone = clone $this;
-        $clone->className = ClassName::fromString((string) $namespace . '\\' . (string) $this);
+        $clone->className = ClassName::fromString((string) $namespace . '\\' . $this->className()->__toString());
 
         return $clone;
     }
