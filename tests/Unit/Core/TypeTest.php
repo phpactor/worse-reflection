@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Name;
 
 class TypeTest extends TestCase
 {
@@ -121,10 +122,9 @@ class TypeTest extends TestCase
     }
 
     /**
-     * @testdox It can be created from a value
      * @dataProvider provideValues
      */
-    public function testFromValue($value, Type $expectedType)
+    public function testItCanBeCreatedFromAValue($value, Type $expectedType)
     {
         $type = Type::fromValue($value);
         $this->assertEquals($expectedType, $type);
@@ -171,5 +171,33 @@ class TypeTest extends TestCase
             new \stdClass(),
             Type::class(ClassName::fromString('stdClass')),
         ];
+    }
+
+    public function testItIsImmutableClassName()
+    {
+        $class = ClassName::fromString('Hello\\Goodbye');
+        $type1 = Type::class($class);
+        $type2 = $type1->withArrayType(Type::fromString('string'));
+
+        $this->assertNotSame($type1, $type2);
+        $this->assertNotSame($type1->className(), $type2->className());
+    }
+
+    public function testItIsImmutableIterableType()
+    {
+        $type1 = Type::array(Type::fromString('Foobar'));
+        $type2 = $type1->withClassName(ClassName::fromString('ClassOne'));
+
+        $this->assertNotSame($type1, $type2);
+        $this->assertNotSame($type1->arrayType(), $type2->arrayType());
+    }
+
+    public function testPrependNamespace()
+    {
+        $type1 = Type::class('Foobar');
+        $type2 = $type1->prependNamespace(Name::fromString('Barfoo'));
+
+        $this->assertNotSame($type1, $type2);
+        $this->assertEquals('Barfoo\Foobar', (string) $type2);
     }
 }

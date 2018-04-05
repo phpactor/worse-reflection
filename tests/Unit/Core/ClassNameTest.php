@@ -29,4 +29,12 @@ class ClassNameTest extends TestCase
         $this->expectExceptionMessage('Do not know how to create class');
         ClassName::fromUnknown(new \stdClass);
     }
+
+    public function testFromUnknownClassName()
+    {
+        $className1 = ClassName::fromString('Foobar');
+        $className2 = ClassName::fromUnknown($className1);
+
+        $this->assertSame($className1, $className2);
+    }
 }

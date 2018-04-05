@@ -13,9 +13,25 @@ class Type
     const TYPE_NULL = 'null';
     const TYPE_VOID = 'void';
 
-    private $type;
+    /**
+     * @var string
+     */
+    private $phpType;
+
+    /**
+     * @var ClassName
+     */
     private $className;
+
+    /**
+     * @var Type|null
+     */
     private $arrayType;
+
+    public function __construct(string $phpType = null)
+    {
+        $this->phpType = $phpType;
+    }
 
     public static function fromArray(array $parts): Type
     {
@@ -96,25 +112,25 @@ class Type
         return self::class(ClassName::fromString($type));
     }
 
-    public static function unknown()
+    public static function unknown(): Type
     {
-        return new self();
+        return new self(null);
     }
 
     /**
      * TODO: Support "pseudo" types
      */
-    public static function mixed()
+    public static function mixed(): Type
     {
-        return new self();
+        return new self(null);
     }
 
-    public static function void()
+    public static function void(): Type
     {
         return self::create(self::TYPE_VOID);
     }
 
-    public static function array(string $type = null)
+    public static function array(string $type = null): Type
     {
         $instance = self::create(self::TYPE_ARRAY);
 
@@ -128,62 +144,62 @@ class Type
         return $instance;
     }
 
-    public static function collection(string $type, string $iterableType)
+    public static function collection(string $type, string $iterableType): Type
     {
-        $instance = self::create(self::TYPE_CLASS);
-        $instance->className = ClassName::fromString($type);
+        $instance = self::class(ClassName::fromString($type));
         $instance->arrayType = self::fromString($iterableType);
 
         return $instance;
     }
 
-    public static function null()
+    public static function null(): Type
     {
         return self::create(self::TYPE_NULL);
     }
 
-    public static function bool()
+    public static function bool(): Type
     {
         return self::create(self::TYPE_BOOL);
     }
 
-    public static function string()
+    public static function string(): Type
     {
         return self::create(self::TYPE_STRING);
     }
 
-    public static function int()
+    public static function int(): Type
     {
         return self::create(self::TYPE_INT);
     }
 
-    public static function float()
+    public static function float(): Type
     {
         return self::create(self::TYPE_FLOAT);
     }
 
-    public static function class(ClassName $className)
+    public static function class($className): Type
     {
-        $instance = new self();
-        $instance->type = self::TYPE_CLASS;
+        $className = ClassName::fromUnknown($className);
+        $instance = new self($className->full());
+        $instance->phpType = self::TYPE_CLASS;
         $instance->className = $className;
 
         return $instance;
     }
 
-    public static function undefined()
+    public static function undefined(): Type
     {
-        return new self();
+        return new self(null);
     }
 
-    public function isDefined()
+    public function isDefined(): bool
     {
-        return null !== $this->type;
+        return null !== $this->phpType;
     }
 
     public function __toString()
     {
-        $className = $this->className ? (string) $this->className : $this->type ?: '<unknown>';
+        $className = $this->className ? (string) $this->className : $this->phpType ?: '<unknown>';
 
         if (null === $this->arrayType) {
             return $className;
@@ -206,7 +222,7 @@ class Type
     public function short(): string
     {
         if ($this->isPrimitive()) {
-            return (string) $this->type;
+            return (string) $this->phpType;
         }
 
         return (string) $this->className->short();
@@ -224,27 +240,25 @@ class Type
 
     public function primitive(): string
     {
-        return $this->type;
+        return $this->phpType;
     }
 
     /**
-     * @return ClassName
+     * @return ClassName|null
      */
     public function className()
     {
         return $this->className;
     }
 
-    private static function create($type)
+    private static function create($type): Type
     {
-        $instance = new self();
-        $instance->type = $type;
-
-        return $instance;
+        return new self($type);
     }
 
-    public function prependNamespace(Name $namespace)
+    public function prependNamespace($namespace): Type
     {
+        $namepsace = Name::fromUnknown($namespace);
         $clone = clone $this;
         $clone->className = ClassName::fromString((string) $namespace . '\\' . $this->className()->__toString());
 
@@ -260,18 +274,29 @@ class Type
         return self::unknown();
     }
 
-    public function withArrayType(Type $arrayType)
+    public function withArrayType(Type $arrayType): Type
     {
         $clone = clone $this;
         $clone->arrayType = $arrayType;
         return $clone;
     }
 
-    public function withClassName(string $className)
+    public function withClassName(string $className): Type
     {
         $clone = clone $this;
-        $clone->className = ClassName::fromString($className);
+        $clone->className = ClassName::fromUnknown($className);
 
         return $clone;
+    }
+
+    public function __clone()
+    {
+        if ($this->className) {
+            $this->className = clone $this->className;
+        }
+
+        if ($this->arrayType) {
+            $this->arrayType = clone $this->arrayType;
+        }
     }
 }

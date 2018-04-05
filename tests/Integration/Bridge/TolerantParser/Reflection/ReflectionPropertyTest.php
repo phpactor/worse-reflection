@@ -131,7 +131,10 @@ EOT
                 ,
                 'Foobar',
                 function ($properties) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $properties->get('property1')->inferredTypes()->best());
+                    $this->assertEquals(
+                        Type::class(ClassName::fromString('Acme\Post')),
+                        $properties->get('property1')->inferredTypes()->best()
+                    );
                     $this->assertFalse($properties->get('property1')->isStatic());
                 },
             ],
