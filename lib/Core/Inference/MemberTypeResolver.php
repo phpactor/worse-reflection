@@ -53,6 +53,14 @@ class MemberTypeResolver
 
     private function memberType(string $type, Type $containerType, SymbolContext $info, string $name)
     {
+        if (false === $containerType->isDefined()) {
+            return $info->withIssue(sprintf(
+                'No type available for containing class "%s" for method "%s"',
+                (string) $containerType,
+                $name
+            ));
+        }
+
         try {
             $class = $this->reflectClassOrNull($containerType, $name);
         } catch (NotFound $e) {
