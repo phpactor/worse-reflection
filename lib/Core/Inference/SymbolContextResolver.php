@@ -34,6 +34,7 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
+use Phpactor\WorseReflection\Core\Inference\Resolvers\ParameterResolver;
 
 /**
  * @TODO: This class requires SERIOUS refactoring.
@@ -65,6 +66,11 @@ class SymbolContextResolver
      */
     private $nameResolver;
 
+    /**
+     * @var ParameterResolver
+     */
+    private $parameterResolver;
+
     public function __construct(ClassReflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
     {
         $this->logger = $logger;
@@ -72,6 +78,12 @@ class SymbolContextResolver
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
         $this->reflector = $reflector;
+
+        $this->parameterResolver = new ParameterResolver(
+            $this->symbolFactory,
+            $this->nameResolver,
+            $this->reflector
+        );
     }
 
     public function resolveNode(Frame $frame, $node): SymbolContext
@@ -127,7 +139,7 @@ class SymbolContextResolver
         }
 
         if ($node instanceof Parameter) {
-            return $this->resolveParameter($frame, $node);
+            return $this->parameterResolver->resolve($this, $frame, $node);
         }
 
         if ($node instanceof ParserVariable) {
@@ -268,83 +280,6 @@ class SymbolContextResolver
     {
         $resolvableNode = $node->callableExpression;
         return $this->_resolveNode($frame, $resolvableNode);
-    }
-
-    private function resolveParameter(Frame $frame, Parameter $node): SymbolContext
-    {
-        /** @var MethodDeclaration $method */
-        $method = $node->getFirstAncestor(AnonymousFunctionCreationExpression::class, MethodDeclaration::class);
-
-        if ($method instanceof MethodDeclaration) {
-            return $this->resolveParameterFromReflection($frame, $method, $node);
-        }
-
-        $typeDeclaration = $node->typeDeclaration;
-        $type = Type::unknown();
-
-        if ($typeDeclaration instanceof QualifiedName) {
-            $type = $this->nameResolver->resolve($node->typeDeclaration);
-        }
-        
-        if ($typeDeclaration instanceof Token) {
-            $type = Type::fromString($typeDeclaration->getText($node->getFileContents()));
-        }
-
-        $value = null;
-        if ($node->default) {
-            $value = $this->_resolveNode($frame, $node->default)->value();
-        }
-
-        return $this->symbolFactory->context(
-            $node->variableName->getText($node->getFileContents()),
-            $node->variableName->getStartPosition(),
-            $node->variableName->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-                'type' => $type,
-                'value' => $value,
-            ]
-        );
-    }
-
-    private function resolveParameterFromReflection(Frame $frame, MethodDeclaration $method, Parameter $node): SymbolContext
-    {
-        /** @var ClassDeclaration|TraitDeclaration|InterfaceDeclaration $class  */
-        $class = $node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class);
-
-        if (null === $class) {
-            return SymbolContext::none()
-                ->withIssue(sprintf(
-                'Cannot find class context "%s" for parameter',
-                $node->getName()
-            ));
-        }
-
-        /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
-        $reflectionClass = $this->reflector->reflectClassLike($class->getNamespacedName()->__toString());
-        $reflectionMethod = $reflectionClass->methods()->get($method->getName());
-
-        if (!$reflectionMethod->parameters()->has($node->getName())) {
-            return SymbolContext::none()
-                ->withIssue(sprintf(
-                'Cannot find parameter "%s" for method "%s" in class "%s"',
-                $node->getName(),
-                $reflectionMethod->name(),
-                $reflectionClass->name()
-            ));
-        }
-        $reflectionParameter = $reflectionMethod->parameters()->get($node->getName());
-
-        return $this->symbolFactory->context(
-            $node->variableName->getText($node->getFileContents()),
-            $node->variableName->getStartPosition(),
-            $node->variableName->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-                'type' => $reflectionParameter->inferredTypes()->best(),
-                'value' => $reflectionParameter->default()->value(),
-            ]
-        );
     }
 
     private function resolveNumericLiteral(NumericLiteral $node): SymbolContext
