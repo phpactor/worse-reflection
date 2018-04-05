@@ -79,4 +79,13 @@ class Name
     {
         return $this->wasFullyQualified;
     }
+
+    /**
+     * @return static
+     */
+    public function prepend($name)
+    {
+        $name = Name::fromUnknown($name);
+        return self::fromString(join('\\', [(string) $name, $this->__toString()]));
+    }
 }

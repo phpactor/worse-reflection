@@ -37,4 +37,14 @@ class ClassNameTest extends TestCase
 
         $this->assertSame($className1, $className2);
     }
+
+    public function testPrepend()
+    {
+        $className1 = ClassName::fromString('Foobar');
+        $className2 = ClassName::fromString('Barfoo');
+
+        $className3 = $className1->prepend($className2);
+
+        $this->assertEquals('Barfoo\\Foobar', (string) $className3);
+    }
 }

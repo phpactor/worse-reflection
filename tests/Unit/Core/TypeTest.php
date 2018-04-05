@@ -191,13 +191,4 @@ class TypeTest extends TestCase
         $this->assertNotSame($type1, $type2);
         $this->assertNotSame($type1->arrayType(), $type2->arrayType());
     }
-
-    public function testPrependNamespace()
-    {
-        $type1 = Type::class('Foobar');
-        $type2 = $type1->prependNamespace(Name::fromString('Barfoo'));
-
-        $this->assertNotSame($type1, $type2);
-        $this->assertEquals('Barfoo\Foobar', (string) $type2);
-    }
 }

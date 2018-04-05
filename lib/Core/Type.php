@@ -256,15 +256,6 @@ class Type
         return new self($type);
     }
 
-    public function prependNamespace($namespace): Type
-    {
-        $namepsace = Name::fromUnknown($namespace);
-        $clone = clone $this;
-        $clone->className = ClassName::fromString((string) $namespace . '\\' . $this->className()->__toString());
-
-        return $clone;
-    }
-
     public function arrayType(): Type
     {
         if ($this->arrayType) {
