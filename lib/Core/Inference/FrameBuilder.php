@@ -30,6 +30,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Microsoft\PhpParser\Node\ForeachValue;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
 
 final class FrameBuilder
 {
@@ -72,7 +73,8 @@ final class FrameBuilder
         $this->docblockFactory = $docblockFactory;
         $this->walkers = [
             new VariableWalker($this->symbolFactory, $this->docblockFactory, $this->nameResolver),
-            new AssignmentWalker($this->symbolFactory, $this->logger)
+            new AssignmentWalker($this->symbolFactory, $this->logger),
+            new CatchWalker($this->symbolFactory)
         ];
     }
 
@@ -105,10 +107,6 @@ final class FrameBuilder
             }
         }
 
-        if ($node instanceof CatchClause) {
-            $this->walkExceptionCatch($frame, $node);
-        }
-
         if ($node instanceof ForeachStatement) {
             $this->walkForeachStatement($frame, $node);
         }
@@ -128,26 +126,6 @@ final class FrameBuilder
         if ($node instanceof SourceFileNode) {
             return $frame;
         }
-    }
-
-    private function walkExceptionCatch(Frame $frame, CatchClause $node)
-    {
-        if (!$node->qualifiedName) {
-            return;
-        }
-
-        $typeContext = $this->resolveNode($frame, $node->qualifiedName);
-        $context = $this->symbolFactory->context(
-            $node->variableName->getText($node->getFileContents()),
-            $node->variableName->getStartPosition(),
-            $node->variableName->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-                'type' => $typeContext->type(),
-            ]
-        );
-
-        $frame->locals()->add(Variable::fromSymbolContext($context));
     }
 
     /**
