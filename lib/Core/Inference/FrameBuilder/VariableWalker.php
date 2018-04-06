@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
 class VariableWalker
 {
@@ -50,7 +51,7 @@ class VariableWalker
         return true;
     }
 
-    public function walk(Frame $frame, Node $node)
+    public function walk(FrameBuilder $builder, Frame $frame, Node $node)
     {
         $this->injectVariablesFromComment($frame, $node);
 

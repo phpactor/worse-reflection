@@ -29,6 +29,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Microsoft\PhpParser\Node\ForeachValue;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
 
 final class FrameBuilder
 {
@@ -70,7 +71,8 @@ final class FrameBuilder
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
         $this->docblockFactory = $docblockFactory;
         $this->walkers = [
-            new VariableWalker($this->symbolFactory, $this->docblockFactory, $this->nameResolver)
+            new VariableWalker($this->symbolFactory, $this->docblockFactory, $this->nameResolver),
+            new AssignmentWalker($this->symbolFactory, $this->logger)
         ];
     }
 
@@ -99,12 +101,8 @@ final class FrameBuilder
 
         foreach ($this->walkers as $walker) {
             if ($walker->canWalk($node)) {
-                $walker->walk($frame, $node);
+                $walker->walk($this, $frame, $node);
             }
-        }
-
-        if ($node instanceof AssignmentExpression) {
-            $this->walkAssignment($frame, $node);
         }
 
         if ($node instanceof CatchClause) {
@@ -150,90 +148,6 @@ final class FrameBuilder
         );
 
         $frame->locals()->add(Variable::fromSymbolContext($context));
-    }
-
-    private function walkAssignment(Frame $frame, AssignmentExpression $node)
-    {
-        $rightContext = $this->resolveNode($frame, $node->rightOperand);
-
-        if ($node->leftOperand instanceof ParserVariable) {
-            return $this->walkParserVariable($frame, $node->leftOperand, $rightContext);
-        }
-
-        if ($node->leftOperand instanceof ListIntrinsicExpression) {
-            return $this->walkList($frame, $node->leftOperand, $rightContext);
-        }
-
-        if ($node->leftOperand instanceof MemberAccessExpression) {
-            return $this->walkMemberAccessExpression($frame, $node->leftOperand, $rightContext);
-        }
-
-        if ($node->leftOperand instanceof SubscriptExpression) {
-            return $this->walkSubscriptExpression($frame, $node->leftOperand, $rightContext);
-        }
-
-
-        $this->logger->warning(sprintf(
-            'Do not know how to assign to left operand "%s"',
-            get_class($node->leftOperand)
-        ));
-    }
-
-    private function walkParserVariable(Frame $frame, ParserVariable $leftOperand, SymbolContext $rightContext)
-    {
-        $name = $leftOperand->name->getText($leftOperand->getFileContents());
-        $context = $this->symbolFactory->context(
-            $name,
-            $leftOperand->getStart(),
-            $leftOperand->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-                'type' => $rightContext->type(),
-                'value' => $rightContext->value(),
-            ]
-        );
-
-        $frame->locals()->add(Variable::fromSymbolContext($context));
-    }
-
-    private function walkMemberAccessExpression(Frame $frame, MemberAccessExpression $leftOperand, SymbolContext $typeContext)
-    {
-        $variable = $leftOperand->dereferencableExpression;
-
-        // we do not track assignments to other classes.
-        if (false === in_array($variable, [ '$this', 'self' ])) {
-            return;
-        }
-
-        $memberNameNode = $leftOperand->memberName;
-
-        // TODO: Sort out this mess.
-        //       If the node is not a token (e.g. it is a variable) then
-        //       evaluate the variable (e.g. $this->$foobar);
-        if ($memberNameNode instanceof Token) {
-            $memberName = $memberNameNode->getText($leftOperand->getFileContents());
-        } else {
-            $memberNameInfo = $this->resolveNode($frame, $memberNameNode);
-
-            if (false === is_string($memberNameInfo->value())) {
-                return;
-            }
-
-            $memberName = $memberNameInfo->value();
-        }
-
-        $context = $this->symbolFactory->context(
-            $memberName,
-            $leftOperand->getStart(),
-            $leftOperand->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-                'type' => $typeContext->type(),
-                'value' => $typeContext->value(),
-            ]
-        );
-
-        $frame->properties()->add(Variable::fromSymbolContext($context));
     }
 
     /**
@@ -338,7 +252,12 @@ final class FrameBuilder
     }
 
 
-    private function resolveNode(Frame $frame, $node): SymbolContext
+    /**
+     * @internal For use with walkers
+     *
+     * TODO: Make an interface for this, extract it.
+     */
+    public function resolveNode(Frame $frame, $node): SymbolContext
     {
         $info = $this->symbolContextResolver->resolveNode($frame, $node);
 
@@ -386,54 +305,6 @@ final class FrameBuilder
         }
 
         return '<unknown>';
-    }
-
-    private function walkList(Frame $frame, ListIntrinsicExpression $leftOperand, SymbolContext $symbolContext)
-    {
-        $value = $symbolContext->value();
-
-        foreach ($leftOperand->listElements as $elements) {
-            foreach ($elements as $index => $element) {
-                if (!$element instanceof ArrayElement) {
-                    continue;
-                }
-
-                $elementValue = $element->elementValue;
-
-                if (!$elementValue instanceof ParserVariable) {
-                    continue;
-                }
-
-                if (null === $elementValue || null === $elementValue->name) {
-                    continue;
-                }
-
-                $varName = $elementValue->name->getText($leftOperand->getFileContents());
-                $variableContext = $this->symbolFactory->context(
-                    $varName,
-                    $element->getStart(),
-                    $element->getEndPosition(),
-                    [
-                        'symbol_type' => Symbol::VARIABLE,
-                    ]
-                );
-
-                if (is_array($value) && isset($value[$index])) {
-                    $variableContext = $variableContext->withValue($value[$index]);
-                    $variableContext = $variableContext->withType(Type::fromString(gettype($value[$index])));
-                }
-
-                $frame->locals()->add(Variable::fromSymbolContext($variableContext));
-            }
-        }
-    }
-
-    private function walkSubscriptExpression(Frame $frame, SubscriptExpression $leftOperand, SymbolContext $rightContext)
-    {
-        if ($leftOperand->postfixExpression instanceof MemberAccessExpression) {
-            $rightContext = $rightContext->withType(Type::array());
-            $this->walkMemberAccessExpression($frame, $leftOperand->postfixExpression, $rightContext);
-        }
     }
 
     private function walkForeachStatement(Frame $frame, ForeachStatement $node)
