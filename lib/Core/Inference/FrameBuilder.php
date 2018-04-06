@@ -28,6 +28,7 @@ use Microsoft\PhpParser\Node\Statement\ForeachStatement;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Microsoft\PhpParser\Node\ForeachValue;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
 
 final class FrameBuilder
 {
@@ -47,14 +48,14 @@ final class FrameBuilder
     private $symbolFactory;
 
     /**
-     * @var array
-     */
-    private $injectedTypes = [];
-
-    /**
      * @var FullyQualifiedNameResolver
      */
     private $nameResolver;
+
+    /**
+     * @var FrameWalker[]
+     */
+    private $walkers;
 
     /**
      * @var DocBlockFactory
@@ -68,6 +69,9 @@ final class FrameBuilder
         $this->symbolFactory = new SymbolFactory();
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
         $this->docblockFactory = $docblockFactory;
+        $this->walkers = [
+            new VariableWalker($this->symbolFactory, $this->docblockFactory, $this->nameResolver)
+        ];
     }
 
     public function build(Node $node): Frame
@@ -93,10 +97,10 @@ final class FrameBuilder
             $this->walkFunctionLike($frame, $node);
         }
 
-        $this->injectVariablesFromComment($frame, $node);
-
-        if ($node instanceof ParserVariable) {
-            $this->walkVariable($frame, $node);
+        foreach ($this->walkers as $walker) {
+            if ($walker->canWalk($node)) {
+                $walker->walk($frame, $node);
+            }
         }
 
         if ($node instanceof AssignmentExpression) {
@@ -291,26 +295,6 @@ final class FrameBuilder
         }
     }
 
-    private function injectVariablesFromComment(Frame $frame, Node $node)
-    {
-        $comment = $node->getLeadingCommentAndWhitespaceText();
-        $docblock = $this->docblockFactory->create($comment);
-
-        if (false === $docblock->isDefined()) {
-            return;
-        }
-
-        $vars = $docblock->vars();
-
-        /** @var DocBlockVar $var */
-        foreach ($docblock->vars() as $var) {
-            $this->injectedTypes[ltrim($var->name(), '$')] = $this->nameResolver->resolve(
-                $node,
-                $var->types()->best()
-            );
-        }
-    }
-
     private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
     {
         $useClause = $node->anonymousFunctionUseClause;
@@ -353,31 +337,6 @@ final class FrameBuilder
         }
     }
 
-    private function walkVariable(Frame $frame, ParserVariable $node)
-    {
-        if (false === $node->name instanceof Token) {
-            return;
-        }
-
-        $context = $this->symbolFactory->context(
-            $node->name->getText($node->getFileContents()),
-            $node->getStart(),
-            $node->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-            ]
-        );
-
-        $symbolName = $context->symbol()->name();
-
-        if (false === isset($this->injectedTypes[$symbolName])) {
-            return;
-        }
-
-        $context = $context->withType($this->injectedTypes[$symbolName]);
-        $frame->locals()->add(Variable::fromSymbolContext($context));
-        unset($this->injectedTypes[$symbolName]);
-    }
 
     private function resolveNode(Frame $frame, $node): SymbolContext
     {
