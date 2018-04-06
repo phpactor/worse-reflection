@@ -31,6 +31,7 @@ use Microsoft\PhpParser\Node\ForeachValue;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\ForeachWalker;
 
 final class FrameBuilder
 {
@@ -74,7 +75,8 @@ final class FrameBuilder
         $this->walkers = [
             new VariableWalker($this->symbolFactory, $this->docblockFactory, $this->nameResolver),
             new AssignmentWalker($this->symbolFactory, $this->logger),
-            new CatchWalker($this->symbolFactory)
+            new CatchWalker($this->symbolFactory),
+            new ForeachWalker($this->symbolFactory)
         ];
     }
 
@@ -105,10 +107,6 @@ final class FrameBuilder
             if ($walker->canWalk($node)) {
                 $walker->walk($this, $frame, $node);
             }
-        }
-
-        if ($node instanceof ForeachStatement) {
-            $this->walkForeachStatement($frame, $node);
         }
 
         foreach ($node->getChildNodes() as $childNode) {
@@ -283,38 +281,5 @@ final class FrameBuilder
         }
 
         return '<unknown>';
-    }
-
-    private function walkForeachStatement(Frame $frame, ForeachStatement $node)
-    {
-        $collection = $this->resolveNode($frame, $node->forEachCollectionName);
-        $itemName = $node->foreachValue;
-
-        if (!$itemName instanceof ForeachValue) {
-            return;
-        }
-
-        if (!$itemName->expression instanceof ParserVariable) {
-            return;
-        }
-
-        $itemName = $itemName->expression->name->getText($node->getFileContents());
-
-        $collectionType = $collection->types()->best();
-
-        $context = $this->symbolFactory->context(
-            $itemName,
-            $node->getStart(),
-            $node->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-            ]
-        );
-
-        if ($collectionType->arrayType()->isDefined()) {
-            $context = $context->withType($collectionType->arrayType());
-        }
-
-        $frame->locals()->add(Variable::fromSymbolContext($context));
     }
 }
