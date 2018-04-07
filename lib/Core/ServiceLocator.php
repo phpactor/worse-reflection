@@ -84,7 +84,7 @@ class ServiceLocator
         $this->sourceLocator = $sourceLocator;
         $this->docblockFactory = new DocblockFactoryBridge();
         $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
-        $this->frameBuilder = new FrameBuilder($this->docblockFactory, $this->symbolContextResolver, $this->logger);
+        $this->frameBuilder = FrameBuilder::create($this->docblockFactory, $this->symbolContextResolver, $this->logger);
         $this->parser = new Parser();
     }
 
