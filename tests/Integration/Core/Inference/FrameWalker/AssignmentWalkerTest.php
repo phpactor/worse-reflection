@@ -4,10 +4,11 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
+use Generator;
 
 class AssignmentWalkerTest extends FrameWalkerTestCase
 {
-    public function provideWalks()
+    public function provideWalk(): Generator
     {
         yield 'It registers string assignments' => [
             <<<'EOT'

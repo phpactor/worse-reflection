@@ -5,10 +5,11 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Type;
+use Generator;
 
 class CatchWalkerTest extends FrameWalkerTestCase
 {
-    public function provideWalks()
+    public function provideWalk(): Generator
     {
         yield 'Exceptions' => [
             <<<'EOT'
