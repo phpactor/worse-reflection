@@ -191,5 +191,40 @@ EOT
                 $this->assertEquals('string', (string) $frame->locals()->first()->symbolContext()->type());
             }
         ];
+
+        yield 'From return type with docblock' => [
+            <<<'EOT'
+<?php
+
+namespace Foobar;
+
+use Foo\Lister;
+
+interface Barfoo
+{
+    /**
+     * @return Lister<Collection>
+     */
+    public static function bar(): List;
+}
+
+class Baz
+{
+    public function (Barfoo $barfoo)
+    {
+        $bar = $barfoo->bar();
+        <>
+    }
+}
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(3, $frame->locals());
+                $this->assertEquals('Foo\Lister<Foobar\Collection>', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best());
+                $this->assertEquals('Foobar\Collection', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best()->arrayType());
+            }
+        ];
     }
 }

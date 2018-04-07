@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 
 class VariableWalker
 {
@@ -46,21 +47,21 @@ class VariableWalker
         $this->nameResolver = $nameResolver;
     }
 
-    public function canWalk(Node $node)
+    public function canWalk(Node $node): bool
     {
         return true;
     }
 
-    public function walk(FrameBuilder $builder, Frame $frame, Node $node)
+    public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
         $this->injectVariablesFromComment($frame, $node);
 
         if (!$node instanceof Variable) {
-            return;
+            return $frame;
         }
 
         if (false === $node->name instanceof Token) {
-            return;
+            return $frame;
         }
 
         $context = $this->symbolFactory->context(
@@ -75,12 +76,14 @@ class VariableWalker
         $symbolName = $context->symbol()->name();
 
         if (false === isset($this->injectedTypes[$symbolName])) {
-            return;
+            return $frame;
         }
 
         $context = $context->withType($this->injectedTypes[$symbolName]);
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
         unset($this->injectedTypes[$symbolName]);
+
+        return $frame;
     }
 
     private function injectVariablesFromComment(Frame $frame, Node $node)

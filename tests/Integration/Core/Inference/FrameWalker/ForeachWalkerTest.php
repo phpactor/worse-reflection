@@ -70,5 +70,29 @@ EOT
                 $this->assertEquals('Foobar\\Item', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
         ];
+
+        yield 'It returns type for a foreach member (with a docblock)' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function hello()
+    {
+        /** @var Foobar $foobar */
+        foreach ($collection as $foobar) {
+            $foobar->foobar();
+            <>
+        }
+    }
+}
+EOT
+        , function (Frame $frame) {
+            $vars = $frame->locals()->byName('foobar');
+            $this->assertCount(2, $vars);
+            $symbolInformation = $vars->atIndex(1)->symbolContext();
+            $this->assertEquals('Foobar', (string) $symbolInformation->type());
+        }];
+
     }
 }

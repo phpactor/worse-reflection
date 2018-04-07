@@ -38,13 +38,15 @@ class AssignmentWalker implements FrameWalker
         $this->logger = $logger;
     }
 
-    public function canWalk(Node $node)
+    public function canWalk(Node $node): bool
     {
         return $node instanceof AssignmentExpression;
     }
 
-    public function walk(FrameBuilder $builder, Frame $frame, Node $node)
+    public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
+        assert($node instanceof AssignmentExpression);
+
         $rightContext = $builder->resolveNode($frame, $node->rightOperand);
 
         if ($node->leftOperand instanceof Variable) {
@@ -68,6 +70,8 @@ class AssignmentWalker implements FrameWalker
             'Do not know how to assign to left operand "%s"',
             get_class($node->leftOperand)
         ));
+
+        return $frame;
     }
 
     private function walkParserVariable(Frame $frame, Variable $leftOperand, SymbolContext $rightContext)
@@ -85,15 +89,22 @@ class AssignmentWalker implements FrameWalker
         );
 
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+
+        return $frame;
     }
 
-    private function walkMemberAccessExpression(FrameBuilder $builder, Frame $frame, MemberAccessExpression $leftOperand, SymbolContext $typeContext)
+    private function walkMemberAccessExpression(
+        FrameBuilder $builder,
+        Frame $frame,
+        MemberAccessExpression $leftOperand,
+        SymbolContext $typeContext
+    ): Frame
     {
         $variable = $leftOperand->dereferencableExpression;
 
         // we do not track assignments to other classes.
         if (false === in_array($variable, [ '$this', 'self' ])) {
-            return;
+            return $frame;
         }
 
         $memberNameNode = $leftOperand->memberName;
@@ -107,7 +118,7 @@ class AssignmentWalker implements FrameWalker
             $memberNameInfo = $builder->resolveNode($frame, $memberNameNode);
 
             if (false === is_string($memberNameInfo->value())) {
-                return;
+                return $frame;
             }
 
             $memberName = $memberNameInfo->value();
@@ -125,9 +136,11 @@ class AssignmentWalker implements FrameWalker
         );
 
         $frame->properties()->add(WorseVariable::fromSymbolContext($context));
+
+        return $frame;
     }
 
-    private function walkList(Frame $frame, ListIntrinsicExpression $leftOperand, SymbolContext $symbolContext)
+    private function walkList(Frame $frame, ListIntrinsicExpression $leftOperand, SymbolContext $symbolContext): Frame
     {
         $value = $symbolContext->value();
 
@@ -165,14 +178,18 @@ class AssignmentWalker implements FrameWalker
                 $frame->locals()->add(WorseVariable::fromSymbolContext($variableContext));
             }
         }
+
+        return $frame;
     }
 
-    private function walkSubscriptExpression(FrameBuilder $builder, Frame $frame, SubscriptExpression $leftOperand, SymbolContext $rightContext)
+    private function walkSubscriptExpression(FrameBuilder $builder, Frame $frame, SubscriptExpression $leftOperand, SymbolContext $rightContext): Frame
     {
         if ($leftOperand->postfixExpression instanceof MemberAccessExpression) {
             $rightContext = $rightContext->withType(Type::array());
             $this->walkMemberAccessExpression($builder, $frame, $leftOperand->postfixExpression, $rightContext);
         }
+
+        return $frame;
     }
 
 }

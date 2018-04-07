@@ -32,52 +32,42 @@ use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\ForeachWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\FunctionLikeWalker;
 
 final class FrameBuilder
 {
-    /**
-     * @var Logger
-     */
-    private $logger;
-
     /**
      e @var SymbolContextResolver
      */
     private $symbolContextResolver;
 
     /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
-    /**
-     * @var FullyQualifiedNameResolver
-     */
-    private $nameResolver;
-
-    /**
      * @var FrameWalker[]
      */
     private $walkers;
 
-    /**
-     * @var DocBlockFactory
-     */
-    private $docblockFactory;
-
-    public function __construct(DocBlockFactory $docblockFactory, SymbolContextResolver $symbolContextResolver, Logger $logger)
+    public static function create(DocBlockFactory $docblockFactory, SymbolContextResolver $symbolContextResolver, Logger $logger)
     {
-        $this->logger = $logger;
-        $this->symbolContextResolver = $symbolContextResolver;
-        $this->symbolFactory = new SymbolFactory();
-        $this->nameResolver = new FullyQualifiedNameResolver($logger);
-        $this->docblockFactory = $docblockFactory;
-        $this->walkers = [
-            new VariableWalker($this->symbolFactory, $this->docblockFactory, $this->nameResolver),
-            new AssignmentWalker($this->symbolFactory, $this->logger),
-            new CatchWalker($this->symbolFactory),
-            new ForeachWalker($this->symbolFactory)
+        $nameResolver = new FullyQualifiedNameResolver($logger);
+        $symbolFactory = new SymbolFactory();
+        $walkers = [
+            new FunctionLikeWalker($symbolFactory),
+            new VariableWalker($symbolFactory, $docblockFactory, $nameResolver),
+            new AssignmentWalker($symbolFactory, $logger),
+            new CatchWalker($symbolFactory),
+            new ForeachWalker($symbolFactory)
         ];
+
+        return new self($symbolContextResolver, $walkers);
+    }
+
+    /**
+     * @param FrameWalker[] $walkers
+     */
+    public function __construct(SymbolContextResolver $symbolContextResolver, array $walkers)
+    {
+        $this->symbolContextResolver = $symbolContextResolver;
+        $this->walkers = $walkers;
     }
 
     public function build(Node $node): Frame
@@ -97,15 +87,9 @@ final class FrameBuilder
             );
         }
 
-        if ($node instanceof FunctionLike) {
-            assert($node instanceof Node);
-            $frame = $frame->new($node->getNodeKindName() . '#' . $this->functionName($node));
-            $this->walkFunctionLike($frame, $node);
-        }
-
         foreach ($this->walkers as $walker) {
             if ($walker->canWalk($node)) {
-                $walker->walk($this, $frame, $node);
+                $frame = $walker->walk($this, $frame, $node);
             }
         }
 
@@ -123,107 +107,6 @@ final class FrameBuilder
         // we start with the source node and we finish with the source node.
         if ($node instanceof SourceFileNode) {
             return $frame;
-        }
-    }
-
-    /**
-     * @param FunctionDeclaration|AnonymousFunctionCreationExpression $node
-     */
-    private function walkFunctionLike(Frame $frame, FunctionLike $node)
-    {
-        $namespace = $node->getNamespaceDefinition();
-        $classNode = $node->getFirstAncestor(
-            ClassDeclaration::class,
-            InterfaceDeclaration::class,
-            TraitDeclaration::class
-        );
-
-        // works for both closure and class method (we currently ignore binding)
-        if ($classNode) {
-            $classType = $this->resolveNode($frame, $classNode)->type();
-            $context = $this->symbolFactory->context(
-                'this',
-                $node->getStart(),
-                $node->getEndPosition(),
-                [
-                    'type' => $classType,
-                    'symbol_type' => Symbol::VARIABLE,
-                ]
-            );
-
-            // add this and self
-            // TODO: self is NOT added here - does it work?
-            $frame->locals()->add(Variable::fromSymbolContext($context));
-        }
-
-        if ($node instanceof AnonymousFunctionCreationExpression) {
-            $this->addAnonymousImports($frame, $node);
-        }
-
-        if (null === $node->parameters) {
-            return;
-        }
-
-        /** @var Parameter $parameterNode */
-        foreach ($node->parameters->getElements() as $parameterNode) {
-            $parameterName = $parameterNode->variableName->getText($node->getFileContents());
-
-            $symbolContext = $this->resolveNode($frame, $parameterNode);
-
-            $context = $this->symbolFactory->context(
-                $parameterName,
-                $parameterNode->getStart(),
-                $parameterNode->getEndPosition(),
-                [
-                    'symbol_type' => Symbol::VARIABLE,
-                    'type' => $symbolContext->types()->best(),
-                    'value' => $symbolContext->value(),
-                ]
-            );
-
-            $frame->locals()->add(Variable::fromSymbolContext($context));
-        }
-    }
-
-    private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
-    {
-        $useClause = $node->anonymousFunctionUseClause;
-
-        if (null === $useClause) {
-            return;
-        }
-
-        $parentFrame = $frame->parent();
-        $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStart());
-
-        foreach ($useClause->useVariableNameList->getElements() as $element) {
-            $varName = $element->variableName->getText($node->getFileContents());
-
-            $variableContext = $this->symbolFactory->context(
-                $varName,
-                $element->getStart(),
-                $element->getEndPosition(),
-                [
-                    'symbol_type' => Symbol::VARIABLE,
-                ]
-            );
-            $varName = $variableContext->symbol()->name();
-
-            // if not in parent scope, then we know nothing about it
-            // add it with above context and continue
-            // TODO: Do we infer the type hint??
-            if (0 === $parentVars->byName($varName)->count()) {
-                $frame->locals()->add(Variable::fromSymbolContext($variableContext));
-                continue;
-            }
-
-            $variable = $parentVars->byName($varName)->last();
-
-            $variableContext = $variableContext
-                ->withType($variable->symbolContext()->type())
-                ->withValue($variable->symbolContext()->value());
-
-            $frame->locals()->add(Variable::fromSymbolContext($variableContext));
         }
     }
 
@@ -262,24 +145,4 @@ final class FrameBuilder
         return $scopeNode;
     }
 
-    private function functionName(FunctionLike $node)
-    {
-        if ($node instanceof MethodDeclaration) {
-            return $node->getName();
-        }
-
-        if ($node instanceof FunctionDeclaration) {
-            return array_reduce($node->getNameParts(), function ($accumulator, Token $part) {
-                return $accumulator
-                    . '\\' .
-                    $part->getText();
-            }, '');
-        }
-
-        if ($node instanceof AnonymousFunctionCreationExpression) {
-            return '<anonymous>';
-        }
-
-        return '<unknown>';
-    }
 }

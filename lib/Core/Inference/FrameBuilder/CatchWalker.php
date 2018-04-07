@@ -23,15 +23,16 @@ class CatchWalker implements FrameWalker
         $this->symbolFactory = $symbolFactory;
     }
 
-    public function canWalk(Node $node)
+    public function canWalk(Node $node): bool
     {
         return $node instanceof CatchClause;
     }
 
-    public function walk(FrameBuilder $builder, Frame $frame, Node $node)
+    public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
+        assert($node instanceof CatchClause);
         if (!$node->qualifiedName) {
-            return;
+            return $frame;
         }
 
         $typeContext = $builder->resolveNode($frame, $node->qualifiedName);
@@ -46,5 +47,7 @@ class CatchWalker implements FrameWalker
         );
 
         $frame->locals()->add(Variable::fromSymbolContext($context));
+
+        return $frame;
     }
 }

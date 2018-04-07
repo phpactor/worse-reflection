@@ -25,22 +25,23 @@ class ForeachWalker implements FrameWalker
         $this->symbolFactory = $symbolFactory;
     }
 
-    public function canWalk(Node $node)
+    public function canWalk(Node $node): bool
     {
         return $node instanceof ForeachStatement;
     }
 
-    public function walk(FrameBuilder $builder, Frame $frame, Node $node)
+    public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
+        assert($node instanceof ForeachStatement);
         $collection = $builder->resolveNode($frame, $node->forEachCollectionName);
         $itemName = $node->foreachValue;
 
         if (!$itemName instanceof ForeachValue) {
-            return;
+            return $frame;
         }
 
         if (!$itemName->expression instanceof Variable) {
-            return;
+            return $frame;
         }
 
         $itemName = $itemName->expression->name->getText($node->getFileContents());
@@ -61,5 +62,7 @@ class ForeachWalker implements FrameWalker
         }
 
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+
+        return $frame;
     }
 }
