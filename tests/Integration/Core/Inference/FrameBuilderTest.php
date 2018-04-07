@@ -178,23 +178,6 @@ EOT
 
     public function provideBuildForNode()
     {
-        yield 'Exceptions' => [
-            <<<'EOT'
-<?php
-try {
-} catch (\Exception $exception) {
-        <>
-}
-
-EOT
-        ,
-            function (Frame $frame) {
-                $this->assertCount(1, $frame->locals()->byName('$exception'));
-                $exception = $frame->locals()->byName('$exception')->first();
-                $this->assertEquals(Type::fromString('\Exception'), $exception->symbolContext()->type());
-            }
-        ];
-
         yield 'Respects closure scope' => [
             <<<'EOT'
 <?php
