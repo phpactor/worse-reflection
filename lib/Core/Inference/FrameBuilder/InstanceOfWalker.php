@@ -21,6 +21,7 @@ use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Phpactor\WorseReflection\Core\Inference\Assignments;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\Node\ReservedWord;
+use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
 
 class InstanceOfWalker implements FrameWalker
 {
@@ -29,12 +30,19 @@ class InstanceOfWalker implements FrameWalker
      */
     private $symbolFactory;
 
+    /**
+     * @var ExpressionEvaluator
+     */
+    private $evaluator;
+
     public function __construct(
         SymbolFactory $symbolFactory
     )
     {
         $this->symbolFactory = $symbolFactory;
+        $this->evaluator = new ExpressionEvaluator();
     }
+
     public function canWalk(Node $node): bool
     {
         return $node instanceof IfStatementNode;
@@ -45,94 +53,50 @@ class InstanceOfWalker implements FrameWalker
      */
     public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
-        $declaredVariables = $this->walkNode($builder, $frame, $node, false);
+        if (null === $node->expression) {
+            return $frame;
+        }
+
+        assert($node instanceof IfStatementNode);
+
+        $expressionsAreTrue = $this->evaluator->evaluate($node->expression);
+        $variables = $this->collectVariables($node);
+        $variables = $this->mergeTypes($variables);
         $terminates = $this->branchTerminates($node);
-        $declaredVariables = $this->mergeTypes($declaredVariables);
 
-        foreach ($declaredVariables as $declaredVariable) {
-            list($declaredVariable, $negated) = $declaredVariable;
-
+        foreach ($variables as $variable) {
             if ($terminates) {
 
                 // reset variables after the if branch
-                if (false === $negated) {
-                    $frame->locals()->add($declaredVariable);
-                    $detypedVariable = $declaredVariable->withTypes(Types::empty())->withOffset($node->getEndPosition());
+                if ($expressionsAreTrue) {
+                    $frame->locals()->add($variable);
+                    $detypedVariable = $variable->withTypes(Types::empty())->withOffset($node->getEndPosition());
                     $frame->locals()->add($detypedVariable);
+                    continue;
                 }
 
                 // create new variables after the if branch
-                if (true === $negated) {
-                    $variable = $declaredVariable->withTypes(Types::empty());
+                if (false === $expressionsAreTrue) {
+                    $detypedVariable = $variable->withTypes(Types::empty());
+                    $frame->locals()->add($detypedVariable);
+                    $variable = $variable->withOffset($node->getEndPosition());
                     $frame->locals()->add($variable);
-                    $variable = $declaredVariable->withOffset($node->getEndPosition());
-                    $frame->locals()->add($variable);
+                    continue;
                 }
 
-                return $frame;
             }
 
-            if (false === $negated) {
-                $frame->locals()->add($declaredVariable);
+            if ($expressionsAreTrue) {
+                $frame->locals()->add($variable);
             }
 
-            if (true === $negated) {
-                $variable = $declaredVariable->withTypes(Types::empty());
+            if (false === $expressionsAreTrue) {
+                $variable = $variable->withTypes(Types::empty());
                 $frame->locals()->add($variable);
             }
         }
 
         return $frame;
-    }
-
-    /**
-     * @return WorseVariable[]
-     */
-    public function walkNode(FrameBuilder $builder, Frame $frame, Node $node, bool $negated, Variable $targetVariable = null, Type $type = null): array
-    {
-        $variables = [];
-        $negatedVariables = [];
-
-        if ($node instanceof IfStatementNode) {
-            var_dump($node->expression);
-            return $this->walkNode($builder, $frame, $node->expression, $negated);
-        }
-
-        if ($node instanceof UnaryOpExpression) {
-            if ($node->operator->getText($node->getFileContents()) == '!') {
-                $negated = !$negated;
-            }
-        }
-
-        if ($node instanceof Variable) {
-            $targetVariable = $node;
-        }
-
-        if ($node instanceof ReservedWord) {
-            if (strtolower($node->getText()) === 'false') {
-                $negated = true;
-            }
-        }
-
-        if ($node instanceof BinaryExpression) {
-            $type = $this->typeFromBinaryExpression($node);
-        }
-
-        if ($type && $targetVariable) {
-            $context = $this->createSymbolContext($targetVariable);
-            $context = $context->withTypes(Types::fromTypes([ $type ]));
-            $variable = WorseVariable::fromSymbolContext($context);
-
-            $variables[] = [$variable, $negated];
-        }
-
-        foreach ($node->getChildNodes() as $childNode) {
-            foreach ($this->walkNode($builder, $frame, $childNode, $negated, $targetVariable, $type) as $variable) {
-                $variables[] = $variable;
-            }
-        }
-
-        return $variables;
     }
 
     private function branchTerminates(IfStatementNode $node): bool
@@ -166,47 +130,72 @@ class InstanceOfWalker implements FrameWalker
         return $context;
     }
 
-    private function typeFromBinaryExpression(Expression $expression): Type
+    private function mergeTypes(array $variables): array
     {
-        $operator = $expression->operator->getText($expression->getFileContents());
+        $vars = [];
+        foreach ($variables as $variable) {
+            if (isset($vars[$variable->name()])) {
+                $originalVariable = $vars[$variable->name()];
+                $variable = $originalVariable->withTypes(
+                    $originalVariable->symbolContext()
+                        ->types()
+                        ->merge(
+                            $variable->symbolContext()->types()
+                        )
+                );
+            }
 
-        if (strtolower($operator) !== 'instanceof') {
-            return Type::unknown();
+            $vars[$variable->name()] = $variable;
         }
 
-        $rightOperand = $expression->rightOperand;
+        return $vars;
+    }
+
+    /**
+     * @return WorseVariable[]
+     */
+    private function collectVariables(Node $node): array
+    {
+        $variables = [];
+        foreach ($node->getDescendantNodes() as $descendantNode) {
+            if (!$descendantNode instanceof BinaryExpression) {
+                continue;
+            }
+
+            $variable = $this->variableFromBinaryExpression($descendantNode);
+
+            if (null === $variable) {
+                continue;
+            }
+
+            $variables[] = $variable;
+        }
+
+        return $variables;
+    }
+
+    private function variableFromBinaryExpression(BinaryExpression $node)
+    {
+        $operator = $node->operator->getText($node->getFileContents());
+
+        if (strtolower($operator) !== 'instanceof') {
+            return null;
+        }
+
+        $variable = $node->getFirstDescendantNode(Variable::class);
+        $rightOperand = $node->rightOperand;
 
         if (false === $rightOperand instanceof QualifiedName) {
-            return Type::unknown();
+            return null;
         }
 
         $type = (string) $rightOperand->getNamespacedName();
 
-        return Type::fromString($type);
-
-        $context = $this->createSymbolContext($leftOperand);
+        $context = $this->createSymbolContext($variable);
         $context = $context->withType(Type::fromString($type));
         $variable = WorseVariable::fromSymbolContext($context);
 
         return $variable;
     }
 
-    private function mergeTypes(array $variableTuples): array
-    {
-        $vars = [];
-        foreach ($variableTuples as $variableTuple) {
-            list($variable, $negated) = $variableTuple;
-
-            if (isset($vars[$variable->name()])) {
-                list($originalVariable) = $vars[$variable->name()];
-                $variable = $originalVariable->withTypes(
-                    $originalVariable->symbolContext()->types()->merge($variable->symbolContext()->types())
-                );
-            }
-
-            $vars[$variable->name()] = [ $variable, $negated ];
-        }
-
-        return $vars;
-    }
 }

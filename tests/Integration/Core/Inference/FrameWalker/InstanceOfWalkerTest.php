@@ -121,8 +121,8 @@ if (!!$foobar instanceof Foobar) {
 EOT
         , function (Frame $frame, int $offset) {
             $this->assertCount(2, $frame->locals());
-            $this->assertEquals('Foobar', (string) $frame->locals()->atIndex(0)->symbolContext()->types()->best());
-            $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(1)->symbolContext()->types()->best());
+            $this->assertEquals('Foobar', (string) $frame->locals()->atIndex(1)->symbolContext()->types()->best());
+            $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
         }
         ];
 
@@ -146,21 +146,6 @@ EOT
 <?php
 
 if ($foobar instanceof Foobar && $foobar instanceof Barfoo) {
-
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
-            $this->assertCount(1, $frame->locals());
-            $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
-        }
-        ];
-
-        yield 'will create a union type with and' => [
-            <<<'EOT'
-<?php
-
-if (false) {
 
 }
 <>
