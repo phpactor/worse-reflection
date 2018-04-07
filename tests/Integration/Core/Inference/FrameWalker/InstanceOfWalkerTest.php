@@ -12,11 +12,6 @@ use Phpactor\WorseReflection\Core\Types;
 
 class InstanceOfWalkerTest extends FrameWalkerTestCase
 {
-    public function createWalker()
-    {
-        return new InstanceOfWalker(new SymbolFactory());
-    }
-
     public function provideWalk(): Generator
     {
         yield 'infers type from instanceof' => [

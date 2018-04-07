@@ -34,6 +34,7 @@ use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\ForeachWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\FunctionLikeWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\InstanceOfWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssertWalker;
 
 final class FrameBuilder
 {
@@ -52,6 +53,7 @@ final class FrameBuilder
         $nameResolver = new FullyQualifiedNameResolver($logger);
         $symbolFactory = new SymbolFactory();
         $walkers = [
+            new AssertWalker($symbolFactory),
             new FunctionLikeWalker($symbolFactory),
             new VariableWalker($symbolFactory, $docblockFactory, $nameResolver),
             new AssignmentWalker($symbolFactory, $logger),
