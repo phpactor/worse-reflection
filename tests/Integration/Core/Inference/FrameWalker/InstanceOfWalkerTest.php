@@ -166,5 +166,21 @@ EOT
             $this->assertEquals('stdClass', $frame->locals()->atIndex(2)->symbolContext()->types()->best());
         }
         ];
+
+        yield 'resolves namespace' => [
+            <<<'EOT'
+<?php
+
+use Foobar\Barfoo;
+
+if ($foobar instanceof Barfoo) {
+<>
+}
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(1, $frame->locals());
+            $this->assertEquals('Foobar\Barfoo', (string) $frame->locals()->atIndex(0)->symbolContext()->types()->best());
+        }
+        ];
     }
 }

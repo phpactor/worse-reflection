@@ -69,7 +69,7 @@ class AbstractInstanceOfWalker
             return null;
         }
 
-        $type = (string) $rightOperand->getNamespacedName();
+        $type = (string) $rightOperand->getResolvedName();
 
         $context = $this->createSymbolContext($variable);
         $context = $context->withType(Type::fromString($type));
