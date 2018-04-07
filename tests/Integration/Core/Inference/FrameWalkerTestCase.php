@@ -16,8 +16,8 @@ abstract class FrameWalkerTestCase extends IntegrationTestCase
     {
         list($source, $offset) = ExtractOffset::fromSource($source);
         $reflector = $this->createReflector($source);
-        $offset = $reflector->reflectOffset($source, $offset);
-        $assertion($offset->frame());
+        $reflectionOffset = $reflector->reflectOffset($source, $offset);
+        $assertion($reflectionOffset->frame(), $offset);
     }
 
     abstract public function provideWalk(): Generator;

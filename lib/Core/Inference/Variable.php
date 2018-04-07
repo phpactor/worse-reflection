@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Types;
 
 final class Variable
 {
@@ -17,7 +18,7 @@ final class Variable
     private $offset;
 
     /**
-     * @var mixed
+     * @var SymbolContext
      */
     private $symbolContext;
 
@@ -28,7 +29,7 @@ final class Variable
         $this->symbolContext = $symbolContext;
     }
 
-    public static function fromSymbolContext(SymbolContext $symbolContext)
+    public static function fromSymbolContext(SymbolContext $symbolContext): Variable
     {
         return new self(
             $symbolContext->symbol()->name(),
@@ -62,5 +63,16 @@ final class Variable
         $name = ltrim($name, '$');
 
         return $this->name == $name;
+    }
+
+    public function withTypes(Types $types)
+    {
+        return new self($this->name, $this->offset, $this->symbolContext->withTypes($types));
+    }
+
+    public function withOffset($offset): Variable
+    {
+        return new self($this->name, Offset::fromUnknown($offset), $this->symbolContext);
+
     }
 }
