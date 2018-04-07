@@ -15,7 +15,7 @@
         "phpactor/docblock": "@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0@stable",
+        "phpunit/phpunit": "^6.0@stable",
         "symfony/filesystem": "^3.3",
         "phpbench/phpbench": "dev-master",
         "phpactor/class-to-file": "^1.0@dev",
