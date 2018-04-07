@@ -59,6 +59,42 @@ EOT
         }
         ];
 
+        yield 'removes type after continue' => [
+            <<<'EOT'
+<?php
+
+
+foreach ([1, 2] as $hello) {
+    if (!$foobar instanceof Foobar) {
+        continue;
+    }
+}
+<>
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(2, $frame->locals()->byName('foobar'));
+            $this->assertEquals(Type::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
+        }
+        ];
+
+        yield 'removes type after break' => [
+            <<<'EOT'
+<?php
+
+
+foreach ([1, 2] as $hello) {
+    if (!$foobar instanceof Foobar) {
+        break;
+    }
+}
+<>
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(2, $frame->locals()->byName('foobar'));
+            $this->assertEquals(Type::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
+        }
+        ];
+
         yield 'adds no type information if bang negated' => [
             <<<'EOT'
 <?php

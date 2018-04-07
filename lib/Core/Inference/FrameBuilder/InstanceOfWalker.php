@@ -22,6 +22,8 @@ use Phpactor\WorseReflection\Core\Inference\Assignments;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\Node\ReservedWord;
 use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
+use Microsoft\PhpParser\Node\Statement\CompoundStatementNode;
+use Microsoft\PhpParser\Node\Statement\BreakOrContinueStatement;
 
 class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 {
@@ -96,6 +98,14 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 
                 if ($statement instanceof ThrowStatement) {
                     return true;
+                }
+
+                if ($statement instanceof CompoundStatementNode) {
+                    foreach ($statement->statements as $statement) {
+                        if ($statement instanceof BreakOrContinueStatement) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
