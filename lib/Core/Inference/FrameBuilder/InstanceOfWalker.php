@@ -20,6 +20,7 @@ use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Phpactor\WorseReflection\Core\Inference\Assignments;
 use Phpactor\WorseReflection\Core\Types;
+use Microsoft\PhpParser\Node\ReservedWord;
 
 class InstanceOfWalker implements FrameWalker
 {
@@ -93,6 +94,7 @@ class InstanceOfWalker implements FrameWalker
         $negatedVariables = [];
 
         if ($node instanceof IfStatementNode) {
+            var_dump($node->expression);
             return $this->walkNode($builder, $frame, $node->expression, $negated);
         }
 
@@ -104,6 +106,12 @@ class InstanceOfWalker implements FrameWalker
 
         if ($node instanceof Variable) {
             $targetVariable = $node;
+        }
+
+        if ($node instanceof ReservedWord) {
+            if (strtolower($node->getText()) === 'false') {
+                $negated = true;
+            }
         }
 
         if ($node instanceof BinaryExpression) {

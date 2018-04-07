@@ -63,7 +63,7 @@ EOT
         }
         ];
 
-        yield 'adds no type information if negated' => [
+        yield 'adds no type information if bang negated' => [
             <<<'EOT'
 <?php
 
@@ -75,7 +75,22 @@ EOT
             $this->assertCount(1, $frame->locals());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
         }
+    ];
+
+        yield 'adds no type information if false negated' => [
+            <<<'EOT'
+<?php
+
+if (false === $foobar instanceof Foobar) {
+}
+<>
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(1, $frame->locals());
+            $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
+        }
         ];
+
 
         yield 'adds type information if negated and if statement terminates' => [
             <<<'EOT'
@@ -131,6 +146,21 @@ EOT
 <?php
 
 if ($foobar instanceof Foobar && $foobar instanceof Barfoo) {
+
+}
+<>
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(1, $frame->locals());
+            $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
+        }
+        ];
+
+        yield 'will create a union type with and' => [
+            <<<'EOT'
+<?php
+
+if (false) {
 
 }
 <>
