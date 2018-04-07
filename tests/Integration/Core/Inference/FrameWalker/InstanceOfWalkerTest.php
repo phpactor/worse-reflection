@@ -19,12 +19,13 @@ class InstanceOfWalkerTest extends FrameWalkerTestCase
 <?php
 
 if ($foobar instanceof Foobar) {
-    <>
 }
+<>
 EOT
         , function (Frame $frame) {
-            $this->assertCount(1, $frame->locals());
+            $this->assertCount(2, $frame->locals());
             $this->assertEquals('Foobar', (string) $frame->locals()->first()->symbolContext()->types()->best());
+            $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(1)->symbolContext()->types()->best());
         }
         ];
 
@@ -131,7 +132,7 @@ if ($foobar instanceof Foobar || $foobar instanceof Barfoo) {
 <>
 EOT
         , function (Frame $frame, int $offset) {
-            $this->assertCount(1, $frame->locals());
+            $this->assertCount(2, $frame->locals());
             $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
         }
         ];
@@ -146,7 +147,7 @@ if ($foobar instanceof Foobar && $foobar instanceof Barfoo) {
 <>
 EOT
         , function (Frame $frame, int $offset) {
-            $this->assertCount(1, $frame->locals());
+            $this->assertCount(2, $frame->locals());
             $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
         }
         ];
@@ -178,7 +179,7 @@ if ($foobar instanceof Barfoo) {
 }
 EOT
         , function (Frame $frame, int $offset) {
-            $this->assertCount(1, $frame->locals());
+            $this->assertCount(2, $frame->locals());
             $this->assertEquals('Foobar\Barfoo', (string) $frame->locals()->atIndex(0)->symbolContext()->types()->best());
         }
         ];

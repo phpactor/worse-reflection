@@ -73,6 +73,8 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 
             if ($expressionsAreTrue) {
                 $frame->locals()->add($variable);
+                $restoredVariable = $this->existingOrStripType($node, $frame, $variable);
+                $frame->locals()->add($restoredVariable);
             }
 
             if (false === $expressionsAreTrue) {
