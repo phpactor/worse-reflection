@@ -155,5 +155,21 @@ EOT
             $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
         }
         ];
+
+        yield 'reverts to original type' => [
+            <<<'EOT'
+<?php
+
+$foobar = new stdClass();
+if ($foobar instanceof Foobar) {
+    return;
+}
+<>
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(3, $frame->locals());
+            $this->assertEquals('stdClass', $frame->locals()->atIndex(2)->symbolContext()->types()->best());
+        }
+        ];
     }
 }

@@ -13,8 +13,8 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
-use Microsoft\PhpParser\Node\Statement\ReturnStatement;
 use Microsoft\PhpParser\Node\Statement\ThrowStatement;
+use Microsoft\PhpParser\Node\Statement\ReturnStatement;
 use Microsoft\PhpParser\Node\Expression\UnaryOpExpression;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
@@ -70,8 +70,10 @@ class InstanceOfWalker implements FrameWalker
                 // reset variables after the if branch
                 if ($expressionsAreTrue) {
                     $frame->locals()->add($variable);
-                    $detypedVariable = $variable->withTypes(Types::empty())->withOffset($node->getEndPosition());
-                    $frame->locals()->add($detypedVariable);
+
+                    // restore
+                    $restoredVariable = $this->existingOrStripType($node, $frame, $variable);
+                    $frame->locals()->add($restoredVariable);
                     continue;
                 }
 
@@ -196,6 +198,19 @@ class InstanceOfWalker implements FrameWalker
         $variable = WorseVariable::fromSymbolContext($context);
 
         return $variable;
+    }
+
+    private function existingOrStripType(IfStatementNode $node, Frame $frame, WorseVariable $variable)
+    {
+        $frameVariable = null;
+        foreach ($frame->locals()->lessThan($node->getStart())->byName($variable->name()) as $frameVariable) {
+        }
+
+        if (null === $frameVariable) {
+            return $variable->withTypes(Types::empty())->withOffset($node->getEndPosition());
+        }
+
+        return $frameVariable->withOffset($node->getEndPosition());
     }
 
 }
