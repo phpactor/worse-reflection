@@ -135,8 +135,6 @@ class ExpressionEvaluator
             case 'xor':
                 return $leftValue xor $rightValue;
         }
-
-        throw new \Exception(sprintf('Unknown operator: "%s"', $operator));
     }
 
     private function walkNumericLiteral(NumericLiteral $node)
@@ -161,8 +159,6 @@ class ExpressionEvaluator
             case '--':
                 return --$value;
         }
-
-        throw new RuntimeException(sprintf('Unknown suffix "%s"', $suffix));
     }
 
     private function walkPostfixUpdateExpression(PostfixUpdateExpression $node)
@@ -189,8 +185,6 @@ class ExpressionEvaluator
             case '!':
                 return !$value;
         }
-
-        throw new RuntimeException(sprintf('Unknown op "%s"', $operator));
     }
 
     private function walkVariable(Variable $node)
