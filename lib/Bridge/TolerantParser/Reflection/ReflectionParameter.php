@@ -10,7 +10,7 @@ use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\ParameterTypeResolver;
 
@@ -32,11 +32,11 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     private $memberTypeResolver;
 
     /**
-     * @var ReflectionMethod
+     * @var CoreReflectionMethod
      */
     private $method;
 
-    public function __construct(ServiceLocator $serviceLocator, ReflectionMethod $method, Parameter $parameter)
+    public function __construct(ServiceLocator $serviceLocator, CoreReflectionMethod $method, Parameter $parameter)
     {
         $this->serviceLocator = $serviceLocator;
         $this->parameter = $parameter;
@@ -91,7 +91,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
         return (bool) $this->parameter->byRefToken;
     }
 
-    public function method(): ReflectionMethod
+    public function method(): CoreReflectionMethod
     {
         return $this->method;
     }
