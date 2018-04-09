@@ -45,26 +45,6 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
         return $this->serviceLocator()->frameBuilder()->build($this->node());
     }
 
-    public function isAbstract(): bool
-    {
-        $node = $this->node();
-        assert($node instanceof PropertyDeclaration || $node instanceof MethodDeclaration);
-
-        foreach ($node->modifiers as $token) {
-            if ($token->kind === TokenKind::AbstractKeyword) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function isStatic(): bool
-    {
-        $node = $this->node();
-        return $node->isStatic();
-    }
-
     public function docblock(): DocBlock
     {
         return $this->serviceLocator()->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());

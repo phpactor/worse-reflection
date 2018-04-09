@@ -75,22 +75,12 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
         return $this->class;
     }
 
-    public function inferredReturnTypes(): Types
+    public function inferredTypes(): Types
     {
         if (Type::unknown() !== $this->type()) {
             return Types::fromTypes([ $this->type() ]);
         }
 
         return Types::empty();
-    }
-
-    public function isStatic(): bool
-    {
-        return true;
-    }
-
-    public function isAbstract(): bool
-    {
-        return false;
     }
 }

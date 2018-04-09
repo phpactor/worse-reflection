@@ -15,12 +15,14 @@ interface ReflectionMethod extends ReflectionMember
 {
     public function parameters(): ReflectionParameterCollection;
 
-    public function inferredReturnTypes(): Types;
-
     /**
      * @deprecated - use type()
      */
     public function returnType(): Type;
 
     public function body(): NodeText;
+
+    public function isAbstract(): bool;
+
+    public function isStatic(): bool;
 }

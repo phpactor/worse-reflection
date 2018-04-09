@@ -72,38 +72,6 @@ EOT
             }
         ];
 
-        yield 'Returns is static as true' => [
-            <<<'EOT'
-<?php
-
-class Foobar
-{
-    const FOOBAR = 'foobar';
-}
-EOT
-            ,
-            'Foobar',
-            function (ReflectionConstantCollection $constants) {
-                $this->assertTrue($constants->first()->isStatic());
-            }
-        ];
-
-        yield 'Returns is abstract as false' => [
-            <<<'EOT'
-<?php
-
-class Foobar
-{
-    const FOOBAR = 'foobar';
-}
-EOT
-            ,
-            'Foobar',
-            function (ReflectionConstantCollection $constants) {
-                $this->assertFalse($constants->first()->isAbstract());
-            }
-        ];
-
         yield 'Returns type' => [
             <<<'EOT'
 <?php
@@ -133,7 +101,7 @@ EOT
             ,
             'Foobar',
             function (ReflectionConstantCollection $constants) {
-                $this->assertEquals('string', $constants->first()->inferredReturnTypes()->best()->short());
+                $this->assertEquals('string', $constants->first()->inferredTypes()->best()->short());
             }
         ];
     }

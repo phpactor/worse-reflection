@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use Phpactor\WorseReflection\Core\Type;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -84,6 +85,11 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return $this->typeResolver->resolve();
     }
 
+    public function type(): Type
+    {
+        return Type::unknown();
+    }
+
     protected function node(): Node
     {
         return $this->propertyDeclaration;
@@ -97,5 +103,10 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     public function class(): ReflectionClassLike
     {
         return $this->class;
+    }
+
+    public function isStatic(): bool
+    {
+        return $this->propertyDeclaration->isStatic();
     }
 }

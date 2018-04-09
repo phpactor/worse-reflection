@@ -101,11 +101,22 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return ReflectionParameterCollection::fromMethodDeclaration($this->serviceLocator, $this->node, $this);
     }
 
+    /**
+     * @deprecated use inferredTypes()
+     */
     public function inferredReturnTypes(): Types
+    {
+        return $this->inferredTypes();
+    }
+
+    public function inferredTypes(): Types
     {
         return $this->returnTypeResolver->resolve();
     }
 
+    /**
+     * @deprecated use type()
+     */
     public function returnType(): Type
     {
         return $this->type();
@@ -139,4 +150,21 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     {
         return $this->serviceLocator;
     }
+
+    public function isStatic(): bool
+    {
+        return $this->node->isStatic();
+    }
+
+    public function isAbstract(): bool
+    {
+        foreach ($this->node->modifiers as $token) {
+            if ($token->kind === TokenKind::AbstractKeyword) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

@@ -23,17 +23,13 @@ interface ReflectionMember
 
     public function frame(): Frame;
 
-    public function isAbstract(): bool;
-
-    public function isStatic(): bool;
-
     public function docblock(): DocBlock;
 
     public function scope(): ReflectionScope;
 
     public function visibility(): Visibility;
 
-    public function inferredReturnTypes(): Types;
+    public function inferredTypes(): Types;
 
     public function type(): Type;
 }
