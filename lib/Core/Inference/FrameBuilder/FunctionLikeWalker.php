@@ -39,8 +39,8 @@ class FunctionLikeWalker implements FrameWalker
     public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
         assert(
-            $node instanceof FunctionLike || 
-            $node instanceof FunctionDeclaration || 
+            $node instanceof FunctionLike ||
+            $node instanceof FunctionDeclaration ||
             $node instanceof AnonymousFunctionCreationExpression
         );
 

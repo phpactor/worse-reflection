@@ -40,8 +40,7 @@ class VariableWalker
         SymbolFactory $symbolFactory,
         DocBlockFactory $docblockFactory,
         FullyQualifiedNameResolver $nameResolver
-    )
-    {
+    ) {
         $this->symbolFactory = $symbolFactory;
         $this->docblockFactory = $docblockFactory;
         $this->nameResolver = $nameResolver;
@@ -105,5 +104,4 @@ class VariableWalker
             );
         }
     }
-
 }

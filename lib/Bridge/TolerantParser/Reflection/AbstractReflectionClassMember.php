@@ -70,6 +70,4 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
     abstract protected function serviceLocator(): ServiceLocator;
 
     abstract protected function name(): string;
-
-
 }

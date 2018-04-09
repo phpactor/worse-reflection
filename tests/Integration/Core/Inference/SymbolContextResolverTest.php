@@ -79,12 +79,12 @@ class SymbolContextResolverTest extends IntegrationTestCase
 
     public function provideGeneral()
     {
-            yield 'It should return none value for whitespace' => [
+        yield 'It should return none value for whitespace' => [
                 '  <>  ', [],
                 ['type' => '<unknown>'],
             ];
 
-            yield 'It should return the name of a class' => [
+        yield 'It should return the name of a class' => [
                 <<<'EOT'
 <?php
 
@@ -94,7 +94,7 @@ EOT
                 , [], ['type' => 'ClassName', 'symbol_type' => Symbol::CLASS_]
                 ];
 
-            yield 'It should return the fully qualified name of a class' => [
+        yield 'It should return the fully qualified name of a class' => [
                 <<<'EOT'
 <?php
 
@@ -106,7 +106,7 @@ EOT
                 , [], ['type' => 'Foobar\Barfoo\ClassName']
                 ];
 
-            yield 'It should return the fully qualified name of a with an imported name.' => [
+        yield 'It should return the fully qualified name of a with an imported name.' => [
                 <<<'EOT'
 <?php
 
@@ -120,7 +120,7 @@ EOT
                 , [], ['type' => 'BarBar\ClassName', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'ClassName']
                 ];
 
-            yield 'It should return the fully qualified name of a use definition' => [
+        yield 'It should return the fully qualified name of a use definition' => [
                 <<<'EOT'
 <?php
 
@@ -134,7 +134,7 @@ EOT
                 , [], ['type' => 'BarBar\ClassName']
                 ];
 
-            yield 'It returns the FQN of a method parameter with a default' => [
+        yield 'It returns the FQN of a method parameter with a default' => [
                 <<<'EOT'
 <?php
 
@@ -151,7 +151,7 @@ EOT
                 , [], ['type' => 'Foobar\Barfoo\Barfoo', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'barfoo']
                 ];
 
-            yield 'It returns the type and value of a scalar method parameter' => [
+        yield 'It returns the type and value of a scalar method parameter' => [
                 <<<'EOT'
 <?php
 
@@ -168,7 +168,7 @@ EOT
                 , [], ['type' => 'string', 'value' => 'test']
                 ];
 
-            yield 'It returns the value of a method parameter with a constant' => [
+        yield 'It returns the value of a method parameter with a constant' => [
                 <<<'EOT'
 <?php
 
@@ -185,7 +185,7 @@ EOT
                 , [], ['type' => 'string', 'value' => 'test']
                 ];
 
-            yield 'It returns the FQN of a method parameter in an interface' => [
+        yield 'It returns the FQN of a method parameter in an interface' => [
                 <<<'EOT'
 <?php
 
@@ -202,7 +202,7 @@ EOT
                 , [], ['type' => 'Foobar\Barfoo\World']
                 ];
 
-            yield 'It returns the FQN of a method parameter in a trait' => [
+        yield 'It returns the FQN of a method parameter in a trait' => [
                 <<<'EOT'
 <?php
 
@@ -221,7 +221,7 @@ EOT
                 , [], ['type' => 'Foobar\Barfoo\World', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'World']
                 ];
 
-            yield 'It returns the value of a method parameter' => [
+        yield 'It returns the value of a method parameter' => [
                 <<<'EOT'
 <?php
 
@@ -238,7 +238,7 @@ EOT
                 , [], ['type' => 'string', 'value' => 'test']
                 ];
 
-            yield 'It returns the FQN of a static call' => [
+        yield 'It returns the FQN of a static call' => [
                 <<<'EOT'
 <?php
 
@@ -252,7 +252,7 @@ EOT
                 , [], ['type' => 'Acme\Factory', 'symbol_type' => Symbol::CLASS_]
                 ];
 
-            yield 'It returns the FQN of a method parameter' => [
+        yield 'It returns the FQN of a method parameter' => [
                 <<<'EOT'
 <?php
 
@@ -271,7 +271,7 @@ EOT
                 , [], ['type' => 'Foobar\Barfoo\World']
                 ];
 
-            yield 'It returns the FQN of variable assigned in frame' => [
+        yield 'It returns the FQN of variable assigned in frame' => [
                 <<<'EOT'
 <?php
 
@@ -291,7 +291,7 @@ EOT
                 , [ 'world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'world']
                 ];
 
-            yield 'It returns type for a call access expression' => [
+        yield 'It returns type for a call access expression' => [
                 <<<'EOT'
 <?php
 
@@ -341,7 +341,7 @@ EOT
             ],
         ];
 
-            yield 'It returns type for a method which returns an interface type' => [
+        yield 'It returns type for a method which returns an interface type' => [
                 <<<'EOT'
 <?php
 
@@ -372,7 +372,7 @@ EOT
             ],
         ];
 
-            yield 'It returns class type for parent class for parent method' => [
+        yield 'It returns class type for parent class for parent method' => [
                 <<<'EOT'
 <?php
 
@@ -408,7 +408,7 @@ EOT
             ],
         ];
 
-            yield 'It returns type for a property access when class has method of same name' => [
+        yield 'It returns type for a property access when class has method of same name' => [
                 <<<'EOT'
 <?php
 
@@ -441,7 +441,7 @@ EOT
             ], ['type' => 'string'],
         ];
 
-            yield 'It returns type for a new instantiation' => [
+        yield 'It returns type for a new instantiation' => [
                 <<<'EOT'
 <?php
 
@@ -450,7 +450,7 @@ EOT
                 , [], ['type' => 'Bar'],
                 ];
 
-            yield 'It returns type for a new instantiation from a variable' => [
+        yield 'It returns type for a new instantiation from a variable' => [
                 <<<'EOT'
 <?php
 
@@ -461,7 +461,7 @@ EOT
         ], ['type' => 'Foobar'],
     ];
 
-            yield 'It returns type for string literal' => [
+        yield 'It returns type for string literal' => [
                 <<<'EOT'
 <?php
 
@@ -470,7 +470,7 @@ EOT
                 , [], ['type' => 'string', 'value' => 'bar', 'symbol_type' => Symbol::STRING ]
                 ];
 
-            yield 'It returns type for float' => [
+        yield 'It returns type for float' => [
                 <<<'EOT'
 <?php
 
@@ -479,7 +479,7 @@ EOT
                 , [], ['type' => 'float', 'value' => 1.2, 'symbol_type' => Symbol::NUMBER],
                 ];
 
-            yield 'It returns type for integer' => [
+        yield 'It returns type for integer' => [
                 <<<'EOT'
 <?php
 
@@ -488,7 +488,7 @@ EOT
                 , [], ['type' => 'int', 'value' => 12, 'symbol_type' => Symbol::NUMBER],
                 ];
 
-            yield 'It returns type for bool true' => [
+        yield 'It returns type for bool true' => [
                 <<<'EOT'
 <?php
 
@@ -497,7 +497,7 @@ EOT
                 , [], ['type' => 'bool', 'value' => true, 'symbol_type' => Symbol::BOOLEAN],
                 ];
 
-            yield 'It returns type for bool false' => [
+        yield 'It returns type for bool false' => [
                 <<<'EOT'
 <?php
 
@@ -506,7 +506,7 @@ EOT
                 , [], ['type' => 'bool', 'value' => false, 'symbol_type' => Symbol::BOOLEAN],
                 ];
 
-            yield 'It returns type null' => [
+        yield 'It returns type null' => [
                 <<<'EOT'
 <?php
 
@@ -515,7 +515,7 @@ EOT
                 , [], ['type' => 'null', 'value' => null],
                 ];
 
-            yield 'It returns type null case insensitive' => [
+        yield 'It returns type null case insensitive' => [
                 <<<'EOT'
 <?php
 
@@ -524,7 +524,7 @@ EOT
                 , [], ['type' => 'null', 'value' => null],
                 ];
 
-            yield 'It returns type and value for an array' => [
+        yield 'It returns type and value for an array' => [
                 <<<'EOT'
 <?php
 
@@ -533,7 +533,7 @@ EOT
                 , [], ['type' => 'array', 'value' => [ 'one' => 'two', 'three' => 3]],
                 ];
 
-            yield 'Empty array' => [
+        yield 'Empty array' => [
                 <<<'EOT'
 <?php
 
@@ -542,7 +542,7 @@ EOT
                 , [], ['type' => 'array', 'value' => [ ]],
                 ];
 
-            yield 'It type for a class constant' => [
+        yield 'It type for a class constant' => [
                 <<<'EOT'
 <?php
 
@@ -556,7 +556,7 @@ EOT
                 , [], ['type' => 'string'],
                 ];
 
-            yield 'Static method access' => [
+        yield 'Static method access' => [
                 <<<'EOT'
 <?php
 
@@ -574,7 +574,7 @@ EOT
               , [], ['type' => 'Hello'],
               ];
 
-            yield 'Static constant access' => [
+        yield 'Static constant access' => [
                 <<<'EOT'
 <?php
 
@@ -588,7 +588,7 @@ EOT
                 , [], ['type' => 'string'],
                 ];
 
-            yield 'Member access with variable' => [
+        yield 'Member access with variable' => [
                 <<<'EOT'
 <?php
 
@@ -602,7 +602,7 @@ EOT
                 , [], ['type' => '<unknown>'],
                 ];
 
-            yield 'Member access with valued variable' => [
+        yield 'Member access with valued variable' => [
                 <<<'EOT'
 <?php
 
@@ -622,7 +622,7 @@ EOT
                 ], ['type' => 'string'],
             ];
 
-            yield 'It returns type of property' => [
+        yield 'It returns type of property' => [
                 <<<'EOT'
 <?php
 
@@ -640,7 +640,7 @@ EOT
 
     public function provideValues()
     {
-            yield 'It returns type for self' => [
+        yield 'It returns type for self' => [
                 <<<'EOT'
 <?php
 
@@ -655,7 +655,7 @@ EOT
                 , [], ['type' => 'Foobar']
                 ];
 
-            yield 'It returns type for static' => [
+        yield 'It returns type for static' => [
                 <<<'EOT'
 <?php
 
@@ -670,7 +670,7 @@ EOT
                 , [], ['type' => 'Foobar']
                 ];
 
-            yield 'It returns type for parent' => [
+        yield 'It returns type for parent' => [
                 <<<'EOT'
 <?php
 
@@ -687,7 +687,7 @@ EOT
                 , [], ['type' => 'ParentClass']
                 ];
 
-            yield 'It assumes true for ternary expressions' => [
+        yield 'It assumes true for ternary expressions' => [
                 <<<'EOT'
 <?php
 
@@ -696,7 +696,7 @@ EOT
                 , [], ['type' => 'string', 'value' => 'foobar']
                 ];
 
-            yield 'It uses condition value if ternery "if" is empty' => [
+        yield 'It uses condition value if ternery "if" is empty' => [
                 <<<'EOT'
 <?php
 
@@ -705,7 +705,7 @@ EOT
                 , [], ['type' => 'string', 'value' => 'string']
                 ];
 
-            yield 'It returns unknown for ternary expressions with unknown condition values' => [
+        yield 'It returns unknown for ternary expressions with unknown condition values' => [
                 <<<'EOT'
 <?php
 
@@ -715,7 +715,7 @@ EOT
                 ];
 
 
-            yield 'It shows the symbol name for a method declartion' => [
+        yield 'It shows the symbol name for a method declartion' => [
                 <<<'EOT'
 <?php
 
@@ -733,7 +733,7 @@ EOT
                 ]
             ];
 
-            yield 'Class name' => [
+        yield 'Class name' => [
                 <<<'EOT'
 <?php
 
@@ -744,7 +744,7 @@ EOT
                 , [], ['type' => 'Foobar', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'Foobar'],
                 ];
 
-            yield 'Property name' => [
+        yield 'Property name' => [
                 <<<'EOT'
 <?php
 
@@ -756,7 +756,7 @@ EOT
                 , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'container_type' => 'Foobar'],
                 ];
 
-            yield 'Constant name' => [
+        yield 'Constant name' => [
                 <<<'EOT'
 <?php
 
@@ -773,7 +773,7 @@ EOT
                 ],
             ];
 
-            yield 'Function name' => [
+        yield 'Function name' => [
                 <<<'EOT'
 <?php
 
@@ -782,7 +782,7 @@ EOT
                 , [], ['type' => '<unknown>'],
                 ];
 
-            yield 'Trait name' => [
+        yield 'Trait name' => [
                 <<<'EOT'
 <?php
 
@@ -796,7 +796,7 @@ EOT
 
     public function provideNotResolvableClass()
     {
-            yield 'Calling property method for non-existing class' => [
+        yield 'Calling property method for non-existing class' => [
                 <<<'EOT'
 <?php
 

@@ -93,6 +93,5 @@ EOT
             $symbolInformation = $vars->atIndex(1)->symbolContext();
             $this->assertEquals('Foobar', (string) $symbolInformation->type());
         }];
-
     }
 }

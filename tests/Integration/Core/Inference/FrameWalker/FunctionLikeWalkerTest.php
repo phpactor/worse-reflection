@@ -90,7 +90,6 @@ EOT
             $this->assertCount(1, $frame->locals()->byName('worlds'));
             $this->assertEquals('Foobar\Barfoo\World[]', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best());
             $this->assertEquals('Foobar\Barfoo\World', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best()->arrayType());
-
         }];
 
         yield 'Respects closure scope' => [
@@ -159,6 +158,5 @@ EOT
                 $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
         ];
-
     }
 }

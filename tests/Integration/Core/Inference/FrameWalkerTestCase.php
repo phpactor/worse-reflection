@@ -21,5 +21,4 @@ abstract class FrameWalkerTestCase extends IntegrationTestCase
     }
 
     abstract public function provideWalk(): Generator;
-
 }

@@ -98,8 +98,7 @@ class AssignmentWalker implements FrameWalker
         Frame $frame,
         MemberAccessExpression $leftOperand,
         SymbolContext $typeContext
-    ): Frame
-    {
+    ): Frame {
         $variable = $leftOperand->dereferencableExpression;
 
         // we do not track assignments to other classes.
@@ -191,5 +190,4 @@ class AssignmentWalker implements FrameWalker
 
         return $frame;
     }
-
 }

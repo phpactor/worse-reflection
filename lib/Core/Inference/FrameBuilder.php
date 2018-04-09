@@ -148,5 +148,4 @@ final class FrameBuilder
 
         return $scopeNode;
     }
-
 }

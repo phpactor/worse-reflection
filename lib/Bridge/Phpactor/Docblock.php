@@ -107,7 +107,6 @@ class Docblock implements CoreDocblock
         }
 
         return Types::empty();
-
     }
 
     private function typesFromDocblockTypes(DocblockTypes $types)

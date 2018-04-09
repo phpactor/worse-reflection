@@ -23,7 +23,9 @@ abstract class AssignmentstTestCase extends TestCase
 
         $information = SymbolContext::for(
             Symbol::fromTypeNameAndPosition(
-                Symbol::VARIABLE, 'hello', Position::fromStartAndEnd(0, 0)
+                Symbol::VARIABLE,
+                'hello',
+                Position::fromStartAndEnd(0, 0)
             )
         );
 
@@ -100,7 +102,9 @@ abstract class AssignmentstTestCase extends TestCase
     private function createVariable(string $name, int $start, int $end): Variable
     {
         return Variable::fromSymbolContext(SymbolContext::for(Symbol::fromTypeNameAndPosition(
-            Symbol::VARIABLE, $name, Position::fromStartAndEnd($start, $end)
+            Symbol::VARIABLE,
+            $name,
+            Position::fromStartAndEnd($start, $end)
         )));
     }
 }

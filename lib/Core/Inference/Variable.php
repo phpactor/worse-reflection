@@ -73,6 +73,5 @@ final class Variable
     public function withOffset($offset): Variable
     {
         return new self($this->name, Offset::fromUnknown($offset), $this->symbolContext);
-
     }
 }

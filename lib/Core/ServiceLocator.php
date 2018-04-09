@@ -57,8 +57,7 @@ class ServiceLocator
         Logger $logger,
         bool $enableCache = false,
         bool $enableContextualLocation = false
-    )
-    {
+    ) {
         $this->logger = $logger;
 
         $classReflector = $sourceReflector =  new CoreReflector($this);

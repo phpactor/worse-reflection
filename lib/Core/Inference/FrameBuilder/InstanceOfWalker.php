@@ -27,7 +27,6 @@ use Microsoft\PhpParser\Node\Statement\BreakOrContinueStatement;
 
 class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 {
-
     public function canWalk(Node $node): bool
     {
         return $node instanceof IfStatementNode;
@@ -70,7 +69,6 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
                     $frame->locals()->add($variable);
                     continue;
                 }
-
             }
 
             if ($expressionsAreTrue) {
@@ -90,7 +88,7 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 
     private function branchTerminates(IfStatementNode $node): bool
     {
-        foreach($node->statements as $list) {
+        foreach ($node->statements as $list) {
             foreach ($list as $statement) {
                 if ($statement instanceof ReturnStatement) {
                     return true;
@@ -146,5 +144,4 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 
         return $frameVariable->withOffset($node->getEndPosition());
     }
-
 }

@@ -28,8 +28,7 @@ class CompositeReflector implements Reflector
     public function __construct(
         ClassReflector $classReflector,
         SourceCodeReflector $sourceCodeReflector
-    )
-    {
+    ) {
         $this->classReflector = $classReflector;
         $this->sourceCodeReflector = $sourceCodeReflector;
     }

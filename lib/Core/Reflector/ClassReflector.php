@@ -17,32 +17,32 @@ interface ClassReflector
 {
     /**
      * Reflect class.
-     * 
+     *
      *         an interface or trait.
      */
     public function reflectClass($className): ReflectionClass;
 
     /**
      * Reflect an interface.
-     * 
-     * 
+     *
+     *
      *         was not a trait.
      */
     public function reflectInterface($className): ReflectionInterface;
 
     /**
      * Reflect a trait
-     * 
-     * 
+     *
+     *
      *         was not a trait.
      */
     public function reflectTrait($className): ReflectionTrait;
 
     /**
      * Reflect a class, trait or interface by its name.
-     * 
+     *
      * If the class it not found an exception will be thrown.
-     * 
+     *
      */
     public function reflectClassLike($className): ReflectionClassLike;
 }

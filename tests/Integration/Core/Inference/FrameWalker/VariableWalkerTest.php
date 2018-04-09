@@ -105,6 +105,5 @@ EOT
                 $this->assertEquals('Foo\Bar\Zed\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
         ];
-
     }
 }

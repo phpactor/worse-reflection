@@ -26,8 +26,7 @@ class AbstractInstanceOfWalker
 
     public function __construct(
         SymbolFactory $symbolFactory
-    )
-    {
+    ) {
         $this->symbolFactory = $symbolFactory;
         $this->evaluator = new ExpressionEvaluator();
     }
@@ -91,5 +90,4 @@ class AbstractInstanceOfWalker
 
         return $context;
     }
-
 }

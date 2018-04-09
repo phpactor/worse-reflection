@@ -166,5 +166,4 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
         return false;
     }
-
 }
