@@ -9,6 +9,9 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant as CoreReflectionConstant;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Visibility;
+use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant
 {
@@ -61,5 +64,10 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
     public function class(): ReflectionClassLike
     {
         return $this->class;
+    }
+
+    public function inferredReturnTypes(): Types
+    {
+        return Types::empty();
     }
 }

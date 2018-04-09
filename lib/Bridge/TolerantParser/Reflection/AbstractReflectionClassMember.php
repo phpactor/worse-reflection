@@ -10,6 +10,10 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use RuntimeException;
+use Microsoft\PhpParser\TokenKind;
+use Phpactor\WorseReflection\Core\Visibility;
+use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 {
@@ -31,7 +35,50 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
         return $this->serviceLocator()->reflector()->reflectClassLike(ClassName::fromString($class));
     }
 
+    public function frame(): Frame
+    {
+        return $this->serviceLocator()->frameBuilder()->build($this->node());
+    }
+
+    public function isAbstract(): bool
+    {
+        foreach ($this->node()->modifiers as $token) {
+            if ($token->kind === TokenKind::AbstractKeyword) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isStatic(): bool
+    {
+        return $this->node()->isStatic();
+    }
+
+    public function docblock(): DocBlock
+    {
+        return $this->serviceLocator()->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
+    }
+
+    public function visibility(): Visibility
+    {
+        foreach ($this->node()->modifiers as $token) {
+            if ($token->kind === TokenKind::PrivateKeyword) {
+                return Visibility::private();
+            }
+
+            if ($token->kind === TokenKind::ProtectedKeyword) {
+                return Visibility::protected();
+            }
+        }
+
+        return Visibility::public();
+    }
+
     abstract protected function serviceLocator(): ServiceLocator;
 
     abstract protected function name(): string;
+
+
 }
