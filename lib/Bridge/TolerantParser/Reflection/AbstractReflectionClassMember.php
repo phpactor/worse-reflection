@@ -14,6 +14,11 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Microsoft\PhpParser\Node\ConstElement;
+use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\Node\PropertyDeclaration;
+use Microsoft\PhpParser\Node\Statement\ConstDeclaration;
+use Microsoft\PhpParser\Node\ClassConstDeclaration;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 {
@@ -42,7 +47,10 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 
     public function isAbstract(): bool
     {
-        foreach ($this->node()->modifiers as $token) {
+        $node = $this->node();
+        assert($node instanceof PropertyDeclaration || $node instanceof MethodDeclaration);
+
+        foreach ($node->modifiers as $token) {
             if ($token->kind === TokenKind::AbstractKeyword) {
                 return true;
             }
@@ -53,7 +61,8 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 
     public function isStatic(): bool
     {
-        return $this->node()->isStatic();
+        $node = $this->node();
+        return $node->isStatic();
     }
 
     public function docblock(): DocBlock
@@ -63,7 +72,9 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 
     public function visibility(): Visibility
     {
-        foreach ($this->node()->modifiers as $token) {
+        $node = $this->node();
+        assert($node instanceof PropertyDeclaration || $node instanceof ClassConstDeclaration || $node instanceof MethodDeclaration);
+        foreach ($node->modifiers as $token) {
             if ($token->kind === TokenKind::PrivateKeyword) {
                 return Visibility::private();
             }

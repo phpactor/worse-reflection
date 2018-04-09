@@ -27,7 +27,7 @@ class ReflectionConstantCollection extends AbstractReflectionCollection implemen
             }
 
             foreach ($member->constElements->children as $constElement) {
-                $items[$constElement->getName()] = new ReflectionConstant($serviceLocator, $reflectionClass, $constElement);
+                $items[$constElement->getName()] = new ReflectionConstant($serviceLocator, $reflectionClass, $member, $constElement);
             }
         }
 
@@ -49,7 +49,7 @@ class ReflectionConstantCollection extends AbstractReflectionCollection implemen
             }
 
             foreach ($member->constElements->children as $constElement) {
-                $items[$constElement->getName()] = new ReflectionConstant($serviceLocator, $reflectionInterface, $constElement);
+                $items[$constElement->getName()] = new ReflectionConstant($serviceLocator, $reflectionInterface, $member, $constElement);
             }
         }
         return new static($serviceLocator, $items);
