@@ -138,6 +138,29 @@ EOT
                     $this->assertFalse($properties->get('property1')->isStatic());
                 },
             ],
+            'Returns unknown type for (real) type' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+class Foobar
+{
+    /**
+     * @var Post
+     */
+    private $property1;
+}
+EOT
+                ,
+                'Foobar',
+                function ($properties) {
+                    $this->assertEquals(
+                        Type::unknown(),
+                        $properties->get('property1')->type()
+                    );
+                },
+            ],
             'Property with assignment' => [
                 <<<'EOT'
 <?php

@@ -11,18 +11,25 @@ use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Types;
 
-interface ReflectionMethod extends ReflectionMember
+interface ReflectionMember
 {
-    public function parameters(): ReflectionParameterCollection;
+    public function position(): Position;
 
-    /**
-     * @deprecated - use type()
-     */
-    public function returnType(): Type;
+    public function declaringClass(): ReflectionClassLike;
 
-    public function body(): NodeText;
+    public function class(): ReflectionClassLike;
 
-    public function isAbstract(): bool;
+    public function name(): string;
 
-    public function isStatic(): bool;
+    public function frame(): Frame;
+
+    public function docblock(): DocBlock;
+
+    public function scope(): ReflectionScope;
+
+    public function visibility(): Visibility;
+
+    public function inferredTypes(): Types;
+
+    public function type(): Type;
 }

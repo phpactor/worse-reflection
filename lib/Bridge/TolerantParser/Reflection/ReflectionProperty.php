@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use Phpactor\WorseReflection\Core\Type;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -79,34 +80,19 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return (string) $this->variable->getName();
     }
 
-    public function visibility(): Visibility
-    {
-        foreach ($this->propertyDeclaration->modifiers as $token) {
-            if ($token->kind === TokenKind::PrivateKeyword) {
-                return Visibility::private();
-            }
-
-            if ($token->kind === TokenKind::ProtectedKeyword) {
-                return Visibility::protected();
-            }
-        }
-
-        return Visibility::public();
-    }
-
     public function inferredTypes(): Types
     {
         return $this->typeResolver->resolve();
     }
 
-    public function isStatic(): bool
+    public function type(): Type
     {
-        return $this->propertyDeclaration->isStatic();
+        return Type::unknown();
     }
 
     protected function node(): Node
     {
-        return $this->variable;
+        return $this->propertyDeclaration;
     }
 
     protected function serviceLocator(): ServiceLocator
@@ -119,8 +105,8 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return $this->class;
     }
 
-    public function docblock(): DocBlock
+    public function isStatic(): bool
     {
-        return $this->serviceLocator->docblockFactory()->create($this->propertyDeclaration->getLeadingCommentAndWhitespaceText());
+        return $this->propertyDeclaration->isStatic();
     }
 }

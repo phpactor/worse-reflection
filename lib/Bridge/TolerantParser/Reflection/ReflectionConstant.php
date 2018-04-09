@@ -9,6 +9,11 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant as CoreReflectionConstant;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Visibility;
+use Phpactor\WorseReflection\Core\Types;
+use Microsoft\PhpParser\Node\Statement\ConstDeclaration;
+use Microsoft\PhpParser\Node\ClassConstDeclaration;
 
 class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant
 {
@@ -27,14 +32,21 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
      */
     private $class;
 
+    /**
+     * @var ConstDeclaration
+     */
+    private $declaration;
+
     public function __construct(
         ServiceLocator $serviceLocator,
         AbstractReflectionClass $class,
+        ClassConstDeclaration $declaration,
         ConstElement $node
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
         $this->class = $class;
+        $this->declaration = $declaration;
     }
 
     public function name(): string
@@ -50,7 +62,7 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
 
     protected function node(): Node
     {
-        return $this->node;
+        return $this->declaration;
     }
 
     protected function serviceLocator(): ServiceLocator
@@ -61,5 +73,14 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
     public function class(): ReflectionClassLike
     {
         return $this->class;
+    }
+
+    public function inferredTypes(): Types
+    {
+        if (Type::unknown() !== $this->type()) {
+            return Types::fromTypes([ $this->type() ]);
+        }
+
+        return Types::empty();
     }
 }

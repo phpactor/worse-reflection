@@ -78,11 +78,6 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return $this->node->getName();
     }
 
-    public function frame(): Frame
-    {
-        return $this->serviceLocator->frameBuilder()->build($this->node);
-    }
-
     public function declaringClass(): ReflectionClassLike
     {
         $classDeclaration = $this->node->getFirstAncestor(ClassLike::class);
@@ -101,53 +96,33 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return $this->serviceLocator->reflector()->reflectClassLike(ClassName::fromString($class));
     }
 
-    public function isAbstract(): bool
-    {
-        foreach ($this->node->modifiers as $token) {
-            if ($token->kind === TokenKind::AbstractKeyword) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function isStatic(): bool
-    {
-        return $this->node->isStatic();
-    }
-
     public function parameters(): CoreReflectionParameterCollection
     {
         return ReflectionParameterCollection::fromMethodDeclaration($this->serviceLocator, $this->node, $this);
     }
 
-    public function docblock(): DocBlock
-    {
-        return $this->serviceLocator->docblockFactory()->create($this->node->getLeadingCommentAndWhitespaceText());
-    }
-
-    public function visibility(): Visibility
-    {
-        foreach ($this->node->modifiers as $token) {
-            if ($token->kind === TokenKind::PrivateKeyword) {
-                return Visibility::private();
-            }
-
-            if ($token->kind === TokenKind::ProtectedKeyword) {
-                return Visibility::protected();
-            }
-        }
-
-        return Visibility::public();
-    }
-
+    /**
+     * @deprecated use inferredTypes()
+     */
     public function inferredReturnTypes(): Types
+    {
+        return $this->inferredTypes();
+    }
+
+    public function inferredTypes(): Types
     {
         return $this->returnTypeResolver->resolve();
     }
 
+    /**
+     * @deprecated use type()
+     */
     public function returnType(): Type
+    {
+        return $this->type();
+    }
+
+    public function type(): Type
     {
         return $this->memberTypeResolver->resolve($this->class()->name(), $this->node, $this->node->returnType);
     }
@@ -175,4 +150,21 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     {
         return $this->serviceLocator;
     }
+
+    public function isStatic(): bool
+    {
+        return $this->node->isStatic();
+    }
+
+    public function isAbstract(): bool
+    {
+        foreach ($this->node->modifiers as $token) {
+            if ($token->kind === TokenKind::AbstractKeyword) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
