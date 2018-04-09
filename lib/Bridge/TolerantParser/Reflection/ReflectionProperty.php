@@ -79,34 +79,14 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return (string) $this->variable->getName();
     }
 
-    public function visibility(): Visibility
-    {
-        foreach ($this->propertyDeclaration->modifiers as $token) {
-            if ($token->kind === TokenKind::PrivateKeyword) {
-                return Visibility::private();
-            }
-
-            if ($token->kind === TokenKind::ProtectedKeyword) {
-                return Visibility::protected();
-            }
-        }
-
-        return Visibility::public();
-    }
-
     public function inferredTypes(): Types
     {
         return $this->typeResolver->resolve();
     }
 
-    public function isStatic(): bool
-    {
-        return $this->propertyDeclaration->isStatic();
-    }
-
     protected function node(): Node
     {
-        return $this->variable;
+        return $this->propertyDeclaration;
     }
 
     protected function serviceLocator(): ServiceLocator
@@ -117,10 +97,5 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     public function class(): ReflectionClassLike
     {
         return $this->class;
-    }
-
-    public function docblock(): DocBlock
-    {
-        return $this->serviceLocator->docblockFactory()->create($this->propertyDeclaration->getLeadingCommentAndWhitespaceText());
     }
 }
