@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 
 class MemberTypeResolver
 {
@@ -101,22 +102,12 @@ class MemberTypeResolver
             return $info;
         }
 
-        /** @var $method ReflectionMethod */
         $member = $class->$type()->get($name);
+        assert($member instanceof ReflectionMember);
         $declaringClass = $member->declaringClass();
 
         $info = $info->withContainerType(Type::class($declaringClass->name()));
 
-        if ($member instanceof ReflectionMethod) {
-            return $info->withTypes($member->inferredReturnTypes());
-        }
-
-        if ($member instanceof ReflectionConstant) {
-            return $info->withType($member->type());
-        }
-
-        if ($member instanceof ReflectionProperty) {
-            return $info->withTypes($member->inferredTypes());
-        }
+        return $info->withTypes($member->inferredTypes());
     }
 }
