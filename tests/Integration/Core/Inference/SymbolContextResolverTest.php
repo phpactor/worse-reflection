@@ -636,6 +636,15 @@ class Foobar
 EOT
                 , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
                 ];
+
+        yield 'It returns type for parenthesised new object' => [
+                <<<'EOT'
+<?php
+
+(new stdClass())<>;
+EOT
+                , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
+                ];
     }
 
     public function provideValues()

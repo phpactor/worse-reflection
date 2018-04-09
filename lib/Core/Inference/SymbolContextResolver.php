@@ -34,6 +34,7 @@ use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
+use Microsoft\PhpParser\Node\Expression\ParenthesizedExpression;
 
 /**
  * @TODO: This class requires SERIOUS refactoring.
@@ -146,6 +147,10 @@ class SymbolContextResolver
             return $this->resolveScopedPropertyAccessExpression($frame, $node);
         }
 
+        if ($node instanceof ParenthesizedExpression) {
+            return $this->resolveParenthesizedExpression($frame, $node);
+        }
+
         if ($node instanceof ClassDeclaration || $node instanceof TraitDeclaration || $node instanceof InterfaceDeclaration) {
             return $this->symbolFactory->context(
                 $node->name->getText($node->getFileContents()),
@@ -214,7 +219,7 @@ class SymbolContextResolver
         ));
     }
 
-    private function resolveVariable(Frame $frame, ParserVariable $node)
+    private function resolveVariable(Frame $frame, Variable $node)
     {
         if ($node->getFirstAncestor(PropertyDeclaration::class)) {
             return $this->resolvePropertyVariable($node);
@@ -239,7 +244,7 @@ class SymbolContextResolver
         return $variables->last()->symbolContext();
     }
 
-    private function resolvePropertyVariable(ParserVariable $node)
+    private function resolvePropertyVariable(Variable $node)
     {
         $info = $this->symbolFactory->context(
             $node->getName(),
@@ -611,5 +616,10 @@ class SymbolContextResolver
         assert($classNode instanceof NamespacedNameInterface);
 
         return Type::fromString($classNode->getNamespacedName());
+    }
+
+    private function resolveParenthesizedExpression(Frame $frame, ParenthesizedExpression $node)
+    {
+        return $this->__resolveNode($frame, $node->expression);
     }
 }
