@@ -219,7 +219,7 @@ class SymbolContextResolver
         ));
     }
 
-    private function resolveVariable(Frame $frame, Variable $node)
+    private function resolveVariable(Frame $frame, ParserVariable $node)
     {
         if ($node->getFirstAncestor(PropertyDeclaration::class)) {
             return $this->resolvePropertyVariable($node);
@@ -244,7 +244,7 @@ class SymbolContextResolver
         return $variables->last()->symbolContext();
     }
 
-    private function resolvePropertyVariable(Variable $node)
+    private function resolvePropertyVariable(ParserVariable $node)
     {
         $info = $this->symbolFactory->context(
             $node->getName(),
