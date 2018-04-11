@@ -27,6 +27,7 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 
 class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
@@ -216,6 +217,9 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $interfaces;
     }
 
+    /**
+     * @return CoreReflectionTraitCollection<ReflectionTrait>
+     */
     public function traits(): CoreReflectionTraitCollection
     {
         $parentTraits = null;

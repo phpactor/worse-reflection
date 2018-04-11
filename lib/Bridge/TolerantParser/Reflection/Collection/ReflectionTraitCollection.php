@@ -27,9 +27,9 @@ class ReflectionTraitCollection extends AbstractReflectionCollection implements 
 
             foreach ($memberDeclaration->traitNameList->getValues() as $traitName) {
                 $traitName = TolerantQualifiedNameResolver::getResolvedName($traitName);
+                $items[] = $serviceLocator->reflector()->reflectTrait(ClassName::fromString($traitName));
             }
 
-            $items[] = $serviceLocator->reflector()->reflectTrait(ClassName::fromString($traitName));
         }
 
         return new static($serviceLocator, $items);
