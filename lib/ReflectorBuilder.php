@@ -10,6 +10,8 @@ use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantFactory;
+use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 
 final class ReflectorBuilder
 {
@@ -39,11 +41,21 @@ final class ReflectorBuilder
     private $enableContextualSourceLocation = false;
 
     /**
+     * @var SourceCodeReflectorFactory
+     */
+    private $sourceReflectorFactory;
+
+    /**
      * Create a new instance of the builder
      */
     public static function create(): ReflectorBuilder
     {
         return new self();
+    }
+
+    public function withSourceReflectorFactory(SourceCodeReflectorFactory $sourceReflectorFactory)
+    {
+        $this->sourceReflectorFactory = $sourceReflectorFactory;
     }
 
     /**
@@ -86,6 +98,7 @@ final class ReflectorBuilder
         return (new ServiceLocator(
             $this->buildLocator(),
             $this->buildLogger(),
+            $this->buildReflectorFactory(),
             $this->enableCache,
             $this->enableContextualSourceLocation
         ))->reflector();
@@ -137,5 +150,10 @@ final class ReflectorBuilder
     private function buildLogger(): Logger
     {
         return $this->logger ?: new ArrayLogger();
+    }
+
+    private function buildReflectorFactory()
+    {
+        return $this->sourceReflectorFactory ?: new TolerantFactory();
     }
 }

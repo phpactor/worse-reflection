@@ -22,10 +22,8 @@ use Microsoft\PhpParser\NamespacedNameInterface;
  */
 class ReflectionClassCollection extends AbstractReflectionCollection implements CoreReflectionClassCollection
 {
-    public static function fromSource(ServiceLocator $serviceLocator, SourceCode $source)
+    public static function fromNode(ServiceLocator $serviceLocator, SourceCode $source, Node $node)
     {
-        $node = $serviceLocator->parser()->parseSourceFile((string) $source);
-
         $items = [];
 
         $nodeCollection = $node->getDescendantNodes(function (Node $node) {

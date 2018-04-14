@@ -14,6 +14,8 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeRefle
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantSourceCodeReflector;
+use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 
 class ServiceLocator
 {
@@ -55,12 +57,13 @@ class ServiceLocator
     public function __construct(
         SourceCodeLocator $sourceLocator,
         Logger $logger,
+        SourceCodeReflectorFactory $reflectorFactory,
         bool $enableCache = false,
         bool $enableContextualLocation = false
     ) {
-        $this->logger = $logger;
+        $sourceReflector = $reflectorFactory->create($this);
 
-        $classReflector = $sourceReflector =  new CoreReflector($this);
+        $classReflector = new CoreReflector($sourceReflector, $sourceLocator);
 
         if ($enableCache) {
             $classReflector = new MemonizedClassReflector($classReflector);
@@ -82,9 +85,10 @@ class ServiceLocator
 
         $this->sourceLocator = $sourceLocator;
         $this->docblockFactory = new DocblockFactoryBridge();
+        $this->logger = $logger;
+
         $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
         $this->frameBuilder = FrameBuilder::create($this->docblockFactory, $this->symbolContextResolver, $this->logger);
-        $this->parser = new Parser();
     }
 
     public function reflector(): Reflector
@@ -102,23 +106,24 @@ class ServiceLocator
         return $this->sourceLocator;
     }
 
+    public function docblockFactory(): DocBlockFactory
+    {
+        return $this->docblockFactory;
+    }
+
+    /**
+     * TODO: This is TolerantParser specific.
+     */
     public function symbolContextResolver(): SymbolContextResolver
     {
         return $this->symbolContextResolver;
     }
 
+    /**
+     * TODO: This is TolerantParser specific.
+     */
     public function frameBuilder(): FrameBuilder
     {
         return $this->frameBuilder;
-    }
-
-    public function parser(): Parser
-    {
-        return $this->parser;
-    }
-
-    public function docblockFactory(): DocBlockFactory
-    {
-        return $this->docblockFactory;
     }
 }
