@@ -63,12 +63,6 @@ class ServiceLocator
     ) {
         $sourceReflector = $reflectorFactory->create($this);
 
-        $classReflector = new CoreReflector($sourceReflector, $sourceLocator);
-
-        if ($enableCache) {
-            $classReflector = new MemonizedClassReflector($classReflector);
-        }
-
         if ($enableContextualLocation) {
             $temporarySourceLocator = new TemporarySourceLocator($sourceReflector);
             $sourceLocator = new ChainSourceLocator([
@@ -77,6 +71,13 @@ class ServiceLocator
             ]);
             $sourceReflector = new ContextualSourceCodeReflector($sourceReflector, $temporarySourceLocator);
         }
+
+        $classReflector = new CoreReflector($sourceReflector, $sourceLocator);
+
+        if ($enableCache) {
+            $classReflector = new MemonizedClassReflector($classReflector);
+        }
+
 
         $this->reflector = new CompositeReflector(
             $classReflector,
