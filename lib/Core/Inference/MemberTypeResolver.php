@@ -52,13 +52,20 @@ class MemberTypeResolver
         return $this->reflector->reflectClassLike($containerType->className());
     }
 
-    private function memberType(string $type, Type $containerType, SymbolContext $info, string $name)
+    private function memberType(string $memberType, Type $containerType, SymbolContext $info, string $name)
     {
         if (false === $containerType->isDefined()) {
             return $info->withIssue(sprintf(
                 'No type available for containing class "%s" for method "%s"',
                 (string) $containerType,
                 $name
+            ));
+        }
+
+        if (false === $containerType->isClass()) {
+            return $info->withIssue(sprintf(
+                'Containing type is not a class, got "%s"',
+                (string) $containerType
             ));
         }
 
@@ -76,22 +83,22 @@ class MemberTypeResolver
 
         $info = $info->withContainerType(Type::class($class->name()));
 
-        if (!method_exists($class, $type)) {
+        if (!method_exists($class, $memberType)) {
             $info = $info->withIssue(sprintf(
                 'Container class "%s" has no method "%s"',
                 (string) $containerType,
-                $type
+                $memberType
             ));
 
             return $info;
         }
 
         try {
-            if (false === $class->$type()->has($name)) {
+            if (false === $class->$memberType()->has($name)) {
                 $info = $info->withIssue(sprintf(
                     'Class "%s" has no %s named "%s"',
                     (string) $containerType,
-                    $type,
+                    $memberType,
                     $name
                 ));
 
@@ -102,7 +109,7 @@ class MemberTypeResolver
             return $info;
         }
 
-        $member = $class->$type()->get($name);
+        $member = $class->$memberType()->get($name);
         assert($member instanceof ReflectionMember);
         $declaringClass = $member->declaringClass();
 
