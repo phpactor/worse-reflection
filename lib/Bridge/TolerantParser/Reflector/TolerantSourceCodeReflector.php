@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset as TolerantReflectionOffset;
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\ServiceLocator;
+use Microsoft\PhpParser\Parser;
 
 class TolerantSourceCodeReflector implements SourceCodeReflector
 {
@@ -20,9 +21,15 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
      */
     private $serviceLocator;
 
+    /**
+     * @var Parser
+     */
+    private $parser;
+
     public function __construct(ServiceLocator $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
+        $this->parser = new Parser();
     }
 
     /**
@@ -30,7 +37,9 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
      */
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
-        return TolerantReflectionClassCollection::fromSource($this->serviceLocator, SourceCode::fromUnknown($sourceCode));
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $node = $this->parser->parseSourceFile((string) $sourceCode);
+        return TolerantReflectionClassCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
 
     /**
@@ -41,7 +50,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $sourceCode = SourceCode::fromUnknown($sourceCode);
         $offset = Offset::fromUnknown($offset);
 
-        $rootNode = $this->serviceLocator->parser()->parseSourceFile((string) $sourceCode);
+        $rootNode = $this->parser->parseSourceFile((string) $sourceCode);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
         $resolver = $this->serviceLocator->symbolContextResolver();
@@ -69,7 +78,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $sourceCode = SourceCode::fromUnknown($sourceCode);
         $offset = Offset::fromUnknown($offset);
 
-        $rootNode = $this->serviceLocator->parser()->parseSourceFile((string) $sourceCode);
+        $rootNode = $this->parser->parseSourceFile((string) $sourceCode);
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
         $frame = $this->serviceLocator->frameBuilder()->build($node);
