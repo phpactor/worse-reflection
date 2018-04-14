@@ -56,6 +56,7 @@ final class ReflectorBuilder
     public function withSourceReflectorFactory(SourceCodeReflectorFactory $sourceReflectorFactory)
     {
         $this->sourceReflectorFactory = $sourceReflectorFactory;
+        return $this;
     }
 
     /**
