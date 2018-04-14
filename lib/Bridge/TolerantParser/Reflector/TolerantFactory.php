@@ -4,8 +4,8 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflector;
 
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
-use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Core\ServiceLocator;
+use Microsoft\PhpParser\Parser;
 
 class TolerantFactory implements SourceCodeReflectorFactory
 {

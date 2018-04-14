@@ -26,10 +26,10 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
      */
     private $parser;
 
-    public function __construct(ServiceLocator $serviceLocator)
+    public function __construct(ServiceLocator $serviceLocator, Parser $parser)
     {
         $this->serviceLocator = $serviceLocator;
-        $this->parser = new Parser();
+        $this->parser = $parser;
     }
 
     /**
