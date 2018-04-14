@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeRefle
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantSourceCodeReflector;
 
 class ServiceLocator
 {
@@ -60,7 +61,8 @@ class ServiceLocator
     ) {
         $this->logger = $logger;
 
-        $classReflector = $sourceReflector =  new CoreReflector($this);
+        $sourceReflector = new TolerantSourceCodeReflector($this);
+        $classReflector = new CoreReflector($sourceReflector, $sourceLocator);
 
         if ($enableCache) {
             $classReflector = new MemonizedClassReflector($classReflector);

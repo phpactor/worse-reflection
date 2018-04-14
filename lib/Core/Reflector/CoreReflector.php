@@ -30,13 +30,19 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 class CoreReflector implements ClassReflector, SourceCodeReflector
 {
     /**
-     * @var ServiceLocator
+     * @var SourceCodeReflector
      */
-    private $services;
+    private $sourceReflector;
 
-    public function __construct(ServiceLocator $services)
+    /**
+     * @var SourceCodeLocator
+     */
+    private $sourceLocator;
+
+    public function __construct(SourceCodeReflector $sourceReflector, SourceCodeLocator $sourceLocator)
     {
-        $this->services = $services;
+        $this->sourceReflector = $sourceReflector;
+        $this->sourceLocator = $sourceLocator;
     }
 
     /**
@@ -123,7 +129,7 @@ class CoreReflector implements ClassReflector, SourceCodeReflector
     {
         $className = ClassName::fromUnknown($className);
 
-        $source = $this->services->sourceLocator()->locate($className);
+        $source = $this->sourceLocator->locate($className);
         $classes = $this->reflectClassesIn($source);
 
         if (false === $classes->has((string) $className)) {
@@ -143,7 +149,7 @@ class CoreReflector implements ClassReflector, SourceCodeReflector
      */
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
-        return TolerantReflectionClassCollection::fromSource($this->services, SourceCode::fromUnknown($sourceCode));
+        return $this->sourceReflector->reflectClassesIn($sourceCode);
     }
 
     /**
@@ -155,43 +161,11 @@ class CoreReflector implements ClassReflector, SourceCodeReflector
      */
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
-        $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $offset = Offset::fromUnknown($offset);
-
-        $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
-        $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
-
-        $resolver = $this->services->symbolContextResolver();
-        $frame = $this->services->frameBuilder()->build($node);
-
-        return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $resolver->resolveNode($frame, $node));
+        return $this->sourceReflector->reflectOffset($sourceCode, $offset);
     }
 
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
     {
-        $reflection = $this->reflectNode($sourceCode, $offset);
-
-        if (false === $reflection instanceof ReflectionMethodCall) {
-            throw new \RuntimeException(sprintf(
-                'Expected method call, got "%s"',
-                get_class($reflection)
-            ));
-        }
-
-        return $reflection;
-    }
-
-    private function reflectNode($sourceCode, $offset)
-    {
-        $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $offset = Offset::fromUnknown($offset);
-
-        $rootNode = $this->services->parser()->parseSourceFile((string) $sourceCode);
-        $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
-
-        $frame = $this->services->frameBuilder()->build($node);
-        $nodeReflector = new NodeReflector($this->services);
-
-        return $nodeReflector->reflectNode($frame, $node);
+        return $this->sourceReflector->reflectMethodCall($sourceCode, $offset);
     }
 }
