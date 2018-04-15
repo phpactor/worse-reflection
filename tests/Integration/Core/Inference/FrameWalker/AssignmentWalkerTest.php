@@ -226,5 +226,28 @@ EOT
                 $this->assertEquals('Foobar\Collection', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best()->arrayType());
             }
         ];
+
+        yield 'From incomplete assignment' => [
+            <<<'EOT'
+<?php
+
+class Baz
+{
+    public function function1(Barfoo $barfoo)
+    {
+        $barfoo = $barfoo->as<>
+    }
+
+    public function function2(): Baz;
+}
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('barfoo'));
+                $this->assertEquals('Barfoo', $frame->locals()->byName('barfoo')->first()->symbolContext()->types()->best()->short());
+            }
+        ];
     }
 }

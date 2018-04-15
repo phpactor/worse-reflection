@@ -19,6 +19,8 @@ use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\ArrayElement;
+use Microsoft\PhpParser\MissingToken;
+use Microsoft\PhpParser\Node\Statement\ExpressionStatement;
 
 class AssignmentWalker implements FrameWalker
 {
@@ -48,6 +50,10 @@ class AssignmentWalker implements FrameWalker
         assert($node instanceof AssignmentExpression);
 
         $rightContext = $builder->resolveNode($frame, $node->rightOperand);
+
+        if ($this->hasMissingTokens($node)) {
+            return $frame;
+        }
 
         if ($node->leftOperand instanceof Variable) {
             return $this->walkParserVariable($frame, $node->leftOperand, $rightContext);
@@ -189,5 +195,21 @@ class AssignmentWalker implements FrameWalker
         }
 
         return $frame;
+    }
+
+    private function hasMissingTokens(AssignmentExpression $node)
+    {
+        // this would probably never happen ...
+        if (false === $node->parent instanceof ExpressionStatement) {
+            return false;
+        }
+
+        foreach ($node->parent->getDescendantTokens() as $token) {
+            if ($token instanceof MissingToken) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
