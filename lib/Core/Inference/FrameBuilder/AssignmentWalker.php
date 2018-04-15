@@ -51,14 +51,9 @@ class AssignmentWalker implements FrameWalker
 
         $rightContext = $builder->resolveNode($frame, $node->rightOperand);
 
-        if ($node->parent instanceof ExpressionStatement) {
-            foreach ($node->parent->getDescendantTokens() as $token) {
-                if ($token instanceof MissingToken) {
-                    return $frame;
-                }
-            }
+        if ($this->hasMissingTokens($node)) {
+            return $frame;
         }
-
 
         if ($node->leftOperand instanceof Variable) {
             return $this->walkParserVariable($frame, $node->leftOperand, $rightContext);
@@ -200,5 +195,21 @@ class AssignmentWalker implements FrameWalker
         }
 
         return $frame;
+    }
+
+    private function hasMissingTokens(AssignmentExpression $node)
+    {
+        // this would probably never happen ...
+        if (false === $node->parent instanceof ExpressionStatement) {
+            return false;
+        }
+
+        foreach ($node->parent->getDescendantTokens() as $token) {
+            if ($token instanceof MissingToken) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
