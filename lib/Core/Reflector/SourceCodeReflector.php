@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection;
 
 interface SourceCodeReflector
 {
@@ -19,6 +20,11 @@ interface SourceCodeReflector
      * Reflect all classes (or class-likes) in the given source code.
      */
     public function reflectClassesIn($sourceCode): ReflectionClassCollection;
+
+    /**
+     * Reflect all functions in the given source code.
+     */
+    public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection;
 
     /**
      * Return the information for the given offset in the given file, including the value

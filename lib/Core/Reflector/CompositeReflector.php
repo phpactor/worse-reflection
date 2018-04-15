@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection;
 
 class CompositeReflector implements Reflector
 {
@@ -87,5 +88,13 @@ class CompositeReflector implements Reflector
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
     {
         return $this->sourceCodeReflector->reflectMethodCall($sourceCode, $offset);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
+    {
+        return $this->sourceCodeReflector->reflectFunctionsIn($sourceCode);
     }
 }

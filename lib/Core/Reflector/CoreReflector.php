@@ -24,6 +24,7 @@ use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection;
 
 class CoreReflector implements ClassReflector, SourceCodeReflector
 {
@@ -165,5 +166,13 @@ class CoreReflector implements ClassReflector, SourceCodeReflector
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
     {
         return $this->sourceReflector->reflectMethodCall($sourceCode, $offset);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
+    {
+        return $this->sourceReflector->reflectFunctionsIn($sourceCode);
     }
 }

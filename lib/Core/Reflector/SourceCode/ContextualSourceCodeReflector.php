@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Core\Reflector\ReflectionFunctionCollection;
 
 class ContextualSourceCodeReflector implements SourceCodeReflector
 {
@@ -59,6 +60,19 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         $this->locator->setSourceCode($sourceCode);
 
         $offset = $this->innerReflector->reflectMethodCall($sourceCode, $offset);
+
+        return $offset;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
+    {
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $this->locator->setSourceCode($sourceCode);
+
+        $offset = $this->innerReflector->reflectFunctionsIn($sourceCode);
 
         return $offset;
     }
