@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflectionClass;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod get()
@@ -51,7 +52,7 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
         return new static($serviceLocator, $items);
     }
 
-    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, ReflectionTrait $reflectionTrait): CoreReflectionMethodCollection
+    public static function fromTraitDeclaration(ServiceLocator $serviceLocator, TraitDeclaration $trait, AbstractReflectionClass $reflectionTrait): CoreReflectionMethodCollection
     {
         /** @var MethodDeclaration[] $methods */
         $methods = array_filter($trait->traitMembers->traitMemberDeclarations, function ($member) {

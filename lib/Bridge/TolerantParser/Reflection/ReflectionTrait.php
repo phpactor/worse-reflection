@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait as CoreReflectionTr
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 
 class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionTrait
 {
@@ -50,9 +51,10 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
         return $this->node;
     }
 
-    public function methods(): CoreReflectionMethodCollection
+    public function methods(ReflectionClassLike $contextClass = null): CoreReflectionMethodCollection
     {
-        return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $this);
+        $contextClass = $contextClass ?: $this;
+        return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $contextClass);
     }
 
     public function properties(): CoreReflectionPropertyCollection

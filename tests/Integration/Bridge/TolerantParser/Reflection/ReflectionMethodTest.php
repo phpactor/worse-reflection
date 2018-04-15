@@ -183,7 +183,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
                 },
             ],
             'Return type from array docblock' => [
@@ -203,7 +203,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::array('Acme\Post'), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::array('Acme\Post'), $methods->get('method1')->inferredTypes()->best());
                 },
             ],
             'Return type from docblock this and static' => [
@@ -226,8 +226,37 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredReturnTypes()->best());
-                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredTypes()->best());
+                },
+            ],
+            'Return type from docblock this and static from a trait' => [
+                <<<'EOT'
+<?php
+
+trait FooTrait
+{
+    /**
+     * @return $this
+     */
+    function method1() {}
+
+    /**
+     * @return static
+     */
+    function method2() {}
+}
+
+class Foobar
+{
+    use FooTrait;
+}
+EOT
+                ,
+                'Foobar',
+                function ($methods) {
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredTypes()->best());
                 },
             ],
             'Return type from class @method annotation' => [
@@ -247,7 +276,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
                 },
             ],
             'Return type from overridden @method annotation' => [
@@ -274,7 +303,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
                 },
             ],
             'Return type from inherited docblock' => [
@@ -302,7 +331,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredTypes()->best());
                 },
             ],
             'Return type from inherited docblock (from interface)' => [
@@ -332,7 +361,7 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredReturnTypes()->best());
+                    $this->assertEquals(Type::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredTypes()->best());
                 },
             ],
             'It reflects an abstract method' => [

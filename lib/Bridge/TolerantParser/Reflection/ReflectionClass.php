@@ -172,7 +172,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
         if ($this->traits()->count() > 0) {
             foreach ($this->traits() as $trait) {
-                $methods = $methods->merge($trait->methods());
+                $methods = $methods->merge($trait->methods($contextClass));
             }
         }
 

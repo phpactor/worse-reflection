@@ -50,6 +50,6 @@ class ReflectionScope implements CoreReflectionScope
     public function resolveFullyQualifiedName($type, ReflectionClassLike $class): Type
     {
         $resolver = new FullyQualifiedNameResolver(new ArrayLogger());
-        return $resolver->resolve($this->node, $type);
+        return $resolver->resolve($this->node, $type, $class->name());
     }
 }

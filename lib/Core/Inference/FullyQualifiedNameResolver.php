@@ -27,7 +27,7 @@ class FullyQualifiedNameResolver
         $this->logger = $logger;
     }
 
-    public function resolve(Node $node, $type = null): Type
+    public function resolve(Node $node, $type = null, Name $currentClass = null): Type
     {
         $type = $type ?: $node->getText();
 
@@ -57,7 +57,7 @@ class FullyQualifiedNameResolver
         }
 
         if (in_array((string) $type, ['self', 'static', '$this'])) {
-            return $this->currentClass($node);
+            return $this->currentClass($node, $currentClass);
         }
 
         if ((string) $type == 'parent') {
@@ -107,8 +107,11 @@ class FullyQualifiedNameResolver
         return Type::fromString($class->classBaseClause->baseClass->getResolvedName());
     }
 
-    private function currentClass(Node $node)
+    private function currentClass(Node $node, Name $currentClass = null)
     {
+        if ($currentClass) {
+            return Type::fromString($currentClass->full());
+        }
         $class = $node->getFirstAncestor(ClassLike::class);
         assert($class instanceof NamespacedNameInterface);
 
