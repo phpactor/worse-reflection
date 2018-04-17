@@ -104,6 +104,10 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             return $parentConstants->merge($constants);
         }
 
+        foreach ($this->interfaces() as $interface) {
+            $constants = $constants->merge($interface->constants());
+        }
+
         return $constants;
     }
 
@@ -209,7 +213,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $interfaces = ReflectionInterfaceCollection::fromClassDeclaration($this->serviceLocator, $this->node);
 
         if ($parentInterfaces) {
-            $interfaces =  $parentInterfaces->merge($interfaces);
+            $interfaces = $parentInterfaces->merge($interfaces);
         }
 
         $this->interfaces = $interfaces;

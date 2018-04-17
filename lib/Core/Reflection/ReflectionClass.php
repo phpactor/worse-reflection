@@ -18,6 +18,9 @@ interface ReflectionClass extends ReflectionClassLike
 
     public function properties(): ReflectionPropertyCollection;
 
+    /**
+     * @return ReflectionInterfaceCollection<ReflectionInterface>
+     */
     public function interfaces(): ReflectionInterfaceCollection;
 
     public function traits(): ReflectionTraitCollection;

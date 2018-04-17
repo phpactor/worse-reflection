@@ -522,5 +522,30 @@ EOT
                 ]), $class->scope()->nameImports());
             },
         ];
+
+        yield 'Inherits constants from interface' => [
+            <<<'EOT'
+<?php
+
+use Foobar\Barfoo;
+use Barfoo\Foobaz as Carzatz;
+
+interface SomeInterface
+{
+    const SOME_CONSTANT = 'foo';
+}
+
+class Class2 implements SomeInterface
+{
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertCount(1, $class->constants());
+                $this->assertEquals('SOME_CONSTANT', $class->constants()->get('SOME_CONSTANT')->name());
+            },
+        ];
     }
 }
