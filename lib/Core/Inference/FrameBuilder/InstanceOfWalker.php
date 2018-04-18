@@ -43,6 +43,10 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 
         assert($node instanceof IfStatementNode);
 
+        if (false === $node->expression instanceof Expression) {
+            return $frame;
+        }
+
         $expressionsAreTrue = $this->evaluator->evaluate($node->expression);
         $variables = $this->collectVariables($node);
         $variables = $this->mergeTypes($variables);
@@ -89,6 +93,9 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
     private function branchTerminates(IfStatementNode $node): bool
     {
         foreach ($node->statements as $list) {
+            if (null === $list) {
+                continue;
+            }
             foreach ($list as $statement) {
                 if ($statement instanceof ReturnStatement) {
                     return true;

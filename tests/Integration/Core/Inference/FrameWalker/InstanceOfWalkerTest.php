@@ -219,5 +219,35 @@ EOT
             $this->assertEquals('Foobar\Barfoo', (string) $frame->locals()->atIndex(0)->symbolContext()->types()->best());
         }
         ];
+
+        yield 'ignores condition incomplete expression' => [
+            <<<'EOT'
+<?php
+
+use Foobar\Barfoo;
+
+if ($foobar instanceof Barfoo
+<>
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(2, $frame->locals());
+        }
+    ];
+
+        yield 'ignores condition with missing token' => [
+            <<<'EOT'
+<?php
+
+use Foobar\Barfoo;
+
+if ($foobar instanceof Barfoo
+<>
+
+if
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(2, $frame->locals());
+        }
+        ];
     }
 }
