@@ -7,8 +7,15 @@ use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
-    protected $items = [];
+    /**
+     * @var ServiceLocator
+     */
     protected $serviceLocator;
+
+    /**
+     * @var array
+     */
+    protected $items = [];
 
     protected function __construct(ServiceLocator $serviceLocator, array $items)
     {

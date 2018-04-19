@@ -20,7 +20,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\AbstractReflection
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod last()
  */
-class ReflectionMethodCollection extends AbstractReflectionCollection implements CoreReflectionMethodCollection
+class ReflectionMethodCollection extends ReflectionMemberCollection implements CoreReflectionMethodCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
@@ -72,40 +72,10 @@ class ReflectionMethodCollection extends AbstractReflectionCollection implements
         return new static($serviceLocator, $methods);
     }
 
-    public function byVisibilities(array $visibilities): CoreReflectionMethodCollection
-    {
-        $items = [];
-        foreach ($this->items as $key => $item) {
-            foreach ($visibilities as $visibility) {
-                if ($item->visibility() != $visibility) {
-                    continue;
-                }
-
-                $items[$key] = $item;
-            }
-        }
-
-        return new static($this->serviceLocator, $items);
-    }
-
-    public function belongingTo(ClassName $class): CoreReflectionMethodCollection
-    {
-        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) use ($class) {
-            return $item->declaringClass()->name() == $class;
-        }));
-    }
-
     public function abstract()
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) {
             return $item->isAbstract();
-        }));
-    }
-
-    public function atOffset(int $offset): ReflectionMethodCollection
-    {
-        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) use ($offset) {
-            return $item->position()->start() <= $offset && $item->position()->end() >= $offset;
         }));
     }
 }

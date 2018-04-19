@@ -19,15 +19,8 @@ use Phpactor\WorseReflection\Core\ClassName;
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty last()
  */
-class ReflectionPropertyCollection extends AbstractReflectionCollection implements CoreReflectionPropertyCollection
+class ReflectionPropertyCollection extends ReflectionMemberCollection implements CoreReflectionPropertyCollection
 {
-    public function belongingTo(ClassName $class)
-    {
-        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionProperty $item) use ($class) {
-            return $item->declaringClass()->name() == $class;
-        }));
-    }
-
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
         /** @var PropertyDeclaration[] $properties */
@@ -74,21 +67,5 @@ class ReflectionPropertyCollection extends AbstractReflectionCollection implemen
         }
 
         return new static($serviceLocator, $items);
-    }
-
-    public function byVisibilities(array $visibilities)
-    {
-        $items = [];
-        foreach ($this->items as $key => $item) {
-            foreach ($visibilities as $visibility) {
-                if ($item->visibility() != $visibility) {
-                    continue;
-                }
-
-                $items[$key] = $item;
-            }
-        }
-
-        return new static($this->serviceLocator, $items);
     }
 }
