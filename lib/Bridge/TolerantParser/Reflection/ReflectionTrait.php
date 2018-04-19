@@ -15,6 +15,8 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMemberCollection as TolerantReflectionMemberCollection;
 
 class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionTrait
 {
@@ -55,6 +57,15 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     {
         $contextClass = $contextClass ?: $this;
         return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $contextClass);
+    }
+
+    public function members(): ReflectionMemberCollection
+    {
+        $members = TolerantReflectionMemberCollection::empty();
+        $members = $members->merge($this->properties());
+        $members = $members->merge($this->methods());
+
+        return $members;
     }
 
     public function properties(): CoreReflectionPropertyCollection

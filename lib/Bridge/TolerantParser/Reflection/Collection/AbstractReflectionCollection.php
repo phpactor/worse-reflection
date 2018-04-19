@@ -38,7 +38,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return new static($serviceLocator, $reflections);
     }
 
-    public static function empty(ServiceLocator $serviceLocator)
+    public static function empty(ServiceLocator $serviceLocator): self
     {
         return new static($serviceLocator, []);
     }

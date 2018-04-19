@@ -28,6 +28,8 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMemberCollection as TolerantReflectionMemberCollection;
 
 class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
@@ -89,6 +91,16 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
 
         return $modifier->kind === TokenKind::AbstractKeyword;
+    }
+
+    public function members(): ReflectionMemberCollection
+    {
+        $members = TolerantReflectionMemberCollection::empty($this->serviceLocator);
+        $members = $members->merge($this->constants());
+        $members = $members->merge($this->properties());
+        $members = $members->merge($this->methods());
+
+        return $members;
     }
 
     public function constants(): CoreReflectionConstantCollection

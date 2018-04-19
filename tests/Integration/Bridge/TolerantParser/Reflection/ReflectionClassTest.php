@@ -547,5 +547,27 @@ EOT
                 $this->assertEquals('SOME_CONSTANT', $class->constants()->get('SOME_CONSTANT')->name());
             },
         ];
+
+        yield 'Returns all members' => [
+            <<<'EOT'
+<?php
+
+class Class1
+{
+    private const FOOBAR = 'foobar';
+    private $foo;
+    private function foobar() {}
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertCount(3, $class->members());
+                $this->assertTrue($class->members()->has('FOOBAR'));
+                $this->assertTrue($class->members()->has('foobar'));
+                $this->assertTrue($class->members()->has('foo'));
+            },
+        ];
     }
 }

@@ -6,6 +6,9 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 
+/**
+ * @method ReflectionMemberCollection empty()
+ */
 class ReflectionMemberCollection extends AbstractReflectionCollection implements CoreReflectionMemberCollection
 {
     public function byVisibilities(array $visibilities): CoreReflectionMemberCollection

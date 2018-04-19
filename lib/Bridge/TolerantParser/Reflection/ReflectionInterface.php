@@ -20,6 +20,8 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface as CoreReflectionInterface;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMemberCollection as TolerantReflectionMemberCollection;
 
 class ReflectionInterface extends AbstractReflectionClass implements CoreReflectionInterface
 {
@@ -56,6 +58,15 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
     protected function node(): Node
     {
         return $this->node;
+    }
+
+    public function members(): ReflectionMemberCollection
+    {
+        $members = TolerantReflectionMemberCollection::empty($this->serviceLocator);
+        $members = $members->merge($this->constants());
+        $members = $members->merge($this->methods());
+
+        return $members;
     }
 
     public function constants(): CoreReflectionConstantCollection

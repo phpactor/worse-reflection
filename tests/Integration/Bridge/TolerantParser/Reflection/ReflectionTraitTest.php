@@ -133,5 +133,25 @@ EOT
                 },
             ],
         ];
+
+        yield 'Returns all members' => [
+            <<<'EOT'
+<?php
+
+trait Class1
+{
+    private $foovar;
+    private function foobar() {}
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionTrait $class) {
+                $this->assertCount(2, $class->members());
+                $this->assertTrue($class->members()->has('foovar'));
+                $this->assertTrue($class->members()->has('foobar'));
+            },
+        ];
     }
 }
