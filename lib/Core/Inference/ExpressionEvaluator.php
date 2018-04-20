@@ -15,13 +15,16 @@ use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\Expression\UnaryOpExpression;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\Expression\ParenthesizedExpression;
-use PhpParser\Node\Expr\Ternary;
 use Microsoft\PhpParser\Node\Expression\TernaryExpression;
 
 class ExpressionEvaluator
 {
-    public function evaluate(Node $node)
+    public function evaluate($node)
     {
+        if (false === $node instanceof Node) {
+            return null;
+        }
+
         if ($node instanceof ReservedWord) {
             return $this->walkReservedWord($node);
         }

@@ -251,5 +251,10 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
             '(5 > 3) AND (10 - 5 < 6)',
             true
         ];
+
+        yield 'missing token' => [
+            '(5 > 3) AND (',
+            false
+        ];
     }
 }
