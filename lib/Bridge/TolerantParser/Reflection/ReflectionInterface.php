@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection as CoreReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
@@ -62,9 +63,10 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
 
     public function members(): ReflectionMemberCollection
     {
-        $members = TolerantReflectionMemberCollection::empty($this->serviceLocator);
-        $members = $members->merge($this->constants());
-        $members = $members->merge($this->methods());
+        return ChainReflectionMemberCollection::fromCollections([
+            $this->constants(),
+            $this->methods()
+        ]);
 
         return $members;
     }

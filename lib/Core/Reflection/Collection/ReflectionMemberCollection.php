@@ -16,4 +16,6 @@ interface ReflectionMemberCollection extends ReflectionCollection
     public function belongingTo(ClassName $class): ReflectionMemberCollection;
 
     public function atOffset(int $offset): ReflectionMemberCollection;
+
+    public function byName(string $name): ReflectionMemberCollection;
 }

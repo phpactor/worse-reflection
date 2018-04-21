@@ -86,6 +86,22 @@ class ReflectionMemberCollectionTest extends TestCase
         $this->assertCount(1, $collection);
     }
 
+    public function testByName()
+    {
+        $collection = $this->create([
+            'foo' => $this->member1->reveal(),
+            'bar' => $this->member2->reveal()
+        ]);
+
+        $this->member1->name()->willReturn('foo');
+
+        $collection = $collection->byName('foo');
+        $this->assertCount(1, $collection);
+
+        $collection = $collection->byName('bar');
+        $this->assertCount(0, $collection);
+    }
+
     private function create(array $members): ReflectionMemberCollection
     {
         return ReflectionMemberCollection::fromReflections(

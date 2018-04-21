@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait as CoreReflectionTrait;
@@ -61,9 +62,10 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
 
     public function members(): ReflectionMemberCollection
     {
-        $members = TolerantReflectionMemberCollection::empty();
-        $members = $members->merge($this->properties());
-        $members = $members->merge($this->methods());
+        return ChainReflectionMemberCollection::fromCollections([
+            $this->properties(),
+            $this->methods()
+        ]);
 
         return $members;
     }

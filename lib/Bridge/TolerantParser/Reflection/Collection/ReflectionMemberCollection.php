@@ -40,4 +40,13 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
             return $item->position()->start() <= $offset && $item->position()->end() >= $offset;
         }));
     }
+
+    public function byName(string $name): CoreReflectionMemberCollection
+    {
+        if ($this->has($name)) {
+            return new self($this->serviceLocator, [ $this->get($name) ]);
+        }
+
+        return new self($this->serviceLocator, []);
+    }
 }

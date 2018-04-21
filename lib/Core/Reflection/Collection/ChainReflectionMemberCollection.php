@@ -180,4 +180,14 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
     {
         $this->collections[] = $collection;
     }
+
+    public function byName(string $name): ReflectionMemberCollection
+    {
+        $collections = [];
+        foreach ($this->collections as $collection) {
+            $collections[] = $collection->byName($name);
+        }
+
+        return new self($collections);
+    }
 }
