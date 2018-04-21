@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 
@@ -43,7 +44,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return new static($serviceLocator, []);
     }
 
-    public function merge(AbstractReflectionCollection $collection)
+    public function merge(ReflectionCollection $collection)
     {
         if (false === $collection instanceof static) {
             throw new \InvalidArgumentException(sprintf(

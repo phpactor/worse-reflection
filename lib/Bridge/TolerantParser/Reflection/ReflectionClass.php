@@ -7,6 +7,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\TokenKind;
 use PhpParser\Node\Stmt\ClassLike;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
@@ -95,12 +96,11 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
     public function members(): ReflectionMemberCollection
     {
-        $members = TolerantReflectionMemberCollection::empty($this->serviceLocator);
-        $members = $members->merge($this->constants());
-        $members = $members->merge($this->properties());
-        $members = $members->merge($this->methods());
-
-        return $members;
+        return ChainReflectionMemberCollection::fromCollections([
+            $this->constants(),
+            $this->properties(),
+            $this->methods()
+        ]);
     }
 
     public function constants(): CoreReflectionConstantCollection
