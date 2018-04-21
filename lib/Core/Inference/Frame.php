@@ -109,7 +109,7 @@ final class Frame
         return $this->name;
     }
 
-    public function withLocals(Assignments $locals)
+    public function withLocals(LocalAssignments $locals)
     {
         $new = clone $this;
         $new->locals = $locals;

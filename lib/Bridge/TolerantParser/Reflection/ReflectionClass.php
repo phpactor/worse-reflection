@@ -7,6 +7,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\TokenKind;
 use PhpParser\Node\Stmt\ClassLike;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
@@ -28,6 +29,8 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMemberCollection as TolerantReflectionMemberCollection;
 
 class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
@@ -47,7 +50,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     private $sourceCode;
 
     /**
-     * @var ReflectionInterface[]
+     * @var ReflectionInterfaceCollection<ReflectionInterface>
      */
     private $interfaces;
 
@@ -89,6 +92,15 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
 
         return $modifier->kind === TokenKind::AbstractKeyword;
+    }
+
+    public function members(): ReflectionMemberCollection
+    {
+        return ChainReflectionMemberCollection::fromCollections([
+            $this->constants(),
+            $this->properties(),
+            $this->methods()
+        ]);
     }
 
     public function constants(): CoreReflectionConstantCollection

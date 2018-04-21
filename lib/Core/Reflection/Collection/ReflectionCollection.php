@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 use IteratorAggregate;
 
 interface ReflectionCollection extends IteratorAggregate
@@ -11,7 +10,7 @@ interface ReflectionCollection extends IteratorAggregate
 
     public function keys(): array;
 
-    public function merge(AbstractReflectionCollection $collection);
+    public function merge(ReflectionCollection $collection);
 
     public function get(string $name);
 

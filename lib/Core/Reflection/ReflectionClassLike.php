@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 
 interface ReflectionClassLike extends ReflectionNode
 {
@@ -15,6 +16,8 @@ interface ReflectionClassLike extends ReflectionNode
     public function name(): ClassName;
 
     public function methods(): ReflectionMethodCollection;
+
+    public function members(): ReflectionMemberCollection;
 
     public function sourceCode(): SourceCode;
 

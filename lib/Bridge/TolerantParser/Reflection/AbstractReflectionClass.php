@@ -2,7 +2,9 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
-abstract class AbstractReflectionClass extends AbstractReflectedNode
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+
+abstract class AbstractReflectionClass extends AbstractReflectedNode implements ReflectionClassLike
 {
     /**
      * @deprecated Use instanceof instead

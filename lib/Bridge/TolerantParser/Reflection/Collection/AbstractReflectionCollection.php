@@ -2,13 +2,21 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
-    protected $items = [];
+    /**
+     * @var ServiceLocator
+     */
     protected $serviceLocator;
+
+    /**
+     * @var array
+     */
+    protected $items = [];
 
     protected function __construct(ServiceLocator $serviceLocator, array $items)
     {
@@ -31,12 +39,12 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return new static($serviceLocator, $reflections);
     }
 
-    public static function empty(ServiceLocator $serviceLocator)
+    public static function empty(ServiceLocator $serviceLocator): self
     {
         return new static($serviceLocator, []);
     }
 
-    public function merge(AbstractReflectionCollection $collection)
+    public function merge(ReflectionCollection $collection)
     {
         if (false === $collection instanceof static) {
             throw new \InvalidArgumentException(sprintf(

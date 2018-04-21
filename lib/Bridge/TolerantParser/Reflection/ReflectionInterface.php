@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection as CoreReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
@@ -20,6 +21,8 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface as CoreReflectionInterface;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMemberCollection as TolerantReflectionMemberCollection;
 
 class ReflectionInterface extends AbstractReflectionClass implements CoreReflectionInterface
 {
@@ -56,6 +59,14 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
     protected function node(): Node
     {
         return $this->node;
+    }
+
+    public function members(): ReflectionMemberCollection
+    {
+        return ChainReflectionMemberCollection::fromCollections([
+            $this->constants(),
+            $this->methods()
+        ]);
     }
 
     public function constants(): CoreReflectionConstantCollection

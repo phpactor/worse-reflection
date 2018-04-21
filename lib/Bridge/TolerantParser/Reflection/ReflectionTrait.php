@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait as CoreReflectionTrait;
@@ -15,6 +16,8 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMemberCollection as TolerantReflectionMemberCollection;
 
 class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionTrait
 {
@@ -55,6 +58,14 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     {
         $contextClass = $contextClass ?: $this;
         return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $contextClass);
+    }
+
+    public function members(): ReflectionMemberCollection
+    {
+        return ChainReflectionMemberCollection::fromCollections([
+            $this->properties(),
+            $this->methods()
+        ]);
     }
 
     public function properties(): CoreReflectionPropertyCollection

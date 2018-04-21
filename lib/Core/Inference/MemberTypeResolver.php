@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -20,7 +21,7 @@ class MemberTypeResolver
     const TYPE_PROPERTIES = 'properties';
 
     /**
-     * @var Reflector
+     * @var ClassReflector
      */
     private $reflector;
 
@@ -45,7 +46,7 @@ class MemberTypeResolver
     }
 
     /**
-     * @return ReflectionClass
+     * @return ReflectionClassLike
      */
     private function reflectClassOrNull(Type $containerType, string $name)
     {

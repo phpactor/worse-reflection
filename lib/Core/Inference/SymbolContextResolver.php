@@ -47,7 +47,7 @@ class SymbolContextResolver
     private $memberTypeResolver;
 
     /**
-     * @var Reflector
+     * @var ClassReflector
      */
     private $reflector;
 

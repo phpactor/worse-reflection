@@ -16,7 +16,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollec
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionConstant last()
  */
-class ReflectionConstantCollection extends AbstractReflectionCollection implements CoreReflectionConstantCollection
+class ReflectionConstantCollection extends ReflectionMemberCollection implements CoreReflectionConstantCollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {

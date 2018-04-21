@@ -19,9 +19,6 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
      */
     private $frame;
 
-    /**
-     * @var MemberAccessExpression
-     */
     private $node;
 
     /**
