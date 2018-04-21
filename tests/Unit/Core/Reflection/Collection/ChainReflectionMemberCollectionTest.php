@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCol
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Visibility;
+use Traversable;
 
 class ChainReflectionMemberCollectionTest extends TestCase
 {
@@ -47,7 +48,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->collection1->getIterator()->willReturn(new ArrayIterator([1]));
         $this->collection2->getIterator()->willReturn(new ArrayIterator([2]));
 
-        $this->assertTrue(is_iterable($collection->getIterator()));
+        $this->assertInstanceOf(Traversable::class, $collection->getIterator());
         $iterator = $collection->getIterator();
         $this->assertEquals(1, $iterator->current());
         $iterator->next();
