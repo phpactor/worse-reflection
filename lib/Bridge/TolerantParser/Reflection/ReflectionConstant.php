@@ -33,7 +33,7 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
     private $class;
 
     /**
-     * @var ConstDeclaration
+     * @var ClassConstDeclaration
      */
     private $declaration;
 

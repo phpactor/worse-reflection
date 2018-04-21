@@ -50,7 +50,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     private $sourceCode;
 
     /**
-     * @var ReflectionInterface[]
+     * @var ReflectionInterfaceCollection<ReflectionInterface>
      */
     private $interfaces;
 

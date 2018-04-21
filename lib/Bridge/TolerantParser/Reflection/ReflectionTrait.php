@@ -66,8 +66,6 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
             $this->properties(),
             $this->methods()
         ]);
-
-        return $members;
     }
 
     public function properties(): CoreReflectionPropertyCollection

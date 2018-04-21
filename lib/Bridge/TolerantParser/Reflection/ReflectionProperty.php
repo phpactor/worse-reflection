@@ -37,7 +37,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     private $variable;
 
     /**
-     * @var AbstractReflectionClass
+     * @var ReflectionClassLike
      */
     private $class;
 

@@ -16,7 +16,7 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 final class ReflectorBuilder
 {
     /**
-     * @var ArrayLogger
+     * @var Logger
      */
     private $logger;
 

@@ -12,10 +12,11 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionArgument
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter last()
+ * @method static Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection empty()
  */
 class ReflectionArgumentCollection extends AbstractReflectionCollection implements CoreReflectionParameterCollection
 {
-    public static function fromArgumentListAndFrame(ServiceLocator $locator, ArgumentExpressionList $list, Frame $frame)
+    public static function fromArgumentListAndFrame(ServiceLocator $locator, ArgumentExpressionList $list, Frame $frame): self
     {
         $arguments = [];
         foreach ($list->getElements() as $element) {

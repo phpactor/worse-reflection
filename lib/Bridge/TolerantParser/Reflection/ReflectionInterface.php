@@ -67,8 +67,6 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
             $this->constants(),
             $this->methods()
         ]);
-
-        return $members;
     }
 
     public function constants(): CoreReflectionConstantCollection
