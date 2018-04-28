@@ -18,7 +18,7 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection as CoreReflectionParameterCollection;
-use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodReturnTypeResolver;
+use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodTypeResolver;
 use Phpactor\WorseReflection\Core\Inference\MemberTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
@@ -52,7 +52,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     private $class;
 
     /**
-     * @var MethodReturnTypeResolver
+     * @var MethodTypeResolver
      */
     private $returnTypeResolver;
 
@@ -69,7 +69,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
         $this->class = $class;
-        $this->returnTypeResolver = new MethodReturnTypeResolver($this, $serviceLocator->logger());
+        $this->returnTypeResolver = new MethodTypeResolver($this, $serviceLocator->logger());
         $this->memberTypeResolver = new DeclaredMemberTypeResolver();
     }
 

@@ -2,13 +2,13 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
+use Phpactor\Docblock\DocblockType;
+use Phpactor\Docblock\Tag\DocblockTypes;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
+use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
-use Phpactor\Docblock\Tag\DocblockTypes;
-use Phpactor\Docblock\DocblockType;
 use Phpactor\WorseReflection\Core\Types;
 
 class Docblock implements CoreDocblock
@@ -69,17 +69,17 @@ class Docblock implements CoreDocblock
     public function methodTypes(string $methodName): Types
     {
         $types = [];
-
+        
         foreach ($this->docblock->tags()->byName('method') as $tag) {
             if ($tag->methodName() !== $methodName) {
                 continue;
             }
-
+        
             foreach ($tag->types() as $type) {
                 $types[] = $this->typesFromDocblockType($type);
             }
         }
-
+        
         return Types::fromTypes($types);
     }
 
@@ -129,5 +129,22 @@ class Docblock implements CoreDocblock
         }
         
         return Type::fromString($type->__toString());
+    }
+
+    public function propertyTypes(string $propertyName): Types
+    {
+        $types = [];
+        
+        foreach ($this->docblock->tags()->byName('property') as $tag) {
+            if ($tag->propertyName() !== $propertyName) {
+                continue;
+            }
+        
+            foreach ($tag->types() as $type) {
+                $types[] = $this->typesFromDocblockType($type);
+            }
+        }
+        
+        return Types::fromTypes($types);
     }
 }

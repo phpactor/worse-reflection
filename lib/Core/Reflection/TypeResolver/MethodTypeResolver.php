@@ -10,7 +10,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
-class MethodReturnTypeResolver
+class MethodTypeResolver
 {
     /**
      * @var ReflectionMethod

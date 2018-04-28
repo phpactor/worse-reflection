@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
@@ -208,6 +209,47 @@ EOT
                 'Foobar',
                 function ($properties) {
                     $this->assertEquals('Foobar', $properties->get('property1')->declaringClass()->name()->__toString());
+                },
+            ],
+            'Property type from class @property annotation' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+
+/**
+ * @property string $bar
+ */
+class Foobar
+{
+    private $bar;
+}
+EOT
+                ,
+                'Foobar',
+                function (ReflectionPropertyCollection $properties) {
+                    $this->assertEquals(Type::fromString('string'), $properties->get('bar')->inferredTypes()->best());
+                },
+            ],
+            'Property type from class @property annotation with imported name' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+use Bar\Foo;
+
+/**
+ * @property Foo $bar
+ */
+class Foobar
+{
+    private $bar;
+}
+EOT
+                ,
+                'Foobar',
+                function (ReflectionPropertyCollection $properties) {
+                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
                 },
             ],
         ];
