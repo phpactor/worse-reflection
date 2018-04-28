@@ -252,6 +252,31 @@ EOT
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
                 },
             ],
+            'Property type from parent class @property annotation with imported name' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+use Bar\Foo;
+
+/**
+ * @property Foo $bar
+ */
+class Barfoo
+{
+    protected $bar;
+}
+
+class Foobar extends Barfoo
+{
+}
+EOT
+                ,
+                'Foobar',
+                function (ReflectionPropertyCollection $properties) {
+                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+                },
+            ],
         ];
     }
 }
