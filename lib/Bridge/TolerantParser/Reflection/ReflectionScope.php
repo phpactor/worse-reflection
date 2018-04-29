@@ -47,7 +47,7 @@ class ReflectionScope implements CoreReflectionScope
         return Name::fromString($namespaceDefinition->name->getText());
     }
 
-    public function resolveFullyQualifiedName($type, ReflectionClassLike $class): Type
+    public function resolveFullyQualifiedName($type, ReflectionClassLike $class = null): Type
     {
         $resolver = new FullyQualifiedNameResolver(new ArrayLogger());
         return $resolver->resolve($this->node, $type, $class->name());

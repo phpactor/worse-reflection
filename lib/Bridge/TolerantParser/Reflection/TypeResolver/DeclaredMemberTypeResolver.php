@@ -9,7 +9,7 @@ use Microsoft\PhpParser\Node;
 
 class DeclaredMemberTypeResolver
 {
-    public function resolve(ClassName $className, Node $tolerantNode, $tolerantType = null): Type
+    public function resolve(Node $tolerantNode, $tolerantType = null, ClassName $className = null): Type
     {
         if (null === $tolerantType) {
             return Type::undefined();
@@ -23,7 +23,7 @@ class DeclaredMemberTypeResolver
 
         $name = $tolerantType->getResolvedName();
 
-        if ($name === 'self') {
+        if ($className && $name === 'self') {
             return Type::fromString((string) $className);
         }
 

@@ -12,6 +12,21 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterColle
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Name;
 
-interface ReflectionFunction extends ReflectionFunctionLike
+interface ReflectionFunctionLike
 {
+    public function parameters(): ReflectionParameterCollection;
+
+    public function body(): NodeText;
+
+    public function position(): Position;
+
+    public function frame(): Frame;
+
+    public function docblock(): DocBlock;
+
+    public function scope(): ReflectionScope;
+
+    public function inferredTypes(): Types;
+
+    public function type(): Type;
 }
