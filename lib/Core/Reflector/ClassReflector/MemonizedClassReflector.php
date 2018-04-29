@@ -97,10 +97,10 @@ class MemonizedClassReflector implements ClassReflector, FunctionReflector
 
     public function reflectFunction($name): ReflectionFunction
     {
-        if ($class = $this->cachedClass($className)) {
+        if ($class = $this->cachedClass($name)) {
             return $class;
         }
 
-        return $this->putCache($className, $this->innerReflector->reflectFunction($className));
+        return $this->putCache($name, $this->functionReflector->reflectFunction($name));
     }
 }
