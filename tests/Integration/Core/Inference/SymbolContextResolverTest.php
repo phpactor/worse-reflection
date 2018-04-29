@@ -801,7 +801,7 @@ EOT
 
 function hello(): string;
 
-hello(<>);
+hel<>lo();
 EOT
                 , [], ['type' => 'string', 'symbol_type' => Symbol::FUNCTION, 'symbol_name' => 'hello'],
                 ];

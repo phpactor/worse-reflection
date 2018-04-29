@@ -108,16 +108,7 @@ class SymbolContextResolver
 
         /** @var QualifiedName $node */
         if ($node instanceof QualifiedName) {
-            return $this->symbolFactory->context(
-                $node->getText(),
-                $node->getStart(),
-                $node->getEndPosition(),
-                [
-                    'type' => $this->nameResolver->resolve($node),
-                    'symbol_type' => Symbol::CLASS_,
-                    'name' => Name::fromString((string) $node->getResolvedName()),
-                ]
-            );
+            return $this->resolveQualfiedName($frame, $node);
         }
 
         /** @var ConstElement $node */
@@ -291,20 +282,34 @@ class SymbolContextResolver
     private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolContext
     {
         $resolvableNode = $node->callableExpression;
+        return $this->_resolveNode($frame, $resolvableNode);
+    }
 
-        if ($resolvableNode instanceof QualifiedName) {
-            $function = $this->reflector->reflectFunction((string) $resolvableNode->getResolvedName());
+    private function resolveQualfiedName(Frame $frame, QualifiedName $name)
+    {
+        if ($name->parent instanceof CallExpression) {
+            $function = $this->reflector->reflectFunction((string) $name->getResolvedName());
             return $this->symbolFactory->context(
-                $resolvableNode->getText(),
-                $resolvableNode->getStart(),
-                $resolvableNode->getEndPosition(),
+                $name->getText(),
+                $name->getStart(),
+                $name->getEndPosition(),
                 [
                     'symbol_type' => Symbol::FUNCTION,
                     'type' => $function->inferredTypes()->best()
                 ]
             );
         }
-        return $this->_resolveNode($frame, $resolvableNode);
+
+        return $this->symbolFactory->context(
+            $name->getText(),
+            $name->getStart(),
+            $name->getEndPosition(),
+            [
+                'type' => $this->nameResolver->resolve($name),
+                'symbol_type' => Symbol::CLASS_,
+                'name' => Name::fromString((string) $name->getResolvedName()),
+            ]
+        );
     }
 
     private function resolveParameter(Frame $frame, Parameter $node): SymbolContext
