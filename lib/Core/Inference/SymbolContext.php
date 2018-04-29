@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
@@ -38,7 +39,12 @@ final class SymbolContext
      */
     private $scope;
 
-    private function __construct(Symbol $symbol, Types $types, $value = null, Type $containerType = null, ReflectionScope $scope = null)
+    /**
+     * @var Name
+     */
+    private $name;
+
+    private function __construct(Symbol $symbol, Types $types, Name $name = null, $value = null, Type $containerType = null, ReflectionScope $scope = null)
     {
         $this->value = $value;
         $this->symbol = $symbol;
@@ -46,6 +52,7 @@ final class SymbolContext
         $this->types = $types;
         $this->containerType = $containerType;
         $this->scope = $scope;
+        $this->name = $name;
     }
 
     public static function for(Symbol $symbol): SymbolContext
@@ -173,5 +180,18 @@ final class SymbolContext
     public function scope(): ReflectionScope
     {
         return $this->scope;
+    }
+
+    public function name()
+    {
+        return $this->name;
+    }
+
+    public function withName(Name $name): SymbolContext
+    {
+        $new = clone $this;
+        $new->name = $name;
+
+        return $new;
     }
 }

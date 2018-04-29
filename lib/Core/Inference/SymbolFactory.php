@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Type;
 
@@ -14,6 +15,7 @@ class SymbolFactory
             'container_type' => null,
             'type' => null,
             'value' => null,
+            'name' => null,
         ];
 
         if ($diff = array_diff(array_keys($config), array_keys($defaultConfig))) {
@@ -36,7 +38,8 @@ class SymbolFactory
             $symbol,
             $config['type'],
             $config['container_type'],
-            $config['value']
+            $config['value'],
+            $config['name']
         );
     }
 
@@ -44,7 +47,8 @@ class SymbolFactory
         Symbol $symbol,
         Type $type = null,
         Type $containerType = null,
-        $value = null
+        $value = null,
+        Name $name = null
     ): SymbolContext {
         $context = SymbolContext::for($symbol);
 
@@ -58,6 +62,10 @@ class SymbolFactory
 
         if (null !== $value) {
             $context = $context->withValue($value);
+        }
+
+        if (null !== $name) {
+            $context = $context->withName($name);
         }
 
         return $context;

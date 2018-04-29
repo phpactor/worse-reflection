@@ -15,9 +15,11 @@ use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\ReservedWord;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
@@ -109,7 +111,8 @@ class SymbolContextResolver
                 $node->getEndPosition(),
                 [
                     'type' => $this->nameResolver->resolve($node),
-                    'symbol_type' => Symbol::CLASS_
+                    'symbol_type' => Symbol::CLASS_,
+                    'name' => Name::fromString((string) $node->getResolvedName()),
                 ]
             );
         }
@@ -157,8 +160,21 @@ class SymbolContextResolver
                 $node->name->getEndPosition(),
                 $node->name->getStartPosition(),
                 [
+                    'name' => Name::fromString($node->getNamespacedName()),
                     'symbol_type' => Symbol::CLASS_,
                     'type' => Type::fromString($node->getNamespacedName())
+                ]
+            );
+        }
+
+        if ($node instanceof FunctionDeclaration) {
+            return $this->symbolFactory->context(
+                $node->name->getText($node->getFileContents()),
+                $node->name->getEndPosition(),
+                $node->name->getStartPosition(),
+                [
+                    'name' => Name::fromString($node->getNamespacedName()),
+                    'symbol_type' => Symbol::FUNCTION,
                 ]
             );
         }
