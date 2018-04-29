@@ -72,16 +72,16 @@ class ServiceLocator
             $sourceReflector = new ContextualSourceCodeReflector($sourceReflector, $temporarySourceLocator);
         }
 
-        $classReflector = new CoreReflector($sourceReflector, $sourceLocator);
+        $coreReflector = new CoreReflector($sourceReflector, $sourceLocator);
 
         if ($enableCache) {
-            $classReflector = new MemonizedClassReflector($classReflector);
+            $coreReflector = new MemonizedClassReflector($coreReflector, $coreReflector);
         }
 
-
         $this->reflector = new CompositeReflector(
-            $classReflector,
-            $sourceReflector
+            $coreReflector,
+            $sourceReflector,
+            $coreReflector
         );
 
         $this->sourceLocator = $sourceLocator;

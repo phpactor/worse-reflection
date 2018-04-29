@@ -2,13 +2,15 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 
+use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
 
-class MemonizedClassReflector implements ClassReflector
+class MemonizedClassReflector implements ClassReflector, FunctionReflector
 {
     /**
      * @var ClassReflector
@@ -20,9 +22,15 @@ class MemonizedClassReflector implements ClassReflector
      */
     private $cache = [];
 
-    public function __construct(ClassReflector $innerReflector)
+    /**
+     * @var FunctionReflector
+     */
+    private $functionReflector;
+
+    public function __construct(ClassReflector $innerReflector, FunctionReflector $functionReflector)
     {
         $this->innerReflector = $innerReflector;
+        $this->functionReflector = $functionReflector;
     }
 
     /**
@@ -85,5 +93,14 @@ class MemonizedClassReflector implements ClassReflector
         $this->cache[(string) $className] = $class;
 
         return $class;
+    }
+
+    public function reflectFunction($name): ReflectionFunction
+    {
+        if ($class = $this->cachedClass($className)) {
+            return $class;
+        }
+
+        return $this->putCache($className, $this->innerReflector->reflectFunction($className));
     }
 }

@@ -10,11 +10,12 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
+use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 
-interface Reflector extends ClassReflector, SourceCodeReflector
+interface Reflector extends ClassReflector, SourceCodeReflector, FunctionReflector
 {
 }

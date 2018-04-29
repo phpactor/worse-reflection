@@ -4,9 +4,13 @@ namespace Phpactor\WorseReflection\Core\Reflector;
 
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
+use Phpactor\WorseReflection\Core\Exception\FunctionNotFound;
+use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
@@ -26,7 +30,7 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection;
 
-class CoreReflector implements ClassReflector, SourceCodeReflector
+class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionReflector
 {
     /**
      * @var SourceCodeReflector
@@ -174,5 +178,24 @@ class CoreReflector implements ClassReflector, SourceCodeReflector
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
     {
         return $this->sourceReflector->reflectFunctionsIn($sourceCode);
+    }
+
+    public function reflectFunction($name): ReflectionFunction
+    {
+        $name = Name::fromUnknown($name);
+
+        $source = $this->sourceLocator->locate($name);
+        $functions = $this->reflectFunctionsIn($source);
+
+        if (false === $functions->has((string) $name)) {
+            throw new FunctionNotFound(sprintf(
+                'Unable to locate function "%s"',
+                $name->full()
+            ));
+        }
+
+        $function = $functions->get((string) $name);
+
+        return $function;
     }
 }

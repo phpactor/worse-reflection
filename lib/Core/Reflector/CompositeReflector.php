@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector;
 
+use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
@@ -26,12 +27,19 @@ class CompositeReflector implements Reflector
      */
     private $sourceCodeReflector;
 
+    /**
+     * @var FunctionReflector
+     */
+    private $functionReflector;
+
     public function __construct(
         ClassReflector $classReflector,
-        SourceCodeReflector $sourceCodeReflector
+        SourceCodeReflector $sourceCodeReflector,
+        FunctionReflector $functionReflector
     ) {
         $this->classReflector = $classReflector;
         $this->sourceCodeReflector = $sourceCodeReflector;
+        $this->functionReflector = $functionReflector;
     }
 
     /**
@@ -96,5 +104,10 @@ class CompositeReflector implements Reflector
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
     {
         return $this->sourceCodeReflector->reflectFunctionsIn($sourceCode);
+    }
+
+    public function reflectFunction($name): ReflectionFunction
+    {
+        return $this->functionReflector->reflectFunction($name);
     }
 }
