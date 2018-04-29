@@ -41,7 +41,7 @@ class FunctionReturnTypeResolver
     private function resolveTypes(array $types): Types
     {
         return Types::fromTypes(array_map(function (Type $type) {
-            return $type;
+            return $this->function->scope()->resolveFullyQualifiedName($type);
         }, $types));
     }
 }

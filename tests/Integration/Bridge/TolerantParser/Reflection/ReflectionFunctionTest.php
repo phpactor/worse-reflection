@@ -106,6 +106,24 @@ EOT
             }
         ];
 
+        yield 'resolved type class from docblock' => [
+            <<<'EOT'
+<?php
+namespace Bar;
+
+use Foo\Goodbye;
+
+/**
+ * @return Goodbye
+ */
+function hello() {}
+EOT
+            , 'Bar\hello', function (ReflectionFunction $function) {
+                $this->assertEquals(Type::fromString('Foo\Goodbye'), $function->inferredTypes()->best());
+            }
+        ];
+
+
         yield 'parameters' => [
                 <<<'EOT'
 <?php
