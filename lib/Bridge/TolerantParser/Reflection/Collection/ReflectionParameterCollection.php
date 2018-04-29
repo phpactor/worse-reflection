@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionParameter;
@@ -22,6 +24,20 @@ class ReflectionParameterCollection extends AbstractReflectionCollection impleme
         if ($method->parameters) {
             foreach ($method->parameters->getElements() as $parameter) {
                 $items[$parameter->getName()] = new ReflectionParameter($serviceLocator, $reflectionMethod, $parameter);
+            }
+        }
+
+
+        return new static($serviceLocator, $items);
+    }
+
+    public static function fromFunctionDeclaration(ServiceLocator $serviceLocator, FunctionDeclaration $functionDeclaration, ReflectionFunction $reflectionFunction)
+    {
+        $items = [];
+
+        if ($functionDeclaration->parameters) {
+            foreach ($functionDeclaration->parameters->getElements() as $parameter) {
+                $items[$parameter->getName()] = new ReflectionParameter($serviceLocator, $reflectionFunction, $parameter);
             }
         }
 

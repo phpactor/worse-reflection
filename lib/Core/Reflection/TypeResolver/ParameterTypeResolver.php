@@ -25,7 +25,7 @@ class ParameterTypeResolver
         $docblockTypes = $docblock->parameterTypes($this->parameter->name());
 
         $resolvedTypes = array_map(function (Type $type) {
-            return $this->parameter->scope()->resolveFullyQualifiedName($type, $this->parameter->method()->class());
+            return $this->parameter->scope()->resolveFullyQualifiedName($type);
         }, iterator_to_array($docblockTypes));
 
         if (count($resolvedTypes)) {

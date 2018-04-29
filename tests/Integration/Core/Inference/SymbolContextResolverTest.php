@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -750,7 +751,7 @@ class Fo<>obar
 {
 }
 EOT
-                , [], ['type' => 'Foobar', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'Foobar'],
+                , [], ['name' => 'Foobar', 'type' => 'Foobar', 'symbol_type' => Symbol::CLASS_, 'symbol_name' => 'Foobar'],
                 ];
 
         yield 'Property name' => [
@@ -786,9 +787,23 @@ EOT
                 <<<'EOT'
 <?php
 
-function_<>call();
+function f<>oobar()
+{
+}
 EOT
-                , [], ['type' => '<unknown>'],
+                , [], ['symbol_type' => Symbol::FUNCTION, 'symbol_name' => 'foobar', 'name' => 'foobar'],
+                ];
+
+
+        yield 'Function call' => [
+                <<<'EOT'
+<?php
+
+function hello(): string;
+
+hel<>lo();
+EOT
+                , [], ['type' => 'string', 'name' => 'hello', 'symbol_type' => Symbol::FUNCTION, 'symbol_name' => 'hello'],
                 ];
 
         yield 'Trait name' => [
@@ -933,6 +948,9 @@ EOT
                     continue;
                 case 'value':
                     $this->assertEquals($value, $information->value());
+                    continue;
+                case 'name':
+                    $this->assertEquals(Name::fromString($value), $information->name());
                     continue;
                 case 'symbol_type':
                     $this->assertEquals($value, $information->symbol()->symbolType());

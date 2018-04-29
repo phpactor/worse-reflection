@@ -9,5 +9,5 @@ interface SourceCodeLocator
     /**
      * @throws SourceNotFound
      */
-    public function locate(ClassName $className): SourceCode;
+    public function locate(Name $name): SourceCode;
 }

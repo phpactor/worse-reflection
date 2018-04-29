@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\SourceCodeLocator;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -32,17 +33,17 @@ final class StubSourceLocator implements SourceCodeLocator
         $this->cacheDir = $cacheDir;
     }
 
-    public function locate(ClassName $className): SourceCode
+    public function locate(Name $name): SourceCode
     {
         $map = $this->map();
 
-        if (isset($map[(string) $className])) {
-            return SourceCode::fromPath($map[(string) $className]);
+        if (isset($map[(string) $name])) {
+            return SourceCode::fromPath($map[(string) $name]);
         }
 
         throw new SourceNotFound(sprintf(
             'Could not find source for "%s" in stub directory "%s"',
-            (string) $className,
+            (string) $name,
             $this->stubPath
         ));
     }
@@ -65,17 +66,8 @@ final class StubSourceLocator implements SourceCodeLocator
                 continue;
             }
 
-            $classes = $this->reflector->reflectClassesIn(
-                SourceCode::fromPath($file)
-            );
-
-            if (empty($classes)) {
-                continue;
-            }
-
-            foreach ($classes as $class) {
-                $map[(string) $class->name()] = (string) $file;
-            }
+            $map = $this->buildClassMap($file, $map);
+            $map = $this->buildFunctionMap($file, $map);
         }
 
         if (!file_exists($this->cacheDir)) {
@@ -96,5 +88,31 @@ final class StubSourceLocator implements SourceCodeLocator
             new \RecursiveDirectoryIterator($this->stubPath, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::SELF_FIRST
         );
+    }
+
+    private function buildClassMap($file, array $map): array
+    {
+        $functions = $this->reflector->reflectClassesIn(
+            SourceCode::fromPath($file)
+        );
+        
+        foreach ($functions as $function) {
+            $map[(string) $function->name()] = (string) $file;
+        }
+
+        return $map;
+    }
+
+    private function buildFunctionMap($file, array $map): array
+    {
+        $functions = $this->reflector->reflectFunctionsIn(
+            SourceCode::fromPath($file)
+        );
+        
+        foreach ($functions as $function) {
+            $map[(string) $function->name()] = (string) $file;
+        }
+
+        return $map;
     }
 }

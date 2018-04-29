@@ -15,9 +15,11 @@ use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\ReservedWord;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Logger;
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
@@ -28,7 +30,6 @@ use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
-use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
@@ -47,7 +48,7 @@ class SymbolContextResolver
     private $memberTypeResolver;
 
     /**
-     * @var ClassReflector
+     * @var Reflector
      */
     private $reflector;
 
@@ -66,7 +67,11 @@ class SymbolContextResolver
      */
     private $nameResolver;
 
-    public function __construct(ClassReflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
+    public function __construct(
+        Reflector $reflector,
+        Logger $logger,
+        SymbolFactory $symbolFactory = null
+    )
     {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
@@ -103,15 +108,7 @@ class SymbolContextResolver
 
         /** @var QualifiedName $node */
         if ($node instanceof QualifiedName) {
-            return $this->symbolFactory->context(
-                $node->getText(),
-                $node->getStart(),
-                $node->getEndPosition(),
-                [
-                    'type' => $this->nameResolver->resolve($node),
-                    'symbol_type' => Symbol::CLASS_
-                ]
-            );
+            return $this->resolveQualfiedName($frame, $node);
         }
 
         /** @var ConstElement $node */
@@ -157,8 +154,21 @@ class SymbolContextResolver
                 $node->name->getEndPosition(),
                 $node->name->getStartPosition(),
                 [
+                    'name' => Name::fromString($node->getNamespacedName()),
                     'symbol_type' => Symbol::CLASS_,
                     'type' => Type::fromString($node->getNamespacedName())
+                ]
+            );
+        }
+
+        if ($node instanceof FunctionDeclaration) {
+            return $this->symbolFactory->context(
+                $node->name->getText($node->getFileContents()),
+                $node->name->getEndPosition(),
+                $node->name->getStartPosition(),
+                [
+                    'name' => Name::fromString($node->getNamespacedName()),
+                    'symbol_type' => Symbol::FUNCTION,
                 ]
             );
         }
@@ -275,6 +285,36 @@ class SymbolContextResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
+    private function resolveQualfiedName(Frame $frame, QualifiedName $node)
+    {
+        if ($node->parent instanceof CallExpression) {
+            $name = $node->getResolvedName() ?: $node;
+            $name = Name::fromString((string) $name);
+            $function = $this->reflector->reflectFunction($name);
+            return $this->symbolFactory->context(
+                $name->short(),
+                $node->getStart(),
+                $node->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::FUNCTION,
+                    'type' => $function->inferredTypes()->best(),
+                    'name' => $name
+                ]
+            );
+        }
+
+        return $this->symbolFactory->context(
+            $node->getText(),
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'type' => $this->nameResolver->resolve($node),
+                'symbol_type' => Symbol::CLASS_,
+                'name' => Name::fromString((string) $node->getResolvedName()),
+            ]
+        );
+    }
+
     private function resolveParameter(Frame $frame, Parameter $node): SymbolContext
     {
         /** @var MethodDeclaration $method */
@@ -290,7 +330,7 @@ class SymbolContextResolver
         if ($typeDeclaration instanceof QualifiedName) {
             $type = $this->nameResolver->resolve($node->typeDeclaration);
         }
-        
+
         if ($typeDeclaration instanceof Token) {
             $type = Type::fromString($typeDeclaration->getText($node->getFileContents()));
         }
@@ -320,9 +360,9 @@ class SymbolContextResolver
         if (null === $class) {
             return SymbolContext::none()
                 ->withIssue(sprintf(
-                'Cannot find class context "%s" for parameter',
-                $node->getName()
-            ));
+                    'Cannot find class context "%s" for parameter',
+                    $node->getName()
+                ));
         }
 
         /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
@@ -332,11 +372,11 @@ class SymbolContextResolver
         if (!$reflectionMethod->parameters()->has($node->getName())) {
             return SymbolContext::none()
                 ->withIssue(sprintf(
-                'Cannot find parameter "%s" for method "%s" in class "%s"',
-                $node->getName(),
-                $reflectionMethod->name(),
-                $reflectionClass->name()
-            ));
+                    'Cannot find parameter "%s" for method "%s" in class "%s"',
+                    $node->getName(),
+                    $reflectionMethod->name(),
+                    $reflectionClass->name()
+                ));
         }
         $reflectionParameter = $reflectionMethod->parameters()->get($node->getName());
 
@@ -461,51 +501,51 @@ class SymbolContextResolver
         SymbolContext $info,
         SubscriptExpression $node = null
     ): SymbolContext {
-        if (null === $node->accessExpression) {
-            $info = $info->withIssue(sprintf(
-                'Subscript expression "%s" is incomplete',
-                (string) $node->getText()
-            ));
-            return $info;
-        }
-
-        $node = $node->accessExpression;
-
-        if ($info->type() != Type::array()) {
-            $info = $info->withIssue(sprintf(
-                'Not resolving subscript expression of type "%s"',
-                (string) $info->type()
-            ));
-            return $info;
-        }
-
-        $subjectValue = $info->value();
-
-        if (false === is_array($subjectValue)) {
-            $info = $info->withIssue(sprintf(
-                'Array value for symbol "%s" is not an array, is a "%s"',
-                (string) $info->symbol(),
-                gettype($subjectValue)
-            ));
-
-            return $info;
-        }
-
-        if ($node instanceof StringLiteral) {
-            $string = $this->_resolveNode($frame, $node);
-
-            if (array_key_exists($string->value(), $subjectValue)) {
-                $value = $subjectValue[$string->value()];
-                return $string->withValue($value);
-            }
-        }
-
+    if (null === $node->accessExpression) {
         $info = $info->withIssue(sprintf(
-            'Did not resolve access expression for node type "%s"',
-            get_class($node)
+            'Subscript expression "%s" is incomplete',
+            (string) $node->getText()
+        ));
+        return $info;
+    }
+
+    $node = $node->accessExpression;
+
+    if ($info->type() != Type::array()) {
+        $info = $info->withIssue(sprintf(
+            'Not resolving subscript expression of type "%s"',
+            (string) $info->type()
+        ));
+        return $info;
+    }
+
+    $subjectValue = $info->value();
+
+    if (false === is_array($subjectValue)) {
+        $info = $info->withIssue(sprintf(
+            'Array value for symbol "%s" is not an array, is a "%s"',
+            (string) $info->symbol(),
+            gettype($subjectValue)
         ));
 
         return $info;
+    }
+
+    if ($node instanceof StringLiteral) {
+        $string = $this->_resolveNode($frame, $node);
+
+        if (array_key_exists($string->value(), $subjectValue)) {
+            $value = $subjectValue[$string->value()];
+            return $string->withValue($value);
+        }
+    }
+
+    $info = $info->withIssue(sprintf(
+        'Did not resolve access expression for node type "%s"',
+        get_class($node)
+    ));
+
+    return $info;
     }
 
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolContext

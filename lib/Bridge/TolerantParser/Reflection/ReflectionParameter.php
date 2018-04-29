@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Reflection\ReflectionFunctionLike;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Parameter;
 use Phpactor\WorseReflection\Core\Type;
@@ -34,14 +35,14 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     /**
      * @var CoreReflectionMethod
      */
-    private $method;
+    private $functionLike;
 
-    public function __construct(ServiceLocator $serviceLocator, CoreReflectionMethod $method, Parameter $parameter)
+    public function __construct(ServiceLocator $serviceLocator, ReflectionFunctionLike $functionLike, Parameter $parameter)
     {
         $this->serviceLocator = $serviceLocator;
         $this->parameter = $parameter;
         $this->memberTypeResolver = new DeclaredMemberTypeResolver();
-        $this->method = $method;
+        $this->functionLike = $functionLike;
     }
 
     public function name(): string
@@ -59,10 +60,12 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
 
     public function type(): Type
     {
+        $className = $this->functionLike instanceof ReflectionMethod ? $this->functionLike->class()->name() : null;
+
         return $this->memberTypeResolver->resolve(
-            $this->method->class()->name(),
             $this->parameter,
-            $this->parameter->typeDeclaration
+            $this->parameter->typeDeclaration,
+            $className
         );
     }
 
@@ -91,8 +94,16 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
         return (bool) $this->parameter->byRefToken;
     }
 
-    public function method(): CoreReflectionMethod
+    /**
+     * @deprecated use functionLike instead
+     */
+    public function method(): ReflectionFunctionLike
     {
-        return $this->method;
+        return $this->functionLike;
+    }
+
+    public function functionLike(): ReflectionFunctionLike
+    {
+        return $this->functionLike;
     }
 }

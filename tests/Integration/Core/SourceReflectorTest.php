@@ -11,41 +11,8 @@ use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Exception\UnexpectedReflectionType;
 use Phpactor\TestUtils\ExtractOffset;
 
-class ReflectorTest extends IntegrationTestCase
+class SourceReflectorTest extends IntegrationTestCase
 {
-    /**
-     * @dataProvider provideReflectClassSuccess
-     */
-    public function testReflectClassSuccess(string $source, string $class, string $method, string $expectedType)
-    {
-        $reflection = $this->createReflector($source)->$method($class);
-        $this->assertInstanceOf($expectedType, $reflection);
-    }
-
-    public function provideReflectClassSuccess()
-    {
-        return [
-            'Class' => [
-                '<?php class Foobar {}',
-                'Foobar',
-                'reflectClass',
-                ReflectionClass::class
-            ],
-            'Interface' => [
-                '<?php interface Foobar {}',
-                'Foobar',
-                'reflectInterface',
-                ReflectionInterface::class
-            ],
-            'Trait' => [
-                '<?php trait Foobar {}',
-                'Foobar',
-                'reflectTrait',
-                ReflectionTrait::class
-            ]
-        ];
-    }
-
     /**
      * @dataProvider provideReflectClassNotCorrectType
      */

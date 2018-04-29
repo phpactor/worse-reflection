@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\Composer;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\ClassName;
 use Composer\Autoload\ClassLoader;
@@ -20,7 +21,7 @@ class ComposerSourceLocator implements SourceCodeLocator
     /**
      * {@inheritdoc}
      */
-    public function locate(ClassName $className): SourceCode
+    public function locate(Name $className): SourceCode
     {
         $path = $this->classLoader->findFile((string) $className);
 

@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\SourceCodeLocator;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -33,7 +34,7 @@ class TemporarySourceLocator implements SourceCodeLocator
     /**
      * {@inheritDoc}
      */
-    public function locate(ClassName $className): SourceCode
+    public function locate(Name $name): SourceCode
     {
         if (null === $this->source) {
             throw new SourceNotFound('No source set on temporary locator');
@@ -41,10 +42,10 @@ class TemporarySourceLocator implements SourceCodeLocator
 
         $classes = $this->reflector->reflectClassesIn($this->source);
 
-        if (false === $classes->has((string) $className)) {
+        if (false === $classes->has((string) $name)) {
             throw new SourceNotFound(sprintf(
                 'Class "%s" not found',
-                (string) $className
+                (string) $name
             ));
         }
 

@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 use Phpactor\ClassFileConverter\Domain\ClassToFile;
 use Phpactor\WorseReflection\Core\ClassName as WorseClassName;
 use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\ClassFileConverter\Domain\ClassName;
@@ -24,12 +25,12 @@ class ClassToFileSourceLocator implements SourceCodeLocator
     /**
      * {@inheritDoc}
      */
-    public function locate(WorseClassName $className): SourceCode
+    public function locate(Name $name): SourceCode
     {
-        $candidates = $this->converter->classToFileCandidates(ClassName::fromString((string) $className));
+        $candidates = $this->converter->classToFileCandidates(ClassName::fromString((string) $name));
 
         if ($candidates->noneFound()) {
-            throw new SourceNotFound(sprintf('Could not locate a candidate for "%s"', (string) $className));
+            throw new SourceNotFound(sprintf('Could not locate a candidate for "%s"', (string) $name));
         }
 
         foreach ($candidates as $candidate) {
@@ -38,6 +39,6 @@ class ClassToFileSourceLocator implements SourceCodeLocator
             }
         }
 
-        throw new SourceNotFound($className);
+        throw new SourceNotFound($name);
     }
 }

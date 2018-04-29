@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector\SourceCode;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
@@ -59,6 +60,19 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         $this->locator->setSourceCode($sourceCode);
 
         $offset = $this->innerReflector->reflectMethodCall($sourceCode, $offset);
+
+        return $offset;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
+    {
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $this->locator->setSourceCode($sourceCode);
+
+        $offset = $this->innerReflector->reflectFunctionsIn($sourceCode);
 
         return $offset;
     }

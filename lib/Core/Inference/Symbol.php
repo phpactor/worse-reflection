@@ -9,6 +9,7 @@ final class Symbol
     const CLASS_ = 'class';
     const VARIABLE = 'variable';
     const METHOD = 'method';
+    const FUNCTION = 'function';
     const PROPERTY = 'property';
     const CONSTANT = 'constant';
     const STRING = 'string';
@@ -23,6 +24,7 @@ final class Symbol
         self::UNKNOWN,
         self::PROPERTY,
         self::CONSTANT,
+        self::FUNCTION,
         self::METHOD,
         self::STRING,
         self::NUMBER,

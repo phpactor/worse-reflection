@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\SourceCodeLocator;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Reflector;
@@ -29,9 +30,15 @@ class StubSourceLocatorTest extends IntegrationTestCase
         );
     }
 
-    public function testCacheBuilder()
+    public function testCanLocateClasses()
     {
         $code = $this->cacheBuilder->locate(ClassName::fromString('StubOne'));
         $this->assertContains('class StubOne', (string) $code);
+    }
+
+    public function testCanLocateFunctions()
+    {
+        $code = $this->cacheBuilder->locate(Name::fromString('hello_world'));
+        $this->assertContains('function hello_world()', (string) $code);
     }
 }

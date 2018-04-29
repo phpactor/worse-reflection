@@ -13,6 +13,9 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset a
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Parser;
+use Phpactor\WorseReflection\Core\Reflector\Collection\ReflectionFunctionCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection as CoreReflectionFunctionCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionFunctionCollection as TolerantReflectionFunctionCollection;
 
 class TolerantSourceCodeReflector implements SourceCodeReflector
 {
@@ -85,5 +88,15 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $nodeReflector = new NodeReflector($this->serviceLocator);
 
         return $nodeReflector->reflectNode($frame, $node);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectFunctionsIn($sourceCode): CoreReflectionFunctionCollection
+    {
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $node = $this->parser->parseSourceFile((string) $sourceCode);
+        return TolerantReflectionFunctionCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
 }
