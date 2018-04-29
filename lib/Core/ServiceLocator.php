@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryBridge;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\Reflector\CompositeReflector;
-use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedClassReflector;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedReflector;
 use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeReflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
@@ -75,7 +75,7 @@ class ServiceLocator
         $coreReflector = new CoreReflector($sourceReflector, $sourceLocator);
 
         if ($enableCache) {
-            $coreReflector = new MemonizedClassReflector($coreReflector, $coreReflector);
+            $coreReflector = new MemonizedReflector($coreReflector, $coreReflector);
         }
 
         $this->reflector = new CompositeReflector(

@@ -10,12 +10,12 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
 
-class MemonizedClassReflector implements ClassReflector, FunctionReflector
+class MemonizedReflector implements ClassReflector, FunctionReflector
 {
     /**
      * @var ClassReflector
      */
-    private $innerReflector;
+    private $classReflector;
 
     /**
      * @var array
@@ -29,7 +29,7 @@ class MemonizedClassReflector implements ClassReflector, FunctionReflector
 
     public function __construct(ClassReflector $innerReflector, FunctionReflector $functionReflector)
     {
-        $this->innerReflector = $innerReflector;
+        $this->classReflector = $innerReflector;
         $this->functionReflector = $functionReflector;
     }
 
@@ -38,11 +38,11 @@ class MemonizedClassReflector implements ClassReflector, FunctionReflector
      */
     public function reflectClass($className): ReflectionClass
     {
-        if ($class = $this->cachedClass($className)) {
+        if ($class = $this->cachedName($className)) {
             return $class;
         }
 
-        return $this->putCache($className, $this->innerReflector->reflectClass($className));
+        return $this->putCache($className, $this->classReflector->reflectClass($className));
     }
 
     /**
@@ -50,11 +50,11 @@ class MemonizedClassReflector implements ClassReflector, FunctionReflector
      */
     public function reflectInterface($className): ReflectionInterface
     {
-        if ($class = $this->cachedClass($className)) {
+        if ($class = $this->cachedName($className)) {
             return $class;
         }
 
-        return $this->putCache($className, $this->innerReflector->reflectInterface($className));
+        return $this->putCache($className, $this->classReflector->reflectInterface($className));
     }
 
     /**
@@ -62,11 +62,11 @@ class MemonizedClassReflector implements ClassReflector, FunctionReflector
      */
     public function reflectTrait($className): ReflectionTrait
     {
-        if ($class = $this->cachedClass($className)) {
+        if ($class = $this->cachedName($className)) {
             return $class;
         }
 
-        return $this->putCache($className, $this->innerReflector->reflectTrait($className));
+        return $this->putCache($className, $this->classReflector->reflectTrait($className));
     }
 
     /**
@@ -74,21 +74,21 @@ class MemonizedClassReflector implements ClassReflector, FunctionReflector
      */
     public function reflectClassLike($className): ReflectionClassLike
     {
-        if ($class = $this->cachedClass($className)) {
+        if ($class = $this->cachedName($className)) {
             return $class;
         }
 
-        return $this->putCache($className, $this->innerReflector->reflectClassLike($className));
+        return $this->putCache($className, $this->classReflector->reflectClassLike($className));
     }
 
-    private function cachedClass($className)
+    private function cachedName($className)
     {
         if (isset($this->cache[(string) $className])) {
             return $this->cache[(string) $className];
         }
     }
 
-    private function putCache($className, ReflectionClassLike $class)
+    private function putCache($className, $class)
     {
         $this->cache[(string) $className] = $class;
 
@@ -97,7 +97,7 @@ class MemonizedClassReflector implements ClassReflector, FunctionReflector
 
     public function reflectFunction($name): ReflectionFunction
     {
-        if ($class = $this->cachedClass($name)) {
+        if ($class = $this->cachedName($name)) {
             return $class;
         }
 

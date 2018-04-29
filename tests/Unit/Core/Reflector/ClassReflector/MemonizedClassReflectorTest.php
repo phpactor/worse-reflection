@@ -3,15 +3,16 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflector\ClassReflector;
 
 use PHPUnit\Framework\TestCase;
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedClassReflector;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedReflector;
 use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
 
 class MemonizedClassReflectorTest extends TestCase
 {
     /**
-     * @var Classreflector|ObjectProphecy
+     * @var ClassReflector|ObjectProphecy
      */
     private $innerClassReflector;
 
@@ -20,12 +21,22 @@ class MemonizedClassReflectorTest extends TestCase
      */
     private $reflector;
 
+    /**
+     * @var ObjectProphecy|FunctionReflector
+     */
+    private $innerFunctionReflector;
+
+    /**
+     * @var ClassName
+     */
+    private $className;
+
     public function setUp()
     {
         $this->innerClassReflector = $this->prophesize(ClassReflector::class);
         $this->innerFunctionReflector = $this->prophesize(FunctionReflector::class);
 
-        $this->reflector = new MemonizedClassReflector(
+        $this->reflector = new MemonizedReflector(
             $this->innerClassReflector->reveal(),
             $this->innerFunctionReflector->reveal()
         );
@@ -62,5 +73,14 @@ class MemonizedClassReflectorTest extends TestCase
         $this->reflector->reflectClassLike($this->className);
         $this->reflector->reflectClassLike($this->className);
         $this->reflector->reflectClassLike($this->className);
+    }
+
+    public function testReflectFunction()
+    {
+        $name = Name::fromString('Foo');
+        $this->innerFunctionReflector->reflectFunction($name)->shouldBeCalledTimes(1);
+        $this->reflector->reflectFunction($name);
+        $this->reflector->reflectFunction($name);
+        $this->reflector->reflectFunction($name);
     }
 }
