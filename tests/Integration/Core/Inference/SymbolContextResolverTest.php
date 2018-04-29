@@ -791,7 +791,7 @@ function f<>oobar()
 {
 }
 EOT
-                , [], ['name' => 'foobar'],
+                , [], ['symbol_type' => Symbol::FUNCTION, 'symbol_name' => 'foobar', 'name' => 'foobar'],
                 ];
 
 
@@ -803,7 +803,7 @@ function hello(): string;
 
 hello(<>);
 EOT
-                , [], ['type' => 'string'],
+                , [], ['type' => 'string', 'symbol_type' => Symbol::FUNCTION, 'symbol_name' => 'hello'],
                 ];
 
         yield 'Trait name' => [

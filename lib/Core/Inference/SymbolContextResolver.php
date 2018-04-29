@@ -295,7 +295,7 @@ class SymbolContextResolver
         if ($resolvableNode instanceof QualifiedName) {
             $function = $this->reflector->reflectFunction((string) $resolvableNode->getResolvedName());
             return $this->symbolFactory->context(
-                $resolvableNode->getText($node->getFileContents()),
+                $resolvableNode->getText(),
                 $resolvableNode->getStart(),
                 $resolvableNode->getEndPosition(),
                 [
