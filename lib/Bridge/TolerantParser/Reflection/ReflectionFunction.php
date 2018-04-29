@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection as TolerantReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction as CoreReflectionFunction;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
@@ -81,6 +82,7 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
 
     public function parameters(): ReflectionParameterCollection
     {
+        return TolerantReflectionParameterCollection::fromFunctionDeclaration($this->serviceLocator, $this->node, $this);
     }
 
     public function body(): NodeText

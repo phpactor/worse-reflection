@@ -11,15 +11,13 @@ use Phpactor\WorseReflection\Core\Type;
 
 class ReflectionFunctionTest extends IntegrationTestCase
 {
-    const TEST_FUNCTION_NAME = 'hello';
-
     /**
      * @dataProvider provideReflectsFunction
      */
-    public function testReflects(string $source, Closure $assertion)
+    public function testReflects(string $source, string $functionName, Closure $assertion)
     {
         $functions = $this->createReflector($source)->reflectFunctionsIn($source);
-        $assertion($functions->get(self::TEST_FUNCTION_NAME));
+        $assertion($functions->get($functionName));
     }
 
     public function provideReflectsFunction()
@@ -31,8 +29,8 @@ function hello()
 {
 }
 EOT
-            , function (ReflectionFunction $function) {
-                $this->assertEquals(self::TEST_FUNCTION_NAME, $function->name());
+            , 'hello', function (ReflectionFunction $function) {
+                $this->assertEquals('hello', $function->name());
                 $this->assertEquals(Position::fromStartAndEnd(6, 26), $function->position());
             }
         ];
@@ -45,7 +43,7 @@ function hello()
     $hello = 'hello';
 }
 EOT
-            , function (ReflectionFunction $function) {
+            , 'hello', function (ReflectionFunction $function) {
                 $this->assertCount(1, $function->frame()->locals());
             }
         ];
@@ -59,7 +57,7 @@ function hello()
     $hello = 'hello';
 }
 EOT
-            , function (ReflectionFunction $function) {
+            , 'hello', function (ReflectionFunction $function) {
                 $this->assertEquals('/** Hello */', trim($function->docblock()->raw()));
             }
         ];
@@ -69,7 +67,7 @@ EOT
 <?php
 function hello(): string {}
 EOT
-            , function (ReflectionFunction $function) {
+            , 'hello', function (ReflectionFunction $function) {
                 $this->assertEquals('string', $function->type()->short());
             }
         ];
@@ -80,7 +78,7 @@ EOT
 use Foobar\Barfoo;
 function hello(): Barfoo {}
 EOT
-            , function (ReflectionFunction $function) {
+            , 'hello', function (ReflectionFunction $function) {
                 $this->assertEquals('Foobar\Barfoo', $function->type()->className()->full());
             }
         ];
@@ -90,7 +88,7 @@ EOT
 <?php
 function hello() {}
 EOT
-            , function (ReflectionFunction $function) {
+            , 'hello', function (ReflectionFunction $function) {
                 $this->assertEquals(Type::unknown(), $function->type());
             }
         ];
@@ -103,9 +101,25 @@ EOT
  */
 function hello() {}
 EOT
-            , function (ReflectionFunction $function) {
+            , 'hello', function (ReflectionFunction $function) {
                 $this->assertEquals(Type::string(), $function->inferredTypes()->best());
             }
+        ];
+
+        yield 'parameters' => [
+                <<<'EOT'
+<?php
+
+namespace Bar;
+
+function hello($foobar, Barfoo $barfoo, int $number)
+{
+}
+EOT
+        , 'Bar\hello', function (ReflectionFunction $function) {
+            $this->assertCount(3, $function->parameters());
+            $this->assertEquals('Bar\Barfoo', $function->parameters()->get('barfoo')->inferredTypes()->best());
+        },
         ];
     }
 }
