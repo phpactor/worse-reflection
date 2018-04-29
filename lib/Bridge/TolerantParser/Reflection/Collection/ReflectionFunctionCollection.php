@@ -22,7 +22,7 @@ class ReflectionFunctionCollection extends AbstractReflectionCollection implemen
                 continue;
             }
 
-            $items[(string) $descendentNode->getNamespacedName()] = new ReflectionFunction($serviceLocator, $descendentNode);
+            $items[(string) $descendentNode->getNamespacedName()] = new ReflectionFunction($sourceCode, $serviceLocator, $descendentNode);
         }
 
         return new self($serviceLocator, $items);

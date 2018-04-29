@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
+use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
@@ -35,10 +36,16 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
      */
     private $node;
 
-    public function __construct(ServiceLocator $serviceLocator, FunctionDeclaration $node)
+    /**
+     * @var SourceCode
+     */
+    private $sourceCode;
+
+    public function __construct(SourceCode $sourceCode, ServiceLocator $serviceLocator, FunctionDeclaration $node)
     {
         $this->serviceLocator = $serviceLocator;
         $this->node = $node;
+        $this->sourceCode = $sourceCode;
     }
 
     public function name(): Name
@@ -92,5 +99,10 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
     protected function node(): Node
     {
         return $this->node;
+    }
+
+    public function sourceCode(): SourceCode
+    {
+        return $this->sourceCode;
     }
 }
