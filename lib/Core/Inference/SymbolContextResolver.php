@@ -18,6 +18,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Token;
+use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Reflector;
@@ -290,17 +291,23 @@ class SymbolContextResolver
         if ($node->parent instanceof CallExpression) {
             $name = $node->getResolvedName() ?: $node;
             $name = Name::fromString((string) $name);
-            $function = $this->reflector->reflectFunction($name);
-            return $this->symbolFactory->context(
+            $context = $this->symbolFactory->context(
                 $name->short(),
                 $node->getStart(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::FUNCTION,
-                    'type' => $function->inferredTypes()->best(),
-                    'name' => $name
                 ]
             );
+
+            try {
+                $function = $this->reflector->reflectFunction($name);
+            } catch (NotFound $exception) {
+                return $context->withIssue($exception->getMessage());
+            }
+
+            return $context->withTypes($function->inferredTypes())
+                ->withName($name);
         }
 
         return $this->symbolFactory->context(
