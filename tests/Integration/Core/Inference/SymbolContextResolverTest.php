@@ -803,7 +803,7 @@ function hello(): string;
 
 hel<>lo();
 EOT
-                , [], ['type' => 'string', 'symbol_type' => Symbol::FUNCTION, 'symbol_name' => 'hello'],
+                , [], ['type' => 'string', 'name' => 'hello', 'symbol_type' => Symbol::FUNCTION, 'symbol_name' => 'hello'],
                 ];
 
         yield 'Trait name' => [

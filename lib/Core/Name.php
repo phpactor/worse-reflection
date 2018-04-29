@@ -18,7 +18,7 @@ class Name
         return new static($parts, false);
     }
 
-    public static function fromString(string $string)
+    public static function fromString(string $string): Name
     {
         $fullyQualified = 0 === strpos($string, '\\');
         $parts = explode('\\', trim($string, '\\'));

@@ -285,29 +285,32 @@ class SymbolContextResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    private function resolveQualfiedName(Frame $frame, QualifiedName $name)
+    private function resolveQualfiedName(Frame $frame, QualifiedName $node)
     {
-        if ($name->parent instanceof CallExpression) {
-            $function = $this->reflector->reflectFunction((string) $name->getResolvedName());
+        if ($node->parent instanceof CallExpression) {
+            $name = $node->getResolvedName() ?: $node;
+            $name = Name::fromString((string) $name);
+            $function = $this->reflector->reflectFunction($name);
             return $this->symbolFactory->context(
-                $name->getText(),
-                $name->getStart(),
-                $name->getEndPosition(),
+                $name->short(),
+                $node->getStart(),
+                $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::FUNCTION,
-                    'type' => $function->inferredTypes()->best()
+                    'type' => $function->inferredTypes()->best(),
+                    'name' => $name
                 ]
             );
         }
 
         return $this->symbolFactory->context(
-            $name->getText(),
-            $name->getStart(),
-            $name->getEndPosition(),
+            $node->getText(),
+            $node->getStart(),
+            $node->getEndPosition(),
             [
-                'type' => $this->nameResolver->resolve($name),
+                'type' => $this->nameResolver->resolve($node),
                 'symbol_type' => Symbol::CLASS_,
-                'name' => Name::fromString((string) $name->getResolvedName()),
+                'name' => Name::fromString((string) $node->getResolvedName()),
             ]
         );
     }
