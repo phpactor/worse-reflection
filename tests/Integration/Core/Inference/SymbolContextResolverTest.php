@@ -795,15 +795,15 @@ EOT
                 ];
 
 
-        yield 'Function call name' => [
+        yield 'Function call' => [
                 <<<'EOT'
 <?php
 
-use function Foobar\function_call;
+function hello(): string;
 
-function_<>call();
+hello(<>);
 EOT
-                , [], ['name' => 'Foobar\function_call'],
+                , [], ['type' => 'string'],
                 ];
 
         yield 'Trait name' => [

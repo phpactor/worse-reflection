@@ -30,7 +30,6 @@ use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ConstElement;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
-use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
@@ -49,7 +48,7 @@ class SymbolContextResolver
     private $memberTypeResolver;
 
     /**
-     * @var ClassReflector
+     * @var Reflector
      */
     private $reflector;
 
@@ -68,7 +67,11 @@ class SymbolContextResolver
      */
     private $nameResolver;
 
-    public function __construct(ClassReflector $reflector, Logger $logger, SymbolFactory $symbolFactory = null)
+    public function __construct(
+        Reflector $reflector,
+        Logger $logger,
+        SymbolFactory $symbolFactory = null
+    )
     {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
@@ -288,6 +291,19 @@ class SymbolContextResolver
     private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolContext
     {
         $resolvableNode = $node->callableExpression;
+
+        if ($resolvableNode instanceof QualifiedName) {
+            $function = $this->reflector->reflectFunction((string) $resolvableNode->getResolvedName());
+            return $this->symbolFactory->context(
+                $resolvableNode->getText($node->getFileContents()),
+                $resolvableNode->getStart(),
+                $resolvableNode->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::FUNCTION,
+                    'type' => $function->inferredTypes()->best()
+                ]
+            );
+        }
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
@@ -306,7 +322,7 @@ class SymbolContextResolver
         if ($typeDeclaration instanceof QualifiedName) {
             $type = $this->nameResolver->resolve($node->typeDeclaration);
         }
-        
+
         if ($typeDeclaration instanceof Token) {
             $type = Type::fromString($typeDeclaration->getText($node->getFileContents()));
         }
@@ -336,9 +352,9 @@ class SymbolContextResolver
         if (null === $class) {
             return SymbolContext::none()
                 ->withIssue(sprintf(
-                'Cannot find class context "%s" for parameter',
-                $node->getName()
-            ));
+                    'Cannot find class context "%s" for parameter',
+                    $node->getName()
+                ));
         }
 
         /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
@@ -348,11 +364,11 @@ class SymbolContextResolver
         if (!$reflectionMethod->parameters()->has($node->getName())) {
             return SymbolContext::none()
                 ->withIssue(sprintf(
-                'Cannot find parameter "%s" for method "%s" in class "%s"',
-                $node->getName(),
-                $reflectionMethod->name(),
-                $reflectionClass->name()
-            ));
+                    'Cannot find parameter "%s" for method "%s" in class "%s"',
+                    $node->getName(),
+                    $reflectionMethod->name(),
+                    $reflectionClass->name()
+                ));
         }
         $reflectionParameter = $reflectionMethod->parameters()->get($node->getName());
 
@@ -477,51 +493,51 @@ class SymbolContextResolver
         SymbolContext $info,
         SubscriptExpression $node = null
     ): SymbolContext {
-        if (null === $node->accessExpression) {
-            $info = $info->withIssue(sprintf(
-                'Subscript expression "%s" is incomplete',
-                (string) $node->getText()
-            ));
-            return $info;
-        }
-
-        $node = $node->accessExpression;
-
-        if ($info->type() != Type::array()) {
-            $info = $info->withIssue(sprintf(
-                'Not resolving subscript expression of type "%s"',
-                (string) $info->type()
-            ));
-            return $info;
-        }
-
-        $subjectValue = $info->value();
-
-        if (false === is_array($subjectValue)) {
-            $info = $info->withIssue(sprintf(
-                'Array value for symbol "%s" is not an array, is a "%s"',
-                (string) $info->symbol(),
-                gettype($subjectValue)
-            ));
-
-            return $info;
-        }
-
-        if ($node instanceof StringLiteral) {
-            $string = $this->_resolveNode($frame, $node);
-
-            if (array_key_exists($string->value(), $subjectValue)) {
-                $value = $subjectValue[$string->value()];
-                return $string->withValue($value);
-            }
-        }
-
+    if (null === $node->accessExpression) {
         $info = $info->withIssue(sprintf(
-            'Did not resolve access expression for node type "%s"',
-            get_class($node)
+            'Subscript expression "%s" is incomplete',
+            (string) $node->getText()
+        ));
+        return $info;
+    }
+
+    $node = $node->accessExpression;
+
+    if ($info->type() != Type::array()) {
+        $info = $info->withIssue(sprintf(
+            'Not resolving subscript expression of type "%s"',
+            (string) $info->type()
+        ));
+        return $info;
+    }
+
+    $subjectValue = $info->value();
+
+    if (false === is_array($subjectValue)) {
+        $info = $info->withIssue(sprintf(
+            'Array value for symbol "%s" is not an array, is a "%s"',
+            (string) $info->symbol(),
+            gettype($subjectValue)
         ));
 
         return $info;
+    }
+
+    if ($node instanceof StringLiteral) {
+        $string = $this->_resolveNode($frame, $node);
+
+        if (array_key_exists($string->value(), $subjectValue)) {
+            $value = $subjectValue[$string->value()];
+            return $string->withValue($value);
+        }
+    }
+
+    $info = $info->withIssue(sprintf(
+        'Did not resolve access expression for node type "%s"',
+        get_class($node)
+    ));
+
+    return $info;
     }
 
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolContext
