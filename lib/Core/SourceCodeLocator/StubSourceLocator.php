@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\SourceCodeLocator;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -32,17 +33,17 @@ final class StubSourceLocator implements SourceCodeLocator
         $this->cacheDir = $cacheDir;
     }
 
-    public function locate(ClassName $className): SourceCode
+    public function locate(Name $name): SourceCode
     {
         $map = $this->map();
 
-        if (isset($map[(string) $className])) {
-            return SourceCode::fromPath($map[(string) $className]);
+        if (isset($map[(string) $name])) {
+            return SourceCode::fromPath($map[(string) $name]);
         }
 
         throw new SourceNotFound(sprintf(
             'Could not find source for "%s" in stub directory "%s"',
-            (string) $className,
+            (string) $name,
             $this->stubPath
         ));
     }

@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\SourceCodeLocator;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -21,7 +22,7 @@ class ChainSourceLocator implements SourceCodeLocator
         }
     }
 
-    public function locate(ClassName $class): SourceCode
+    public function locate(Name $name): SourceCode
     {
         $exception = new SourceNotFound(
             'No source locators registered with chain loader '.
@@ -30,11 +31,11 @@ class ChainSourceLocator implements SourceCodeLocator
 
         foreach ($this->locators as $locator) {
             try {
-                return $locator->locate($class);
+                return $locator->locate($name);
             } catch (SourceNotFound $e) {
                 $exception = new SourceNotFound(sprintf(
                     'Could not find source with "%s"',
-                    (string) $class
+                    (string) $name
                 ), null, $e);
             }
         }
