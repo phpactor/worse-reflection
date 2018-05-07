@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall as CoreReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
@@ -11,6 +12,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
+use RuntimeException;
 
 abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 {
@@ -48,6 +50,12 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
     public function class(): ReflectionClassLike
     {
         $info = $this->services->symbolContextResolver()->resolveNode($this->frame, $this->node);
+
+        if (!$info->containerType()) {
+            throw new CouldNotResolveNode(sprintf(
+                'Class for member "%s" could not be determined', $this->name()
+            ));
+        }
 
         return $this->services->reflector()->reflectClassLike((string) $info->containerType());
     }
