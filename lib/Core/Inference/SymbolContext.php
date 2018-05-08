@@ -165,7 +165,7 @@ final class SymbolContext
     }
 
     /**
-     * @return Type
+     * @return Type|null
      */
     public function containerType()
     {
