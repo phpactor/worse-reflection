@@ -17,8 +17,10 @@ use Microsoft\PhpParser\Node\ReservedWord;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
+use Microsoft\PhpParser\Node\UseVariableName;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
+use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Reflector;
@@ -129,6 +131,11 @@ class SymbolContextResolver
             return $this->resolveParameter($frame, $node);
         }
 
+        if ($node instanceof UseVariableName) {
+            $name = $node->getText();
+            return $this->resolveVariableName($name, $node, $frame);
+        }
+
         if ($node instanceof ParserVariable) {
             return $this->resolveVariable($frame, $node);
         }
@@ -237,22 +244,7 @@ class SymbolContextResolver
         }
 
         $name = $node->getText();
-        $name = ltrim($name, '$');
-        $offset = $node->getFullStart();
-        $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($name);
-
-        if (0 === $variables->count()) {
-            return $this->symbolFactory->context(
-                $node->name->getText($node->getFileContents()),
-                $node->getStart(),
-                $node->getEndPosition(),
-                [
-                    'symbol_type' => Symbol::VARIABLE
-                ]
-            )->withIssue(sprintf('Variable "%s" is undefined', $name));
-        }
-
-        return $variables->last()->symbolContext();
+        return $this->resolveVariableName($name, $node, $frame);
     }
 
     private function resolvePropertyVariable(ParserVariable $node)
@@ -668,5 +660,25 @@ class SymbolContextResolver
     private function resolveParenthesizedExpression(Frame $frame, ParenthesizedExpression $node)
     {
         return $this->__resolveNode($frame, $node->expression);
+    }
+
+    private function resolveVariableName(string $name, Node $node, Frame $frame)
+    {
+        $varName = ltrim($name, '$');
+        $offset = $node->getFullStart();
+        $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($varName);
+        
+        if (0 === $variables->count()) {
+            return $this->symbolFactory->context(
+                $name,
+                $node->getStart(),
+                $node->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::VARIABLE
+                ]
+            )->withIssue(sprintf('Variable "%s" is undefined', $name));
+        }
+        
+        return $variables->last()->symbolContext();
     }
 }

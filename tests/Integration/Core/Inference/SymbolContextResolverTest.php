@@ -272,6 +272,19 @@ EOT
                 , [], ['type' => 'Foobar\Barfoo\World']
                 ];
 
+        yield 'It resolves a anonymous function use' => [
+                <<<'EOT'
+<?php
+
+function ($blah) use ($f<>oo) {
+
+}
+
+EOT
+            , [ 'foo' => Type::fromString('string') ], ['type' => 'string', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'foo']
+        ];
+
+
         yield 'It returns the FQN of variable assigned in frame' => [
                 <<<'EOT'
 <?php
