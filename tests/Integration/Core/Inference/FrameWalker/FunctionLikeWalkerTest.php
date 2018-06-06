@@ -145,6 +145,17 @@ EOT
             }
         ];
 
+        yield 'Incomplete use name' => [
+            <<<'EOT'
+<?php
+function () use ($<>
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(0, $frame->locals());
+            }
+        ];
+
         yield 'Injects variables with @var (non-standard)' => [
             <<<'EOT'
 <?php

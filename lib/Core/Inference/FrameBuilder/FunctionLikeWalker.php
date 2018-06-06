@@ -120,6 +120,10 @@ class FunctionLikeWalker implements FrameWalker
         $parentFrame = $frame->parent();
         $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStart());
 
+        if (null === $useClause->useVariableNameList) {
+            return;
+        }
+
         foreach ($useClause->useVariableNameList->getElements() as $element) {
             $varName = $element->variableName->getText($node->getFileContents());
 
