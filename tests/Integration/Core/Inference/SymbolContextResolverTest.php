@@ -284,6 +284,16 @@ EOT
             , [ 'foo' => Type::fromString('string') ], ['type' => 'string', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'foo']
         ];
 
+        yield 'It resolves an undeclared variable' => [
+                <<<'EOT'
+<?php
+
+$b<>lah;
+
+EOT
+            , [], ['type' => '<unknown>', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'blah']
+        ];
+
 
         yield 'It returns the FQN of variable assigned in frame' => [
                 <<<'EOT'
