@@ -9,10 +9,8 @@ This library aims to provide a light class-based AST based "reflection" library.
 
 It is influenced by [BetterReflection](https://github.com/Roave/BetterReflection), diffrerences are as follows:
 
-- Can reflect types at offsets.
-- Can reflect frames (i.e. all variables in a method).
+- Can reflect variables.
 - Does not aim to implement built-in PHP reflection API.
-- Only reflects classes and similar, not functions.
 - Uses the amazing [Tolerant Parser](https://github.com/Microsoft/tolerant-php-parser).
 - Uses the PHPStorm stubs to provide reflections of internal classes.
 
@@ -21,8 +19,8 @@ It is being developed to provide support for the
 refactoring tool. And is therefore driven by that use case.
 
 If you want comprehsnsive reflection, use BetterReflection. If you want faster
-class-based reflection with no support and frequent BC breaks, then you can
-use this one.
+reflection including type/value flow with no support and frequent BC breaks, then you can
+use this one (note that I havn't benchmarked BR in sometime, it may well be faster now).
 
 ## Usage
 
