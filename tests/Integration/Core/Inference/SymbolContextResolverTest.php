@@ -239,6 +239,23 @@ EOT
                 , [], ['type' => 'string', 'value' => 'test']
                 ];
 
+        yield 'Ignores parameter on anonymous class' => [
+            <<<'EOT'
+<?php
+
+class Foobar {
+
+    public function foobar()
+    {
+        $class = new class { public function __invoke($foo<>bar) {} };
+    }
+}
+
+EOT
+            , [], ['type' => '<unknown>', 'symbol_type' => '<unknown>', 'symbol_name' => '<unknown>']
+        ];
+
+
         yield 'It returns the FQN of a static call' => [
                 <<<'EOT'
 <?php

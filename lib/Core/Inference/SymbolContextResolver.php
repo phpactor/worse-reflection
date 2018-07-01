@@ -19,6 +19,7 @@ use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\UseVariableName;
 use Microsoft\PhpParser\Token;
+use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Logger;
@@ -85,7 +86,12 @@ class SymbolContextResolver
 
     public function resolveNode(Frame $frame, $node): SymbolContext
     {
-        return $this->_resolveNode($frame, $node);
+        try {
+            return $this->_resolveNode($frame, $node);
+        } catch (CouldNotResolveNode $couldNotResolveNode) {
+            return SymbolContext::none()
+                ->withIssue($couldNotResolveNode->getMessage());
+        }
     }
 
     /**
@@ -94,9 +100,7 @@ class SymbolContextResolver
     public function _resolveNode(Frame $frame, $node): SymbolContext
     {
         if (false === $node instanceof Node) {
-            $info = SymbolContext::none()
-                ->withIssue(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
-            return $info;
+            throw new CouldNotResolveNode(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
         }
 
         $context = $this->__resolveNode($frame, $node);
@@ -229,8 +233,7 @@ class SymbolContextResolver
             return $this->resolveMethodDeclaration($frame, $node);
         }
 
-        return SymbolContext::none()
-            ->withIssue(sprintf(
+        throw new CouldNotResolveNode(sprintf(
             'Did not know how to resolve node of type "%s" with text "%s"',
             get_class($node),
             $node->getText()
@@ -353,15 +356,13 @@ class SymbolContextResolver
 
     private function resolveParameterFromReflection(Frame $frame, MethodDeclaration $method, Parameter $node): SymbolContext
     {
-        /** @var ClassDeclaration|TraitDeclaration|InterfaceDeclaration $class  */
-        $class = $node->getFirstAncestor(ClassDeclaration::class, InterfaceDeclaration::class, TraitDeclaration::class);
+        $class = $this->getClassLikeAncestor($node);
 
         if (null === $class) {
-            return SymbolContext::none()
-                ->withIssue(sprintf(
-                    'Cannot find class context "%s" for parameter',
-                    $node->getName()
-                ));
+            throw new CouldNotResolveNode(sprintf(
+                'Cannot find class context "%s" for parameter',
+                $node->getName()
+            ));
         }
 
         /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
@@ -369,14 +370,14 @@ class SymbolContextResolver
         $reflectionMethod = $reflectionClass->methods()->get($method->getName());
 
         if (!$reflectionMethod->parameters()->has($node->getName())) {
-            return SymbolContext::none()
-                ->withIssue(sprintf(
-                    'Cannot find parameter "%s" for method "%s" in class "%s"',
-                    $node->getName(),
-                    $reflectionMethod->name(),
-                    $reflectionClass->name()
-                ));
+            throw new CouldNotResolveNode(sprintf(
+                'Cannot find parameter "%s" for method "%s" in class "%s"',
+                $node->getName(),
+                $reflectionMethod->name(),
+                $reflectionClass->name()
+            ));
         }
+
         $reflectionParameter = $reflectionMethod->parameters()->get($node->getName());
 
         return $this->symbolFactory->context(
@@ -558,8 +559,7 @@ class SymbolContextResolver
     private function resolveObjectCreationExpression(Frame $frame, $node): SymbolContext
     {
         if (false === $node->classTypeDesignator instanceof Node) {
-            return SymbolContext::none()
-                ->withIssue(sprintf('Could not create object from "%s"', get_class($node)));
+            throw new CouldNotResolveNode(sprintf('Could not create object from "%s"', get_class($node)));
         }
 
         return $this->_resolveNode($frame, $node->classTypeDesignator);
@@ -588,7 +588,7 @@ class SymbolContextResolver
 
     private function resolveMethodDeclaration(Frame $frame, MethodDeclaration $node): SymbolContext
     {
-        $classNode = $node->getFirstAncestor(ClassLike::class);
+        $classNode = $this->getClassLikeAncestor($node);
         $classSymbolContext = $this->_resolveNode($frame, $classNode);
 
         return $this->symbolFactory->context(
@@ -645,7 +645,7 @@ class SymbolContextResolver
 
     private function classTypeFromNode(Node $node)
     {
-        $classNode = $node->getFirstAncestor(ClassLike::class);
+        $classNode = $this->getClassLikeAncestor($node);
 
         if (null === $classNode) {
             // TODO: Wrning here
@@ -667,7 +667,7 @@ class SymbolContextResolver
         $varName = ltrim($name, '$');
         $offset = $node->getFullStart();
         $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($varName);
-        
+
         if (0 === $variables->count()) {
             return $this->symbolFactory->context(
                 $name,
@@ -678,7 +678,21 @@ class SymbolContextResolver
                 ]
             )->withIssue(sprintf('Variable "%s" is undefined', $varName));
         }
-        
+
         return $variables->last()->symbolContext();
+    }
+
+    /**
+     * @return ClassDeclaration|TraitDeclaration|InterfaceDeclaration|ObjectCreationExpression
+     */
+    private function getClassLikeAncestor(Node $node):? Node
+    {
+        $ancestor = $node->getFirstAncestor(ObjectCreationExpression::class, ClassLike::class);
+
+        if ($ancestor instanceof ObjectCreationExpression) {
+            throw new CouldNotResolveNode('Resolving anonymous classes is not currently supported');
+        }
+
+        return $ancestor;
     }
 }
