@@ -683,9 +683,9 @@ class SymbolContextResolver
     }
 
     /**
-     * @return ClassDeclaration|TraitDeclaration|InterfaceDeclaration|ObjectCreationExpression
+     * @return ClassDeclaration|TraitDeclaration|InterfaceDeclaration
      */
-    private function getClassLikeAncestor(Node $node):? Node
+    private function getClassLikeAncestor(Node $node)
     {
         $ancestor = $node->getFirstAncestor(ObjectCreationExpression::class, ClassLike::class);
 
