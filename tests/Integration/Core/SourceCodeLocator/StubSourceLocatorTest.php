@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\SourceCodeLocator;
 
+use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
@@ -13,32 +14,54 @@ use Phpactor\WorseReflection\ReflectorBuilder;
 
 class StubSourceLocatorTest extends IntegrationTestCase
 {
-    private $locator;
-    private $reflector;
-    private $cacheBuilder;
+    /**
+     * @var StubSourceLocator
+     */
+    private $sourceLocator;
 
     public function setUp()
     {
-        $this->initWorkspace();
+        $this->workspace()->reset();
 
         $locator = new StringSourceLocator(SourceCode::fromString(''));
         $reflector = ReflectorBuilder::create()->addLocator($locator)->build();
-        $this->cacheBuilder = new StubSourceLocator(
+        $this->workspace()->mkdir('stubs')->mkdir('cache');
+
+        $this->sourceLocator = new StubSourceLocator(
             $reflector,
-            __DIR__ . '/stubs',
-            $this->workspaceDir()
+            $this->workspace()->path('stubs'),
+            $this->workspace()->path('cache')
         );
     }
 
     public function testCanLocateClasses()
     {
-        $code = $this->cacheBuilder->locate(ClassName::fromString('StubOne'));
+        $this->workspace()->put('stubs/Stub.php', '<?php class StubOne {}');
+        $code = $this->sourceLocator->locate(ClassName::fromString('StubOne'));
         $this->assertContains('class StubOne', (string) $code);
     }
 
     public function testCanLocateFunctions()
     {
-        $code = $this->cacheBuilder->locate(Name::fromString('hello_world'));
+        file_put_contents($this->workspace()->path('stubs/Stub.php'), '<?php function hello_world() {}');
+        $code = $this->sourceLocator->locate(Name::fromString('hello_world'));
         $this->assertContains('function hello_world()', (string) $code);
+    }
+
+    public function testDoesNotParseNonPhpFiles()
+    {
+        $this->workspace()->put('stubs/Stub.xml', '<?php function hello_world() {}');
+        $this->workspace()->put('stubs/Stub.php', '<?php function goodbye_world() {}');
+
+        try {
+            $code = $this->sourceLocator->locate(Name::fromString('hello_world'));
+            $this->fail('Non PHP file parsed');
+        } catch (NotFound $notFound) {
+            $this->addToAssertionCount(1);
+            return;
+        }
+
+        $code = $this->sourceLocator->locate(Name::fromString('goodbye_world'));
+        $this->assertContains('function goodbye_world()', (string) $code);
     }
 }
