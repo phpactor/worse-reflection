@@ -43,7 +43,7 @@ class StubSourceLocatorTest extends IntegrationTestCase
 
     public function testCanLocateFunctions()
     {
-        file_put_contents($this->workspace()->path('stubs/Stub.php'), '<?php function hello_world() {}');
+        $this->workspace()->put('stubs/Stub.php', '<?php function hello_world() {}');
         $code = $this->sourceLocator->locate(Name::fromString('hello_world'));
         $this->assertContains('function hello_world()', (string) $code);
     }
