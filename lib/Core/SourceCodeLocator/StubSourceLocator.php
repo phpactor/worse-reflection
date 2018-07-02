@@ -62,7 +62,7 @@ final class StubSourceLocator implements SourceCodeLocator
     {
         $map = [];
         foreach ($this->fileIterator() as $file) {
-            if ($file->isDir()) {
+            if ($file->getExtension() !== 'php' || $file->isDir()) {
                 continue;
             }
 
