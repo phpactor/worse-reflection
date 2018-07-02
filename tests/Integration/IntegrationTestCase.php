@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration;
 
+use Phpactor\TestUtils\Workspace;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
@@ -29,24 +30,14 @@ class IntegrationTestCase extends TestCase
         return ReflectorBuilder::create()->addSource($source)->withLogger($this->logger())->build();
     }
 
-    protected function workspaceDir(): string
-    {
-        return __DIR__ . '/../Workspace';
-    }
-
     protected function logger(): ArrayLogger
     {
         return $this->logger;
     }
 
-    protected function initWorkspace()
+    protected function workspace(): Workspace
     {
-        $filesystem = new Filesystem();
-        if (file_exists($this->workspaceDir())) {
-            $filesystem->remove($this->workspaceDir());
-        }
-
-        $filesystem->mkdir($this->workspaceDir());
+        return new Workspace(__DIR__ . '/../Workspace');
     }
 
     protected function parseSource(string $source): SourceFileNode
