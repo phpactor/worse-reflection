@@ -18,14 +18,14 @@ class ReflectMethodBench extends BaseBenchCase
      */
     private $class;
 
-    public function before()
+    public function setUp()
     {
+        parent::setUp();
         $this->class = $this->getReflector()->reflectClassLike(ClassName::fromString(MethodClass::class));
     }
 
     /**
      * @Subject()
-     * @BeforeMethods({"before"})
      */
     public function method()
     {
@@ -34,7 +34,6 @@ class ReflectMethodBench extends BaseBenchCase
 
     /**
      * @Subject()
-     * @BeforeMethods({"before"})
      */
     public function method_return_type()
     {
@@ -43,7 +42,6 @@ class ReflectMethodBench extends BaseBenchCase
 
     /**
      * @Subject()
-     * @BeforeMethods({"before"})
      */
     public function method_inferred_return_type()
     {

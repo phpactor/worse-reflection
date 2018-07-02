@@ -18,14 +18,14 @@ class ReflectPropertyBench extends BaseBenchCase
      */
     private $class;
 
-    public function before()
+    public function setUp()
     {
+        parent::setUp();
         $this->class = $this->getReflector()->reflectClassLike(ClassName::fromString(PropertyClass::class));
     }
 
     /**
      * @Subject()
-     * @BeforeMethods({"before"})
      */
     public function property()
     {
@@ -34,7 +34,6 @@ class ReflectPropertyBench extends BaseBenchCase
 
     /**
      * @Subject()
-     * @BeforeMethods({"before"})
      */
     public function property_return_type()
     {
