@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
+use Phpactor\TestUtils\Workspace;
 use Phpactor\WorseReflection\Bridge\Composer\ComposerSourceLocator;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StubSourceLocator;
@@ -14,10 +15,11 @@ abstract class BaseBenchCase
     {
         $composerLocator = new ComposerSourceLocator(include(__DIR__ . '/../../vendor/autoload.php'));
 
+        $workspace = new Workspace(__DIR__ . '/../Workspace');
         $stubLocator = new StubSourceLocator(
             ReflectorBuilder::create()->build(),
             __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs',
-            __DIR__ . '/../Workspace/cache'
+            $workspace->path('/')
         );
 
         return ReflectorBuilder::create()
