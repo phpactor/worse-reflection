@@ -257,14 +257,19 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
             false
         ];
 
-        yield 'division by zero' => [
+        yield 'division by zero returns 0 to avoid crash' => [
             '5 / 0',
-true
+            0
         ];
 
-        yield 'modulo by zero' => [
+        yield 'modulo by zero returns 0 to avoid crash' => [
             '5 / 0',
-true
+            0
+        ];
+
+        yield 'division by unresolable constant returns 0' => [
+            '5 / SOME_CONSTANT',
+            0
         ];
     }
 }
