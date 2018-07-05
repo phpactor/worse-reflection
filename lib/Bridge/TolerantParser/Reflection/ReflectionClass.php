@@ -133,6 +133,11 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             return;
         }
 
+        // incomplete class
+        if (!$this->node->classBaseClause->baseClass) {
+            return;
+        }
+
         try {
             $reflectedClass = $this->serviceLocator->reflector()->reflectClassLike(
                 ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())

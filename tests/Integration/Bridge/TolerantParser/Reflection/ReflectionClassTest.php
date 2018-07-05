@@ -569,5 +569,22 @@ EOT
                 $this->assertTrue($class->members()->has('foo'));
             },
         ];
+
+        yield 'Incomplete extends' => [
+            <<<'EOT'
+<?php
+
+class Class1 extends
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertNull($class->parent());
+                $this->assertEquals('Class1', $class->name()->short());
+            },
+        ];
     }
 }
