@@ -104,5 +104,21 @@ EOT
                 $this->assertEquals('string', $constants->first()->inferredTypes()->best()->short());
             }
         ];
+
+        yield 'Delimited constant list' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    const FOOBAR = 'foobar', BARFOO = 'barfoo';
+}
+EOT
+            ,
+            'Foobar',
+            function (ReflectionConstantCollection $constants) {
+                $this->assertCount(2, $constants);
+            }
+        ];
     }
 }

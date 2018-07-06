@@ -62,6 +62,11 @@ class AbstractInstanceOfWalker
         }
 
         $variable = $node->getFirstDescendantNode(Variable::class);
+
+        if (null === $variable) {
+            return null;
+        }
+
         $rightOperand = $node->rightOperand;
 
         if (false === $rightOperand instanceof QualifiedName) {

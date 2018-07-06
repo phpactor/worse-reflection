@@ -249,5 +249,22 @@ EOT
             $this->assertCount(2, $frame->locals());
         }
         ];
+
+        yield 'ignores expression which does not include a variable' => [
+            <<<'EOT'
+<?php
+
+functoin this_function_returns_something() {
+    return new stdClass();
+}
+
+if (this_function_returns_something() instanceof Barfoo) {
+<>
+}
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(0, $frame->locals());
+        }
+        ];
     }
 }

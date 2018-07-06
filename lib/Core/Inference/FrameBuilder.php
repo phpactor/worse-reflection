@@ -81,7 +81,7 @@ final class FrameBuilder
 
     private function walkNode(Node $node, Node $targetNode, Frame $frame = null)
     {
-        if ($node instanceof SourceFileNode) {
+        if ($frame === null) {
             $frame = new Frame($node->getNodeKindName());
         }
 
@@ -137,13 +137,24 @@ final class FrameBuilder
             return $node;
         }
 
-        $scopeNode = $node->getFirstAncestor(SourceFileNode::class);
+        // do not traverse the whole source file for functions
+        if ($node instanceof FunctionLike) {
+            return $node;
+        }
+
+        $scopeNode = $node->getFirstAncestor(AnonymousFunctionCreationExpression::class, FunctionLike::class, SourceFileNode::class);
 
         if (null === $scopeNode) {
             throw new RuntimeException(sprintf(
                 'Could not find scope node for "%s", this should not happen.',
                 get_class($node)
             ));
+        }
+
+        // if this is an anonymous functoin, traverse the parent scope to
+        // resolve any potential variable imports.
+        if ($scopeNode instanceof AnonymousFunctionCreationExpression) {
+            return $this->resolveScopeNode($scopeNode->parent);
         }
 
         return $scopeNode;

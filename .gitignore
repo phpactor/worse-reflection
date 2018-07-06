@@ -3,3 +3,5 @@ composer.lock
 phpunit.xml
 composer.phar
 tests/Workspace
+tests/Smoke/cache
+smoke_test.log
