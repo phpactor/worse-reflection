@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
@@ -26,7 +27,7 @@ class ReflectionConstantCollection extends ReflectionMemberCollection implements
                 continue;
             }
 
-            foreach ($member->constElements->children as $constElement) {
+            foreach ($member->constElements->getElements() as $constElement) {
                 $items[$constElement->getName()] = new ReflectionConstant($serviceLocator, $reflectionClass, $member, $constElement);
             }
         }
