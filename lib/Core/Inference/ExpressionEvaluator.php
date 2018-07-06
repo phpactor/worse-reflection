@@ -106,8 +106,17 @@ class ExpressionEvaluator
             case '-':
                 return $leftValue - $rightValue;
             case '%':
+                // do not cause fatal error if right value is zero-ish
+                if (!$rightValue) {
+                    return 0;
+                }
                 return $leftValue % $rightValue;
             case '/':
+                // do not cause fatal error if right value is zero-ish
+                if (!$rightValue) {
+                    return 0;
+                }
+
                 return $leftValue / $rightValue;
             case '.':
                 return $leftValue . $rightValue;
@@ -128,7 +137,7 @@ class ExpressionEvaluator
             case '&':
                 return $leftValue & $rightValue;
             case '|':
-                return $leftValue & $rightValue;
+                return $leftValue | $rightValue;
             case '^':
                 return $leftValue ^ $rightValue;
             case '<<':

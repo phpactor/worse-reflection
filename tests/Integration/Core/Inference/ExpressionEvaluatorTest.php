@@ -180,7 +180,7 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
 
         yield 'Bitwise or' => [
             'true | true',
-1
+            1
         ];
 
         yield 'Neg' => [
@@ -255,6 +255,21 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
         yield 'missing token' => [
             '(5 > 3) AND (',
             false
+        ];
+
+        yield 'division by zero returns 0 to avoid crash' => [
+            '5 / 0',
+            0
+        ];
+
+        yield 'modulo by zero returns 0 to avoid crash' => [
+            '5 / 0',
+            0
+        ];
+
+        yield 'division by unresolable constant returns 0' => [
+            '5 / SOME_CONSTANT',
+            0
         ];
     }
 }
