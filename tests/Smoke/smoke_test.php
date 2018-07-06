@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 use Phpactor\WorseReflection\Bridge\Composer\ComposerSourceLocator;
@@ -11,14 +12,16 @@ use Webmozart\PathUtil\Path;
 $autoload = require __DIR__ . '/../../vendor/autoload.php';
 $path = __DIR__ . '/../..';
 $slowThreshold = 0.25;
-$logFile = 'parse-log.log';
+$logFile = 'smoke_test.log';
 $logHandle = fopen($logFile, 'w');
 $opts = array_merge([
     'pattern' => '.*\.php$',
-    'offset' => 0
+    'offset' => 0,
+    'limit' => null
 ], getopt('', [
     'pattern:',
     'offset:',
+    'limit:',
 ]));
 
 if (isset($argv[1])) {
@@ -51,6 +54,10 @@ foreach ($files as $file) {
     if ($count < $opts['offset']) {
         $count++;
         continue;
+    }
+
+    if (null !== $opts['limit'] && $count > $opts['limit']) {
+        break;
     }
 
     echo $count++ . ' ' . Path::makeRelative($file->getPathname(), getcwd()) . PHP_EOL;

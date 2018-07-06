@@ -4,5 +4,4 @@ phpunit.xml
 composer.phar
 tests/Workspace
 tests/Smoke/cache
-parse_self.log
-
+smoke_test.log
