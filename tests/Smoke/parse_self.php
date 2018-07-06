@@ -13,7 +13,13 @@ $path = __DIR__ . '/../..';
 $slowThreshold = 0.25;
 $logFile = 'parse-log.log';
 $logHandle = fopen($logFile, 'w');
-$pattern = '.*\.php$';
+$opts = array_merge([
+    'pattern' => '.*\.php$',
+    'offset' => 0
+], getopt('', [
+    'pattern:',
+    'offset:',
+]));
 
 if (isset($argv[1])) {
     $pattern = $argv[1];
@@ -34,7 +40,7 @@ $files = new RecursiveIteratorIterator(
     RecursiveIteratorIterator::SELF_FIRST
 );
 
-$files  = new RegexIterator($files, '{' . $pattern  . '}');
+$files  = new RegexIterator($files, '{.*' . $opts['pattern'] . '.*}');
 $exceptions = [];
 $count = 0;
 
@@ -42,7 +48,12 @@ echo 'Legend: N = Not found, E = Error' . PHP_EOL . PHP_EOL;
 
 /** @var SplFileInfo $file */
 foreach ($files as $file) {
-    echo Path::makeRelative($file->getPathname(), getcwd()) . PHP_EOL;
+    if ($count < $opts['offset']) {
+        $count++;
+        continue;
+    }
+
+    echo $count++ . ' ' . Path::makeRelative($file->getPathname(), getcwd()) . PHP_EOL;
     $message = $file->getPathname();
     try {
         $classes = $reflector->reflectClassesIn(file_get_contents($file->getPathname()));
