@@ -19,7 +19,7 @@ before_script:
 script:
   - vendor/bin/phpstan analyze lib/ --level=2
   - vendor/bin/phpunit
-  - vendor/bin/phpbench run --report=aggregate --progress=travis --store
+  - vendor/bin/phpbench run --report=aggregate --progress=travis --store --iterations=1
 
   # don't run the whole smoke test as it takes many minutes
   - tests/Smoke/smoke_test.php --limit=100
