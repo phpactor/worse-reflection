@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
@@ -18,11 +19,14 @@ interface SourceCodeReflector
 {
     /**
      * Reflect all classes (or class-likes) in the given source code.
+     *
+     * @return ReflectionClassCollection<ReflectionClass>
      */
     public function reflectClassesIn($sourceCode): ReflectionClassCollection;
 
     /**
      * Reflect all functions in the given source code.
+     * @return ReflectionFunctionCollection<ReflectionFunction>
      */
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection;
 
