@@ -678,6 +678,43 @@ EOT
                 , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
                 ];
 
+        yield 'It returns type of property assigned from the constructor' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    private $std<>Class;
+
+    public function __construct(stdClass $class)
+    {
+        $this->stdClass = $class;
+    }
+}
+EOT
+                , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
+                ];
+
+        yield 'Docblock types takes precedence over constructor type' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    /**
+     * @var Foobar
+     */
+    private $std<>Class;
+
+    public function __construct(stdClass $class)
+    {
+        $this->stdClass = $class;
+    }
+}
+EOT
+                , [], ['type' => 'Foobar', 'symbol_name' => 'stdClass'],
+                ];
+
         yield 'It returns type for parenthesised new object' => [
                 <<<'EOT'
 <?php
