@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use ReflectionFunction;
 
-class ReflectionFunctionSourceLocator implements SourceCodeLocator
+class NativeReflectionFunctionSourceLocator implements SourceCodeLocator
 {
     /**
      * {@inheritDoc}

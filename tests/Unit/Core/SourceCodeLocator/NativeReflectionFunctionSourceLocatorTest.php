@@ -5,9 +5,9 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core\SourceCodeLocator;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
 use Phpactor\WorseReflection\Core\Name;
-use Phpactor\WorseReflection\Core\SourceCodeLocator\ReflectionFunctionSourceLocator;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\NativeReflectionFunctionSourceLocator;
 
-class ReflectionFunctionSourceLocatorTest extends TestCase
+class NativeReflectionFunctionSourceLocatorTest extends TestCase
 {
     /**
      * @var ReflectionFunctionSourceLocator
@@ -16,7 +16,7 @@ class ReflectionFunctionSourceLocatorTest extends TestCase
 
     public function setUp()
     {
-        $this->locator = new ReflectionFunctionSourceLocator();
+        $this->locator = new NativeReflectionFunctionSourceLocator();
     }
 
     public function testLocatesAFunction()
