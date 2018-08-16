@@ -255,7 +255,6 @@ EOT
             , [], ['type' => '<unknown>', 'symbol_type' => '<unknown>', 'symbol_name' => '<unknown>']
         ];
 
-
         yield 'It returns the FQN of a static call' => [
                 <<<'EOT'
 <?php

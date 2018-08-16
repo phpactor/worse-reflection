@@ -302,6 +302,35 @@ EOT
             },
         ];
 
+        yield 'Get methods includes aliased trait methods' => [
+            <<<'EOT'
+<?php
+
+trait TraitOne
+{
+    public function one()
+    {
+    }
+}
+
+
+class Class2
+{
+    use TraitOne {
+        one as private two
+    }
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertEquals(1, $class->methods()->count());
+                $this->assertTrue($class->methods()->has('two'));
+                $this->assertFalse($class->methods()->belongingTo(Class2::class)->has('two'));
+            },
+        ];
+
         yield 'Get properties includes trait properties' => [
             <<<'EOT'
 <?php

@@ -4,6 +4,8 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\TraitSelectOrAliasClause;
+use Microsoft\PhpParser\Node\TraitUseClause;
 use Microsoft\PhpParser\TokenKind;
 use PhpParser\Node\Stmt\ClassLike;
 
@@ -191,10 +193,8 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $contextClass = $contextClass ?: $this;
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);
 
-        if ($this->traits()->count() > 0) {
-            foreach ($this->traits() as $trait) {
-                $methods = $methods->merge($trait->methods($contextClass));
-            }
+        foreach ($this->traits() as $trait) {
+            $methods = $methods->merge($trait->methods($contextClass));
         }
 
         if ($this->parent()) {
@@ -244,6 +244,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     public function traits(): CoreReflectionTraitCollection
     {
         $parentTraits = null;
+
         if ($this->parent()) {
             $parentTraits = $this->parent()->traits();
         }
