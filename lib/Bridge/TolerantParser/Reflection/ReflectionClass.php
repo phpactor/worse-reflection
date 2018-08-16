@@ -9,6 +9,8 @@ use Microsoft\PhpParser\Node\TraitUseClause;
 use Microsoft\PhpParser\TokenKind;
 use PhpParser\Node\Stmt\ClassLike;
 
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImport;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImports;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
@@ -193,8 +195,20 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $contextClass = $contextClass ?: $this;
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);
 
-        foreach ($this->traits() as $trait) {
-            $methods = $methods->merge($trait->methods($contextClass));
+        $traitImports = new TraitImports($this->node);
+
+        /** @var TraitImport $traitImport */
+        foreach ($traitImports as $traitImport) {
+            $trait = $this->traits()->get($traitImport->name());
+
+            if (false === $traitImport->hasTraitAliases()) {
+                $methods = $methods->merge($trait->methods($contextClass));
+            }
+
+            foreach ($traitImport->traitAliases as $originalName => $traitAlias) {
+                $method = $trait->methods()->get($originalName);
+                // HERE >>> virtual method here
+            }
         }
 
         if ($this->parent()) {

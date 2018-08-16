@@ -2,7 +2,9 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport;
 
+use ArrayIterator;
 use Countable;
+use IteratorAggregate;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\TraitSelectOrAliasClause;
 use Microsoft\PhpParser\Node\TraitUseClause;
@@ -10,7 +12,7 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Visibility;
 use RuntimeException;
 
-class TraitImports implements Countable
+class TraitImports implements Countable, IteratorAggregate
 {
     private $imports = [];
 
@@ -94,4 +96,11 @@ class TraitImports implements Countable
         return Visibility::public();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->imports);
+    }
 }
