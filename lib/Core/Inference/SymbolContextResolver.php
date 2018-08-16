@@ -369,6 +369,12 @@ class SymbolContextResolver
         $reflectionClass = $this->reflector->reflectClassLike($class->getNamespacedName()->__toString());
         $reflectionMethod = $reflectionClass->methods()->get($method->getName());
 
+        if (null === $node->getName()) {
+            throw new CouldNotResolveNode(
+                'Node name for parameter resolved to NULL'
+            );
+        }
+
         if (!$reflectionMethod->parameters()->has($node->getName())) {
             throw new CouldNotResolveNode(sprintf(
                 'Cannot find parameter "%s" for method "%s" in class "%s"',
