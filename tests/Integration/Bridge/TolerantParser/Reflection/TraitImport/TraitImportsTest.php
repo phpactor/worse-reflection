@@ -50,8 +50,6 @@ class TraitImportsTest extends IntegrationTestCase
             function (TraitImports $traitImports) {
                 $traitImport = $traitImports->get('A');
                 ;
-                assert($traitAlias instanceof TraitAlias);
-
                 $this->assertEquals(Visibility::private(), $traitImport->traitAliases()['foo']->visiblity());
                 $this->assertEquals(Visibility::protected(), $traitImport->traitAliases()['bar']->visiblity());
                 $this->assertEquals(Visibility::public(), $traitImport->traitAliases()['zed']->visiblity());
@@ -64,7 +62,6 @@ class TraitImportsTest extends IntegrationTestCase
             'class B { use A, B { B::foo insteadof A } }',
             function (TraitImports $traitImports) {
                 $traitImport = $traitImports->get('A');
-                assert($traitAlias instanceof TraitAlias);
                 $this->assertCount(0, $traitImport->traitAliases());
             }
         ];
@@ -76,11 +73,9 @@ class TraitImportsTest extends IntegrationTestCase
             function (TraitImports $traitImports) {
                 $this->assertCount(2, $traitImports);
                 $traitImport = $traitImports->get('A');
-                assert($traitAlias instanceof TraitAlias);
                 $this->assertCount(2, $traitImport->traitAliases());
 
                 $traitImport = $traitImports->get('B');
-                assert($traitAlias instanceof TraitAlias);
                 $this->assertCount(2, $traitImport->traitAliases());
             }
         ];
