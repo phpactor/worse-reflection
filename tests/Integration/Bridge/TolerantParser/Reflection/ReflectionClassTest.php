@@ -234,8 +234,8 @@ EOT
             'Class2',
             function (ReflectionClass $class) {
                 $this->assertEquals(2, $class->traits()->count());
-                $this->assertEquals('TraitNUMBERone', $class->traits()->get(0)->name());
-                $this->assertEquals('TraitNUMBERtwo', $class->traits()->get(1)->name());
+                $this->assertEquals('TraitNUMBERone', $class->traits()->get('TraitNUMBERone')->name());
+                $this->assertEquals('TraitNUMBERtwo', $class->traits()->get('TraitNUMBERtwo')->name());
             },
         ];
 
@@ -327,7 +327,8 @@ EOT
             function (ReflectionClass $class) {
                 $this->assertEquals(1, $class->methods()->count());
                 $this->assertTrue($class->methods()->has('two'));
-                $this->assertFalse($class->methods()->belongingTo(Class2::class)->has('two'));
+                $this->assertFalse($class->methods()->belongingTo(ClassName::fromString(Class2::class))->has('two'));
+                $this->assertEquals('TraitOne', $class->methods()->get('two')->declaringClass()->name()->short());
             },
         ];
 

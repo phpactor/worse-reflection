@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
+namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -9,18 +9,12 @@ use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
-     * @var ServiceLocator
-     */
-    protected $serviceLocator;
-
-    /**
      * @var array
      */
     protected $items = [];
 
-    protected function __construct(ServiceLocator $serviceLocator, array $items)
+    protected function __construct(array $items)
     {
-        $this->serviceLocator = $serviceLocator;
         $this->items = $items;
     }
 
@@ -34,25 +28,22 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return array_keys($this->items);
     }
 
-    public static function fromReflections(ServiceLocator $serviceLocator, array $reflections)
-    {
-        return new static($serviceLocator, $reflections);
-    }
-
-    public static function empty(ServiceLocator $serviceLocator): self
-    {
-        return new static($serviceLocator, []);
-    }
-
     public function merge(ReflectionCollection $collection): ReflectionCollection
     {
+        if (false === $collection instanceof static) {
+            throw new \InvalidArgumentException(sprintf(
+                'Collection must be instance of "%s"',
+                static::class
+            ));
+        }
+
         $items = $this->items;
 
         foreach ($collection as $key => $value) {
             $items[$key] = $value;
         }
 
-        return new static($this->serviceLocator, $items);
+        return new static($items);
     }
 
     public function get(string $name)

@@ -29,6 +29,8 @@ use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass as CoreReflectionClass;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
@@ -203,12 +205,14 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
             if (false === $traitImport->hasTraitAliases()) {
                 $methods = $methods->merge($trait->methods($contextClass));
+                continue;
             }
 
-            foreach ($traitImport->traitAliases as $originalName => $traitAlias) {
-                $method = $trait->methods()->get($originalName);
-                // HERE >>> virtual method here
+            $virtualMethods = [];
+            foreach ($traitImport->traitAliases() as $originalName => $traitAlias) {
+                $virtualMethods[] = VirtualReflectionMethod::fromReflectionMethod($trait->methods()->get($originalName))->withName($traitAlias->newName());
             }
+            $methods = $methods->merge(VirtualReflectionMethodCollection::fromReflectionMethods($virtualMethods));
         }
 
         if ($this->parent()) {

@@ -108,6 +108,13 @@ abstract class VirtualReflectionMember implements ReflectionMember
         return $this->name;
     }
 
+    public function withName(string $name): self
+    {
+        $new = clone $this;
+        $new->name = $name;
+        return $new;
+    }
+
     public function frame(): Frame
     {
         return $this->frame;

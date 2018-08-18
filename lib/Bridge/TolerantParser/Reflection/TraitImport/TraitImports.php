@@ -24,18 +24,22 @@ class TraitImports implements Countable, IteratorAggregate
                 continue;
             }
 
-            $traitNames = $memberDeclaration->traitNameList->getElements();
-            foreach ($traitNames as $traitName) {
-                $traitName = (string) $traitName;
+            $traitNames = array_map(function ($name) {
+                return (string) $name;
+            }, iterator_to_array($memberDeclaration->traitNameList->getElements()));
 
-            }
-
-
-            if (null === $memberDeclaration->traitSelectAndAliasClauses) {
-                $this->imports[$traitName] = new TraitImport($traitName);
+            if (empty($traitNames)) {
                 continue;
             }
 
+            if (null === $memberDeclaration->traitSelectAndAliasClauses) {
+                foreach ($traitNames as $traitName) {
+                    $this->imports[$traitName] = new TraitImport($traitName);
+                }
+                continue;
+            }
+
+            $traitName = reset($traitNames);
             $aliases = [];
 
             foreach ($memberDeclaration->traitSelectAndAliasClauses as $selectAndAliasClauses)
