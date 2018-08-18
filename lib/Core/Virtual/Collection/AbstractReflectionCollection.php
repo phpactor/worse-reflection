@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
+use RuntimeException;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
@@ -18,6 +19,8 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         $this->items = $items;
     }
 
+    abstract protected function collectionType(): string;
+
     public function count()
     {
         return count($this->items);
@@ -30,8 +33,10 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
 
     public function merge(ReflectionCollection $collection): ReflectionCollection
     {
-        if (false === $collection instanceof static) {
-            throw new \InvalidArgumentException(sprintf(
+        $collectionType = $this->collectionType();
+
+        if (false === $collection instanceof $collectionType) {
+            throw new RuntimeException(sprintf(
                 'Collection must be instance of "%s"',
                 static::class
             ));
