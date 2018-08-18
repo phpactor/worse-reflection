@@ -78,4 +78,9 @@ class ReflectionMethodCollection extends ReflectionMemberCollection implements C
             return $item->isAbstract();
         }));
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionMethodCollection::class;
+    }
 }

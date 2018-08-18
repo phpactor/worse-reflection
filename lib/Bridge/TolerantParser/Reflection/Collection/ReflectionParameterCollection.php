@@ -44,4 +44,9 @@ class ReflectionParameterCollection extends AbstractReflectionCollection impleme
 
         return new static($serviceLocator, $items);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionParameterCollection::class;
+    }
 }

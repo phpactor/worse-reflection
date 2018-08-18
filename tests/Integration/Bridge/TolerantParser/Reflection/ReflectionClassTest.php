@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Name;
@@ -234,8 +235,8 @@ EOT
             'Class2',
             function (ReflectionClass $class) {
                 $this->assertEquals(2, $class->traits()->count());
-                $this->assertEquals('TraitNUMBERone', $class->traits()->get(0)->name());
-                $this->assertEquals('TraitNUMBERtwo', $class->traits()->get(1)->name());
+                $this->assertEquals('TraitNUMBERone', $class->traits()->get('TraitNUMBERone')->name());
+                $this->assertEquals('TraitNUMBERtwo', $class->traits()->get('TraitNUMBERtwo')->name());
             },
         ];
 
@@ -299,6 +300,46 @@ EOT
                 $this->assertEquals(3, $class->methods()->count());
                 $this->assertTrue($class->methods()->has('traitMethod1'));
                 $this->assertTrue($class->methods()->has('traitMethod2'));
+            },
+        ];
+
+        yield 'Get methods includes aliased trait methods' => [
+            <<<'EOT'
+<?php
+
+trait TraitOne
+{
+    public function one() {}
+    public function three() {}
+    public function four() {}
+}
+
+
+class Class2
+{
+    use TraitOne {
+        one as private two;
+        three as protected three;
+    }
+
+    public function one()
+    {
+    }
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertEquals(4, $class->methods()->count());
+                $this->assertTrue($class->methods()->has('one'));
+                $this->assertTrue($class->methods()->has('two'));
+                $this->assertTrue($class->methods()->has('three'));
+                $this->assertTrue($class->methods()->has('four'));
+                $this->assertEquals(Visibility::private(), $class->methods()->get('two')->visibility());
+                $this->assertEquals(Visibility::protected(), $class->methods()->get('three')->visibility());
+                $this->assertFalse($class->methods()->belongingTo(ClassName::fromString(Class2::class))->has('two'));
+                $this->assertEquals('TraitOne', $class->methods()->get('two')->declaringClass()->name()->short());
             },
         ];
 

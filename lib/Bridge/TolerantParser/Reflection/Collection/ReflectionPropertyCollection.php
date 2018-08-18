@@ -68,4 +68,9 @@ class ReflectionPropertyCollection extends ReflectionMemberCollection implements
 
         return new static($serviceLocator, $items);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionPropertyCollection::class;
+    }
 }

@@ -49,4 +49,9 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
 
         return new self($this->serviceLocator, []);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionMemberCollection::class;
+    }
 }

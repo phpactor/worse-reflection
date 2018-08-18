@@ -1,26 +1,21 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
+namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
+use RuntimeException;
 
 abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
-    /**
-     * @var ServiceLocator
-     */
-    protected $serviceLocator;
-
     /**
      * @var array
      */
     protected $items = [];
 
-    protected function __construct(ServiceLocator $serviceLocator, array $items)
+    protected function __construct(array $items)
     {
-        $this->serviceLocator = $serviceLocator;
         $this->items = $items;
     }
 
@@ -36,22 +31,12 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return array_keys($this->items);
     }
 
-    public static function fromReflections(ServiceLocator $serviceLocator, array $reflections)
+    public function merge(ReflectionCollection $collection): ReflectionCollection
     {
-        return new static($serviceLocator, $reflections);
-    }
+        $collectionType = $this->collectionType();
 
-    public static function empty(ServiceLocator $serviceLocator): self
-    {
-        return new static($serviceLocator, []);
-    }
-
-    public function merge(ReflectionCollection $collection)
-    {
-        $type = $this->collectionType();
-
-        if (false === $collection instanceof $type) {
-            throw new \InvalidArgumentException(sprintf(
+        if (false === $collection instanceof $collectionType) {
+            throw new RuntimeException(sprintf(
                 'Collection must be instance of "%s"',
                 static::class
             ));
@@ -63,7 +48,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
             $items[$key] = $value;
         }
 
-        return new static($this->serviceLocator, $items);
+        return new static($items);
     }
 
     public function get(string $name)

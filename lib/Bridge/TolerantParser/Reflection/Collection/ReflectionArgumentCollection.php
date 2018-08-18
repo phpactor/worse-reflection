@@ -25,4 +25,9 @@ class ReflectionArgumentCollection extends AbstractReflectionCollection implemen
 
         return new self($locator, $arguments);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionParameterCollection::class;
+    }
 }

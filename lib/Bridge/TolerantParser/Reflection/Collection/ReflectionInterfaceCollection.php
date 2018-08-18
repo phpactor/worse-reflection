@@ -50,4 +50,9 @@ class ReflectionInterfaceCollection extends AbstractReflectionCollection impleme
 
         return new static($serviceLocator, $items);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionInterfaceCollection::class;
+    }
 }

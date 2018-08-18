@@ -2,7 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-final class Frame
+class Frame
 {
     /**
      * @var PropertyAssignments

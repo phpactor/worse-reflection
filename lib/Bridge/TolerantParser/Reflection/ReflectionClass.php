@@ -4,9 +4,13 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
+use Microsoft\PhpParser\Node\TraitSelectOrAliasClause;
+use Microsoft\PhpParser\Node\TraitUseClause;
 use Microsoft\PhpParser\TokenKind;
 use PhpParser\Node\Stmt\ClassLike;
 
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImport;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImports;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
@@ -25,6 +29,8 @@ use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass as CoreReflectionClass;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
@@ -191,10 +197,26 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $contextClass = $contextClass ?: $this;
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);
 
-        if ($this->traits()->count() > 0) {
-            foreach ($this->traits() as $trait) {
-                $methods = $methods->merge($trait->methods($contextClass));
+        $traitImports = new TraitImports($this->node);
+        /** @var TraitImport $traitImport */
+        foreach ($traitImports as $traitImport) {
+            $trait = $this->traits()->get($traitImport->name());
+
+            $traitMethods = [];
+            foreach ($trait->methods($contextClass) as $method) {
+                if (false === $traitImport->hasAliasFor($method->name())) {
+                    $traitMethods[] = $method;
+                    continue;
+                }
+
+                $traitAlias = $traitImport->getAlias($method->name());
+                $virtualMethod = VirtualReflectionMethod::fromReflectionMethod($trait->methods()->get($traitAlias->originalName()))
+                    ->withName($traitAlias->newName())
+                    ->withVisibility($traitAlias->visiblity($method->visibility()));
+
+                $traitMethods[] = $virtualMethod;
             }
+            $methods = $methods->merge(VirtualReflectionMethodCollection::fromReflectionMethods($traitMethods));
         }
 
         if ($this->parent()) {
@@ -244,6 +266,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     public function traits(): CoreReflectionTraitCollection
     {
         $parentTraits = null;
+
         if ($this->parent()) {
             $parentTraits = $this->parent()->traits();
         }
