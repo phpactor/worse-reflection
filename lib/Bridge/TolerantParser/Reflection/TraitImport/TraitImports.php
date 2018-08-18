@@ -10,6 +10,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\TraitSelectOrAliasClause;
 use Microsoft\PhpParser\Node\TraitUseClause;
 use Microsoft\PhpParser\TokenKind;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Patch\TolerantQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Visibility;
 use RuntimeException;
 
@@ -25,9 +26,13 @@ class TraitImports implements Countable, IteratorAggregate
                 continue;
             }
 
-            $traitNames = array_map(function ($name) {
-                return (string) $name;
-            }, iterator_to_array($memberDeclaration->traitNameList->getElements()));
+            $traitNames = array_filter(array_map(function ($name) {
+                if (!$name instanceof QualifiedName) {
+                    return null;
+                }
+
+                return (string) TolerantQualifiedNameResolver::getResolvedName($name);
+            }, iterator_to_array($memberDeclaration->traitNameList->getElements())));
 
             if (empty($traitNames)) {
                 continue;
