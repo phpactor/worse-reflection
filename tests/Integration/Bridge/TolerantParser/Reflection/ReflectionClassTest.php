@@ -308,16 +308,20 @@ EOT
 
 trait TraitOne
 {
-    public function one()
-    {
-    }
+    public function one() {}
+    public function three() {}
 }
 
 
 class Class2
 {
     use TraitOne {
-        one as private two
+        one as private two;
+        three as protected three;
+    }
+
+    public function one()
+    {
     }
 }
 
@@ -325,8 +329,10 @@ EOT
         ,
             'Class2',
             function (ReflectionClass $class) {
-                $this->assertEquals(1, $class->methods()->count());
+                $this->assertEquals(3, $class->methods()->count());
+                $this->assertTrue($class->methods()->has('one'));
                 $this->assertTrue($class->methods()->has('two'));
+                $this->assertTrue($class->methods()->has('three'));
                 $this->assertFalse($class->methods()->belongingTo(ClassName::fromString(Class2::class))->has('two'));
                 $this->assertEquals('TraitOne', $class->methods()->get('two')->declaringClass()->name()->short());
             },
