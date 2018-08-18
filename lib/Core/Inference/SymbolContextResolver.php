@@ -368,9 +368,6 @@ class SymbolContextResolver
         /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
         $reflectionClass = $this->reflector->reflectClassLike($class->getNamespacedName()->__toString());
         $reflectionMethod = $reflectionClass->methods()->get($method->getName());
-        if (null === $node->getName()) {
-            var_dump($node);
-        }
 
         if (!$reflectionMethod->parameters()->has($node->getName())) {
             throw new CouldNotResolveNode(sprintf(
