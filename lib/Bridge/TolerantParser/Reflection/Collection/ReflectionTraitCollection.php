@@ -33,4 +33,9 @@ class ReflectionTraitCollection extends AbstractReflectionCollection implements 
 
         return new static($serviceLocator, $items);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionTraitCollection::class;
+    }
 }

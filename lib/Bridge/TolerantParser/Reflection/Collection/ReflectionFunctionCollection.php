@@ -27,4 +27,9 @@ class ReflectionFunctionCollection extends AbstractReflectionCollection implemen
 
         return new self($serviceLocator, $items);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionFunctionCollection::class;
+    }
 }

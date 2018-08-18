@@ -55,4 +55,9 @@ class ReflectionConstantCollection extends ReflectionMemberCollection implements
         }
         return new static($serviceLocator, $items);
     }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionConstantCollection::class;
+    }
 }

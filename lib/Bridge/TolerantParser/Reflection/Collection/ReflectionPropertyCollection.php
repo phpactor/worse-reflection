@@ -19,7 +19,7 @@ use Phpactor\WorseReflection\Core\ClassName;
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty last()
  */
-class ReflectionPropertyCollection extends ReflectionMemberCollection implements CoreReflectionPropertyCollection
+class ReflectionPropertyCollection extends ReflectionMemberCollection implements corereflectionpropertycollection
 {
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
     {
@@ -67,5 +67,10 @@ class ReflectionPropertyCollection extends ReflectionMemberCollection implements
         }
 
         return new static($serviceLocator, $items);
+    }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionPropertyCollection::class;
     }
 }

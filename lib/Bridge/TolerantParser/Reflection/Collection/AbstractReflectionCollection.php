@@ -24,6 +24,8 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         $this->items = $items;
     }
 
+    abstract protected function collectionType(): string;
+
     public function count()
     {
         return count($this->items);
@@ -44,8 +46,17 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return new static($serviceLocator, []);
     }
 
-    public function merge(ReflectionCollection $collection): ReflectionCollection
+    public function merge(ReflectionCollection $collection)
     {
+        $type = $this->collectionType();
+
+        if (false === $collection instanceof $type) {
+            throw new \InvalidArgumentException(sprintf(
+                'Collection must be instance of "%s"',
+                static::class
+            ));
+        }
+
         $items = $this->items;
 
         foreach ($collection as $key => $value) {
