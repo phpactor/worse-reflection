@@ -49,6 +49,10 @@ class TraitImports implements Countable, IteratorAggregate
                         continue;
                     }
 
+                    if ($clause->asOrInsteadOfKeyword->kind === TokenKind::InsteadOfKeyword) {
+                        continue;
+                    }
+
                     $memberName = (string) $clause->name;
                     $targetName = (string) $clause->targetName;
 

@@ -46,7 +46,7 @@ class TraitImportsTest extends IntegrationTestCase
         ];
 
         yield 'simple use with alias and visiblity' => [
-            '<?php trait A { function foo() {}}; class B { use A { foo as private bar; bar as protected bar; zed as public aar}',
+            '<?php trait A { function foo() {}}; class B { use A { foo as private bar; bar as protected bar; zed as public aar;}',
             function (TraitImports $traitImports) {
                 $traitImport = $traitImports->get('A');
                 ;
@@ -55,6 +55,17 @@ class TraitImportsTest extends IntegrationTestCase
                 $this->assertEquals(Visibility::private(), $traitImport->traitAliases()['foo']->visiblity());
                 $this->assertEquals(Visibility::protected(), $traitImport->traitAliases()['bar']->visiblity());
                 $this->assertEquals(Visibility::public(), $traitImport->traitAliases()['zed']->visiblity());
+            }
+        ];
+
+        yield 'does not support insteadof' => [
+            '<?php trait A { function foo(){} function bar()}}' .
+            'trait B { function foo() {}} ' .
+            'class B { use A, B { B::foo insteadof A } }',
+            function (TraitImports $traitImports) {
+                $traitImport = $traitImports->get('A');
+                assert($traitAlias instanceof TraitAlias);
+                $this->assertCount(0, $traitImport->traitAliases());
             }
         ];
     }
