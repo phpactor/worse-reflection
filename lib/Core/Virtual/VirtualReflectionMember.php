@@ -98,6 +98,20 @@ abstract class VirtualReflectionMember implements ReflectionMember
         return $this->declaringClass;
     }
 
+    public function withDeclaringClass(ReflectionClassLike $contextClass): self
+    {
+        $new = clone $this;
+        $new->declaringClass = $contextClass;
+        return $new;
+    }
+
+    public function withVisibility(Visibility $visibility): self
+    {
+        $new = clone $this;
+        $new->visibility = $visibility;
+        return $new;
+    }
+
     public function class(): ReflectionClassLike
     {
         return $this->class;

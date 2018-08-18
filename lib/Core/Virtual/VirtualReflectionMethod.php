@@ -66,7 +66,7 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
         $this->isStatic = $isStatic;
     }
 
-    public static function fromReflectionMethod(ReflectionMethod $reflectionMethod)
+    public static function fromReflectionMethod(ReflectionMethod $reflectionMethod): self
     {
         return new self(
             $reflectionMethod->position(),

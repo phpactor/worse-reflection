@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Name;
@@ -310,6 +311,7 @@ trait TraitOne
 {
     public function one() {}
     public function three() {}
+    public function four() {}
 }
 
 
@@ -329,10 +331,13 @@ EOT
         ,
             'Class2',
             function (ReflectionClass $class) {
-                $this->assertEquals(3, $class->methods()->count());
+                $this->assertEquals(4, $class->methods()->count());
                 $this->assertTrue($class->methods()->has('one'));
                 $this->assertTrue($class->methods()->has('two'));
                 $this->assertTrue($class->methods()->has('three'));
+                $this->assertTrue($class->methods()->has('four'));
+                $this->assertEquals(Visibility::private(), $class->methods()->get('two')->visibility());
+                $this->assertEquals(Visibility::protected(), $class->methods()->get('three')->visibility());
                 $this->assertFalse($class->methods()->belongingTo(ClassName::fromString(Class2::class))->has('two'));
                 $this->assertEquals('TraitOne', $class->methods()->get('two')->declaringClass()->name()->short());
             },

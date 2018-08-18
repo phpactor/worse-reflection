@@ -37,7 +37,7 @@ class TraitImportsTest extends IntegrationTestCase
             function (TraitImports $traitImports) {
                 $this->assertCount(1, $traitImports);
                 $traitImport = $traitImports->get('A');
-                $this->assertTrue($traitImport->hasTraitAliases());
+                $this->assertCount(1, $traitImport->traitAliases());
                 $traitAlias = $traitImport->traitAliases()['foo'];
                 assert($traitAlias instanceof TraitAlias);
                 $this->assertEquals('foo', $traitAlias->originalName());
@@ -66,6 +66,22 @@ class TraitImportsTest extends IntegrationTestCase
                 $traitImport = $traitImports->get('A');
                 assert($traitAlias instanceof TraitAlias);
                 $this->assertCount(0, $traitImport->traitAliases());
+            }
+        ];
+
+        yield 'multiple traits with single alias maping' => [
+            '<?php trait A { function foo(){} }' .
+            'trait B { function bar(){} } ' .
+            'class B { use A, B { foo as foo1; bar as bar1 } }',
+            function (TraitImports $traitImports) {
+                $this->assertCount(2, $traitImports);
+                $traitImport = $traitImports->get('A');
+                assert($traitAlias instanceof TraitAlias);
+                $this->assertCount(2, $traitImport->traitAliases());
+
+                $traitImport = $traitImports->get('B');
+                assert($traitAlias instanceof TraitAlias);
+                $this->assertCount(2, $traitImport->traitAliases());
             }
         ];
     }

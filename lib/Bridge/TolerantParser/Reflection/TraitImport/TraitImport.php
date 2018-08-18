@@ -5,17 +5,16 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport;
 class TraitImport
 {
     private $traitName;
-    private $traitAliases = null;
 
-    public function __construct(string $traitName, array $traitAliases = null)
+    /**
+     * @var array
+     */
+    private $traitAliases = [];
+
+    public function __construct(string $traitName, array $traitAliases = [])
     {
         $this->traitName = $traitName;
         $this->traitAliases = $traitAliases;
-    }
-
-    public function hasTraitAliases()
-    {
-        return null !== $this->traitAliases;
     }
 
     public function name(): string
@@ -26,5 +25,15 @@ class TraitImport
     public function traitAliases(): array
     {
         return $this->traitAliases;
+    }
+
+    public function getAlias($name): TraitAlias
+    {
+        return $this->traitAliases[$name];
+    }
+
+    public function hasAliasFor($name): bool
+    {
+        return array_key_exists($name, $this->traitAliases);
     }
 }

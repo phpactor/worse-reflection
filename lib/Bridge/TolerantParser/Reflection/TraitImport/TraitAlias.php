@@ -10,7 +10,7 @@ class TraitAlias
     private $visiblity;
     private $newName;
 
-    public function __construct(string $originalName, Visibility $visiblity, string $newName)
+    public function __construct(string $originalName, Visibility $visiblity = null, string $newName)
     {
         $this->originalName = $originalName;
         $this->visiblity = $visiblity;
@@ -22,9 +22,9 @@ class TraitAlias
         return $this->originalName;
     }
 
-    public function visiblity(): Visibility
+    public function visiblity(Visibility $default = null): Visibility
     {
-        return $this->visiblity;
+        return $this->visiblity ?: $default ?: Visibility::public();
     }
 
     public function newName(): string

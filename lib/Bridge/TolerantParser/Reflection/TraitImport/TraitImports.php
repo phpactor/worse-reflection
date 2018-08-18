@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\TraitSelectOrAliasClause;
 use Microsoft\PhpParser\Node\TraitUseClause;
@@ -39,28 +40,40 @@ class TraitImports implements Countable, IteratorAggregate
                 continue;
             }
 
-            $traitName = reset($traitNames);
-            $aliases = [];
+            foreach ($traitNames as $traitName) {
+                $aliases = [];
 
-            foreach ($memberDeclaration->traitSelectAndAliasClauses as $selectAndAliasClauses)
-            {
-                foreach($selectAndAliasClauses as $clause) {
-                    if (false === $clause instanceof TraitSelectOrAliasClause) {
-                        continue;
+                foreach ($memberDeclaration->traitSelectAndAliasClauses as $selectAndAliasClauses)
+                {
+                    foreach($selectAndAliasClauses as $clause) {
+                        if (false === $clause instanceof TraitSelectOrAliasClause) {
+                            continue;
+                        }
+
+                        // Only support "as" keyword, do not support "insteadof"
+                        // (the last one will win in the reflection class logic
+                        // currently).
+                        if ($clause->asOrInsteadOfKeyword->kind !== TokenKind::AsKeyword) {
+                            continue;
+                        }
+
+                        if (!$clause->name instanceof QualifiedName) {
+                            continue;
+                        }
+
+                        if (!$clause->targetName instanceof QualifiedName) {
+                            continue;
+                        }
+
+                        $memberName = (string) $clause->name;
+                        $targetName = (string) $clause->targetName;
+
+                        $aliases[$memberName] = new TraitAlias($memberName, $this->visiblity($clause), $targetName);
                     }
-
-                    if ($clause->asOrInsteadOfKeyword->kind === TokenKind::InsteadOfKeyword) {
-                        continue;
-                    }
-
-                    $memberName = (string) $clause->name;
-                    $targetName = (string) $clause->targetName;
-
-                    $aliases[$memberName] = new TraitAlias($memberName, $this->visiblity($clause), $targetName);
                 }
-            }
 
-            $this->imports[$traitName] = new TraitImport($traitName, $aliases);
+                $this->imports[$traitName] = new TraitImport($traitName, $aliases);
+            }
         }
     }
 
@@ -98,10 +111,14 @@ class TraitImports implements Countable, IteratorAggregate
             if ($modifier->kind === TokenKind::ProtectedKeyword) {
                 return Visibility::protected();
             }
+
+            if ($modifier->kind === TokenKind::PublicKeyword) {
+                return Visibility::public();
+            }
         }
 
 
-        return Visibility::public();
+        return null;
     }
 
     /**
