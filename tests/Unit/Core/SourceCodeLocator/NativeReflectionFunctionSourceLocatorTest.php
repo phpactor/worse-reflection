@@ -31,6 +31,12 @@ class NativeReflectionFunctionSourceLocatorTest extends TestCase
         $this->expectException(SourceNotFound::class);
         $this->locator->locate(Name::fromString(__NAMESPACE__ . '\\not_existing'));
     }
+
+    public function testDoesNotLocateInternalFunctions()
+    {
+        $this->expectException(SourceNotFound::class);
+        $this->locator->locate(Name::fromString('assert'));
+    }
 }
 
 function test_function()
