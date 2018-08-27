@@ -19,6 +19,7 @@ use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\UseVariableName;
 use Microsoft\PhpParser\Token;
+use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -696,7 +697,13 @@ class SymbolContextResolver
         $ancestor = $node->getFirstAncestor(ObjectCreationExpression::class, ClassLike::class);
 
         if ($ancestor instanceof ObjectCreationExpression) {
-            throw new CouldNotResolveNode('Resolving anonymous classes is not currently supported');
+            if ($ancestor->classTypeDesignator instanceof Token) {
+                if ($ancestor->classTypeDesignator->kind == TokenKind::ClassKeyword) {
+                    throw new CouldNotResolveNode('Resolving anonymous classes is not currently supported');
+                }
+            }
+
+            return $this->getClassLikeAncestor($ancestor);
         }
 
         return $ancestor;

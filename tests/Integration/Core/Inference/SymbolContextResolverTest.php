@@ -20,7 +20,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
 {
     public function tearDown()
     {
-        //var_dump($this->logger);
+        //var_dump($this->logger());
     }
 
     /**
@@ -253,7 +253,7 @@ class Foobar {
 
 EOT
             , [], ['type' => '<unknown>', 'symbol_type' => '<unknown>', 'symbol_name' => '<unknown>']
-        ];
+            ];
 
         yield 'It returns the FQN of a static call' => [
                 <<<'EOT'
@@ -1020,25 +1020,25 @@ EOT
         foreach ($expectedInformation as $name => $value) {
             switch ($name) {
                 case 'type':
-                    $this->assertEquals($value, (string) $information->type());
+                    $this->assertEquals($value, (string) $information->type(), $name);
                     continue;
                 case 'value':
-                    $this->assertEquals($value, $information->value());
+                    $this->assertEquals($value, $information->value(), $name);
                     continue;
                 case 'name':
-                    $this->assertEquals(Name::fromString($value), $information->name());
+                    $this->assertEquals(Name::fromString($value), $information->name(), $name);
                     continue;
                 case 'symbol_type':
-                    $this->assertEquals($value, $information->symbol()->symbolType());
+                    $this->assertEquals($value, $information->symbol()->symbolType(), $name);
                     continue;
                 case 'symbol_name':
-                    $this->assertEquals($value, $information->symbol()->name());
+                    $this->assertEquals($value, $information->symbol()->name(), $name);
                     continue;
                 case 'container_type':
-                    $this->assertEquals($value, (string) $information->containerType());
+                    $this->assertEquals($value, (string) $information->containerType(), $name);
                     continue;
                 case 'log':
-                    $this->assertContains($value, implode(' ', $this->logger->messages()));
+                    $this->assertContains($value, implode(' ', $this->logger->messages()), $name);
                     continue;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));
