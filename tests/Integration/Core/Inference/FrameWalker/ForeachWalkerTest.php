@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Generator;
@@ -27,6 +28,25 @@ EOT
                 $this->assertEquals('int', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
         ];
+
+        yield 'yields array keys' => [
+            <<<'EOT'
+<?php
+/** @var int[] $items */
+$items = [ 'one' => 1, 'two' => 2 ];
+
+foreach ($items as $key => $item) {
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(4, $frame->locals());
+                $this->assertCount(1, $frame->locals()->byName('key'));
+                $this->assertEquals(Type::unknown(), $frame->locals()->byName('key')->first()->symbolContext()->types()->best());
+            }
+        ];
+
 
         yield 'Assigns fully qualfied type to foreach item' => [
             <<<'EOT'
