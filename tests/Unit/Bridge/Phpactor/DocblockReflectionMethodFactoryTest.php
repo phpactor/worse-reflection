@@ -4,6 +4,9 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
+use PhpParser\Comment\Doc;
+use Phpactor\Docblock\DefaultValue;
+use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\Docblock\Method\Parameter;
 use Phpactor\Docblock\Tag\MethodTag;
@@ -74,7 +77,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
             }
         ];
 
-        yield 'multiple types' => [
+        yield 'parameters' => [
             new MethodTag(
                 DocblockTypes::fromStringTypes(['Foobar', 'string']),
                 'myMethod',
@@ -85,6 +88,28 @@ class DocblockReflectionMethodFactoryTest extends TestCase
             ),
             function (ReflectionMethod $method) {
                 $this->assertEquals(2, $method->parameters()->count());
+                $this->assertEquals('one', $method->parameters()->first()->name());
+                $this->assertEquals('two', $method->parameters()->get('two')->name());
+            }
+        ];
+
+        yield 'parameters with type and default value' => [
+            new MethodTag(
+                DocblockTypes::fromStringTypes(['Foobar', 'string']),
+                'myMethod',
+                [
+                    new Parameter('one', DocblockTypes::fromDocblockTypes([
+                        DocblockType::of('string'),
+                        DocblockType::of('int'),
+                    ], DefaultValue::ofValue(1234)))
+                ]
+            ),
+            function (ReflectionMethod $method) {
+                $this->assertEquals(1, $method->parameters()->count());
+                $parameter = $method->parameters()->first();
+                $this->assertEquals('one', $parameter->name());
+                $this->assertCount(2, $parameter->inferredTypes());
+                $this->assertEquals('string', $parameter->inferredTypes()->best());
             }
         ];
     }

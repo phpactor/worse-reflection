@@ -4,25 +4,31 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
+use Phpactor\Docblock\Method\Parameter;
 use Phpactor\Docblock\Tag\MethodTag;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionParameter;
+use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 use Phpactor\WorseReflection\Core\Visibility;
 
 class DocblockReflectionMethodFactory
 {
     public function create(DocBlock $docblock, ReflectionClassLike $reflectionClass, MethodTag $methodTag)
     {
-        $types = $this->typesFrom($reflectionClass, $methodTag->types());
+        $types = $this->typesFrom($reflectionClass->scope(), $methodTag->types());
+        $parameters = VirtualReflectionParameterCollection::empty();
         
-        return new VirtualReflectionMethod(
+        $reflectionMethod = new VirtualReflectionMethod(
             $reflectionClass->position(),
             $reflectionClass,
             $reflectionClass,
@@ -33,21 +39,42 @@ class DocblockReflectionMethodFactory
             Visibility::public(),
             $types,
             Type::unknown(),
-            VirtualReflectionParameterCollection::empty(),
+            $parameters,
             NodeText::fromString(''),
             false,
             false
         );
+
+        $this->parametersFrom($parameters, $reflectionMethod, $methodTag);
+
+        return $reflectionMethod;
     }
 
-    private function typesFrom(ReflectionClassLike $reflectionClass, DocblockTypes $docblockTypes)
+    private function typesFrom(ReflectionScope $scope, DocblockTypes $docblockTypes)
     {
         $types = [];
         /** @var DocblockType $docblockType */
         foreach ($docblockTypes as $docblockType) {
-            $types[] = Type::fromString($reflectionClass->scope()->resolveFullyQualifiedName($docblockType->__toString()));
+            $types[] = Type::fromString($scope->resolveFullyQualifiedName($docblockType->__toString()));
         }
 
         return Types::fromTypes($types);
+    }
+
+    private function parametersFrom(VirtualReflectionParameterCollection $parameterCollection, VirtualReflectionMethod $reflectionMethod, MethodTag $methodTag)
+    {
+        /** @var Parameter $parameter */
+        foreach ($methodTag->parameters() as $parameter) {
+            $parameterCollection->add(new VirtualReflectionParameter(
+                $parameter->name(),
+                $reflectionMethod,
+                $this->typesFrom($reflectionMethod->scope(), $parameter->type()),
+                Type::unknown(),
+                DefaultValue::fromValue($parameter->defaultValue()->value()),
+                false,
+                $reflectionMethod->scope(),
+                $reflectionMethod->position()
+            ));
+        }
     }
 }
