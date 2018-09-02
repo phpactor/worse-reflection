@@ -17,6 +17,8 @@ interface ReflectionClassLike extends ReflectionNode
 
     public function methods(): ReflectionMethodCollection;
 
+    public function inferredMethods(): ReflectionMethodCollection;
+
     public function members(): ReflectionMemberCollection;
 
     public function sourceCode(): SourceCode;

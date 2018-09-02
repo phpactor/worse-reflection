@@ -343,6 +343,56 @@ EOT
             },
         ];
 
+        yield 'virtual methods' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @method \Foobar foobar()
+ * @method \Foobar barfoo()
+ */
+class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function ($class) {
+                $this->assertEquals(2, $class->inferredMethods()->count());
+            },
+        ];
+
+        yield 'virtual methods merge onto existing ones' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @method \Foobar foobar()
+ */
+class Class1
+{
+    public function foobar(): \Barfoo
+    {
+    }
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertEquals(
+                    'Foobar',
+                    $class->inferredMethods()->first()->type()->__toString(),
+                    'original type should be preserved'
+                );
+                $this->assertEquals(
+                    'Foobar',
+                    $class->inferredMethods()->first()->inferredTypes()->best()->__toString()
+                );
+            },
+        ];
+
         yield 'Get properties includes trait properties' => [
             <<<'EOT'
 <?php

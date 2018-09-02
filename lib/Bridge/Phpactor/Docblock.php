@@ -133,8 +133,8 @@ class Docblock implements CoreDocblock
     {
         $methods = [];
         /** @var MethodTag $methodTag */
-        foreach($this->docblock->fromTags('method') as $methodTag) {
-            $methods[$methodTag->methodName()] = $this->methodFactory->create($declaringClass, $methodTag);
+        foreach($this->docblock->tags('method') as $methodTag) {
+            $methods[$methodTag->methodName()] = $this->methodFactory->create($this, $declaringClass, $methodTag);
         }
 
         return VirtualReflectionMethodCollection::fromReflectionMethods($methods);

@@ -68,7 +68,7 @@ class DocblockReflectionMethodFactory
             $parameterCollection->add(new VirtualReflectionParameter(
                 $parameter->name(),
                 $reflectionMethod,
-                $this->typesFrom($reflectionMethod->scope(), $parameter->type()),
+                $this->typesFrom($reflectionMethod->scope(), $parameter->types()),
                 Type::unknown(),
                 DefaultValue::fromValue($parameter->defaultValue()->value()),
                 false,

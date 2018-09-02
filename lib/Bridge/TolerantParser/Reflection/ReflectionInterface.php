@@ -132,6 +132,14 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return $this->methods;
     }
 
+    public function inferredMethods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
+    {
+        $actualMethods = $this->methods($contextClass);
+        $virtualMethods = $this->docblock()->methods($contextClass ?: $this);
+
+        return $actualMethods->merge($virtualMethods);
+    }
+
     public function name(): ClassName
     {
         return ClassName::fromString((string) $this->node()->getNamespacedName());

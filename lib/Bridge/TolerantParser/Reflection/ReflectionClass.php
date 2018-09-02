@@ -237,7 +237,9 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     public function inferredMethods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
     {
         $actualMethods = $this->methods($contextClass);
-        $virtaulMethods = VirtualReflectionMethodCollection::fromDocblock($this->docblock());
+        $virtualMethods = $this->docblock()->methods($contextClass ?: $this);
+
+        return $actualMethods->merge($virtualMethods);
     }
 
     public function interfaces(): CoreReflectionInterfaceCollection
