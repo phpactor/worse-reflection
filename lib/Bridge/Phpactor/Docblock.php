@@ -4,12 +4,17 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
+use Phpactor\Docblock\Tag\MethodTag;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 
 class Docblock implements CoreDocblock
 {
@@ -23,10 +28,16 @@ class Docblock implements CoreDocblock
      */
     private $raw;
 
-    public function __construct(string $raw, PhpactorDocblock $docblock)
+    /**
+     * @var DocblockReflectionMethodFactory
+     */
+    private $methodFactory;
+
+    public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null)
     {
         $this->docblock = $docblock;
         $this->raw = $raw;
+        $this->methodFactory = $methodFactory ?: new DocblockReflectionMethodFactory();
     }
 
     public function isDefined(): bool
@@ -116,6 +127,17 @@ class Docblock implements CoreDocblock
         }, iterator_to_array($types));
 
         return Types::fromTypes($types);
+    }
+
+    public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection
+    {
+        $methods = [];
+        /** @var MethodTag $methodTag */
+        foreach($this->docblock->fromTags('method') as $methodTag) {
+            $methods[$methodTag->methodName()] = $this->methodFactory->create($declaringClass, $methodTag);
+        }
+
+        return VirtualReflectionMethodCollection::fromReflectionMethods($methods);
     }
 
     private function typesFromDocblockType(DocblockType $type)

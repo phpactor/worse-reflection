@@ -21,4 +21,9 @@ class VirtualReflectionParameterCollection extends AbstractReflectionCollection 
 
         return new static($parameters);
     }
+
+    public static function empty()
+    {
+        return new static([]);
+    }
 }
