@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
 use Phpactor\Docblock\DocblockType;
-use Phpactor\Docblock\Tag\DocblockTypes;
+use Phpactor\Docblock\DocblockTypes;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
@@ -121,7 +121,7 @@ class Docblock implements CoreDocblock
     private function typesFromDocblockType(DocblockType $type)
     {
         if ($type->isArray()) {
-            return Type::array($type->iteratedType());
+            return Type::array((string) $type->iteratedType());
         }
         
         if ($type->isCollection()) {
