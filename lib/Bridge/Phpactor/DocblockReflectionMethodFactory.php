@@ -27,6 +27,7 @@ class DocblockReflectionMethodFactory
     {
         $types = $this->typesFrom($reflectionClass->scope(), $methodTag->types());
         $parameters = VirtualReflectionParameterCollection::empty();
+
         $originalMethod = $reflectionClass->methods()->has($methodTag->methodName()) ?
             $reflectionClass->methods()->get($methodTag->methodName()) : null;
         
