@@ -27,6 +27,8 @@ class DocblockReflectionMethodFactory
     {
         $types = $this->typesFrom($reflectionClass->scope(), $methodTag->types());
         $parameters = VirtualReflectionParameterCollection::empty();
+        $originalMethod = $reflectionClass->methods()->has($methodTag->methodName()) ?
+            $reflectionClass->methods()->get($methodTag->methodName()) : null;
         
         $reflectionMethod = new VirtualReflectionMethod(
             $reflectionClass->position(),
@@ -38,7 +40,7 @@ class DocblockReflectionMethodFactory
             $reflectionClass->scope(),
             Visibility::public(),
             $types,
-            Type::unknown(),
+            $originalMethod ? $originalMethod->type() : Type::unknown(),
             $parameters,
             NodeText::fromString(''),
             false,

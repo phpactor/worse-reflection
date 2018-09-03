@@ -58,14 +58,6 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
         return ReflectionMethodCollection::fromTraitDeclaration($this->serviceLocator, $this->node, $contextClass);
     }
 
-    public function inferredMethods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
-    {
-        $actualMethods = $this->methods($contextClass);
-        $virtualMethods = $this->docblock()->methods($contextClass ?: $this);
-
-        return $actualMethods->merge($virtualMethods);
-    }
-
     public function members(): ReflectionMemberCollection
     {
         return ChainReflectionMemberCollection::fromCollections([

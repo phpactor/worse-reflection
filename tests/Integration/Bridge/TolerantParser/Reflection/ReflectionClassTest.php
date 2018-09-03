@@ -343,56 +343,6 @@ EOT
             },
         ];
 
-        yield 'virtual methods' => [
-            <<<'EOT'
-<?php
-
-/**
- * @method \Foobar foobar()
- * @method \Foobar barfoo()
- */
-class Class1
-{
-}
-
-EOT
-        ,
-            'Class1',
-            function ($class) {
-                $this->assertEquals(2, $class->inferredMethods()->count());
-            },
-        ];
-
-        yield 'virtual methods merge onto existing ones' => [
-            <<<'EOT'
-<?php
-
-/**
- * @method \Foobar foobar()
- */
-class Class1
-{
-    public function foobar(): \Barfoo
-    {
-    }
-}
-
-EOT
-        ,
-            'Class1',
-            function (ReflectionClass $class) {
-                $this->assertEquals(
-                    'Foobar',
-                    $class->inferredMethods()->first()->type()->__toString(),
-                    'original type should be preserved'
-                );
-                $this->assertEquals(
-                    'Foobar',
-                    $class->inferredMethods()->first()->inferredTypes()->best()->__toString()
-                );
-            },
-        ];
-
         yield 'Get properties includes trait properties' => [
             <<<'EOT'
 <?php
@@ -675,6 +625,114 @@ EOT
             function (ReflectionClass $class) {
                 $this->assertNull($class->parent());
                 $this->assertEquals('Class1', $class->name()->short());
+            },
+        ];
+    }
+
+    /**
+     * @dataProvider provideVirtualMethods
+     */
+    public function testVirtualMethods(string $source, string $class, \Closure $assertion)
+    {
+        $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
+        $assertion($class);
+    }
+
+
+    public function provideVirtualMethods()
+    {
+        yield 'virtual methods' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @method \Foobar foobar()
+ * @method \Foobar barfoo()
+ */
+class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function ($class) {
+                $this->assertEquals(2, $class->inferredMethods()->count());
+                $this->assertEquals('foobar', $class->inferredMethods()->first()->name());
+            }
+        ];
+
+        yield 'virtual methods merge onto existing ones' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @method \Foobar foobar()
+ */
+class Class1
+{
+    public function foobar(): \Barfoo
+    {
+    }
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertCount(1, $class->inferredMethods());
+                $this->assertEquals(
+                    'Barfoo',
+                    $class->inferredMethods()->first()->type()->__toString(),
+                    'original type should be preserved'
+                );
+                $this->assertEquals('Foobar', $class->inferredMethods()->first()->inferredTypes()->best()->__toString());
+            },
+        ];
+
+        yield 'virtual methods are inherited' => [
+            <<<'EOT'
+<?php
+
+
+/** @method \Foobar foobar() */
+class Class1 {}
+
+class Class2 extends Class1 {
+    public function foo()  {}
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertCount(2, $class->inferredMethods());
+                $this->assertEquals(
+                    'Foobar',
+                    $class->inferredMethods()->get('foobar')->inferredTypes()->best()->__toString()
+                );
+            },
+        ];
+
+        yield 'virtual method types can be relative' => [
+            '<?php namespace Bosh { /** @method Foobar foobar() */ class Class1 {}',
+            'Bosh\Class1',
+            function (ReflectionClass $class) {
+                $this->assertEquals(
+                    'Bosh\Foobar',
+                    $class->inferredMethods()->get('foobar')->inferredTypes()->best()->__toString()
+                );
+            },
+        ];
+
+        yield 'virtual method types can be absolute' => [
+            '<?php namespace Bosh { /** @method \Foobar foobar() */ class Class1 {}',
+            'Bosh\Class1',
+            function (ReflectionClass $class) {
+                $this->assertEquals(
+                    'Foobar',
+                    $class->inferredMethods()->get('foobar')->inferredTypes()->best()->__toString()
+                );
             },
         ];
     }

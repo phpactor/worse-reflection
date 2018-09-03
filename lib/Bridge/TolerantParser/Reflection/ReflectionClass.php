@@ -182,7 +182,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $properties;
     }
 
-    public function methods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
+    public function methods(CoreReflectionClass $contextClass = null, bool $docblockMethods = false): CoreReflectionMethodCollection
     {
         $cacheKey = $contextClass ? (string) $contextClass->name() : '*_null_*';
 
@@ -236,10 +236,22 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
     public function inferredMethods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
     {
-        $actualMethods = $this->methods($contextClass);
+        $virtualMethods = $this->virtualMethods($contextClass);
+        $methods = $this->methods($contextClass)->merge($virtualMethods);
+        return $methods;
+    }
+
+    private function virtualMethods(CoreReflectionClass $contextClass = null)
+    {
         $virtualMethods = $this->docblock()->methods($contextClass ?: $this);
 
-        return $actualMethods->merge($virtualMethods);
+        if ($this->parent()) {
+            $virtualMethods = $virtualMethods->merge(
+                $this->parent()->virtualMethods($contextClass)->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
+        }
+
+        return $virtualMethods;
     }
 
     public function interfaces(): CoreReflectionInterfaceCollection
