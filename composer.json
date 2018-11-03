@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "microsoft/tolerant-php-parser": "0.*",
+        "microsoft/tolerant-php-parser": "dev-master",
         "jetbrains/phpstorm-stubs": "*",
         "psr/log": "^1.0",
         "phpactor/docblock": "^0.1"
