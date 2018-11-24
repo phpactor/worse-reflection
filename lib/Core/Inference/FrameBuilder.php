@@ -48,10 +48,10 @@ final class FrameBuilder
      */
     private $walkers;
 
-    public static function create(DocBlockFactory $docblockFactory, SymbolContextResolver $symbolContextResolver, Logger $logger)
+    public static function create(DocBlockFactory $docblockFactory, SymbolContextResolver $symbolContextResolver, Logger $logger, array $walkers = [])
     {
         $nameResolver = new FullyQualifiedNameResolver($logger);
-        $walkers = [
+        $walkers = array_merge([
             new AssertFrameWalker(),
             new FunctionLikeWalker(),
             new VariableWalker($docblockFactory, $nameResolver),
@@ -59,7 +59,7 @@ final class FrameBuilder
             new CatchWalker(),
             new ForeachWalker(),
             new InstanceOfWalker()
-        ];
+        ], $walkers);
 
         return new self($symbolContextResolver, $walkers);
     }
