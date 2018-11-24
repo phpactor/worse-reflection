@@ -14,7 +14,7 @@ use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 
-class VariableWalker
+class VariableWalker extends AbstractWalker
 {
     /**
      * @var DocBlockFactory
@@ -27,21 +27,14 @@ class VariableWalker
     private $injectedTypes = [];
 
     /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
-    /**
      * @var FullyQualifiedNameResolver
      */
     private $nameResolver;
 
     public function __construct(
-        SymbolFactory $symbolFactory,
         DocBlockFactory $docblockFactory,
         FullyQualifiedNameResolver $nameResolver
     ) {
-        $this->symbolFactory = $symbolFactory;
         $this->docblockFactory = $docblockFactory;
         $this->nameResolver = $nameResolver;
     }
@@ -63,7 +56,7 @@ class VariableWalker
             return $frame;
         }
 
-        $context = $this->symbolFactory->context(
+        $context = $this->symbolFactory()->context(
             $node->name->getText($node->getFileContents()),
             $node->getStart(),
             $node->getEndPosition(),

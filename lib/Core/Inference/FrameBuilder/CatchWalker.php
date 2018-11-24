@@ -11,18 +11,8 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node\CatchClause;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 
-class CatchWalker implements FrameWalker
+class CatchWalker extends AbstractWalker
 {
-    /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
-    public function __construct(SymbolFactory $symbolFactory)
-    {
-        $this->symbolFactory = $symbolFactory;
-    }
-
     public function canWalk(Node $node): bool
     {
         return $node instanceof CatchClause;
@@ -36,7 +26,7 @@ class CatchWalker implements FrameWalker
         }
 
         $typeContext = $builder->resolveNode($frame, $node->qualifiedName);
-        $context = $this->symbolFactory->context(
+        $context = $this->symbolFactory()->context(
             $node->variableName->getText($node->getFileContents()),
             $node->variableName->getStartPosition(),
             $node->variableName->getEndPosition(),

@@ -12,22 +12,15 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 
-class AbstractInstanceOfWalker
+abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
-    /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
     /**
      * @var ExpressionEvaluator
      */
     protected $evaluator;
 
-    public function __construct(
-        SymbolFactory $symbolFactory
-    ) {
-        $this->symbolFactory = $symbolFactory;
+    public function __construct()
+    {
         $this->evaluator = new ExpressionEvaluator();
     }
     /**
@@ -84,7 +77,7 @@ class AbstractInstanceOfWalker
 
     protected function createSymbolContext(Variable $leftOperand)
     {
-        $context = $this->symbolFactory->context(
+        $context = $this->symbolFactory()->context(
             $leftOperand->getName(),
             $leftOperand->getStart(),
             $leftOperand->getEndPosition(),

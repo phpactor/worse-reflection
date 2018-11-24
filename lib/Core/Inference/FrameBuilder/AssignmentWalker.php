@@ -22,21 +22,15 @@ use Microsoft\PhpParser\Node\ArrayElement;
 use Microsoft\PhpParser\MissingToken;
 use Microsoft\PhpParser\Node\Statement\ExpressionStatement;
 
-class AssignmentWalker implements FrameWalker
+class AssignmentWalker extends AbstractWalker
 {
-    /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
     /**
      * @var Logger
      */
     private $logger;
 
-    public function __construct(SymbolFactory $symbolFactory, Logger $logger)
+    public function __construct(Logger $logger)
     {
-        $this->symbolFactory = $symbolFactory;
         $this->logger = $logger;
     }
 
@@ -83,7 +77,7 @@ class AssignmentWalker implements FrameWalker
     private function walkParserVariable(Frame $frame, Variable $leftOperand, SymbolContext $rightContext)
     {
         $name = $leftOperand->name->getText($leftOperand->getFileContents());
-        $context = $this->symbolFactory->context(
+        $context = $this->symbolFactory()->context(
             $name,
             $leftOperand->getStart(),
             $leftOperand->getEndPosition(),
@@ -129,7 +123,7 @@ class AssignmentWalker implements FrameWalker
             $memberName = $memberNameInfo->value();
         }
 
-        $context = $this->symbolFactory->context(
+        $context = $this->symbolFactory()->context(
             $memberName,
             $leftOperand->getStart(),
             $leftOperand->getEndPosition(),
@@ -166,7 +160,7 @@ class AssignmentWalker implements FrameWalker
                 }
 
                 $varName = $elementValue->name->getText($leftOperand->getFileContents());
-                $variableContext = $this->symbolFactory->context(
+                $variableContext = $this->symbolFactory()->context(
                     $varName,
                     $element->getStart(),
                     $element->getEndPosition(),

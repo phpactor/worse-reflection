@@ -10,11 +10,10 @@ use Microsoft\PhpParser\Node\Statement\ExpressionStatement;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
-use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Microsoft\PhpParser\Node\Expression\Variable;
 
-class AssertWalker extends AbstractInstanceOfWalker implements FrameWalker
+class AssertFrameWalker extends AbstractInstanceOfWalker implements FrameWalker
 {
     public function canWalk(Node $node): bool
     {

@@ -15,18 +15,8 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 
-class ForeachWalker implements FrameWalker
+class ForeachWalker extends AbstractWalker
 {
-    /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
-    public function __construct(SymbolFactory $symbolFactory)
-    {
-        $this->symbolFactory = $symbolFactory;
-    }
-
     public function canWalk(Node $node): bool
     {
         return $node instanceof ForeachStatement;
@@ -58,7 +48,7 @@ class ForeachWalker implements FrameWalker
         
         $collectionType = $collection->types()->best();
         
-        $context = $this->symbolFactory->context(
+        $context = $this->symbolFactory()->context(
             $itemName,
             $node->getStart(),
             $node->getEndPosition(),
@@ -90,7 +80,7 @@ class ForeachWalker implements FrameWalker
         
         $collectionType = $collection->types()->best();
         
-        $context = $this->symbolFactory->context(
+        $context = $this->symbolFactory()->context(
             $itemName,
             $node->getStart(),
             $node->getEndPosition()

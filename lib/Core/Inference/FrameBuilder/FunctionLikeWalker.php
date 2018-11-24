@@ -19,18 +19,8 @@ use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
 use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\Token;
 
-class FunctionLikeWalker implements FrameWalker
+class FunctionLikeWalker extends AbstractWalker
 {
-    /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
-    public function __construct(SymbolFactory $symbolFactory)
-    {
-        $this->symbolFactory = $symbolFactory;
-    }
-
     public function canWalk(Node $node): bool
     {
         return $node instanceof FunctionLike;
@@ -65,7 +55,7 @@ class FunctionLikeWalker implements FrameWalker
         // works for both closure and class method (we currently ignore binding)
         if ($classNode) {
             $classType = $builder->resolveNode($frame, $classNode)->type();
-            $context = $this->symbolFactory->context(
+            $context = $this->symbolFactory()->context(
                 'this',
                 $node->getStart(),
                 $node->getEndPosition(),
@@ -94,7 +84,7 @@ class FunctionLikeWalker implements FrameWalker
 
             $symbolContext = $builder->resolveNode($frame, $parameterNode);
 
-            $context = $this->symbolFactory->context(
+            $context = $this->symbolFactory()->context(
                 $parameterName,
                 $parameterNode->getStart(),
                 $parameterNode->getEndPosition(),
@@ -127,7 +117,7 @@ class FunctionLikeWalker implements FrameWalker
         foreach ($useClause->useVariableNameList->getElements() as $element) {
             $varName = $element->variableName->getText($node->getFileContents());
 
-            $variableContext = $this->symbolFactory->context(
+            $variableContext = $this->symbolFactory()->context(
                 $varName,
                 $element->getStart(),
                 $element->getEndPosition(),
