@@ -59,7 +59,7 @@ final class ReflectorBuilder
         return new self();
     }
 
-    public function withSourceReflectorFactory(SourceCodeReflectorFactory $sourceReflectorFactory)
+    public function withSourceReflectorFactory(SourceCodeReflectorFactory $sourceReflectorFactory): ReflectorBuilder
     {
         $this->sourceReflectorFactory = $sourceReflectorFactory;
         return $this;
@@ -68,7 +68,7 @@ final class ReflectorBuilder
     /**
      * Replace the logger implementation.
      */
-    public function withLogger(Logger $logger)
+    public function withLogger(Logger $logger): ReflectorBuilder
     {
         $this->logger = $logger;
 
@@ -97,9 +97,10 @@ final class ReflectorBuilder
         return $this;
     }
 
-    public function addFrameWalker(FrameWalker $frameWalker)
+    public function addFrameWalker(FrameWalker $frameWalker): ReflectorBuilder
     {
         $this->framewalkers[] = $frameWalker;
+        return $this;
     }
 
     /**
