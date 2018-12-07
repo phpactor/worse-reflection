@@ -48,6 +48,7 @@ class IncludeWalker implements FrameWalker
         assert($node instanceof ScriptInclusionExpression);
         $context = $builder->resolveNode($frame, $node->expression);
         $includeUri = $context->value();
+        var_dump($includeUri);
         if (!is_string($includeUri)) {
             return $frame;
         }
@@ -62,6 +63,7 @@ class IncludeWalker implements FrameWalker
         $uri = $sourceNode->uri;
 
         if (!$uri) {
+            $this->logger->warning('source code has no path associated with it, cannot process include');
             return $frame;
         }
 

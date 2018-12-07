@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
+use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ObjectCreationExpression;
@@ -72,6 +73,11 @@ class SymbolContextResolver
      */
     private $nameResolver;
 
+    /**
+     * @var ExpressionEvaluator
+     */
+    private $expressionEvaluator;
+
     public function __construct(
         Reflector $reflector,
         Logger $logger,
@@ -83,6 +89,7 @@ class SymbolContextResolver
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
         $this->reflector = $reflector;
+        $this->expressionEvaluator = new ExpressionEvaluator();
     }
 
     public function resolveNode(Frame $frame, $node): SymbolContext
@@ -159,6 +166,20 @@ class SymbolContextResolver
 
         if ($node instanceof ParenthesizedExpression) {
             return $this->resolveParenthesizedExpression($frame, $node);
+        }
+
+        if ($node instanceof BinaryExpression) {
+            $value = $this->expressionEvaluator->evaluate($node);
+            return $this->symbolFactory->context(
+                $node->getText($node->getFileContents()),
+                $node->getEndPosition(),
+                $node->getStart(),
+                [
+                    'symbol_type' => Symbol::CLASS_,
+                    'type' => Type::fromValue($value),
+                    'value' => $value,
+                ]
+            );
         }
 
         if ($node instanceof ClassDeclaration || $node instanceof TraitDeclaration || $node instanceof InterfaceDeclaration) {
