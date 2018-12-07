@@ -14,7 +14,7 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
      */
     public function testEvaluate(string $source, $expectedResult)
     {
-        $rootNode = $this->parseSource('<?php ' . $source);
+        $rootNode = $this->parseSource('<?php ' . $source, $this->workspace()->path('foo.php'));
         $node = $rootNode->getFirstDescendantNode(Expression::class);
 
         $evaluator = new ExpressionEvaluator();
@@ -270,6 +270,16 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
         yield 'division by unresolable constant returns 0' => [
             '5 / SOME_CONSTANT',
             0
+        ];
+
+        yield 'magic constants: __DIR__' => [
+            '(__DIR__)',
+            rtrim($this->workspace()->path(''),'/')
+        ];
+
+        yield 'magic constants: __FILE__' => [
+            '(__FILE__)',
+            $this->workspace()->path('foo.php')
         ];
     }
 }

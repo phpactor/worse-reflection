@@ -48,7 +48,7 @@ class IncludeWalker implements FrameWalker
         assert($node instanceof ScriptInclusionExpression);
         $context = $builder->resolveNode($frame, $node->expression);
         $includeUri = $context->value();
-        var_dump($includeUri);
+
         if (!is_string($includeUri)) {
             return $frame;
         }
@@ -80,36 +80,40 @@ class IncludeWalker implements FrameWalker
         $includedFrame = $builder->build($sourceNode);
 
         $parentNode = $node->parent;
+
         if ($parentNode instanceof AssignmentExpression) {
-            $return = $sourceNode->getFirstDescendantNode(ReturnStatement::class);
-            assert($return instanceof ReturnStatement);
-            $returnValueContext = $builder->resolveNode($frame->new('required'), $return->expression);
-
-            if (!$parentNode->leftOperand instanceof Variable) {
-                return $frame;
-            }
-            
-            $name = $parentNode->leftOperand->name;
-
-            if (!$name instanceof Token) {
-                return $frame;
-            }
-
-            $name = $name->getText($node->getFileContents());
-
-            /** @var WorseVariable $variable */
-            foreach ($frame->locals()->byName($name) as $variable) {
-                $frame->locals()->add(
-                    $variable->withTypes($returnValueContext->types())
-                );
-                return $frame;
-            }
-
-            return $frame;
+            return $this->processAssignment($sourceNode, $builder, $frame, $parentNode, $node);
         }
 
         $frame->locals()->merge($includedFrame->locals());
 
         return $frame;
+    }
+
+    private function processAssignment(SourceFileNode $sourceNode, FrameBuilder $builder, Frame $frame, AssignmentExpression $parentNode, ScriptInclusionExpression $node)
+    {
+        $return = $sourceNode->getFirstDescendantNode(ReturnStatement::class);
+        assert($return instanceof ReturnStatement);
+        $returnValueContext = $builder->resolveNode($frame->new('required'), $return->expression);
+        
+        if (!$parentNode->leftOperand instanceof Variable) {
+            return $frame;
+        }
+        
+        $name = $parentNode->leftOperand->name;
+        
+        if (!$name instanceof Token) {
+            return $frame;
+        }
+        
+        $name = $name->getText($node->getFileContents());
+        
+        /** @var WorseVariable $variable */
+        foreach ($frame->locals()->byName($name) as $variable) {
+            $frame->locals()->add(
+                $variable->withTypes($returnValueContext->types())
+            );
+            return $frame;
+        }
     }
 }

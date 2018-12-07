@@ -77,5 +77,20 @@ EOT
                 $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
             }
         ];
+
+        yield 'Returns from constant' => [
+            <<<'EOT'
+<?php
+
+$foo = require(__DIR__ . '/return_value.php');
+<>
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(2, $frame->locals());
+                $this->assertEquals('foo', $frame->locals()->last()->__toString());
+                $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
+            }
+        ];
     }
 }

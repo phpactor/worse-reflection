@@ -40,10 +40,10 @@ class IntegrationTestCase extends TestCase
         return new Workspace(__DIR__ . '/../Workspace');
     }
 
-    protected function parseSource(string $source): SourceFileNode
+    protected function parseSource(string $source, string $uri = null): SourceFileNode
     {
         $parser = new Parser();
 
-        return $parser->parseSourceFile($source);
+        return $parser->parseSourceFile($source, $uri);
     }
 }
