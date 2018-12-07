@@ -171,7 +171,7 @@ class SymbolContextResolver
         if ($node instanceof BinaryExpression) {
             $value = $this->expressionEvaluator->evaluate($node);
             return $this->symbolFactory->context(
-                $node->getText($node->getFileContents()),
+                $node->getText(),
                 $node->getEndPosition(),
                 $node->getStart(),
                 [
