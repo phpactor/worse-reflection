@@ -15,6 +15,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
 use Microsoft\PhpParser\Token;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
 use Phpactor\WorseReflection\Core\Logger;
 use RuntimeException;
 use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
@@ -58,7 +59,8 @@ final class FrameBuilder
             new AssignmentWalker($logger),
             new CatchWalker(),
             new ForeachWalker(),
-            new InstanceOfWalker()
+            new InstanceOfWalker(),
+            new IncludeWalker($logger),
         ], $walkers);
 
         return new self($symbolContextResolver, $walkers);

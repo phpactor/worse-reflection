@@ -15,19 +15,27 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
+use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Types;
 use Webmozart\PathUtil\Path;
 
-class RequireWalker implements FrameWalker
+class IncludeWalker implements FrameWalker
 {
     /**
      * @var Parser
      */
     private $parser;
 
-    public function __construct(Parser $parser = null)
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+
+    public function __construct(Logger $logger, Parser $parser = null)
     {
         $this->parser = $parser ?: new Parser();
+        $this->logger = $logger;
     }
 
     public function canWalk(Node $node): bool
@@ -62,6 +70,7 @@ class RequireWalker implements FrameWalker
         }
 
         if (!file_exists($includeUri)) {
+            $this->logger->warning('require/include "%s" does not exist');
             return $frame;
         }
 

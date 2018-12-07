@@ -2,14 +2,14 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\RequireWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Generator;
 
-class RequireWalkerTest extends FrameWalkerTestCase
+class IncludeWalkerTest extends FrameWalkerTestCase
 {
     public function setUp()
     {
@@ -77,10 +77,5 @@ EOT
                 $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
             }
         ];
-    }
-
-    public function walker(): ?FrameWalker
-    {
-        return new RequireWalker();
     }
 }
