@@ -41,7 +41,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $node = $this->parser->parseSourceFile((string) $sourceCode);
+        $node = $this->parser->parseSourceFile((string) $sourceCode, $sourceCode->path());
         return TolerantReflectionClassCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
 
@@ -53,7 +53,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $sourceCode = SourceCode::fromUnknown($sourceCode);
         $offset = Offset::fromUnknown($offset);
 
-        $rootNode = $this->parser->parseSourceFile((string) $sourceCode);
+        $rootNode = $this->parser->parseSourceFile((string) $sourceCode, $sourceCode->path());
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
         $resolver = $this->serviceLocator->symbolContextResolver();
@@ -81,7 +81,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $sourceCode = SourceCode::fromUnknown($sourceCode);
         $offset = Offset::fromUnknown($offset);
 
-        $rootNode = $this->parser->parseSourceFile((string) $sourceCode);
+        $rootNode = $this->parser->parseSourceFile((string) $sourceCode, $sourceCode->path());
         $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
 
         $frame = $this->serviceLocator->frameBuilder()->build($node);
@@ -96,7 +96,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
     public function reflectFunctionsIn($sourceCode): CoreReflectionFunctionCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $node = $this->parser->parseSourceFile((string) $sourceCode);
+        $node = $this->parser->parseSourceFile((string) $sourceCode, $sourceCode->path());
         return TolerantReflectionFunctionCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
 }

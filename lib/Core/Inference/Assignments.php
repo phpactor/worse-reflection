@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Inference\Assignments;
+
 abstract class Assignments implements \Countable, \IteratorAggregate
 {
     /**
@@ -105,5 +107,14 @@ abstract class Assignments implements \Countable, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->variables);
+    }
+
+    public function merge(Assignments $variables): Assignments
+    {
+        foreach ($variables as $variable) {
+            $this->variables[] = $variable;
+        }
+
+        return $this;
     }
 }
