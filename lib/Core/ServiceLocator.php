@@ -14,7 +14,6 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeRefle
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantSourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 
 class ServiceLocator

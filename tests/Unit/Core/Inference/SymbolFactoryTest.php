@@ -5,8 +5,6 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core\Inference;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\Token;
-use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;

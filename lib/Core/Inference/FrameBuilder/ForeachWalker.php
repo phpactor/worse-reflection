@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
 use Microsoft\PhpParser\Node\ForeachKey;
-use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -11,7 +10,6 @@ use Microsoft\PhpParser\Node\Statement\ForeachStatement;
 use Microsoft\PhpParser\Node\ForeachValue;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
-use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 

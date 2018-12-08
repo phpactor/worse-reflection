@@ -4,9 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Integration;
 
 use Phpactor\TestUtils\Workspace;
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Core\SourceCode;
-use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
-use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;
 use Microsoft\PhpParser\Node\SourceFileNode;

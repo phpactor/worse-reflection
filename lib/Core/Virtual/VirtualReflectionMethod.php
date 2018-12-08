@@ -13,7 +13,6 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMember;
 
 class VirtualReflectionMethod extends VirtualReflectionMember implements ReflectionMethod
 {

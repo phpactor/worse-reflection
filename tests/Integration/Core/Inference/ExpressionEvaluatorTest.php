@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
-use Phpactor\TestUtils\ExtractOffset;
 use Microsoft\PhpParser\Node\Expression;
 
 class ExpressionEvaluatorTest extends IntegrationTestCase

@@ -8,7 +8,6 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
-use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 

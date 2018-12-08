@@ -4,13 +4,10 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\QualifiedName;
-use Phpactor\WorseReflection\Core\DefaultValue;
 use Microsoft\PhpParser\Node\ReservedWord;
-use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Microsoft\PhpParser\Node\NumericLiteral;
 use Microsoft\PhpParser\Node\Expression\PostfixUpdateExpression;
-use RuntimeException;
 use Microsoft\PhpParser\Node\Expression\PrefixUpdateExpression;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\Expression\UnaryOpExpression;

@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
 use Phpactor\ClassFileConverter\Domain\ClassToFile;
-use Phpactor\WorseReflection\Core\ClassName as WorseClassName;
 use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;

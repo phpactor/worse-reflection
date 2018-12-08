@@ -3,15 +3,9 @@
 namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 
 class MemberTypeResolver

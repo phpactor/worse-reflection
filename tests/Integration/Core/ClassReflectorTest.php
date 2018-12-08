@@ -2,14 +2,11 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core;
 
-use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
-use Phpactor\WorseReflection\Core\Exception\UnexpectedReflectionType;
-use Phpactor\TestUtils\ExtractOffset;
 
 class ClassReflectorTest extends IntegrationTestCase
 {

@@ -2,12 +2,10 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
-use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\Variable;
-use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node\CatchClause;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 

@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Microsoft\PhpParser\Node\Expression\ScriptInclusionExpression;
 use Microsoft\PhpParser\Node\Expression\Variable;
@@ -16,7 +15,6 @@ use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Phpactor\WorseReflection\Core\Logger;
-use Phpactor\WorseReflection\Core\Types;
 use Webmozart\PathUtil\Path;
 
 class IncludeWalker implements FrameWalker

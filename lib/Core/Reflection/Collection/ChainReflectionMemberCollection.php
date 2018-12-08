@@ -6,7 +6,6 @@ use AppendIterator;
 use IteratorIterator;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 use RuntimeException;
 
 class ChainReflectionMemberCollection implements ReflectionMemberCollection

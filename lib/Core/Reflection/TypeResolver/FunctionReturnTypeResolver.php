@@ -2,13 +2,9 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 
 class FunctionReturnTypeResolver
 {

@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
-use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -10,7 +9,6 @@ use Microsoft\PhpParser\FunctionLike;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
-use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;

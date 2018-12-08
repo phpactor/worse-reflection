@@ -3,9 +3,6 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Tests\Integration\Util\CodeHelper;
-use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection;
 use Phpactor\TestUtils\ExtractOffset;
 

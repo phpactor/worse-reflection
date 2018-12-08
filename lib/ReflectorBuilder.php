@@ -10,7 +10,6 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
-use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantFactory;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 

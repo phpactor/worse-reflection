@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
 
 class ParameterTypeResolver

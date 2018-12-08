@@ -13,7 +13,6 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionOffset a
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Parser;
-use Phpactor\WorseReflection\Core\Reflector\Collection\ReflectionFunctionCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection as CoreReflectionFunctionCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionFunctionCollection as TolerantReflectionFunctionCollection;
 
