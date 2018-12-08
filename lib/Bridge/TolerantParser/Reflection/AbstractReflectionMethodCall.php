@@ -7,12 +7,10 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall as CoreReflect
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
-use RuntimeException;
 
 abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 {
@@ -53,7 +51,8 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 
         if (!$info->containerType()) {
             throw new CouldNotResolveNode(sprintf(
-                'Class for member "%s" could not be determined', $this->name()
+                'Class for member "%s" could not be determined',
+                $this->name()
             ));
         }
 

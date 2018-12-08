@@ -7,17 +7,13 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\NamespacedNameInterface;
-use RuntimeException;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
-use Microsoft\PhpParser\Node\ConstElement;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
-use Microsoft\PhpParser\Node\Statement\ConstDeclaration;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode

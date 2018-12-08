@@ -6,12 +6,8 @@ use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
-use Microsoft\PhpParser\Node\Statement\ExpressionStatement;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
-use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
-use Microsoft\PhpParser\Node\Expression\BinaryExpression;
-use Microsoft\PhpParser\Node\Expression\Variable;
 
 class AssertFrameWalker extends AbstractInstanceOfWalker implements FrameWalker
 {

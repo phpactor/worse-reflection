@@ -3,13 +3,8 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Inference\Symbol;
-use Phpactor\WorseReflection\Core\Offset;
-use Phpactor\WorseReflection\Core\SourceCode;
-use Phpactor\TestUtils\ExtractOffset;
 
 class FrameBuilderTest extends IntegrationTestCase
 {

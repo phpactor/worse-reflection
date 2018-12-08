@@ -13,7 +13,6 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMember;
 
 class VirtualReflectionMethod extends VirtualReflectionMember implements ReflectionMethod
 {
@@ -57,8 +56,7 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
         NodeText $body,
         bool $isAbstract,
         bool $isStatic
-    )
-    {
+    ) {
         parent::__construct($position, $declaringClass, $class, $name, $frame, $docblock, $scope, $visiblity, $inferredTypes, $type);
         $this->body = $body;
         $this->parameters = $parameters;

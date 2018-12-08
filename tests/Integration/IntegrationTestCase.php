@@ -4,9 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Integration;
 
 use Phpactor\TestUtils\Workspace;
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Core\SourceCode;
-use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
-use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;
 use Microsoft\PhpParser\Node\SourceFileNode;
@@ -40,10 +37,10 @@ class IntegrationTestCase extends TestCase
         return new Workspace(__DIR__ . '/../Workspace');
     }
 
-    protected function parseSource(string $source): SourceFileNode
+    protected function parseSource(string $source, string $uri = null): SourceFileNode
     {
         $parser = new Parser();
 
-        return $parser->parseSourceFile($source);
+        return $parser->parseSourceFile($source, $uri);
     }
 }

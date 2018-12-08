@@ -3,13 +3,11 @@
 namespace Phpactor\WorseReflection\Core\Inference;
 
 use Microsoft\PhpParser\Node;
-use Phpactor\WorseReflection\Core\DefaultValue;
+use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\ReservedWord;
-use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Microsoft\PhpParser\Node\NumericLiteral;
 use Microsoft\PhpParser\Node\Expression\PostfixUpdateExpression;
-use RuntimeException;
 use Microsoft\PhpParser\Node\Expression\PrefixUpdateExpression;
 use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\Expression\UnaryOpExpression;
@@ -63,6 +61,10 @@ class ExpressionEvaluator
 
         if ($node instanceof TernaryExpression) {
             return $this->walkTernary($node);
+        }
+
+        if ($node instanceof QualifiedName) {
+            return $this->resolveQualifiedName($node);
         }
     }
 
@@ -224,5 +226,30 @@ class ExpressionEvaluator
         }
 
         return $condition ?: $else;
+    }
+
+    private function resolveQualifiedName(QualifiedName $node): string
+    {
+        return $this->resolveMagicConstants($node);
+    }
+
+    private function resolveMagicConstants(QualifiedName $node): string
+    {
+        $name = $node->getText();
+        $uri = $node->getRoot()->uri;
+
+        if (!$uri) {
+            return '';
+        }
+
+        if ($name === '__DIR__') {
+            return dirname($uri);
+        }
+
+        if ($name === '__FILE__') {
+            return $uri;
+        }
+
+        return '';
     }
 }

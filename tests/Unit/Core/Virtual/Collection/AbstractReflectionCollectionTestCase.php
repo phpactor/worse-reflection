@@ -3,10 +3,8 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Virtual\Collection;
 
 use PHPUnit\Framework\TestCase;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\AbstractReflectionCollection;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
-use Prophecy\Exception\InvalidArgumentException;
 use RuntimeException;
 
 abstract class AbstractReflectionCollectionTestCase extends TestCase

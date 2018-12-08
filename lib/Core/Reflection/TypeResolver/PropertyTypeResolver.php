@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
 use Generator;
-use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Types;

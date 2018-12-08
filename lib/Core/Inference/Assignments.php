@@ -106,4 +106,13 @@ abstract class Assignments implements \Countable, \IteratorAggregate
     {
         return new \ArrayIterator($this->variables);
     }
+
+    public function merge(Assignments $variables): Assignments
+    {
+        foreach ($variables as $variable) {
+            $this->variables[] = $variable;
+        }
+
+        return $this;
+    }
 }

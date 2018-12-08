@@ -4,8 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
-use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\InstanceOfWalker;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;

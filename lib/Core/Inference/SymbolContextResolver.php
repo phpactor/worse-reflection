@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
+use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ObjectCreationExpression;
@@ -22,7 +23,6 @@ use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
-use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Reflector;
@@ -72,17 +72,22 @@ class SymbolContextResolver
      */
     private $nameResolver;
 
+    /**
+     * @var ExpressionEvaluator
+     */
+    private $expressionEvaluator;
+
     public function __construct(
         Reflector $reflector,
         Logger $logger,
         SymbolFactory $symbolFactory = null
-    )
-    {
+    ) {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
         $this->reflector = $reflector;
+        $this->expressionEvaluator = new ExpressionEvaluator();
     }
 
     public function resolveNode(Frame $frame, $node): SymbolContext
@@ -159,6 +164,20 @@ class SymbolContextResolver
 
         if ($node instanceof ParenthesizedExpression) {
             return $this->resolveParenthesizedExpression($frame, $node);
+        }
+
+        if ($node instanceof BinaryExpression) {
+            $value = $this->expressionEvaluator->evaluate($node);
+            return $this->symbolFactory->context(
+                $node->getText(),
+                $node->getEndPosition(),
+                $node->getStart(),
+                [
+                    'symbol_type' => Symbol::CLASS_,
+                    'type' => Type::fromValue($value),
+                    'value' => $value,
+                ]
+            );
         }
 
         if ($node instanceof ClassDeclaration || $node instanceof TraitDeclaration || $node instanceof InterfaceDeclaration) {
@@ -508,51 +527,51 @@ class SymbolContextResolver
         SymbolContext $info,
         SubscriptExpression $node = null
     ): SymbolContext {
-    if (null === $node->accessExpression) {
-        $info = $info->withIssue(sprintf(
+        if (null === $node->accessExpression) {
+            $info = $info->withIssue(sprintf(
             'Subscript expression "%s" is incomplete',
             (string) $node->getText()
         ));
-        return $info;
-    }
+            return $info;
+        }
 
-    $node = $node->accessExpression;
+        $node = $node->accessExpression;
 
-    if ($info->type() != Type::array()) {
-        $info = $info->withIssue(sprintf(
+        if ($info->type() != Type::array()) {
+            $info = $info->withIssue(sprintf(
             'Not resolving subscript expression of type "%s"',
             (string) $info->type()
         ));
-        return $info;
-    }
+            return $info;
+        }
 
-    $subjectValue = $info->value();
+        $subjectValue = $info->value();
 
-    if (false === is_array($subjectValue)) {
-        $info = $info->withIssue(sprintf(
+        if (false === is_array($subjectValue)) {
+            $info = $info->withIssue(sprintf(
             'Array value for symbol "%s" is not an array, is a "%s"',
             (string) $info->symbol(),
             gettype($subjectValue)
         ));
 
-        return $info;
-    }
-
-    if ($node instanceof StringLiteral) {
-        $string = $this->_resolveNode($frame, $node);
-
-        if (array_key_exists($string->value(), $subjectValue)) {
-            $value = $subjectValue[$string->value()];
-            return $string->withValue($value);
+            return $info;
         }
-    }
 
-    $info = $info->withIssue(sprintf(
+        if ($node instanceof StringLiteral) {
+            $string = $this->_resolveNode($frame, $node);
+
+            if (array_key_exists($string->value(), $subjectValue)) {
+                $value = $subjectValue[$string->value()];
+                return $string->withValue($value);
+            }
+        }
+
+        $info = $info->withIssue(sprintf(
         'Did not resolve access expression for node type "%s"',
         get_class($node)
     ));
 
-    return $info;
+        return $info;
     }
 
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolContext

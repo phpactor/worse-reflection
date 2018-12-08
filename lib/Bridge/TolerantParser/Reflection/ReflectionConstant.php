@@ -9,10 +9,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant as CoreReflectionConstant;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
-use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Types;
-use Microsoft\PhpParser\Node\Statement\ConstDeclaration;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
 
 class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant

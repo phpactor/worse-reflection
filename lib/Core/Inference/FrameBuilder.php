@@ -4,30 +4,12 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Microsoft\PhpParser\FunctionLike;
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\Node\CatchClause;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
-use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
-use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
-use Microsoft\PhpParser\Node\Expression\Variable as ParserVariable;
-use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\Node\SourceFileNode;
-use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
-use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
-use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
-use Microsoft\PhpParser\Token;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
 use Phpactor\WorseReflection\Core\Logger;
 use RuntimeException;
-use Microsoft\PhpParser\Node\Statement\FunctionDeclaration;
-use Microsoft\PhpParser\Node\MethodDeclaration;
-use Microsoft\PhpParser\Node\Expression\ListIntrinsicExpression;
-use Microsoft\PhpParser\Node\ArrayElement;
-use Phpactor\WorseReflection\Core\Inference\Variable;
-use Phpactor\WorseReflection\Core\Type;
-use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
-use Microsoft\PhpParser\Node\Statement\ForeachStatement;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
-use Microsoft\PhpParser\Node\ForeachValue;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
@@ -58,7 +40,8 @@ final class FrameBuilder
             new AssignmentWalker($logger),
             new CatchWalker(),
             new ForeachWalker(),
-            new InstanceOfWalker()
+            new InstanceOfWalker(),
+            new IncludeWalker($logger),
         ], $walkers);
 
         return new self($symbolContextResolver, $walkers);

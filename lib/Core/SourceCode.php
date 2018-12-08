@@ -20,7 +20,7 @@ class SourceCode
         $this->path = $path;
     }
 
-    public static function fromUnknown($value)
+    public static function fromUnknown($value): SourceCode
     {
         if ($value instanceof SourceCode) {
             return $value;
