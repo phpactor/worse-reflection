@@ -48,9 +48,8 @@ class TraitImports implements Countable, IteratorAggregate
             foreach ($traitNames as $traitName) {
                 $aliases = [];
 
-                foreach ($memberDeclaration->traitSelectAndAliasClauses as $selectAndAliasClauses)
-                {
-                    foreach($selectAndAliasClauses as $clause) {
+                foreach ($memberDeclaration->traitSelectAndAliasClauses as $selectAndAliasClauses) {
+                    foreach ($selectAndAliasClauses as $clause) {
                         if (false === $clause instanceof TraitSelectOrAliasClause) {
                             continue;
                         }
@@ -82,7 +81,7 @@ class TraitImports implements Countable, IteratorAggregate
         }
     }
 
-    public function has(string $name) 
+    public function has(string $name)
     {
         return isset($this->imports[$name]);
     }
@@ -91,7 +90,8 @@ class TraitImports implements Countable, IteratorAggregate
     {
         if (!array_key_exists($name, $this->imports)) {
             throw new RuntimeException(sprintf(
-                'Trait import "%s" does not exist', $name
+                'Trait import "%s" does not exist',
+                $name
             ));
         }
 

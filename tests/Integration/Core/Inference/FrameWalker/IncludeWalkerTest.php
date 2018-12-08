@@ -18,8 +18,8 @@ class IncludeWalkerTest extends FrameWalkerTestCase
 
     public function provideWalk(): Generator
     {
-        $this->workspace()->put('foo.php','<?php $foo = "bar";');
-        $this->workspace()->put('return_value.php','<?php return "bar";');
+        $this->workspace()->put('foo.php', '<?php $foo = "bar";');
+        $this->workspace()->put('return_value.php', '<?php return "bar";');
 
         yield 'Require relative' => [
             <<<'EOT'

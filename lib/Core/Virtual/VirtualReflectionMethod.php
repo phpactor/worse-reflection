@@ -57,8 +57,7 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
         NodeText $body,
         bool $isAbstract,
         bool $isStatic
-    )
-    {
+    ) {
         parent::__construct($position, $declaringClass, $class, $name, $frame, $docblock, $scope, $visiblity, $inferredTypes, $type);
         $this->body = $body;
         $this->parameters = $parameters;

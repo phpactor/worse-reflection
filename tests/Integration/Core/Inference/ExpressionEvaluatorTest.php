@@ -274,7 +274,7 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
 
         yield 'magic constants: __DIR__' => [
             '(__DIR__)',
-            rtrim($this->workspace()->path(''),'/')
+            rtrim($this->workspace()->path(''), '/')
         ];
 
         yield 'magic constants: __FILE__' => [

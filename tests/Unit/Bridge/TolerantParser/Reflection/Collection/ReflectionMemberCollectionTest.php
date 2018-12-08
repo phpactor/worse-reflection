@@ -46,7 +46,6 @@ class ReflectionMemberCollectionTest extends TestCase
 
         $collection = $collection->byVisibilities([Visibility::public()]);
         $this->assertCount(2, $collection);
-
     }
 
     public function testBelongingTo()
@@ -80,7 +79,7 @@ class ReflectionMemberCollectionTest extends TestCase
 
         $this->member1->position()->willReturn(Position::fromStartAndEnd(0, 10));
         $this->member2->position()->willReturn(Position::fromStartAndEnd(11, 11));
-        $this->member3->position()->willReturn(Position::fromStartAndEnd(13,16));
+        $this->member3->position()->willReturn(Position::fromStartAndEnd(13, 16));
 
         $collection = $collection->atOffset(11);
         $this->assertCount(1, $collection);

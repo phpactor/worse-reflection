@@ -85,7 +85,8 @@ foreach ($files as $file) {
         echo 'N';
     } catch (Exception $e) {
         echo 'E';
-        fwrite($logHandle, sprintf('%s %s [%s] %s', 'ERROR', $message, get_class($e), $e->getMessage()).PHP_EOL);;
+        fwrite($logHandle, sprintf('%s %s [%s] %s', 'ERROR', $message, get_class($e), $e->getMessage()).PHP_EOL);
+        ;
         $exceptions[] = $e;
     } finally {
     }
