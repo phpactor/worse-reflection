@@ -21,7 +21,7 @@ abstract class FrameWalkerTestCase extends IntegrationTestCase
         list($source, $offset) = ExtractOffset::fromSource($source);
         $path = $this->workspace()->path('test.php');
         $source = SourceCode::fromPathAndString($path, $source);
-        $reflector = $this->createReflector($source, $this->walker());
+        $reflector = $this->createReflectorWithWalker($source, $this->walker());
         $reflectionOffset = $reflector->reflectOffset($source, $offset);
         $assertion($reflectionOffset->frame(), $offset);
     }
@@ -33,7 +33,7 @@ abstract class FrameWalkerTestCase extends IntegrationTestCase
         return null;
     }
 
-    public function createReflector($source, FrameWalker $frameWalker = null): Reflector
+    private function createReflectorWithWalker($source, FrameWalker $frameWalker = null): Reflector
     {
         $reflector = ReflectorBuilder::create();
         $reflector->addSource($source);
