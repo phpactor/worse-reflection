@@ -92,6 +92,31 @@ EOT
             $this->assertEquals('Foobar\Barfoo\World', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best()->arrayType());
         }];
 
+        yield 'Variadic argument' => [
+            <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+use Acme\Factory;
+use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+
+class Foobar
+{
+    public function hello(string ...$hellos)
+    {
+        <>
+    }
+}
+
+EOT
+        , function (Frame $frame) {
+            $this->assertCount(1, $frame->locals()->byName('hellos'));
+            $variable = $frame->locals()->byName('hellos')->first();
+            $this->assertEquals('string', $variable->symbolContext()->type()->arrayType());
+
+        }];
+
         yield 'Respects closure scope' => [
             <<<'EOT'
 <?php

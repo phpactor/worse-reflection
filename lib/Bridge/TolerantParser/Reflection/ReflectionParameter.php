@@ -62,11 +62,17 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     {
         $className = $this->functionLike instanceof ReflectionMethod ? $this->functionLike->class()->name() : null;
 
-        return $this->memberTypeResolver->resolve(
+        $type = $this->memberTypeResolver->resolve(
             $this->parameter,
             $this->parameter->typeDeclaration,
             $className
         );
+
+        if ($this->parameter->dotDotDotToken) {
+            return Type::array($type->__toString());
+        }
+
+        return $type;
     }
 
     public function inferredTypes(): Types
