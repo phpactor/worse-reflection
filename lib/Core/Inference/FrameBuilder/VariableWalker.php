@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\Types;
 
 class VariableWalker extends AbstractWalker
 {
@@ -45,7 +46,7 @@ class VariableWalker extends AbstractWalker
 
     public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
-        $this->injectVariablesFromComment($frame, $node);
+        $docblockTypes = $this->injectVariablesFromComment($frame, $node);
 
         if (!$node instanceof Variable) {
             return $frame;
@@ -66,24 +67,28 @@ class VariableWalker extends AbstractWalker
 
         $symbolName = $context->symbol()->name();
 
-        if (false === isset($this->injectedTypes[$symbolName])) {
+        if (!isset($this->injectedTypes[$symbolName]) && $docblockTypes->count() === 0) {
             return $frame;
         }
 
-        $context = $context->withType($this->injectedTypes[$symbolName]);
+        if (isset($this->injectedTypes[$symbolName])) {
+            $docblockTypes = Types::fromTypes([$this->injectedTypes[$symbolName]]);
+            unset($this->injectedTypes[$symbolName]);
+        }
+
+        $context = $context->withTypes($docblockTypes);
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
-        unset($this->injectedTypes[$symbolName]);
 
         return $frame;
     }
 
-    private function injectVariablesFromComment(Frame $frame, Node $node)
+    private function injectVariablesFromComment(Frame $frame, Node $node): Types
     {
         $comment = $node->getLeadingCommentAndWhitespaceText();
         $docblock = $this->docblockFactory->create($comment);
 
         if (false === $docblock->isDefined()) {
-            return;
+            return Types::empty();
         }
 
         $vars = $docblock->vars();
@@ -95,5 +100,7 @@ class VariableWalker extends AbstractWalker
                 $var->types()->best()
             );
         }
+
+        return $vars->types();
     }
 }

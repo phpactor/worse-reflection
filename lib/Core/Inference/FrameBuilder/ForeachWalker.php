@@ -43,7 +43,6 @@ class ForeachWalker extends AbstractWalker
         }
         
         $itemName = $itemName->expression->name->getText($node->getFileContents());
-        
         $collectionType = $collection->types()->best();
         
         $context = $this->symbolFactory()->context(

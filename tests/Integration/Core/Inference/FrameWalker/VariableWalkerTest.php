@@ -105,5 +105,20 @@ EOT
                 $this->assertEquals('Foo\Bar\Zed\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
         ];
+
+        yield 'Unspecified type for following variable' => [
+            <<<'EOT'
+<?php
+
+/** @var \Zed\Baz */
+$zed;
+<>
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('Zed\Baz', (string) $frame->locals()->byName('$zed')->first()->symbolContext()->type());
+            }
+        ];
     }
 }
