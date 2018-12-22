@@ -691,7 +691,7 @@ class SymbolContextResolver
     private function resolveVariableName(string $name, Node $node, Frame $frame)
     {
         $varName = ltrim($name, '$');
-        $offset = $node->getFullStart();
+        $offset = $node->getEndPosition();
         $variables = $frame->locals()->lessThanOrEqualTo($offset)->byName($varName);
 
         if (0 === $variables->count()) {
