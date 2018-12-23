@@ -62,6 +62,20 @@ class DocblockReflectionMethodFactoryTest extends TestCase
             }
         ];
 
+        yield 'static method' => [
+            new MethodTag(
+                DocblockTypes::fromStringTypes([]),
+                'myMethod',
+                [],
+                true
+            ),
+            function (ReflectionMethod $method) {
+                $this->assertEquals('Foobar', (string) $method->class()->name());
+                $this->assertEquals('myMethod', $method->name());
+                $this->assertTrue($method->isStatic());
+            }
+        ];
+
         yield 'multiple types' => [
             new MethodTag(
                 DocblockTypes::fromStringTypes(['Foobar', 'string']),
