@@ -30,4 +30,6 @@ interface ReflectionMember
     public function inferredTypes(): Types;
 
     public function type(): Type;
+
+    public function isVirtual(): bool;
 }

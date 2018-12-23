@@ -18,6 +18,7 @@ class VirtualReflectionMethodCollectionTest extends VirtualReflectionMemberTestC
             $item->visibility()->willReturn(Visibility::public());
             $item->declaringClass()->willReturn($this->declaringClass->reveal());
             $item->class()->willReturn($this->class->reveal());
+            $item->isVirtual()->willReturn(true);
             $item->position()->willReturn($this->position);
             $items[] = $item->reveal();
         }

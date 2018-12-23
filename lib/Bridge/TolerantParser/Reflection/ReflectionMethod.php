@@ -163,4 +163,9 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
         return false;
     }
+
+    public function isVirtual(): bool
+    {
+        return false;
+    }
 }

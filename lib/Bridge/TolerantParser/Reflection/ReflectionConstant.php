@@ -80,4 +80,9 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
 
         return Types::empty();
     }
+
+    public function isVirtual(): bool
+    {
+        return false;
+    }
 }

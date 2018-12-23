@@ -66,4 +66,9 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
     {
         $this->assertEquals($this->isStatic, $this->member()->isStatic());
     }
+
+    public function testVirtual()
+    {
+        $this->assertTrue($this->member()->isStatic());
+    }
 }

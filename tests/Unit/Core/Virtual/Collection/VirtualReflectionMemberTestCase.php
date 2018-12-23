@@ -7,6 +7,9 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Visibility;
 
+/**
+ * @method \Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection collection()
+ */
 abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollectionTestCase
 {
     /**
@@ -52,7 +55,19 @@ abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollect
 
     public function testAtOffset()
     {
-        $collection = $this->collection(['one', 'two'])->atOffset(0);
-        $this->assertCount(2, $collection);
+        $collection = $this->collection(['one', 'two'])->atoffset(0);
+        $this->assertcount(2, $collection);
+    }
+
+    public function testVirtual()
+    {
+        $collection = $this->collection(['one', 'two']);
+        $this->assertCount(2, $collection->virtual());
+    }
+
+    public function testReal()
+    {
+        $collection = $this->collection(['one', 'two']);
+        $this->assertCount(0, $collection->real());
     }
 }

@@ -106,4 +106,9 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     {
         return $this->propertyDeclaration->isStatic();
     }
+
+    public function isVirtual(): bool
+    {
+        return false;
+    }
 }

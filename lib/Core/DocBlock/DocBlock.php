@@ -2,10 +2,14 @@
 
 namespace Phpactor\WorseReflection\Core\DocBlock;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Types;
 
 interface DocBlock
 {
+    public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection;
+
     public function isDefined(): bool;
 
     public function raw(): string;

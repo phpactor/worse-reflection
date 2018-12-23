@@ -190,4 +190,24 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
 
         return new self($collections);
     }
+
+    public function virtual(): ReflectionMemberCollection
+    {
+        $collections = [];
+        foreach ($this->collections as $collection) {
+            $collections[] = $collection->virtual();
+        }
+
+        return new self($collections);
+    }
+
+    public function real(): ReflectionMemberCollection
+    {
+        $collections = [];
+        foreach ($this->collections as $collection) {
+            $collections[] = $collection->real();
+        }
+
+        return new self($collections);
+    }
 }

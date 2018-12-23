@@ -111,4 +111,9 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
     {
         return $this->isStatic;
     }
+
+    public function isVirtual(): bool
+    {
+        return true;
+    }
 }
