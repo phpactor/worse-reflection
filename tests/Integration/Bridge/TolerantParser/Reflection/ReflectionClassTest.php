@@ -657,8 +657,8 @@ EOT
         ,
             'Class1',
             function ($class) {
-                $this->assertEquals(2, $class->inferredMethods()->count());
-                $this->assertEquals('foobar', $class->inferredMethods()->first()->name());
+                $this->assertEquals(2, $class->methods()->count());
+                $this->assertEquals('foobar', $class->methods()->first()->name());
             }
         ];
 
@@ -680,13 +680,13 @@ EOT
         ,
             'Class1',
             function (ReflectionClass $class) {
-                $this->assertCount(1, $class->inferredMethods());
+                $this->assertCount(1, $class->methods());
                 $this->assertEquals(
                     'Barfoo',
-                    $class->inferredMethods()->first()->type()->__toString(),
+                    $class->methods()->first()->type()->__toString(),
                     'original type should be preserved'
                 );
-                $this->assertEquals('Foobar', $class->inferredMethods()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $class->methods()->first()->inferredTypes()->best()->__toString());
             },
         ];
 
@@ -706,10 +706,10 @@ EOT
         ,
             'Class2',
             function (ReflectionClass $class) {
-                $this->assertCount(2, $class->inferredMethods());
+                $this->assertCount(2, $class->methods());
                 $this->assertEquals(
                     'Foobar',
-                    $class->inferredMethods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
                 );
             },
         ];
@@ -720,7 +720,7 @@ EOT
             function (ReflectionClass $class) {
                 $this->assertEquals(
                     'Bosh\Foobar',
-                    $class->inferredMethods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
                 );
             },
         ];
@@ -731,7 +731,7 @@ EOT
             function (ReflectionClass $class) {
                 $this->assertEquals(
                     'Foobar',
-                    $class->inferredMethods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
                 );
             },
         ];
