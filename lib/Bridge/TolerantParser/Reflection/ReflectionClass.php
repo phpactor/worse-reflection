@@ -182,7 +182,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $properties;
     }
 
-    public function methods(CoreReflectionClass $contextClass = null, bool $docblockMethods = false): CoreReflectionMethodCollection
+    public function methods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
     {
         $cacheKey = $contextClass ? (string) $contextClass->name() : '*_null_*';
 
