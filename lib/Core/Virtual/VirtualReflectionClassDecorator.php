@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Virtual;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
@@ -68,6 +69,13 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         $virtualMethods = $this->virtualMethods();
 
         return $realMethods->merge($virtualMethods);
+    }
+
+    public function members(): ReflectionMemberCollection
+    {
+        $members = $this->class->members();
+        $members->merge($this->virtualMethods());
+        return $members;
     }
 
     private function virtualMethods(ReflectionClass $contextClass = null)
