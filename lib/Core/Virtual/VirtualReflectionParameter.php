@@ -62,8 +62,7 @@ class VirtualReflectionParameter implements ReflectionParameter
         bool $byReference,
         ReflectionScope $scope,
         Position $position
-    )
-    {
+    ) {
         $this->name = $name;
         $this->functionLike = $functionLike;
         $this->inferredTypes = $inferredTypes;

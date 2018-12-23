@@ -114,7 +114,6 @@ EOT
             $this->assertCount(1, $frame->locals()->byName('hellos'));
             $variable = $frame->locals()->byName('hellos')->first();
             $this->assertEquals('string', $variable->symbolContext()->type()->arrayType());
-
         }];
 
         yield 'Respects closure scope' => [

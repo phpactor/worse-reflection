@@ -14,7 +14,6 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
-use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 
 class Docblock implements CoreDocblock
 {

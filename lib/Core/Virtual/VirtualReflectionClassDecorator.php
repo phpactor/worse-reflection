@@ -9,7 +9,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollecti
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionClassLikeDecorator;
 use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorator implements ReflectionClass

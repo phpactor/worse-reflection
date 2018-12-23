@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
-use PhpParser\Comment\Doc;
 use Phpactor\Docblock\DefaultValue;
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
@@ -15,7 +14,6 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
-use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\ReflectorBuilder;
 
 class DocblockReflectionMethodFactoryTest extends TestCase

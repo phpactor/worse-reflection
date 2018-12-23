@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 
 /**

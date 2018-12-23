@@ -4,18 +4,13 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core\Virtual;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\DefaultValue;
-use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Position;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
-use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 
 class VirtualReflectionParameterTest extends TestCase
