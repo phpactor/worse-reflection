@@ -17,7 +17,7 @@ class VirtualReflectionParameterCollection extends AbstractReflectionCollection 
         return ReflectionParameterCollection::class;
     }
 
-    public function fromReflectionParameters(array $reflectionParameters)
+    public static function fromReflectionParameters(array $reflectionParameters)
     {
         $parameters = [];
         foreach ($reflectionParameters as $reflectionParameter) {
