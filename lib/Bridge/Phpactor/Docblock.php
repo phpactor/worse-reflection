@@ -132,14 +132,10 @@ class Docblock implements CoreDocblock
     {
         $methods = [];
         /** @var MethodTag $methodTag */
-<<<<<<< HEAD
-        foreach($this->docblock->tags('method') as $methodTag) {
+        foreach ($this->docblock->tags()->byName('method') as $methodTag) {
             if (!$methodTag->methodName()) {
                 continue;
             }
-=======
-        foreach ($this->docblock->tags()->byName('method') as $methodTag) {
->>>>>>> phpstan fix
             $methods[$methodTag->methodName()] = $this->methodFactory->create($this, $declaringClass, $methodTag);
         }
 
