@@ -73,7 +73,6 @@ class VirtualReflectionParameter implements ReflectionParameter
         $this->position = $position;
     }
 
-
     public function scope(): ReflectionScope
     {
         return $this->scope;
