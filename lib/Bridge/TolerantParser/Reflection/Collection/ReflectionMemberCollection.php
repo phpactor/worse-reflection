@@ -54,4 +54,18 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
     {
         return CoreReflectionMemberCollection::class;
     }
+
+    public function virtual(): ReflectionMemberCollection
+    {
+        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
+            return true === $member->isVirtual();
+        }));
+    }
+
+    public function real(): ReflectionMemberCollection
+    {
+        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
+            return false === $member->isVirtual();
+        }));
+    }
 }

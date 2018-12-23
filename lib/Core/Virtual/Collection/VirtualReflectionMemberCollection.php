@@ -56,4 +56,18 @@ abstract class VirtualReflectionMemberCollection extends AbstractReflectionColle
             return $item->position()->start() <= $offset && $item->position()->end() >= $offset;
         }));
     }
+
+    public function virtual(): ReflectionMemberCollection
+    {
+        return new static(array_filter($this->items, function (ReflectionMember $member) {
+            return true === $member->isVirtual();
+        }));
+    }
+
+    public function real(): ReflectionMemberCollection
+    {
+        return new static(array_filter($this->items, function (ReflectionMember $member) {
+            return false === $member->isVirtual();
+        }));
+    }
 }

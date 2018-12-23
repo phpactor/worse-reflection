@@ -18,4 +18,8 @@ interface ReflectionMemberCollection extends ReflectionCollection
     public function atOffset(int $offset): ReflectionMemberCollection;
 
     public function byName(string $name): ReflectionMemberCollection;
+
+    public function virtual();
+
+    public function real();
 }
