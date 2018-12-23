@@ -234,26 +234,6 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $methods;
     }
 
-    public function inferredMethods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
-    {
-        $virtualMethods = $this->virtualMethods($contextClass);
-        $methods = $this->methods($contextClass)->merge($virtualMethods);
-        return $methods;
-    }
-
-    private function virtualMethods(CoreReflectionClass $contextClass = null)
-    {
-        $virtualMethods = $this->docblock()->methods($contextClass ?: $this);
-
-        if ($this->parent()) {
-            $virtualMethods = $virtualMethods->merge(
-                $this->parent()->virtualMethods($contextClass)->byVisibilities([ Visibility::public(), Visibility::protected() ])
-            );
-        }
-
-        return $virtualMethods;
-    }
-
     public function interfaces(): CoreReflectionInterfaceCollection
     {
         if ($this->interfaces) {

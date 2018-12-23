@@ -5,10 +5,12 @@ namespace Phpactor\WorseReflection\Core\Virtual;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionClassLikeDecorator;
+use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorator implements ReflectionClass
 {
@@ -59,5 +61,28 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     public function memberListPosition(): Position
     {
         return $this->class->memberListPosition();
+    }
+
+    public function methods(): ReflectionMethodCollection
+    {
+        $realMethods = $this->class->methods();
+        $virtualMethods = $this->virtualMethods();
+
+        return $realMethods->merge($virtualMethods);
+    }
+
+    private function virtualMethods(ReflectionClass $contextClass = null)
+    {
+        $virtualMethods = $this->docblock()->methods($contextClass ?: $this->class);
+
+        if ($this->parent()) {
+            $virtualMethods = $virtualMethods->merge(
+                $this->parent()->virtualMethods(
+                    $contextClass
+                )->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
+        }
+
+        return $virtualMethods;
     }
 }
