@@ -27,6 +27,4 @@ interface ReflectionClass extends ReflectionClassLike
     public function traits(): ReflectionTraitCollection;
 
     public function memberListPosition(): Position;
-
-    public function inferredMethods(): ReflectionMethodCollection;
 }

@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollectio
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionClassDecorator;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
@@ -48,7 +49,7 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
                 continue;
             }
 
-            $items[(string) $child->getNamespacedName()] = new ReflectionClass($serviceLocator, $source, $child);
+            $items[(string) $child->getNamespacedName()] = new VirtualReflectionClassDecorator(new ReflectionClass($serviceLocator, $source, $child));
         }
 
         return new static($serviceLocator, $items);
