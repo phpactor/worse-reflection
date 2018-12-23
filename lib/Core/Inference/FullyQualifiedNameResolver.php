@@ -113,6 +113,11 @@ class FullyQualifiedNameResolver
             return Type::fromString($currentClass->full());
         }
         $class = $node->getFirstAncestor(ClassLike::class);
+
+        if (null === $class) {
+            return Type::unknown();
+        }
+
         assert($class instanceof NamespacedNameInterface);
 
         return Type::fromString($class->getNamespacedName());
