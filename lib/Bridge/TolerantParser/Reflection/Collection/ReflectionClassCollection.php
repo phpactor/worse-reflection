@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
-use Phpactor\WorseReflection\Bridge\Phpactor\MethodProvider\DocblockMethodProvider;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
