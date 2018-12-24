@@ -52,9 +52,7 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
 
             $items[(string) $child->getNamespacedName()] = new VirtualReflectionClassDecorator(
                 new ReflectionClass($serviceLocator, $source, $child),
-                array_merge([
-                    new DocblockMethodProvider(),
-                ], $serviceLocator->methodProviders())
+                $serviceLocator->methodProviders()
             );
         }
 
