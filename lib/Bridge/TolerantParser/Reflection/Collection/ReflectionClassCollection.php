@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Phpactor\WorseReflection\Bridge\Phpactor\MethodProvider\DocblockMethodProvider;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
@@ -49,7 +50,12 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
                 continue;
             }
 
-            $items[(string) $child->getNamespacedName()] = new VirtualReflectionClassDecorator(new ReflectionClass($serviceLocator, $source, $child));
+            $items[(string) $child->getNamespacedName()] = new VirtualReflectionClassDecorator(
+                new ReflectionClass($serviceLocator, $source, $child),
+                array_merge([
+                    new DocblockMethodProvider(),
+                ], $serviceLocator->methodProviders())
+            );
         }
 
         return new static($serviceLocator, $items);

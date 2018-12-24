@@ -53,11 +53,17 @@ class ServiceLocator
      */
     private $docblockFactory;
 
+    /**
+     * @var array
+     */
+    private $methodProviders;
+
     public function __construct(
         SourceCodeLocator $sourceLocator,
         Logger $logger,
         SourceCodeReflectorFactory $reflectorFactory,
         array $frameWalkers = [],
+        array $methodProviders = [],
         bool $enableCache = false,
         bool $enableContextualLocation = false
     ) {
@@ -89,7 +95,13 @@ class ServiceLocator
         $this->logger = $logger;
 
         $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
-        $this->frameBuilder = FrameBuilder::create($this->docblockFactory, $this->symbolContextResolver, $this->logger, $frameWalkers);
+        $this->frameBuilder = FrameBuilder::create(
+            $this->docblockFactory,
+            $this->symbolContextResolver,
+            $this->logger,
+            $frameWalkers
+        );
+        $this->methodProviders = $methodProviders;
     }
 
     public function reflector(): Reflector
@@ -126,5 +138,10 @@ class ServiceLocator
     public function frameBuilder(): FrameBuilder
     {
         return $this->frameBuilder;
+    }
+
+    public function methodProviders()
+    {
+        return $this->methodProviders;
     }
 }
