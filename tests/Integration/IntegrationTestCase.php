@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration;
 
 use Phpactor\TestUtils\Workspace;
+use Phpactor\WorseReflection\Bridge\Phpactor\MethodProvider\DocblockMethodProvider;
 use Phpactor\WorseReflection\Reflector;
 use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;
@@ -24,7 +25,10 @@ class IntegrationTestCase extends TestCase
 
     public function createReflector(string $source): Reflector
     {
-        return ReflectorBuilder::create()->addSource($source)->withLogger($this->logger())->build();
+        return ReflectorBuilder::create()
+            ->addSource($source)
+            ->addMethodProvider(new DocblockMethodProvider())
+            ->withLogger($this->logger())->build();
     }
 
     protected function logger(): ArrayLogger

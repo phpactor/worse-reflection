@@ -108,9 +108,10 @@ final class ReflectorBuilder
         return $this;
     }
 
-    public function addMethodProvider(ReflectionMethodProvider $provider)
+    public function addMethodProvider(ReflectionMethodProvider $provider): ReflectorBuilder
     {
         $this->methodProviders[] = $provider;
+        return $this;
     }
 
     /**
