@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollecti
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Visibility;
 
@@ -21,16 +22,21 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private $class;
 
     /**
-     * @var array
+     * @var ReflectionMethodProvider[]
      */
     private $methodProviders;
 
+    /**
+     * @var ServiceLocator
+     */
+    private $serviceLocator;
 
-    public function __construct(ReflectionClass $class, array $methodProviders = [])
+    public function __construct(ServiceLocator $serviceLocator, ReflectionClass $class, array $methodProviders = [])
     {
         parent::__construct($class);
         $this->class = $class;
         $this->methodProviders = $methodProviders;
+        $this->serviceLocator = $serviceLocator;
     }
 
     public function isAbstract(): bool
@@ -90,7 +96,7 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     {
         $virtualMethods = VirtualReflectionMethodCollection::fromReflectionMethods([]);
         foreach ($this->methodProviders as $methodProvider) {
-            $virtualMethods = $virtualMethods->merge($methodProvider->provideMethods($this->class));
+            $virtualMethods = $virtualMethods->merge($methodProvider->provideMethods($this->serviceLocator, $this->class));
         }
 
         if ($this->parent()) {

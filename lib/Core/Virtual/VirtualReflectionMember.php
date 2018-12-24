@@ -129,6 +129,14 @@ abstract class VirtualReflectionMember implements ReflectionMember
         return $new;
     }
 
+    public function withInferredTypes(Types $types): self
+    {
+        $new = clone $this;
+        $new->inferredTypes = $types;
+
+        return $new;
+    }
+
     public function frame(): Frame
     {
         return $this->frame;

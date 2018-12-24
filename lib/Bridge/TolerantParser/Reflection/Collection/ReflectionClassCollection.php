@@ -50,6 +50,7 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
             }
 
             $items[(string) $child->getNamespacedName()] = new VirtualReflectionClassDecorator(
+                $serviceLocator,
                 new ReflectionClass($serviceLocator, $source, $child),
                 $serviceLocator->methodProviders()
             );
