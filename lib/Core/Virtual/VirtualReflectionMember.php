@@ -137,6 +137,14 @@ abstract class VirtualReflectionMember implements ReflectionMember
         return $new;
     }
 
+    public function withType(Type $type): self
+    {
+        $new = clone $this;
+        $new->type = $type;
+
+        return $new;
+    }
+
     public function frame(): Frame
     {
         return $this->frame;
