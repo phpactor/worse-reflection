@@ -49,7 +49,11 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
                 continue;
             }
 
-            $items[(string) $child->getNamespacedName()] = new VirtualReflectionClassDecorator(new ReflectionClass($serviceLocator, $source, $child));
+            $items[(string) $child->getNamespacedName()] = new VirtualReflectionClassDecorator(
+                $serviceLocator,
+                new ReflectionClass($serviceLocator, $source, $child),
+                $serviceLocator->methodProviders()
+            );
         }
 
         return new static($serviceLocator, $items);

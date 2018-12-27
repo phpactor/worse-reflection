@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantFactory;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
+use Phpactor\WorseReflection\Core\Virtual\ReflectionMethodProvider;
 
 final class ReflectorBuilder
 {
@@ -49,6 +50,11 @@ final class ReflectorBuilder
      * @var FrameWalker[]
      */
     private $framewalkers = [];
+
+    /**
+     * @var ReflectionMethodProvider[]
+     */
+    private $methodProviders = [];
 
     /**
      * Create a new instance of the builder
@@ -102,6 +108,12 @@ final class ReflectorBuilder
         return $this;
     }
 
+    public function addMethodProvider(ReflectionMethodProvider $provider): ReflectorBuilder
+    {
+        $this->methodProviders[] = $provider;
+        return $this;
+    }
+
     /**
      * Build the reflector
      */
@@ -112,6 +124,7 @@ final class ReflectorBuilder
             $this->buildLogger(),
             $this->buildReflectorFactory(),
             $this->framewalkers,
+            $this->methodProviders,
             $this->enableCache,
             $this->enableContextualSourceLocation
         ))->reflector();

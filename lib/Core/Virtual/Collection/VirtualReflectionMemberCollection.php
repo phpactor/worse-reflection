@@ -8,16 +8,6 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 
 abstract class VirtualReflectionMemberCollection extends AbstractReflectionCollection implements ReflectionMemberCollection
 {
-    public static function fromReflectionMethods(array $reflectionMethods)
-    {
-        $methods = [];
-        foreach ($reflectionMethods as $reflectionMethod) {
-            $methods[$reflectionMethod->name()] = $reflectionMethod;
-        }
-        return new static($methods);
-    }
-
-
     public function byName(string $name): ReflectionMemberCollection
     {
         if ($this->has($name)) {
