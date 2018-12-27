@@ -120,5 +120,22 @@ EOT
                 $this->assertEquals('Zed\Baz', (string) $frame->locals()->byName('$zed')->first()->symbolContext()->type());
             }
         ];
+
+        yield 'Unspecified type for following variable with class import' => [
+            <<<'EOT'
+<?php
+
+use Zed\Baz;
+
+/** @var Baz */
+$zed;
+<>
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('Zed\Baz', (string) $frame->locals()->byName('$zed')->first()->symbolContext()->type());
+            }
+        ];
     }
 }

@@ -92,15 +92,18 @@ class VariableWalker extends AbstractWalker
         }
 
         $vars = $docblock->vars();
+        $resolvedTypes = [];
 
         /** @var DocBlockVar $var */
         foreach ($docblock->vars() as $var) {
-            $this->injectedTypes[ltrim($var->name(), '$')] = $this->nameResolver->resolve(
+            $resolvedType = $this->nameResolver->resolve(
                 $node,
                 $var->types()->best()
             );
+            $this->injectedTypes[ltrim($var->name(), '$')] = $resolvedType;
+            $resolvedTypes[] = $resolvedType;
         }
 
-        return $vars->types();
+        return Types::fromTypes($resolvedTypes);
     }
 }
