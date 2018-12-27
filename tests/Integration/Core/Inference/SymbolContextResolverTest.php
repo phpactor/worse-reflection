@@ -720,6 +720,15 @@ EOT
 EOT
                 , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
                 ];
+
+        yield 'It resolves a clone expression' => [
+                <<<'EOT'
+<?php
+
+(clone new stdClass())<>;
+EOT
+                , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
+                ];
     }
 
     public function provideValues()

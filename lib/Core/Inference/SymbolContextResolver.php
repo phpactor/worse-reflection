@@ -7,6 +7,7 @@ use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
+use Microsoft\PhpParser\Node\Expression\CloneExpression;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node\Expression\ObjectCreationExpression;
 use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
@@ -23,6 +24,7 @@ use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
+use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Reflector;
@@ -251,6 +253,10 @@ class SymbolContextResolver
 
         if ($node instanceof MethodDeclaration) {
             return $this->resolveMethodDeclaration($frame, $node);
+        }
+
+        if ($node instanceof CloneExpression) {
+            return $this->resolveCloneExpression($frame, $node);
         }
 
         throw new CouldNotResolveNode(sprintf(
@@ -726,5 +732,10 @@ class SymbolContextResolver
         }
 
         return $ancestor;
+    }
+
+    private function resolveCloneExpression(Frame $frame, CloneExpression $node): SymbolContext
+    {
+        return $this->__resolveNode($frame, $node->expression);
     }
 }
