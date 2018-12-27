@@ -52,9 +52,9 @@ final class ReflectorBuilder
     private $framewalkers = [];
 
     /**
-     * @var ReflectionMethodProvider[]
+     * @var ReflectionMemberProvider[]
      */
-    private $methodProviders = [];
+    private $memberProviders = [];
 
     /**
      * Create a new instance of the builder
@@ -108,9 +108,9 @@ final class ReflectorBuilder
         return $this;
     }
 
-    public function addMethodProvider(ReflectionMemberProvider $provider): ReflectorBuilder
+    public function addMemberProvider(ReflectionMemberProvider $provider): ReflectorBuilder
     {
-        $this->methodProviders[] = $provider;
+        $this->memberProviders[] = $provider;
         return $this;
     }
 
@@ -124,7 +124,7 @@ final class ReflectorBuilder
             $this->buildLogger(),
             $this->buildReflectorFactory(),
             $this->framewalkers,
-            $this->methodProviders,
+            $this->memberProviders,
             $this->enableCache,
             $this->enableContextualSourceLocation
         ))->reflector();

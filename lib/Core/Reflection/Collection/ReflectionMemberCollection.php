@@ -19,7 +19,9 @@ interface ReflectionMemberCollection extends ReflectionCollection
 
     public function byName(string $name): ReflectionMemberCollection;
 
-    public function virtual();
+    public function virtual(): ReflectionMemberCollection;
 
-    public function real();
+    public function real(): ReflectionMemberCollection;
+
+    public function methods(): ReflectionMethodCollection;
 }

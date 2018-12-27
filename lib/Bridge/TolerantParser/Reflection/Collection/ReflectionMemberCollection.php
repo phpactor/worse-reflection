@@ -4,7 +4,9 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection as CoreReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 
 /**
  * @method ReflectionMemberCollection empty()
@@ -55,17 +57,24 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
         return CoreReflectionMemberCollection::class;
     }
 
-    public function virtual(): ReflectionMemberCollection
+    public function virtual(): CoreReflectionMemberCollection
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
             return true === $member->isVirtual();
         }));
     }
 
-    public function real(): ReflectionMemberCollection
+    public function real(): CoreReflectionMemberCollection
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
             return false === $member->isVirtual();
+        }));
+    }
+
+    public function methods(): ReflectionMethodCollection
+    {
+        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
+            return $member instanceof ReflectionMethod;
         }));
     }
 }

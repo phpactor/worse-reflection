@@ -27,7 +27,7 @@ class IntegrationTestCase extends TestCase
     {
         return ReflectorBuilder::create()
             ->addSource($source)
-            ->addMethodProvider(new DocblockMemberProvider())
+            ->addMemberProvider(new DocblockMemberProvider())
             ->withLogger($this->logger())->build();
     }
 
