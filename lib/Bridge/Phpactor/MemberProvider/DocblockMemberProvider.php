@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\Phpactor\MethodProvider;
+namespace Phpactor\WorseReflection\Bridge\Phpactor\MemberProvider;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
