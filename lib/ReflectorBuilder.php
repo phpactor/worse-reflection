@@ -12,7 +12,7 @@ use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantFactory;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
-use Phpactor\WorseReflection\Core\Virtual\ReflectionMethodProvider;
+use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
 
 final class ReflectorBuilder
 {
@@ -108,7 +108,7 @@ final class ReflectorBuilder
         return $this;
     }
 
-    public function addMethodProvider(ReflectionMethodProvider $provider): ReflectorBuilder
+    public function addMethodProvider(ReflectionMemberProvider $provider): ReflectorBuilder
     {
         $this->methodProviders[] = $provider;
         return $this;

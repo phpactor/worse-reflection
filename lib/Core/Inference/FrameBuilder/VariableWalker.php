@@ -97,8 +97,8 @@ class VariableWalker extends AbstractWalker
 
         /** @var DocBlockVar $var */
         foreach ($docblock->vars() as $var) {
-            $resolvedTypes = Types::fromTypes(array_map(function(Type $type) use ($node) {
-                 return $this->nameResolver->resolve(
+            $resolvedTypes = Types::fromTypes(array_map(function (Type $type) use ($node) {
+                return $this->nameResolver->resolve(
                     $node,
                     $type
                 );

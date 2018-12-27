@@ -24,7 +24,6 @@ use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
-use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Reflector;

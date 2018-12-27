@@ -22,20 +22,20 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private $class;
 
     /**
-     * @var ReflectionMethodProvider[]
+     * @var ReflectionMemberProvider[]
      */
-    private $methodProviders;
+    private $memberProviders;
 
     /**
      * @var ServiceLocator
      */
     private $serviceLocator;
 
-    public function __construct(ServiceLocator $serviceLocator, ReflectionClass $class, array $methodProviders = [])
+    public function __construct(ServiceLocator $serviceLocator, ReflectionClass $class, array $memberProviders = [])
     {
         parent::__construct($class);
         $this->class = $class;
-        $this->methodProviders = $methodProviders;
+        $this->memberProviders = $memberProviders;
         $this->serviceLocator = $serviceLocator;
     }
 
@@ -95,8 +95,10 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private function virtualMethods(ReflectionClass $contextClass = null)
     {
         $virtualMethods = VirtualReflectionMethodCollection::fromReflectionMethods([]);
-        foreach ($this->methodProviders as $methodProvider) {
-            $virtualMethods = $virtualMethods->merge($methodProvider->provideMethods($this->serviceLocator, $this->class));
+        foreach ($this->memberProviders as $memberProvider) {
+            $virtualMethods = $virtualMethods->merge(
+                $memberProvider->provideMembers($this->serviceLocator, $this->class)->methods()
+            );
         }
 
         if ($this->parent()) {

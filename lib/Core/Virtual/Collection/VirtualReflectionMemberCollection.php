@@ -4,10 +4,17 @@ namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 
-abstract class VirtualReflectionMemberCollection extends AbstractReflectionCollection implements ReflectionMemberCollection
+class VirtualReflectionMemberCollection extends AbstractReflectionCollection implements ReflectionMemberCollection
 {
+    public static function fromMembers(array $members): ReflectionMemberCollection
+    {
+        return new static($members);
+    }
+
     public function byName(string $name): ReflectionMemberCollection
     {
         if ($this->has($name)) {
@@ -15,6 +22,13 @@ abstract class VirtualReflectionMemberCollection extends AbstractReflectionColle
         }
 
         return new static([]);
+    }
+
+    public function methods(): ReflectionMethodCollection
+    {
+        return VirtualReflectionMethodCollection::fromReflectionMethods(array_filter($this->items, function (ReflectionMember $member) {
+            return $member instanceof ReflectionMethod;
+        }));
     }
 
     public function byVisibilities(array $visibilities): ReflectionMemberCollection
@@ -59,5 +73,10 @@ abstract class VirtualReflectionMemberCollection extends AbstractReflectionColle
         return new static(array_filter($this->items, function (ReflectionMember $member) {
             return false === $member->isVirtual();
         }));
+    }
+
+    protected function collectionType(): string
+    {
+        return ReflectionMember::class;
     }
 }
