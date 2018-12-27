@@ -137,5 +137,23 @@ EOT
                 $this->assertEquals('Zed\Baz', (string) $frame->locals()->byName('$zed')->first()->symbolContext()->type());
             }
         ];
+
+        yield 'Targeted variable not matching following variable assignment' => [
+            <<<'EOT'
+<?php
+
+class Baz { public function hello(): string {}}
+$foo = new Baz();
+
+/** @var Baz $foo */
+$zed = $foo->hello();
+<>
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
     }
 }

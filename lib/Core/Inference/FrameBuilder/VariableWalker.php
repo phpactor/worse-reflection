@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 
 class VariableWalker extends AbstractWalker
@@ -96,14 +97,20 @@ class VariableWalker extends AbstractWalker
 
         /** @var DocBlockVar $var */
         foreach ($docblock->vars() as $var) {
-            $resolvedType = $this->nameResolver->resolve(
-                $node,
-                $var->types()->best()
-            );
-            $this->injectedTypes[ltrim($var->name(), '$')] = $resolvedType;
-            $resolvedTypes[] = $resolvedType;
+            $resolvedTypes = Types::fromTypes(array_map(function(Type $type) use ($node) {
+                 return $this->nameResolver->resolve(
+                    $node,
+                    $type
+                );
+            }, iterator_to_array($var->types())));
+
+            if (empty($var->name())) {
+                return $resolvedTypes;
+            }
+
+            $this->injectedTypes[ltrim($var->name(), '$')] = $resolvedTypes->best();
         }
 
-        return Types::fromTypes($resolvedTypes);
+        return Types::empty();
     }
 }
