@@ -15,11 +15,12 @@
         "jetbrains/phpstorm-stubs": "*",
         "psr/log": "^1.0",
         "phpactor/docblock": "~0.2",
-        "friendsofphp/php-cs-fixer": "^2.13"
+        "phpactor/text-document": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0@stable",
         "symfony/filesystem": "^3.3",
+        "friendsofphp/php-cs-fixer": "^2.13",
         "phpbench/phpbench": "dev-master",
         "phpactor/class-to-file": "~0.1",
         "phpstan/phpstan": "^0.8.5",

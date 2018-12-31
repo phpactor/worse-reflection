@@ -2,7 +2,11 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-class SourceCode
+use Phpactor\TextDocument\TextDocument;
+use Phpactor\TextDocument\TextDocumentLanguage;
+use Phpactor\TextDocument\TextDocumentUri;
+
+class SourceCode implements TextDocument
 {
     /**
      * @var string
@@ -24,6 +28,18 @@ class SourceCode
     {
         if ($value instanceof SourceCode) {
             return $value;
+        }
+
+        if ($value instanceof TextDocument) {
+            if (null === $value->uri()) {
+                return self::fromString(
+                    $value->__toString()
+                );
+            }
+            return self::fromPathAndString(
+                $value->uri(),
+                $value->__toString()
+            );
         }
 
         if (is_string($value)) {
@@ -61,6 +77,26 @@ class SourceCode
     public static function fromPathAndString(string $filePath, string $source)
     {
         return new self($source, $filePath);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function uri(): ?TextDocumentUri
+    {
+        if (!$this->path) {
+            return null;
+        }
+
+        return TextDocumentUri::fromString($this->path);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function language(): TextDocumentLanguage
+    {
+        return TextDocumentLanguage::fromString('php');
     }
 
     public function path()
