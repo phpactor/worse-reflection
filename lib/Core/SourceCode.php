@@ -37,7 +37,7 @@ class SourceCode implements TextDocument
                 );
             }
             return self::fromPathAndString(
-                $value->uri(),
+                $value->uri()->path(),
                 $value->__toString()
             );
         }
