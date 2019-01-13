@@ -70,7 +70,7 @@ class ReflectionMethodCollection extends ReflectionMemberCollection implements C
         return new static($serviceLocator, $methods);
     }
 
-    public function abstract()
+    public function abstract(): CoreReflectionMethodCollection
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) {
             return $item->isAbstract();

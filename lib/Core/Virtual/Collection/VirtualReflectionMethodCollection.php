@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 
 class VirtualReflectionMethodCollection extends VirtualReflectionMemberCollection implements ReflectionMethodCollection
 {
@@ -19,4 +20,12 @@ class VirtualReflectionMethodCollection extends VirtualReflectionMemberCollectio
     {
         return ReflectionMethodCollection::class;
     }
+
+    public function abstract(): ReflectionMethodCollection
+    {
+        return new self(array_filter($this->items, function (ReflectionMethod $item) {
+            return $item->isAbstract();
+        }));
+    }
+
 }
