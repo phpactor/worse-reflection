@@ -27,5 +27,4 @@ class VirtualReflectionMethodCollection extends VirtualReflectionMemberCollectio
             return $item->isAbstract();
         }));
     }
-
 }
