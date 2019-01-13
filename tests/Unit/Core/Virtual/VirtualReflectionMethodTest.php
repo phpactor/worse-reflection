@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 
 class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
@@ -70,5 +71,10 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
     public function testVirtual()
     {
         $this->assertTrue($this->member()->isStatic());
+    }
+
+    public function testReturnType()
+    {
+        $this->assertEquals(Type::unknown(), $this->member()->returnType());
     }
 }

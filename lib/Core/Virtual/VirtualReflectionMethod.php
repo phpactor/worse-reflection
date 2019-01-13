@@ -99,7 +99,7 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
      */
     public function returnType(): Type
     {
-        return $this->type;
+        return $this->type();
     }
 
     public function isAbstract(): bool
