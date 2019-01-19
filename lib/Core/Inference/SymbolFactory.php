@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Types;
 
 class SymbolFactory
 {
@@ -14,6 +15,7 @@ class SymbolFactory
             'symbol_type' => Symbol::UNKNOWN,
             'container_type' => null,
             'type' => null,
+            'types' => null,
             'value' => null,
             'name' => null,
         ];
@@ -34,9 +36,13 @@ class SymbolFactory
             $position
         );
 
+        if ($config['type'] && !$config['types']) {
+            $config['types'] = Types::fromTypes([$config['type']]);
+        }
+
         return $this->contextFromParameters(
             $symbol,
-            $config['type'],
+            $config['types'],
             $config['container_type'],
             $config['value'],
             $config['name']
@@ -45,15 +51,15 @@ class SymbolFactory
 
     private function contextFromParameters(
         Symbol $symbol,
-        Type $type = null,
+        Types $types = null,
         Type $containerType = null,
         $value = null,
         Name $name = null
     ): SymbolContext {
         $context = SymbolContext::for($symbol);
 
-        if ($type) {
-            $context = $context->withType($type);
+        if ($types) {
+            $context = $context->withTypes($types);
         }
 
         if ($containerType) {

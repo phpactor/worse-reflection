@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
 use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\Node\QualifiedName;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\Variable;
@@ -23,14 +24,23 @@ class CatchWalker extends AbstractWalker
             return $frame;
         }
 
-        $typeContext = $builder->resolveNode($frame, $node->qualifiedName);
+        $types = $builder->resolveNode($frame, $node->qualifiedName)->types();
+
+        foreach ($node->otherQualifiedNameList as $element) {
+            if (!$element instanceof QualifiedName) {
+                continue;
+            }
+
+            $types = $types->merge($builder->resolveNode($frame, $element)->types());
+        }
+
         $context = $this->symbolFactory()->context(
             $node->variableName->getText($node->getFileContents()),
             $node->variableName->getStartPosition(),
             $node->variableName->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
-                'type' => $typeContext->type(),
+                'types' => $types,
             ]
         );
 
