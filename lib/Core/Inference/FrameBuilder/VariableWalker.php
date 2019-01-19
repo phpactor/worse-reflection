@@ -73,7 +73,7 @@ class VariableWalker extends AbstractWalker
         }
 
         if (isset($this->injectedTypes[$symbolName])) {
-            $docblockTypes = Types::fromTypes([$this->injectedTypes[$symbolName]]);
+            $docblockTypes = $this->injectedTypes[$symbolName];
             unset($this->injectedTypes[$symbolName]);
         }
 
@@ -108,7 +108,7 @@ class VariableWalker extends AbstractWalker
                 return $resolvedTypes;
             }
 
-            $this->injectedTypes[ltrim($var->name(), '$')] = $resolvedTypes->best();
+            $this->injectedTypes[ltrim($var->name(), '$')] = $resolvedTypes;
         }
 
         return Types::empty();

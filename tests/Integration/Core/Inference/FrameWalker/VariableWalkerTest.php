@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -103,6 +105,24 @@ EOT
             function (Frame $frame) {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('Foo\Bar\Zed\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
+            }
+        ];
+
+        yield 'Injects named union type' => [
+            <<<'EOT'
+<?php
+
+/** @var Bar|Baz $zed */
+$zed;
+<>
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('$zed'));
+                $this->assertEquals(Types::fromTypes([
+                    Type::fromString('Bar'),
+                    Type::fromString('Baz')
+                ]), $frame->locals()->byName('$zed')->last()->symbolContext()->types());
             }
         ];
 

@@ -1028,25 +1028,25 @@ EOT
             switch ($name) {
                 case 'type':
                     $this->assertEquals($value, (string) $information->type(), $name);
-                    continue;
+                    continue 2;
                 case 'value':
                     $this->assertEquals($value, $information->value(), $name);
-                    continue;
+                    continue 2;
                 case 'name':
                     $this->assertEquals(Name::fromString($value), $information->name(), $name);
-                    continue;
+                    continue 2;
                 case 'symbol_type':
                     $this->assertEquals($value, $information->symbol()->symbolType(), $name);
-                    continue;
+                    continue 2;
                 case 'symbol_name':
                     $this->assertEquals($value, $information->symbol()->name(), $name);
-                    continue;
+                    continue 2;
                 case 'container_type':
                     $this->assertEquals($value, (string) $information->containerType(), $name);
-                    continue;
+                    continue 2;
                 case 'log':
                     $this->assertContains($value, implode(' ', $this->logger->messages()), $name);
-                    continue;
+                    continue 2;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));
             }
