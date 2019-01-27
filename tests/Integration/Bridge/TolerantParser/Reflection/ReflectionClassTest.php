@@ -314,7 +314,6 @@ trait TraitOne
     public function four() {}
 }
 
-
 class Class2
 {
     use TraitOne {
@@ -340,6 +339,40 @@ EOT
                 $this->assertEquals(Visibility::protected(), $class->methods()->get('three')->visibility());
                 $this->assertFalse($class->methods()->belongingTo(ClassName::fromString(Class2::class))->has('two'));
                 $this->assertEquals('TraitOne', $class->methods()->get('two')->declaringClass()->name()->short());
+            },
+        ];
+
+        yield 'Get methods includes namespaced aliased trait methods' => [
+            <<<'EOT'
+<?php
+
+namespace Bar;
+
+trait TraitOne
+{
+    public function one() {}
+    public function three() {}
+}
+
+class Class2
+{
+    use \Bar\TraitOne {
+        one as private two;
+        three as protected three;
+    }
+
+    public function one()
+    {
+    }
+}
+
+EOT
+        ,
+            'Bar\Class2',
+            function (ReflectionClass $class) {
+                $this->assertEquals(3, $class->methods()->count());
+                $this->assertTrue($class->methods()->has('one'));
+                $this->assertTrue($class->methods()->has('three'));
             },
         ];
 
@@ -760,6 +793,5 @@ EOT
                 );
             },
         ];
-
     }
 }
