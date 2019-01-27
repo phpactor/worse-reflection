@@ -194,6 +194,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $methods = ReflectionMethodCollection::empty($this->serviceLocator);
 
         $traitImports = new TraitImports($this->node);
+
         /** @var TraitImport $traitImport */
         foreach ($traitImports as $traitImport) {
             $trait = $this->traits()->get($traitImport->name());

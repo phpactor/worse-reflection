@@ -735,5 +735,31 @@ EOT
                 );
             },
         ];
+
+        yield 'virtual methods of child classes override those of parents' => [
+            <<<'EOT'
+<?php
+
+
+/** @method \Foobar foobar() */
+class Class1 {}
+
+/** @method \Barfoo foobar() */
+class Class2 extends Class1 {
+    public function foo()  {}
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertCount(2, $class->methods());
+                $this->assertEquals(
+                    'Barfoo',
+                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                );
+            },
+        ];
+
     }
 }

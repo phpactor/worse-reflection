@@ -95,17 +95,17 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private function virtualMethods(ReflectionClass $contextClass = null)
     {
         $virtualMethods = VirtualReflectionMethodCollection::fromReflectionMethods([]);
-        foreach ($this->memberProviders as $memberProvider) {
-            $virtualMethods = $virtualMethods->merge(
-                $memberProvider->provideMembers($this->serviceLocator, $this->class)->methods()
-            );
-        }
-
         if ($this->parent()) {
             $virtualMethods = $virtualMethods->merge(
                 $this->parent()->virtualMethods(
                     $contextClass
                 )->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
+        }
+
+        foreach ($this->memberProviders as $memberProvider) {
+            $virtualMethods = $virtualMethods->merge(
+                $memberProvider->provideMembers($this->serviceLocator, $this->class)->methods()
             );
         }
 
