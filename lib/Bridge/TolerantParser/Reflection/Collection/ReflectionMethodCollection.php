@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
@@ -72,7 +73,7 @@ class ReflectionMethodCollection extends ReflectionMemberCollection implements C
 
     public function abstract(): CoreReflectionMethodCollection
     {
-        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMethod $item) {
+        return new self($this->serviceLocator, array_filter($this->items, function (CoreReflectionMethod $item) {
             return $item->isAbstract();
         }));
     }
