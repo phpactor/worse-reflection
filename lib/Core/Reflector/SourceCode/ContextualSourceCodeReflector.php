@@ -34,7 +34,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $this->locator->setSourceCode($sourceCode);
+        $this->locator->pushSourceCode($sourceCode);
 
         $collection = $this->innerReflector->reflectClassesIn($sourceCode);
 
@@ -47,7 +47,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $this->locator->setSourceCode($sourceCode);
+        $this->locator->pushSourceCode($sourceCode);
 
         $offset = $this->innerReflector->reflectOffset($sourceCode, $offset);
 
@@ -57,7 +57,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $this->locator->setSourceCode($sourceCode);
+        $this->locator->pushSourceCode($sourceCode);
 
         $offset = $this->innerReflector->reflectMethodCall($sourceCode, $offset);
 
@@ -70,7 +70,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $this->locator->setSourceCode($sourceCode);
+        $this->locator->pushSourceCode($sourceCode);
 
         $offset = $this->innerReflector->reflectFunctionsIn($sourceCode);
 

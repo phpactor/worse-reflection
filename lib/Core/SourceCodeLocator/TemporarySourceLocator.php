@@ -25,7 +25,7 @@ class TemporarySourceLocator implements SourceCodeLocator
         $this->reflector = $reflector;
     }
 
-    public function setSourceCode(SourceCode $source)
+    public function pushSourceCode(SourceCode $source)
     {
         $this->source = $source;
     }

@@ -44,7 +44,7 @@ class TemporarySourceLocatorTest extends TestCase
         );
         $this->classCollection->has('Foobar')->willReturn(false);
 
-        $this->locator->setSourceCode($source);
+        $this->locator->pushSourceCode($source);
 
         $this->locator->locate(ClassName::fromString('Foobar'));
     }
@@ -58,7 +58,7 @@ class TemporarySourceLocatorTest extends TestCase
         );
         $this->classCollection->has('Foobar')->willReturn(true);
 
-        $this->locator->setSourceCode(SourceCode::fromString($code));
+        $this->locator->pushSourceCode(SourceCode::fromString($code));
         $source = $this->locator->locate(ClassName::fromString('Foobar'));
         $this->assertEquals($code, (string) $source);
     }
