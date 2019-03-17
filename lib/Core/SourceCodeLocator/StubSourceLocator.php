@@ -78,7 +78,7 @@ final class StubSourceLocator implements SourceCodeLocator
 
     private function serializedMapPath()
     {
-        return $this->cacheDir . '/stubmap.map';
+        return $this->cacheDir . '/' . md5($this->stubPath) . '.map';
     }
 
     private function fileIterator()
