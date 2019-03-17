@@ -17,7 +17,7 @@ before_script:
   - composer install
 
 script:
-  - vendor/bin/php-cs-fixer fix --dry-run
+  - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format=udiff
   - vendor/bin/phpstan analyze lib/ --level=2
   - vendor/bin/phpunit
   - vendor/bin/phpbench run --report=aggregate --progress=travis --store --iterations=1

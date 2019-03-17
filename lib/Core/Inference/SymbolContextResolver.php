@@ -534,9 +534,9 @@ class SymbolContextResolver
     ): SymbolContext {
         if (null === $node->accessExpression) {
             $info = $info->withIssue(sprintf(
-            'Subscript expression "%s" is incomplete',
-            (string) $node->getText()
-        ));
+                'Subscript expression "%s" is incomplete',
+                (string) $node->getText()
+            ));
             return $info;
         }
 
@@ -544,9 +544,9 @@ class SymbolContextResolver
 
         if ($info->type() != Type::array()) {
             $info = $info->withIssue(sprintf(
-            'Not resolving subscript expression of type "%s"',
-            (string) $info->type()
-        ));
+                'Not resolving subscript expression of type "%s"',
+                (string) $info->type()
+            ));
             return $info;
         }
 
@@ -554,10 +554,10 @@ class SymbolContextResolver
 
         if (false === is_array($subjectValue)) {
             $info = $info->withIssue(sprintf(
-            'Array value for symbol "%s" is not an array, is a "%s"',
-            (string) $info->symbol(),
-            gettype($subjectValue)
-        ));
+                'Array value for symbol "%s" is not an array, is a "%s"',
+                (string) $info->symbol(),
+                gettype($subjectValue)
+            ));
 
             return $info;
         }
@@ -572,9 +572,9 @@ class SymbolContextResolver
         }
 
         $info = $info->withIssue(sprintf(
-        'Did not resolve access expression for node type "%s"',
-        get_class($node)
-    ));
+            'Did not resolve access expression for node type "%s"',
+            get_class($node)
+        ));
 
         return $info;
     }
