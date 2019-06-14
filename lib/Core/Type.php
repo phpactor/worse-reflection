@@ -28,6 +28,11 @@ class Type
      */
     private $arrayType;
 
+    /**
+     * @var bool
+     */
+    private $nullable = false;
+
     public function __construct(string $phpType = null)
     {
         $this->phpType = $phpType;
@@ -71,49 +76,13 @@ class Type
         return self::unknown();
     }
 
-    public static function fromString(string $type): Type
+    public static function fromString(string $type): self
     {
-        if ('' === $type) {
-            return self::unknown();
+        if ('?' === substr($type, 0, 1)) {
+            return self::typeFromString(substr($type, 1))->asNullable();
         }
 
-        if ($type === 'string') {
-            return self::string();
-        }
-
-        if ($type === 'int') {
-            return self::int();
-        }
-
-        if ($type === 'float') {
-            return self::float();
-        }
-
-        if ($type === 'array') {
-            return self::array();
-        }
-
-        if ($type === 'bool') {
-            return self::bool();
-        }
-
-        if ($type === 'mixed') {
-            return self::mixed();
-        }
-
-        if ($type === 'object') {
-            return self::object();
-        }
-
-        if ($type === 'null') {
-            return self::null();
-        }
-
-        if ($type === 'void') {
-            return self::void();
-        }
-
-        return self::class(ClassName::fromString($type));
+        return self::typeFromString($type);
     }
 
     public static function unknown(): Type
@@ -210,6 +179,10 @@ class Type
     {
         $className = $this->className ? (string) $this->className : ($this->phpType ?: '<unknown>');
 
+        if($this->nullable) {
+            $className = '?' . $className;
+        }
+
         if (null === $this->arrayType) {
             return $className;
         }
@@ -249,7 +222,7 @@ class Type
 
     public function primitive(): string
     {
-        return $this->phpType;
+        return $this->nullable ? '?' . $this->phpType : $this->phpType;
     }
 
     /**
@@ -298,5 +271,57 @@ class Type
         if ($this->arrayType) {
             $this->arrayType = clone $this->arrayType;
         }
+    }
+
+    private static function typeFromString(string $type): Type
+    {
+        if ('' === $type) {
+            return self::unknown();
+        }
+        
+        if ($type === 'string') {
+            return self::string();
+        }
+        
+        if ($type === 'int') {
+            return self::int();
+        }
+        
+        if ($type === 'float') {
+            return self::float();
+        }
+        
+        if ($type === 'array') {
+            return self::array();
+        }
+        
+        if ($type === 'bool') {
+            return self::bool();
+        }
+        
+        if ($type === 'mixed') {
+            return self::mixed();
+        }
+        
+        if ($type === 'null') {
+            return self::null();
+        }
+        
+        if ($type === 'object') {
+            return self::object();
+        }
+
+        if ($type === 'void') {
+            return self::void();
+        }
+        
+        return self::class(ClassName::fromString($type));
+    }
+
+    private function asNullable(): self
+    {
+        $instance = clone $this;;
+        $instance->nullable = true;
+        return $instance;
     }
 }
