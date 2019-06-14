@@ -209,4 +209,12 @@ class TypeTest extends TestCase
         $this->assertNotSame($type1, $type2);
         $this->assertNotSame($type1->arrayType(), $type2->arrayType());
     }
+
+    public function testHasMethodToIndicateIfItIsNullable()
+    {
+        $type1 = Type::fromString('string');
+        $this->assertFalse($type1->isNullable());
+        $type1 = Type::fromString('?string');
+        $this->assertTrue($type1->isNullable());
+    }
 }

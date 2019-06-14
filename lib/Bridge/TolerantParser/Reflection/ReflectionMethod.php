@@ -121,7 +121,12 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function type(): Type
     {
-        return $this->memberTypeResolver->resolve($this->node, $this->node->returnType, $this->class()->name());
+        return $this->memberTypeResolver->resolve(
+            $this->node,
+            $this->node->returnType,
+            $this->class()->name(),
+            $this->node->questionToken ? true : false
+        );
     }
 
     public function body(): NodeText
