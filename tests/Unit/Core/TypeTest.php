@@ -15,10 +15,10 @@ class TypeTest extends TestCase
      */
     public function testToString(Type $type, $toString, $phpType)
     {
-        $this->assertEquals($toString, (string) $type);
+        $this->assertEquals($toString, (string) $type, '__toString()');
 
         if ($type->isDefined()) {
-            $this->assertEquals($phpType, $type->primitive());
+            $this->assertEquals($phpType, $type->primitive(), 'primitive (phptype)');
         }
     }
 
@@ -82,6 +82,24 @@ class TypeTest extends TestCase
             Type::array('string'),
             'string[]',
             'array',
+        ];
+
+        yield 'Nullable string' => [
+            Type::fromString('?string'),
+            '?string',
+            '?string',
+        ];
+
+        yield 'Nullable class' => [
+            Type::fromString('?Foobar'),
+            '?Foobar',
+            '?object',
+        ];
+
+        yield 'asd' => [
+            Type::fromString('?Foo<Bar>'),
+            '?Foo<Bar>',
+            '?object',
         ];
     }
 
