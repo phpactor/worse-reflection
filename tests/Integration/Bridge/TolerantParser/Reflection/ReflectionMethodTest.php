@@ -130,7 +130,10 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::int(), $methods->get('method1')->returnType());
+                    $this->assertEquals(
+                        Type::int()->asNullable(),
+                        $methods->get('method1')->returnType()
+                    );
                 },
             ],
             'Inherited methods' => [

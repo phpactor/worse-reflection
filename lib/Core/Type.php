@@ -179,7 +179,7 @@ class Type
     {
         $className = $this->className ? (string) $this->className : ($this->phpType ?: '<unknown>');
 
-        if($this->nullable) {
+        if ($this->nullable) {
             $className = '?' . $className;
         }
 
@@ -196,6 +196,11 @@ class Type
         }
 
         return $className;
+    }
+
+    public function isNullable(): bool
+    {
+        return $this->nullable;
     }
 
     /**
@@ -318,9 +323,10 @@ class Type
         return self::class(ClassName::fromString($type));
     }
 
-    private function asNullable(): self
+    public function asNullable(): self
     {
-        $instance = clone $this;;
+        $instance = clone $this;
+        ;
         $instance->nullable = true;
         return $instance;
     }
