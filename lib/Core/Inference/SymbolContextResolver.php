@@ -117,6 +117,28 @@ class SymbolContextResolver
         return $context;
     }
 
+    /**
+     * Resolve a node backward until the firsts resolvable node.
+     *
+     * @param Frame $frame
+     * @param Node $node
+     *
+     * @return SymbolContext
+     */
+    public function resolveNodeBackwardsUntilSuccess(Frame $frame, Node $node): SymbolContext
+    {
+        try {
+            return $this->_resolveNode($frame, $node);
+        } catch (CouldNotResolveNode $couldNotResolveNode) {
+            if ($parentNode = $node->getParent()) {
+                return $this->resolveNodeBackwardsUntilSuccess($frame, $parentNode);
+            }
+
+            return SymbolContext::none()
+                ->withIssue($couldNotResolveNode->getMessage());
+        }
+    }
+
     private function __resolveNode(Frame $frame, Node $node): SymbolContext
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));

@@ -1010,7 +1010,96 @@ EOT
         $this->assertCount(2, $context->scope()->nameImports());
     }
 
-    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source): SymbolContext
+    /**
+     * @dataProvider provideResolvableByParent
+     */
+    public function testResolveBackwardsUntilSuccess(
+        string $source,
+        array $locals,
+        array $expectedInformation
+    ) {
+        $variables = [];
+        foreach ($locals as $name => $varSymbolInfo) {
+            if ($varSymbolInfo instanceof Type) {
+                $varSymbolInfo = SymbolContext::for(
+                    Symbol::fromTypeNameAndPosition(
+                        'variable',
+                        $name,
+                        Position::fromStartAndEnd(0, 0)
+                    )
+                )->withType($varSymbolInfo);
+            }
+
+            $variables[] = Variable::fromSymbolContext($varSymbolInfo);
+        }
+        $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source, true);
+
+        $this->assertExpectedInformation($expectedInformation, $symbolInfo);
+    }
+
+    public function provideResolvableByParent()
+    {
+        yield 'It shows the symbol name for a method declartion containing the cursor' => [ <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+use Acme\Factory;
+
+class Foobar
+{
+    public function hello(World $world)
+    {
+        $temp = 1;
+<>
+        return $temp;
+    }
+}
+EOT
+        , [], [
+            'symbol_type' => Symbol::METHOD,
+            'symbol_name' => 'hello',
+            'container_type' => 'Foobar\Barfoo\Foobar',
+        ],
+    ];
+
+        yield 'It shows the symbol name for a method declartion under the cursor' => [ <<<'EOT'
+<?php
+
+class Foobar
+{
+    public function me<>thod()
+    {
+    }
+}
+EOT
+        , [], [
+            'symbol_type' => Symbol::METHOD,
+            'symbol_name' => 'method',
+            'container_type' => 'Foobar',
+        ]
+    ];
+
+        yield 'Class name of the class containing the cursor' => [ <<<'EOT'
+<?php
+
+class Foobar
+{
+    private $a;
+    <>
+    protected $b;
+}
+EOT
+        , [], [
+            'name' => 'Foobar',
+            'type' => 'Foobar',
+            'symbol_type' => Symbol::CLASS_,
+            'symbol_name' => 'Foobar',
+        ],
+        ];
+    }
+
+    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source, $backward = false): SymbolContext
     {
         $frame = new Frame('test', $assignments);
 
@@ -1019,7 +1108,9 @@ EOT
 
         $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger());
 
-        return $resolver->resolveNode($frame, $node);
+        return $backward
+            ? $resolver->resolveNodeBackwardsUntilSuccess($frame, $node)
+            : $resolver->resolveNode($frame, $node);
     }
 
     private function assertExpectedInformation(array $expectedInformation, SymbolContext $information)
