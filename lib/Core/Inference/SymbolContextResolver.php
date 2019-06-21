@@ -92,10 +92,10 @@ class SymbolContextResolver
         $this->expressionEvaluator = new ExpressionEvaluator();
     }
 
-    public function resolveNode(Frame $frame, $node): SymbolContext
+    public function resolveNode(Frame $frame, $node, $closest = false): SymbolContext
     {
         try {
-            return $this->_resolveNode($frame, $node);
+            return $this->_resolveNode($frame, $node, $closest);
         } catch (CouldNotResolveNode $couldNotResolveNode) {
             return SymbolContext::none()
                 ->withIssue($couldNotResolveNode->getMessage());
@@ -105,37 +105,23 @@ class SymbolContextResolver
     /**
      * Internal interface
      */
-    public function _resolveNode(Frame $frame, $node): SymbolContext
+    public function _resolveNode(Frame $frame, $node, $closest = false): SymbolContext
     {
         if (false === $node instanceof Node) {
             throw new CouldNotResolveNode(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
         }
 
-        $context = $this->__resolveNode($frame, $node);
-        $context = $context->withScope(new ReflectionScope($node));
-
-        return $context;
-    }
-
-    /**
-     * Resolve a node backward until the firsts resolvable node.
-     *
-     * @param Frame $frame
-     * @param Node $node
-     *
-     * @return SymbolContext
-     */
-    public function resolveNodeBackwardsUntilSuccess(Frame $frame, Node $node): SymbolContext
-    {
         try {
-            return $this->_resolveNode($frame, $node);
+            $context = $this->__resolveNode($frame, $node);
+            $context = $context->withScope(new ReflectionScope($node));
+
+            return $context;
         } catch (CouldNotResolveNode $couldNotResolveNode) {
-            if ($parentNode = $node->getParent()) {
-                return $this->resolveNodeBackwardsUntilSuccess($frame, $parentNode);
+            if ($closest && $parentNode = $node->getParent()) {
+                return $this->_resolveNode($frame, $parentNode);
             }
 
-            return SymbolContext::none()
-                ->withIssue($couldNotResolveNode->getMessage());
+            throw $couldNotResolveNode;
         }
     }
 

@@ -44,12 +44,12 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
     /**
      * {@inheritDoc}
      */
-    public function reflectOffset($sourceCode, $offset): ReflectionOffset
+    public function reflectOffset($sourceCode, $offset, $closestParent = false): ReflectionOffset
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
         $this->locator->pushSourceCode($sourceCode);
 
-        $offset = $this->innerReflector->reflectOffset($sourceCode, $offset);
+        $offset = $this->innerReflector->reflectOffset($sourceCode, $offset, $closestParent);
 
         return $offset;
     }

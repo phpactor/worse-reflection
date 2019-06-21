@@ -1013,7 +1013,7 @@ EOT
     /**
      * @dataProvider provideResolvableByParent
      */
-    public function testResolveBackwardsUntilSuccess(
+    public function testResolveClosestNode(
         string $source,
         array $locals,
         array $expectedInformation
@@ -1099,7 +1099,7 @@ EOT
         ];
     }
 
-    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source, $backward = false): SymbolContext
+    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source, $closest = false): SymbolContext
     {
         $frame = new Frame('test', $assignments);
 
@@ -1108,9 +1108,7 @@ EOT
 
         $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger());
 
-        return $backward
-            ? $resolver->resolveNodeBackwardsUntilSuccess($frame, $node)
-            : $resolver->resolveNode($frame, $node);
+        return $resolver->resolveNode($frame, $node, $closest);
     }
 
     private function assertExpectedInformation(array $expectedInformation, SymbolContext $information)

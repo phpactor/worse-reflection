@@ -48,7 +48,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
     /**
      * {@inheritDoc}
      */
-    public function reflectOffset($sourceCode, $offset): ReflectionOffset
+    public function reflectOffset($sourceCode, $offset, $closestParent = false): ReflectionOffset
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
         $offset = Offset::fromUnknown($offset);
@@ -59,7 +59,9 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $resolver = $this->serviceLocator->symbolContextResolver();
         $frame = $this->serviceLocator->frameBuilder()->build($node);
 
-        return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $resolver->resolveNode($frame, $node));
+        $symbolContext = $resolver->resolveNode($frame, $node, $closestParent);
+
+        return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $symbolContext);
     }
 
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall

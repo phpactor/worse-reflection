@@ -83,9 +83,9 @@ class CompositeReflector implements Reflector
     /**
      * {@inheritDoc}
      */
-    public function reflectOffset($sourceCode, $offset): ReflectionOffset
+    public function reflectOffset($sourceCode, $offset, $closestParent = false): ReflectionOffset
     {
-        return $this->sourceCodeReflector->reflectOffset($sourceCode, $offset);
+        return $this->sourceCodeReflector->reflectOffset($sourceCode, $offset, $closestParent);
     }
 
     /**

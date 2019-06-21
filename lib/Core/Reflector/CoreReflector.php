@@ -153,9 +153,9 @@ class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionRefl
      * @param SourceCode|string $sourceCode
      * @param Offset|int $offset
      */
-    public function reflectOffset($sourceCode, $offset): ReflectionOffset
+    public function reflectOffset($sourceCode, $offset, $closestParent = false): ReflectionOffset
     {
-        return $this->sourceReflector->reflectOffset($sourceCode, $offset);
+        return $this->sourceReflector->reflectOffset($sourceCode, $offset, $closestParent);
     }
 
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
