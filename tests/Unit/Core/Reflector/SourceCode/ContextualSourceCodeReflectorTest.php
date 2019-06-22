@@ -56,13 +56,19 @@ class ContextualSourceCodeReflectorTest extends TestCase
     public function testReflectOffset()
     {
         $this->locator->pushSourceCode($this->code)->shouldBeCalled();
-        $this->innerReflector->reflectOffset(
-            $this->code,
-            self::TEST_OFFSET,
-            false
-        )->willReturn($this->prophesize(ReflectionOffset::class));
+        $this->innerReflector->reflectOffset($this->code, self::TEST_OFFSET)
+             ->willReturn($this->prophesize(ReflectionOffset::class));
 
         $this->reflector->reflectOffset(self::TEST_SOURCE_CODE, self::TEST_OFFSET);
+    }
+
+    public function testReflectOffsetToClosestParent()
+    {
+        $this->locator->pushSourceCode($this->code)->shouldBeCalled();
+        $this->innerReflector->reflectOffsetToClosestParent($this->code, self::TEST_OFFSET)
+             ->willReturn($this->prophesize(ReflectionOffset::class));
+
+        $this->reflector->reflectOffsetToClosestParent(self::TEST_SOURCE_CODE, self::TEST_OFFSET);
     }
 
     public function testReflectMethodCall()

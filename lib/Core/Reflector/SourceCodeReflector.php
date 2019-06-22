@@ -27,11 +27,14 @@ interface SourceCodeReflector
     /**
      * Return the information for the given offset in the given file, including the value
      * and type of a variable and the frame information.
-     *
-     * @param bool $closestParent Allows to find the closest parent if there is
-     * no available symbol at the given offset, default to false.
      */
-    public function reflectOffset($sourceCode, $offset, $closestParent = false): ReflectionOffset;
+    public function reflectOffset($sourceCode, $offset): ReflectionOffset;
+
+    /**
+     * Return the information for the closest valid node from the given offset,
+     * including the value and type of a variable and the frame information.
+     */
+    public function reflectOffsetToClosestParent($sourceCode, $offset): ReflectionOffset;
 
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall;
 }

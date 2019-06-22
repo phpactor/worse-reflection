@@ -63,6 +63,62 @@ EOT
     }
 
     /**
+     * @test
+     * @dataProvider provideSourceCodeToReflectOn
+     */
+    public function testReflectOffsetToClosestParent(
+        string $source,
+        int $offset,
+        string $symbolType,
+        string $symbolName
+    ) {
+        $offsetReflection = $this->createReflector($source)
+           ->reflectOffsetToClosestParent($source, $offset);
+        $symbol = $offsetReflection->symbolContext()->symbol();
+
+        $this->assertEquals($symbolType, $symbol->symbolType());
+        $this->assertEquals($symbolName, $symbol->name());
+    }
+
+    public function provideSourceCodeToReflectOn()
+    {
+        $source = <<<'EOT'
+<?php
+
+class Foo
+{
+    private $property;
+
+    public function __construct()
+    {
+
+    }
+}
+EOT;
+
+        return [
+            'Cursor inside the class but not on a symbol' => [
+                $source,
+                43,
+                'class',
+                'Foo',
+            ],
+            'Cursor inside a method but not on a symbol' => [
+                $source,
+                84,
+                'method',
+                '__construct',
+            ],
+            'Cursor on a method definition' => [
+                $source,
+                70,
+                'method',
+                '__construct',
+            ],
+        ];
+    }
+
+    /**
      * @testdox It reflects the value at an offset.
      */
     public function testReflectOffsetRedeclared()

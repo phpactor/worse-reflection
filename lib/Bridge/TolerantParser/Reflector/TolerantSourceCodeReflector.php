@@ -2,7 +2,9 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflector;
 
+use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\SourceFileNode;
+use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
@@ -48,18 +50,33 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
     /**
      * {@inheritDoc}
      */
-    public function reflectOffset($sourceCode, $offset, $closestParent = false): ReflectionOffset
+    public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
-        $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $offset = Offset::fromUnknown($offset);
-
-        $rootNode = $this->parseSourceCode($sourceCode);
-        $node = $rootNode->getDescendantNodeAtPosition($offset->toInt());
+        $node = $this->nodeFromSourceAndOffset($sourceCode, $offset);
 
         $resolver = $this->serviceLocator->symbolContextResolver();
         $frame = $this->serviceLocator->frameBuilder()->build($node);
 
-        $symbolContext = $resolver->resolveNode($frame, $node, $closestParent);
+        $symbolContext = $resolver->resolveNode($frame, $node);
+
+        return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $symbolContext);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectOffsetToClosestParent($sourceCode, $offset): ReflectionOffset
+    {
+        $node = $this->nodeFromSourceAndOffset($sourceCode, $offset);
+
+        $resolver = $this->serviceLocator->symbolContextResolver();
+        $frame = $this->serviceLocator->frameBuilder()->build($node);
+
+        do {
+            $symbolContext = $resolver->resolveNode($frame, $node);
+
+            $isUnknown = Symbol::UNKNOWN === $symbolContext->symbol()->symbolType();
+        } while ($isUnknown && $node = $node->getParent());
 
         return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $symbolContext);
     }
@@ -106,5 +123,15 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
     {
         $rootNode = $this->parser->parseSourceFile((string) $sourceCode, $sourceCode->path());
         return $rootNode;
+    }
+
+    private function nodeFromSourceAndOffset($sourceCode, $offset): Node
+    {
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $offset = Offset::fromUnknown($offset);
+
+        $rootNode = $this->parseSourceCode($sourceCode);
+
+        return $rootNode->getDescendantNodeAtPosition($offset->toInt());
     }
 }
