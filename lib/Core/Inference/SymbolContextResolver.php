@@ -92,10 +92,10 @@ class SymbolContextResolver
         $this->expressionEvaluator = new ExpressionEvaluator();
     }
 
-    public function resolveNode(Frame $frame, $node, $closest = false): SymbolContext
+    public function resolveNode(Frame $frame, $node): SymbolContext
     {
         try {
-            return $this->_resolveNode($frame, $node, $closest);
+            return $this->_resolveNode($frame, $node);
         } catch (CouldNotResolveNode $couldNotResolveNode) {
             return SymbolContext::none()
                 ->withIssue($couldNotResolveNode->getMessage());
@@ -105,24 +105,14 @@ class SymbolContextResolver
     /**
      * Internal interface
      */
-    public function _resolveNode(Frame $frame, $node, $closest = false): SymbolContext
+    public function _resolveNode(Frame $frame, $node): SymbolContext
     {
         if (false === $node instanceof Node) {
             throw new CouldNotResolveNode(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
         }
 
-        try {
-            $context = $this->__resolveNode($frame, $node);
-            $context = $context->withScope(new ReflectionScope($node));
-
-            return $context;
-        } catch (CouldNotResolveNode $couldNotResolveNode) {
-            if ($closest && $parentNode = $node->getParent()) {
-                return $this->_resolveNode($frame, $parentNode);
-            }
-
-            throw $couldNotResolveNode;
-        }
+        return $this->__resolveNode($frame, $node)
+            ->withScope(new ReflectionScope($node));
     }
 
     private function __resolveNode(Frame $frame, Node $node): SymbolContext
