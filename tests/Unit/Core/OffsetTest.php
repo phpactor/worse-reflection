@@ -3,11 +3,20 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Core;
 
 use PHPUnit\Framework\TestCase;
+use Phpactor\TextDocument\ByteOffset;
 use Phpactor\WorseReflection\Core\Offset;
 
 class OffsetTest extends TestCase
 {
     const OFFSET = 123;
+
+    public function testFromPhpactorByteOffset()
+    {
+        $byteOffset = ByteOffset::fromInt(self::OFFSET);
+        $offset = Offset::fromUnknown($byteOffset);
+
+        $this->assertSame(self::OFFSET, $offset->toInt());
+    }
 
     public function testFromUnknownReturnsOffsetIfGivenOffset()
     {

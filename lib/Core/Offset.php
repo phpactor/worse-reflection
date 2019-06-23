@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use Phpactor\TextDocument\ByteOffset;
+
 final class Offset
 {
     private $offset;
@@ -20,6 +22,10 @@ final class Offset
 
     public static function fromUnknown($value)
     {
+        if ($value instanceof ByteOffset) {
+            return self::fromInt($value->toInt());
+        }
+
         if ($value instanceof Offset) {
             return $value;
         }
