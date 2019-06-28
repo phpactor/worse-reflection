@@ -277,6 +277,46 @@ EOT
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
                 },
             ],
+            'Understands root namespace' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    private $property1;
+
+    public function __construct()
+    {
+        $this->property1 = new \DateTime();
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($properties) {
+                    $this->assertEquals('\DateTime', $properties->get('property1')->inferredTypes()->best()->short());
+                },
+            ],
+            'Does not print root backslash when asking for short version if multiple parts' => [
+                <<<'EOT'
+<?php
+
+class Foobar
+{
+    private $property1;
+
+    public function __construct()
+    {
+        $this->property1 = new \Some\Thing();
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function ($properties) {
+                    $this->assertEquals('Thing', $properties->get('property1')->inferredTypes()->best()->short());
+                },
+            ],
         ];
     }
 }

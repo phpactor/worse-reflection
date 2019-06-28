@@ -72,7 +72,16 @@ class Name
 
     public function short(): string
     {
-        return end($this->parts);
+        $parts = $this->parts;
+        $short = end($parts);
+
+        if (count($this->parts) > 1) {
+            return $short;
+        }
+
+        return $this->wasFullyQualified()
+            ? sprintf('\\%s', $short)
+            : $short;
     }
 
     public function wasFullyQualified(): bool
