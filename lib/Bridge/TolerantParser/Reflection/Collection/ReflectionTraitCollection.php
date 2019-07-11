@@ -19,7 +19,7 @@ class ReflectionTraitCollection extends AbstractReflectionCollection implements 
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class)
     {
         $items = [];
-        /** @var $memberDeclaration TraitUseClause */
+        /** @var TraitUseClause $memberDeclaration */
         foreach ($class->classMembers->classMemberDeclarations as $memberDeclaration) {
             if (false === $memberDeclaration instanceof TraitUseClause) {
                 continue;

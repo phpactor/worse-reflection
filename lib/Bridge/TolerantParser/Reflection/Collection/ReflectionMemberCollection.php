@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 
 /**
- * @method ReflectionMemberCollection empty()
+ * @method static ReflectionMemberCollection empty(ServiceLocator $serviceLocator)
  */
 class ReflectionMemberCollection extends AbstractReflectionCollection implements CoreReflectionMemberCollection
 {

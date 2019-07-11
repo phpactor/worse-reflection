@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
+use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall as CoreReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Position;
@@ -19,6 +21,9 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
      */
     private $frame;
 
+    /**
+     * @var ScopedPropertyAccessExpression|MemberAccessExpression
+     */
     private $node;
 
     /**

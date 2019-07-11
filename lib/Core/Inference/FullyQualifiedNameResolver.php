@@ -90,7 +90,7 @@ class FullyQualifiedNameResolver
 
     private function parentClass(Node $node)
     {
-        /** @var $class ClassDeclaration */
+        /** @var ClassDeclaration $class */
         $class = $node->getFirstAncestor(ClassDeclaration::class);
 
         if (null === $class) {

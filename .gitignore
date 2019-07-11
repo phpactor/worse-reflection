@@ -1,7 +1,6 @@
-vendor/
-composer.lock
-phpunit.xml
-composer.phar
-tests/Workspace
-tests/Smoke/cache
-smoke_test.log
+/vendor
+/tests/Workspace
+/tests/Assets/workspace
+/phpbench.json
+/composer.lock
+/.php_cs.cache
