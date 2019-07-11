@@ -12,7 +12,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionArgument
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter get()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionParameter last()
- * @method static \Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection empty()
+ * @method static \Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionArgumentCollection empty(ServiceLocator $locator)
  */
 class ReflectionArgumentCollection extends AbstractReflectionCollection implements CoreReflectionParameterCollection
 {
