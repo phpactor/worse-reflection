@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMember first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMember last()
- * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMember get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMember get(string $name)
  */
 interface ReflectionMemberCollection extends ReflectionCollection
 {

@@ -26,6 +26,7 @@ use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
@@ -390,7 +391,7 @@ class SymbolContextResolver
             ));
         }
 
-        /** @var ReflectionClass|ReflectionIntreface $reflectionClass */
+        /** @var ReflectionClass|ReflectionInterface $reflectionClass */
         $reflectionClass = $this->reflector->reflectClassLike($class->getNamespacedName()->__toString());
         $reflectionMethod = $reflectionClass->methods()->get($method->getName());
 

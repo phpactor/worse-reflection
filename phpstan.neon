@@ -6,6 +6,7 @@ parameters:
     ignoreErrors:
         - '#Method .*getText.. invoked with 1 parameter, 0 required#'
         - '#methods.. invoked with 1 parameter, 0 required#'
+        - '#Binary operation "\+" between string and 0 results in an error#'
         
     paths:
         - lib
