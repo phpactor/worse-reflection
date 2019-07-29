@@ -3,12 +3,15 @@
 namespace Phpactor\WorseReflection\Core\DocBlock;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Types;
 
 interface DocBlock
 {
     public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection;
+
+    public function properties(ReflectionClassLike $declaringClass): ReflectionPropertyCollection;
 
     public function isDefined(): bool;
 

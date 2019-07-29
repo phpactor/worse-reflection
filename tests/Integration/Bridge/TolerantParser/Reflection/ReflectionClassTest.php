@@ -794,4 +794,78 @@ EOT
             },
         ];
     }
+
+    /**
+     * @dataProvider provideVirtualProperties
+     */
+    public function testVirtualProperties(string $source, string $class, \Closure $assertion)
+    {
+        $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
+        $assertion($class);
+    }
+
+
+    public function provideVirtualProperties()
+    {
+        yield 'virtual properties' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @property \Foobar $foobar
+ * @property \Foobar $barfoo
+ */
+class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function ($class) {
+                $this->assertEquals(2, $class->properties()->count());
+                $this->assertEquals('foobar', $class->properties()->first()->name());
+            }
+        ];
+
+        yield 'invalid properties' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @property $foobar
+ * @property
+ */
+class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function ($class) {
+                $this->assertEquals(0, $class->properties()->count());
+            }
+        ];
+
+        yield 'multiple types' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @property string|int $foobar
+ */
+class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertEquals(1, $class->properties()->count());
+                $this->assertCount(2, $class->properties()->first()->inferredTypes());
+            }
+        ];
+    }
 }

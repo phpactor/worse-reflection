@@ -36,8 +36,9 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
 
         if (false === $collection instanceof $collectionType) {
             throw new RuntimeException(sprintf(
-                'Collection must be instance of "%s"',
-                static::class
+                'Collection must be instance of "%s", got "%s"',
+                $collectionType,
+                get_class($collection)
             ));
         }
 

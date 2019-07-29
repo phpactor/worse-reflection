@@ -12,6 +12,8 @@ class DocblockMemberProvider implements ReflectionMemberProvider
 {
     public function provideMembers(ServiceLocator $locator, ReflectionClassLike $class): ReflectionMemberCollection
     {
-        return VirtualReflectionMemberCollection::fromMembers(iterator_to_array($class->docblock()->methods($class)));
+        return VirtualReflectionMemberCollection::fromMembers([])
+            ->merge(VirtualReflectionMemberCollection::fromMembers(iterator_to_array($class->docblock()->methods($class))))
+            ->merge(VirtualReflectionMemberCollection::fromMembers(iterator_to_array($class->docblock()->properties($class))));
     }
 }

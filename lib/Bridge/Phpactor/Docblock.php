@@ -9,11 +9,13 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
 
 class Docblock implements CoreDocblock
 {
@@ -32,11 +34,17 @@ class Docblock implements CoreDocblock
      */
     private $methodFactory;
 
-    public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null)
+    /**
+     * @var DocblockReflectionPropertyFactory
+     */
+    private $propertyFactory;
+
+    public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null, DocblockReflectionPropertyFactory $propertyFactory = null)
     {
         $this->docblock = $docblock;
         $this->raw = $raw;
         $this->methodFactory = $methodFactory ?: new DocblockReflectionMethodFactory();
+        $this->propertyFactory = $propertyFactory ?: new DocblockReflectionPropertyFactory();
     }
 
     public function isDefined(): bool
@@ -140,6 +148,19 @@ class Docblock implements CoreDocblock
         }
 
         return VirtualReflectionMethodCollection::fromReflectionMethods($methods);
+    }
+
+    public function properties(ReflectionClassLike $declaringClass): ReflectionPropertyCollection
+    {
+        $properties = [];
+        foreach ($this->docblock->tags()->byName('property') as $propertyTag) {
+            if (!$propertyTag->propertyName()) {
+                continue;
+            }
+            $properties[$propertyTag->propertyName()] = $this->propertyFactory->create($this, $declaringClass, $propertyTag);
+        }
+
+        return VirtualReflectionPropertyCollection::fromReflectionProperties($properties);
     }
 
     private function typesFromDocblockType(DocblockType $type)

@@ -24,4 +24,6 @@ interface ReflectionMemberCollection extends ReflectionCollection
     public function real(): ReflectionMemberCollection;
 
     public function methods(): ReflectionMethodCollection;
+
+    public function properties(): ReflectionPropertyCollection;
 }

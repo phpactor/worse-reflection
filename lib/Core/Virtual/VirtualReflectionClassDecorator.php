@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollectio
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorator implements ReflectionClass
@@ -56,7 +57,10 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
 
     public function properties(): ReflectionPropertyCollection
     {
-        return $this->class->properties();
+        $realProperties = $this->class->properties();
+        $virtualProperties = $this->virtualProperties();
+
+        return $realProperties->merge($virtualProperties);
     }
 
     /**
@@ -110,5 +114,25 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         }
 
         return $virtualMethods;
+    }
+
+    private function virtualProperties(ReflectionClass $contextClass = null)
+    {
+        $virtualProperties = VirtualReflectionPropertyCollection::fromReflectionProperties([]);
+        if ($this->parent()) {
+            $virtualProperties = $virtualProperties->merge(
+                $this->parent()->virtualProperties(
+                    $contextClass
+                )->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
+        }
+
+        foreach ($this->memberProviders as $memberProvider) {
+            $virtualProperties = $virtualProperties->merge(
+                $memberProvider->provideMembers($this->serviceLocator, $this->class)->properties()
+            );
+        }
+
+        return $virtualProperties;
     }
 }

@@ -220,4 +220,14 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
 
         return new self($collections);
     }
+
+    public function properties(): ReflectionPropertyCollection
+    {
+        $collections = [];
+        foreach ($this->collections as $collection) {
+            $collections[] = $collection->properties();
+        }
+
+        return new self($collections);
+    }
 }

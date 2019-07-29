@@ -5,8 +5,10 @@ namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 
 class VirtualReflectionMemberCollection extends AbstractReflectionCollection implements ReflectionMemberCollection
 {
@@ -75,8 +77,15 @@ class VirtualReflectionMemberCollection extends AbstractReflectionCollection imp
         }));
     }
 
+    public function properties(): ReflectionPropertyCollection
+    {
+        return new VirtualReflectionPropertyCollection(array_filter($this->items, function (ReflectionMember $member) {
+            return $member instanceof ReflectionProperty;
+        }));
+    }
+
     protected function collectionType(): string
     {
-        return ReflectionMember::class;
+        return ReflectionMemberCollection::class;
     }
 }

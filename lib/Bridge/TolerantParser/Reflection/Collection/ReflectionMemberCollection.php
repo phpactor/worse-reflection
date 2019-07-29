@@ -5,8 +5,10 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection as CoreReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 
 /**
  * @method static ReflectionMemberCollection empty(ServiceLocator $serviceLocator)
@@ -75,6 +77,13 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
             return $member instanceof ReflectionMethod;
+        }));
+    }
+
+    public function properties(): ReflectionPropertyCollection
+    {
+        return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
+            return $member instanceof ReflectionProperty;
         }));
     }
 }
