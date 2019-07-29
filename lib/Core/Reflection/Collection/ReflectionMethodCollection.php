@@ -9,13 +9,7 @@ use Phpactor\WorseReflection\Core\ClassName;
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod last()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionMethod get(string $name)
  */
-interface ReflectionMethodCollection extends ReflectionCollection
+interface ReflectionMethodCollection extends ReflectionMemberCollection
 {
-    public function byVisibilities(array $visibilities);
-
-    public function belongingTo(ClassName $class);
-
-    public function atOffset(int $offset);
-
     public function abstract();
 }
