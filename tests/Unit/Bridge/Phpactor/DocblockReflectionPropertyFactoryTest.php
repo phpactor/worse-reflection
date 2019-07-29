@@ -4,10 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
-use Phpactor\Docblock\DefaultValue;
-use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
-use Phpactor\Docblock\Property\Parameter;
 use Phpactor\Docblock\Tag\PropertyTag;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockReflectionPropertyFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;

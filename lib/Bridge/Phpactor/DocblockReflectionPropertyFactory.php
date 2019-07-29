@@ -4,12 +4,9 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
-use Phpactor\Docblock\Property\Parameter;
 use Phpactor\Docblock\Tag\PropertyTag;
-use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
@@ -18,7 +15,6 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionProperty;
-use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 use Phpactor\WorseReflection\Core\Visibility;
 use RuntimeException;
 
@@ -27,10 +23,11 @@ class DocblockReflectionPropertyFactory
     public function create(DocBlock $docblock, ReflectionClassLike $reflectionClass, PropertyTag $propertyTag): VirtualReflectionProperty
     {
         $types = $this->typesFrom($reflectionClass->scope(), $propertyTag->types());
-        $parameters = VirtualReflectionParameterCollection::empty();;
+        $parameters = VirtualReflectionParameterCollection::empty();
+        ;
 
         if (
-            !$reflectionClass instanceof ReflectionClass && 
+            !$reflectionClass instanceof ReflectionClass &&
             !$reflectionClass instanceof ReflectionTrait
         ) {
             throw new RuntimeException(sprintf(
