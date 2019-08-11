@@ -3,9 +3,7 @@
 $finder = PhpCsFixer\Finder::create()
     ->in('lib')
     ->in('tests')
-    ->exclude([
-        
-    ])
+    ->exclude('Workspace')
 ;
 
 return PhpCsFixer\Config::create()
