@@ -299,7 +299,9 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
 
         if ($this->parent()) {
-            return $this->parent()->isInstanceOf($className);
+            if ($this->parent()->isInstanceOf($className)) {
+                return true;
+            }
         }
 
         return $this->interfaces()->has((string) $className);
