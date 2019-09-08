@@ -539,6 +539,24 @@ EOT
             },
         ];
 
+        yield 'isInstanceOf returns true when a class implements the interface and has a parent' => [
+            <<<'EOT'
+<?php
+
+interface SomeInterface {}
+
+class ParentClass {}
+
+class Class2 extends ParentClass implements SomeInterface {}
+
+EOT
+        ,
+            'Class2',
+            function ($class) {
+                $this->assertTrue($class->isInstanceOf(ClassName::fromString('SomeInterface')));
+            },
+        ];
+
         yield 'isInstanceOf returns true for a parent class' => [
             <<<'EOT'
 <?php
