@@ -191,4 +191,11 @@ class TypeTest extends TestCase
         $this->assertNotSame($type1, $type2);
         $this->assertNotSame($type1->arrayType(), $type2->arrayType());
     }
+
+    public function testIsClassShouldNotReturnTrueForObjectType()
+    {
+        $type1 = Type::fromString('object');
+        $this->assertFalse($type1->isClass());
+        $this->assertEquals('object', $type1->__toString());
+    }
 }

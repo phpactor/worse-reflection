@@ -101,6 +101,10 @@ class Type
             return self::mixed();
         }
 
+        if ($type === 'object') {
+            return self::object();
+        }
+
         if ($type === 'null') {
             return self::null();
         }
@@ -175,6 +179,11 @@ class Type
     public static function float(): Type
     {
         return self::create(self::TYPE_FLOAT);
+    }
+
+    private static function object()
+    {
+        return self::create(self::TYPE_CLASS);
     }
 
     public static function class($className): Type
