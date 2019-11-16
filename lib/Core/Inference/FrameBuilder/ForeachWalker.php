@@ -80,7 +80,10 @@ class ForeachWalker extends AbstractWalker
         $context = $this->symbolFactory()->context(
             $itemName,
             $node->getStart(),
-            $node->getEndPosition()
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+            ]
         );
         
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));

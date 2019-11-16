@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -44,6 +45,7 @@ EOT
                 $this->assertCount(4, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('key'));
                 $this->assertEquals(Type::unknown(), $frame->locals()->byName('key')->first()->symbolContext()->types()->best());
+                $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('key')->first()->symbolContext()->symbol()->symbolType());
             }
         ];
 
