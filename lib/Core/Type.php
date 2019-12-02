@@ -208,7 +208,7 @@ class Type
 
     public function __toString()
     {
-        $className = $this->className ? (string) $this->className : $this->phpType ?: '<unknown>';
+        $className = $this->className ? (string) $this->className : ($this->phpType ?: '<unknown>');
 
         if (null === $this->arrayType) {
             return $className;
