@@ -38,6 +38,14 @@ class PropertyTypeResolver
             return $this->property->scope()->resolveFullyQualifiedName($type, $this->property->class());
         }, iterator_to_array($docblockTypes));
 
+        if ($this->property->type()->isDefined()) {
+            // TODO Possible overlaps with phpdoc, bad ?
+            $resolvedTypes[] = $this->property
+                ->scope()
+                ->resolveFullyQualifiedName($this->property->type(), $this->property->class())
+            ;
+        }
+
         if (empty($resolvedTypes)) {
             foreach ($this->typeFromConstructor() as $type) {
                 $resolvedTypes[] = $type;

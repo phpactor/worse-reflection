@@ -2,8 +2,11 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Microsoft\PhpParser\DiagnosticsProvider;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
+use Microsoft\PhpParser\Node\QualifiedName;
+use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
@@ -84,6 +87,20 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function type(): Type
     {
+        $typeDeclaration = $this->propertyDeclaration->typeDeclaration;
+
+        if($typeDeclaration instanceof QualifiedName) {
+            return Type::fromString(
+                $typeDeclaration->getText()
+            );
+        }
+
+        if ($typeDeclaration instanceof Token) {
+            return Type::fromString(
+                DiagnosticsProvider::getTextForTokenKind($typeDeclaration->kind)
+            );
+        }
+
         return Type::unknown();
     }
 
