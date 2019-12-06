@@ -22,7 +22,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
 
     public function provideReflectionProperty()
     {
-            yield 'It reflects a property' => [
+        yield 'It reflects a property' => [
                 <<<'EOT'
 <?php
 
@@ -39,7 +39,7 @@ EOT
                 },
             ];
 
-            yield 'Private visibility' => [
+        yield 'Private visibility' => [
                 <<<'EOT'
 <?php
 
@@ -55,7 +55,7 @@ EOT
                 },
             ];
 
-            yield 'Protected visibility' => [
+        yield 'Protected visibility' => [
                 <<<'EOT'
 <?php
 
@@ -71,7 +71,7 @@ EOT
                 },
             ];
 
-            yield 'Public visibility' => [
+        yield 'Public visibility' => [
                 <<<'EOT'
 <?php
 
@@ -87,7 +87,7 @@ EOT
                 },
             ];
 
-            yield 'Inherited properties' => [
+        yield 'Inherited properties' => [
                 <<<'EOT'
 <?php
 
@@ -119,7 +119,7 @@ EOT
                 },
             ];
 
-            yield 'Return type from docblock' => [
+        yield 'Return type from docblock' => [
                 <<<'EOT'
 <?php
 
@@ -144,7 +144,7 @@ EOT
                 },
             ];
 
-            yield 'Returns unknown type for (real) type' => [
+        yield 'Returns unknown type for (real) type' => [
                 <<<'EOT'
 <?php
 
@@ -168,7 +168,7 @@ EOT
                 },
             ];
 
-            yield 'Property with assignment' => [
+        yield 'Property with assignment' => [
                 <<<'EOT'
 <?php
 
@@ -186,7 +186,7 @@ EOT
                 },
             ];
 
-            yield 'Return true if property is static' => [
+        yield 'Return true if property is static' => [
                 <<<'EOT'
 <?php
 
@@ -204,7 +204,7 @@ EOT
                 },
             ];
 
-            yield 'Returns declaring class' => [
+        yield 'Returns declaring class' => [
                 <<<'EOT'
 <?php
 
@@ -220,7 +220,7 @@ EOT
                 },
             ];
 
-            yield 'Property type from class @property annotation' => [
+        yield 'Property type from class @property annotation' => [
                 <<<'EOT'
 <?php
 
@@ -241,7 +241,7 @@ EOT
                 },
             ];
 
-            yield 'Property type from class @property annotation with imported name' => [
+        yield 'Property type from class @property annotation with imported name' => [
                 <<<'EOT'
 <?php
 
@@ -263,7 +263,7 @@ EOT
                 },
             ];
 
-            yield 'Property type from parent class @property annotation with imported name' => [
+        yield 'Property type from parent class @property annotation with imported name' => [
                 <<<'EOT'
 <?php
 
@@ -289,7 +289,7 @@ EOT
                 },
             ];
 
-            yield 'Typed property from imported class' => [
+        yield 'Typed property from imported class' => [
                 <<<'EOT'
 <?php
 
