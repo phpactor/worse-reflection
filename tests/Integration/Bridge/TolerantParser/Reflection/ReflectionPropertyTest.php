@@ -299,6 +299,8 @@ use Bar\Foo;
 class Barfoo
 {
      public Foo $bar;
+     public string $baz;
+     public $undefined;
 }
 EOT
                 ,
@@ -306,6 +308,8 @@ EOT
                 function (ReflectionPropertyCollection $properties) {
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->type());
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+
+                    $this->assertEquals(Type::undefined(), $properties->get('undefined')->type());
                 },
             ];
     }
