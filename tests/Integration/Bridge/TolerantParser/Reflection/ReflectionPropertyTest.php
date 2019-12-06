@@ -22,8 +22,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
 
     public function provideReflectionProperty()
     {
-        return [
-            'It reflects a property' => [
+        yield 'It reflects a property' => [
                 <<<'EOT'
 <?php
 
@@ -38,8 +37,9 @@ EOT
                     $this->assertEquals('property', $properties->get('property')->name());
                     $this->assertInstanceOf(ReflectionProperty::class, $properties->get('property'));
                 },
-            ],
-            'Private visibility' => [
+            ];
+
+        yield 'Private visibility' => [
                 <<<'EOT'
 <?php
 
@@ -53,8 +53,9 @@ EOT
                 function ($properties) {
                     $this->assertEquals(Visibility::private(), $properties->get('property')->visibility());
                 },
-            ],
-            'Protected visibility' => [
+            ];
+
+        yield 'Protected visibility' => [
                 <<<'EOT'
 <?php
 
@@ -68,8 +69,9 @@ EOT
                 function ($properties) {
                     $this->assertEquals(Visibility::protected(), $properties->get('property')->visibility());
                 },
-            ],
-            'Public visibility' => [
+            ];
+
+        yield 'Public visibility' => [
                 <<<'EOT'
 <?php
 
@@ -83,8 +85,9 @@ EOT
                 function ($properties) {
                     $this->assertEquals(Visibility::public(), $properties->get('property')->visibility());
                 },
-            ],
-            'Inherited properties' => [
+            ];
+
+        yield 'Inherited properties' => [
                 <<<'EOT'
 <?php
 
@@ -114,8 +117,9 @@ EOT
                         $properties->keys()
                     );
                 },
-            ],
-            'Return type from docblock' => [
+            ];
+
+        yield 'Return type from docblock' => [
                 <<<'EOT'
 <?php
 
@@ -138,8 +142,9 @@ EOT
                     );
                     $this->assertFalse($properties->get('property1')->isStatic());
                 },
-            ],
-            'Returns unknown type for (real) type' => [
+            ];
+
+        yield 'Returns unknown type for (real) type' => [
                 <<<'EOT'
 <?php
 
@@ -161,8 +166,9 @@ EOT
                         $properties->get('property1')->type()
                     );
                 },
-            ],
-            'Property with assignment' => [
+            ];
+
+        yield 'Property with assignment' => [
                 <<<'EOT'
 <?php
 
@@ -178,8 +184,9 @@ EOT
                 function ($properties) {
                     $this->assertTrue($properties->has('property1'));
                 },
-            ],
-            'Return true if property is static' => [
+            ];
+
+        yield 'Return true if property is static' => [
                 <<<'EOT'
 <?php
 
@@ -195,8 +202,9 @@ EOT
                 function ($properties) {
                     $this->assertTrue($properties->get('property1')->isStatic());
                 },
-            ],
-            'Returns declaring class' => [
+            ];
+
+        yield 'Returns declaring class' => [
                 <<<'EOT'
 <?php
 
@@ -210,8 +218,9 @@ EOT
                 function ($properties) {
                     $this->assertEquals('Foobar', $properties->get('property1')->declaringClass()->name()->__toString());
                 },
-            ],
-            'Property type from class @property annotation' => [
+            ];
+
+        yield 'Property type from class @property annotation' => [
                 <<<'EOT'
 <?php
 
@@ -230,8 +239,9 @@ EOT
                 function (ReflectionPropertyCollection $properties) {
                     $this->assertEquals(Type::fromString('string'), $properties->get('bar')->inferredTypes()->best());
                 },
-            ],
-            'Property type from class @property annotation with imported name' => [
+            ];
+
+        yield 'Property type from class @property annotation with imported name' => [
                 <<<'EOT'
 <?php
 
@@ -251,8 +261,9 @@ EOT
                 function (ReflectionPropertyCollection $properties) {
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
                 },
-            ],
-            'Property type from parent class @property annotation with imported name' => [
+            ];
+
+        yield 'Property type from parent class @property annotation with imported name' => [
                 <<<'EOT'
 <?php
 
@@ -276,7 +287,30 @@ EOT
                 function (ReflectionPropertyCollection $properties) {
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
                 },
-            ],
-        ];
+            ];
+
+        yield 'Typed property from imported class' => [
+                <<<'EOT'
+<?php
+
+use Acme\Post;
+use Bar\Foo;
+
+class Barfoo
+{
+     public Foo $bar;
+     public string $baz;
+     public $undefined;
+}
+EOT
+                ,
+                'Barfoo',
+                function (ReflectionPropertyCollection $properties) {
+                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->type());
+                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+
+                    $this->assertEquals(Type::undefined(), $properties->get('undefined')->type());
+                },
+            ];
     }
 }

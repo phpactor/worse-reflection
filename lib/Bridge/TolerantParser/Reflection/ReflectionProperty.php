@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
@@ -43,6 +44,11 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
      */
     private $typeResolver;
 
+    /**
+     * @var DeclaredMemberTypeResolver
+     */
+    private $memberTypeResolver;
+
     public function __construct(
         ServiceLocator $serviceLocator,
         AbstractReflectionClass $class,
@@ -54,6 +60,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         $this->variable = $variable;
         $this->class = $class;
         $this->typeResolver = new PropertyTypeResolver($this, $this->serviceLocator->logger());
+        $this->memberTypeResolver = new DeclaredMemberTypeResolver();
     }
 
     public function declaringClass(): ReflectionClassLike
@@ -84,7 +91,11 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function type(): Type
     {
-        return Type::unknown();
+        return $this->memberTypeResolver->resolve(
+            $this->propertyDeclaration,
+            $this->propertyDeclaration->typeDeclaration,
+            $this->class()->name()
+        );
     }
 
     protected function node(): Node
