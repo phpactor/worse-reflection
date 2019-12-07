@@ -301,6 +301,9 @@ class Barfoo
      public Foo $bar;
      public string $baz;
      public $undefined;
+
+     /** @var Foo[] */
+     public iterable $collection;
 }
 EOT
                 ,
@@ -309,7 +312,12 @@ EOT
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->type());
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
 
+                    $this->assertEquals(Type::string(), $properties->get('baz')->type());
+
                     $this->assertEquals(Type::undefined(), $properties->get('undefined')->type());
+
+                    $this->assertEquals(Type::fromString('iterable'), $properties->get('collection')->type());
+                    $this->assertEquals(Type::array('Bar\Foo'), $properties->get('collection')->inferredTypes()->best());
                 },
             ];
     }

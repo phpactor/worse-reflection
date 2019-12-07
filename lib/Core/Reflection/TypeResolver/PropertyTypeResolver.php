@@ -34,13 +34,13 @@ class PropertyTypeResolver
             $docblockTypes = $this->getDocblockTypesFromClass();
         }
 
-        if ($this->property->type()->isDefined()) {
-            return Types::fromTypes([ $this->property->type() ]);
-        }
-
         $resolvedTypes = array_map(function (Type $type) {
             return $this->property->scope()->resolveFullyQualifiedName($type, $this->property->class());
         }, iterator_to_array($docblockTypes));
+
+        if ($this->property->type()->isDefined()) {
+            $resolvedTypes[] = $this->property->type();
+        }
 
         if (empty($resolvedTypes)) {
             foreach ($this->typeFromConstructor() as $type) {
