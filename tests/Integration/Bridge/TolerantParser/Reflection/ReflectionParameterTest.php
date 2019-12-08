@@ -138,6 +138,36 @@ class ReflectionParameterTest extends IntegrationTestCase
                 );
             },
         ];
+
+        yield 'It reflect iterable type properly' => [
+            'iterable $foobar',
+            function ($method) {
+                $this->assertEquals(
+                    Type::fromString('iterable'),
+                    $method->parameters()->get('foobar')->type()
+                );
+            },
+        ];
+
+        yield 'It reflect resource type properly' => [
+            'resource $foobar',
+            function ($method) {
+                $this->assertEquals(
+                    Type::fromString('resource'),
+                    $method->parameters()->get('foobar')->type()
+                );
+            },
+        ];
+
+        yield 'It reflect callable type properly' => [
+            'callable $foobar',
+            function ($method) {
+                $this->assertEquals(
+                    Type::fromString('callable'),
+                    $method->parameters()->get('foobar')->type()
+                );
+            },
+        ];
     }
 
     /**
