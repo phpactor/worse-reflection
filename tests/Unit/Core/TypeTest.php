@@ -101,6 +101,24 @@ class TypeTest extends TestCase
             '?Foo<Bar>',
             '?object',
         ];
+
+        yield 'callable' => [
+            Type::fromString('callable'),
+            'callable',
+            'callable'
+        ];
+
+        yield 'iterable' => [
+            Type::fromString('iterable'),
+            'iterable',
+            'iterable'
+        ];
+
+        yield 'resource' => [
+            Type::fromString('resource'),
+            'resource',
+            'resource'
+        ];
     }
 
     /**
@@ -188,6 +206,16 @@ class TypeTest extends TestCase
         yield [
             new \stdClass(),
             Type::class(ClassName::fromString('stdClass')),
+        ];
+
+        yield 'resource' => [
+            \fopen(__FILE__, 'r'),
+            Type::resource(),
+        ];
+
+        yield 'callable' => [
+            function () {},
+            Type::callable(),
         ];
     }
 

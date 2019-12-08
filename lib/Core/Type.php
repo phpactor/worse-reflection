@@ -12,6 +12,9 @@ class Type
     const TYPE_CLASS = 'object';
     const TYPE_NULL = 'null';
     const TYPE_VOID = 'void';
+    const TYPE_ITERABLE = 'iterable';
+    const TYPE_CALLABLE = 'callable';
+    const TYPE_RESOURCE = 'resource';
 
     /**
      * @var string
@@ -69,8 +72,16 @@ class Type
             return self::null();
         }
 
+        if (is_callable($value)) {
+            return self::callable();
+        }
+
         if (is_object($value)) {
             return self::class(ClassName::fromString(get_class($value)));
+        }
+
+        if (is_resource($value)) {
+            return self::resource();
         }
 
         return self::unknown();
@@ -148,6 +159,21 @@ class Type
     public static function float(): Type
     {
         return self::create(self::TYPE_FLOAT);
+    }
+
+    public static function callable(): Type
+    {
+        return self::create(self::TYPE_CALLABLE);
+    }
+
+    public static function resource(): Type
+    {
+        return self::create(self::TYPE_RESOURCE);
+    }
+
+    public static function iterable(): Type
+    {
+        return self::create(self::TYPE_ITERABLE);
     }
 
     private static function object()
@@ -283,35 +309,35 @@ class Type
         if ('' === $type) {
             return self::unknown();
         }
-        
+
         if ($type === 'string') {
             return self::string();
         }
-        
+
         if ($type === 'int') {
             return self::int();
         }
-        
+
         if ($type === 'float') {
             return self::float();
         }
-        
+
         if ($type === 'array') {
             return self::array();
         }
-        
+
         if ($type === 'bool') {
             return self::bool();
         }
-        
+
         if ($type === 'mixed') {
             return self::mixed();
         }
-        
+
         if ($type === 'null') {
             return self::null();
         }
-        
+
         if ($type === 'object') {
             return self::object();
         }
@@ -319,7 +345,19 @@ class Type
         if ($type === 'void') {
             return self::void();
         }
-        
+
+        if ($type === 'callable') {
+            return self::callable();
+        }
+
+        if ($type === 'resource') {
+            return self::resource();
+        }
+
+        if ($type === 'iterable') {
+            return self::iterable();
+        }
+
         return self::class(ClassName::fromString($type));
     }
 
