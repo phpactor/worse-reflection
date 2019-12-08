@@ -413,6 +413,8 @@ EOT
                 <<<'EOT'
 <?php
 
+namespace Test;
+
 class Foobar
 {
     public function barfoo(?Barfoo $barfoo)
@@ -421,10 +423,13 @@ class Foobar
 }
 EOT
                 ,
-                'Foobar',
+                'Test\Foobar',
                 function ($methods) {
                     $this->assertCount(1, $methods->get('barfoo')->parameters());
-                    $this->assertEquals('Barfoo', $methods->get('barfoo')->parameters()->first()->type());
+                    $this->assertEquals(
+                        Type::fromString('Test\Barfoo')->asNullable(),
+                        $methods->get('barfoo')->parameters()->first()->type()
+                    );
                 },
             ],
             'It tolerantes and logs method parameters with missing variables parameter' => [

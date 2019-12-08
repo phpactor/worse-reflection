@@ -168,6 +168,16 @@ class ReflectionParameterTest extends IntegrationTestCase
                 );
             },
         ];
+
+        yield 'It reflect a nullable parameter' => [
+            '?string $foobar',
+            function ($method) {
+                $this->assertEquals(
+                    Type::string()->asNullable(),
+                    $method->parameters()->get('foobar')->type()
+                );
+            },
+        ];
     }
 
     /**

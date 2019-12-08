@@ -65,7 +65,8 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
         $type = $this->memberTypeResolver->resolve(
             $this->parameter,
             $this->parameter->typeDeclaration,
-            $className
+            $className,
+            $this->parameter->questionToken ? true : false
         );
 
         if ($this->parameter->dotDotDotToken) {
