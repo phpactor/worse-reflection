@@ -327,5 +327,26 @@ EOT
                     );
                 },
             ];
+
+        yield 'Nullable typed property' => [
+                <<<'EOT'
+<?php
+
+namespace Test;
+
+class Barfoo
+{
+     public ?string $foo;
+}
+EOT
+                ,
+                'Test\Barfoo',
+                function (ReflectionPropertyCollection $properties) {
+                    $this->assertEquals(
+                        Type::string()->asNullable(),
+                        $properties->get('foo')->type()
+                    );
+                },
+            ];
     }
 }

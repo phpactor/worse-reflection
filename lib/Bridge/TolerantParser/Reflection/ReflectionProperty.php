@@ -94,7 +94,8 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         return $this->memberTypeResolver->resolve(
             $this->propertyDeclaration,
             $this->propertyDeclaration->typeDeclaration,
-            $this->class()->name()
+            $this->class()->name(),
+            $this->propertyDeclaration->questionToken ? true : false
         );
     }
 
