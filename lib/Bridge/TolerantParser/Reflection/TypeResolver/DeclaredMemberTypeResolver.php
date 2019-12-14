@@ -10,7 +10,7 @@ use Microsoft\PhpParser\Node;
 
 class DeclaredMemberTypeResolver
 {
-    private const WRONG_QUALIFIED_NAME = [
+    private const RESERVED_NAMES = [
         'iterable',
         'resource',
     ];
@@ -38,7 +38,7 @@ class DeclaredMemberTypeResolver
 
         /** @var QualifiedName $tolerantType */
         $text = $tolerantType->getText($tolerantNode->getFileContents());
-        if ($tolerantType->isUnqualifiedName() && in_array($text, self::WRONG_QUALIFIED_NAME)) {
+        if ($tolerantType->isUnqualifiedName() && in_array($text, self::RESERVED_NAMES)) {
             return type::fromString($text);
         }
 
