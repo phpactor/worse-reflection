@@ -96,7 +96,7 @@ class TypeTest extends TestCase
             '?object',
         ];
 
-        yield 'asd' => [
+        yield 'Nullable iterable class' => [
             Type::fromString('?Foo<Bar>'),
             '?Foo<Bar>',
             '?object',
