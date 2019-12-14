@@ -214,7 +214,8 @@ class TypeTest extends TestCase
         ];
 
         yield 'callable' => [
-            function () {},
+            function () {
+            },
             Type::callable(),
         ];
     }
