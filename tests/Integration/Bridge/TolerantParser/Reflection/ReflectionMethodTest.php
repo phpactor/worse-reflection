@@ -91,6 +91,8 @@ EOT
                 <<<'EOT'
 <?php
 
+namespace Test;
+
 use Acme\Post;
 
 class Foobar
@@ -102,18 +104,24 @@ class Foobar
     function method5(): Barfoo {}
     function method6(): Post {}
     function method7(): self {}
+    function method8(): iterable {}
+    function method9(): callable {}
+    function method10(): resource {}
 }
 EOT
                 ,
-                'Foobar',
+                'Test\Foobar',
                 function ($methods) {
                     $this->assertEquals(Type::int(), $methods->get('method1')->returnType());
                     $this->assertEquals(Type::string(), $methods->get('method2')->returnType());
                     $this->assertEquals(Type::float(), $methods->get('method3')->returnType());
                     $this->assertEquals(Type::array(), $methods->get('method4')->returnType());
-                    $this->assertEquals(Type::class(ClassName::fromString('Barfoo')), $methods->get('method5')->returnType());
+                    $this->assertEquals(Type::class(ClassName::fromString('Test\Barfoo')), $methods->get('method5')->returnType());
                     $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method6')->returnType());
-                    $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method7')->returnType());
+                    $this->assertEquals(Type::class(ClassName::fromString('Test\Foobar')), $methods->get('method7')->returnType());
+                    $this->assertEquals(Type::iterable(), $methods->get('method8')->returnType());
+                    $this->assertEquals(Type::callable(), $methods->get('method9')->returnType());
+                    $this->assertEquals(Type::resource(), $methods->get('method10')->returnType());
                 },
             ],
             'Nullable return type' => [
@@ -130,7 +138,10 @@ EOT
                 ,
                 'Foobar',
                 function ($methods) {
-                    $this->assertEquals(Type::int(), $methods->get('method1')->returnType());
+                    $this->assertEquals(
+                        Type::int()->asNullable(),
+                        $methods->get('method1')->returnType()
+                    );
                 },
             ],
             'Inherited methods' => [
@@ -402,6 +413,8 @@ EOT
                 <<<'EOT'
 <?php
 
+namespace Test;
+
 class Foobar
 {
     public function barfoo(?Barfoo $barfoo)
@@ -410,10 +423,13 @@ class Foobar
 }
 EOT
                 ,
-                'Foobar',
+                'Test\Foobar',
                 function ($methods) {
                     $this->assertCount(1, $methods->get('barfoo')->parameters());
-                    $this->assertEquals('Barfoo', $methods->get('barfoo')->parameters()->first()->type());
+                    $this->assertEquals(
+                        Type::fromString('Test\Barfoo')->asNullable(),
+                        $methods->get('barfoo')->parameters()->first()->type()
+                    );
                 },
             ],
             'It tolerantes and logs method parameters with missing variables parameter' => [

@@ -293,6 +293,8 @@ EOT
                 <<<'EOT'
 <?php
 
+namespace Test;
+
 use Acme\Post;
 use Bar\Foo;
 
@@ -301,13 +303,14 @@ class Barfoo
      public Foo $bar;
      public string $baz;
      public $undefined;
+     public iterable $it;
 
      /** @var Foo[] */
      public iterable $collection;
 }
 EOT
                 ,
-                'Barfoo',
+                'Test\Barfoo',
                 function (ReflectionPropertyCollection $properties) {
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->type());
                     $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
@@ -316,8 +319,33 @@ EOT
 
                     $this->assertEquals(Type::undefined(), $properties->get('undefined')->type());
 
-                    $this->assertEquals(Type::fromString('iterable'), $properties->get('collection')->type());
+                    $this->assertEquals(Type::iterable(), $properties->get('collection')->type());
                     $this->assertEquals(Type::array('Bar\Foo'), $properties->get('collection')->inferredTypes()->best());
+                    $this->assertEquals(
+                        Type::iterable(),
+                        $properties->get('it')->type()
+                    );
+                },
+            ];
+
+        yield 'Nullable typed property' => [
+                <<<'EOT'
+<?php
+
+namespace Test;
+
+class Barfoo
+{
+     public ?string $foo;
+}
+EOT
+                ,
+                'Test\Barfoo',
+                function (ReflectionPropertyCollection $properties) {
+                    $this->assertEquals(
+                        Type::string()->asNullable(),
+                        $properties->get('foo')->type()
+                    );
                 },
             ];
     }

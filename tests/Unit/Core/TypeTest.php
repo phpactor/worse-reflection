@@ -15,10 +15,10 @@ class TypeTest extends TestCase
      */
     public function testToString(Type $type, $toString, $phpType)
     {
-        $this->assertEquals($toString, (string) $type);
+        $this->assertEquals($toString, (string) $type, '__toString()');
 
         if ($type->isDefined()) {
-            $this->assertEquals($phpType, $type->primitive());
+            $this->assertEquals($phpType, $type->primitive(), 'primitive (phptype)');
         }
     }
 
@@ -82,6 +82,42 @@ class TypeTest extends TestCase
             Type::array('string'),
             'string[]',
             'array',
+        ];
+
+        yield 'Nullable string' => [
+            Type::fromString('?string'),
+            '?string',
+            '?string',
+        ];
+
+        yield 'Nullable class' => [
+            Type::fromString('?Foobar'),
+            '?Foobar',
+            '?object',
+        ];
+
+        yield 'Nullable iterable class' => [
+            Type::fromString('?Foo<Bar>'),
+            '?Foo<Bar>',
+            '?object',
+        ];
+
+        yield 'callable' => [
+            Type::fromString('callable'),
+            'callable',
+            'callable'
+        ];
+
+        yield 'iterable' => [
+            Type::fromString('iterable'),
+            'iterable',
+            'iterable'
+        ];
+
+        yield 'resource' => [
+            Type::fromString('resource'),
+            'resource',
+            'resource'
         ];
     }
 
@@ -171,6 +207,17 @@ class TypeTest extends TestCase
             new \stdClass(),
             Type::class(ClassName::fromString('stdClass')),
         ];
+
+        yield 'resource' => [
+            \fopen(__FILE__, 'r'),
+            Type::resource(),
+        ];
+
+        yield 'callable' => [
+            function () {
+            },
+            Type::callable(),
+        ];
     }
 
     public function testItIsImmutableClassName()
@@ -197,5 +244,13 @@ class TypeTest extends TestCase
         $type1 = Type::fromString('object');
         $this->assertFalse($type1->isClass());
         $this->assertEquals('object', $type1->__toString());
+    }
+
+    public function testHasMethodToIndicateIfItIsNullable()
+    {
+        $type1 = Type::fromString('string');
+        $this->assertFalse($type1->isNullable());
+        $type1 = Type::fromString('?string');
+        $this->assertTrue($type1->isNullable());
     }
 }

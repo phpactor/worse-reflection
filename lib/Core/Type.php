@@ -12,6 +12,9 @@ class Type
     const TYPE_CLASS = 'object';
     const TYPE_NULL = 'null';
     const TYPE_VOID = 'void';
+    const TYPE_ITERABLE = 'iterable';
+    const TYPE_CALLABLE = 'callable';
+    const TYPE_RESOURCE = 'resource';
 
     /**
      * @var string
@@ -27,6 +30,11 @@ class Type
      * @var Type|null
      */
     private $arrayType;
+
+    /**
+     * @var bool
+     */
+    private $nullable = false;
 
     public function __construct(string $phpType = null)
     {
@@ -64,56 +72,28 @@ class Type
             return self::null();
         }
 
+        if (is_callable($value)) {
+            return self::callable();
+        }
+
         if (is_object($value)) {
             return self::class(ClassName::fromString(get_class($value)));
+        }
+
+        if (is_resource($value)) {
+            return self::resource();
         }
 
         return self::unknown();
     }
 
-    public static function fromString(string $type): Type
+    public static function fromString(string $type): self
     {
-        if ('' === $type) {
-            return self::unknown();
+        if ('?' === substr($type, 0, 1)) {
+            return self::typeFromString(substr($type, 1))->asNullable();
         }
 
-        if ($type === 'string') {
-            return self::string();
-        }
-
-        if ($type === 'int') {
-            return self::int();
-        }
-
-        if ($type === 'float') {
-            return self::float();
-        }
-
-        if ($type === 'array') {
-            return self::array();
-        }
-
-        if ($type === 'bool') {
-            return self::bool();
-        }
-
-        if ($type === 'mixed') {
-            return self::mixed();
-        }
-
-        if ($type === 'object') {
-            return self::object();
-        }
-
-        if ($type === 'null') {
-            return self::null();
-        }
-
-        if ($type === 'void') {
-            return self::void();
-        }
-
-        return self::class(ClassName::fromString($type));
+        return self::typeFromString($type);
     }
 
     public static function unknown(): Type
@@ -181,6 +161,21 @@ class Type
         return self::create(self::TYPE_FLOAT);
     }
 
+    public static function callable(): Type
+    {
+        return self::create(self::TYPE_CALLABLE);
+    }
+
+    public static function resource(): Type
+    {
+        return self::create(self::TYPE_RESOURCE);
+    }
+
+    public static function iterable(): Type
+    {
+        return self::create(self::TYPE_ITERABLE);
+    }
+
     private static function object()
     {
         return self::create(self::TYPE_CLASS);
@@ -210,6 +205,10 @@ class Type
     {
         $className = $this->className ? (string) $this->className : ($this->phpType ?: '<unknown>');
 
+        if ($this->nullable) {
+            $className = '?' . $className;
+        }
+
         if (null === $this->arrayType) {
             return $className;
         }
@@ -223,6 +222,11 @@ class Type
         }
 
         return $className;
+    }
+
+    public function isNullable(): bool
+    {
+        return $this->nullable;
     }
 
     /**
@@ -249,7 +253,7 @@ class Type
 
     public function primitive(): string
     {
-        return $this->phpType;
+        return $this->nullable ? '?' . $this->phpType : $this->phpType;
     }
 
     /**
@@ -298,5 +302,70 @@ class Type
         if ($this->arrayType) {
             $this->arrayType = clone $this->arrayType;
         }
+    }
+
+    private static function typeFromString(string $type): Type
+    {
+        if ('' === $type) {
+            return self::unknown();
+        }
+
+        if ($type === 'string') {
+            return self::string();
+        }
+
+        if ($type === 'int') {
+            return self::int();
+        }
+
+        if ($type === 'float') {
+            return self::float();
+        }
+
+        if ($type === 'array') {
+            return self::array();
+        }
+
+        if ($type === 'bool') {
+            return self::bool();
+        }
+
+        if ($type === 'mixed') {
+            return self::mixed();
+        }
+
+        if ($type === 'null') {
+            return self::null();
+        }
+
+        if ($type === 'object') {
+            return self::object();
+        }
+
+        if ($type === 'void') {
+            return self::void();
+        }
+
+        if ($type === 'callable') {
+            return self::callable();
+        }
+
+        if ($type === 'resource') {
+            return self::resource();
+        }
+
+        if ($type === 'iterable') {
+            return self::iterable();
+        }
+
+        return self::class(ClassName::fromString($type));
+    }
+
+    public function asNullable(): self
+    {
+        $instance = clone $this;
+        ;
+        $instance->nullable = true;
+        return $instance;
     }
 }
