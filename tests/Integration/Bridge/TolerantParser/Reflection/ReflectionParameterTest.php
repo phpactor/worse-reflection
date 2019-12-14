@@ -139,7 +139,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             },
         ];
 
-        yield 'It reflect iterable type properly' => [
+        yield 'It reflects iterable type properly' => [
             'iterable $foobar',
             function ($method) {
                 $this->assertEquals(
@@ -149,7 +149,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             },
         ];
 
-        yield 'It reflect resource type properly' => [
+        yield 'It reflects resource type properly' => [
             'resource $foobar',
             function ($method) {
                 $this->assertEquals(
@@ -159,7 +159,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             },
         ];
 
-        yield 'It reflect callable type properly' => [
+        yield 'It reflects callable type properly' => [
             'callable $foobar',
             function ($method) {
                 $this->assertEquals(
@@ -169,7 +169,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             },
         ];
 
-        yield 'It reflect a nullable parameter' => [
+        yield 'It reflects a nullable parameter' => [
             '?string $foobar',
             function ($method) {
                 $this->assertEquals(
