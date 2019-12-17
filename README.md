@@ -56,8 +56,8 @@ foreach ($class->interfaes() as $interface) {
     // ...
 }
 
-foreach ($class->method('foobar')->frame() as $variable) {
-    $variable->offset()->asInt(); // byte offset
+foreach ($class->method('foobar')->frame()->locals() as $variable) {
+    $variable->offset()->toInt(); // byte offset
     $variable->type();            // variable type (if available )
     $variable->value();           // variable value (if available)
 }
