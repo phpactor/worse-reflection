@@ -20,7 +20,12 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
     /**
      * @var array
      */
-    private $cache = [];
+    private $classCache = [];
+
+    /**
+     * @var array
+     */
+    private $functionCache = [];
 
     /**
      * @var FunctionReflector
@@ -83,24 +88,26 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
 
     private function cachedName($className)
     {
-        if (isset($this->cache[(string) $className])) {
-            return $this->cache[(string) $className];
+        if (isset($this->classCache[(string) $className])) {
+            return $this->classCache[(string) $className];
         }
+
+        return null;
     }
 
     private function putCache($className, $class)
     {
-        $this->cache[(string) $className] = $class;
+        $this->classCache[(string) $className] = $class;
 
         return $class;
     }
 
     public function reflectFunction($name): ReflectionFunction
     {
-        if ($class = $this->cachedName($name)) {
-            return $class;
+        if (isset($this->functionCache[(string)$name])) {
+            return $this->functionCache[(string)$name];
         }
 
-        return $this->putCache($name, $this->functionReflector->reflectFunction($name));
+        return $this->functionCache[(string)$name] = $this->functionReflector->reflectFunction($name);
     }
 }
