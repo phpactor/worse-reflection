@@ -83,7 +83,7 @@ class MethodTypeResolver
             return Types::empty();
         }
 
-        return $reflectionClass->methods()->get($this->method->name())->inferredReturnTypes();
+        return $reflectionClass->methods()->get($this->method->name())->inferredTypes();
     }
 
     private function getTypesFromInterfaces(ReflectionClassLike $reflectionClassLike): Types

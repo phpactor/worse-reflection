@@ -100,9 +100,10 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private function virtualMethods(ReflectionClass $contextClass = null)
     {
         $virtualMethods = VirtualReflectionMethodCollection::fromReflectionMethods([]);
-        if ($this->parent()) {
+        if ($parentClass = $this->parent()) {
+            assert($parentClass instanceof VirtualReflectionClassDecorator);
             $virtualMethods = $virtualMethods->merge(
-                $this->parent()->virtualMethods(
+                $parentClass->virtualMethods(
                     $contextClass
                 )->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
@@ -120,9 +121,10 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private function virtualProperties(ReflectionClass $contextClass = null)
     {
         $virtualProperties = VirtualReflectionPropertyCollection::fromReflectionProperties([]);
-        if ($this->parent()) {
+        if ($parentClass = $this->parent()) {
+            assert($parentClass instanceof VirtualReflectionClassDecorator);
             $virtualProperties = $virtualProperties->merge(
-                $this->parent()->virtualProperties(
+                $parentClass->virtualProperties(
                     $contextClass
                 )->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
