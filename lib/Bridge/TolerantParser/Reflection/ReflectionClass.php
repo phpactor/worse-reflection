@@ -125,19 +125,19 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $constants;
     }
 
-    public function parent()
+    public function parent(): ?ReflectionClass
     {
         if ($this->parent) {
             return $this->parent;
         }
 
         if (!$this->node->classBaseClause) {
-            return;
+            return null;
         }
 
         // incomplete class
         if (!$this->node->classBaseClause->baseClass) {
-            return;
+            return null;
         }
 
         try {
@@ -158,6 +158,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
             return $reflectedClass;
         } catch (ClassNotFound $e) {
+            return null;
         }
     }
 
@@ -298,10 +299,8 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             return true;
         }
 
-        if ($this->parent()) {
-            if ($this->parent()->isInstanceOf($className)) {
-                return true;
-            }
+        if ($this->ancestors()) {
+            return $this->parent()->isInstanceOf($className);
         }
 
         return $this->interfaces()->has((string) $className);
@@ -324,5 +323,23 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
+    }
+
+    public function ancestors()
+    {
+        $ancestors = [];
+        $class = $this;
+
+        while ($parent = $class->parent()) {
+            if (isset($ancestors[$parent->name()->full()])) {
+                break;
+            }
+
+            $ancestors[$parent->name()->full()] = $parent;
+
+            $class = $parent;
+        }
+
+        return $ancestors;
     }
 }
