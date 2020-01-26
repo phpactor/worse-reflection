@@ -15,6 +15,8 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionTraitCollection;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection as TolerantReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection as CoreReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
@@ -65,6 +67,8 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
      * @var ReflectionMethodCollection|null
      */
     private $methods;
+    private $ancestors;
+
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -125,7 +129,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $constants;
     }
 
-    public function parent(): ?ReflectionClass
+    public function parent(): ?CoreReflectionClass
     {
         if ($this->parent) {
             return $this->parent;
@@ -151,7 +155,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
                     $this->name(),
                     $reflectedClass->name()
                 ));
-                return;
+                return null;
             }
 
             $this->parent = $reflectedClass;
@@ -243,8 +247,8 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
 
         $parentInterfaces = null;
-        if ($this->parent()) {
-            $parentInterfaces = $this->parent()->interfaces();
+        foreach ($this->ancestors() as $ancestor) {
+            $parentInterfaces = $ancestor->interfaces();
         }
 
         $interfaces = ReflectionInterfaceCollection::fromClassDeclaration($this->serviceLocator, $this->node);
@@ -299,8 +303,8 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             return true;
         }
 
-        if ($this->ancestors()) {
-            return $this->parent()->isInstanceOf($className);
+        if ($this->ancestors()->has((string)$className)) {
+            return true;
         }
 
         return $this->interfaces()->has((string) $className);
@@ -325,13 +329,20 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
     }
 
-    public function ancestors()
+    /**
+     * @return ReflectionClassCollection<ReflectionClass>
+     */
+    public function ancestors(): ReflectionClassCollection
     {
+        if ($this->ancestors) {
+            return $this->ancestors;
+        }
         $ancestors = [];
         $class = $this;
 
         while ($parent = $class->parent()) {
             if (isset($ancestors[$parent->name()->full()])) {
+                unset($ancestors[$parent->name()->full()]);
                 break;
             }
 
@@ -340,6 +351,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             $class = $parent;
         }
 
-        return $ancestors;
+        $this->ancestors = TolerantReflectionClassCollection::fromReflections($this->serviceLocator, $ancestors);
+        return $this->ancestors;
     }
 }

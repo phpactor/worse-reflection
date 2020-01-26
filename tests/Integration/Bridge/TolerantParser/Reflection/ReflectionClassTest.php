@@ -678,6 +678,22 @@ EOT
                 $this->assertEquals('Class1', $class->name()->short());
             },
         ];
+
+        yield 'Does not infinite loop with self-referencing class on get interfaces' => [
+            <<<'EOT'
+<?php
+
+class Class1 extends Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertCount(0, $class->interfaces());
+            },
+        ];
     }
 
     /**

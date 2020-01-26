@@ -17,7 +17,7 @@ interface ReflectionClass extends ReflectionClassLike
 
     public function parent(): ?ReflectionClass;
 
-    public function descendants(): ReflectionClassCollection;
+    public function ancestors(): ReflectionClassCollection;
 
     public function properties(): ReflectionPropertyCollection;
 
