@@ -21,7 +21,7 @@
         "phpunit/phpunit": "~7.0",
         "symfony/filesystem": "^3.3",
         "friendsofphp/php-cs-fixer": "^2.15",
-        "phpbench/phpbench": "dev-master",
+        "phpbench/phpbench": "^0.16.0",
         "phpactor/class-to-file": "~0.1",
         "phpstan/phpstan": "~0.11.0",
         "phpactor/test-utils": "@dev"
