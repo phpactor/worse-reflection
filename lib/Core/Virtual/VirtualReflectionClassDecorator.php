@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Virtual;
 
 use Phpactor\WorseReflection\Core\Position;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
@@ -50,7 +51,7 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $this->class->constants();
     }
 
-    public function parent()
+    public function parent(): ?ReflectionClass
     {
         return $this->class->parent();
     }
@@ -99,9 +100,10 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private function virtualMethods(ReflectionClass $contextClass = null)
     {
         $virtualMethods = VirtualReflectionMethodCollection::fromReflectionMethods([]);
-        if ($this->parent()) {
+        if ($parentClass = $this->parent()) {
+            assert($parentClass instanceof VirtualReflectionClassDecorator);
             $virtualMethods = $virtualMethods->merge(
-                $this->parent()->virtualMethods(
+                $parentClass->virtualMethods(
                     $contextClass
                 )->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
@@ -119,9 +121,10 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     private function virtualProperties(ReflectionClass $contextClass = null)
     {
         $virtualProperties = VirtualReflectionPropertyCollection::fromReflectionProperties([]);
-        if ($this->parent()) {
+        if ($parentClass = $this->parent()) {
+            assert($parentClass instanceof VirtualReflectionClassDecorator);
             $virtualProperties = $virtualProperties->merge(
-                $this->parent()->virtualProperties(
+                $parentClass->virtualProperties(
                     $contextClass
                 )->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
@@ -134,5 +137,10 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         }
 
         return $virtualProperties;
+    }
+
+    public function ancestors(): ReflectionClassCollection
+    {
+        return $this->class->ancestors();
     }
 }

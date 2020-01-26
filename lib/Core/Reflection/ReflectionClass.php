@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Position;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
@@ -14,7 +15,9 @@ interface ReflectionClass extends ReflectionClassLike
 
     public function constants(): ReflectionConstantCollection;
 
-    public function parent();
+    public function parent(): ?ReflectionClass;
+
+    public function ancestors(): ReflectionClassCollection;
 
     public function properties(): ReflectionPropertyCollection;
 
