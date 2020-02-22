@@ -55,10 +55,7 @@ final class NameImports implements \IteratorAggregate
             return $name->substitute($importedName, $alias);
         }
 
-        throw new RuntimeException(sprintf(
-            'Class "%s" is not imported',
-            $name->__toString()
-        ));
+        return Name::fromString($name->short());
     }
 
     public function hasAlias(string $alias)

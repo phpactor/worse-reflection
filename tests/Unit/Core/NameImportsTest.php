@@ -62,6 +62,19 @@ class NameImportsTest extends TestCase
         );
     }
 
+    public function testLocalNameIfNoImport()
+    {
+        $imports = NameImports::fromNames([
+        ]);
+
+        $this->assertEquals(
+            Name::fromString('Foo'),
+            $imports->resolveLocalName(
+                Name::fromString('Foobar\\Barfoo\\Zoz\\Foo')
+            )
+        );
+    }
+
     public function testAliasNotFound()
     {
         $this->expectException(RuntimeException::class);
