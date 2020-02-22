@@ -40,5 +40,14 @@
         "branch-alias": {
             "dev-master": "0.3.x-dev"
         }
+    },
+    "scripts": {
+        "integrate": [
+            "./vendor/bin/php-cs-fixer fix",
+            "./vendor/bin/phpstan analyse lib -c phpstan.neon",
+            "./vendor/bin/phpunit",
+            "./vendor/bin/phpbench run --iterations=1",
+            "./tests/Smoke/smoke_test.php --limit=100"
+        ]
     }
 }
