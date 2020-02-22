@@ -24,6 +24,9 @@ class ReflectionScope implements CoreReflectionScope
         $this->node = $node;
     }
 
+    /**
+     * @return NameImports<Name>
+     */
     public function nameImports(): NameImports
     {
         list($nameImports) = $this->node->getImportTablesForCurrentScope();
@@ -51,5 +54,10 @@ class ReflectionScope implements CoreReflectionScope
     {
         $resolver = new FullyQualifiedNameResolver(new ArrayLogger());
         return $resolver->resolve($this->node, $type, $class ? $class->name() : null);
+    }
+
+    public function resolveLocalName(Name $name): Name
+    {
+        return $this->nameImports()->resolveLocalName($name);
     }
 }

@@ -43,6 +43,24 @@ final class NameImports implements \IteratorAggregate
         return $this->nameImports[$alias];
     }
 
+    public function resolveLocalName(Name $name): Name
+    {
+        foreach ($this->nameImports as $alias => $importedName) {
+            assert($importedName instanceof Name);
+
+            if (!$importedName->isAncestorOrSame($name)) {
+                continue;
+            }
+
+            return $name->substitute($importedName, $alias);
+        }
+
+        throw new RuntimeException(sprintf(
+            'Class "%s" is not imported',
+            $name->__toString()
+        ));
+    }
+
     public function hasAlias(string $alias)
     {
         return isset($this->nameImports[$alias]);

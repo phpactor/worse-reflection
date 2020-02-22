@@ -58,11 +58,20 @@ class Name
     /**
      * @return static
      */
-    public function tail()
+    public function tail(): self
     {
         $parts = $this->parts;
         array_shift($parts);
         return new self($parts, $this->wasFullyQualified);
+    }
+
+    public function namespace(): string
+    {
+        if (count($this->parts) === 1) {
+            return '';
+        }
+
+        return implode('\\', array_slice($this->parts, 0, count($this->parts) - 1));
     }
 
     public function full(): string
@@ -87,5 +96,20 @@ class Name
     {
         $name = Name::fromUnknown($name);
         return self::fromString(join('\\', [(string) $name, $this->__toString()]));
+    }
+
+    public function isAncestorOrSame(Name $name): bool
+    {
+        $segment = array_slice($name->parts, 0, count($this->parts));
+        return $segment === $this->parts;
+    }
+
+    public function substitute(Name $name, $alias)
+    {
+        $suffix = array_slice($this->parts, count($name->parts));
+        return Name::fromParts(array_merge(
+            [$alias],
+            $suffix
+        ));
     }
 }
