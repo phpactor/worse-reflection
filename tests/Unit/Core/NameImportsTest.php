@@ -41,9 +41,7 @@ class NameImportsTest extends TestCase
         ]);
 
         $this->assertEquals(
-
             Name::fromString('Baz\\Zoz'),
-
             $imports->resolveLocalName(
                 Name::fromString('Foobar\\Barfoo\\Zoz')
             )
@@ -57,9 +55,7 @@ class NameImportsTest extends TestCase
         ]);
 
         $this->assertEquals(
-
             Name::fromString('Baz\\Zoz\\Foo'),
-
             $imports->resolveLocalName(
                 Name::fromString('Foobar\\Barfoo\\Zoz\\Foo')
             )
