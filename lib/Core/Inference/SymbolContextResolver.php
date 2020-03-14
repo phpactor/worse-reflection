@@ -23,6 +23,7 @@ use Microsoft\PhpParser\Node\UseVariableName;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
+use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
@@ -393,7 +394,16 @@ class SymbolContextResolver
 
         /** @var ReflectionClass|ReflectionInterface $reflectionClass */
         $reflectionClass = $this->reflector->reflectClassLike($class->getNamespacedName()->__toString());
-        $reflectionMethod = $reflectionClass->methods()->get($method->getName());
+
+        try {
+            $reflectionMethod = $reflectionClass->methods()->get($method->getName());
+        } catch (ItemNotFound $notFound) {
+            throw new CouldNotResolveNode(sprintf(
+                'Could not find method "%s" in class "%s"',
+                $method->getName(),
+                $reflectionClass->name()->__toString()
+            ), 0, $notFound);
+        }
 
         if (null === $node->getName()) {
             throw new CouldNotResolveNode(
