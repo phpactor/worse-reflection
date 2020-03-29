@@ -53,7 +53,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         return $this->cache->getOrSet(self::CLASS_PREFIX.$className, function () use ($className) {
             return $this->classReflector->reflectClass($className);
         });
-
     }
 
     /**

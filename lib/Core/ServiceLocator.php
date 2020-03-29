@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\WorseReflection\Core\Cache\TtlCache;
-use Phpactor\WorseReflection\Core\Cache\NullCache;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;

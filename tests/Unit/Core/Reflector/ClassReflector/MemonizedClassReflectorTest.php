@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Reflector\ClassReflector;
 
 use PHPUnit\Framework\TestCase;
+use Phpactor\WorseReflection\Core\Cache\TtlCache;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -38,7 +39,8 @@ class MemonizedClassReflectorTest extends TestCase
 
         $this->reflector = new MemonizedReflector(
             $this->innerClassReflector->reveal(),
-            $this->innerFunctionReflector->reveal()
+            $this->innerFunctionReflector->reveal(),
+            new TtlCache(10)
         );
         $this->className = ClassName::fromString('Hello');
     }
