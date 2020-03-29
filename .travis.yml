@@ -12,6 +12,7 @@ cache:
         - $HOME/.composer/cache
 
 before_script:
+    - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - composer install
 
 script:
