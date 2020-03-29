@@ -34,6 +34,7 @@ abstract class BaseBenchCase
             ->addLocator($composerLocator)
             ->addLocator($stubLocator)
             ->enableCache()
+            ->cacheLifetime(5)
             ->enableContextualSourceLocation()
             ->build();
     }
