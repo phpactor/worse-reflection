@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 
+use Phpactor\WorseReflection\Core\Cache;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
@@ -18,24 +19,26 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
     private $classReflector;
 
     /**
-     * @var array
-     */
-    private $classCache = [];
-
-    /**
-     * @var array
-     */
-    private $functionCache = [];
-
-    /**
      * @var FunctionReflector
      */
     private $functionReflector;
 
-    public function __construct(ClassReflector $innerReflector, FunctionReflector $functionReflector)
+    /**
+     * @var ClassReflector
+     */
+    private $innerReflector;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    public function __construct(ClassReflector $innerReflector, FunctionReflector $functionReflector, Cache $cache)
     {
         $this->classReflector = $innerReflector;
         $this->functionReflector = $functionReflector;
+        $this->innerReflector = $innerReflector;
+        $this->cache = $cache;
     }
 
     /**
