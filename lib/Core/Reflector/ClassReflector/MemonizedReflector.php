@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 
+use Phpactor\WorseReflection\Core\Cache;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
@@ -12,30 +13,36 @@ use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
 
 class MemonizedReflector implements ClassReflector, FunctionReflector
 {
+    private const FUNC_PREFIX = '__func__';
+    private const CLASS_PREFIX = '__class__';
+
+
     /**
      * @var ClassReflector
      */
     private $classReflector;
 
     /**
-     * @var array
-     */
-    private $classCache = [];
-
-    /**
-     * @var array
-     */
-    private $functionCache = [];
-
-    /**
      * @var FunctionReflector
      */
     private $functionReflector;
 
-    public function __construct(ClassReflector $innerReflector, FunctionReflector $functionReflector)
+    /**
+     * @var ClassReflector
+     */
+    private $innerReflector;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    public function __construct(ClassReflector $innerReflector, FunctionReflector $functionReflector, Cache $cache)
     {
         $this->classReflector = $innerReflector;
         $this->functionReflector = $functionReflector;
+        $this->innerReflector = $innerReflector;
+        $this->cache = $cache;
     }
 
     /**
@@ -43,11 +50,9 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function reflectClass($className): ReflectionClass
     {
-        if ($class = $this->cachedName($className)) {
-            return $class;
-        }
-
-        return $this->putCache($className, $this->classReflector->reflectClass($className));
+        return $this->cache->getOrSet(self::CLASS_PREFIX.$className, function () use ($className) {
+            return $this->classReflector->reflectClass($className);
+        });
     }
 
     /**
@@ -55,11 +60,9 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function reflectInterface($className): ReflectionInterface
     {
-        if ($class = $this->cachedName($className)) {
-            return $class;
-        }
-
-        return $this->putCache($className, $this->classReflector->reflectInterface($className));
+        return $this->cache->getOrSet(self::CLASS_PREFIX.$className, function () use ($className) {
+            return $this->classReflector->reflectInterface($className);
+        });
     }
 
     /**
@@ -67,11 +70,9 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function reflectTrait($className): ReflectionTrait
     {
-        if ($class = $this->cachedName($className)) {
-            return $class;
-        }
-
-        return $this->putCache($className, $this->classReflector->reflectTrait($className));
+        return $this->cache->getOrSet(self::CLASS_PREFIX.$className, function () use ($className) {
+            return $this->classReflector->reflectTrait($className);
+        });
     }
 
     /**
@@ -79,35 +80,15 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function reflectClassLike($className): ReflectionClassLike
     {
-        if ($class = $this->cachedName($className)) {
-            return $class;
-        }
-
-        return $this->putCache($className, $this->classReflector->reflectClassLike($className));
-    }
-
-    private function cachedName($className)
-    {
-        if (isset($this->classCache[(string) $className])) {
-            return $this->classCache[(string) $className];
-        }
-
-        return null;
-    }
-
-    private function putCache($className, $class)
-    {
-        $this->classCache[(string) $className] = $class;
-
-        return $class;
+        return $this->cache->getOrSet(self::CLASS_PREFIX.(string)$className, function () use ($className) {
+            return $this->classReflector->reflectClassLike($className);
+        });
     }
 
     public function reflectFunction($name): ReflectionFunction
     {
-        if (isset($this->functionCache[(string)$name])) {
-            return $this->functionCache[(string)$name];
-        }
-
-        return $this->functionCache[(string)$name] = $this->functionReflector->reflectFunction($name);
+        return $this->cache->getOrSet(self::FUNC_PREFIX.$name, function () use ($name) {
+            return $this->functionReflector->reflectFunction($name);
+        });
     }
 }

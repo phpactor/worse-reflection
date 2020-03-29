@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use Phpactor\WorseReflection\Core\Cache\TtlCache;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
@@ -65,7 +66,8 @@ class ServiceLocator
         array $frameWalkers = [],
         array $methodProviders = [],
         bool $enableCache = false,
-        bool $enableContextualLocation = false
+        bool $enableContextualLocation = false,
+        float $cacheLifetime
     ) {
         $sourceReflector = $reflectorFactory->create($this);
 
@@ -81,7 +83,7 @@ class ServiceLocator
         $coreReflector = new CoreReflector($sourceReflector, $sourceLocator);
 
         if ($enableCache) {
-            $coreReflector = new MemonizedReflector($coreReflector, $coreReflector);
+            $coreReflector = new MemonizedReflector($coreReflector, $coreReflector, new TtlCache($cacheLifetime));
         }
 
         $this->reflector = new CompositeReflector(
