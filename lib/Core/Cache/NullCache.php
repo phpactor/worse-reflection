@@ -2,16 +2,13 @@
 
 namespace Phpactor\WorseReflection\Core\Cache;
 
+use Closure;
 use Phpactor\WorseReflection\Core\Cache;
 
 class NullCache implements Cache
 {
-    public function put(string $key, $value, $ttl = null)
+    public function getOrSet(string $key, Closure $closure)
     {
-    }
-
-    public function get(string $key, $value)
-    {
-        return null;
+        return $closure();
     }
 }
