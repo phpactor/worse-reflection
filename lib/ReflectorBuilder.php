@@ -57,6 +57,11 @@ final class ReflectorBuilder
     private $memberProviders = [];
 
     /**
+     * @var float
+     */
+    private $cacheLifetime = 5.0;
+
+    /**
      * Create a new instance of the builder
      */
     public static function create(): ReflectorBuilder
@@ -126,7 +131,8 @@ final class ReflectorBuilder
             $this->framewalkers,
             $this->memberProviders,
             $this->enableCache,
-            $this->enableContextualSourceLocation
+            $this->enableContextualSourceLocation,
+            $this->cacheLifetime
         ))->reflector();
     }
 
@@ -156,6 +162,16 @@ final class ReflectorBuilder
     public function enableCache(): ReflectorBuilder
     {
         $this->enableCache = true;
+
+        return $this;
+    }
+
+    /**
+     * Set the cache lifetime in seconds (floats accepted)
+     */
+    public function cacheLifetime(float $lifetime): ReflectorBuilder
+    {
+        $this->cacheLifetime = $lifetime;
 
         return $this;
     }

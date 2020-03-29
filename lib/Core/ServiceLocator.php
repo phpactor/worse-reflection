@@ -67,7 +67,8 @@ class ServiceLocator
         array $frameWalkers = [],
         array $methodProviders = [],
         bool $enableCache = false,
-        bool $enableContextualLocation = false
+        bool $enableContextualLocation = false,
+        float $cacheLifetime
     ) {
         $sourceReflector = $reflectorFactory->create($this);
 
@@ -83,7 +84,7 @@ class ServiceLocator
         $coreReflector = new CoreReflector($sourceReflector, $sourceLocator);
 
         if ($enableCache) {
-            $coreReflector = new MemonizedReflector($coreReflector, $coreReflector, new TtlCache());
+            $coreReflector = new MemonizedReflector($coreReflector, $coreReflector, new TtlCache($cacheLifetime));
         }
 
         $this->reflector = new CompositeReflector(
