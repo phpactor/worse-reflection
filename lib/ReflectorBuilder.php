@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\NullSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\StringSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantFactory;
@@ -179,7 +180,7 @@ final class ReflectorBuilder
     private function buildLocator(): SourceCodeLocator
     {
         if (empty($this->locators)) {
-            return new StringSourceLocator(SourceCode::empty());
+            return new NullSourceLocator();
         }
 
         if (count($this->locators) > 1) {

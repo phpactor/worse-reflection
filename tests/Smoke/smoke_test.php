@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use Phpactor\TextDocument\TextDocumentBuilder;
 use Phpactor\WorseReflection\Bridge\Composer\ComposerSourceLocator;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
@@ -34,7 +35,7 @@ $reflector = ReflectorBuilder::create()
     ->addLocator(new StubSourceLocator(
         ReflectorBuilder::create()->build(),
         __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs',
-        __DIR__ . '/cache'
+        __DIR__ . '/../Workspace/smoke-cache'
     ))
     ->build();
 
@@ -63,7 +64,8 @@ foreach ($files as $file) {
     echo $count++ . ' ' . Path::makeRelative($file->getPathname(), getcwd()) . PHP_EOL;
     $message = $file->getPathname();
     try {
-        $classes = $reflector->reflectClassesIn(file_get_contents($file->getPathname()));
+        $source = TextDocumentBuilder::create(file_get_contents($file->getPathname()))->uri($file->getPathname())->build();
+        $classes = $reflector->reflectClassesIn($source);
 
         /** @var ReflectionClass $class */
         foreach ($classes as $class) {
