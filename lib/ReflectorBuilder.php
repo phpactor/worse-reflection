@@ -196,7 +196,7 @@ final class ReflectorBuilder
         }
 
         if (count($locators) > 1) {
-            return new ChainSourceLocator($locators);
+            return new ChainSourceLocator($locators, $this->logger);
         }
 
         return reset($locators);
