@@ -26,7 +26,7 @@ final class ReflectorBuilder
     /**
      * @var SourceCodeLocator[]
      */
-    private $locators;
+    private $locators = [];
 
     /**
      * @var bool
@@ -90,9 +90,9 @@ final class ReflectorBuilder
     /**
      * Add a source locator
      */
-    public function addLocator(SourceCodeLocator $locator): ReflectorBuilder
+    public function addLocator(SourceCodeLocator $locator, int $priority = 0): ReflectorBuilder
     {
-        $this->locators[] = $locator;
+        $this->locators[] = [$priority, $locator];
 
         return $this;
     }
@@ -180,15 +180,26 @@ final class ReflectorBuilder
 
     private function buildLocator(): SourceCodeLocator
     {
-        if (empty($this->locators)) {
+        $locators = $this->locators;
+        usort($locators, function ($locator1, $locator2) {
+            [ $priority1 ] = $locator1;
+            [ $priority2 ] = $locator2;
+            return $priority2 <=> $priority1;
+        });
+
+        $locators = array_map(function (array $locator) {
+            return $locator[1];
+        }, $locators);
+
+        if (empty($locators)) {
             return new NullSourceLocator();
         }
 
-        if (count($this->locators) > 1) {
-            return new ChainSourceLocator($this->locators);
+        if (count($locators) > 1) {
+            return new ChainSourceLocator($locators);
         }
 
-        return reset($this->locators);
+        return reset($locators);
     }
 
     private function buildLogger(): LoggerInterface

@@ -3,9 +3,11 @@
 namespace Phpactor\WorseReflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\ReflectorBuilder;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
+use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 
 class ReflectorBuilderTest extends TestCase
@@ -45,6 +47,26 @@ class ReflectorBuilderTest extends TestCase
             ->build();
 
         $this->assertInstanceOf(Reflector::class, $reflector);
+    }
+
+    public function testHighestPriorityLocatorWins()
+    {
+        $locator1 = $this->prophesize(SourceCodeLocator::class);
+        $locator2 = $this->prophesize(SourceCodeLocator::class);
+        $locator3 = $this->prophesize(SourceCodeLocator::class);
+
+        $reflector = ReflectorBuilder::create()
+            ->addLocator($locator1->reveal(), 0)
+            ->addLocator($locator2->reveal(), 10)
+            ->addLocator($locator3->reveal(), -10)
+            ->build();
+
+        $locator1->locate(Argument::any())->shouldNotBeCalled();
+        $locator2->locate(Argument::any())->willReturn(SourceCode::fromString(file_get_contents(__FILE__)));
+        $locator3->locate(Argument::any())->shouldNotBeCalled();
+
+        $this->assertInstanceOf(Reflector::class, $reflector);
+        $reflector->reflectClass(__CLASS__);
     }
 
     public function testWithSource()
