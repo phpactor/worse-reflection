@@ -77,7 +77,7 @@ class ServiceLocator
             $sourceLocator = new ChainSourceLocator([
                 $temporarySourceLocator,
                 $sourceLocator,
-            ]);
+            ], $logger);
             $sourceReflector = new ContextualSourceCodeReflector($sourceReflector, $temporarySourceLocator);
         }
 
