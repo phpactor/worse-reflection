@@ -15,6 +15,9 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
 {
     private const FUNC_PREFIX = '__func__';
     private const CLASS_PREFIX = '__class__';
+    private const INTERFACE_PREFIX = '__interface__';
+    private const TRAIT_PREFIX = '__trait__';
+    private const CLASS_LIKE_PREFIX = '__class_like__';
 
 
     /**
@@ -60,7 +63,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function reflectInterface($className): ReflectionInterface
     {
-        return $this->cache->getOrSet(self::CLASS_PREFIX.$className, function () use ($className) {
+        return $this->cache->getOrSet(self::INTERFACE_PREFIX.$className, function () use ($className) {
             return $this->classReflector->reflectInterface($className);
         });
     }
@@ -70,7 +73,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function reflectTrait($className): ReflectionTrait
     {
-        return $this->cache->getOrSet(self::CLASS_PREFIX.$className, function () use ($className) {
+        return $this->cache->getOrSet(self::TRAIT_PREFIX.$className, function () use ($className) {
             return $this->classReflector->reflectTrait($className);
         });
     }
@@ -80,7 +83,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function reflectClassLike($className): ReflectionClassLike
     {
-        return $this->cache->getOrSet(self::CLASS_PREFIX.(string)$className, function () use ($className) {
+        return $this->cache->getOrSet(self::CLASS_LIKE_PREFIX.(string)$className, function () use ($className) {
             return $this->classReflector->reflectClassLike($className);
         });
     }
