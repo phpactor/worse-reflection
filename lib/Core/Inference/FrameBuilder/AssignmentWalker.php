@@ -19,6 +19,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\ArrayElement;
 use Microsoft\PhpParser\MissingToken;
 use Microsoft\PhpParser\Node\Statement\ExpressionStatement;
+use Psr\Log\LoggerInterface;
 
 class AssignmentWalker extends AbstractWalker
 {
@@ -27,7 +28,7 @@ class AssignmentWalker extends AbstractWalker
      */
     private $logger;
 
-    public function __construct(Logger $logger)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }

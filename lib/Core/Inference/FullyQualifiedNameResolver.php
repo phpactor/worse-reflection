@@ -13,6 +13,7 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Name;
+use Psr\Log\LoggerInterface;
 
 class FullyQualifiedNameResolver
 {
@@ -22,7 +23,7 @@ class FullyQualifiedNameResolver
     private $logger;
 
     public function __construct(
-        Logger $logger
+        LoggerInterface $logger
     ) {
         $this->logger = $logger;
     }

@@ -15,6 +15,7 @@ use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Phpactor\WorseReflection\Core\Logger;
+use Psr\Log\LoggerInterface;
 use Webmozart\PathUtil\Path;
 
 class IncludeWalker implements FrameWalker
@@ -30,7 +31,7 @@ class IncludeWalker implements FrameWalker
     private $logger;
 
 
-    public function __construct(Logger $logger, Parser $parser = null)
+    public function __construct(LoggerInterface $logger, Parser $parser = null)
     {
         $this->parser = $parser ?: new Parser();
         $this->logger = $logger;

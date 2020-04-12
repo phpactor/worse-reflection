@@ -7,7 +7,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
-use Phpactor\WorseReflection\Core\Logger;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
@@ -30,7 +30,7 @@ final class FrameBuilder
      */
     private $walkers;
 
-    public static function create(DocBlockFactory $docblockFactory, SymbolContextResolver $symbolContextResolver, Logger $logger, array $walkers = [])
+    public static function create(DocBlockFactory $docblockFactory, SymbolContextResolver $symbolContextResolver, LoggerInterface $logger, array $walkers = [])
     {
         $nameResolver = new FullyQualifiedNameResolver($logger);
         $walkers = array_merge([

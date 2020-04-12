@@ -6,9 +6,9 @@ use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Psr\Log\LoggerInterface;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
@@ -445,7 +445,7 @@ class Foobar
 EOT
                 ,
                 'Foobar',
-                function ($methods, ArrayLogger $logger) {
+                function ($methods, LoggerInterface $logger) {
                     $this->assertEquals('', $methods->get('barfoo')->parameters()->first()->name());
                     $this->assertContains(
                         'Parameter has no variable',

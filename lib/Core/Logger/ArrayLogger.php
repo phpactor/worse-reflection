@@ -2,18 +2,17 @@
 
 namespace Phpactor\WorseReflection\Core\Logger;
 
-use Phpactor\WorseReflection\Core\Logger;
+use Psr\Log\AbstractLogger;
 
-class ArrayLogger implements Logger
+class ArrayLogger extends AbstractLogger
 {
     private $messages = [];
 
-    public function warning(string $message)
-    {
-        $this->messages[] = $message;
-    }
-
-    public function debug(string $message)
+    /**
+     * {@inheritDoc}
+     */
+    public function log($level, $message, array $context = [
+    ])
     {
         $this->messages[] = $message;
     }

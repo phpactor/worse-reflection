@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflector\TolerantFactory;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
+use Psr\Log\LoggerInterface;
 
 final class ReflectorBuilder
 {
@@ -79,7 +80,7 @@ final class ReflectorBuilder
     /**
      * Replace the logger implementation.
      */
-    public function withLogger(Logger $logger): ReflectorBuilder
+    public function withLogger(LoggerInterface $logger): ReflectorBuilder
     {
         $this->logger = $logger;
 
@@ -190,7 +191,7 @@ final class ReflectorBuilder
         return reset($this->locators);
     }
 
-    private function buildLogger(): Logger
+    private function buildLogger(): LoggerInterface
     {
         return $this->logger ?: new ArrayLogger();
     }

@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\TemporarySourceLocator;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
+use Psr\Log\LoggerInterface;
 
 class ServiceLocator
 {
@@ -61,7 +62,7 @@ class ServiceLocator
 
     public function __construct(
         SourceCodeLocator $sourceLocator,
-        Logger $logger,
+        LoggerInterface $logger,
         SourceCodeReflectorFactory $reflectorFactory,
         array $frameWalkers = [],
         array $methodProviders = [],
@@ -111,7 +112,7 @@ class ServiceLocator
         return $this->reflector;
     }
 
-    public function logger(): Logger
+    public function logger(): LoggerInterface
     {
         return $this->logger;
     }

@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Core;
 use Phpactor\TextDocument\TextDocument;
 use Phpactor\TextDocument\TextDocumentLanguage;
 use Phpactor\TextDocument\TextDocumentUri;
-use RuntimeException;
 
 class SourceCode implements TextDocument
 {

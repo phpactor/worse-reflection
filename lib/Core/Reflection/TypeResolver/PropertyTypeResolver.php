@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
+use Psr\Log\LoggerInterface;
 
 class PropertyTypeResolver
 {
@@ -20,7 +21,7 @@ class PropertyTypeResolver
      */
     private $logger;
 
-    public function __construct(ReflectionProperty $property, Logger $logger)
+    public function __construct(ReflectionProperty $property, LoggerInterface $logger)
     {
         $this->property = $property;
         $this->logger = $logger;

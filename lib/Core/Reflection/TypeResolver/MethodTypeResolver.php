@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Psr\Log\LoggerInterface;
 
 class MethodTypeResolver
 {
@@ -22,7 +23,7 @@ class MethodTypeResolver
      */
     private $logger;
 
-    public function __construct(ReflectionMethod $method, Logger $logger)
+    public function __construct(ReflectionMethod $method, LoggerInterface $logger)
     {
         $this->method = $method;
         $this->logger = $logger;

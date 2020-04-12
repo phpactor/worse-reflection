@@ -5,8 +5,8 @@ namespace Phpactor\WorseReflection\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\ReflectorBuilder;
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
+use Psr\Log\LoggerInterface;
 
 class ReflectorBuilderTest extends TestCase
 {
@@ -18,7 +18,7 @@ class ReflectorBuilderTest extends TestCase
 
     public function testReplacesLogger()
     {
-        $logger = $this->prophesize(Logger::class);
+        $logger = $this->prophesize(LoggerInterface::class);
         $reflector = ReflectorBuilder::create()
             ->withLogger($logger->reveal())
             ->build();

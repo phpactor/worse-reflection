@@ -25,7 +25,6 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Reflector;
@@ -44,6 +43,7 @@ use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\Expression\ParenthesizedExpression;
+use Psr\Log\LoggerInterface;
 
 /**
  * @TODO: This class requires SERIOUS refactoring.
@@ -61,7 +61,7 @@ class SymbolContextResolver
     private $reflector;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -82,7 +82,7 @@ class SymbolContextResolver
 
     public function __construct(
         Reflector $reflector,
-        Logger $logger,
+        LoggerInterface $logger,
         SymbolFactory $symbolFactory = null
     ) {
         $this->logger = $logger;
