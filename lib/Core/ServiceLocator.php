@@ -26,7 +26,7 @@ class ServiceLocator
     private $sourceLocator;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 

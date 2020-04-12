@@ -7,7 +7,6 @@ use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\ClassLike;
-use Phpactor\WorseReflection\Core\Logger;
 use Microsoft\PhpParser\Node\NamespaceUseClause;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\QualifiedName;
@@ -18,7 +17,7 @@ use Psr\Log\LoggerInterface;
 class FullyQualifiedNameResolver
 {
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 

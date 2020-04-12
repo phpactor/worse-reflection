@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\Logger;
+namespace Phpactor\WorseReflection\Bridge\PsrLog;
 
 use Psr\Log\AbstractLogger;
 

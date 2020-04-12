@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
 use Generator;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
@@ -17,7 +16,7 @@ class PropertyTypeResolver
     private $property;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 

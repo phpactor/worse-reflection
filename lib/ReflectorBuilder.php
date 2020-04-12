@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection;
 
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+use Phpactor\WorseReflection\Bridge\PsrLog\ArrayLogger;
 use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 final class ReflectorBuilder
 {
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 

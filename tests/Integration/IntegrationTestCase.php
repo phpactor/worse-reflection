@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Reflector;
 use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;
 use Microsoft\PhpParser\Node\SourceFileNode;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+use Phpactor\WorseReflection\Bridge\PsrLog\ArrayLogger;
 use Phpactor\WorseReflection\ReflectorBuilder;
 
 class IntegrationTestCase extends TestCase

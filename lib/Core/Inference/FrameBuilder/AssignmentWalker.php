@@ -11,7 +11,6 @@ use Microsoft\PhpParser\Node\Expression\SubscriptExpression;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
-use Phpactor\WorseReflection\Core\Logger;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Microsoft\PhpParser\Token;
@@ -24,7 +23,7 @@ use Psr\Log\LoggerInterface;
 class AssignmentWalker extends AbstractWalker
 {
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 

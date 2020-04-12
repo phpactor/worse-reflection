@@ -10,7 +10,7 @@ use Microsoft\PhpParser\ResolvedName;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+use Phpactor\WorseReflection\Bridge\PsrLog\ArrayLogger;
 
 class ReflectionScope implements CoreReflectionScope
 {
