@@ -40,16 +40,17 @@ class ChainSourceLocator implements SourceCodeLocator
             try {
                 $source = $locator->locate($name);
                 $this->logger->debug(sprintf(
-                    'Found source for "%s" with "%s" locator',
+                    ' OK for "%s" with locator "%s"',
                     $name,
                     get_class($locator)
                 ));
                 return $source;
             } catch (SourceNotFound $e) {
                 $this->logger->debug(sprintf(
-                    'Could not find source for "%s" with "%s" locator',
+                    'NOK "%s" with locator "%s" : %s',
                     $name,
-                    get_class($locator)
+                    get_class($locator),
+                    $e->getMessage()
                 ));
                 $exception = new SourceNotFound(sprintf(
                     'Could not find source with "%s"',
