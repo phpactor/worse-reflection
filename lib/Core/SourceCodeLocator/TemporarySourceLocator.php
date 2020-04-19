@@ -28,7 +28,7 @@ class TemporarySourceLocator implements SourceCodeLocator
     public function pushSourceCode(SourceCode $source): void
     {
         if (!$source->path()) {
-            $this->sources['__source_with_no_path__'] = $source;
+            $this->sources[] = $source;
             return;
         }
 
