@@ -120,5 +120,56 @@ EOT
                 $this->assertCount(2, $constants);
             }
         ];
+
+        yield 'returns value' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    const FOOBAR = 'foobar';
+}
+EOT
+            ,
+            'Foobar',
+            function (ReflectionConstantCollection $constants) {
+                $constant = $constants->first();
+                self::assertEquals('foobar', $constant->value());
+            }
+        ];
+
+        yield 'array value' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    const FOOBAR = ['one', 'two']';
+}
+EOT
+            ,
+            'Foobar',
+            function (ReflectionConstantCollection $constants) {
+                $constant = $constants->first();
+                self::assertEquals(['one', 'two'], $constant->value());
+            }
+        ];
+
+        yield 'no value' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+    const FOOBAR = null';
+}
+EOT
+            ,
+            'Foobar',
+            function (ReflectionConstantCollection $constants) {
+                $constant = $constants->first();
+                self::assertEquals(null, $constant->value());
+            }
+        ];
     }
 }

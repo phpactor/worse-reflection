@@ -85,4 +85,17 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
     {
         return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function value()
+    {
+        return $this->serviceLocator()
+                    ->symbolContextResolver()
+                    ->resolveNode(
+                        new Frame('_'),
+                        $this->node->assignment
+                    )->value();
+    }
 }
