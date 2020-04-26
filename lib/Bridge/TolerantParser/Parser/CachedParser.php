@@ -4,24 +4,26 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Parser;
 
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Microsoft\PhpParser\Parser;
+use Phpactor\WorseReflection\Core\Cache;
+use Phpactor\WorseReflection\Core\Cache\TtlCache;
 
 class CachedParser extends Parser
 {
     /**
-     * @var array
+     * @var Cache
      */
-    private $cache = [];
+    private $cache;
+
+    public function __construct(Cache $cache = null)
+    {
+        $this->cache = $cache ?: new TtlCache();
+        parent::__construct();
+    }
 
     public function parseSourceFile(string $source, string $uri = null): SourceFileNode
     {
-        if (isset($this->cache[$source])) {
-            return $this->cache[$source];
-        }
-
-        $node = parent::parseSourceFile($source);
-
-        $this->cache[$source] = $node;
-
-        return $node;
+        return $this->cache->getOrSet('__parser__' . md5($source), function () use ($source, $uri) {
+            return parent::parseSourceFile($source, $uri);
+        });
     }
 }
