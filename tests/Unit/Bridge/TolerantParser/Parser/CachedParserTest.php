@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\TolerantParser\Parser;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Parser\CachedParser;
-use Phpactor\WorseReflection\Core\Cache;
 use Phpactor\WorseReflection\Core\Cache\TtlCache;
 
 class CachedParserTest extends TestCase
