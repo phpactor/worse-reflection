@@ -74,30 +74,4 @@ class TemporarySourceLocatorTest extends TestCase
         $source = $this->locator->locate(ClassName::fromString('Boobar'));
         $this->assertEquals($code2, (string) $source);
     }
-
-    public function testMixingOfCodeWithAndWithoutPaths()
-    {
-        $this->expectException(SourceNotFound::class);
-        $code1 = SourceCode::fromString('class Foobar {}');
-        $this->locator->pushSourceCode($code1);
-
-        $code2 = SourceCode::fromPathAndString('foo.php', 'class Boobar {}');
-        $this->locator->pushSourceCode($code2);
-
-        $code3 = SourceCode::fromString('class Coobar {}');
-        $this->locator->pushSourceCode($code3);
-
-        $this->reflector->reflectClassesIn($code1)->willReturn(
-            $this->classCollection->reveal()
-        )->shouldBeCalled();
-        $this->reflector->reflectClassesIn($code2)->willReturn(
-            $this->classCollection->reveal()
-        )->shouldBeCalled();
-        $this->reflector->reflectClassesIn($code3)->willReturn(
-            $this->classCollection->reveal()
-        )->shouldBeCalled();
-        $this->classCollection->has('Boobar')->willReturn(false);
-
-        $source = $this->locator->locate(ClassName::fromString('Boobar'));
-    }
 }

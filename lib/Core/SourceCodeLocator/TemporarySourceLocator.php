@@ -32,9 +32,9 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 class TemporarySourceLocator implements SourceCodeLocator
 {
     /**
-     * @var SourceCode[]
+     * @var SourceCode
      */
-    private $sources = [];
+    private $source;
 
     /**
      * @var SourceCodeReflector
@@ -48,12 +48,7 @@ class TemporarySourceLocator implements SourceCodeLocator
 
     public function pushSourceCode(SourceCode $source): void
     {
-        if (!$source->path()) {
-            $this->sources[] = $source;
-            return;
-        }
-
-        $this->sources[$source->path()] = $source;
+        $this->source = $source;
     }
 
     /**
@@ -61,14 +56,10 @@ class TemporarySourceLocator implements SourceCodeLocator
      */
     public function locate(Name $name): SourceCode
     {
-        foreach ($this->sources as $source) {
-            $classes = $this->reflector->reflectClassesIn($source);
+        $classes = $this->reflector->reflectClassesIn($this->source);
 
-            if (false === $classes->has((string) $name)) {
-                continue;
-            }
-
-            return $source;
+        if ($classes->has((string) $name)) {
+            return $this->source;
         }
 
         throw new SourceNotFound(sprintf(
