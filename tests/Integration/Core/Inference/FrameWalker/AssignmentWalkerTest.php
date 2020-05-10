@@ -249,5 +249,46 @@ EOT
                 $this->assertEquals('Barfoo', $frame->locals()->byName('barfoo')->first()->symbolContext()->types()->best()->short());
             }
         ];
+
+        yield 'References previously walked member' => [
+            <<<'EOT'
+<?php
+
+class Zed
+{
+    public function foobar():string {}
+}
+
+class Car
+{
+    /**
+     * @var Zed
+     */
+    public $options;
+}
+
+class Baz
+{
+    private $foobar;
+    private $options;
+    public function __construct(Barfoo $barfoo)
+    {
+        $this->foobar = new Car();
+        $this->options = $this->foobar->options;
+    }
+    public function bar()
+    {
+        $barfoo = $this->options->foobar();
+        $barfo<>o;
+    }
+}
+<>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(1, $frame->locals()->byName('barfoo'));
+            }
+        ];
     }
 }
