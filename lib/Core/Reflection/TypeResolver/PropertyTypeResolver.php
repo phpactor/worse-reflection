@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
-use Generator;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;

@@ -56,6 +56,12 @@ class TemporarySourceLocator implements SourceCodeLocator
      */
     public function locate(Name $name): SourceCode
     {
+        if (null === $this->source) {
+            throw new SourceNotFound(sprintf(
+                'No source in temporary source locator yet',
+            ));
+        }
+
         $classes = $this->reflector->reflectClassesIn($this->source);
 
         if ($classes->has((string) $name)) {
