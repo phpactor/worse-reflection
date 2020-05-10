@@ -37,17 +37,20 @@ class ChainSourceLocator implements SourceCodeLocator
         );
 
         foreach ($this->locators as $locator) {
+            $start = microtime(true);
             try {
                 $source = $locator->locate($name);
                 $this->logger->debug(sprintf(
-                    ' OK for "%s" with locator "%s"',
+                    ' OK [%s] "%s" with locator "%s"',
+                    number_format(microtime(true) - $start, 4),
                     $name,
                     get_class($locator)
                 ));
                 return $source;
             } catch (SourceNotFound $e) {
                 $this->logger->debug(sprintf(
-                    'NOK "%s" with locator "%s" : %s',
+                    'NOK [%s] "%s" with locator "%s" : %s',
+                    number_format(microtime(true) - $start, 4),
                     $name,
                     get_class($locator),
                     $e->getMessage()
