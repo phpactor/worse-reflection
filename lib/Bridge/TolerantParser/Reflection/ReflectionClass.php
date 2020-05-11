@@ -354,4 +354,15 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $this->ancestors = TolerantReflectionClassCollection::fromReflections($this->serviceLocator, $ancestors);
         return $this->ancestors;
     }
+
+    public function isFinal(): bool
+    {
+        $modifier = $this->node->abstractOrFinalModifier;
+
+        if (!$modifier) {
+            return false;
+        }
+
+        return $modifier->kind === TokenKind::FinalKeyword;
+    }
 }

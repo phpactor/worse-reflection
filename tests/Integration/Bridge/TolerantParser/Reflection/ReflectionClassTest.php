@@ -694,6 +694,54 @@ EOT
                 $this->assertCount(0, $class->interfaces());
             },
         ];
+
+        yield 'Says if class is abstract' => [
+            <<<'EOT'
+<?php
+
+abstract class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertTrue($class->isAbstract());
+            },
+        ];
+
+        yield 'Says if class is not abstract' => [
+            <<<'EOT'
+<?php
+
+class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertFalse($class->isAbstract());
+            },
+        ];
+
+        yield 'Says if class is final' => [
+            <<<'EOT'
+<?php
+
+final class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertTrue($class->isFinal());
+            },
+        ];
     }
 
     /**

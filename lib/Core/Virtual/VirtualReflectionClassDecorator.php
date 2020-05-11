@@ -143,4 +143,9 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     {
         return $this->class->ancestors();
     }
+
+    public function isFinal(): bool
+    {
+        return $this->class->isFinal();
+    }
 }
