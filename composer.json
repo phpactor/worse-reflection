@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "microsoft/tolerant-php-parser": "~0.0",
         "jetbrains/phpstorm-stubs": "*",
         "psr/log": "^1.0",
