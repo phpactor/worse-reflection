@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 
 use IteratorAggregate;
+use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 
 interface ReflectionCollection extends IteratorAggregate
 {
@@ -14,8 +15,18 @@ interface ReflectionCollection extends IteratorAggregate
 
     public function get(string $name);
 
+    /**
+     * Return first item from the collection of throw an ItemNotFound exception.
+     *
+     * @throws ItemNotFound
+     */
     public function first();
 
+    /**
+     * Return last item from the collection of throw an ItemNotFound exception.
+     *
+     * @throws ItemNotFound
+     */
     public function last();
 
     public function has(string $name): bool;

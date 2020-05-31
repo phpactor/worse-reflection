@@ -52,6 +52,12 @@ abstract class AbstractReflectionCollectionTestCase extends TestCase
         $this->assertNotNull($this->collection(['one', 'two', 'three'])->first());
     }
 
+    public function testGetFirstThrowsExceptionIfColletionIsEmpty()
+    {
+        $this->expectException(ItemNotFound::class);
+        $this->collection([])->first();
+    }
+
     public function testLast()
     {
         $this->assertNotNull($this->collection(['one', 'two', 'three'])->last());

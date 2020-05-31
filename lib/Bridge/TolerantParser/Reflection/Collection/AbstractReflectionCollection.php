@@ -81,11 +81,23 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
 
     public function first()
     {
+        if (empty($this->items)) {
+            throw new ItemNotFound(
+                'Collection is empty, cannot get the first item'
+            );
+        }
+
         return reset($this->items);
     }
 
     public function last()
     {
+        if (empty($this->items)) {
+            throw new ItemNotFound(
+                'Collection is empty, cannot get the last item'
+            );
+        }
+
         return end($this->items);
     }
 
