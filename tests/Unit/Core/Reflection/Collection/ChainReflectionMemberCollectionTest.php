@@ -94,6 +94,8 @@ class ChainReflectionMemberCollectionTest extends TestCase
 
         $this->collection1->get('foobar')->willReturn($this->member1->reveal());
         $this->collection1->has('foobar')->willReturn(true);
+        $this->collection1->keys()->willReturn([]);
+        $this->collection2->keys()->willReturn([]);
 
 
         $item = $collection1->get('foobar');
@@ -114,6 +116,9 @@ class ChainReflectionMemberCollectionTest extends TestCase
 
         $this->collection1->has('foobar')->willReturn(false);
         $this->collection2->has('foobar')->willReturn(false);
+
+        $this->collection1->keys()->willReturn([]);
+        $this->collection2->keys()->willReturn([]);
 
 
         $item = $collection1->get('foobar');

@@ -89,7 +89,7 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
 
     public function byMemberType(string $type): CoreReflectionMemberCollection
     {
-        return new static(array_filter($this->items, function (ReflectionMember $member) use ($type) {
+        return new static($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) use ($type) {
             return $type === $member->memberType();
         }));
     }

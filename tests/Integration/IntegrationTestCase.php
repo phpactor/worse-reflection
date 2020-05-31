@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration;
 
 use Phpactor\TestUtils\Workspace;
 use Phpactor\WorseReflection\Bridge\Phpactor\MemberProvider\DocblockMemberProvider;
+use Phpactor\WorseReflection\Core\SourceCodeLocator\StubSourceLocator;
 use Phpactor\WorseReflection\Reflector;
 use PHPUnit\Framework\TestCase;
 use Microsoft\PhpParser\Parser;
@@ -27,6 +28,18 @@ class IntegrationTestCase extends TestCase
     {
         return ReflectorBuilder::create()
             ->addSource($source)
+            ->addMemberProvider(new DocblockMemberProvider())
+            ->withLogger($this->logger())->build();
+    }
+
+    public function createWorkspaceReflector(string $source): Reflector
+    {
+        return ReflectorBuilder::create()
+            ->addLocator(new StubSourceLocator(
+                ReflectorBuilder::create()->build(),
+                $this->workspace()->path('/'),
+                $this->workspace()->path('/')
+            ))
             ->addMemberProvider(new DocblockMemberProvider())
             ->withLogger($this->logger())->build();
     }

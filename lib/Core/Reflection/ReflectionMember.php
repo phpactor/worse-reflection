@@ -19,6 +19,15 @@ interface ReflectionMember
 
     public function declaringClass(): ReflectionClassLike;
 
+    /**
+     * Return the original method declaration (in case this method has been
+     * overridden).
+     *
+     * In case the original method is ambiguous (e.g. implemented by two
+     * or more interfaces) the first will be returned.
+     */
+    public function original(): ReflectionMember;
+
     public function class(): ReflectionClassLike;
 
     public function name(): string;

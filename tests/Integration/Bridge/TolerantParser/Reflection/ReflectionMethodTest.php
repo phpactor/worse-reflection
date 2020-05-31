@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
@@ -571,7 +572,7 @@ trait Foobar
 EOT
                 ,
                 'Foobar',
-                function ($methods) {
+                function (ReflectionMethodCollection $methods) {
                     $this->assertTrue($methods->has('barfoo'));
                     $this->assertEquals('Foobar', (string) $methods->get('barfoo')->declaringClass()->name());
                 },

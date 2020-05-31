@@ -3,12 +3,14 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\TokenKind;
+use Phpactor\WorseReflection\Core\Util\OriginalMethodResolver;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
@@ -34,6 +36,11 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
         }
 
         return $this->serviceLocator()->reflector()->reflectClassLike(ClassName::fromString($class));
+    }
+
+    public function original(): ReflectionMember
+    {
+        return (new OriginalMethodResolver())->resolveOriginalMember($this);
     }
 
     public function frame(): Frame

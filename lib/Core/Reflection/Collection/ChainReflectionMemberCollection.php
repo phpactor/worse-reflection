@@ -70,7 +70,7 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
     {
         $known = [];
         foreach ($this->collections as $collection) {
-            $known[] = $name;
+            $known = array_merge($known, $collection->keys());
             if ($collection->has($name)) {
                 return $collection->get($name);
             }

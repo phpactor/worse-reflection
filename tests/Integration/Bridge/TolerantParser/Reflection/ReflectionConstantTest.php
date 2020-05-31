@@ -39,6 +39,28 @@ EOT
             }
         ];
 
+        yield 'Returns original member' => [
+            <<<'EOT'
+<?php
+
+class Barfoo
+{
+    const FOOBAR = 'foobar';
+}
+
+class Foobar extends Barfoo
+{
+    const FOOBAR = 'foobar';
+}
+EOT
+            ,
+            'Foobar',
+            function (ReflectionConstantCollection $constants) {
+                $this->assertEquals('Barfoo', $constants->get('FOOBAR')->original()->declaringClass()->name()->__toString());
+                $this->assertEquals(Visibility::public(), $constants->first()->visibility());
+            }
+        ];
+
         yield 'Returns visibility' => [
             <<<'EOT'
 <?php

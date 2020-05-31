@@ -174,4 +174,9 @@ abstract class VirtualReflectionMember implements ReflectionMember
     {
         return $this->type;
     }
+
+    public function original(): ReflectionMember
+    {
+        return $this;
+    }
 }
