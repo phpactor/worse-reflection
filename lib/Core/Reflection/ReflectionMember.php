@@ -11,6 +11,10 @@ use Phpactor\WorseReflection\Core\Types;
 
 interface ReflectionMember
 {
+    public const TYPE_METHOD = 'method';
+    public const TYPE_PROPERTY = 'property';
+    public const TYPE_CONSTANT = 'constant';
+
     public function position(): Position;
 
     public function declaringClass(): ReflectionClassLike;
@@ -32,4 +36,6 @@ interface ReflectionMember
     public function type(): Type;
 
     public function isVirtual(): bool;
+
+    public function memberType();
 }

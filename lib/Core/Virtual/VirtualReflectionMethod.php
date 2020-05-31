@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
@@ -115,5 +116,10 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
     public function isVirtual(): bool
     {
         return true;
+    }
+
+    public function memberType(): string
+    {
+        return ReflectionMember::TYPE_PROPERTY;
     }
 }

@@ -86,4 +86,11 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
             return $member instanceof ReflectionProperty;
         }));
     }
+
+    public function byMemberType(string $type): CoreReflectionMemberCollection
+    {
+        return new static(array_filter($this->items, function (ReflectionMember $member) use ($type) {
+            return $type === $member->memberType();
+        }));
+    }
 }

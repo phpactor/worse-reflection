@@ -230,4 +230,17 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
 
         return new self($collections);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function byMemberType(string $type): ReflectionMemberCollection
+    {
+        $collections = [];
+        foreach ($this->collections as $collection) {
+            $collections[] = $collection->byMemberType($type);
+        }
+
+        return new self($collections);
+    }
 }

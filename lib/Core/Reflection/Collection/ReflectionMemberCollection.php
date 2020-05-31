@@ -11,6 +11,11 @@ use Phpactor\WorseReflection\Core\ClassName;
  */
 interface ReflectionMemberCollection extends ReflectionCollection
 {
+    /**
+     * By member type: constant, method, or property
+     */
+    public function byMemberType(string $type): ReflectionMemberCollection;
+
     public function byVisibilities(array $visibilities): ReflectionMemberCollection;
 
     public function belongingTo(ClassName $class): ReflectionMemberCollection;

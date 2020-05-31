@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
@@ -122,5 +123,10 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     public function isVirtual(): bool
     {
         return false;
+    }
+
+    public function memberType(): string
+    {
+        return ReflectionMember::TYPE_PROPERTY;
     }
 }

@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node\ConstElement;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -97,5 +98,10 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
                         new Frame('_'),
                         $this->node->assignment
                     )->value();
+    }
+
+    public function memberType(): string
+    {
+        return ReflectionMember::TYPE_CONSTANT;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Virtual;
 
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 
 class VirtualReflectionProperty extends VirtualReflectionMember implements ReflectionProperty
@@ -14,5 +15,10 @@ class VirtualReflectionProperty extends VirtualReflectionMember implements Refle
     public function isStatic(): bool
     {
         return false;
+    }
+
+    public function memberType()
+    {
+        return ReflectionMember::TYPE_PROPERTY;
     }
 }

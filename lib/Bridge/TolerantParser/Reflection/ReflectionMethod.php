@@ -9,6 +9,7 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\NodeText;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Type;
@@ -172,5 +173,10 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     public function isVirtual(): bool
     {
         return false;
+    }
+
+    public function memberType(): string
+    {
+        return ReflectionMember::TYPE_METHOD;
     }
 }
