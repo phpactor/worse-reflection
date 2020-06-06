@@ -577,6 +577,24 @@ EOT
                     $this->assertEquals('Foobar', (string) $methods->get('barfoo')->declaringClass()->name());
                 },
             ],
+            'It returns methods when a class extends itself' => [
+                <<<'EOT'
+<?php
+
+class Foobar extends Foobar
+{
+    public function barfoo()
+    {
+        echo "Hello!";
+    }
+}
+EOT
+                ,
+                'Foobar',
+                function (ReflectionMethodCollection $methods) {
+                    $this->assertTrue($methods->has('barfoo'));
+                },
+            ],
         ];
     }
 

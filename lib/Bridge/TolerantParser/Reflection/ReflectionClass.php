@@ -145,8 +145,15 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
 
         try {
+            $className = ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName());
+
+            // prevent infinite loops
+            if ($className == $this->name()) {
+                return null;
+            }
+
             $reflectedClass = $this->serviceLocator->reflector()->reflectClassLike(
-                ClassName::fromString((string) $this->node->classBaseClause->baseClass->getResolvedName())
+                $className
             );
 
             if (!$reflectedClass instanceof CoreReflectionClass) {
