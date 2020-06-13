@@ -188,9 +188,6 @@ interface Barfoo
     function method1() {}
 }
 
-/**
- * @method Bar method1()
- */
 interface Foobar extends Barfoo
 {
 }

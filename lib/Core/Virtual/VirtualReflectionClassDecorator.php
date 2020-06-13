@@ -64,9 +64,6 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $realProperties->merge($virtualProperties);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function interfaces(): ReflectionInterfaceCollection
     {
         return $this->class->interfaces();
@@ -84,7 +81,7 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
 
     public function methods(): ReflectionMethodCollection
     {
-        $realMethods = $this->class->methods();
+        $realMethods = $this->class->methods($this->class);
         $virtualMethods = $this->virtualMethods();
 
         return $realMethods->merge($virtualMethods);
@@ -97,15 +94,20 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $members;
     }
 
-    private function virtualMethods(ReflectionClass $contextClass = null)
+    public function virtualMethods(): VirtualReflectionMethodCollection
     {
         $virtualMethods = VirtualReflectionMethodCollection::fromReflectionMethods([]);
         if ($parentClass = $this->parent()) {
             assert($parentClass instanceof VirtualReflectionClassDecorator);
             $virtualMethods = $virtualMethods->merge(
-                $parentClass->virtualMethods(
-                    $contextClass
-                )->byVisibilities([ Visibility::public(), Visibility::protected() ])
+                $parentClass->virtualMethods()->byVisibilities([ Visibility::public(), Visibility::protected() ])
+            );
+        }
+
+        foreach ($this->interfaces() as $interface) {
+            assert($interface instanceof VirtualReflectionInterfaceDecorator);
+            $virtualMethods = $virtualMethods->merge(
+                $interface->virtualMethods()->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
         }
 
@@ -118,14 +120,13 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $virtualMethods;
     }
 
-    private function virtualProperties(ReflectionClass $contextClass = null)
+    private function virtualProperties()
     {
         $virtualProperties = VirtualReflectionPropertyCollection::fromReflectionProperties([]);
         if ($parentClass = $this->parent()) {
             assert($parentClass instanceof VirtualReflectionClassDecorator);
             $virtualProperties = $virtualProperties->merge(
                 $parentClass->virtualProperties(
-                    $contextClass
                 )->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
         }
