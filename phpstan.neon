@@ -1,6 +1,7 @@
 includes:
     - baseline.neon
 parameters:
+    reportUnmatchedIgnoredErrors: false
     level: 7
     inferPrivatePropertyTypeFromConstructor: true
     ignoreErrors:
