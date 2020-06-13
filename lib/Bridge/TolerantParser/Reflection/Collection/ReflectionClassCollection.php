@@ -16,7 +16,6 @@ use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionClassDecorator;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionInterfaceDecorator;
 
-
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass first()

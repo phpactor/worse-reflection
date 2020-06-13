@@ -6,11 +6,9 @@ use AppendIterator;
 use IteratorIterator;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
-use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMemberCollection;
 use RuntimeException;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Visibility;
-
 
 /**
  * @template T of ReflectionMemberCollection
