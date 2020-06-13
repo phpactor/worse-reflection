@@ -20,7 +20,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
 
     abstract protected function collectionType(): string;
 
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }

@@ -7,7 +7,11 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 
+/**
+ * @implements ReflectionMemberProvider<ReflectionMember>
+ */
 class DocblockMemberProvider implements ReflectionMemberProvider
 {
     public function provideMembers(ServiceLocator $locator, ReflectionClassLike $class): ReflectionMemberCollection

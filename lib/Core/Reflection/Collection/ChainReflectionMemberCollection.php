@@ -6,17 +6,25 @@ use AppendIterator;
 use IteratorIterator;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMemberCollection;
 use RuntimeException;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use Phpactor\WorseReflection\Core\Visibility;
 
+
+/**
+ * @template T of ReflectionMemberCollection
+ * @implements ReflectionMemberCollection<ReflectionMember>
+ */
 class ChainReflectionMemberCollection implements ReflectionMemberCollection
 {
     /**
-     * @var ReflectionMemberCollection[]
+     * @var array<T>
      */
     private $collections = [];
 
     /**
-     * @param ReflectionMemberCollection[] $collections
+     * @param array<T> $collections
      */
     public function __construct(array $collections)
     {
@@ -25,6 +33,10 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
         }
     }
 
+    /**
+     * @param array<T> $collections
+     * @return self<T>
+     */
     public static function fromCollections(array $collections): self
     {
         return new self($collections);
@@ -37,13 +49,14 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
     {
         $iterator = new AppendIterator();
         foreach ($this->collections as $collection) {
+            /** @phpstan-ignore-next-line */
             $iterator->append($collection->getIterator());
         }
 
         return $iterator;
     }
 
-    public function count()
+    public function count(): int
     {
         return array_reduce($this->collections, function ($acc, ReflectionMemberCollection $collection) {
             $acc += count($collection);
@@ -59,7 +72,11 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
         }, []);
     }
 
-    public function merge(ReflectionCollection $collection)
+    /**
+     * @return self<T>
+     * @param T $collection
+     */
+    public function merge(ReflectionCollection $collection): self
     {
         $new = new self($this->collections);
         $new->add($collection);
@@ -122,30 +139,10 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
         return false;
     }
 
-    public function offsetGet($name)
-    {
-        return $this->get($name);
-    }
-
-    public function offsetSet($name, $value)
-    {
-        throw new RuntimeException(sprintf(
-            'ChainColleciton is immutable'
-        ));
-    }
-
-    public function offsetUnset($name)
-    {
-        throw new RuntimeException(sprintf(
-            'ChainColleciton is immutable'
-        ));
-    }
-
-    public function offsetExists($name)
-    {
-        return $this->has($name);
-    }
-
+    /**
+     * @return ReflectionMemberCollection<ReflectionMember>
+     * @param array<Visibility> $visibilities
+     */
     public function byVisibilities(array $visibilities): ReflectionMemberCollection
     {
         $collections = [];
@@ -176,7 +173,10 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
         return new self($collections);
     }
 
-    private function add(ReflectionMemberCollection $collection)
+    /**
+     * @param T $collection
+     */
+    private function add(ReflectionMemberCollection $collection): void
     {
         $this->collections[] = $collection;
     }
@@ -213,22 +213,16 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
 
     public function methods(): ReflectionMethodCollection
     {
-        $collections = [];
-        foreach ($this->collections as $collection) {
-            $collections[] = $collection->methods();
-        }
-
-        return new self($collections);
+        throw new RuntimeException(
+            'Method not supported on chain member collection corrently'
+        );
     }
 
     public function properties(): ReflectionPropertyCollection
     {
-        $collections = [];
-        foreach ($this->collections as $collection) {
-            $collections[] = $collection->properties();
-        }
-
-        return new self($collections);
+        throw new RuntimeException(
+            'Method not supported on chain member collection corrently'
+        );
     }
 
     /**
