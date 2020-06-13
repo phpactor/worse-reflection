@@ -4,20 +4,36 @@ namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 
 use IteratorAggregate;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
+use Countable;
 
-interface ReflectionCollection extends IteratorAggregate
+/**
+ * @template T
+ * @extends IteratorAggregate<T>
+ */
+interface ReflectionCollection extends IteratorAggregate, Countable
 {
-    public function count();
+    public function count(): int;
 
+    /**
+     * @return array<string>
+     */
     public function keys(): array;
 
+    /**
+     * @param ReflectionCollection<T> $collection
+     * @return ReflectionCollection<T>
+     */
     public function merge(ReflectionCollection $collection);
 
+    /**
+     * @return T
+     */
     public function get(string $name);
 
     /**
      * Return first item from the collection of throw an ItemNotFound exception.
      *
+     * @return T
      * @throws ItemNotFound
      */
     public function first();
@@ -26,18 +42,11 @@ interface ReflectionCollection extends IteratorAggregate
      * Return last item from the collection of throw an ItemNotFound exception.
      *
      * @throws ItemNotFound
+     * @return T
      */
     public function last();
 
     public function has(string $name): bool;
 
     public function getIterator();
-
-    public function offsetGet($name);
-
-    public function offsetSet($name, $value);
-
-    public function offsetUnset($name);
-
-    public function offsetExists($name);
 }

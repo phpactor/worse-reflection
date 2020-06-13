@@ -62,8 +62,8 @@ class ChainReflectionMemberCollectionTest extends TestCase
             $this->collection2->reveal()
         ]);
 
-        $this->collection1->getIterator()->willReturn(new ArrayIterator([1]));
-        $this->collection2->getIterator()->willReturn(new ArrayIterator([2,3]));
+        $this->collection1->count()->willReturn(1);
+        $this->collection2->count()->willReturn(2);
         $this->assertCount(3, $collection);
     }
 
@@ -74,8 +74,8 @@ class ChainReflectionMemberCollectionTest extends TestCase
         ]);
         $collection2 = $collection1->merge($this->collection2->reveal());
 
-        $this->collection1->getIterator()->willReturn(new ArrayIterator([1]));
-        $this->collection2->getIterator()->willReturn(new ArrayIterator([2,3]));
+        $this->collection1->count()->willReturn(1);
+        $this->collection2->count()->willReturn(2);
 
         $this->assertCount(1, $collection1);
         $this->assertCount(3, $collection2);
@@ -89,8 +89,8 @@ class ChainReflectionMemberCollectionTest extends TestCase
             $this->collection2->reveal()
         ]);
 
-        $this->collection1->getIterator()->willReturn(new ArrayIterator([1]));
-        $this->collection2->getIterator()->willReturn(new ArrayIterator([2,3]));
+        $this->collection1->count()->willReturn(1);
+        $this->collection2->count()->willReturn(3);
 
         $this->collection1->get('foobar')->willReturn($this->member1->reveal());
         $this->collection1->has('foobar')->willReturn(true);
@@ -192,8 +192,10 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $visibilties = [ Visibility::protected() ];
         $this->collection1->byVisibilities($visibilties)->willReturn($this->collection3->reveal());
         $this->collection2->byVisibilities($visibilties)->willReturn($this->collection4->reveal());
-        $this->collection3->getIterator()->willReturn(new ArrayIterator([1]));
-        $this->collection4->getIterator()->willReturn(new ArrayIterator([1]));
+        $this->collection1->count()->willReturn(1);
+        $this->collection2->count()->willReturn(1);
+        $this->collection3->count()->willReturn(1);
+        $this->collection4->count()->willReturn(1);
 
         $collection = $collection1->byVisibilities($visibilties);
         $this->assertCount(2, $collection);

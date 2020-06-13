@@ -829,6 +829,81 @@ EOT
             },
         ];
 
+        yield 'virtual methods are inherited from interface' => [
+            <<<'EOT'
+<?php
+
+
+/** @method \Foobar foobar() */
+interface Class1 {}
+
+class Class2 implements Class1 {
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertCount(1, $class->methods());
+                $this->assertEquals(
+                    'Foobar',
+                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                );
+            },
+        ];
+
+        yield 'virtual methods are inherited from multiple layers of interfaces' => [
+            <<<'EOT'
+<?php
+
+/** @method \Foobar foobar() */
+interface Class3 {}
+
+interface Class1 extends Class3 {}
+
+class Class2 implements Class1 {
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertCount(1, $class->methods());
+                $this->assertEquals(
+                    'Foobar',
+                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                );
+            },
+        ];
+
+        yield 'virtual methods are inherited from parent class which implements interface' => [
+            <<<'EOT'
+<?php
+
+/** @method \Foobar foobar() */
+interface ParentInterface {}
+
+class ParentClass implements ParentInterface {}
+
+class Class2 extends ParentClass {
+}
+
+EOT
+        ,
+            'Class2',
+            function (ReflectionClass $class) {
+                $this->assertCount(1, $class->methods());
+                $this->assertEquals(
+                    'Foobar',
+                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                );
+                $this->assertEquals(
+                    'ParentInterface',
+                    $class->methods()->get('foobar')->declaringClass()->name()->__toString()
+                );
+            },
+        ];
+
         yield 'virtual method types can be relative' => [
             '<?php namespace Bosh { /** @method Foobar foobar() */ class Class1 {}',
             'Bosh\Class1',

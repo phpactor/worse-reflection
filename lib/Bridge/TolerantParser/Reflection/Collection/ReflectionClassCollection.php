@@ -14,6 +14,7 @@ use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionClassDecorator;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionInterfaceDecorator;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionClass get()
@@ -45,7 +46,11 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
             }
 
             if ($child instanceof InterfaceDeclaration) {
-                $items[(string) $child->getNamespacedName()] =  new ReflectionInterface($serviceLocator, $source, $child);
+                $items[(string) $child->getNamespacedName()] =  new VirtualReflectionInterfaceDecorator(
+                    $serviceLocator,
+                    new ReflectionInterface($serviceLocator, $source, $child),
+                    $serviceLocator->methodProviders()
+                );
                 continue;
             }
 
