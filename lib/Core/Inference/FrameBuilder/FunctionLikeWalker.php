@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
+use Microsoft\PhpParser\MissingToken;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -109,6 +110,10 @@ class FunctionLikeWalker extends AbstractWalker
         $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStart());
 
         if (null === $useClause->useVariableNameList) {
+            return;
+        }
+
+        if ($useClause->useVariableNameList instanceof MissingToken) {
             return;
         }
 
