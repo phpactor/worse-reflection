@@ -41,9 +41,15 @@ class TemporarySourceLocator implements SourceCodeLocator
      */
     private $reflector;
 
-    public function __construct(SourceCodeReflector $reflector)
+    /**
+     * @var bool
+     */
+    private $locateFunctions;
+
+    public function __construct(SourceCodeReflector $reflector, bool $locateFunctions = false)
     {
         $this->reflector = $reflector;
+        $this->locateFunctions = $locateFunctions;
     }
 
     public function pushSourceCode(SourceCode $source): void
@@ -66,6 +72,14 @@ class TemporarySourceLocator implements SourceCodeLocator
 
         if ($classes->has((string) $name)) {
             return $this->source;
+        }
+
+        if ($this->locateFunctions) {
+            $functions = $this->reflector->reflectFunctionsIn($this->source);
+
+            if ($functions->has((string) $name)) {
+                return $this->source;
+            }
         }
 
         throw new SourceNotFound(sprintf(
