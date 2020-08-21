@@ -195,6 +195,7 @@ class ExpressionEvaluator
 
         switch ($operator) {
             case '~':
+                /** @phpstan-ignore-next-line */
                 return ~$value;
             case '!':
                 return !$value;
