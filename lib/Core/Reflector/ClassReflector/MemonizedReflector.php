@@ -101,7 +101,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function sourceCodeForFunction($name): SourceCode
     {
-        return $this->cache->getOrSet(self::FUNC_PREFIX.$name, function () use ($name) {
+        return $this->cache->getOrSet(self::FUNC_PREFIX.'source_code'.$name, function () use ($name) {
             return $this->functionReflector->sourceCodeForFunction($name);
         });
     }
@@ -111,7 +111,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
      */
     public function sourceCodeForClassLike($name): SourceCode
     {
-        return $this->cache->getOrSet(self::FUNC_PREFIX.$name, function () use ($name) {
+        return $this->cache->getOrSet(self::CLASS_LIKE_PREFIX.'source_code'.$name, function () use ($name) {
             return $this->classReflector->sourceCodeForClassLike($name);
         });
     }
