@@ -2,10 +2,12 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector;
 
+use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 interface ClassReflector
 {
@@ -39,4 +41,9 @@ interface ClassReflector
      *
      */
     public function reflectClassLike($className): ReflectionClassLike;
+
+    /**
+     * @param string|Name $className
+     */
+    public function sourceCodeForClassLike($className): SourceCode;
 }

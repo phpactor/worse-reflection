@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
+use Phpactor\WorseReflection\Core\SourceCode;
 
 class MemonizedReflector implements ClassReflector, FunctionReflector
 {
@@ -92,6 +93,26 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
     {
         return $this->cache->getOrSet(self::FUNC_PREFIX.$name, function () use ($name) {
             return $this->functionReflector->reflectFunction($name);
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sourceCodeForFunction($name): SourceCode
+    {
+        return $this->cache->getOrSet(self::FUNC_PREFIX.$name, function () use ($name) {
+            return $this->functionReflector->sourceCodeForFunction($name);
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sourceCodeForClassLike($name): SourceCode
+    {
+        return $this->cache->getOrSet(self::FUNC_PREFIX.$name, function () use ($name) {
+            return $this->classReflector->sourceCodeForClassLike($name);
         });
     }
 }

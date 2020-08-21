@@ -189,4 +189,20 @@ class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionRefl
 
         return $function;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sourceCodeForFunction($name): SourceCode
+    {
+        return $this->sourceLocator->locate(Name::fromUnknown($name));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sourceCodeForClassLike($name): SourceCode
+    {
+        return $this->sourceLocator->locate(Name::fromUnknown($name));
+    }
 }

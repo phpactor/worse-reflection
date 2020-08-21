@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflector;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
+use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
@@ -107,5 +108,22 @@ class CompositeReflector implements Reflector
     public function reflectFunction($name): ReflectionFunction
     {
         return $this->functionReflector->reflectFunction($name);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sourceCodeForClassLike($className): SourceCode
+    {
+        return $this->classReflector->sourceCodeForClassLike($className);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sourceCodeForFunction($name): SourceCode
+    {
+        return $this->functionReflector->sourceCodeForFunction($name);
     }
 }
