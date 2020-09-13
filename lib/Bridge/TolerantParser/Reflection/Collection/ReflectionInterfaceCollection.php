@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\QualifiedName;
@@ -9,6 +10,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection as CoreReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
+
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionInterface get()
@@ -44,7 +46,7 @@ class ReflectionInterfaceCollection extends AbstractReflectionCollection impleme
                     ClassName::fromString((string) $name->getResolvedName())
                 );
                 $items[$interface->name()->full()] = $interface;
-            } catch (ClassNotFound $e) {
+            } catch (NotFound $e) {
             }
         }
 

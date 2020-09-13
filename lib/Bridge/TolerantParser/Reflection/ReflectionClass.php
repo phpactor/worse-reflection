@@ -8,6 +8,7 @@ use Microsoft\PhpParser\TokenKind;
 
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImport;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImports;
+use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
@@ -168,7 +169,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             $this->parent = $reflectedClass;
 
             return $reflectedClass;
-        } catch (ClassNotFound $e) {
+        } catch (NotFound $e) {
             return null;
         }
     }
