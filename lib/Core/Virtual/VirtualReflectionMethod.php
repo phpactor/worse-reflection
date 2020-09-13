@@ -42,6 +42,11 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
      */
     private $isStatic;
 
+    /**
+     * @var bool
+     */
+    private $isDeprecated;
+
     public function __construct(
         Position $position,
         ReflectionClassLike $declaringClass,
@@ -56,13 +61,15 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
         ReflectionParameterCollection $parameters,
         NodeText $body,
         bool $isAbstract,
-        bool $isStatic
+        bool $isStatic,
+        bool $isDeprecated
     ) {
         parent::__construct($position, $declaringClass, $class, $name, $frame, $docblock, $scope, $visiblity, $inferredTypes, $type);
         $this->body = $body;
         $this->parameters = $parameters;
         $this->isAbstract = $isAbstract;
         $this->isStatic = $isStatic;
+        $this->isDeprecated = $isDeprecated;
     }
 
     public static function fromReflectionMethod(ReflectionMethod $reflectionMethod): self
@@ -81,7 +88,8 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
             $reflectionMethod->parameters(),
             $reflectionMethod->body(),
             $reflectionMethod->isAbstract(),
-            $reflectionMethod->isStatic()
+            $reflectionMethod->isStatic(),
+            $reflectionMethod->isDeprecated()
         );
     }
 
@@ -121,5 +129,10 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
     public function memberType(): string
     {
         return ReflectionMember::TYPE_PROPERTY;
+    }
+
+    public function isDeprecated(): bool
+    {
+        return false;
     }
 }

@@ -43,7 +43,8 @@ class DocblockReflectionMethodFactory
             $parameters,
             NodeText::fromString(''),
             false,
-            $methodTag->isStatic()
+            $methodTag->isStatic(),
+            false
         );
 
         $this->parametersFrom($parameters, $reflectionMethod, $methodTag);

@@ -15,6 +15,7 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
     private $body;
     private $isAbstract;
     private $isStatic;
+    private $isDeprecated;
 
     public function setUp()
     {
@@ -23,6 +24,7 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
         $this->body = NodeText::fromString('hello');
         $this->isAbstract = true;
         $this->isStatic = true;
+        $this->isDeprecated = true;
     }
 
     /**
@@ -44,7 +46,8 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
             $this->parameters->reveal(),
             $this->body,
             $this->isAbstract,
-            $this->isStatic
+            $this->isStatic,
+            $this->isDeprecated
         );
     }
 

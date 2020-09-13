@@ -179,4 +179,9 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     {
         return ReflectionMember::TYPE_METHOD;
     }
+
+    public function isDeprecated(): bool
+    {
+        return false;
+    }
 }
