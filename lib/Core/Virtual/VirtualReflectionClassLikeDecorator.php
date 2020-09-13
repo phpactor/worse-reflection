@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Virtual;
 
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
@@ -81,5 +82,10 @@ class VirtualReflectionClassLikeDecorator implements ReflectionClassLike
     public function docblock(): DocBlock
     {
         return $this->classLike->docblock();
+    }
+
+    public function deprecation(): Deprecation
+    {
+        return $this->classLike->deprecation();
     }
 }
