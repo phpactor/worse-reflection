@@ -68,6 +68,20 @@ class DocblockTest extends TestCase
         $this->assertTrue($docblock->inherits());
     }
 
+    public function testDeprecated(): void
+    {
+        $docblock = $this->create('/** Hello */');
+        $this->assertFalse($docblock->inherits());
+        $docblock = $this->create('/** @deprecated */');
+        $this->assertTrue($docblock->deprecation()->isDefined());
+    }
+
+    public function testDeprecatedMessage(): void
+    {
+        $docblock = $this->create('/** @deprecated Use foobar instead */');
+        $this->assertEquals('Use foobar instead', $docblock->deprecation()->message());
+    }
+
     private function create($docblock): DocBlock
     {
         $factory = new DocblockFactory();

@@ -618,7 +618,7 @@ EOT
             'Foobar',
             function (ReflectionMethodCollection $methods) {
                 $this->assertTrue($methods->has('barfoo'));
-                $this->assertTrue($methods->get('barfoo')->isDeprecated());
+                $this->assertTrue($methods->get('barfoo')->deprecation()->isDefined());
             },
         ];
     }

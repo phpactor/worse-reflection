@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Virtual;
 
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Position;
@@ -64,6 +65,16 @@ abstract class VirtualReflectionMember implements ReflectionMember
      */
     private $type;
 
+    /**
+     * @var Visibility
+     */
+    private $visiblity;
+
+    /**
+     * @var Deprecation
+     */
+    private $deprecation;
+
     public function __construct(
         Position $position,
         ReflectionClassLike $declaringClass,
@@ -74,7 +85,8 @@ abstract class VirtualReflectionMember implements ReflectionMember
         ReflectionScope $scope,
         Visibility $visiblity,
         Types $inferredTypes,
-        Type $type
+        Type $type,
+        Deprecation $deprecation
     ) {
         $this->position = $position;
         $this->declaringClass = $declaringClass;
@@ -86,6 +98,8 @@ abstract class VirtualReflectionMember implements ReflectionMember
         $this->visibility = $visiblity;
         $this->inferredTypes = $inferredTypes;
         $this->type = $type;
+        $this->visiblity = $visiblity;
+        $this->deprecation = $deprecation;
     }
 
     public function position(): Position
@@ -178,5 +192,10 @@ abstract class VirtualReflectionMember implements ReflectionMember
     public function original(): ReflectionMember
     {
         return $this;
+    }
+
+    public function deprecation(): Deprecation
+    {
+        return $this->deprecation;
     }
 }

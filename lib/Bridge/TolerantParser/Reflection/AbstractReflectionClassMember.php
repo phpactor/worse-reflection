@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
@@ -68,6 +69,11 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
         }
 
         return Visibility::public();
+    }
+
+    public function deprecation(): Deprecation
+    {
+        return $this->docblock()->deprecation();
     }
 
     abstract protected function serviceLocator(): ServiceLocator;

@@ -7,6 +7,7 @@ use Phpactor\Docblock\DocblockTypes;
 use Phpactor\Docblock\Method\Parameter;
 use Phpactor\Docblock\Tag\MethodTag;
 use Phpactor\WorseReflection\Core\DefaultValue;
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
@@ -44,7 +45,7 @@ class DocblockReflectionMethodFactory
             NodeText::fromString(''),
             false,
             $methodTag->isStatic(),
-            false
+            new Deprecation(false)
         );
 
         $this->parametersFrom($parameters, $reflectionMethod, $methodTag);

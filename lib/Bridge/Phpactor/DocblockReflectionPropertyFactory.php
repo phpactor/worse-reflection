@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\Docblock\Tag\PropertyTag;
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
@@ -49,7 +50,8 @@ class DocblockReflectionPropertyFactory
             $reflectionClass->scope(),
             Visibility::public(),
             $types,
-            $originalProperty ? $originalProperty->type() : Type::unknown()
+            $originalProperty ? $originalProperty->type() : Type::unknown(),
+            new Deprecation(false)
         );
 
         return $reflectionProperty;

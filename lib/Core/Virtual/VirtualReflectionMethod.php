@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Virtual;
 
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
@@ -42,11 +43,6 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
      */
     private $isStatic;
 
-    /**
-     * @var bool
-     */
-    private $isDeprecated;
-
     public function __construct(
         Position $position,
         ReflectionClassLike $declaringClass,
@@ -62,14 +58,13 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
         NodeText $body,
         bool $isAbstract,
         bool $isStatic,
-        bool $isDeprecated
+        Deprecation $deprecation
     ) {
-        parent::__construct($position, $declaringClass, $class, $name, $frame, $docblock, $scope, $visiblity, $inferredTypes, $type);
+        parent::__construct($position, $declaringClass, $class, $name, $frame, $docblock, $scope, $visiblity, $inferredTypes, $type, $deprecation);
         $this->body = $body;
         $this->parameters = $parameters;
         $this->isAbstract = $isAbstract;
         $this->isStatic = $isStatic;
-        $this->isDeprecated = $isDeprecated;
     }
 
     public static function fromReflectionMethod(ReflectionMethod $reflectionMethod): self
@@ -89,7 +84,7 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
             $reflectionMethod->body(),
             $reflectionMethod->isAbstract(),
             $reflectionMethod->isStatic(),
-            $reflectionMethod->isDeprecated()
+            $reflectionMethod->deprecation()
         );
     }
 
@@ -129,10 +124,5 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
     public function memberType(): string
     {
         return ReflectionMember::TYPE_PROPERTY;
-    }
-
-    public function isDeprecated(): bool
-    {
-        return false;
     }
 }

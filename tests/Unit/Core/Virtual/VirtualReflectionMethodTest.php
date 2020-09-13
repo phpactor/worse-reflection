@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Virtual;
 
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
@@ -15,7 +16,6 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
     private $body;
     private $isAbstract;
     private $isStatic;
-    private $isDeprecated;
 
     public function setUp()
     {
@@ -24,7 +24,6 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
         $this->body = NodeText::fromString('hello');
         $this->isAbstract = true;
         $this->isStatic = true;
-        $this->isDeprecated = true;
     }
 
     /**
@@ -47,7 +46,7 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
             $this->body,
             $this->isAbstract,
             $this->isStatic,
-            $this->isDeprecated
+            new Deprecation(false)
         );
     }
 

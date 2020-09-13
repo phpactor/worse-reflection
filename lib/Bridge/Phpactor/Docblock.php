@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\Docblock\Tag\MethodTag;
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
@@ -191,5 +192,13 @@ class Docblock implements CoreDocblock
         }
         
         return Types::fromTypes($types);
+    }
+
+    public function deprecation(): Deprecation
+    {
+        foreach ($this->docblock->tags()->byName('deprecated') as $tag) {
+            return new Deprecation(true, $tag->message());
+        }
+        return new Deprecation(false);
     }
 }

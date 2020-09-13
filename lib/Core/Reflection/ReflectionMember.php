@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
+use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
@@ -47,4 +48,6 @@ interface ReflectionMember
     public function isVirtual(): bool;
 
     public function memberType();
+
+    public function deprecation(): Deprecation;
 }

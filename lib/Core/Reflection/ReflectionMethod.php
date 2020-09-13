@@ -14,6 +14,4 @@ interface ReflectionMethod extends ReflectionMember, ReflectionFunctionLike
     public function isAbstract(): bool;
 
     public function isStatic(): bool;
-
-    public function isDeprecated(): bool;
 }
