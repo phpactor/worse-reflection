@@ -742,6 +742,25 @@ EOT
                 $this->assertTrue($class->isFinal());
             },
         ];
+
+        yield 'Says if class is deprecated' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @deprecated Foobar yes
+ */
+final class Class1
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertTrue($class->deprecation()->isDefined());
+            },
+        ];
     }
 
     /**
