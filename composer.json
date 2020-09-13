@@ -14,7 +14,7 @@
         "microsoft/tolerant-php-parser": "~0.0",
         "jetbrains/phpstorm-stubs": "*",
         "psr/log": "^1.0",
-        "phpactor/docblock": "~0.2",
+        "phpactor/docblock": "^0.3.4",
         "phpactor/text-document": "~1.0"
     },
     "require-dev": {
