@@ -43,7 +43,7 @@ class ReflectionArgument implements CoreReflectionArgument
         if ($this->node->expression instanceof Variable) {
             $name = $this->node->expression->name->getText($this->node->getFileContents());
 
-            if (substr($name, 0, 1) == '$') {
+            if (is_string($name) && substr($name, 0, 1) == '$') {
                 return substr($name, 1);
             }
 
