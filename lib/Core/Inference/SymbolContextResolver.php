@@ -658,7 +658,12 @@ class SymbolContextResolver
             }
         }
 
-        if ('property' === $memberType && $node instanceof ScopedPropertyAccessExpression && substr($memberName, 0, 1) !== '$') {
+        if (
+            'property' === $memberType
+            && $node instanceof ScopedPropertyAccessExpression
+            && is_string($memberName)
+            && substr($memberName, 0, 1) !== '$'
+        ) {
             $memberType = 'constant';
         }
 
