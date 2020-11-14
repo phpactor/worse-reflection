@@ -38,42 +38,44 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
         }
 
         $expressionsAreTrue = $this->evaluator->evaluate($node->expression);
-        $variables = $this->collectVariables($node);
+        $variables = $this->collectVariables($node, $frame);
         $variables = $this->mergeTypes($variables);
         $terminates = $this->branchTerminates($node);
 
         foreach ($variables as $variable) {
+            $assignments = $this->getAssignmentsMatchingVariableType($frame, $variable);
+
             if ($terminates) {
 
                 // reset variables after the if branch
                 if ($expressionsAreTrue) {
-                    $frame->locals()->add($variable);
+                    $assignments->add($variable);
 
                     // restore
                     $restoredVariable = $this->existingOrStripType($node, $frame, $variable);
-                    $frame->locals()->add($restoredVariable);
+                    $assignments->add($restoredVariable);
                     continue;
                 }
 
                 // create new variables after the if branch
                 if (false === $expressionsAreTrue) {
                     $detypedVariable = $variable->withTypes(Types::empty());
-                    $frame->locals()->add($detypedVariable);
+                    $assignments->add($detypedVariable);
                     $variable = $variable->withOffset($node->getEndPosition());
-                    $frame->locals()->add($variable);
+                    $assignments->add($variable);
                     continue;
                 }
             }
 
             if ($expressionsAreTrue) {
-                $frame->locals()->add($variable);
+                $assignments->add($variable);
                 $restoredVariable = $this->existingOrStripType($node, $frame, $variable);
-                $frame->locals()->add($restoredVariable);
+                $assignments->add($restoredVariable);
             }
 
             if (false === $expressionsAreTrue) {
                 $variable = $variable->withTypes(Types::empty());
-                $frame->locals()->add($variable);
+                $assignments->add($variable);
             }
         }
 
@@ -131,14 +133,15 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
 
     private function existingOrStripType(IfStatementNode $node, Frame $frame, WorseVariable $variable)
     {
-        $frameVariable = null;
-        foreach ($frame->locals()->lessThan($node->getStart())->byName($variable->name()) as $frameVariable) {
-        }
+        $previousAssignments = $this->getAssignmentsMatchingVariableType($frame, $variable)
+            ->lessThan($node->getStart())
+            ->byName($variable->name())
+        ;
 
-        if (null === $frameVariable) {
+        if (0 === $previousAssignments->count()) {
             return $variable->withTypes(Types::empty())->withOffset($node->getEndPosition());
         }
 
-        return $frameVariable->withOffset($node->getEndPosition());
+        return $previousAssignments->last()->withOffset($node->getEndPosition());
     }
 }

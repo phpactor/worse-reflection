@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Generator;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
@@ -27,6 +28,7 @@ use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
@@ -677,7 +679,23 @@ class SymbolContextResolver
         );
 
         // if the classType is a call expression, then this is a method call
+        /** @var SymbolContext $info */
         $info = $this->memberTypeResolver->{$memberType . 'Type'}($classType, $information, $memberName);
+
+        if ('property' === $memberType) {
+            $frameTypes = $this->getFrameTypesForPropertyAtPosition(
+                $frame,
+                (string) $memberName,
+                $classType,
+                $node->getEndPosition(),
+            );
+
+            foreach ($frameTypes as $types) {
+                $info = $info->withTypes(
+                    $info->types()->merge($types),
+                );
+            }
+        }
 
         $this->logger->debug(sprintf(
             'Resolved type "%s" for %s "%s" of class "%s"',
@@ -752,5 +770,37 @@ class SymbolContextResolver
     private function resolveCloneExpression(Frame $frame, CloneExpression $node): SymbolContext
     {
         return $this->__resolveNode($frame, $node->expression);
+    }
+
+    /**
+     * @return Generator<int, Types, null, void>
+     */
+    private function getFrameTypesForPropertyAtPosition(
+        Frame $frame,
+        string $propertyName,
+        Type $classType,
+        int $position
+    ): Generator {
+        $assignments = $frame->properties()
+            ->lessThanOrEqualTo($position)
+            ->byName($propertyName)
+        ;
+
+        /** @var Variable $variable */
+        foreach ($assignments as $variable) {
+            $symbolContext = $variable->symbolContext();
+            $containerType = $symbolContext->containerType();
+
+            if (
+                !$containerType->isClass()
+                || $containerType->className() !== $classType->className()
+            ) {
+                // Ignore if not a class, could throw LogicException since it shoudl not append
+                // Or if the symbol is for a different class
+                continue;
+            }
+
+            yield $symbolContext->types();
+        }
     }
 }

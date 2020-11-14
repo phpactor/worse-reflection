@@ -2,9 +2,15 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
+use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
+use Microsoft\PhpParser\Node\Expression\CallExpression;
+use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Node\Expression\Variable;
+use Phpactor\WorseReflection\Core\Inference\Assignments;
+use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
@@ -25,7 +31,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
     /**
      * @return WorseVariable[]
      */
-    protected function collectVariables(Node $node): array
+    protected function collectVariables(Node $node, Frame $frame): array
     {
         $variables = [];
         foreach ($node->getDescendantNodes() as $descendantNode) {
@@ -33,7 +39,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
                 continue;
             }
 
-            $variable = $this->variableFromBinaryExpression($descendantNode);
+            $variable = $this->variableFromBinaryExpression($descendantNode, $frame);
 
             if (null === $variable) {
                 continue;
@@ -45,7 +51,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
         return $variables;
     }
 
-    protected function variableFromBinaryExpression(BinaryExpression $node)
+    protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame)
     {
         $operator = $node->operator->getText($node->getFileContents());
 
@@ -59,6 +65,16 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
             return null;
         }
 
+        // In case we are testing a property we don't want to change the type
+        // of the underlying class but the type of the property
+        if ($variable->getParent() instanceof MemberAccessExpression) {
+            $variable = $variable->getParent();
+
+            if ($variable->getParent() instanceof CallExpression) {
+                return null; // Ignore if it's a method call
+            }
+        }
+
         $rightOperand = $node->rightOperand;
 
         if (false === $rightOperand instanceof QualifiedName) {
@@ -67,24 +83,73 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
         $type = (string) $rightOperand->getResolvedName();
 
-        $context = $this->createSymbolContext($variable);
+        $context = $this->createSymbolContext($variable, $frame);
         $context = $context->withType(Type::fromString($type));
         $variable = WorseVariable::fromSymbolContext($context);
 
         return $variable;
     }
 
-    protected function createSymbolContext(Variable $leftOperand)
+    protected function createSymbolContext(Expression $leftOperand, Frame $frame): SymbolContext
     {
-        $context = $this->symbolFactory()->context(
-            $leftOperand->getName(),
+        assert($leftOperand instanceof Variable || $leftOperand instanceof MemberAccessExpression);
+
+        if ($leftOperand instanceof MemberAccessExpression) {
+            return $this->createPropertySymbolContext($leftOperand, $frame);
+        }
+
+        return $this->createVariableSymbolContext($leftOperand);
+    }
+
+    protected function createPropertySymbolContext(
+        MemberAccessExpression $leftOperand,
+        Frame $frame
+    ): SymbolContext {
+        assert($leftOperand->dereferencableExpression instanceof Variable);
+
+        $classVariableName = $leftOperand->dereferencableExpression->getName();
+
+        try {
+            $classType = $frame->locals()->byName($classVariableName)->first()
+                ->symbolContext()->types()->best()
+            ;
+        } catch (\RuntimeException $exception) {
+            // TODO log the fact that the variable was not recognize ?
+            $classType = Type::unknown();
+        }
+
+        return $this->symbolFactory()->context(
+            (string) $leftOperand->memberName->getText($leftOperand->getFileContents()),
             $leftOperand->getStart(),
             $leftOperand->getEndPosition(),
             [
-                'symbol_type' => Symbol::VARIABLE,
-            ]
+                'symbol_type' => Symbol::PROPERTY,
+                'container_type' => $classType,
+            ],
         );
+    }
 
-        return $context;
+    protected function createVariableSymbolContext(Variable $leftOperand): SymbolContext
+    {
+        return $this->symbolFactory()->context(
+            $leftOperand->getName(),
+            $leftOperand->getStart(),
+            $leftOperand->getEndPosition(),
+            ['symbol_type' => Symbol::VARIABLE],
+        );
+    }
+
+    /**
+     * @return Assignments<WorseVariable>
+     */
+    protected function getAssignmentsMatchingVariableType(
+        Frame $frame,
+        WorseVariable $variable
+    ): Assignments {
+        if (Symbol::PROPERTY === $variable->symbolContext()->symbol()->symbolType()) {
+            return $frame->properties();
+        }
+
+        return $frame->locals();
     }
 }

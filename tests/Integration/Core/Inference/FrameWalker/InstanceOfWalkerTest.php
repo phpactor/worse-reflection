@@ -264,5 +264,34 @@ EOT
             $this->assertCount(0, $frame->locals());
         }
         ];
+
+        yield 'should handle properties' => [
+            <<<'EOT'
+<?php
+
+class Foo
+{
+    private $bar;
+
+    public function bar(): void
+    {
+        if (!$this->bar instanceof Bar) {
+            continue;
+        }
+
+        <>
+    }
+}
+EOT
+        , function (Frame $frame, int $offset) {
+            $this->assertCount(1, $frame->locals());
+            $this->assertEquals(Type::fromString('Foo'), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
+            $this->assertCount(2, $frame->properties());
+            $this->assertEquals(Type::fromString('Foo'), $frame->properties()->atIndex(0)->symbolContext()->containerType());
+            $this->assertEquals(Type::unknown(), $frame->properties()->atIndex(0)->symbolContext()->types()->best());
+            $this->assertEquals(Type::fromString('Foo'), $frame->properties()->atIndex(1)->symbolContext()->containerType());
+            $this->assertEquals(Type::fromString('Bar'), $frame->properties()->atIndex(1)->symbolContext()->types()->best());
+        }
+        ];
     }
 }

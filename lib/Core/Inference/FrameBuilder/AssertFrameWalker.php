@@ -37,10 +37,12 @@ class AssertFrameWalker extends AbstractInstanceOfWalker implements FrameWalker
                 continue;
             }
 
-            $variables = $this->collectVariables($expression);
+            $variables = $this->collectVariables($expression, $frame);
 
             foreach ($variables as $variable) {
-                $frame->locals()->add($variable);
+                $this->getAssignmentsMatchingVariableType($frame, $variable)
+                    ->add($variable)
+                ;
             }
         }
 
