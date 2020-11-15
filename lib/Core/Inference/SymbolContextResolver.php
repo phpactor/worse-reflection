@@ -651,7 +651,7 @@ class SymbolContextResolver
         assert($node instanceof MemberAccessExpression || $node instanceof ScopedPropertyAccessExpression);
 
         $memberName = $node->memberName->getText($node->getFileContents());
-        $memberType = $node->getParent() instanceof CallExpression ? 'method' : 'property';
+        $memberType = $node->getParent() instanceof CallExpression ? Symbol::METHOD : Symbol::PROPERTY;
 
         if ($node->memberName instanceof Node) {
             $memberNameInfo = $this->_resolveNode($frame, $node->memberName);
@@ -661,12 +661,12 @@ class SymbolContextResolver
         }
 
         if (
-            'property' === $memberType
+            Symbol::PROPERTY === $memberType
             && $node instanceof ScopedPropertyAccessExpression
             && is_string($memberName)
             && substr($memberName, 0, 1) !== '$'
         ) {
-            $memberType = 'constant';
+            $memberType = Symbol::CONSTANT;
         }
 
         $information = $this->symbolFactory->context(
@@ -682,7 +682,7 @@ class SymbolContextResolver
         /** @var SymbolContext $info */
         $info = $this->memberTypeResolver->{$memberType . 'Type'}($classType, $information, $memberName);
 
-        if ('property' === $memberType) {
+        if (Symbol::PROPERTY === $memberType) {
             $frameTypes = $this->getFrameTypesForPropertyAtPosition(
                 $frame,
                 (string) $memberName,
