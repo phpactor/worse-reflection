@@ -794,7 +794,7 @@ class SymbolContextResolver
             if (
                 !$containerType
                 || !$containerType->isClass()
-                || $containerType->className() !== $classType->className()
+                || $containerType->className() != $classType->className()
             ) {
                 // Ignore if not a class, could throw LogicException since it shoudl not append
                 // Or if the symbol is for a different class
