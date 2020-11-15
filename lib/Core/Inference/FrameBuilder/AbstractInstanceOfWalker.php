@@ -107,26 +107,26 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
     ): SymbolContext {
         assert($leftOperand->dereferencableExpression instanceof Variable);
 
-        $classVariableName = $leftOperand->dereferencableExpression->getName();
-
-        try {
-            $classType = $frame->locals()->byName($classVariableName)->first()
-                ->symbolContext()->types()->best()
-            ;
-        } catch (\RuntimeException $exception) {
-            // TODO log the fact that the variable was not recognize ?
-            $classType = Type::unknown();
-        }
-
-        return $this->symbolFactory()->context(
+        $symbolContext = $this->symbolFactory()->context(
             (string) $leftOperand->memberName->getText($leftOperand->getFileContents()),
             $leftOperand->getStart(),
             $leftOperand->getEndPosition(),
-            [
-                'symbol_type' => Symbol::PROPERTY,
-                'container_type' => $classType,
-            ],
+            ['symbol_type' => Symbol::PROPERTY],
         );
+
+        $classVariableName = $leftOperand->dereferencableExpression->getName();
+        $assignments = $frame->locals()->byName($classVariableName);
+
+        if (0 === $assignments->count()) {
+            return $symbolContext
+                ->withContainerType(Type::unknown())
+                ->withIssue(sprintf('Variable "%s" is undefined', $classVariableName))
+            ;
+        }
+
+        $classType = $assignments->first()->symbolContext()->types()->best();
+
+        return $symbolContext->withContainerType($classType);
     }
 
     protected function createVariableSymbolContext(Variable $leftOperand): SymbolContext
