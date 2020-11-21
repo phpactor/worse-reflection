@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
@@ -27,6 +28,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
     public function testGeneral(string $source, array $locals, array $expectedInformation)
     {
         $variables = [];
+        $properties = [];
         foreach ($locals as $name => $varSymbolInfo) {
             if ($varSymbolInfo instanceof Type) {
                 $varSymbolInfo = SymbolContext::for(
@@ -38,10 +40,22 @@ class SymbolContextResolverTest extends IntegrationTestCase
                 )->withType($varSymbolInfo);
             }
 
-            $variables[] = Variable::fromSymbolContext($varSymbolInfo);
+            $variable = Variable::fromSymbolContext($varSymbolInfo);
+
+            if (Symbol::PROPERTY === $varSymbolInfo->symbol()->symbolType()) {
+                $properties[] = $variable;
+
+                continue;
+            }
+
+            $variables[] = $variable;
         }
 
-        $symbolInfo = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
+        $symbolInfo = $this->resolveNodeAtOffset(
+            LocalAssignments::fromArray($variables),
+            PropertyAssignments::fromArray($properties),
+            $source,
+        );
 
         $this->assertExpectedInformation($expectedInformation, $symbolInfo);
     }
@@ -51,7 +65,11 @@ class SymbolContextResolverTest extends IntegrationTestCase
      */
     public function testValues(string $source, array $variables, array $expected)
     {
-        $information = $this->resolveNodeAtOffset(LocalAssignments::fromArray($variables), $source);
+        $information = $this->resolveNodeAtOffset(
+            LocalAssignments::fromArray($variables),
+            PropertyAssignments::create(),
+            $source,
+        );
         $this->assertExpectedInformation($expected, $information);
     }
 
@@ -64,15 +82,19 @@ class SymbolContextResolverTest extends IntegrationTestCase
      */
     public function testNotResolvableClass(string $source)
     {
-        $value = $this->resolveNodeAtOffset(LocalAssignments::fromArray([
-            Variable::fromSymbolContext(
-                SymbolContext::for(Symbol::fromTypeNameAndPosition(
-                    Symbol::CLASS_,
-                    'bar',
-                    Position::fromStartAndEnd(0, 0)
-                ))->withType(Type::fromString('Foobar'))
-            ),
-        ]), $source);
+        $value = $this->resolveNodeAtOffset(
+            LocalAssignments::fromArray([
+                Variable::fromSymbolContext(
+                    SymbolContext::for(Symbol::fromTypeNameAndPosition(
+                        Symbol::CLASS_,
+                        'bar',
+                        Position::fromStartAndEnd(0, 0)
+                    ))->withType(Type::fromString('Foobar'))
+                ),
+            ]),
+            PropertyAssignments::create(),
+            $source
+        );
         $this->assertEquals(Type::unknown(), $value->type());
     }
 
@@ -307,7 +329,6 @@ $b<>lah;
 EOT
             , [], ['type' => '<unknown>', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'blah']
         ];
-
 
         yield 'It returns the FQN of variable assigned in frame' => [
                 <<<'EOT'
@@ -692,6 +713,49 @@ EOT
 EOT
                 , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
                 ];
+
+        yield 'It returns the FQN of variable assigned in frame' => [
+                <<<'EOT'
+<?php
+
+namespace Foobar\Barfoo;
+
+use Acme\Factory;
+use Acme\FactoryInterface;
+
+class Foobar
+{
+    /**
+     * @var FactoryInterface
+     */
+    private $bar;
+
+    public function hello(World $world)
+    {
+        assert($this->bar instanceof Factory);
+
+        $this->ba<>r
+    }
+}
+
+EOT
+            , [
+                'this' => Type::class('Foobar\Barfoo\Foobar'),
+                'bar' => SymbolContext::for(Symbol::fromTypeNameAndPosition(
+                    Symbol::PROPERTY,
+                    'bar',
+                    Position::fromStartAndEnd(0, 0),
+                ))->withContainerType(Type::class('Foobar\Barfoo\Foobar'))
+                ->withType(Type::class('Acme\Factory')),
+            ], [
+                'types' => [
+                    Type::class('Acme\FactoryInterface'),
+                    Type::class('Acme\Factory'),
+                ],
+                'symbol_type' => Symbol::PROPERTY,
+                'symbol_name' => 'bar',
+            ]
+        ];
     }
 
     public function provideValues()
@@ -881,7 +945,7 @@ class Foobar
     {
         $this->hello->foobar(<>);
     }
-} 
+}
 EOT
             ];
 
@@ -969,13 +1033,20 @@ use Adios;
 new Foob<>o;
 EOT
         ;
-        $context = $this->resolveNodeAtOffset(LocalAssignments::create(), $source);
+        $context = $this->resolveNodeAtOffset(
+            LocalAssignments::create(),
+            PropertyAssignments::create(),
+            $source,
+        );
         $this->assertCount(2, $context->scope()->nameImports());
     }
 
-    private function resolveNodeAtOffset(LocalAssignments $assignments, string $source): SymbolContext
-    {
-        $frame = new Frame('test', $assignments);
+    private function resolveNodeAtOffset(
+        LocalAssignments $locals,
+        PropertyAssignments $properties,
+        string $source
+    ): SymbolContext {
+        $frame = new Frame('test', $locals, $properties);
 
         list($source, $offset) = ExtractOffset::fromSource($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
@@ -991,6 +1062,15 @@ EOT
             switch ($name) {
                 case 'type':
                     $this->assertEquals($value, (string) $information->type(), $name);
+                    continue 2;
+                case 'types':
+                    foreach ($information->types() as $index => $type) {
+                        $this->assertEquals(
+                            $value,
+                            iterator_to_array($information->types()),
+                            $name,
+                        );
+                    }
                     continue 2;
                 case 'value':
                     $this->assertEquals($value, $information->value(), $name);

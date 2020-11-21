@@ -50,7 +50,6 @@ final class SymbolContext
         $this->symbol = $symbol;
         $this->containerType = $containerType;
         $this->types = $types;
-        $this->containerType = $containerType;
         $this->scope = $scope;
         $this->name = $name;
     }
