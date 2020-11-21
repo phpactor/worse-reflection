@@ -969,6 +969,58 @@ EOT
                 );
             },
         ];
+
+        yield 'virtual methods are extracted from traits' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @method \Foobar foobar()
+ */
+trait Trait1 {
+}
+
+class Class1
+{
+    use Trait1;
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertCount(1, $class->methods());
+                $this->assertEquals('Foobar', $class->methods()->first()->inferredTypes()->best()->__toString());
+            },
+        ];
+
+        yield 'virtual methods are extracted from traits of a parent class' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @method \Foobar foobar()
+ */
+trait Trait1 {
+}
+
+class Class2
+{
+    use Trait1;
+}
+
+class Class1 extends Class2
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertCount(1, $class->methods());
+                $this->assertEquals('Foobar', $class->methods()->first()->inferredTypes()->best()->__toString());
+            },
+        ];
     }
 
     /**
@@ -1041,6 +1093,66 @@ EOT
             function (ReflectionClass $class) {
                 $this->assertEquals(1, $class->properties()->count());
                 $this->assertCount(2, $class->properties()->first()->inferredTypes());
+            }
+        ];
+
+        yield 'virtual properties are extracted from traits' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @property \Foobar $foobar
+ * @property \Barfoo $barfoo
+ */
+trait Trait1 {
+}
+
+class Class1
+{
+    use Trait1;
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertEquals(2, $class->properties()->count());
+                $this->assertEquals('foobar', $class->properties()->first()->name());
+                $this->assertEquals('Foobar', $class->properties()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals('barfoo', $class->properties()->last()->name());
+                $this->assertEquals('Barfoo', $class->properties()->last()->inferredTypes()->best()->__toString());
+            }
+        ];
+
+        yield 'virtual properties are extracted from traits of a parent class' => [
+            <<<'EOT'
+<?php
+
+/**
+ * @property \Foobar $foobar
+ * @property \Barfoo $barfoo
+ */
+trait Trait1 {
+}
+
+class Class2
+{
+    use Trait1;
+}
+
+class Class1 extends Class2
+{
+}
+
+EOT
+        ,
+            'Class1',
+            function (ReflectionClass $class) {
+                $this->assertEquals(2, $class->properties()->count());
+                $this->assertEquals('foobar', $class->properties()->first()->name());
+                $this->assertEquals('Foobar', $class->properties()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals('barfoo', $class->properties()->last()->name());
+                $this->assertEquals('Barfoo', $class->properties()->last()->inferredTypes()->best()->__toString());
             }
         ];
     }

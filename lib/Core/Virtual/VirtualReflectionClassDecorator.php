@@ -115,6 +115,12 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
             $virtualMethods = $virtualMethods->merge(
                 $memberProvider->provideMembers($this->serviceLocator, $this->class)->methods()
             );
+
+            foreach ($this->traits() as $trait) {
+                $virtualMethods = $virtualMethods->merge(
+                    $memberProvider->provideMembers($this->serviceLocator, $trait)->methods()
+                );
+            }
         }
 
         return $virtualMethods;
@@ -135,6 +141,12 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
             $virtualProperties = $virtualProperties->merge(
                 $memberProvider->provideMembers($this->serviceLocator, $this->class)->properties()
             );
+
+            foreach ($this->traits() as $trait) {
+                $virtualProperties = $virtualProperties->merge(
+                    $memberProvider->provideMembers($this->serviceLocator, $trait)->properties()
+                );
+            }
         }
 
         return $virtualProperties;
