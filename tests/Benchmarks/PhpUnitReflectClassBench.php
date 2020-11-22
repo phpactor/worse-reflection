@@ -4,20 +4,18 @@ namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 
 /**
- * @Iterations(4)
+ * @Iterations(5)
  * @Revs(10)
  * @Warmup(1)
  * @OutputTimeUnit("milliseconds", precision=2)
- * @Assert("variant.mode <= baseline.mode +/- 5%")
  */
 class PhpUnitReflectClassBench extends BaseBenchCase
 {
     /**
      * @Subject()
-     * @OutputTimeUnit("microseconds", precision=2)
+     * @OutputTimeUnit("microseconds", precision=4)
      */
     public function test_case(): void
     {
@@ -27,7 +25,7 @@ class PhpUnitReflectClassBench extends BaseBenchCase
     /**
      * @Subject()
      * @OutputTimeUnit("seconds", precision=2)
-     * @OutputMode("throughput", precision=2)
+     * @Assert("variant.mode <= baseline.mode +/- 5%")
      */
     public function test_case_methods_and_properties(): void
     {
@@ -48,13 +46,12 @@ class PhpUnitReflectClassBench extends BaseBenchCase
      * @Subject()
      * @Revs(1)
      * @OutputTimeUnit("seconds", precision=2)
-     * @OutputMode("throughput", precision=2)
+     * @Assert("variant.mode <= baseline.mode +/- 5%")
      */
     public function test_case_method_frames(): void
     {
         $class = $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
 
-        /** @var $method ReflectionMethod */
         foreach ($class->methods() as $method) {
             $method->frame();
         }
