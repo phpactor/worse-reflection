@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-RETRY_THRESHOLD=${RETRY_THRESHOLD:-5}
+RETRY_THRESHOLD=${RETRY_THRESHOLD:-2}
 REPO="https://github.com/phpactor/worse-reflection"
 
 if [ -z "$TRAVIS_BRANCH" ]; then
