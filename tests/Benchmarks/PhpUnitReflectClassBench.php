@@ -8,18 +8,20 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 
 /**
  * @Iterations(4)
- * @Revs(1)
+ * @Revs(10)
  * @Warmup(1)
  * @OutputTimeUnit("milliseconds", precision=2)
+ * @Assert("variant.mode <= baseline.mode +/- 5%")
  */
 class PhpUnitReflectClassBench extends BaseBenchCase
 {
     /**
      * @Subject()
+     * @OutputTimeUnit("microseconds", precision=2)
      */
-    public function test_case()
+    public function test_case(): void
     {
-        $class = $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
+        $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
     }
 
     /**
@@ -27,11 +29,10 @@ class PhpUnitReflectClassBench extends BaseBenchCase
      * @OutputTimeUnit("seconds", precision=2)
      * @OutputMode("throughput", precision=2)
      */
-    public function test_case_methods_and_properties()
+    public function test_case_methods_and_properties(): void
     {
         $class = $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
 
-        /** @var $method ReflectionMethod */
         foreach ($class->methods() as $method) {
             foreach ($method->parameters() as $parameter) {
                 $method->inferredReturnTypes();
@@ -45,12 +46,11 @@ class PhpUnitReflectClassBench extends BaseBenchCase
      * operations.
      *
      * @Subject()
+     * @Revs(1)
      * @OutputTimeUnit("seconds", precision=2)
      * @OutputMode("throughput", precision=2)
-     *
-     * @Assert(0.1, comparator=">", time_unit="seconds", mode="throughput", tolerance="0.5")
      */
-    public function test_case_method_frames()
+    public function test_case_method_frames(): void
     {
         $class = $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
 

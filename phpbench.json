@@ -4,5 +4,17 @@
     "path": "tests/Benchmarks",
     "extensions": [
         "PhpBench\\Extensions\\XDebug\\XDebugExtension"
-    ]
+    ],
+    "php_disable_ini": true,
+    "php_config": {
+        "extension": [
+            "tokenizer",
+            "json"
+        ],
+        "error_reporting": -1,
+        "memory_limit": -1
+    },
+    "remote_script_path": ".phpbench/script",
+    "remote_script_remove": false
+
 }
