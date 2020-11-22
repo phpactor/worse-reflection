@@ -6,7 +6,7 @@ git fetch upstream
 
 git checkout upstream/master
 composer install
-vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master --progres=none
+vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master --progress=none
 
 git checkout -
 composer install
