@@ -122,7 +122,6 @@ class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionRefl
     public function reflectClassLike($className): ReflectionClassLike
     {
         $className = ClassName::fromUnknown($className);
-        usleep(10000);
 
         $source = $this->sourceLocator->locate($className);
         $classes = $this->reflectClassesIn($source);
