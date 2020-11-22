@@ -16,7 +16,7 @@ before_script:
 
 script:
     - git remote
-    - "git remote add upstream git@github.com:phpactor/worse-reflection"
+    - "git remote add upstream https://github.com/phpactor/worse-reflection"
     - git fetch upstream
     - git branch -a
     - git checkout upstream/master
