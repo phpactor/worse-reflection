@@ -2,7 +2,7 @@
 set -e
 set -x
 
-RETRY_THRESHOLD=${RETRY_THRESHOLD:-5}
+RETRY_THRESHOLD=${RETRY_THRESHOLD:-2}
 
 if [ -z "$TRAVIS_BRANCH" ]; then
     echo "PR is not a pull request (TRAVIS_BRANCH empty), skipping benchmarks"
