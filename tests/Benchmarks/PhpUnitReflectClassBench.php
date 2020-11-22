@@ -51,7 +51,6 @@ class PhpUnitReflectClassBench extends BaseBenchCase
     public function test_case_method_frames(): void
     {
         $class = $this->getReflector()->reflectClassLike(ClassName::fromString(TestCase::class));
-        usleep(10000);
 
         foreach ($class->methods() as $method) {
             $method->frame();
