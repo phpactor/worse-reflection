@@ -13,5 +13,11 @@
         ],
         "error_reporting": -1,
         "memory_limit": -1
+    },
+    "reports": {
+        "aggregate_compact": {
+            "extends": "aggregate",
+            "cols": [ "benchmark", "subject", "mode", "rstdev" ]
+        }
     }
 }

@@ -27,7 +27,6 @@ class PhpUnitReflectClassBench extends BaseBenchCase
     /**
      * @Subject()
      * @OutputTimeUnit("seconds", precision=2)
-     * @OutputMode("throughput", precision=2)
      */
     public function test_case_methods_and_properties(): void
     {
@@ -48,7 +47,6 @@ class PhpUnitReflectClassBench extends BaseBenchCase
      * @Subject()
      * @Revs(1)
      * @OutputTimeUnit("seconds", precision=2)
-     * @OutputMode("throughput", precision=2)
      */
     public function test_case_method_frames(): void
     {
