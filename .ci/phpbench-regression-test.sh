@@ -3,8 +3,8 @@ set -e
 
 env
 
-if [ -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
-    echo "PR is not a pull request, skipping benchmarks"
+if [ -z "$TRAVIS_BRANCH" ]; then
+    echo "PR is not a pull request (TRAVIS_BRANCH empty), skipping benchmarks"
     exit 0;
 fi
 
