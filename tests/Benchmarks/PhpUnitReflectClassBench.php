@@ -4,10 +4,9 @@ namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 
 /**
- * @Iterations(4)
+ * @Iterations(5)
  * @Revs(10)
  * @Warmup(1)
  * @OutputTimeUnit("milliseconds", precision=2)
