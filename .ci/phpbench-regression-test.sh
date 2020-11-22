@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -x
 
 if [ -z "$TRAVIS_BRANCH" ]; then
     echo "PR is not a pull request (TRAVIS_BRANCH empty), skipping benchmarks"
@@ -21,7 +22,7 @@ vendor/bin/phpbench run --report=aggregate_compact --progress=dots --retry-thres
 echo -e "\n\n"
 echo -e "Benchmarking TRAVIS_BRANCH and comparing to master"
 echo -e "==================================================\n\n"
-git checkout upstream/$TRAVIS_BRANCH
+git checkout $TRAVIS_BRANCH
 git status
 mv composer.lock.pr composer.lock
 composer install --quiet
