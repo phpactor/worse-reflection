@@ -13,8 +13,5 @@
         ],
         "error_reporting": -1,
         "memory_limit": -1
-    },
-    "remote_script_path": ".phpbench/script",
-    "remote_script_remove": false
-
+    }
 }
