@@ -16,10 +16,10 @@ before_script:
 
 script:
     - git remote
-    - git remote add origin git@github.com:phpbench/phpbench
+    - git remote add upstream git@github.com:phpactor/worse-reflection
     - git fetch
     - git branch -a
-    - git checkout origin/master
+    - git checkout upstream/master
     - vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master
     - git checkout -
     - vendor/bin/phpbench run --report=aggregate --progress=travis --retry-threshold=2 --uuid=tag:master
