@@ -2,6 +2,8 @@
 set -e
 set -x
 
+RETRY_THRESHOLD=${RETRY_THRESHOLD:-5}
+
 if [ -z "$TRAVIS_BRANCH" ]; then
     echo "PR is not a pull request (TRAVIS_BRANCH empty), skipping benchmarks"
     exit 0;
@@ -17,7 +19,7 @@ echo -e "==========================\n\n"
 git checkout upstream/master
 mv composer.lock composer.lock.pr
 composer install --quiet
-vendor/bin/phpbench run --report=aggregate_compact --progress=dots --retry-threshold=2 --tag=master
+vendor/bin/phpbench run --report=aggregate_compact --progress=dots --retry-threshold=$RETRY_THRESHOLD --tag=master
 
 echo -e "\n\n"
 echo -e "Benchmarking TRAVIS_BRANCH and comparing to master"
@@ -26,4 +28,4 @@ git checkout $TRAVIS_BRANCH
 git status
 mv composer.lock.pr composer.lock
 composer install --quiet
-vendor/bin/phpbench run --report=aggregate_compact --progress=dots --retry-threshold=2 --uuid=tag:master 
+vendor/bin/phpbench run --report=aggregate_compact --progress=dots --retry-threshold=$RETRY_THRESHOLD --uuid=tag:master 
