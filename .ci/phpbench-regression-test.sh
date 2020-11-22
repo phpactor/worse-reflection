@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 set -e
-set -x
 
 RETRY_THRESHOLD=${RETRY_THRESHOLD:-5}
+REPO="https://github.com/phpactor/worse-reflection"
 
 if [ -z "$TRAVIS_BRANCH" ]; then
     echo "PR is not a pull request (TRAVIS_BRANCH empty), skipping benchmarks"
     exit 0;
 fi
 
-git reset --hard
-git remote add upstream https://github.com/phpactor/worse-reflection
+git remote add upstream $REPO
 git fetch upstream master $TRAVIS_BRANCH
 
 echo -e "\n\n"
