@@ -13,6 +13,7 @@ cache:
 
 before_script:
     - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+    - composer install
 
 script:
     - vendor/bin/php-cs-fixer fix --dry-run
