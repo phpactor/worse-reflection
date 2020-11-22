@@ -13,19 +13,11 @@ cache:
 
 before_script:
     - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-    - composer install
 
 script:
-    - git remote
-    - "git remote add upstream https://github.com/phpactor/worse-reflection"
-    - git fetch upstream
-    - git checkout upstream/master
-    - vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master
-    - git checkout -
-    - vendor/bin/phpbench run --report=aggregate --progress=travis --retry-threshold=2 --uuid=tag:master
-
     - vendor/bin/php-cs-fixer fix --dry-run
     - vendor/bin/phpstan analyse lib -c phpstan.neon
     - vendor/bin/phpunit
+    - .ci/phpbench-regression-test.sh
     - tests/Smoke/smoke_test.php --limit=100
     
