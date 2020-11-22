@@ -3,7 +3,7 @@ set -e
 
 git reset --hard
 git remote add upstream https://github.com/phpactor/worse-reflection
-git fetch upstream
+git fetch upstream master
 
 echo "\n\n"
 echo "Benchmarking master branch"
