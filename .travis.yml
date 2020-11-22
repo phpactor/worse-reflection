@@ -15,6 +15,7 @@ before_script:
     - composer install
 
 script:
+    - git fetch
     - git branch -a
     - git checkout master
     - vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master
