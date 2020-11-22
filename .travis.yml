@@ -17,8 +17,8 @@ cache:
 
 before_script:
     - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-    - composer install
     - "cat composer.json| sed -e 's/7.3/7.3 || ^8.0/g' > composer.json.new && mv composer.json.new composer.json -f"
+    - composer install
 
 script:
     - vendor/bin/php-cs-fixer fix --dry-run

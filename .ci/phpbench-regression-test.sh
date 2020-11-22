@@ -11,7 +11,7 @@ echo "==========================\n\n"
 git checkout upstream/master
 mv composer.lock composer.lock.pr
 composer install --quiet
-vendor/bin/phpbench run --report=aggregate_compact --progress=travis --tag=master --retry-threshold=2 --tag=master --progress=none
+vendor/bin/phpbench run --progress=travis --tag=master --retry-threshold=2 --tag=master --progress=none
 
 echo "\n\n"
 echo "Benchmarking current branch and comparing to master"
