@@ -17,7 +17,7 @@ before_script:
 script:
     - git remote
     - git remote add upstream git@github.com:phpactor/worse-reflection
-    - git fetch
+    - git fetch upstream
     - git branch -a
     - git checkout upstream/master
     - vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master
