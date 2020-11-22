@@ -15,9 +15,13 @@ before_script:
     - composer install
 
 script:
+    - git branch
+    - git checkout origin/master
+    - vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master
+    - git checkout -
+    - vendor/bin/phpbench run --report=aggregate --progress=travis --retry-threshold=2 --uuid=tag:master
     - vendor/bin/php-cs-fixer fix --dry-run
     - vendor/bin/phpstan analyse lib -c phpstan.neon
     - vendor/bin/phpunit
-    - vendor/bin/phpbench run --report=aggregate --progress=travis --store --iterations=1
     - tests/Smoke/smoke_test.php --limit=100
     
