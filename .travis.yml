@@ -19,12 +19,11 @@ script:
     - git remote
     - "git remote add upstream https://github.com/phpactor/worse-reflection"
     - git fetch upstream
-    - git branch -a
     - git checkout upstream/master
     - vendor/bin/phpbench run --report=aggregate --progress=travis --tag=master --retry-threshold=2 --tag=master
     - git checkout -
-
     - vendor/bin/phpbench run --report=aggregate --progress=travis --retry-threshold=2 --uuid=tag:master
+
     - vendor/bin/php-cs-fixer fix --dry-run
     - vendor/bin/phpstan analyse lib -c phpstan.neon
     - vendor/bin/phpunit
