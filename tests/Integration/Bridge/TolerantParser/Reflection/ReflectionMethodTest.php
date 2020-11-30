@@ -100,7 +100,7 @@ EOT
             function (ReflectionMethodCollection $methods) {
                 $this->assertEquals(Types::fromTypes([
                     Type::string(),
-                    Type::int(), 
+                    Type::int(),
                 ]), $methods->get('method1')->inferredTypes());
             },
         ];

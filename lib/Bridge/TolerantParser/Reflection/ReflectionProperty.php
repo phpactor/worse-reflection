@@ -97,7 +97,6 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         ));
 
         return $types;
-        
     }
 
     public function type(): Type
