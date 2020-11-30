@@ -2,8 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
-use Microsoft\PhpParser\Node\Expression\Variable;
-use Microsoft\PhpParser\Node\PropertyDeclaration;
+use Microsoft\PhpParser\Node\Parameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -18,22 +17,12 @@ use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Type;
 
-class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
+class ReflectionPromotedProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
     /**
      * @var ServiceLocator
      */
     private $serviceLocator;
-
-    /**
-     * @var PropertyDeclaration
-     */
-    private $propertyDeclaration;
-
-    /**
-     * @var Variable
-     */
-    private $variable;
 
     /**
      * @var ReflectionClassLike
@@ -50,26 +39,30 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
      */
     private $memberTypeResolver;
 
+    /**
+     * @var Parameter
+     */
+    private $parameter;
+
     public function __construct(
         ServiceLocator $serviceLocator,
         AbstractReflectionClass $class,
-        PropertyDeclaration $propertyDeclaration,
-        Variable $variable
+        Parameter $parameter
     ) {
         $this->serviceLocator = $serviceLocator;
-        $this->propertyDeclaration = $propertyDeclaration;
-        $this->variable = $variable;
         $this->class = $class;
         $this->typeResolver = new PropertyTypeResolver($this, $this->serviceLocator->logger());
         $this->memberTypeResolver = new DeclaredMemberTypeResolver();
+        $this->parameter = $parameter;
     }
 
     public function declaringClass(): ReflectionClassLike
     {
         /** @var NamespacedNameInterface $classDeclaration */
-        $classDeclaration = $this->propertyDeclaration->getFirstAncestor(ClassDeclaration::class, TraitDeclaration::class);
+        $classDeclaration = $this->parameter->getFirstAncestor(ClassDeclaration::class, TraitDeclaration::class);
         $class = $classDeclaration->getNamespacedName();
 
+        /** @phpstan-ignore-next-line */
         if (null === $class) {
             throw new \InvalidArgumentException(sprintf(
                 'Could not locate class-like ancestor node for method "%s"',
@@ -82,7 +75,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function name(): string
     {
-        return (string) $this->variable->getName();
+        return (string) $this->parameter->getName();
     }
 
     public function inferredTypes(): Types
@@ -93,16 +86,16 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     public function type(): Type
     {
         return $this->memberTypeResolver->resolve(
-            $this->propertyDeclaration,
-            $this->propertyDeclaration->typeDeclaration,
+            $this->parameter,
+            $this->parameter->typeDeclaration,
             $this->class()->name(),
-            $this->propertyDeclaration->questionToken ? true : false
+            $this->parameter->questionToken ? true : false
         );
     }
 
     protected function node(): Node
     {
-        return $this->propertyDeclaration;
+        return $this->parameter;
     }
 
     protected function serviceLocator(): ServiceLocator
@@ -117,7 +110,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function isStatic(): bool
     {
-        return $this->propertyDeclaration->isStatic();
+        return false;
     }
 
     public function isVirtual(): bool
@@ -132,6 +125,6 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function isPromoted(): bool
     {
-        return false;
+        return true;
     }
 }

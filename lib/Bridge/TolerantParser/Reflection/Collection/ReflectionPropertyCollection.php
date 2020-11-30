@@ -2,6 +2,9 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Microsoft\PhpParser\Node\MethodDeclaration;
+use Microsoft\PhpParser\Node\Parameter;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionPromotedProperty;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
@@ -18,9 +21,49 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollec
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty last()
  */
-class ReflectionPropertyCollection extends ReflectionMemberCollection implements CoreReflectionPropertyCollection
+final class ReflectionPropertyCollection extends ReflectionMemberCollection implements CoreReflectionPropertyCollection
 {
-    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass)
+    /**
+     * @return ReflectionPropertyCollection<ReflectionPromotedProperty>
+     */
+    public static function fromClassDeclarationConstructorPropertyPromotion(
+        ServiceLocator $serviceLocator,
+        ClassDeclaration $class,
+        ReflectionClass $reflectionClass
+    ): self {
+        $properties = [];
+        foreach ($class->classMembers->classMemberDeclarations as $classMember) {
+            if (!$classMember instanceof MethodDeclaration) {
+                continue;
+            }
+
+            if ($classMember->getName() !== '__construct') {
+                continue;
+            }
+
+            $properties = array_merge($properties, array_filter($classMember->parameters->children, function ($member) {
+                if (!$member instanceof Parameter) {
+                    return false;
+                }
+                return $member->visibilityToken !== null;
+            }));
+        }
+
+        $items = [];
+        foreach ($properties as $property) {
+            if (!$property instanceof Parameter) {
+                continue;
+            }
+            $items[$property->getName()] = new ReflectionPromotedProperty($serviceLocator, $reflectionClass, $property);
+        }
+
+        return new static($serviceLocator, $items);
+    }
+
+    /**
+     * @return ReflectionPropertyCollection<ReflectionProperty>
+     */
+    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass): self
     {
         /** @var PropertyDeclaration[] $properties */
         $properties = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
