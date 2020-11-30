@@ -2,7 +2,12 @@
 
 namespace Phpactor\WorseReflection\Core;
 
-final class Types implements \IteratorAggregate, \Countable
+use IteratorAggregate;
+
+/**
+ * @implements IteratorAggregate<Type>
+ */
+final class Types implements IteratorAggregate, \Countable
 {
     private $types = [];
 

@@ -21,4 +21,9 @@ class VirtualReflectionProperty extends VirtualReflectionMember implements Refle
     {
         return ReflectionMember::TYPE_PROPERTY;
     }
+
+    public function isPromoted(): bool
+    {
+        return false;
+    }
 }

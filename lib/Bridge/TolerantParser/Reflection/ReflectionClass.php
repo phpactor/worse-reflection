@@ -190,6 +190,7 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
 
         $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node, $this));
+        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclarationConstructorPropertyPromotion($this->serviceLocator, $this->node, $this));
 
         return $properties;
     }
