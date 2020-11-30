@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Generator;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
@@ -13,6 +14,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 class ReflectionPropertyTest extends IntegrationTestCase
 {
     /**
+     * @dataProvider provideReflectionPropertyTypes
      * @dataProvider provideReflectionProperty
      * @dataProvider provideConsturctorPropertyPromotion
      */
@@ -20,6 +22,21 @@ class ReflectionPropertyTest extends IntegrationTestCase
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class->properties());
+    }
+
+    public function provideReflectionPropertyTypes(): \Generator
+    {
+        yield 'It reflects a property with union type' => [
+            '<?php class Foobar { private int|string $property;}',
+                'Foobar',
+                function ($properties) {
+                    $this->assertEquals('property', $properties->get('property')->name());
+                    $this->assertEquals(Types::fromTypes([
+                        Type::int(),
+                        Type::string(),
+                    ]), $properties->get('property')->inferredTypes());
+                },
+        ];
     }
 
     public function provideReflectionProperty()

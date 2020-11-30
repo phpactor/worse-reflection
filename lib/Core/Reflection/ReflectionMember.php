@@ -41,6 +41,12 @@ interface ReflectionMember
 
     public function visibility(): Visibility;
 
+    /**
+     * Inferred types.
+     *
+     * Note that this will also return PHP 8.0 union types until the type
+     * system has been refactored to support more complex types.
+     */
     public function inferredTypes(): Types;
 
     public function type(): Type;

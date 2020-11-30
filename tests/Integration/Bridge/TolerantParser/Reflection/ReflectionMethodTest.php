@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
@@ -86,6 +87,21 @@ EOT
             'Foobar',
             function ($methods) {
                 $this->assertEquals(Visibility::public(), $methods->get('method')->visibility());
+            },
+        ];
+        yield 'Union type' => [
+            <<<'EOT'
+<?php
+
+class Foobar { function method1(): string|int {} }
+EOT
+        ,
+            'Foobar',
+            function (ReflectionMethodCollection $methods) {
+                $this->assertEquals(Types::fromTypes([
+                    Type::string(),
+                    Type::int(), 
+                ]), $methods->get('method1')->inferredTypes());
             },
         ];
         yield 'Return type' => [
@@ -176,6 +192,7 @@ EOT
                 );
             },
         ];
+
         yield 'Return type from docblock' => [
             <<<'EOT'
 <?php
@@ -196,6 +213,7 @@ EOT
                 $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
             },
         ];
+
         yield 'Return type from array docblock' => [
             <<<'EOT'
 <?php

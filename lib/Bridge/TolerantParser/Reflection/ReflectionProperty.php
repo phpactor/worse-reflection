@@ -87,7 +87,17 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function inferredTypes(): Types
     {
-        return $this->typeResolver->resolve();
+        $types = $this->typeResolver->resolve();
+
+        $types = $types->merge($this->memberTypeResolver->resolveOtherTypes(
+            $this->propertyDeclaration,
+            $this->propertyDeclaration->otherTypeDeclarations,
+            $this->class()->name(),
+            $this->propertyDeclaration->questionToken ? true : false
+        ));
+
+        return $types;
+        
     }
 
     public function type(): Type
