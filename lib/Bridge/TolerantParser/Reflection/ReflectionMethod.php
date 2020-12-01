@@ -111,14 +111,16 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     {
         $types = $this->returnTypeResolver->resolve();
 
-        $types = $types->merge($this->memberTypeResolver->resolveOtherTypes(
+        if (!$this->node->otherReturnTypes) {
+            return $types;
+        }
+
+        return $types->merge($this->memberTypeResolver->resolveOtherTypes(
             $this->node,
             $this->node->otherReturnTypes,
-            $this->class()->name(),
+            $this->class()->name(), // note: this call is quite expensive
             $this->node->questionToken ? true : false
         ));
-
-        return $types;
     }
 
     /**
