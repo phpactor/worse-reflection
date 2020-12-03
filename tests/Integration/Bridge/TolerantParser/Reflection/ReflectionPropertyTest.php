@@ -2,8 +2,8 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
-use Generator;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
@@ -13,13 +13,28 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 class ReflectionPropertyTest extends IntegrationTestCase
 {
     /**
+     * @dataProvider provideReflectionPropertyTypes
      * @dataProvider provideReflectionProperty
-     * @dataProvider provideConsturctorPropertyPromotion
      */
     public function testReflectProperty(string $source, string $class, \Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class->properties());
+    }
+
+    public function provideReflectionPropertyTypes(): \Generator
+    {
+        yield 'It reflects a property with union type' => [
+            '<?php class Foobar { private int|string $property;}',
+                'Foobar',
+                function ($properties) {
+                    $this->assertEquals('property', $properties->get('property')->name());
+                    $this->assertEquals(Types::fromTypes([
+                        Type::int(),
+                        Type::string(),
+                    ]), $properties->get('property')->inferredTypes());
+                },
+        ];
     }
 
     public function provideReflectionProperty()
@@ -347,61 +362,6 @@ EOT
                     $this->assertEquals(
                         Type::string()->asNullable(),
                         $properties->get('foo')->type()
-                    );
-                },
-            ];
-    }
-
-
-    public function provideConsturctorPropertyPromotion(): Generator
-    {
-        yield 'Typed properties' => [
-                <<<'EOT'
-<?php
-
-namespace Test;
-
-class Barfoo
-{
-    public function __construct(
-        private string $foobar
-        private int $barfoo
-    ) {}
-}
-EOT
-                ,
-                'Test\Barfoo',
-                function (ReflectionPropertyCollection $properties) {
-                    $this->assertTrue($properties->get('foobar')->isPromoted());
-                    $this->assertEquals(
-                        Type::string(),
-                        $properties->get('foobar')->type()
-                    );
-                    $this->assertEquals(
-                        Type::int(),
-                        $properties->get('barfoo')->type()
-                    );
-                },
-            ];
-
-        yield 'Nullable' => [
-                '<?php class Barfoo { public function __construct(private ?string $foobar){}}',
-                'Barfoo',
-                function (ReflectionPropertyCollection $properties) {
-                    $this->assertEquals(
-                        Type::string()->asNullable(),
-                        $properties->get('foobar')->type()
-                    );
-                },
-            ];
-
-        yield 'No types' => [
-                '<?php class Barfoo { public function __construct(private $foobar){}}',
-                'Barfoo',
-                function (ReflectionPropertyCollection $properties) {
-                    $this->assertEquals(
-                        Type::undefined(),
-                        $properties->get('foobar')->type()
                     );
                 },
             ];
