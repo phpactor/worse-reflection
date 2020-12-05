@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 
 class ReflectionPromotedPropertyTest extends IntegrationTestCase
@@ -44,6 +45,7 @@ EOT
                         Type::string(),
                         $properties->get('foobar')->type()
                     );
+                    $this->assertEquals(Visibility::private(), $properties->get('foobar')->visibility());
                     $this->assertEquals(
                         Type::int(),
                         $properties->get('barfoo')->type()

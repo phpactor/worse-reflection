@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node\Parameter;
+use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -16,6 +17,7 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Visibility;
 
 class ReflectionPromotedProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -81,12 +83,15 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
     public function inferredTypes(): Types
     {
         $types = $this->typeResolver->resolve();
-        $types = $this->memberTypeResolver->resolveOtherTypes(
-            $this->parameter,
-            $this->parameter->otherTypeDeclarations,
-            $this->class()->name(),
-            $this->parameter->questionToken ? true : false
-        );
+
+        if ($this->parameter->otherTypeDeclarations) {
+            $types = $this->memberTypeResolver->resolveOtherTypes(
+                $this->parameter,
+                $this->parameter->otherTypeDeclarations,
+                $this->class()->name(),
+                $this->parameter->questionToken ? true : false
+            );
+        }
 
         return $types;
     }
@@ -134,5 +139,24 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
     public function isPromoted(): bool
     {
         return true;
+    }
+
+    public function visibility(): Visibility
+    {
+        $node = $this->parameter;
+
+        if (!$node->visibilityToken) {
+            return Visibility::public();
+        }
+
+        if ($node->visibilityToken->kind === TokenKind::PrivateKeyword) {
+            return Visibility::private();
+        }
+
+        if ($node->visibilityToken->kind === TokenKind::ProtectedKeyword) {
+            return Visibility::protected();
+        }
+
+        return Visibility::public();
     }
 }
