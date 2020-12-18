@@ -1,7 +1,7 @@
 Worse Reflection
 ==================
 
-[![Build Status](https://travis-ci.org/phpactor/worse-reflection.svg?branch=master)](https://travis-ci.org/phpactor/worse-reflection)
+![CI](https://github.com/phpactor/worse-reflection/workflows/CI/badge.svg)
 
 This library aims to provide a light class-based AST based "reflection" library.
 
