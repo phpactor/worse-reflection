@@ -3,7 +3,7 @@
     "description": "Lazy AST reflector that is much worse than better",
     "license": "MIT",
     "minimum-stability": "dev",
-    "prefer-stable":true,
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Daniel Leech",
@@ -24,7 +24,7 @@
         "friendsofphp/php-cs-fixer": "^2.15",
         "phpbench/phpbench": "dev-master",
         "phpactor/class-to-file": "~0.1",
-        "phpstan/phpstan": "^0.12.0",
+        "phpstan/phpstan": "~0.12.0",
         "phpactor/test-utils": "@dev"
     },
     "autoload": {
