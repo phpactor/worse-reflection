@@ -41,7 +41,11 @@ final class ReflectionPropertyCollection extends ReflectionMemberCollection impl
                 continue;
             }
 
-            $properties = array_merge($properties, array_filter($classMember->parameters->children, function ($member) {
+            $children = $classMember->parameters->children;
+            if (!$children) {
+                continue;
+            }
+            $properties = array_merge($properties, array_filter($children, function ($member) {
                 if (!$member instanceof Parameter) {
                     return false;
                 }

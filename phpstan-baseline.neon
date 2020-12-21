@@ -336,11 +336,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
 
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 2
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
-
-		-
 			message: "#^Class Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection implements generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection but does not specify its types\\: T$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
