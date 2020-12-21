@@ -14,7 +14,7 @@ class ReflectionClassCollectionTest extends TestCase
     private $reflection2;
     private $reflection3;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serviceLocator = $this->prophesize(ServiceLocator::class);
         $this->reflection1 = $this->prophesize(ReflectionClass::class);

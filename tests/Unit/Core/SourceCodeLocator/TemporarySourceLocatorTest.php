@@ -17,7 +17,7 @@ class TemporarySourceLocatorTest extends TestCase
      */
     private $locator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->reflector = $this->prophesize(SourceCodeReflector::class);
         $this->locator = new TemporarySourceLocator(

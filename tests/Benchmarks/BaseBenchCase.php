@@ -18,7 +18,7 @@ abstract class BaseBenchCase
      */
     private $reflector;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $composerLocator = new ComposerSourceLocator(include(__DIR__ . '/../../vendor/autoload.php'));
 

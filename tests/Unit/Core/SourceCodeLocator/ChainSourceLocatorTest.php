@@ -15,7 +15,7 @@ class ChainSourceLocatorTest extends TestCase
     private $locator2;
     private $chain;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->locator1 = $this->prophesize(SourceCodeLocator::class);
         $this->locator2 = $this->prophesize(SourceCodeLocator::class);

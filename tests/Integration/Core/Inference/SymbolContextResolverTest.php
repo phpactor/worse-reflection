@@ -17,7 +17,7 @@ use Phpactor\TestUtils\ExtractOffset;
 
 class SymbolContextResolverTest extends IntegrationTestCase
 {
-    public function tearDown()
+    protected function tearDownt (): void
     {
         //var_dump($this->logger());
     }
@@ -1088,7 +1088,7 @@ EOT
                     $this->assertEquals($value, (string) $information->containerType(), $name);
                     continue 2;
                 case 'log':
-                    $this->assertContains($value, implode(' ', $this->logger->messages()), $name);
+                    $this->assertStringContainsString($value, implode(' ', $this->logger->messages()), $name);
                     continue 2;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));

@@ -24,7 +24,7 @@ abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollect
 
     protected $position;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->declaringClass = $this->prophesize(ReflectionClass::class);
         $this->class = $this->prophesize(ReflectionClass::class);

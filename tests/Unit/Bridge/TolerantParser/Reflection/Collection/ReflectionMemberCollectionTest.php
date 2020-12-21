@@ -23,7 +23,7 @@ class ReflectionMemberCollectionTest extends TestCase
      */
     private $member2;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->member1 = $this->prophesize(ReflectionMember::class);
         $this->member2 = $this->prophesize(ReflectionMember::class);

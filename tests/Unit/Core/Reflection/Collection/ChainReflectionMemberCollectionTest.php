@@ -28,7 +28,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
      */
     private $member1;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collection1 = $this->prophesize(ReflectionMemberCollection::class);
         $this->collection2 = $this->prophesize(ReflectionMemberCollection::class);

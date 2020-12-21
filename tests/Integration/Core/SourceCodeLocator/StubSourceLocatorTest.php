@@ -18,7 +18,7 @@ class StubSourceLocatorTest extends IntegrationTestCase
      */
     private $sourceLocator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->workspace()->reset();
 
@@ -37,14 +37,14 @@ class StubSourceLocatorTest extends IntegrationTestCase
     {
         $this->workspace()->put('stubs/Stub.php', '<?php class StubOne {}');
         $code = $this->sourceLocator->locate(ClassName::fromString('StubOne'));
-        $this->assertContains('class StubOne', (string) $code);
+        $this->assertStringContainsString('class StubOne', (string) $code);
     }
 
     public function testCanLocateFunctions()
     {
         $this->workspace()->put('stubs/Stub.php', '<?php function hello_world() {}');
         $code = $this->sourceLocator->locate(Name::fromString('hello_world'));
-        $this->assertContains('function hello_world()', (string) $code);
+        $this->assertStringContainsString('function hello_world()', (string) $code);
     }
 
     public function testDoesNotParseNonPhpFiles()
@@ -61,6 +61,6 @@ class StubSourceLocatorTest extends IntegrationTestCase
         }
 
         $code = $this->sourceLocator->locate(Name::fromString('goodbye_world'));
-        $this->assertContains('function goodbye_world()', (string) $code);
+        $this->assertStringContainsString('function goodbye_world()', (string) $code);
     }
 }

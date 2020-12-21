@@ -22,7 +22,7 @@ class SymbolFactoryTest extends TestCase
     private $node;
 
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->factory = new SymbolFactory();
         $this->node = $this->prophesize(Node::class);

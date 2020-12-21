@@ -18,7 +18,7 @@ class ReflectMethodBench extends BaseBenchCase
      */
     private $class;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->class = $this->getReflector()->reflectClassLike(ClassName::fromString(MethodClass::class));

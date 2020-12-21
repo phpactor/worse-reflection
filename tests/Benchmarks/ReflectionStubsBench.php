@@ -16,7 +16,7 @@ class ReflectionStubsBench extends BaseBenchCase
      */
     private $reflector;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->reflector = $this->getReflector();

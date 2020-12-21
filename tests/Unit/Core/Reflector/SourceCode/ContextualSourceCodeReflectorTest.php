@@ -32,7 +32,7 @@ class ContextualSourceCodeReflectorTest extends TestCase
     private $locator;
     private $code;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->innerReflector = $this->prophesize(SourceCodeReflector::class);
         $this->locator = $this->prophesize(TemporarySourceLocator::class);
