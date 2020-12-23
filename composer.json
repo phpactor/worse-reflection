@@ -2,8 +2,6 @@
     "name": "phpactor/worse-reflection",
     "description": "Lazy AST reflector that is much worse than better",
     "license": "MIT",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "authors": [
         {
             "name": "Daniel Leech",
@@ -12,20 +10,26 @@
     ],
     "require": {
         "php": "^7.3",
-        "microsoft/tolerant-php-parser": "~0.0",
         "jetbrains/phpstorm-stubs": "*",
-        "psr/log": "^1.0",
+        "microsoft/tolerant-php-parser": "~0.0",
         "phpactor/docblock": "^0.3.4",
-        "phpactor/text-document": "~1.0"
+        "phpactor/text-document": "~1.0",
+        "psr/log": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0",
-        "symfony/filesystem": "^4.3||^5.0",
-        "friendsofphp/php-cs-fixer": "^2.15",
-        "phpbench/phpbench": "dev-master",
+        "ergebnis/composer-normalize": "^2.0",
+        "friendsofphp/php-cs-fixer": "^2.17",
         "phpactor/class-to-file": "~0.1",
+        "phpactor/test-utils": "@dev",
+        "phpbench/phpbench": "dev-master",
         "phpstan/phpstan": "~0.12.0",
-        "phpactor/test-utils": "@dev"
+        "phpunit/phpunit": "~7.0",
+        "symfony/filesystem": "^4.3 || ^5.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4.x-dev"
+        }
     },
     "autoload": {
         "psr-4": {
@@ -37,11 +41,8 @@
             "Phpactor\\WorseReflection\\Tests\\": "tests/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.4.x-dev"
-        }
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "integrate": [
             "./vendor/bin/php-cs-fixer fix",
