@@ -166,7 +166,7 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
             true
         ];
         // strings
-        yield 'true and true' => [
+        yield 'string and string' => [
             '"hello";',
             'hello'
         ];

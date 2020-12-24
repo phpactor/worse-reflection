@@ -714,7 +714,7 @@ EOT
                 , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
                 ];
 
-        yield 'It returns the FQN of variable assigned in frame' => [
+        yield 'It returns the FQN of variable assigned in frame 2' => [
                 <<<'EOT'
 <?php
 
