@@ -90,7 +90,7 @@ EOT
             ,
             'Foobar',
             function (ReflectionConstantCollection $constants) {
-                $this->assertContains('/** Hello! */', $constants->first()->docblock()->raw());
+                $this->assertStringContainsString('/** Hello! */', $constants->first()->docblock()->raw());
             }
         ];
 

@@ -32,7 +32,7 @@ class MemonizedClassReflectorTest extends TestCase
      */
     private $className;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->innerClassReflector = $this->prophesize(ClassReflector::class);
         $this->innerFunctionReflector = $this->prophesize(FunctionReflector::class);

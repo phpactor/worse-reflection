@@ -15,7 +15,7 @@ class ChainSourceLocatorTest extends TestCase
     private $locator2;
     private $chain;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->locator1 = $this->prophesize(SourceCodeLocator::class);
         $this->locator2 = $this->prophesize(SourceCodeLocator::class);
@@ -23,10 +23,10 @@ class ChainSourceLocatorTest extends TestCase
 
     /**
      * @testdox It throws an exception if no loaders found.
-     * @expectedException Phpactor\WorseReflection\Core\Exception\SourceNotFound
      */
     public function testNoLocators()
     {
+        $this->expectException(\Phpactor\WorseReflection\Core\Exception\SourceNotFound::class);
         $this->locate([], ClassName::fromString('as'));
     }
 
@@ -68,11 +68,11 @@ class ChainSourceLocatorTest extends TestCase
 
     /**
      * @testdox It throws an exception if all fail
-     * @expectedException Phpactor\WorseReflection\Core\Exception\SourceNotFound
-     * @expectedExceptionMessage Could not find source with "Foobar"
      */
     public function testAllFail()
     {
+        $this->expectException(\Phpactor\WorseReflection\Core\Exception\SourceNotFound::class);
+        $this->expectExceptionMessage('Could not find source with "Foobar"');
         $expectedSource = SourceCode::fromString('hello');
         $class = ClassName::fromString('Foobar');
         $this->locator1->locate($class)->willThrow(new SourceNotFound('Foo'));

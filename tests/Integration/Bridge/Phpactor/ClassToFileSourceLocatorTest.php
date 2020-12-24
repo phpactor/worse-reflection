@@ -15,7 +15,7 @@ class ClassToFileSourceLocatorTest extends IntegrationTestCase
      */
     private $locator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $classToFile = ClassToFileConverter::fromComposerAutoloader(include(__DIR__ . '/../../../../vendor/autoload.php'));
         $this->locator = new ClassToFileSourceLocator($classToFile);

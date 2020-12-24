@@ -23,11 +23,11 @@ class SourceCodeTest extends TestCase
 
     /**
      * @testdox It throws an exception if file not found.
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage File "Improbable_Path_62.xyz" does not exist
      */
     public function testFileNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File "Improbable_Path_62.xyz" does not exist');
         SourceCode::fromPath('Improbable_Path_62.xyz');
     }
 

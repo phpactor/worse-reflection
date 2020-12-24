@@ -8,7 +8,7 @@ use Generator;
 
 class IncludeWalkerTest extends FrameWalkerTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

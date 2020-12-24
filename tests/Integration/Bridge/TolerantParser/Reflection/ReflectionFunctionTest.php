@@ -150,7 +150,7 @@ function hello($foobar, Barfoo $barfoo, int $number)
 }
 EOT
         , 'Bar\hello', function (ReflectionFunction $function) {
-            $this->assertContains('function hello(', (string) $function->sourceCode());
+            $this->assertStringContainsString('function hello(', (string) $function->sourceCode());
         },
         ];
     }
