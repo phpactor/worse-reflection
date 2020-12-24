@@ -14,7 +14,7 @@ class NativeReflectionFunctionSourceLocatorTest extends TestCase
      */
     private $locator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->locator = new NativeReflectionFunctionSourceLocator();
     }

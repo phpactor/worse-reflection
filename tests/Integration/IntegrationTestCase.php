@@ -19,7 +19,7 @@ class IntegrationTestCase extends TestCase
      */
     private $logger;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->logger = new ArrayLogger();
     }

@@ -46,7 +46,7 @@ class VirtualReflectionParameterTest extends TestCase
      */
     private $defaults;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->position = Position::fromStartAndEnd(0, 0);
         $this->class = $this->prophesize(ReflectionClass::class);
