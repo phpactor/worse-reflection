@@ -175,8 +175,8 @@ class SymbolContextResolver
             $value = $this->expressionEvaluator->evaluate($node);
             return $this->symbolFactory->context(
                 $node->getText(),
-                $node->getEndPosition(),
                 $node->getStart(),
+                $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CLASS_,
                     'type' => Type::fromValue($value),
@@ -188,8 +188,8 @@ class SymbolContextResolver
         if ($node instanceof ClassDeclaration || $node instanceof TraitDeclaration || $node instanceof InterfaceDeclaration) {
             return $this->symbolFactory->context(
                 $node->name->getText($node->getFileContents()),
-                $node->name->getEndPosition(),
                 $node->name->getStartPosition(),
+                $node->name->getEndPosition(),
                 [
                     'name' => Name::fromString($node->getNamespacedName()),
                     'symbol_type' => Symbol::CLASS_,
@@ -201,8 +201,8 @@ class SymbolContextResolver
         if ($node instanceof FunctionDeclaration) {
             return $this->symbolFactory->context(
                 $node->name->getText($node->getFileContents()),
-                $node->name->getEndPosition(),
                 $node->name->getStartPosition(),
+                $node->name->getEndPosition(),
                 [
                     'name' => Name::fromString($node->getNamespacedName()),
                     'symbol_type' => Symbol::FUNCTION,
