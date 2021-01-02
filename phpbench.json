@@ -9,7 +9,8 @@
     "php_config": {
         "extension": [
             "tokenizer",
-            "json"
+            "json",
+            "iconv"
         ],
         "error_reporting": -1,
         "memory_limit": -1
