@@ -7,3 +7,4 @@
 /stubs
 /.phpbench
 .phpunit.result.cache
+/.vscode
