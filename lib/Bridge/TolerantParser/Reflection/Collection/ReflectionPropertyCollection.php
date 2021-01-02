@@ -41,7 +41,14 @@ final class ReflectionPropertyCollection extends ReflectionMemberCollection impl
                 continue;
             }
 
-            $children = $classMember->parameters->children;
+            $parameters = $classMember->parameters;
+
+            if (!$parameters) {
+                continue;
+            }
+
+            $children = $parameters->children;
+
             if (!$children) {
                 continue;
             }
