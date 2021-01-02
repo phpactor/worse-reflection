@@ -120,4 +120,9 @@ class VirtualReflectionParameter implements ReflectionParameter
     {
         return $this->byReference;
     }
+
+    public function isPromoted(): bool
+    {
+        return false;
+    }
 }

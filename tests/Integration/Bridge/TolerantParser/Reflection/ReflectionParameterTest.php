@@ -178,6 +178,24 @@ class ReflectionParameterTest extends IntegrationTestCase
                 );
             },
         ];
+
+        yield 'It reflects a promoted parameter' => [
+            'private string $foobar',
+            function ($method) {
+                $this->assertTrue(
+                    $method->parameters()->get('foobar')->isPromoted()
+                );
+            },
+        ];
+
+        yield 'It reflects a (not) promoted parameter' => [
+            'string $foobar',
+            function ($method) {
+                $this->assertFalse(
+                    $method->parameters()->get('foobar')->isPromoted()
+                );
+            },
+        ];
     }
 
     /**
