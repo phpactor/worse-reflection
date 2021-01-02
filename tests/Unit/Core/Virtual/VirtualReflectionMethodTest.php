@@ -17,7 +17,7 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
     private $isAbstract;
     private $isStatic;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parameters = $this->prophesize(ReflectionParameterCollection::class);

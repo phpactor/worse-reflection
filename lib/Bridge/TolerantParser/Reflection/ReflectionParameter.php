@@ -113,4 +113,9 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     {
         return $this->functionLike;
     }
+
+    public function isPromoted(): bool
+    {
+        return $this->parameter->visibilityToken !== null;
+    }
 }

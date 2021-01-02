@@ -23,8 +23,9 @@
         "phpactor/test-utils": "@dev",
         "phpbench/phpbench": "dev-master",
         "phpstan/phpstan": "~0.12.0",
-        "phpunit/phpunit": "~7.0",
-        "symfony/filesystem": "^4.3 || ^5.0"
+        "phpunit/phpunit": "^9.0",
+        "symfony/filesystem": "^4.3 || ^5.0",
+        "phpspec/prophecy-phpunit": "^2.0"
     },
     "extra": {
         "branch-alias": {

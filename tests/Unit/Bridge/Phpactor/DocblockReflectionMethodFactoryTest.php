@@ -28,7 +28,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
      */
     private $docblock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new DocblockReflectionMethodFactory();
         $this->docblock = $this->prophesize(DocBlock::class);

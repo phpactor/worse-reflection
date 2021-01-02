@@ -27,4 +27,6 @@ interface ReflectionParameter extends ReflectionNode
     public function default(): DefaultValue;
 
     public function byReference(): bool;
+
+    public function isPromoted(): bool;
 }

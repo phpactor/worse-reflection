@@ -36,4 +36,20 @@ class VirtualReflectionParameterCollection extends AbstractReflectionCollection 
     {
         $this->items[$virtualReflectionParameter->name()] = $virtualReflectionParameter;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function notPromoted(): ReflectionParameterCollection
+    {
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function promoted(): ReflectionParameterCollection
+    {
+        return new self([]);
+    }
 }

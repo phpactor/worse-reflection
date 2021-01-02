@@ -466,7 +466,7 @@ EOT
             'Foobar',
             function ($methods, LoggerInterface $logger) {
                 $this->assertEquals('', $methods->get('barfoo')->parameters()->first()->name());
-                $this->assertContains(
+                $this->assertStringContainsString(
                     'Parameter has no variable',
                     $logger->messages()[0]
                 );
@@ -489,7 +489,7 @@ EOT
         ,
             'Foobar',
             function ($methods) {
-                $this->assertContains(<<<EOT
+                $this->assertStringContainsString(<<<EOT
 Hello this is a docblock.
 EOT
                 , $methods->get('barfoo')->docblock()->raw());

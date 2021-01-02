@@ -36,7 +36,7 @@ class Foobar
 }
 EOT
         , [ 'Foobar', 'hello' ], function (Frame $frame, $logger) {
-            $this->assertContains('Non-node class passed to resolveNode, got', (string) $frame->problems());
+            $this->assertStringContainsString('Non-node class passed to resolveNode, got', (string) $frame->problems());
         }];
     }
 }

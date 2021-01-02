@@ -17,7 +17,7 @@ use Phpactor\TestUtils\ExtractOffset;
 
 class SymbolContextResolverTest extends IntegrationTestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         //var_dump($this->logger());
     }
@@ -714,7 +714,7 @@ EOT
                 , [], ['type' => 'stdClass', 'symbol_name' => 'stdClass'],
                 ];
 
-        yield 'It returns the FQN of variable assigned in frame' => [
+        yield 'It returns the FQN of variable assigned in frame 2' => [
                 <<<'EOT'
 <?php
 
@@ -1088,7 +1088,7 @@ EOT
                     $this->assertEquals($value, (string) $information->containerType(), $name);
                     continue 2;
                 case 'log':
-                    $this->assertContains($value, implode(' ', $this->logger->messages()), $name);
+                    $this->assertStringContainsString($value, implode(' ', $this->logger->messages()), $name);
                     continue 2;
                 default:
                     throw new \RuntimeException(sprintf('Do not know how to test symbol information attribute "%s"', $name));

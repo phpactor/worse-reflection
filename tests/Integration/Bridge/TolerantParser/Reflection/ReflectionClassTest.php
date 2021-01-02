@@ -12,11 +12,9 @@ use Phpactor\WorseReflection\Core\NameImports;
 
 class ReflectionClassTest extends IntegrationTestCase
 {
-    /**
-     * @expectedException Phpactor\WorseReflection\Core\Exception\ClassNotFound
-     */
     public function testExceptionOnClassNotFound()
     {
+        $this->expectException(\Phpactor\WorseReflection\Core\Exception\ClassNotFound::class);
         $this->createReflector('')->reflectClassLike(ClassName::fromString('Foobar'));
     }
 
@@ -589,7 +587,7 @@ EOT
         ,
             'Class2',
             function ($class) {
-                $this->assertContains('class Class2', (string) $class->sourceCode());
+                $this->assertStringContainsString('class Class2', (string) $class->sourceCode());
             },
         ];
 
