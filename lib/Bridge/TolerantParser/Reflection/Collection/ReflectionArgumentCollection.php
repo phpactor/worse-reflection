@@ -30,4 +30,14 @@ class ReflectionArgumentCollection extends AbstractReflectionCollection implemen
     {
         return CoreReflectionParameterCollection::class;
     }
+
+    public function notPromoted(): CoreReflectionParameterCollection
+    {
+        return $this;
+    }
+
+    public function promoted(): CoreReflectionParameterCollection
+    {
+        return new self($this->serviceLocator, []);
+    }
 }
