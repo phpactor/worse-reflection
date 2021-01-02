@@ -98,6 +98,9 @@ class SymbolContextResolver
     public function resolveNode(Frame $frame, $node): SymbolContext
     {
         try {
+            if ($node instanceof ParserVariable && $node->parent instanceof ScopedPropertyAccessExpression) {
+                return $this->_resolveNode($frame, $node->parent);
+            }
             return $this->_resolveNode($frame, $node);
         } catch (CouldNotResolveNode $couldNotResolveNode) {
             return SymbolContext::none()
@@ -668,7 +671,7 @@ class SymbolContextResolver
         ) {
             $memberType = Symbol::CONSTANT;
         }
-
+        
         $information = $this->symbolFactory->context(
             $memberName,
             $node->getStart(),
