@@ -56,7 +56,6 @@ class SymbolContextResolverTest extends IntegrationTestCase
             PropertyAssignments::fromArray($properties),
             $source,
         );
-
         $this->assertExpectedInformation($expectedInformation, $symbolInfo);
     }
 
@@ -688,6 +687,29 @@ EOT
                         'container_type' => 'Foobar',
                     ],
                 ];
+
+        yield 'Static property access (instance)' => [
+            <<<'EOT'
+<?php
+
+class Foobar
+{
+/** @var string */
+public static $myProperty = 'hello';
+}
+
+$foobar = new Foobar();
+$foobar::$my<>Property = 5;
+EOT
+            , [
+                'foobar' => Type::fromString("Foobar")
+            ], [
+                'type' => 'string',
+                'symbol_type' => Symbol::PROPERTY,
+                'symbol_name' => 'myProperty',
+                'container_type' => 'Foobar',
+            ],
+        ];
 
         yield 'Member access with variable' => [
                 <<<'EOT'

@@ -98,7 +98,11 @@ class SymbolContextResolver
     public function resolveNode(Frame $frame, $node): SymbolContext
     {
         try {
-            if ($node instanceof ParserVariable && $node->parent instanceof ScopedPropertyAccessExpression) {
+            if (
+                $node instanceof ParserVariable
+                && $node->parent instanceof ScopedPropertyAccessExpression
+                && $node === $node->parent->memberName
+            ) {
                 return $this->_resolveNode($frame, $node->parent);
             }
             return $this->_resolveNode($frame, $node);
@@ -597,7 +601,23 @@ class SymbolContextResolver
 
     private function resolveScopedPropertyAccessExpression(Frame $frame, ScopedPropertyAccessExpression $node): SymbolContext
     {
-        $name = $node->scopeResolutionQualifier->getText();
+        $name = null;
+        if ($node->scopeResolutionQualifier instanceof ParserVariable) {
+            /** @var SymbolContext $context */
+            $context = $this->resolveVariable($frame, $node->scopeResolutionQualifier);
+            if (
+                $context->types() !== null &&
+                $context->types()->count() > 0 &&
+                $context->type()->className() !== null
+            ) {
+                $name = $context->type()->className()->__toString();
+            }
+        }
+        
+        if (empty($name)) {
+            $name = $node->scopeResolutionQualifier->getText();
+        }
+        
         $parent = $this->nameResolver->resolve($node, $name);
 
         return $this->_infoFromMemberAccess($frame, $parent, $node);
