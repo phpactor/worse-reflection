@@ -647,6 +647,48 @@ EOT
                 , [], ['type' => 'string'],
                 ];
 
+        yield 'Static property access' => [
+                    <<<'EOT'
+<?php
+
+Foobar::$my<>Property;
+
+class Foobar
+{
+    /** @var string */
+    public static $myProperty = 'hello';
+}
+EOT
+                    , [], [
+                        'type' => 'string',
+                        'symbol_type' => Symbol::PROPERTY,
+                        'symbol_name' => 'myProperty',
+                        'container_type' => 'Foobar',
+                    ],
+                ];
+        
+        yield 'Static property access 2' => [
+                    <<<'EOT'
+<?php
+
+class Foobar
+{
+    /** @var string */
+    public static $myProperty = 'hello';
+
+    function m() {
+        self::$my<>Property = 5;
+    }
+}
+EOT
+                    , [], [
+                        'type' => 'string',
+                        'symbol_type' => Symbol::PROPERTY,
+                        'symbol_name' => 'myProperty',
+                        'container_type' => 'Foobar',
+                    ],
+                ];
+
         yield 'Member access with variable' => [
                 <<<'EOT'
 <?php

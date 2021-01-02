@@ -6,4 +6,8 @@
 /.php_cs.cache
 /stubs
 /.phpbench
+<<<<<<< HEAD
 .phpunit.result.cache
+=======
+/.vscode
+>>>>>>> f9533e5 (Resolve static properties)

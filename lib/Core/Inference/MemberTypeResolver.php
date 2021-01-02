@@ -36,6 +36,9 @@ class MemberTypeResolver
 
     public function propertyType(Type $containerType, SymbolContext $info, string $name): SymbolContext
     {
+        if (mb_substr($name, 0, 1) == '$') {
+            $name = mb_substr($name, 1);
+        }
         return $this->memberType(self::TYPE_PROPERTIES, $containerType, $info, $name);
     }
 
