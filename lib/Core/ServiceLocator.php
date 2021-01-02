@@ -3,9 +3,11 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\WorseReflection\Core\Cache\TtlCache;
+use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Parser;
+use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryBridge;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
@@ -56,10 +58,14 @@ class ServiceLocator
     private $docblockFactory;
 
     /**
-     * @var array
+     * @var array<int,ReflectionMemberProvider>
      */
     private $methodProviders;
 
+    /**
+     * @param list<FrameWalker> $frameWalkers
+     * @param list<ReflectionMemberProvider> $methodProviders
+     */
     public function __construct(
         SourceCodeLocator $sourceLocator,
         LoggerInterface $logger,
@@ -68,7 +74,7 @@ class ServiceLocator
         array $methodProviders = [],
         bool $enableCache = false,
         bool $enableContextualLocation = false,
-        float $cacheLifetime
+        float $cacheLifetime = 5.0
     ) {
         $sourceReflector = $reflectorFactory->create($this);
 
@@ -143,7 +149,10 @@ class ServiceLocator
         return $this->frameBuilder;
     }
 
-    public function methodProviders()
+    /**
+     * @return list<ReflectionMemberProvider>
+     */
+    public function methodProviders(): array
     {
         return $this->methodProviders;
     }
