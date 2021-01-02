@@ -6,7 +6,5 @@
 /.php_cs.cache
 /stubs
 /.phpbench
-<<<<<<< HEAD
-<<<<<<< HEAD
 .phpunit.result.cache
 /.vscode
