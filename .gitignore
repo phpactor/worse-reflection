@@ -8,3 +8,4 @@
 /.phpbench
 .phpunit.result.cache
 /.vscode
+smoke_test.log

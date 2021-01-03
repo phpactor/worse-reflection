@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\Docblock\Tag\MethodTag;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\Docblock as PhpactorDocblock;
@@ -156,6 +157,9 @@ class Docblock implements CoreDocblock
         $properties = [];
         foreach ($this->docblock->tags()->byName('property') as $propertyTag) {
             if (!$propertyTag->propertyName()) {
+                continue;
+            }
+            if ($declaringClass instanceof ReflectionInterface) {
                 continue;
             }
             $properties[$propertyTag->propertyName()] = $this->propertyFactory->create($this, $declaringClass, $propertyTag);
