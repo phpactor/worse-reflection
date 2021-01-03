@@ -605,11 +605,7 @@ class SymbolContextResolver
         if ($node->scopeResolutionQualifier instanceof ParserVariable) {
             /** @var SymbolContext $context */
             $context = $this->resolveVariable($frame, $node->scopeResolutionQualifier);
-            if (
-                $context->types() !== null &&
-                $context->types()->count() > 0 &&
-                $context->type()->className() !== null
-            ) {
+            if ($context->type()->className() !== null) {
                 $name = $context->type()->className()->__toString();
             }
         }
