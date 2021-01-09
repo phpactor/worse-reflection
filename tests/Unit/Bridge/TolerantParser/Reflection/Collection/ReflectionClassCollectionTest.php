@@ -6,9 +6,12 @@ use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\ServiceLocator;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ReflectionClassCollectionTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $serviceLocator;
     private $reflection1;
     private $reflection2;

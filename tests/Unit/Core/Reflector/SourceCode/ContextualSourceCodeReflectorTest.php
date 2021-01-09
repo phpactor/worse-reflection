@@ -9,9 +9,12 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCode\ContextualSourceCodeRefle
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ContextualSourceCodeReflectorTest extends TestCase
 {
+    use ProphecyTrait;
+
     const TEST_SOURCE_CODE = 'hello';
     const TEST_OFFSET = 666;
 

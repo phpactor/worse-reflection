@@ -8,10 +8,13 @@ use Phpactor\WorseReflection\ReflectorBuilder;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Log\LoggerInterface;
 
 class ReflectorBuilderTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testBuildWithDefaults()
     {
         $reflector = ReflectorBuilder::create()->build();

@@ -10,9 +10,12 @@ use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Position;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ReflectionMemberCollectionTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ObjectProphecy|ReflectionMember
      */

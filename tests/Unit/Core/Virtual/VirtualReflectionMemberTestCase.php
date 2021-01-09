@@ -12,9 +12,12 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 abstract class VirtualReflectionMemberTestCase extends TestCase
 {
+    use ProphecyTrait;
+
     protected $position;
     protected $declaringClass;
     protected $class;

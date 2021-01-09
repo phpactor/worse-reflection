@@ -8,9 +8,12 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class SymbolFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var SymbolFactory
      */

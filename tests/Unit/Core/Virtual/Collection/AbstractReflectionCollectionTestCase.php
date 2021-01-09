@@ -5,10 +5,13 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core\Virtual\Collection;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
+use Prophecy\PhpUnit\ProphecyTrait;
 use RuntimeException;
 
 abstract class AbstractReflectionCollectionTestCase extends TestCase
 {
+    use ProphecyTrait;
+
     abstract public function collection(array $names): ReflectionCollection;
 
     public function testCount()

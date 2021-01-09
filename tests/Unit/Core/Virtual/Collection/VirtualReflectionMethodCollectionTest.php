@@ -6,9 +6,12 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Visibility;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class VirtualReflectionMethodCollectionTest extends VirtualReflectionMemberTestCase
 {
+    use ProphecyTrait;
+
     public function collection(array $names): ReflectionCollection
     {
         $items = [];

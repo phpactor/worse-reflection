@@ -9,9 +9,12 @@ use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedReflector;
 use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class MemonizedClassReflectorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ClassReflector|ObjectProphecy
      */

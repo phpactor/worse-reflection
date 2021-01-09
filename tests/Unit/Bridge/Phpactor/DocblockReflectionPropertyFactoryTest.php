@@ -12,9 +12,12 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\ReflectorBuilder;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class DocblockReflectionPropertyFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var DocblockReflectionPropertyFactory
      */

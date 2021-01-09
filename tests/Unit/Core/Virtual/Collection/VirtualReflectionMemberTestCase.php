@@ -6,12 +6,15 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Visibility;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection collection()
  */
 abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollectionTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ObjectProphecy
      */

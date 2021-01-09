@@ -7,9 +7,12 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\SourceFileNode;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class NodeReflectorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testUnkown()
     {
         $this->expectException(\RuntimeException::class);

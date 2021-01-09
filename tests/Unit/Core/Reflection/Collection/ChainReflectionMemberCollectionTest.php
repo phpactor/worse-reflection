@@ -10,10 +10,13 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCol
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Visibility;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Traversable;
 
 class ChainReflectionMemberCollectionTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ObjectProphecy
      */

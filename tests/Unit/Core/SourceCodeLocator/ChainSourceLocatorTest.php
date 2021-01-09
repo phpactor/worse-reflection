@@ -8,9 +8,12 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\SourceCodeLocator\ChainSourceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ChainSourceLocatorTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $locator1;
     private $locator2;
     private $chain;

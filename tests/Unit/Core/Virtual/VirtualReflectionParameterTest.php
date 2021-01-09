@@ -12,9 +12,12 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class VirtualReflectionParameterTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $position;
     /**
      * @var ObjectProphecy
