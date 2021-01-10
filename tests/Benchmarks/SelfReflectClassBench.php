@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
-use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 
 /**
@@ -10,7 +9,7 @@ use Phpactor\WorseReflection\Core\ClassName;
  * @Revs(10)
  * @Warmup(1)
  * @OutputTimeUnit("milliseconds", precision=2)
- * @Assert("variant.mode <= baseline.mode +/- 5%")
+ * @Assert("variant.mode <= baseline.mode +/- 10%")
  */
 class SelfReflectClassBench extends BaseBenchCase
 {

@@ -42,8 +42,7 @@ final class FrameBuilder
         LoggerInterface $logger,
         Cache $cache,
         array $walkers = []
-    ): self
-    {
+    ): self {
         $nameResolver = new FullyQualifiedNameResolver($logger);
         $walkers = array_merge([
             new AssertFrameWalker(),
@@ -154,5 +153,4 @@ final class FrameBuilder
 
         return $scopeNode;
     }
-
 }
