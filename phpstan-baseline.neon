@@ -711,27 +711,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\:\\:getOrSet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Cache.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\NullCache\\:\\:getOrSet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Cache/NullCache.php
-
-		-
 			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$ticker has no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Cache/TtlCache.php
 
 		-
 			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$lifetime \\(int\\) does not accept float\\.$#"
-			count: 1
-			path: lib/Core/Cache/TtlCache.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:getOrSet\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Cache/TtlCache.php
 
@@ -1026,22 +1011,7 @@ parameters:
 			path: lib/Core/Inference/Frame.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\:\\:create\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\:\\:create\\(\\) has parameter \\$walkers with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\:\\:walkNode\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between null and Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame will always evaluate to false\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder.php
 
