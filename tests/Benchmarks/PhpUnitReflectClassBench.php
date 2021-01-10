@@ -9,7 +9,6 @@ use Phpactor\WorseReflection\Core\ClassName;
  * @Iterations(5)
  * @Revs(10)
  * @Warmup(1)
- * @OutputTimeUnit("milliseconds", precision=2)
  */
 class PhpUnitReflectClassBench extends BaseBenchCase
 {
@@ -24,8 +23,8 @@ class PhpUnitReflectClassBench extends BaseBenchCase
 
     /**
      * @Subject()
-     * @OutputTimeUnit("seconds", precision=2)
-     * @Assert("variant.mode <= baseline.mode +/- 5%")
+     * @OutputTimeUnit("milliseconds", precision=2)
+     * @Assert("variant.mode <= baseline.mode +/- 10%")
      */
     public function test_case_methods_and_properties(): void
     {
@@ -39,14 +38,10 @@ class PhpUnitReflectClassBench extends BaseBenchCase
     }
 
     /**
-     * This benchmark has taken exponential amount of time (minutes), so we
-     * assert that it operates in seconds rather than minutes
-     * operations.
-     *
      * @Subject()
      * @Revs(1)
-     * @OutputTimeUnit("seconds", precision=2)
-     * @Assert("variant.mode <= baseline.mode +/- 5%")
+     * @OutputTimeUnit("milliseconds", precision=2)
+     * @Assert("variant.mode <= baseline.mode +/- 10%")
      */
     public function test_case_method_frames(): void
     {

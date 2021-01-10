@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflector;
 
+use Phpactor\WorseReflection\Bridge\TolerantParser\Parser\CachedParser;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflectorFactory;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -16,7 +17,7 @@ class TolerantFactory implements SourceCodeReflectorFactory
 
     public function __construct(Parser $parser = null)
     {
-        $this->parser = $parser ?: new Parser();
+        $this->parser = $parser ?: new CachedParser();
     }
 
     public function create(ServiceLocator $serviceLocator): SourceCodeReflector

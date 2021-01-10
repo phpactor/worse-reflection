@@ -23,6 +23,7 @@ use Microsoft\PhpParser\Node\StringLiteral;
 use Microsoft\PhpParser\Node\UseVariableName;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
+use Phpactor\WorseReflection\Core\Cache;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
@@ -47,9 +48,6 @@ use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\Expression\ParenthesizedExpression;
 use Psr\Log\LoggerInterface;
 
-/**
- * @TODO: This class requires SERIOUS refactoring.
- */
 class SymbolContextResolver
 {
     /**
@@ -82,9 +80,15 @@ class SymbolContextResolver
      */
     private $expressionEvaluator;
 
+    /**
+     * @var Cache
+     */
+    private $cache;
+
     public function __construct(
         Reflector $reflector,
         LoggerInterface $logger,
+        Cache $cache,
         SymbolFactory $symbolFactory = null
     ) {
         $this->logger = $logger;
@@ -93,6 +97,7 @@ class SymbolContextResolver
         $this->nameResolver = new FullyQualifiedNameResolver($logger);
         $this->reflector = $reflector;
         $this->expressionEvaluator = new ExpressionEvaluator();
+        $this->cache = $cache;
     }
 
     public function resolveNode(Frame $frame, $node): SymbolContext
@@ -117,14 +122,21 @@ class SymbolContextResolver
      */
     public function _resolveNode(Frame $frame, $node): SymbolContext
     {
-        if (false === $node instanceof Node) {
-            throw new CouldNotResolveNode(sprintf('Non-node class passed to resolveNode, got "%s"', get_class($node)));
-        }
+        $key = 'sc:'.spl_object_hash($node);
 
-        $context = $this->__resolveNode($frame, $node);
-        $context = $context->withScope(new ReflectionScope($node));
+        return $this->cache->getOrSet($key, function () use ($frame, $node) {
+            if (false === $node instanceof Node) {
+                throw new CouldNotResolveNode(sprintf(
+                    'Non-node class passed to resolveNode, got "%s"',
+                    get_class($node)
+                ));
+            }
 
-        return $context;
+            $context = $this->__resolveNode($frame, $node);
+            $context = $context->withScope(new ReflectionScope($node));
+
+            return $context;
+        });
     }
 
     private function __resolveNode(Frame $frame, Node $node): SymbolContext

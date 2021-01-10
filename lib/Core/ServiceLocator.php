@@ -2,11 +2,11 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use Phpactor\WorseReflection\Core\Cache\NullCache;
 use Phpactor\WorseReflection\Core\Cache\TtlCache;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
-use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryBridge;
@@ -48,11 +48,6 @@ class ServiceLocator
     private $symbolContextResolver;
 
     /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
      * @var DocBlockFactory
      */
     private $docblockFactory;
@@ -87,10 +82,11 @@ class ServiceLocator
             $sourceReflector = new ContextualSourceCodeReflector($sourceReflector, $temporarySourceLocator);
         }
 
+        $cache = $enableCache ? new TtlCache($cacheLifetime) : new NullCache();
         $coreReflector = new CoreReflector($sourceReflector, $sourceLocator);
 
         if ($enableCache) {
-            $coreReflector = new MemonizedReflector($coreReflector, $coreReflector, new TtlCache($cacheLifetime));
+            $coreReflector = new MemonizedReflector($coreReflector, $coreReflector, $cache);
         }
 
         $this->reflector = new CompositeReflector(
@@ -103,11 +99,16 @@ class ServiceLocator
         $this->docblockFactory = new DocblockFactoryBridge();
         $this->logger = $logger;
 
-        $this->symbolContextResolver = new SymbolContextResolver($this->reflector, $this->logger);
+        $this->symbolContextResolver = new SymbolContextResolver(
+            $this->reflector,
+            $this->logger,
+            $cache
+        );
         $this->frameBuilder = FrameBuilder::create(
             $this->docblockFactory,
             $this->symbolContextResolver,
             $this->logger,
+            $cache,
             $frameWalkers
         );
         $this->methodProviders = $methodProviders;

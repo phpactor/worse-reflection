@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Cache\NullCache;
 use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Name;
@@ -1115,7 +1116,7 @@ EOT
         list($source, $offset) = ExtractOffset::fromSource($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
 
-        $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger());
+        $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger(), new NullCache());
 
         return $resolver->resolveNode($frame, $node);
     }
