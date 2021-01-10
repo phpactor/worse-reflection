@@ -108,6 +108,7 @@ class ServiceLocator
             $this->docblockFactory,
             $this->symbolContextResolver,
             $this->logger,
+            $cache,
             $frameWalkers
         );
         $this->methodProviders = $methodProviders;

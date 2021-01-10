@@ -122,7 +122,9 @@ class SymbolContextResolver
      */
     public function _resolveNode(Frame $frame, $node): SymbolContext
     {
-        return $this->cache->getOrSet(spl_object_hash($node), function () use ($frame, $node) {
+        $key = 'sc:'.spl_object_hash($node);
+
+        return $this->cache->getOrSet($key, function () use ($frame, $node) {
             if (false === $node instanceof Node) {
                 throw new CouldNotResolveNode(sprintf(
                     'Non-node class passed to resolveNode, got "%s"',
