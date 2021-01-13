@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
+use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\ForeachKey;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
@@ -30,19 +31,67 @@ class ForeachWalker extends AbstractWalker
         return $frame;
     }
 
-    private function processValue(ForeachStatement $node, Frame $frame, SymbolContext $collection)
+    private function processValue(ForeachStatement $node, Frame $frame, SymbolContext $collection): void
     {
         $itemName = $node->foreachValue;
         
         if (!$itemName instanceof ForeachValue) {
-            return $frame;
+            return;
         }
         
-        if (!$itemName->expression instanceof Variable) {
-            return $frame;
+        $expression = $itemName->expression;
+        if ($expression instanceof Variable) {
+            $this->valueFromVariable($expression, $node, $collection, $frame);
+            return;
+        }
+
+        if ($expression instanceof ArrayCreationExpression) {
         }
         
-        $itemName = $itemName->expression->name->getText($node->getFileContents());
+    }
+
+    private function processKey(ForeachStatement $node, Frame $frame, SymbolContext $collection): void
+    {
+        $itemName = $node->foreachKey;
+        
+        if (!$itemName instanceof ForeachKey) {
+            return;
+        }
+        
+        $expression = $itemName->expression;
+        if (!$expression instanceof Variable) {
+            return;
+        }
+        
+        /** @phpstan-ignore-next-line */
+        $itemName = $expression->name->getText($node->getFileContents());
+
+        if (!is_string($itemName)) {
+            return;
+        }
+        
+        $collectionType = $collection->types()->best();
+        
+        $context = $this->symbolFactory()->context(
+            $itemName,
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+            ]
+        );
+        
+        $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+    }
+
+    private function valueFromVariable(Variable $expression, ForeachStatement $node, SymbolContext $collection, Frame $frame): void
+    {
+        $itemName = $expression->getText();
+        
+        if (!is_string($itemName)) {
+            return;
+        }
+
         $collectionType = $collection->types()->best();
         
         $context = $this->symbolFactory()->context(
@@ -57,34 +106,6 @@ class ForeachWalker extends AbstractWalker
         if ($collectionType->arrayType()->isDefined()) {
             $context = $context->withType($collectionType->arrayType());
         }
-        
-        $frame->locals()->add(WorseVariable::fromSymbolContext($context));
-    }
-
-    private function processKey(ForeachStatement $node, Frame $frame, SymbolContext $collection)
-    {
-        $itemName = $node->foreachKey;
-        
-        if (!$itemName instanceof ForeachKey) {
-            return $frame;
-        }
-        
-        if (!$itemName->expression instanceof Variable) {
-            return $frame;
-        }
-        
-        $itemName = $itemName->expression->name->getText($node->getFileContents());
-        
-        $collectionType = $collection->types()->best();
-        
-        $context = $this->symbolFactory()->context(
-            $itemName,
-            $node->getStart(),
-            $node->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-            ]
-        );
         
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
     }

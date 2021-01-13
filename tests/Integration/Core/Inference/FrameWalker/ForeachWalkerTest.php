@@ -115,5 +115,20 @@ EOT
             $symbolInformation = $vars->atIndex(1)->symbolContext();
             $this->assertEquals('Foobar', (string) $symbolInformation->type());
         }];
+
+        yield 'List assignment in foreach' => [
+            <<<'EOT'
+<?php
+foreach (['foo', 'bar'] as [ $foo, $bar ]) {
+    <>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(2, $frame->locals());
+                $this->assertEquals('foo', $frame->locals()->atIndex(0)->symbolContext()->value());
+                $this->assertEquals('bar', $frame->locals()->atIndex(1)->symbolContext()->value());
+            }
+        ];
     }
 }
