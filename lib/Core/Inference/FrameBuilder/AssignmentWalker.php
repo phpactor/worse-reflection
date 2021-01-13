@@ -3,6 +3,9 @@
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
 use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\Node\DelimitedList\ArrayElementList;
+use Microsoft\PhpParser\Node\DelimitedList\ListExpressionList;
+use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\Expression\ListIntrinsicExpression;
@@ -54,6 +57,11 @@ class AssignmentWalker extends AbstractWalker
 
         if ($node->leftOperand instanceof ListIntrinsicExpression) {
             $this->walkList($frame, $node->leftOperand, $rightContext);
+            return $frame;
+        }
+
+        if ($node->leftOperand instanceof ArrayCreationExpression) {
+            $this->walkArrayCreation($frame, $node->leftOperand, $rightContext);
             return $frame;
         }
 
@@ -138,45 +146,26 @@ class AssignmentWalker extends AbstractWalker
 
         return $frame;
     }
+    private function walkArrayCreation(Frame $frame, ArrayCreationExpression $leftOperand, SymbolContext $symbolContext): void
+    {
+        $list = $leftOperand->arrayElements;
+        $value = $symbolContext->value();
+        if (!$list instanceof ArrayElementList) {
+            return;
+        }
+
+        $this->walkArrayElements($list->children, $leftOperand, $value, $frame);
+    }
 
     private function walkList(Frame $frame, ListIntrinsicExpression $leftOperand, SymbolContext $symbolContext): Frame
     {
+        $list = $leftOperand->listElements;
         $value = $symbolContext->value();
-
-        foreach ($leftOperand->listElements as $elements) {
-            foreach ($elements as $index => $element) {
-                if (!$element instanceof ArrayElement) {
-                    continue;
-                }
-
-                $elementValue = $element->elementValue;
-
-                if (!$elementValue instanceof Variable) {
-                    continue;
-                }
-
-                if (null === $elementValue || null === $elementValue->name) {
-                    continue;
-                }
-
-                $varName = $elementValue->name->getText($leftOperand->getFileContents());
-                $variableContext = $this->symbolFactory()->context(
-                    $varName,
-                    $element->getStart(),
-                    $element->getEndPosition(),
-                    [
-                        'symbol_type' => Symbol::VARIABLE,
-                    ]
-                );
-
-                if (is_array($value) && isset($value[$index])) {
-                    $variableContext = $variableContext->withValue($value[$index]);
-                    $variableContext = $variableContext->withType(Type::fromString(gettype($value[$index])));
-                }
-
-                $frame->locals()->add(WorseVariable::fromSymbolContext($variableContext));
-            }
+        if (!$list instanceof ListExpressionList) {
+            return $frame;
         }
+
+        $this->walkArrayElements($list->children, $leftOperand, $value, $frame);
 
         return $frame;
     }
@@ -205,5 +194,48 @@ class AssignmentWalker extends AbstractWalker
         }
         
         return false;
+    }
+
+    /**
+     * @param mixed $value
+     * @param mixed[] $elements
+     */
+    private function walkArrayElements(array $elements, Node $leftOperand, $value, Frame $frame): void
+    {
+        $index = -1;
+        foreach ($elements as $element) {
+            if (!$element instanceof ArrayElement) {
+                continue;
+            }
+        
+            $index++;
+            $elementValue = $element->elementValue;
+        
+            if (!$elementValue instanceof Variable) {
+                continue;
+            }
+        
+            /** @phpstan-ignore-next-line */
+            if (null === $elementValue || null === $elementValue->name) {
+                continue;
+            }
+        
+            $varName = $elementValue->name->getText($leftOperand->getFileContents());
+            $variableContext = $this->symbolFactory()->context(
+                $varName,
+                $element->getStart(),
+                $element->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::VARIABLE,
+                ]
+            );
+        
+            if (is_array($value) && isset($value[$index])) {
+                $variableContext = $variableContext->withValue($value[$index]);
+                $variableContext = $variableContext->withType(Type::fromString(gettype($value[$index])));
+            }
+        
+            $frame->locals()->add(WorseVariable::fromSymbolContext($variableContext));
+        }
     }
 }

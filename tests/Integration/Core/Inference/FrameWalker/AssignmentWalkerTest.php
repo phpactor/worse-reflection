@@ -192,6 +192,20 @@ EOT
             }
         ];
 
+        yield 'New list assignment' => [
+            <<<'EOT'
+<?php
+[$foo, $bar] = [ 'foo', 'bar' ];
+<>
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(2, $frame->locals());
+                $this->assertEquals('foo', $frame->locals()->atIndex(0)->symbolContext()->value());
+                $this->assertEquals('bar', $frame->locals()->atIndex(1)->symbolContext()->value());
+            }
+        ];
+
         yield 'From return type with docblock' => [
             <<<'EOT'
 <?php

@@ -961,22 +961,12 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
 
 		-
-			message: "#^Argument of an invalid type Microsoft\\\\PhpParser\\\\Node\\\\DelimitedList\\\\ListExpressionList supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\Variable will always evaluate to false\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\AssignmentWalker\\:\\:hasMissingTokens\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
 
 		-
 			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\AssignmentWalker\\:\\:hasMissingTokens\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
 
