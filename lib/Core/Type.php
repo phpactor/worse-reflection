@@ -191,6 +191,11 @@ class Type
         return $instance;
     }
 
+    public function phpType(): string
+    {
+        return $this->phpType;
+    }
+
     public static function undefined(): Type
     {
         return new self(null);

@@ -2,13 +2,22 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-abstract class Assignments implements \Countable, \IteratorAggregate
+use Countable;
+use IteratorAggregate;
+
+/**
+ * @implements IteratorAggregate<int,Variable>
+ */
+abstract class Assignments implements Countable, IteratorAggregate
 {
     /**
-     * @var array
+     * @var Variable[]
      */
     private $variables = [];
 
+    /**
+     * @param Variable[] $variables
+     */
     protected function __construct(array $variables)
     {
         foreach ($variables as $variable) {
@@ -16,11 +25,14 @@ abstract class Assignments implements \Countable, \IteratorAggregate
         }
     }
 
-    public function add(Variable $variable)
+    public function add(Variable $variable): void
     {
         $this->variables[] = $variable;
     }
 
+    /**
+     * @return self
+     */
     public function byName(string $name): Assignments
     {
         return new static(array_filter($this->variables, function (Variable $variable) use ($name) {
@@ -114,5 +126,22 @@ abstract class Assignments implements \Countable, \IteratorAggregate
         }
 
         return $this;
+    }
+
+    public function replace(Variable $existing, Variable $replacement): void
+    {
+        foreach ($this->variables as $index => $variable) {
+            if ($variable !== $existing) {
+                continue;
+            }
+            $this->variables[$index] = $replacement;
+        }
+    }
+
+    public function equalTo(int $offset): Assignments
+    {
+        return new static(array_filter($this->variables, function (Variable $variable) use ($offset) {
+            return $variable->offset()->toInt() === $offset;
+        }));
     }
 }

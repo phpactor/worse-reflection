@@ -126,14 +126,22 @@ class ForeachWalker extends AbstractWalker
             return;
         }
 
+        $values = (array)$collection->value();
+        $index = 0;
         foreach ($elements->children as $child) {
             if (!$child instanceof ArrayElement) {
                 continue;
             }
 
             $context = $builder->resolveNode($frame, $child->elementValue);
+            $context = $context->withType($collection->type()->arrayType());
+
+            if (isset($values[$index])) {
+                $context = $context->withValue($values[$index]);
+            }
 
             $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+            $index++;
         }
     }
 }

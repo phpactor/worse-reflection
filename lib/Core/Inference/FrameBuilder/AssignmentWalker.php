@@ -48,21 +48,24 @@ class AssignmentWalker extends AbstractWalker
         }
 
         if ($node->leftOperand instanceof Variable) {
-            return $this->walkParserVariable($frame, $node->leftOperand, $rightContext);
+            $this->walkParserVariable($frame, $node->leftOperand, $rightContext);
+            return $frame;
         }
 
         if ($node->leftOperand instanceof ListIntrinsicExpression) {
-            return $this->walkList($frame, $node->leftOperand, $rightContext);
+            $this->walkList($frame, $node->leftOperand, $rightContext);
+            return $frame;
         }
 
         if ($node->leftOperand instanceof MemberAccessExpression) {
-            return $this->walkMemberAccessExpression($builder, $frame, $node->leftOperand, $rightContext);
+            $this->walkMemberAccessExpression($builder, $frame, $node->leftOperand, $rightContext);
+            return $frame;
         }
 
         if ($node->leftOperand instanceof SubscriptExpression) {
-            return $this->walkSubscriptExpression($builder, $frame, $node->leftOperand, $rightContext);
+            $this->walkSubscriptExpression($builder, $frame, $node->leftOperand, $rightContext);
+            return $frame;
         }
-
 
         $this->logger->warning(sprintf(
             'Do not know how to assign to left operand "%s"',
@@ -72,8 +75,9 @@ class AssignmentWalker extends AbstractWalker
         return $frame;
     }
 
-    private function walkParserVariable(Frame $frame, Variable $leftOperand, SymbolContext $rightContext)
+    private function walkParserVariable(Frame $frame, Variable $leftOperand, SymbolContext $rightContext): void
     {
+        /** @phpstan-ignore-next-line */
         $name = $leftOperand->name->getText($leftOperand->getFileContents());
         $context = $this->symbolFactory()->context(
             $name,
@@ -87,8 +91,6 @@ class AssignmentWalker extends AbstractWalker
         );
 
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
-
-        return $frame;
     }
 
     private function walkMemberAccessExpression(
