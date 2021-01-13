@@ -50,7 +50,6 @@ class ForeachWalker extends AbstractWalker
         if ($expression instanceof ArrayCreationExpression) {
             $this->valueFromArrayCreation($builder, $expression, $node, $collection, $frame);
         }
-        
     }
 
     private function processKey(ForeachStatement $node, Frame $frame, SymbolContext $collection): void
@@ -119,10 +118,9 @@ class ForeachWalker extends AbstractWalker
         ForeachStatement $node,
         SymbolContext $collection,
         Frame $frame
-    ): void
-    {
+    ): void {
         $elements = $expression->arrayElements;
-        if(!$elements instanceof ArrayElementList) {
+        if (!$elements instanceof ArrayElementList) {
             return;
         }
 

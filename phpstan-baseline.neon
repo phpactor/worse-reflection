@@ -791,68 +791,8 @@ parameters:
 			path: lib/Core/DocBlock/DocBlockVars.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:\\$variables type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:__construct\\(\\) has parameter \\$variables with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:add\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:byName\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 5
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:lessThanOrEqualTo\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:lessThan\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:greaterThan\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:greaterThanOrEqualTo\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:merge\\(\\) has parameter \\$variables with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Assignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:merge\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
-			count: 1
+			count: 6
 			path: lib/Core/Inference/Assignments.php
 
 		-
@@ -941,37 +881,12 @@ parameters:
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:\\$properties type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\PropertyAssignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Frame.php
-
-		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:\\$locals type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\LocalAssignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Frame.php
-
-		-
 			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:\\$problems type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
 			count: 1
 			path: lib/Core/Inference/Frame.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:__construct\\(\\) has parameter \\$locals with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\LocalAssignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Frame.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:__construct\\(\\) has parameter \\$problems with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
-			count: 1
-			path: lib/Core/Inference/Frame.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:__construct\\(\\) has parameter \\$properties with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\PropertyAssignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Frame.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:properties\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\.$#"
 			count: 1
 			path: lib/Core/Inference/Frame.php
 
@@ -1006,11 +921,6 @@ parameters:
 			path: lib/Core/Inference/Frame.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:withLocals\\(\\) has parameter \\$locals with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\LocalAssignments\\.$#"
-			count: 1
-			path: lib/Core/Inference/Frame.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\:\\:create\\(\\) has parameter \\$walkers with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder.php
@@ -1041,16 +951,6 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/AbstractInstanceOfWalker.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\AssignmentWalker\\:\\:walkParserVariable\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
-
-		-
-			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 2
-			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
-
-		-
 			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
 			count: 3
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
@@ -1071,6 +971,11 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
 
 		-
+			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\AssignmentWalker\\:\\:hasMissingTokens\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
@@ -1084,26 +989,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/CatchWalker.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\ForeachWalker\\:\\:processValue\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/ForeachWalker.php
-
-		-
-			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 2
-			path: lib/Core/Inference/FrameBuilder/ForeachWalker.php
-
-		-
-			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
-			count: 2
-			path: lib/Core/Inference/FrameBuilder/ForeachWalker.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\ForeachWalker\\:\\:processKey\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/ForeachWalker.php
 
 		-
 			message: "#^Parameter \\#3 \\$node of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\FunctionLikeWalker\\:\\:walkFunctionLike\\(\\) expects Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\AnonymousFunctionCreationExpression\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\FunctionDeclaration, Microsoft\\\\PhpParser\\\\FunctionLike&Microsoft\\\\PhpParser\\\\Node given\\.$#"
@@ -1181,11 +1066,6 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/VariableWalker.php
 
 		-
-			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/VariableWalker.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:resolve\\(\\) has parameter \\$type with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
@@ -1232,11 +1112,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\LocalAssignments\\:\\:fromArray\\(\\) has parameter \\$assignments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Inference/LocalAssignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\LocalAssignments\\:\\:fromArray\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\LocalAssignments\\.$#"
 			count: 1
 			path: lib/Core/Inference/LocalAssignments.php
 
@@ -1327,11 +1202,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\PropertyAssignments\\:\\:fromArray\\(\\) has parameter \\$assignments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Inference/PropertyAssignments.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\PropertyAssignments\\:\\:fromArray\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\PropertyAssignments\\.$#"
 			count: 1
 			path: lib/Core/Inference/PropertyAssignments.php
 
