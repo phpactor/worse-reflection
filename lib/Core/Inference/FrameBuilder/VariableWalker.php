@@ -12,6 +12,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
 use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\Inference\Variable as PhpactorVariable;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 
@@ -53,12 +54,13 @@ class VariableWalker extends AbstractWalker
             return $frame;
         }
 
-        if (false === $node->name instanceof Token) {
+        $token = $node->name;
+        if (false === $token instanceof Token) {
             return $frame;
         }
 
         $context = $this->symbolFactory()->context(
-            $node->name->getText($node->getFileContents()),
+            (string)$token->getText($node->getFileContents()),
             $node->getStart(),
             $node->getEndPosition(),
             [
@@ -78,6 +80,12 @@ class VariableWalker extends AbstractWalker
         }
 
         $context = $context->withTypes($docblockTypes);
+        $locals = $frame->locals();
+        foreach ($locals->byName($symbolName)->equalTo($context->symbol()->position()->start()) as $existing) {
+            assert($existing instanceof PhpactorVariable);
+            $locals->replace($existing, $existing->withTypes($context->types()));
+            return $frame;
+        }
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
 
         return $frame;

@@ -24,7 +24,7 @@ foreach ($items as $item) {
 EOT
         ,
             function (Frame $frame) {
-                $this->assertCount(3, $frame->locals());
+                $this->assertCount(2, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('item'));
                 $this->assertEquals('int', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
@@ -42,7 +42,7 @@ foreach ($items as $key => $item) {
 EOT
         ,
             function (Frame $frame) {
-                $this->assertCount(4, $frame->locals());
+                $this->assertCount(3, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('key'));
                 $this->assertEquals(Type::unknown(), $frame->locals()->byName('key')->first()->symbolContext()->types()->best());
                 $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('key')->first()->symbolContext()->symbol()->symbolType());
@@ -65,7 +65,7 @@ foreach ($items as $item) {
 EOT
         ,
             function (Frame $frame) {
-                $this->assertCount(3, $frame->locals());
+                $this->assertCount(2, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('item'));
                 $this->assertEquals('Foobar\\Barfoo', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
@@ -86,9 +86,12 @@ foreach ($items as $item) {
 EOT
         ,
             function (Frame $frame) {
-                $this->assertCount(3, $frame->locals());
+                $this->assertCount(2, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('item'));
-                $this->assertEquals('Foobar\\Collection', (string) $frame->locals()->byName('items')->first()->symbolContext()->types()->best());
+                $this->assertEquals(
+                    'Foobar\\Collection<Foobar\Item>',
+                    (string) $frame->locals()->byName('items')->first()->symbolContext()->types()->best()
+                );
                 $this->assertEquals('Foobar\\Item', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
             }
         ];
@@ -115,5 +118,53 @@ EOT
             $symbolInformation = $vars->atIndex(1)->symbolContext();
             $this->assertEquals('Foobar', (string) $symbolInformation->type());
         }];
+
+        yield 'List assignment in foreach' => [
+            <<<'EOT'
+<?php
+foreach (['foo', 'bar'] as [ $foo, $bar ]) {
+    <>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertCount(2, $frame->locals());
+                $this->assertEquals('foo', $frame->locals()->atIndex(0)->name());
+                $this->assertEquals('bar', $frame->locals()->atIndex(1)->name());
+                $this->assertEquals(
+                    'foo',
+                    $frame->locals()->byName('foo')->first()->symbolContext()->value()
+                );
+                $this->assertEquals(
+                    'bar',
+                    $frame->locals()->byName('bar')->first()->symbolContext()->value()
+                );
+            }
+        ];
+
+        yield 'Typed array' => [
+            <<<'EOT'
+<?php
+/** @var string[] $vars */
+$vars = ['one', 'two'];
+
+foreach ($vars as [ $foo, $bar ]) {
+    <>
+}
+EOT
+        ,
+            function (Frame $frame) {
+                $this->assertEquals(
+                    Type::string(),
+                    $frame->locals()->byName('foo')->atIndex(0)->symbolContext()->type(),
+                    'Type'
+                );
+                $this->assertEquals(
+                    'one',
+                    $frame->locals()->byName('foo')->first()->symbolContext()->value(),
+                    'Value'
+                );
+            }
+        ];
     }
 }

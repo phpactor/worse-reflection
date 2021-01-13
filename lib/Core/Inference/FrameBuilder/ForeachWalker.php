@@ -2,6 +2,9 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
+use Microsoft\PhpParser\Node\ArrayElement;
+use Microsoft\PhpParser\Node\DelimitedList\ArrayElementList;
+use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\ForeachKey;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
@@ -25,24 +28,72 @@ class ForeachWalker extends AbstractWalker
         assert($node instanceof ForeachStatement);
         $collection = $builder->resolveNode($frame, $node->forEachCollectionName);
         $this->processKey($node, $frame, $collection);
-        $this->processValue($node, $frame, $collection);
+        $this->processValue($builder, $node, $frame, $collection);
 
         return $frame;
     }
 
-    private function processValue(ForeachStatement $node, Frame $frame, SymbolContext $collection)
+    private function processValue(FrameBuilder $builder, ForeachStatement $node, Frame $frame, SymbolContext $collection): void
     {
         $itemName = $node->foreachValue;
         
         if (!$itemName instanceof ForeachValue) {
-            return $frame;
+            return;
         }
         
-        if (!$itemName->expression instanceof Variable) {
-            return $frame;
+        $expression = $itemName->expression;
+        if ($expression instanceof Variable) {
+            $this->valueFromVariable($expression, $node, $collection, $frame);
+            return;
+        }
+
+        if ($expression instanceof ArrayCreationExpression) {
+            $this->valueFromArrayCreation($builder, $expression, $node, $collection, $frame);
+        }
+    }
+
+    private function processKey(ForeachStatement $node, Frame $frame, SymbolContext $collection): void
+    {
+        $itemName = $node->foreachKey;
+        
+        if (!$itemName instanceof ForeachKey) {
+            return;
         }
         
-        $itemName = $itemName->expression->name->getText($node->getFileContents());
+        $expression = $itemName->expression;
+        if (!$expression instanceof Variable) {
+            return;
+        }
+        
+        /** @phpstan-ignore-next-line */
+        $itemName = $expression->name->getText($node->getFileContents());
+
+        if (!is_string($itemName)) {
+            return;
+        }
+        
+        $collectionType = $collection->types()->best();
+        
+        $context = $this->symbolFactory()->context(
+            $itemName,
+            $node->getStart(),
+            $node->getEndPosition(),
+            [
+                'symbol_type' => Symbol::VARIABLE,
+            ]
+        );
+        
+        $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+    }
+
+    private function valueFromVariable(Variable $expression, ForeachStatement $node, SymbolContext $collection, Frame $frame): void
+    {
+        $itemName = $expression->getText();
+        
+        if (!is_string($itemName)) {
+            return;
+        }
+
         $collectionType = $collection->types()->best();
         
         $context = $this->symbolFactory()->context(
@@ -61,31 +112,34 @@ class ForeachWalker extends AbstractWalker
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
     }
 
-    private function processKey(ForeachStatement $node, Frame $frame, SymbolContext $collection)
-    {
-        $itemName = $node->foreachKey;
-        
-        if (!$itemName instanceof ForeachKey) {
-            return $frame;
+    private function valueFromArrayCreation(
+        FrameBuilder $builder,
+        ArrayCreationExpression $expression,
+        ForeachStatement $node,
+        SymbolContext $collection,
+        Frame $frame
+    ): void {
+        $elements = $expression->arrayElements;
+        if (!$elements instanceof ArrayElementList) {
+            return;
         }
-        
-        if (!$itemName->expression instanceof Variable) {
-            return $frame;
+
+        $values = (array)$collection->value();
+        $index = 0;
+        foreach ($elements->children as $child) {
+            if (!$child instanceof ArrayElement) {
+                continue;
+            }
+
+            $context = $builder->resolveNode($frame, $child->elementValue);
+            $context = $context->withType($collection->type()->arrayType());
+
+            if (isset($values[$index])) {
+                $context = $context->withValue($values[$index]);
+            }
+
+            $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+            $index++;
         }
-        
-        $itemName = $itemName->expression->name->getText($node->getFileContents());
-        
-        $collectionType = $collection->types()->best();
-        
-        $context = $this->symbolFactory()->context(
-            $itemName,
-            $node->getStart(),
-            $node->getEndPosition(),
-            [
-                'symbol_type' => Symbol::VARIABLE,
-            ]
-        );
-        
-        $frame->locals()->add(WorseVariable::fromSymbolContext($context));
     }
 }
