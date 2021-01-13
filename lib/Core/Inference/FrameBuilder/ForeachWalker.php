@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
+use Microsoft\PhpParser\Node\ArrayElement;
+use Microsoft\PhpParser\Node\DelimitedList\ArrayElementList;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\ForeachKey;
 use Microsoft\PhpParser\Node;
@@ -26,12 +28,12 @@ class ForeachWalker extends AbstractWalker
         assert($node instanceof ForeachStatement);
         $collection = $builder->resolveNode($frame, $node->forEachCollectionName);
         $this->processKey($node, $frame, $collection);
-        $this->processValue($node, $frame, $collection);
+        $this->processValue($builder, $node, $frame, $collection);
 
         return $frame;
     }
 
-    private function processValue(ForeachStatement $node, Frame $frame, SymbolContext $collection): void
+    private function processValue(FrameBuilder $builder, ForeachStatement $node, Frame $frame, SymbolContext $collection): void
     {
         $itemName = $node->foreachValue;
         
@@ -46,6 +48,7 @@ class ForeachWalker extends AbstractWalker
         }
 
         if ($expression instanceof ArrayCreationExpression) {
+            $this->valueFromArrayCreation($builder, $expression, $node, $collection, $frame);
         }
         
     }
@@ -108,5 +111,29 @@ class ForeachWalker extends AbstractWalker
         }
         
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+    }
+
+    private function valueFromArrayCreation(
+        FrameBuilder $builder,
+        ArrayCreationExpression $expression,
+        ForeachStatement $node,
+        SymbolContext $collection,
+        Frame $frame
+    ): void
+    {
+        $elements = $expression->arrayElements;
+        if(!$elements instanceof ArrayElementList) {
+            return;
+        }
+
+        foreach ($elements->children as $child) {
+            if (!$child instanceof ArrayElement) {
+                continue;
+            }
+
+            $context = $builder->resolveNode($frame, $child->elementValue);
+
+            $frame->locals()->add(WorseVariable::fromSymbolContext($context));
+        }
     }
 }

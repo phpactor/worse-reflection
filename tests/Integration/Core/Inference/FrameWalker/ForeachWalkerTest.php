@@ -126,8 +126,8 @@ EOT
         ,
             function (Frame $frame) {
                 $this->assertCount(2, $frame->locals());
-                $this->assertEquals('foo', $frame->locals()->atIndex(0)->symbolContext()->value());
-                $this->assertEquals('bar', $frame->locals()->atIndex(1)->symbolContext()->value());
+                $this->assertEquals('foo', $frame->locals()->atIndex(0)->name());
+                $this->assertEquals('bar', $frame->locals()->atIndex(1)->name());
             }
         ];
     }
