@@ -106,12 +106,12 @@ class AssignmentWalker extends AbstractWalker
         Frame $frame,
         MemberAccessExpression $leftOperand,
         SymbolContext $typeContext
-    ): Frame {
+    ): void {
         $variable = $leftOperand->dereferencableExpression;
 
         // we do not track assignments to other classes.
         if (false === in_array($variable, [ '$this', 'self' ])) {
-            return $frame;
+            return;
         }
 
         $memberNameNode = $leftOperand->memberName;
@@ -125,7 +125,7 @@ class AssignmentWalker extends AbstractWalker
             $memberNameInfo = $builder->resolveNode($frame, $memberNameNode);
 
             if (false === is_string($memberNameInfo->value())) {
-                return $frame;
+                return;
             }
 
             $memberName = $memberNameInfo->value();
@@ -143,9 +143,8 @@ class AssignmentWalker extends AbstractWalker
         );
 
         $frame->properties()->add(WorseVariable::fromSymbolContext($context));
-
-        return $frame;
     }
+
     private function walkArrayCreation(Frame $frame, ArrayCreationExpression $leftOperand, SymbolContext $symbolContext): void
     {
         $list = $leftOperand->arrayElements;
@@ -157,30 +156,26 @@ class AssignmentWalker extends AbstractWalker
         $this->walkArrayElements($list->children, $leftOperand, $value, $frame);
     }
 
-    private function walkList(Frame $frame, ListIntrinsicExpression $leftOperand, SymbolContext $symbolContext): Frame
+    private function walkList(Frame $frame, ListIntrinsicExpression $leftOperand, SymbolContext $symbolContext): void
     {
         $list = $leftOperand->listElements;
         $value = $symbolContext->value();
         if (!$list instanceof ListExpressionList) {
-            return $frame;
+            return;
         }
 
         $this->walkArrayElements($list->children, $leftOperand, $value, $frame);
-
-        return $frame;
     }
 
-    private function walkSubscriptExpression(FrameBuilder $builder, Frame $frame, SubscriptExpression $leftOperand, SymbolContext $rightContext): Frame
+    private function walkSubscriptExpression(FrameBuilder $builder, Frame $frame, SubscriptExpression $leftOperand, SymbolContext $rightContext): void
     {
         if ($leftOperand->postfixExpression instanceof MemberAccessExpression) {
             $rightContext = $rightContext->withType(Type::array());
             $this->walkMemberAccessExpression($builder, $frame, $leftOperand->postfixExpression, $rightContext);
         }
-
-        return $frame;
     }
 
-    private function hasMissingTokens(AssignmentExpression $node)
+    private function hasMissingTokens(AssignmentExpression $node): bool
     {
         // this would probably never happen ...
         if (false === $node->parent instanceof ExpressionStatement) {

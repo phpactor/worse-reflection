@@ -961,11 +961,6 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\AssignmentWalker\\:\\:hasMissingTokens\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
-
-		-
 			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
