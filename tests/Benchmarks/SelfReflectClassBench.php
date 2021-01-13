@@ -10,7 +10,7 @@ use Phpactor\WorseReflection\Core\ClassName;
  * @Warmup(1)
  * @OutputTimeUnit("milliseconds", precision=2)
  * @Assert("variant.mode <= baseline.mode +/- 10%")
- * @Assert("variant.mem_peak <= baseline.mem_final")
+ * @Assert("variant.mem_peak <= baseline.mem_final +/- 10%")
  */
 class SelfReflectClassBench extends BaseBenchCase
 {
