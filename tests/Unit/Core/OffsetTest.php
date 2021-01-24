@@ -5,12 +5,13 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Phpactor\TextDocument\ByteOffset;
 use Phpactor\WorseReflection\Core\Offset;
+use stdClass;
 
 class OffsetTest extends TestCase
 {
     const OFFSET = 123;
 
-    public function testFromPhpactorByteOffset()
+    public function testFromPhpactorByteOffset(): void
     {
         $byteOffset = ByteOffset::fromInt(self::OFFSET);
         $offset = Offset::fromUnknown($byteOffset);
@@ -18,7 +19,7 @@ class OffsetTest extends TestCase
         $this->assertSame(self::OFFSET, $offset->toInt());
     }
 
-    public function testFromUnknownReturnsOffsetIfGivenOffset()
+    public function testFromUnknownReturnsOffsetIfGivenOffset(): void
     {
         $givenOffset = Offset::fromInt(self::OFFSET);
         $offset = Offset::fromUnknown($givenOffset);
@@ -26,16 +27,16 @@ class OffsetTest extends TestCase
         $this->assertSame($givenOffset, $offset);
     }
 
-    public function testFromUnknownString()
+    public function testFromUnknownString(): void
     {
         $offset = Offset::fromUnknown(self::OFFSET);
 
         $this->assertEquals(Offset::fromInt(self::OFFSET), $offset);
     }
 
-    public function testFromUnknownInvalid()
+    public function testFromUnknownInvalid(): void
     {
         $this->expectExceptionMessage('Do not know how to create offset');
-        Offset::fromUnknown(new \stdClass);
+        Offset::fromUnknown(new stdClass);
     }
 }

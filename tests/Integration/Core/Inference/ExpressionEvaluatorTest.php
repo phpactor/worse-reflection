@@ -11,7 +11,7 @@ class ExpressionEvaluatorTest extends IntegrationTestCase
     /**
      * @dataProvider provideEvaluate
      */
-    public function testEvaluate(string $source, $expectedResult)
+    public function testEvaluate(string $source, $expectedResult): void
     {
         $rootNode = $this->parseSource('<?php ' . $source, $this->workspace()->path('foo.php'));
         $node = $rootNode->getFirstDescendantNode(Expression::class);

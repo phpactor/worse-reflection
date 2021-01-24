@@ -19,26 +19,26 @@ class NativeReflectionFunctionSourceLocatorTest extends TestCase
         $this->locator = new NativeReflectionFunctionSourceLocator();
     }
 
-    public function testLocatesAFunction()
+    public function testLocatesAFunction(): void
     {
         $location = $this->locator->locate(Name::fromString(__NAMESPACE__ . '\\test_function'));
         $this->assertEquals(__FILE__, $location->path());
         $this->assertEquals(file_get_contents(__FILE__), $location->__toString());
     }
 
-    public function testThrowsExceptionWhenSourceNotFound()
+    public function testThrowsExceptionWhenSourceNotFound(): void
     {
         $this->expectException(SourceNotFound::class);
         $this->locator->locate(Name::fromString(__NAMESPACE__ . '\\not_existing'));
     }
 
-    public function testDoesNotLocateInternalFunctions()
+    public function testDoesNotLocateInternalFunctions(): void
     {
         $this->expectException(SourceNotFound::class);
         $this->locator->locate(Name::fromString('assert'));
     }
 }
 
-function test_function()
+function test_function(): void
 {
 }

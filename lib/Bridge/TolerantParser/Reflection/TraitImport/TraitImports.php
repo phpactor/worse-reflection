@@ -106,6 +106,14 @@ class TraitImports implements Countable, IteratorAggregate
         return count($this->imports);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->imports);
+    }
+
     private function visiblity(TraitSelectOrAliasClause $clause)
     {
         foreach ($clause->modifiers as $modifier) {
@@ -124,13 +132,5 @@ class TraitImports implements Countable, IteratorAggregate
 
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->imports);
     }
 }

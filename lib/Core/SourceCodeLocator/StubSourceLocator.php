@@ -7,6 +7,8 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
 use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 final class StubSourceLocator implements SourceCodeLocator
 {
@@ -57,7 +59,7 @@ final class StubSourceLocator implements SourceCodeLocator
         return $this->map();
     }
 
-    private function buildCache()
+    private function buildCache(): void
     {
         $map = [];
         foreach ($this->fileIterator() as $file) {
@@ -83,9 +85,9 @@ final class StubSourceLocator implements SourceCodeLocator
 
     private function fileIterator()
     {
-        return new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->stubPath, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST
+        return new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($this->stubPath, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
         );
     }
 

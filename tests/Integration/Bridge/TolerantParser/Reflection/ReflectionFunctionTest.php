@@ -13,7 +13,7 @@ class ReflectionFunctionTest extends IntegrationTestCase
     /**
      * @dataProvider provideReflectsFunction
      */
-    public function testReflects(string $source, string $functionName, Closure $assertion)
+    public function testReflects(string $source, string $functionName, Closure $assertion): void
     {
         $functions = $this->createReflector($source)->reflectFunctionsIn($source);
         $assertion($functions->get($functionName));
@@ -23,12 +23,12 @@ class ReflectionFunctionTest extends IntegrationTestCase
     {
         yield 'single function with no params' => [
             <<<'EOT'
-<?php
-function hello()
-{
-}
-EOT
-            , 'hello', function (ReflectionFunction $function) {
+                <?php
+                function hello()
+                {
+                }
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
                 $this->assertEquals('hello', $function->name());
                 $this->assertEquals(Position::fromStartAndEnd(6, 26), $function->position());
             }
@@ -36,88 +36,88 @@ EOT
 
         yield 'function\'s frame' => [
             <<<'EOT'
-<?php
-function hello()
-{
-    $hello = 'hello';
-}
-EOT
-            , 'hello', function (ReflectionFunction $function) {
+                <?php
+                function hello()
+                {
+                    $hello = 'hello';
+                }
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
                 $this->assertCount(1, $function->frame()->locals());
             }
         ];
 
         yield 'the docblock' => [
             <<<'EOT'
-<?php
-/** Hello */
-function hello()
-{
-    $hello = 'hello';
-}
-EOT
-            , 'hello', function (ReflectionFunction $function) {
+                <?php
+                /** Hello */
+                function hello()
+                {
+                    $hello = 'hello';
+                }
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
                 $this->assertEquals('/** Hello */', trim($function->docblock()->raw()));
             }
         ];
 
         yield 'the declared scalar type' => [
             <<<'EOT'
-<?php
-function hello(): string {}
-EOT
-            , 'hello', function (ReflectionFunction $function) {
+                <?php
+                function hello(): string {}
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
                 $this->assertEquals('string', $function->type()->short());
             }
         ];
 
         yield 'the declared class type' => [
             <<<'EOT'
-<?php
-use Foobar\Barfoo;
-function hello(): Barfoo {}
-EOT
-            , 'hello', function (ReflectionFunction $function) {
+                <?php
+                use Foobar\Barfoo;
+                function hello(): Barfoo {}
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
                 $this->assertEquals('Foobar\Barfoo', $function->type()->className()->full());
             }
         ];
 
         yield 'unknown if nothing declared as type' => [
             <<<'EOT'
-<?php
-function hello() {}
-EOT
-            , 'hello', function (ReflectionFunction $function) {
+                <?php
+                function hello() {}
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
                 $this->assertEquals(Type::unknown(), $function->type());
             }
         ];
 
         yield 'type from docblock' => [
             <<<'EOT'
-<?php
-/**
- * @return string
- */
-function hello() {}
-EOT
-            , 'hello', function (ReflectionFunction $function) {
+                <?php
+                /**
+                 * @return string
+                 */
+                function hello() {}
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
                 $this->assertEquals(Type::string(), $function->inferredTypes()->best());
             }
         ];
 
         yield 'resolved type class from docblock' => [
             <<<'EOT'
-<?php
-namespace Bar;
+                <?php
+                namespace Bar;
 
-use Foo\Goodbye;
+                use Foo\Goodbye;
 
-/**
- * @return Goodbye
- */
-function hello() {}
-EOT
-            , 'Bar\hello', function (ReflectionFunction $function) {
+                /**
+                 * @return Goodbye
+                 */
+                function hello() {}
+                EOT
+            , 'Bar\hello', function (ReflectionFunction $function): void {
                 $this->assertEquals(Type::fromString('Foo\Goodbye'), $function->inferredTypes()->best());
             }
         ];
@@ -125,15 +125,15 @@ EOT
 
         yield 'parameters' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-namespace Bar;
+                    namespace Bar;
 
-function hello($foobar, Barfoo $barfoo, int $number)
-{
-}
-EOT
-        , 'Bar\hello', function (ReflectionFunction $function) {
+                    function hello($foobar, Barfoo $barfoo, int $number)
+                    {
+                    }
+                    EOT
+        , 'Bar\hello', function (ReflectionFunction $function): void {
             $this->assertCount(3, $function->parameters());
             $this->assertEquals('Bar\Barfoo', $function->parameters()->get('barfoo')->inferredTypes()->best());
         },
@@ -141,15 +141,15 @@ EOT
 
         yield 'returns the source code' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-namespace Bar;
+                    namespace Bar;
 
-function hello($foobar, Barfoo $barfoo, int $number)
-{
-}
-EOT
-        , 'Bar\hello', function (ReflectionFunction $function) {
+                    function hello($foobar, Barfoo $barfoo, int $number)
+                    {
+                    }
+                    EOT
+        , 'Bar\hello', function (ReflectionFunction $function): void {
             $this->assertStringContainsString('function hello(', (string) $function->sourceCode());
         },
         ];

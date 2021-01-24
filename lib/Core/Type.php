@@ -41,6 +41,40 @@ class Type
         $this->phpType = $phpType;
     }
 
+    public function __toString()
+    {
+        $className = $this->className ? (string) $this->className : ($this->phpType ?: '<unknown>');
+
+        if ($this->nullable) {
+            $className = '?' . $className;
+        }
+
+        if (null === $this->arrayType) {
+            return $className;
+        }
+
+        if ($this->isClass()) {
+            return $className . '<' . $this->arrayType->__toString() . '>';
+        }
+
+        if ($this->arrayType->isDefined()) {
+            return (string) $this->arrayType . '[]';
+        }
+
+        return $className;
+    }
+
+    public function __clone()
+    {
+        if ($this->className) {
+            $this->className = clone $this->className;
+        }
+
+        if ($this->arrayType) {
+            $this->arrayType = clone $this->arrayType;
+        }
+    }
+
     public static function fromArray(array $parts): Type
     {
         return self::fromString(implode('\\', $parts));
@@ -176,11 +210,6 @@ class Type
         return self::create(self::TYPE_ITERABLE);
     }
 
-    private static function object()
-    {
-        return self::create(self::TYPE_CLASS);
-    }
-
     public static function class($className): Type
     {
         $className = ClassName::fromUnknown($className);
@@ -204,29 +233,6 @@ class Type
     public function isDefined(): bool
     {
         return null !== $this->phpType;
-    }
-
-    public function __toString()
-    {
-        $className = $this->className ? (string) $this->className : ($this->phpType ?: '<unknown>');
-
-        if ($this->nullable) {
-            $className = '?' . $className;
-        }
-
-        if (null === $this->arrayType) {
-            return $className;
-        }
-
-        if ($this->isClass()) {
-            return $className . '<' . $this->arrayType->__toString() . '>';
-        }
-
-        if ($this->arrayType->isDefined()) {
-            return (string) $this->arrayType . '[]';
-        }
-
-        return $className;
     }
 
     public function isNullable(): bool
@@ -269,11 +275,6 @@ class Type
         return $this->className;
     }
 
-    private static function create($type): Type
-    {
-        return new self($type);
-    }
-
     public function arrayType(): Type
     {
         if ($this->arrayType) {
@@ -298,15 +299,22 @@ class Type
         return $clone;
     }
 
-    public function __clone()
+    public function asNullable(): self
     {
-        if ($this->className) {
-            $this->className = clone $this->className;
-        }
+        $instance = clone $this;
+        ;
+        $instance->nullable = true;
+        return $instance;
+    }
 
-        if ($this->arrayType) {
-            $this->arrayType = clone $this->arrayType;
-        }
+    private static function object()
+    {
+        return self::create(self::TYPE_CLASS);
+    }
+
+    private static function create($type): Type
+    {
+        return new self($type);
     }
 
     private static function typeFromString(string $type): Type
@@ -364,13 +372,5 @@ class Type
         }
 
         return self::class(ClassName::fromString($type));
-    }
-
-    public function asNullable(): self
-    {
-        $instance = clone $this;
-        ;
-        $instance->nullable = true;
-        return $instance;
     }
 }

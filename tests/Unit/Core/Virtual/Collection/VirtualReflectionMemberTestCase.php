@@ -34,13 +34,13 @@ abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollect
         $this->position = Position::fromStartAndEnd(0, 10);
     }
 
-    public function testByName()
+    public function testByName(): void
     {
         $collection = $this->collection(['one', 'two'])->byName('one');
         $this->assertCount(1, $collection);
     }
 
-    public function testByVisiblities()
+    public function testByVisiblities(): void
     {
         $collection = $this->collection(['one', 'two'])->byVisibilities([
             Visibility::public()
@@ -48,7 +48,7 @@ abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollect
         $this->assertCount(2, $collection);
     }
 
-    public function testBelongingTo()
+    public function testBelongingTo(): void
     {
         $belongingTo = ClassName::fromString('Hello');
         $this->declaringClass->name()->willReturn($belongingTo);
@@ -56,19 +56,19 @@ abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollect
         $this->assertCount(2, $collection);
     }
 
-    public function testAtOffset()
+    public function testAtOffset(): void
     {
         $collection = $this->collection(['one', 'two'])->atoffset(0);
         $this->assertcount(2, $collection);
     }
 
-    public function testVirtual()
+    public function testVirtual(): void
     {
         $collection = $this->collection(['one', 'two']);
         $this->assertCount(2, $collection->virtual());
     }
 
-    public function testReal()
+    public function testReal(): void
     {
         $collection = $this->collection(['one', 'two']);
         $this->assertCount(0, $collection->real());

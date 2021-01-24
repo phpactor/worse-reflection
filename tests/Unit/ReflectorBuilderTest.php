@@ -15,13 +15,13 @@ class ReflectorBuilderTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testBuildWithDefaults()
+    public function testBuildWithDefaults(): void
     {
         $reflector = ReflectorBuilder::create()->build();
         $this->assertInstanceOf(Reflector::class, $reflector);
     }
 
-    public function testReplacesLogger()
+    public function testReplacesLogger(): void
     {
         $logger = $this->prophesize(LoggerInterface::class);
         $reflector = ReflectorBuilder::create()
@@ -31,7 +31,7 @@ class ReflectorBuilderTest extends TestCase
         $this->assertInstanceOf(Reflector::class, $reflector);
     }
 
-    public function testHasOneLocator()
+    public function testHasOneLocator(): void
     {
         $locator = $this->prophesize(SourceCodeLocator::class);
         $reflector = ReflectorBuilder::create()
@@ -41,7 +41,7 @@ class ReflectorBuilderTest extends TestCase
         $this->assertInstanceOf(Reflector::class, $reflector);
     }
 
-    public function testHasManyLocators()
+    public function testHasManyLocators(): void
     {
         $locator = $this->prophesize(SourceCodeLocator::class);
         $reflector = ReflectorBuilder::create()
@@ -52,7 +52,7 @@ class ReflectorBuilderTest extends TestCase
         $this->assertInstanceOf(Reflector::class, $reflector);
     }
 
-    public function testHighestPriorityLocatorWins()
+    public function testHighestPriorityLocatorWins(): void
     {
         $locator1 = $this->prophesize(SourceCodeLocator::class);
         $locator2 = $this->prophesize(SourceCodeLocator::class);
@@ -72,7 +72,7 @@ class ReflectorBuilderTest extends TestCase
         $reflector->reflectClass(__CLASS__);
     }
 
-    public function testWithSource()
+    public function testWithSource(): void
     {
         $reflector = ReflectorBuilder::create()
             ->addSource('<?php class Foobar {}')
@@ -83,7 +83,7 @@ class ReflectorBuilderTest extends TestCase
         $this->assertInstanceOf(Reflector::class, $reflector);
     }
 
-    public function testEnableCache()
+    public function testEnableCache(): void
     {
         $reflector = ReflectorBuilder::create()
             ->enableCache()
@@ -92,7 +92,7 @@ class ReflectorBuilderTest extends TestCase
         $this->assertInstanceOf(Reflector::class, $reflector);
     }
 
-    public function testEnableContextualSourceLocation()
+    public function testEnableContextualSourceLocation(): void
     {
         $reflector = ReflectorBuilder::create()
             ->enableContextualSourceLocation()

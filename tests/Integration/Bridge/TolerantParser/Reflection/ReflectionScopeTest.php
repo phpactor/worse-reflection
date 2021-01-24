@@ -7,13 +7,14 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\NameImports;
+use Closure;
 
 class ReflectionScopeTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideScope
      */
-    public function testScope(string $source, string $class, \Closure $assertion)
+    public function testScope(string $source, string $class, Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class);
@@ -23,19 +24,19 @@ class ReflectionScopeTest extends IntegrationTestCase
     {
         yield 'Returns imported classes' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Foobar\Barfoo;
-use Barfoo\Foobaz as Carzatz;
+                use Foobar\Barfoo;
+                use Barfoo\Foobaz as Carzatz;
 
-class Class2
-{
-}
+                class Class2
+                {
+                }
 
-EOT
+                EOT
         ,
             'Class2',
-            function ($class) {
+            function ($class): void {
                 $this->assertEquals(NameImports::fromNames([
                     'Barfoo' => Name::fromString('Foobar\\Barfoo'),
                     'Carzatz' => Name::fromString('Barfoo\\Foobaz'),
@@ -45,18 +46,18 @@ EOT
 
         yield 'Returns local name' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Foobar\Barfoo;
+                use Foobar\Barfoo;
 
-class Class2
-{
-}
+                class Class2
+                {
+                }
 
-EOT
+                EOT
         ,
             'Class2',
-            function (ReflectionClass $class) {
+            function (ReflectionClass $class): void {
                 $this->assertEquals(
                     Name::fromString('Barfoo'),
                     $class->scope()->resolveLocalName(Name::fromString('Foobar\Barfoo'))

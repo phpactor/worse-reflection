@@ -21,6 +21,7 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\MethodTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
 use Microsoft\PhpParser\NamespacedNameInterface;
+use InvalidArgumentException;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
@@ -85,7 +86,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
 
         if (null === $class) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Could not locate class-like ancestor node for method "%s"',
                 $this->name()
             ));
@@ -155,16 +156,6 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         return $this->class;
     }
 
-    protected function node(): Node
-    {
-        return $this->node;
-    }
-
-    protected function serviceLocator(): ServiceLocator
-    {
-        return $this->serviceLocator;
-    }
-
     public function isStatic(): bool
     {
         return $this->node->isStatic();
@@ -189,5 +180,15 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     public function memberType(): string
     {
         return ReflectionMember::TYPE_METHOD;
+    }
+
+    protected function node(): Node
+    {
+        return $this->node;
+    }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
     }
 }

@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Benchmarks\Examples;
 
 class MethodClass
 {
-    public function methodNoReturnType()
+    public function methodNoReturnType(): void
     {
     }
 

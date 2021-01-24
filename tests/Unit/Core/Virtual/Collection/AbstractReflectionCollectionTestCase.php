@@ -14,24 +14,24 @@ abstract class AbstractReflectionCollectionTestCase extends TestCase
 
     abstract public function collection(array $names): ReflectionCollection;
 
-    public function testCount()
+    public function testCount(): void
     {
         $this->assertEquals(2, $this->collection(['one', 'two'])->count());
     }
 
-    public function testKeys()
+    public function testKeys(): void
     {
         $this->assertEquals(2, $this->collection(['one', 'two'])->count());
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $collection = $this->collection(['one', 'two'])->merge($this->collection(['three', 'four']));
         $this->assertCount(4, $collection);
         $this->assertEquals(['one', 'two', 'three', 'four'], $collection->keys());
     }
 
-    public function testMergeThrowsExceptionOnIncorrectType()
+    public function testMergeThrowsExceptionOnIncorrectType(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Collection must be instance of');
@@ -39,34 +39,34 @@ abstract class AbstractReflectionCollectionTestCase extends TestCase
         $this->collection([])->merge($collection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->assertNotNull($this->collection(['one'])->get('one'));
     }
 
-    public function testGetThrowsExceptionIfItemNotExisting()
+    public function testGetThrowsExceptionIfItemNotExisting(): void
     {
         $this->expectException(ItemNotFound::class);
         $this->collection(['one'])->get('two');
     }
 
-    public function testFirst()
+    public function testFirst(): void
     {
         $this->assertNotNull($this->collection(['one', 'two', 'three'])->first());
     }
 
-    public function testGetFirstThrowsExceptionIfColletionIsEmpty()
+    public function testGetFirstThrowsExceptionIfColletionIsEmpty(): void
     {
         $this->expectException(ItemNotFound::class);
         $this->collection([])->first();
     }
 
-    public function testLast()
+    public function testLast(): void
     {
         $this->assertNotNull($this->collection(['one', 'two', 'three'])->last());
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $this->assertTrue($this->collection(['one'])->has('one'));
     }

@@ -13,13 +13,13 @@ class AssertWalkerTest extends FrameWalkerTestCase
     {
         yield 'assert instanceof' => [
             <<<'EOT'
-<?php
+                <?php
 
-assert($foobar instanceof Foobar);
-<>
-EOT
+                assert($foobar instanceof Foobar);
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals());
                 $this->assertEquals('Foobar', (string) $frame->locals()->first()->symbolContext()->types()->best());
             }
@@ -27,34 +27,34 @@ EOT
 
         yield 'assert instanceof negative' => [
             <<<'EOT'
-<?php
+                <?php
 
-assert(!$foobar instanceof Foobar);
-<>
-EOT
+                assert(!$foobar instanceof Foobar);
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertEquals(0, $frame->locals()->count());
             }
         ];
 
         yield 'should handle properties' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foo
-{
-    private $bar;
+                class Foo
+                {
+                    private $bar;
 
-    public function bar(): void
-    {
-        assert($this->bar instanceof Bar);
+                    public function bar(): void
+                    {
+                        assert($this->bar instanceof Bar);
 
-        <>
-    }
-}
-EOT
-        , function (Frame $frame, int $offset) {
+                        <>
+                    }
+                }
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(1, $frame->locals());
             $this->assertEquals(Type::fromString('Foo'), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
             $this->assertCount(1, $frame->properties());

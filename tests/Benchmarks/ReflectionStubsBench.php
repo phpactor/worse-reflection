@@ -16,7 +16,7 @@ class ReflectionStubsBench extends BaseBenchCase
      */
     private $reflector;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->reflector = $this->getReflector();
@@ -25,7 +25,7 @@ class ReflectionStubsBench extends BaseBenchCase
     /**
      * @Subject()
      */
-    public function test_classes_and_methods()
+    public function test_classes_and_methods(): void
     {
         $classes = $this->reflector->reflectClassesIn(file_get_contents(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs/Reflection/Reflection.php'));
 

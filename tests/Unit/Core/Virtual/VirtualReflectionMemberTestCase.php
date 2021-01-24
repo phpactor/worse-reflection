@@ -45,52 +45,52 @@ abstract class VirtualReflectionMemberTestCase extends TestCase
 
     abstract public function member(): ReflectionMember;
 
-    public function testPosition()
+    public function testPosition(): void
     {
         $this->assertSame($this->position, $this->member()->position());
     }
 
-    public function testDeclaringClass()
+    public function testDeclaringClass(): void
     {
         $this->assertSame($this->declaringClass->reveal(), $this->member()->declaringClass());
     }
 
-    public function testClass()
+    public function testClass(): void
     {
         $this->assertSame($this->class->reveal(), $this->member()->class());
     }
 
-    public function testName()
+    public function testName(): void
     {
         $this->assertEquals($this->name, $this->member()->name());
     }
 
-    public function testFrame()
+    public function testFrame(): void
     {
         $this->assertEquals($this->frame->reveal(), $this->member()->frame());
     }
 
-    public function testDocblock()
+    public function testDocblock(): void
     {
         $this->assertEquals($this->docblock->reveal(), $this->member()->docblock());
     }
 
-    public function testScope()
+    public function testScope(): void
     {
         $this->assertEquals($this->scope->reveal(), $this->member()->scope());
     }
 
-    public function testVisibility()
+    public function testVisibility(): void
     {
         $this->assertEquals($this->visibility, $this->member()->visibility());
     }
 
-    public function testTypes()
+    public function testTypes(): void
     {
         $this->assertEquals($this->types, $this->member()->inferredTypes());
     }
 
-    public function testType()
+    public function testType(): void
     {
         $this->assertEquals($this->type, $this->member()->type());
     }

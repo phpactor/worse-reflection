@@ -126,6 +126,16 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $virtualMethods;
     }
 
+    public function ancestors(): ReflectionClassCollection
+    {
+        return $this->class->ancestors();
+    }
+
+    public function isFinal(): bool
+    {
+        return $this->class->isFinal();
+    }
+
     private function virtualProperties()
     {
         $virtualProperties = VirtualReflectionPropertyCollection::fromReflectionProperties([]);
@@ -150,15 +160,5 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         }
 
         return $virtualProperties;
-    }
-
-    public function ancestors(): ReflectionClassCollection
-    {
-        return $this->class->ancestors();
-    }
-
-    public function isFinal(): bool
-    {
-        return $this->class->isFinal();
     }
 }

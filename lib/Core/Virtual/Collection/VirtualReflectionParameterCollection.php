@@ -12,11 +12,6 @@ use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
  */
 class VirtualReflectionParameterCollection extends AbstractReflectionCollection implements ReflectionParameterCollection
 {
-    protected function collectionType(): string
-    {
-        return ReflectionParameterCollection::class;
-    }
-
     public static function fromReflectionParameters(array $reflectionParameters)
     {
         $parameters = [];
@@ -32,7 +27,7 @@ class VirtualReflectionParameterCollection extends AbstractReflectionCollection 
         return new static([]);
     }
 
-    public function add(VirtualReflectionParameter $virtualReflectionParameter)
+    public function add(VirtualReflectionParameter $virtualReflectionParameter): void
     {
         $this->items[$virtualReflectionParameter->name()] = $virtualReflectionParameter;
     }
@@ -51,5 +46,9 @@ class VirtualReflectionParameterCollection extends AbstractReflectionCollection 
     public function promoted(): ReflectionParameterCollection
     {
         return new self([]);
+    }
+    protected function collectionType(): string
+    {
+        return ReflectionParameterCollection::class;
     }
 }

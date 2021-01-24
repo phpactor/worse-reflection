@@ -2,28 +2,17 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
-final class Problems implements \IteratorAggregate, \Countable
+use IteratorAggregate;
+use Countable;
+use ArrayIterator;
+
+final class Problems implements IteratorAggregate, Countable
 {
     private $problems = [];
 
     private function __construct(array $problems = [])
     {
         $this->problems = $problems;
-    }
-
-    public static function create(): Problems
-    {
-        return new self();
-    }
-
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->problems);
-    }
-
-    public function add(SymbolContext $problem)
-    {
-        $this->problems[] = $problem;
     }
 
     public function __toString()
@@ -40,6 +29,21 @@ final class Problems implements \IteratorAggregate, \Countable
         }
 
         return implode(PHP_EOL, $lines);
+    }
+
+    public static function create(): Problems
+    {
+        return new self();
+    }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->problems);
+    }
+
+    public function add(SymbolContext $problem): void
+    {
+        $this->problems[] = $problem;
     }
 
     public function none(): bool

@@ -12,9 +12,7 @@ use RuntimeException;
 
 abstract class AssignmentstTestCase extends TestCase
 {
-    abstract protected function assignments(): Assignments;
-
-    public function testAddByName()
+    public function testAddByName(): void
     {
         $assignments = $this->assignments();
         $this->assertCount(0, $assignments->byName('hello'));
@@ -32,7 +30,7 @@ abstract class AssignmentstTestCase extends TestCase
         $this->assertEquals($information, $assignments->byName('hello')->first()->symbolContext());
     }
 
-    public function testMultipleByName()
+    public function testMultipleByName(): void
     {
         $assignments = $this->assignments();
 
@@ -42,7 +40,7 @@ abstract class AssignmentstTestCase extends TestCase
         $this->assertCount(2, $assignments->byName('hello'));
     }
 
-    public function testLessThanEqualTo()
+    public function testLessThanEqualTo(): void
     {
         $assignments = $this->assignments();
 
@@ -53,7 +51,7 @@ abstract class AssignmentstTestCase extends TestCase
         $this->assertCount(2, $assignments->byName('hello')->lessThanOrEqualTo(5));
     }
 
-    public function testLessThan()
+    public function testLessThan(): void
     {
         $assignments = $this->assignments();
 
@@ -64,7 +62,7 @@ abstract class AssignmentstTestCase extends TestCase
         $this->assertCount(1, $assignments->byName('hello')->lessThan(5));
     }
 
-    public function testGreaterThanOrEqualTo()
+    public function testGreaterThanOrEqualTo(): void
     {
         $assignments = $this->assignments();
 
@@ -75,7 +73,7 @@ abstract class AssignmentstTestCase extends TestCase
         $this->assertCount(2, $assignments->byName('hello')->greaterThanOrEqualTo(5));
     }
 
-    public function testGreaterThan()
+    public function testGreaterThan(): void
     {
         $assignments = $this->assignments();
 
@@ -86,7 +84,7 @@ abstract class AssignmentstTestCase extends TestCase
         $this->assertCount(1, $assignments->byName('hello')->greaterThan(5));
     }
 
-    public function testThrowsExceptionIfIndexNotExist()
+    public function testThrowsExceptionIfIndexNotExist(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No variable at index "5"');
@@ -96,6 +94,7 @@ abstract class AssignmentstTestCase extends TestCase
 
         $this->assertCount(1, $assignments->atIndex(5));
     }
+    abstract protected function assignments(): Assignments;
 
     private function createVariable(string $name, int $start, int $end): Variable
     {

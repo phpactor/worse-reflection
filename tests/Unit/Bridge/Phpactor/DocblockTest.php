@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 
 class DocblockTest extends TestCase
 {
-    public function testIsDefined()
+    public function testIsDefined(): void
     {
         $docblock = $this->create('');
         $this->assertFalse($docblock->isDefined());
@@ -20,39 +20,39 @@ class DocblockTest extends TestCase
         $this->assertTrue($docblock->isDefined());
     }
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $docblock = $this->create('asd');
         $this->assertEquals('asd', $docblock->raw());
     }
 
-    public function testReturnTypes()
+    public function testReturnTypes(): void
     {
         $docblock = $this->create('/** @return Foo */');
         $this->assertEquals([ 'Foo' ], iterator_to_array($docblock->returnTypes()));
     }
 
-    public function testMethodTypes()
+    public function testMethodTypes(): void
     {
         $docblock = $this->create('/** @method Foo bar() */');
         $this->assertEquals([ 'Foo' ], iterator_to_array($docblock->methodTypes('bar')));
     }
 
-    public function testVarTypes()
+    public function testVarTypes(): void
     {
         $docblock = $this->create('/** @var Foo $foo) */');
         $this->assertEquals('Foo', $docblock->vars()->types()->best()->className()->full());
         $this->assertFalse($docblock->vars()->types()->best()->arrayType()->isDefined());
     }
 
-    public function testArrayTypes()
+    public function testArrayTypes(): void
     {
         $docblock = $this->create('/** @var Foo[] $foo) */');
         $this->assertTrue($docblock->vars()->types()->best()->arrayType()->isDefined());
         $this->assertEquals('Foo', $docblock->vars()->types()->best()->arrayType()->className()->full());
     }
 
-    public function testCollectionTypes()
+    public function testCollectionTypes(): void
     {
         $docblock = $this->create('/** @var Foo<Item> $foo) */');
         $this->assertTrue($docblock->vars()->types()->best()->arrayType()->isDefined());
@@ -60,7 +60,7 @@ class DocblockTest extends TestCase
         $this->assertEquals('Item', $docblock->vars()->types()->best()->arrayType()->className()->full());
     }
 
-    public function testInherits()
+    public function testInherits(): void
     {
         $docblock = $this->create('/** Hello */');
         $this->assertFalse($docblock->inherits());

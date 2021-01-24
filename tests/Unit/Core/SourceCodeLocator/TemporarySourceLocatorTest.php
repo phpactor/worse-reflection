@@ -30,7 +30,7 @@ class TemporarySourceLocatorTest extends TestCase
         $this->classCollection = $this->prophesize(ReflectionClassCollection::class);
     }
 
-    public function testThrowsExceptionWhenClassNotFound()
+    public function testThrowsExceptionWhenClassNotFound(): void
     {
         $this->expectException(SourceNotFound::class);
         $this->expectExceptionMessage('Class "Foobar" not found');
@@ -47,7 +47,7 @@ class TemporarySourceLocatorTest extends TestCase
         $this->locator->locate(ClassName::fromString('Foobar'));
     }
 
-    public function testReturnsSourceIfClassIsInTheSource()
+    public function testReturnsSourceIfClassIsInTheSource(): void
     {
         $code = 'class Foobar {}';
 
@@ -61,7 +61,7 @@ class TemporarySourceLocatorTest extends TestCase
         $this->assertEquals($code, (string) $source);
     }
 
-    public function testNewFilesOverridePreviousOnes()
+    public function testNewFilesOverridePreviousOnes(): void
     {
         $code1 = 'class Foobar {}';
         $this->locator->pushSourceCode(SourceCode::fromPathAndString('foo.php', $code1));

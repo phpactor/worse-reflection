@@ -7,13 +7,14 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Core\Visibility;
+use Closure;
 
 class ReflectionConstantTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideReflectionConstant
      */
-    public function testReflectConstant(string $source, string $class, \Closure $assertion)
+    public function testReflectConstant(string $source, string $class, Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         assert($class instanceof ReflectionClass);
@@ -24,16 +25,16 @@ class ReflectionConstantTest extends IntegrationTestCase
     {
         yield 'Returns declaring class' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    const FOOBAR = 'foobar';
-}
-EOT
+                class Foobar
+                {
+                    const FOOBAR = 'foobar';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $this->assertEquals('Foobar', $constants->get('FOOBAR')->declaringClass()->name()->__toString());
                 $this->assertEquals(Visibility::public(), $constants->first()->visibility());
             }
@@ -41,21 +42,21 @@ EOT
 
         yield 'Returns original member' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Barfoo
-{
-    const FOOBAR = 'foobar';
-}
+                class Barfoo
+                {
+                    const FOOBAR = 'foobar';
+                }
 
-class Foobar extends Barfoo
-{
-    const FOOBAR = 'foobar';
-}
-EOT
+                class Foobar extends Barfoo
+                {
+                    const FOOBAR = 'foobar';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $this->assertEquals('Barfoo', $constants->get('FOOBAR')->original()->declaringClass()->name()->__toString());
                 $this->assertEquals(Visibility::public(), $constants->first()->visibility());
             }
@@ -63,98 +64,98 @@ EOT
 
         yield 'Returns visibility' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    private const FOOBAR = 'foobar';
-}
-EOT
+                class Foobar
+                {
+                    private const FOOBAR = 'foobar';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $this->assertEquals(Visibility::private(), $constants->first()->visibility());
             }
         ];
 
         yield 'Returns docblock' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    /** Hello! */
-    private const FOOBAR = 'foobar';
-}
-EOT
+                class Foobar
+                {
+                    /** Hello! */
+                    private const FOOBAR = 'foobar';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $this->assertStringContainsString('/** Hello! */', $constants->first()->docblock()->raw());
             }
         ];
 
         yield 'Returns type' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    const FOOBAR = 'foobar';
-}
-EOT
+                class Foobar
+                {
+                    const FOOBAR = 'foobar';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $this->assertEquals('string', $constants->first()->type()->short());
             }
         ];
 
         yield 'Doesnt return inferred retutrn types (not implemented)' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    /** @var int */
-    const FOOBAR = 'foobar';
-}
-EOT
+                class Foobar
+                {
+                    /** @var int */
+                    const FOOBAR = 'foobar';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $this->assertEquals('string', $constants->first()->inferredTypes()->best()->short());
             }
         ];
 
         yield 'Delimited constant list' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    const FOOBAR = 'foobar', BARFOO = 'barfoo';
-}
-EOT
+                class Foobar
+                {
+                    const FOOBAR = 'foobar', BARFOO = 'barfoo';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $this->assertCount(2, $constants);
             }
         ];
 
         yield 'returns value' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    const FOOBAR = 'foobar';
-}
-EOT
+                class Foobar
+                {
+                    const FOOBAR = 'foobar';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $constant = $constants->first();
                 self::assertEquals('foobar', $constant->value());
             }
@@ -162,16 +163,16 @@ EOT
 
         yield 'array value' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    const FOOBAR = ['one', 'two']';
-}
-EOT
+                class Foobar
+                {
+                    const FOOBAR = ['one', 'two']';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $constant = $constants->first();
                 self::assertEquals(['one', 'two'], $constant->value());
             }
@@ -179,16 +180,16 @@ EOT
 
         yield 'no value' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    const FOOBAR = null';
-}
-EOT
+                class Foobar
+                {
+                    const FOOBAR = null';
+                }
+                EOT
             ,
             'Foobar',
-            function (ReflectionConstantCollection $constants) {
+            function (ReflectionConstantCollection $constants): void {
                 $constant = $constants->first();
                 self::assertEquals(null, $constant->value());
             }

@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Core\Cache\TtlCache;
 
 class TtlCacheTest extends TestCase
 {
-    public function testPutsCacheIfNotSet()
+    public function testPutsCacheIfNotSet(): void
     {
         $cache = new TtlCache();
         self::assertEquals(1234, $cache->getOrSet('foobar', function () {
@@ -15,7 +15,7 @@ class TtlCacheTest extends TestCase
         }));
     }
 
-    public function testCallbackIsOnlyCalledOnce()
+    public function testCallbackIsOnlyCalledOnce(): void
     {
         $cache = new TtlCache();
         $count = 0;
@@ -28,7 +28,7 @@ class TtlCacheTest extends TestCase
         self::assertEquals(1, $count);
     }
 
-    public function testDiscardsEntryIfExpired()
+    public function testDiscardsEntryIfExpired(): void
     {
         $cache = new TtlCache(0.0001);
         $count = 0;

@@ -35,7 +35,7 @@ class ReflectionMemberCollectionTest extends TestCase
         $this->serviceLocator = $this->prophesize(ServiceLocator::class);
     }
 
-    public function testByVisibilities()
+    public function testByVisibilities(): void
     {
         $collection = $this->create([
             $this->member1->reveal(),
@@ -51,7 +51,7 @@ class ReflectionMemberCollectionTest extends TestCase
         $this->assertCount(2, $collection);
     }
 
-    public function testBelongingTo()
+    public function testBelongingTo(): void
     {
         $collection = $this->create([
             $this->member1->reveal(),
@@ -72,7 +72,7 @@ class ReflectionMemberCollectionTest extends TestCase
         $this->assertCount(2, $collection);
     }
 
-    public function testAtOffset()
+    public function testAtOffset(): void
     {
         $collection = $this->create([
             $this->member1->reveal(),
@@ -88,7 +88,7 @@ class ReflectionMemberCollectionTest extends TestCase
         $this->assertCount(1, $collection);
     }
 
-    public function testByName()
+    public function testByName(): void
     {
         $collection = $this->create([
             'foo' => $this->member1->reveal(),

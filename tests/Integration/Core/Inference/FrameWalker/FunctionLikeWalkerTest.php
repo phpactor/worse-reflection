@@ -14,22 +14,22 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
     {
         yield 'It returns this' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Foobar\Barfoo;
+                namespace Foobar\Barfoo;
 
-use Acme\Factory;
+                use Acme\Factory;
 
-class Foobar
-{
-    public function hello()
-    {
-        <>
-    }
-}
+                class Foobar
+                {
+                    public function hello()
+                    {
+                        <>
+                    }
+                }
 
-EOT
-        , function (Frame $frame) {
+                EOT
+        , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
             $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolContext()->type());
             $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolContext()->symbol()->symbolType());
@@ -37,23 +37,23 @@ EOT
 
         yield 'It returns method arguments' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Foobar\Barfoo;
+                namespace Foobar\Barfoo;
 
-use Acme\Factory;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+                use Acme\Factory;
+                use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
-class Foobar
-{
-    public function hello(World $world)
-    {
-        <>
-    }
-}
+                class Foobar
+                {
+                    public function hello(World $world)
+                    {
+                        <>
+                    }
+                }
 
-EOT
-        , function (Frame $frame) {
+                EOT
+        , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
             $this->assertEquals(
                 Type::fromString('Foobar\Barfoo\Foobar'),
@@ -63,27 +63,27 @@ EOT
 
         yield 'It injects method argument with inferred types' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Foobar\Barfoo;
+                namespace Foobar\Barfoo;
 
-use Acme\Factory;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+                use Acme\Factory;
+                use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
-class Foobar
-{
-    /**
-     * @param World[] $worlds
-     * @param string $many
-     */
-    public function hello(array $worlds, $many)
-    {
-        <>
-    }
-}
+                class Foobar
+                {
+                    /**
+                     * @param World[] $worlds
+                     * @param string $many
+                     */
+                    public function hello(array $worlds, $many)
+                    {
+                        <>
+                    }
+                }
 
-EOT
-        , function (Frame $frame) {
+                EOT
+        , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('many'));
             $this->assertEquals('string', (string) $frame->locals()->byName('many')->first()->symbolContext()->types()->best());
 
@@ -94,23 +94,23 @@ EOT
 
         yield 'Variadic argument' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Foobar\Barfoo;
+                namespace Foobar\Barfoo;
 
-use Acme\Factory;
-use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
+                use Acme\Factory;
+                use Phpactor\WorseReflection\Core\Logger\ArrayLogger;
 
-class Foobar
-{
-    public function hello(string ...$hellos)
-    {
-        <>
-    }
-}
+                class Foobar
+                {
+                    public function hello(string ...$hellos)
+                    {
+                        <>
+                    }
+                }
 
-EOT
-        , function (Frame $frame) {
+                EOT
+        , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('hellos'));
             $variable = $frame->locals()->byName('hellos')->first();
             $this->assertEquals('string', $variable->symbolContext()->type()->arrayType());
@@ -118,16 +118,16 @@ EOT
 
         yield 'Respects closure scope' => [
             <<<'EOT'
-<?php
-$foo = 'bar';
+                <?php
+                $foo = 'bar';
 
-$hello = function () {
-    $bar = 'foo';
-    <>
-};
-EOT
+                $hello = function () {
+                    $bar = 'foo';
+                    <>
+                };
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$bar'), 'Scoped variable exists');
                 $this->assertCount(0, $frame->locals()->byName('$foo'), 'Parent scoped variable doesnt exist');
             }
@@ -135,15 +135,15 @@ EOT
 
         yield 'Injects closure parameters' => [
             <<<'EOT'
-<?php
-$foo = 'bar';
+                <?php
+                $foo = 'bar';
 
-$hello = function (Foobar $foo) {
-    <>
-};
-EOT
+                $hello = function (Foobar $foo) {
+                    <>
+                };
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$foo'));
                 $variable = $frame->locals()->byName('$foo')->first();
                 $this->assertEquals(Type::fromString('Foobar'), $variable->symbolContext()->type());
@@ -152,16 +152,16 @@ EOT
 
         yield 'Injects imported closure parent scope variables' => [
             <<<'EOT'
-<?php
-$zed = 'zed';
-$art = 'art';
+                <?php
+                $zed = 'zed';
+                $art = 'art';
 
-$hello = function () use ($zed) {
-    <>
-};
-EOT
+                $hello = function () use ($zed) {
+                    <>
+                };
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $zed = $frame->locals()->byName('$zed')->first();
                 $this->assertEquals('string', (string) $zed->symbolContext()->type());
@@ -171,24 +171,24 @@ EOT
 
         yield 'Incomplete use name' => [
             <<<'EOT'
-<?php
-function () use ($<>
-EOT
+                <?php
+                function () use ($<>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(0, $frame->locals());
             }
         ];
 
         yield 'Injects variables with @var (non-standard)' => [
             <<<'EOT'
-<?php
-/** @var string $zed */
-$zed;
-<>
-EOT
+                <?php
+                /** @var string $zed */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }

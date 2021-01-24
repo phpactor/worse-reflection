@@ -91,13 +91,13 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
     {
     }
 
-    protected function node(): Node
-    {
-        return $this->node;
-    }
-
     public function sourceCode(): SourceCode
     {
         return $this->sourceCode;
+    }
+
+    protected function node(): Node
+    {
+        return $this->node;
     }
 }

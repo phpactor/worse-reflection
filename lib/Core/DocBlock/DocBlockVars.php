@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\DocBlock;
 
 use IteratorAggregate;
 use Phpactor\WorseReflection\Core\Types;
+use ArrayIterator;
 
 class DocBlockVars implements IteratorAggregate
 {
@@ -36,10 +37,10 @@ class DocBlockVars implements IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->vars);
+        return new ArrayIterator($this->vars);
     }
 
-    private function add(DocBlockVar $var)
+    private function add(DocBlockVar $var): void
     {
         $this->vars[] = $var;
     }

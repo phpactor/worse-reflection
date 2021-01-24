@@ -84,15 +84,15 @@ class VirtualReflectionMemberCollection extends AbstractReflectionCollection imp
         }));
     }
 
-    protected function collectionType(): string
-    {
-        return ReflectionMemberCollection::class;
-    }
-
     public function byMemberType(string $type): ReflectionMemberCollection
     {
         return new static(array_filter($this->items, function (ReflectionMember $member) use ($type) {
             return $type === $member->memberType();
         }));
+    }
+
+    protected function collectionType(): string
+    {
+        return ReflectionMemberCollection::class;
     }
 }

@@ -118,26 +118,6 @@ class Docblock implements CoreDocblock
         return 0 !== $this->docblock->tags()->byName('inheritDoc')->count();
     }
 
-    private function typesFromTag(string $tag)
-    {
-        $types = [];
-
-        foreach ($this->docblock->tags()->byName($tag) as $tag) {
-            return $this->typesFromDocblockTypes($tag->types());
-        }
-
-        return Types::empty();
-    }
-
-    private function typesFromDocblockTypes(DocblockTypes $types)
-    {
-        $types = array_map(function (DocblockType $type) {
-            return $this->typesFromDocblockType($type);
-        }, iterator_to_array($types));
-
-        return Types::fromTypes($types);
-    }
-
     public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection
     {
         $methods = [];
@@ -168,19 +148,6 @@ class Docblock implements CoreDocblock
         return VirtualReflectionPropertyCollection::fromReflectionProperties($properties);
     }
 
-    private function typesFromDocblockType(DocblockType $type)
-    {
-        if ($type->isArray()) {
-            return Type::array((string) $type->iteratedType());
-        }
-        
-        if ($type->isCollection()) {
-            return Type::collection((string) $type, $type->iteratedType());
-        }
-        
-        return Type::fromString($type->__toString());
-    }
-
     public function propertyTypes(string $propertyName): Types
     {
         $types = [];
@@ -204,5 +171,38 @@ class Docblock implements CoreDocblock
             return new Deprecation(true, $tag->message());
         }
         return new Deprecation(false);
+    }
+
+    private function typesFromTag(string $tag)
+    {
+        $types = [];
+
+        foreach ($this->docblock->tags()->byName($tag) as $tag) {
+            return $this->typesFromDocblockTypes($tag->types());
+        }
+
+        return Types::empty();
+    }
+
+    private function typesFromDocblockTypes(DocblockTypes $types)
+    {
+        $types = array_map(function (DocblockType $type) {
+            return $this->typesFromDocblockType($type);
+        }, iterator_to_array($types));
+
+        return Types::fromTypes($types);
+    }
+
+    private function typesFromDocblockType(DocblockType $type)
+    {
+        if ($type->isArray()) {
+            return Type::array((string) $type->iteratedType());
+        }
+        
+        if ($type->isCollection()) {
+            return Type::collection((string) $type, $type->iteratedType());
+        }
+        
+        return Type::fromString($type->__toString());
     }
 }

@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection as CoreReflectionFunctionCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionFunctionCollection as TolerantReflectionFunctionCollection;
+use RuntimeException;
 
 class TolerantSourceCodeReflector implements SourceCodeReflector
 {
@@ -67,13 +68,23 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $reflection = $this->reflectNode($sourceCode, $offset);
 
         if (false === $reflection instanceof ReflectionMethodCall) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Expected method call, got "%s"',
                 get_class($reflection)
             ));
         }
 
         return $reflection;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectFunctionsIn($sourceCode): CoreReflectionFunctionCollection
+    {
+        $sourceCode = SourceCode::fromUnknown($sourceCode);
+        $node = $this->parseSourceCode($sourceCode);
+        return TolerantReflectionFunctionCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
 
     private function reflectNode($sourceCode, $offset)
@@ -88,16 +99,6 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $nodeReflector = new NodeReflector($this->serviceLocator);
 
         return $nodeReflector->reflectNode($frame, $node);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function reflectFunctionsIn($sourceCode): CoreReflectionFunctionCollection
-    {
-        $sourceCode = SourceCode::fromUnknown($sourceCode);
-        $node = $this->parseSourceCode($sourceCode);
-        return TolerantReflectionFunctionCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
 
     private function parseSourceCode(SourceCode $sourceCode): SourceFileNode

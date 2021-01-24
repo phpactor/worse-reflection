@@ -15,14 +15,14 @@ class FrameTest extends TestCase
     /**
      * @testdox It returns local and class assignments.
      */
-    public function testAssignments()
+    public function testAssignments(): void
     {
         $frame = new Frame('test');
         $this->assertInstanceOf(LocalAssignments::class, $frame->locals());
         $this->assertInstanceOf(PropertyAssignments::class, $frame->properties());
     }
 
-    public function testReduce()
+    public function testReduce(): void
     {
         $s1 = SymbolContext::none();
         $s2 = SymbolContext::none();

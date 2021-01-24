@@ -14,15 +14,15 @@ class CatchWalkerTest extends FrameWalkerTestCase
     {
         yield 'Exceptions' => [
             <<<'EOT'
-<?php
-try {
-} catch (\Exception $exception) {
-        <>
-}
+                <?php
+                try {
+                } catch (\Exception $exception) {
+                        <>
+                }
 
-EOT
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$exception'));
                 $exception = $frame->locals()->byName('$exception')->first();
                 $this->assertEquals(Type::fromString('\Exception'), $exception->symbolContext()->type());
@@ -31,15 +31,15 @@ EOT
 
         yield 'Catch type-hint union' => [
             <<<'EOT'
-<?php
-try {
-} catch (Foo | Bar $exception) {
-        <>
-}
+                <?php
+                try {
+                } catch (Foo | Bar $exception) {
+                        <>
+                }
 
-EOT
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$exception'));
                 $exception = $frame->locals()->byName('$exception')->first();
                 $this->assertEquals(Types::fromTypes([

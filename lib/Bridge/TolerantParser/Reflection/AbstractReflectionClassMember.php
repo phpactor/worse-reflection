@@ -18,6 +18,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
+use InvalidArgumentException;
 
 abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 {
@@ -30,7 +31,7 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
         $class = $classDeclaration->getNamespacedName();
 
         if (null === $class) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Could not locate class-like ancestor node for member "%s"',
                 $this->name()
             ));

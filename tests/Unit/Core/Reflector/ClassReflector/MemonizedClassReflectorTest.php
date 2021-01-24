@@ -48,7 +48,7 @@ class MemonizedClassReflectorTest extends TestCase
         $this->className = ClassName::fromString('Hello');
     }
 
-    public function testReflectClass()
+    public function testReflectClass(): void
     {
         $this->innerClassReflector->reflectClass($this->className)->shouldBeCalledTimes(1);
         $this->reflector->reflectClass($this->className);
@@ -56,7 +56,7 @@ class MemonizedClassReflectorTest extends TestCase
         $this->reflector->reflectClass($this->className);
     }
 
-    public function testReflectInterface()
+    public function testReflectInterface(): void
     {
         $this->innerClassReflector->reflectInterface($this->className)->shouldBeCalledTimes(1);
         $this->reflector->reflectInterface($this->className);
@@ -64,7 +64,7 @@ class MemonizedClassReflectorTest extends TestCase
         $this->reflector->reflectInterface($this->className);
     }
 
-    public function testReflectTrait()
+    public function testReflectTrait(): void
     {
         $this->innerClassReflector->reflectTrait($this->className)->shouldBeCalledTimes(1);
         $this->reflector->reflectTrait($this->className);
@@ -72,7 +72,7 @@ class MemonizedClassReflectorTest extends TestCase
         $this->reflector->reflectTrait($this->className);
     }
 
-    public function testReflectClassLike()
+    public function testReflectClassLike(): void
     {
         $this->innerClassReflector->reflectClassLike($this->className)->shouldBeCalledTimes(1);
         $this->reflector->reflectClassLike($this->className);
@@ -80,7 +80,7 @@ class MemonizedClassReflectorTest extends TestCase
         $this->reflector->reflectClassLike($this->className);
     }
 
-    public function testReflectFunction()
+    public function testReflectFunction(): void
     {
         $name = Name::fromString('Foo');
         $this->innerFunctionReflector->reflectFunction($name)->shouldBeCalledTimes(1);

@@ -51,14 +51,6 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         $this->sourceCode = $sourceCode;
     }
 
-    /**
-     * @return InterfaceDeclaration
-     */
-    protected function node(): Node
-    {
-        return $this->node;
-    }
-
     public function members(): ReflectionMemberCollection
     {
         return ChainReflectionMemberCollection::fromCollections([
@@ -145,5 +137,13 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
     public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
+    }
+
+    /**
+     * @return InterfaceDeclaration
+     */
+    protected function node(): Node
+    {
+        return $this->node;
     }
 }

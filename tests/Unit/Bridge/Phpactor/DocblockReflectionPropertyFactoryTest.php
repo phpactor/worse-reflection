@@ -37,7 +37,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
     /**
      * @dataProvider provideCreatesDocblockProperty
      */
-    public function testCreatesDocblockProperty(PropertyTag $propertyTag, Closure $assertion)
+    public function testCreatesDocblockProperty(PropertyTag $propertyTag, Closure $assertion): void
     {
         $reflector = ReflectorBuilder::create()->addSource(
             '<?php class Foobar {}'
@@ -54,7 +54,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
                 DocblockTypes::fromStringTypes([]),
                 'myProperty'
             ),
-            function (ReflectionProperty $property) {
+            function (ReflectionProperty $property): void {
                 $this->assertEquals('Foobar', (string) $property->class()->name());
                 $this->assertEquals('myProperty', $property->name());
             }
@@ -65,7 +65,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
                 DocblockTypes::fromStringTypes(['Foobar', 'string']),
                 'myProperty'
             ),
-            function (ReflectionProperty $property) {
+            function (ReflectionProperty $property): void {
                 $this->assertEquals('Foobar', (string) $property->class()->name());
                 $this->assertEquals('myProperty', $property->name());
                 $this->assertEquals(Types::fromTypes([

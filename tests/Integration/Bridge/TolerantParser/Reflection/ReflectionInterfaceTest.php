@@ -6,13 +6,14 @@ use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant;
+use Closure;
 
 class ReflectionInterfaceTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideReflectionInterface
      */
-    public function testReflectInterface(string $source, string $class, \Closure $assertion)
+    public function testReflectInterface(string $source, string $class, Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class);
@@ -22,14 +23,14 @@ class ReflectionInterfaceTest extends IntegrationTestCase
     {
         yield 'It reflects an interface' => [
             <<<'EOT'
-<?php
+                <?php
 
-interface Barfoo
-{
-}
-EOT
+                interface Barfoo
+                {
+                }
+                EOT
         , 'Barfoo',
-            function ($class) {
+            function ($class): void {
                 $this->assertEquals('Barfoo', (string) $class->name()->short());
                 $this->assertInstanceOf(ReflectionInterface::class, $class);
                 $this->assertTrue($class->isInterface());
@@ -38,22 +39,22 @@ EOT
 
         yield 'It reflects a classes interfaces' => [
             <<<'EOT'
-<?php
-interface Barfoo
-{
-}
+                <?php
+                interface Barfoo
+                {
+                }
 
-interface Bazbar
-{
-}
+                interface Bazbar
+                {
+                }
 
-class Foobar implements Barfoo, Bazbar
-{
-}
-EOT
+                class Foobar implements Barfoo, Bazbar
+                {
+                }
+                EOT
         ,
             'Foobar',
-            function ($class) {
+            function ($class): void {
                 $interfaces = $class->interfaces();
                 $this->assertCount(2, $interfaces);
                 $interface = $interfaces['Barfoo'];
@@ -63,22 +64,22 @@ EOT
 
         yield 'It reflects a class which implements an interface which extends other interfaces' => [
             <<<'EOT'
-<?php
-interface Barfoo
-{
-}
+                <?php
+                interface Barfoo
+                {
+                }
 
-interface Zedboo
-{
-}
+                interface Zedboo
+                {
+                }
 
-interface Bazbar extends Barfoo, Zedboo
-{
-}
-EOT
+                interface Bazbar extends Barfoo, Zedboo
+                {
+                }
+                EOT
         ,
             'Bazbar',
-            function ($class) {
+            function ($class): void {
                 $interfaces = $class->parents();
                 $this->assertCount(2, $interfaces);
                 $interface = $interfaces['Barfoo'];
@@ -88,24 +89,24 @@ EOT
 
         yield 'It reflects inherited methods in an interface' => [
             <<<'EOT'
-<?php
-interface Barfoo
-{
-    public function methodOne();
-}
+                <?php
+                interface Barfoo
+                {
+                    public function methodOne();
+                }
 
-interface Zedboo
-{
-    public function methodTwo();
-}
+                interface Zedboo
+                {
+                    public function methodTwo();
+                }
 
-interface Bazbar extends Barfoo, Zedboo
-{
-}
-EOT
+                interface Bazbar extends Barfoo, Zedboo
+                {
+                }
+                EOT
         ,
             'Bazbar',
-            function ($interface) {
+            function ($interface): void {
                 $this->assertInstanceOf(ReflectionInterface::class, $interface);
                 $this->assertCount(2, $interface->methods());
             },
@@ -113,16 +114,16 @@ EOT
 
         yield 'It reflect interface methods' => [
             <<<'EOT'
-<?php
+                <?php
 
-interface Barfoo
-{
-    public function foobar();
-}
-EOT
+                interface Barfoo
+                {
+                    public function foobar();
+                }
+                EOT
         ,
             'Barfoo',
-            function ($class) {
+            function ($class): void {
                 $this->assertEquals('Barfoo', (string) $class->name()->short());
                 $this->assertEquals(['foobar'], $class->methods()->keys());
             },
@@ -130,27 +131,27 @@ EOT
 
         yield 'It interface constants' => [
             <<<'EOT'
-<?php
+                <?php
 
-interface Int1
-{
-    const FOOBAR = 'foobar';
-}
+                interface Int1
+                {
+                    const FOOBAR = 'foobar';
+                }
 
-interface Int2
-{
-    const FOOBAR = 'foobar';
-    const BARFOO = 'barfoo';
-}
+                interface Int2
+                {
+                    const FOOBAR = 'foobar';
+                    const BARFOO = 'barfoo';
+                }
 
-interface Int3 extends Int1, Int2
-{
-    const EEEBAR = 'eeebar';
-}
-EOT
+                interface Int3 extends Int1, Int2
+                {
+                    const EEEBAR = 'eeebar';
+                }
+                EOT
         ,
             'Int3',
-            function ($class) {
+            function ($class): void {
                 $this->assertCount(3, $class->constants());
                 $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('FOOBAR'));
                 $this->assertInstanceOf(ReflectionConstant::class, $class->constants()->get('EEEBAR'));
@@ -159,18 +160,18 @@ EOT
 
         yield 'instanceof' => [
             <<<'EOT'
-<?php
-interface Interface1
-{
-}
+                <?php
+                interface Interface1
+                {
+                }
 
-interface Interface2 extends Interface1
-{
-}
-EOT
+                interface Interface2 extends Interface1
+                {
+                }
+                EOT
         ,
             'Interface2',
-            function ($class) {
+            function ($class): void {
                 $this->assertTrue($class->isInstanceOf(ClassName::fromString('Interface2')));
                 $this->assertTrue($class->isInstanceOf(ClassName::fromString('Interface1')));
                 $this->assertFalse($class->isInstanceOf(ClassName::fromString('Interface3')));
@@ -179,22 +180,22 @@ EOT
 
         yield 'Method class is of context class, not declaration class' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Acme;
+                namespace Acme;
 
-interface Barfoo
-{
-    function method1() {}
-}
+                interface Barfoo
+                {
+                    function method1() {}
+                }
 
-interface Foobar extends Barfoo
-{
-}
-EOT
+                interface Foobar extends Barfoo
+                {
+                }
+                EOT
         ,
             'Acme\Foobar',
-            function (ReflectionInterface $class) {
+            function (ReflectionInterface $class): void {
                 $this->assertEquals(
                     'Acme\Foobar',
                     (string) $class->methods()->get('method1')->class()->name()
@@ -208,18 +209,18 @@ EOT
 
         yield 'Returns all members' => [
             <<<'EOT'
-<?php
+                <?php
 
-interface Class1
-{
-    private const FOOBAR = 'foobar';
-    private function foobar() {}
-}
+                interface Class1
+                {
+                    private const FOOBAR = 'foobar';
+                    private function foobar() {}
+                }
 
-EOT
+                EOT
         ,
             'Class1',
-            function (ReflectionInterface $class) {
+            function (ReflectionInterface $class): void {
                 $this->assertCount(2, $class->members());
                 $this->assertTrue($class->members()->has('FOOBAR'));
                 $this->assertTrue($class->members()->has('foobar'));

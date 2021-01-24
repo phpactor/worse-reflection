@@ -54,11 +54,6 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
         return new self($this->serviceLocator, []);
     }
 
-    protected function collectionType(): string
-    {
-        return CoreReflectionMemberCollection::class;
-    }
-
     public function virtual(): CoreReflectionMemberCollection
     {
         return new self($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) {
@@ -92,5 +87,10 @@ class ReflectionMemberCollection extends AbstractReflectionCollection implements
         return new static($this->serviceLocator, array_filter($this->items, function (ReflectionMember $member) use ($type) {
             return $type === $member->memberType();
         }));
+    }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionMemberCollection::class;
     }
 }

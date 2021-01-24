@@ -12,7 +12,7 @@ class ArrayLogger extends AbstractLogger
      * {@inheritDoc}
      */
     public function log($level, $message, array $context = [
-    ])
+    ]): void
     {
         $this->messages[] = $message;
     }

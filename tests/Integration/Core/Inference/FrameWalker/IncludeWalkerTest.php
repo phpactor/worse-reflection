@@ -20,13 +20,13 @@ class IncludeWalkerTest extends FrameWalkerTestCase
 
         yield 'Require relative' => [
             <<<'EOT'
-<?php
+                <?php
 
-require('foo.php');
-<>
-EOT
+                require('foo.php');
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals());
                 $this->assertEquals('foo', $frame->locals()->first()->__toString());
             }
@@ -34,13 +34,13 @@ EOT
 
         yield 'Require absolute' => [
             <<<EOT
-<?php
+                <?php
 
-require('{$this->workspace()->path("foo.php")}');
-<>
-EOT
+                require('{$this->workspace()->path('foo.php')}');
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals());
                 $this->assertEquals('foo', $frame->locals()->first()->__toString());
             }
@@ -48,13 +48,13 @@ EOT
 
         yield 'Include' => [
             <<<'EOT'
-<?php
+                <?php
 
-include('foo.php');
-<>
-EOT
+                include('foo.php');
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals());
                 $this->assertEquals('foo', $frame->locals()->first()->__toString());
             }
@@ -62,13 +62,13 @@ EOT
 
         yield 'Returns value' => [
             <<<'EOT'
-<?php
+                <?php
 
-$foo = require('return_value.php');
-<>
-EOT
+                $foo = require('return_value.php');
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(2, $frame->locals());
                 $this->assertEquals('foo', $frame->locals()->last()->__toString());
                 $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
@@ -77,13 +77,13 @@ EOT
 
         yield 'Returns from constant' => [
             <<<'EOT'
-<?php
+                <?php
 
-$foo = require(__DIR__ . '/return_value.php');
-<>
-EOT
+                $foo = require(__DIR__ . '/return_value.php');
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(2, $frame->locals());
                 $this->assertEquals('foo', $frame->locals()->last()->__toString());
                 $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());

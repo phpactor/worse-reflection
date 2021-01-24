@@ -9,7 +9,7 @@ use RuntimeException;
 
 class NameImportsTest extends TestCase
 {
-    public function testByAlias()
+    public function testByAlias(): void
     {
         $imports = NameImports::fromNames([
             'Barfoo' => Name::fromString('Foobar\\Barfoo'),
@@ -22,7 +22,7 @@ class NameImportsTest extends TestCase
         );
     }
 
-    public function testResolveAliasedLocalName()
+    public function testResolveAliasedLocalName(): void
     {
         $imports = NameImports::fromNames([
             'Baz' => Name::fromString('Foobar\\Barfoo'),
@@ -34,7 +34,7 @@ class NameImportsTest extends TestCase
         );
     }
 
-    public function testResolveRelativeAliasedLocalName()
+    public function testResolveRelativeAliasedLocalName(): void
     {
         $imports = NameImports::fromNames([
             'Baz' => Name::fromString('Foobar\\Barfoo'),
@@ -48,7 +48,7 @@ class NameImportsTest extends TestCase
         );
     }
 
-    public function testResolveRelativeAliasedLocalName2()
+    public function testResolveRelativeAliasedLocalName2(): void
     {
         $imports = NameImports::fromNames([
             'Baz' => Name::fromString('Foobar\\Barfoo'),
@@ -62,7 +62,7 @@ class NameImportsTest extends TestCase
         );
     }
 
-    public function testLocalNameIfNoImport()
+    public function testLocalNameIfNoImport(): void
     {
         $imports = NameImports::fromNames([
         ]);
@@ -75,7 +75,7 @@ class NameImportsTest extends TestCase
         );
     }
 
-    public function testAliasNotFound()
+    public function testAliasNotFound(): void
     {
         $this->expectException(RuntimeException::class);
 

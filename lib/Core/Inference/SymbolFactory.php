@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
+use RuntimeException;
 
 class SymbolFactory
 {
@@ -21,7 +22,7 @@ class SymbolFactory
         ];
 
         if ($diff = array_diff(array_keys($config), array_keys($defaultConfig))) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Invalid keys "%s", valid keys "%s"',
                 implode('", "', $diff),
                 implode('", "', array_keys($defaultConfig))

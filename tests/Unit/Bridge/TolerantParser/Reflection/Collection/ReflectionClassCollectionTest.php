@@ -28,7 +28,7 @@ class ReflectionClassCollectionTest extends TestCase
     /**
      * @testdox It returns only concrete classes.
      */
-    public function testConcrete()
+    public function testConcrete(): void
     {
         $this->reflection1->isConcrete()->willReturn(false);
         $this->reflection2->isConcrete()->willReturn(true);

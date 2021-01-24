@@ -3,11 +3,13 @@
 namespace Phpactor\WorseReflection\Core;
 
 use IteratorAggregate;
+use Countable;
+use ArrayIterator;
 
 /**
  * @implements IteratorAggregate<Type>
  */
-final class Types implements IteratorAggregate, \Countable
+final class Types implements IteratorAggregate, Countable
 {
     private $types = [];
 
@@ -39,7 +41,7 @@ final class Types implements IteratorAggregate, \Countable
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->types);
+        return new ArrayIterator($this->types);
     }
 
     public function merge(Types $types) : Types
@@ -58,7 +60,7 @@ final class Types implements IteratorAggregate, \Countable
         return count($this->types);
     }
 
-    private function add(Type $item)
+    private function add(Type $item): void
     {
         $this->types[] = $item;
     }

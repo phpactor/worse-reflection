@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethodCa
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionStaticMethodCall;
+use RuntimeException;
 
 class NodeReflector
 {
@@ -32,7 +33,7 @@ class NodeReflector
             return $this->reflectScopedPropertyAccessExpression($frame, $node);
         }
 
-        throw new \RuntimeException(sprintf(
+        throw new RuntimeException(sprintf(
             'Did not know how to reflect node of type "%s"',
             get_class($node)
         ));

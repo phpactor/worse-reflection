@@ -42,7 +42,7 @@ class FunctionLikeWalker extends AbstractWalker
     /**
      * @param FunctionDeclaration|AnonymousFunctionCreationExpression $node
      */
-    private function walkFunctionLike(FrameBuilder $builder, Frame $frame, FunctionLike $node)
+    private function walkFunctionLike(FrameBuilder $builder, Frame $frame, FunctionLike $node): void
     {
         $namespace = $node->getNamespaceDefinition();
         $classNode = $node->getFirstAncestor(
@@ -98,7 +98,7 @@ class FunctionLikeWalker extends AbstractWalker
         }
     }
 
-    private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node)
+    private function addAnonymousImports(Frame $frame, AnonymousFunctionCreationExpression $node): void
     {
         $useClause = $node->anonymousFunctionUseClause;
 

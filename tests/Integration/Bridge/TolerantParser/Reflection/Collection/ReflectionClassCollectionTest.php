@@ -4,13 +4,14 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Closure;
 
 class ReflectionClassCollectionTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideCollection
      */
-    public function testCollection(string $source, \Closure $assertion)
+    public function testCollection(string $source, Closure $assertion): void
     {
         $collection = $this->createReflector($source)->reflectClassesIn($source);
         $assertion($collection);
@@ -21,33 +22,33 @@ class ReflectionClassCollectionTest extends IntegrationTestCase
         return [
             'It has all the classes' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-class Foobar
-{
-}
+                    class Foobar
+                    {
+                    }
 
-class Barfoo
-{
-}
-EOT
+                    class Barfoo
+                    {
+                    }
+                    EOT
                 ,
-                function (ReflectionClassCollection $collection) {
+                function (ReflectionClassCollection $collection): void {
                     $this->assertEquals(2, $collection->count());
                 },
             ],
             'It reflects nested classes' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-if (true) {
-    class Foobar
-    {
-    }
-}
-EOT
+                    if (true) {
+                        class Foobar
+                        {
+                        }
+                    }
+                    EOT
                 ,
-                function (ReflectionClassCollection $collection) {
+                function (ReflectionClassCollection $collection): void {
                     $this->assertEquals(1, $collection->count());
                 },
             ],

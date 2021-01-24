@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use InvalidArgumentException;
+
 class Name
 {
     protected $parts;
@@ -11,6 +13,11 @@ class Name
     {
         $this->parts = $parts;
         $this->wasFullyQualified = $wasFullyQualified;
+    }
+
+    public function __toString()
+    {
+        return implode('\\', $this->parts);
     }
 
     public static function fromParts(array $parts)
@@ -36,15 +43,10 @@ class Name
             return static::fromString($value);
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'Do not know how to create class from type "%s"',
             is_object($value) ? get_class($value) : gettype($value)
         ));
-    }
-
-    public function __toString()
-    {
-        return implode('\\', $this->parts);
     }
 
     /**

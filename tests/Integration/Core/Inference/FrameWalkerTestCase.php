@@ -16,7 +16,7 @@ abstract class FrameWalkerTestCase extends IntegrationTestCase
     /**
      * @dataProvider provideWalk
      */
-    public function testWalk(string $source, Closure $assertion)
+    public function testWalk(string $source, Closure $assertion): void
     {
         list($source, $offset) = ExtractOffset::fromSource($source);
         $path = $this->workspace()->path('test.php');

@@ -5,6 +5,8 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Phpactor\TextDocument\TextDocumentBuilder;
 use Phpactor\WorseReflection\Core\SourceCode;
+use InvalidArgumentException;
+use stdClass;
 
 class SourceCodeTest extends TestCase
 {
@@ -15,7 +17,7 @@ class SourceCodeTest extends TestCase
     /**
      * @testdox It can load source code from a file.
      */
-    public function testFromPath()
+    public function testFromPath(): void
     {
         $code = SourceCode::fromPath(__FILE__);
         $this->assertEquals(file_get_contents(__FILE__), (string) $code);
@@ -24,14 +26,14 @@ class SourceCodeTest extends TestCase
     /**
      * @testdox It throws an exception if file not found.
      */
-    public function testFileNotFound()
+    public function testFileNotFound(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('File "Improbable_Path_62.xyz" does not exist');
         SourceCode::fromPath('Improbable_Path_62.xyz');
     }
 
-    public function testFromUnknownReturnsSourceCodeIfGivenSourceCode()
+    public function testFromUnknownReturnsSourceCodeIfGivenSourceCode(): void
     {
         $givenSource = SourceCode::fromString(self::SOURCE_CODE);
         $sourceCode = SourceCode::fromUnknown($givenSource);
@@ -39,20 +41,20 @@ class SourceCodeTest extends TestCase
         $this->assertSame($givenSource, $sourceCode);
     }
 
-    public function testFromUnknownString()
+    public function testFromUnknownString(): void
     {
         $sourceCode = SourceCode::fromUnknown(self::SOURCE_CODE);
 
         $this->assertEquals(SourceCode::fromString(self::SOURCE_CODE), $sourceCode);
     }
 
-    public function testFromUnknownInvalid()
+    public function testFromUnknownInvalid(): void
     {
         $this->expectExceptionMessage('Do not know how to create source code');
-        SourceCode::fromUnknown(new \stdClass);
+        SourceCode::fromUnknown(new stdClass);
     }
 
-    public function testFromTextDocument()
+    public function testFromTextDocument(): void
     {
         $document = TextDocumentBuilder::create(
             self::SOURCE_CODE
@@ -65,7 +67,7 @@ class SourceCodeTest extends TestCase
         $this->assertEquals($sourceCode->path(), self::EXAMPLE_PATH);
     }
 
-    public function testFromTextDocumentWithNoUri()
+    public function testFromTextDocumentWithNoUri(): void
     {
         $document = TextDocumentBuilder::create(
             self::SOURCE_CODE

@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Core\SourceCode;
 
 class StringSourceLocatorTest extends TestCase
 {
-    public function testLocate()
+    public function testLocate(): void
     {
         $locator = new StringSourceLocator(SourceCode::fromString('Hello'));
         $source = $locator->locate(ClassName::fromString('Foobar'));

@@ -48,7 +48,7 @@ class ContextualSourceCodeReflectorTest extends TestCase
         $this->code = SourceCode::fromString(self::TEST_SOURCE_CODE);
     }
 
-    public function testReflectsClassesIn()
+    public function testReflectsClassesIn(): void
     {
         $this->locator->pushSourceCode($this->code)->shouldBeCalled();
         $this->innerReflector->reflectClassesIn($this->code)->shouldBeCalled();
@@ -56,7 +56,7 @@ class ContextualSourceCodeReflectorTest extends TestCase
         $this->reflector->reflectClassesIn(self::TEST_SOURCE_CODE);
     }
 
-    public function testReflectOffset()
+    public function testReflectOffset(): void
     {
         $this->locator->pushSourceCode($this->code)->shouldBeCalled();
         $this->innerReflector->reflectOffset(
@@ -67,7 +67,7 @@ class ContextualSourceCodeReflectorTest extends TestCase
         $this->reflector->reflectOffset(self::TEST_SOURCE_CODE, self::TEST_OFFSET);
     }
 
-    public function testReflectMethodCall()
+    public function testReflectMethodCall(): void
     {
         $this->locator->pushSourceCode($this->code)->shouldBeCalled();
         $this->innerReflector->reflectMethodCall(

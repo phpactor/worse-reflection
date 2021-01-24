@@ -13,7 +13,7 @@ class ClassReflectorTest extends IntegrationTestCase
     /**
      * @dataProvider provideReflectClassSuccess
      */
-    public function testReflectClassSuccess(string $source, string $class, string $method, string $expectedType)
+    public function testReflectClassSuccess(string $source, string $class, string $method, string $expectedType): void
     {
         $reflection = $this->createReflector($source)->$method($class);
         $this->assertInstanceOf($expectedType, $reflection);
@@ -46,7 +46,7 @@ class ClassReflectorTest extends IntegrationTestCase
     /**
      * @dataProvider provideReflectClassNotCorrectType
      */
-    public function testReflectClassNotCorrectType(string $source, string $class, string $method, string $expectedErrorMessage)
+    public function testReflectClassNotCorrectType(string $source, string $class, string $method, string $expectedErrorMessage): void
     {
         $this->expectException(ClassNotFound::class);
         $this->expectExceptionMessage($expectedErrorMessage);

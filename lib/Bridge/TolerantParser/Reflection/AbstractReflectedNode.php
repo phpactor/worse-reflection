@@ -8,8 +8,6 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionScope as CoreReflectionSc
 
 abstract class AbstractReflectedNode
 {
-    abstract protected function node(): Node;
-
     public function position(): Position
     {
         return Position::fromFullStartStartAndEnd(
@@ -23,4 +21,5 @@ abstract class AbstractReflectedNode
     {
         return new ReflectionScope($this->node());
     }
+    abstract protected function node(): Node;
 }

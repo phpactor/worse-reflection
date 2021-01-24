@@ -29,6 +29,11 @@ final class Variable
         $this->symbolContext = $symbolContext;
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public static function fromSymbolContext(SymbolContext $symbolContext): Variable
     {
         return new self(
@@ -36,11 +41,6 @@ final class Variable
             Offset::fromInt($symbolContext->symbol()->position()->start()),
             $symbolContext
         );
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 
     public function offset(): Offset
