@@ -7,13 +7,14 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\TestUtils\ExtractOffset;
+use Closure;
 
 class ReflectionMethodCallTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideReflectionMethod
      */
-    public function testReflectMethodCall(string $source, array $frame, \Closure $assertion)
+    public function testReflectMethodCall(string $source, array $frame, Closure $assertion): void
     {
         list($source, $offset) = ExtractOffset::fromSource($source);
         $reflection = $this->createReflector($source)->reflectMethodCall($source, $offset);
@@ -25,37 +26,37 @@ class ReflectionMethodCallTest extends IntegrationTestCase
         return [
             'It reflects the method name' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-$foo->b<>ar();
-EOT
+                    $foo->b<>ar();
+                    EOT
                 , [
                 ],
-                function (ReflectionMethodCall $method) {
+                function (ReflectionMethodCall $method): void {
                     $this->assertEquals('bar', $method->name());
                 },
             ],
             'It reflects a method' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-$foo->b<>ar();
-EOT
+                    $foo->b<>ar();
+                    EOT
                 , [
                 ],
-                function (ReflectionMethodCall $method) {
+                function (ReflectionMethodCall $method): void {
                     $this->assertEquals('bar', $method->name());
                 },
             ],
             'It returns the position' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-$foo->foo->b<>ar();
-EOT
+                    $foo->foo->b<>ar();
+                    EOT
                 , [
                 ],
-                function (ReflectionMethodCall $method) {
+                function (ReflectionMethodCall $method): void {
                     $this->assertInstanceOf(Position::class, $method->position());
                     $this->assertEquals(7, $method->position()->start());
                     $this->assertEquals(21, $method->position()->end());
@@ -63,44 +64,44 @@ EOT
             ],
             'It returns the containing class' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-class BBB
-{
-}
+                    class BBB
+                    {
+                    }
 
-class AAA
-{
-    public function foo(): BBB
-    {
-    }
-}
+                    class AAA
+                    {
+                        public function foo(): BBB
+                        {
+                        }
+                    }
 
-$foo = new AAA;
-$foo->foo()->b<>ar();
+                    $foo = new AAA;
+                    $foo->foo()->b<>ar();
 
-EOT
+                    EOT
                 , [
                 ],
-                function (ReflectionMethodCall $method) {
+                function (ReflectionMethodCall $method): void {
                     $this->assertInstanceOf(Position::class, $method->position());
                     $this->assertEquals(ClassName::fromString('BBB'), $method->class()->name());
                 },
             ],
             'It returns if the call is static' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-class AAA
-{
-}
+                    class AAA
+                    {
+                    }
 
-AAA::b<>ar();
+                    AAA::b<>ar();
 
-EOT
+                    EOT
                 , [
                 ],
-                function (ReflectionMethodCall $method) {
+                function (ReflectionMethodCall $method): void {
                     $this->assertInstanceOf(Position::class, $method->position());
                     $this->assertTrue($method->isStatic());
                     $this->assertEquals(ClassName::fromString('AAA'), $method->class()->name());
@@ -108,20 +109,20 @@ EOT
             ],
             'It has arguments' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-class AAA
-{
-}
+                    class AAA
+                    {
+                    }
 
-$a = 1;
-$foo = new AAA();
-$foo->b<>ar($a);
+                    $a = 1;
+                    $foo = new AAA();
+                    $foo->b<>ar($a);
 
-EOT
+                    EOT
                 , [
                 ],
-                function (ReflectionMethodCall $method) {
+                function (ReflectionMethodCall $method): void {
                     $this->assertInstanceOf(Position::class, $method->position());
                     $this->assertEquals('a', $method->arguments()->first()->guessName());
                 },

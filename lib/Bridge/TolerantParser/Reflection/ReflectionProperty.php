@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Type;
+use InvalidArgumentException;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -71,7 +72,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         $class = $classDeclaration->getNamespacedName();
 
         if (null === $class) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Could not locate class-like ancestor node for method "%s"',
                 $this->name()
             ));
@@ -113,16 +114,6 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         );
     }
 
-    protected function node(): Node
-    {
-        return $this->propertyDeclaration;
-    }
-
-    protected function serviceLocator(): ServiceLocator
-    {
-        return $this->serviceLocator;
-    }
-
     public function class(): ReflectionClassLike
     {
         return $this->class;
@@ -146,5 +137,15 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     public function isPromoted(): bool
     {
         return false;
+    }
+
+    protected function node(): Node
+    {
+        return $this->propertyDeclaration;
+    }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
     }
 }

@@ -14,19 +14,19 @@ class VariableWalkerTest extends FrameWalkerTestCase
     {
         yield 'Redeclared variables' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function hello()
-    {
-        $foobar = new Foobar();
-        $foobar = new \stdClass();
-        <>
-    }
-}
-EOT
-        , function (Frame $frame) {
+                class Foobar
+                {
+                    public function hello()
+                    {
+                        $foobar = new Foobar();
+                        $foobar = new \stdClass();
+                        <>
+                    }
+                }
+                EOT
+        , function (Frame $frame): void {
             $vars = $frame->locals()->byName('$foobar');
             $this->assertCount(2, $vars);
             $this->assertEquals('Foobar', (string) $vars->first()->symbolContext()->type()->className());
@@ -35,13 +35,13 @@ EOT
 
         yield 'Injects variables with @var (standard)' => [
             <<<'EOT'
-<?php
-/** @var string $zed */
-$zed;
-<>
-EOT
+                <?php
+                /** @var string $zed */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
@@ -49,14 +49,14 @@ EOT
 
         yield 'Injects variables with @var namespaced' => [
             <<<'EOT'
-<?php
-namespace Foo;
-/** @var Bar $zed */
-$zed;
-<>
-EOT
+                <?php
+                namespace Foo;
+                /** @var Bar $zed */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('Foo\\Bar', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
@@ -64,14 +64,14 @@ EOT
 
         yield 'Injects variables with @var namespaced and qualified name' => [
             <<<'EOT'
-<?php
-namespace Foo;
-/** @var Bar\Baz $zed */
-$zed;
-<>
-EOT
+                <?php
+                namespace Foo;
+                /** @var Bar\Baz $zed */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('Foo\\Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
@@ -79,14 +79,14 @@ EOT
 
         yield 'Injects variables with @var namespaced with fully qualified name' => [
             <<<'EOT'
-<?php
-namespace Foo;
-/** @var \Bar\Baz $zed */
-$zed;
-<>
-EOT
+                <?php
+                namespace Foo;
+                /** @var \Bar\Baz $zed */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('Bar\\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
@@ -94,15 +94,15 @@ EOT
 
         yield 'Injects variables with @var with imported namespace' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Foo\Bar\Zed;
-/** @var Zed\Baz $zed */
-$zed;
-<>
-EOT
+                use Foo\Bar\Zed;
+                /** @var Zed\Baz $zed */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('Foo\Bar\Zed\Baz', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }
@@ -110,14 +110,14 @@ EOT
 
         yield 'Injects named union type' => [
             <<<'EOT'
-<?php
+                <?php
 
-/** @var Bar|Baz $zed */
-$zed;
-<>
-EOT
+                /** @var Bar|Baz $zed */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals(Types::fromTypes([
                     Type::fromString('Bar'),
@@ -128,14 +128,14 @@ EOT
 
         yield 'Unspecified type for following variable' => [
             <<<'EOT'
-<?php
+                <?php
 
-/** @var \Zed\Baz */
-$zed;
-<>
-EOT
+                /** @var \Zed\Baz */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('Zed\Baz', (string) $frame->locals()->byName('$zed')->first()->symbolContext()->type());
             }
@@ -143,16 +143,16 @@ EOT
 
         yield 'Unspecified type for following variable with class import' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Zed\Baz;
+                use Zed\Baz;
 
-/** @var Baz */
-$zed;
-<>
-EOT
+                /** @var Baz */
+                $zed;
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('Zed\Baz', (string) $frame->locals()->byName('$zed')->first()->symbolContext()->type());
             }
@@ -160,17 +160,17 @@ EOT
 
         yield 'Targeted variable not matching following variable assignment' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Baz { public function hello(): string {}}
-$foo = new Baz();
+                class Baz { public function hello(): string {}}
+                $foo = new Baz();
 
-/** @var Baz $foo */
-$zed = $foo->hello();
-<>
-EOT
+                /** @var Baz $foo */
+                $zed = $foo->hello();
+                <>
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals('string', (string) $frame->locals()->byName('$zed')->last()->symbolContext()->type());
             }

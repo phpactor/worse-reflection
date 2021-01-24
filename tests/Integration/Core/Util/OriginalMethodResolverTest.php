@@ -18,7 +18,7 @@ class OriginalMethodResolverTest extends IntegrationTestCase
         string $memberName,
         string $containerType,
         ?string $expectedType
-    ) {
+    ): void {
         $this->workspace()->reset();
         $this->workspace()->loadManifest(implode("\n", $manifest));
         $source = $this->workspace()->getContents('test.php');

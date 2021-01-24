@@ -4,13 +4,14 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
+use Closure;
 
 class ReflectionMethodCollectionTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideCollection
      */
-    public function testCollection(string $source, \Closure $assertion)
+    public function testCollection(string $source, Closure $assertion): void
     {
         $collection = $this->createReflector($source)->reflectClass('Foobar');
         $assertion($collection);
@@ -20,41 +21,41 @@ class ReflectionMethodCollectionTest extends IntegrationTestCase
     {
         yield 'Get abstract methods' => [
             <<<'EOT'
-<?php
+                <?php
 
-abstract class Foobar
-{
-    public function one() {}
+                abstract class Foobar
+                {
+                    public function one() {}
 
-    abstract function two() {}
-    abstract function three() {}
-}
+                    abstract function two() {}
+                    abstract function three() {}
+                }
 
-EOT
+                EOT
         ,
-            function (ReflectionClass $class) {
+            function (ReflectionClass $class): void {
                 $this->assertEquals(2, $class->methods()->abstract()->count());
             },
         ];
 
         yield 'Get abstract methods with virtual methods' => [
             <<<'EOT'
-<?php
+                <?php
 
-/**
-* @method Barfoo barfoo()
- */
-abstract class Foobar
-{
-    public function one() {}
+                /**
+                * @method Barfoo barfoo()
+                 */
+                abstract class Foobar
+                {
+                    public function one() {}
 
-    abstract function two() {}
-    abstract function three() {}
-}
+                    abstract function two() {}
+                    abstract function three() {}
+                }
 
-EOT
+                EOT
         ,
-            function (ReflectionClass $class) {
+            function (ReflectionClass $class): void {
                 $this->assertEquals(2, $class->methods()->abstract()->count());
             },
         ];

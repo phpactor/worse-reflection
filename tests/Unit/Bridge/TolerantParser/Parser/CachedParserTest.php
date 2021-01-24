@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Cache\TtlCache;
 
 class CachedParserTest extends TestCase
 {
-    public function testCachesResults()
+    public function testCachesResults(): void
     {
         $parser = new CachedParser(new TtlCache());
         $node1 = $parser->parseSourceFile(file_get_contents(__FILE__));
@@ -17,7 +17,7 @@ class CachedParserTest extends TestCase
         $this->assertSame($node1, $node2);
     }
 
-    public function testReturnsDifferentResultsForDifferentSourceCodes()
+    public function testReturnsDifferentResultsForDifferentSourceCodes(): void
     {
         $parser = new CachedParser(new TtlCache());
         $node1 = $parser->parseSourceFile(file_get_contents(__FILE__));

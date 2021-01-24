@@ -14,16 +14,16 @@ class ForeachWalkerTest extends FrameWalkerTestCase
     {
         yield 'Assigns type to foreach item' => [
             <<<'EOT'
-<?php
-/** @var int[] $items */
-$items = [1, 2, 3, 4];
+                <?php
+                /** @var int[] $items */
+                $items = [1, 2, 3, 4];
 
-foreach ($items as $item) {
-<>
-}
-EOT
+                foreach ($items as $item) {
+                <>
+                }
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(2, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('item'));
                 $this->assertEquals('int', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
@@ -32,16 +32,16 @@ EOT
 
         yield 'yields array keys' => [
             <<<'EOT'
-<?php
-/** @var int[] $items */
-$items = [ 'one' => 1, 'two' => 2 ];
+                <?php
+                /** @var int[] $items */
+                $items = [ 'one' => 1, 'two' => 2 ];
 
-foreach ($items as $key => $item) {
-<>
-}
-EOT
+                foreach ($items as $key => $item) {
+                <>
+                }
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(3, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('key'));
                 $this->assertEquals(Type::unknown(), $frame->locals()->byName('key')->first()->symbolContext()->types()->best());
@@ -52,19 +52,19 @@ EOT
 
         yield 'Assigns fully qualfied type to foreach item' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Foobar;
+                namespace Foobar;
 
-/** @var Barfoo[] $items */
-$items = [];
+                /** @var Barfoo[] $items */
+                $items = [];
 
-foreach ($items as $item) {
-<>
-}
-EOT
+                foreach ($items as $item) {
+                <>
+                }
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(2, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('item'));
                 $this->assertEquals('Foobar\\Barfoo', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
@@ -73,19 +73,19 @@ EOT
 
         yield 'Assigns fully qualfied type to foreach from collection' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Foobar;
+                namespace Foobar;
 
-/** @var Collection<Item> $items */
-$items = new Collection();
+                /** @var Collection<Item> $items */
+                $items = new Collection();
 
-foreach ($items as $item) {
-<>
-}
-EOT
+                foreach ($items as $item) {
+                <>
+                }
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(2, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('item'));
                 $this->assertEquals(
@@ -98,21 +98,21 @@ EOT
 
         yield 'It returns type for a foreach member (with a docblock)' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function hello()
-    {
-        /** @var Foobar $foobar */
-        foreach ($collection as $foobar) {
-            $foobar->foobar();
-            <>
-        }
-    }
-}
-EOT
-        , function (Frame $frame) {
+                class Foobar
+                {
+                    public function hello()
+                    {
+                        /** @var Foobar $foobar */
+                        foreach ($collection as $foobar) {
+                            $foobar->foobar();
+                            <>
+                        }
+                    }
+                }
+                EOT
+        , function (Frame $frame): void {
             $vars = $frame->locals()->byName('foobar');
             $this->assertCount(2, $vars);
             $symbolInformation = $vars->atIndex(1)->symbolContext();
@@ -121,13 +121,13 @@ EOT
 
         yield 'List assignment in foreach' => [
             <<<'EOT'
-<?php
-foreach (['foo', 'bar'] as [ $foo, $bar ]) {
-    <>
-}
-EOT
+                <?php
+                foreach (['foo', 'bar'] as [ $foo, $bar ]) {
+                    <>
+                }
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertCount(2, $frame->locals());
                 $this->assertEquals('foo', $frame->locals()->atIndex(0)->name());
                 $this->assertEquals('bar', $frame->locals()->atIndex(1)->name());
@@ -144,16 +144,16 @@ EOT
 
         yield 'Typed array' => [
             <<<'EOT'
-<?php
-/** @var string[] $vars */
-$vars = ['one', 'two'];
+                <?php
+                /** @var string[] $vars */
+                $vars = ['one', 'two'];
 
-foreach ($vars as [ $foo, $bar ]) {
-    <>
-}
-EOT
+                foreach ($vars as [ $foo, $bar ]) {
+                    <>
+                }
+                EOT
         ,
-            function (Frame $frame) {
+            function (Frame $frame): void {
                 $this->assertEquals(
                     Type::string(),
                     $frame->locals()->byName('foo')->atIndex(0)->symbolContext()->type(),

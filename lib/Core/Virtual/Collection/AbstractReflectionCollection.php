@@ -5,8 +5,13 @@ namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use RuntimeException;
+use IteratorAggregate;
+use Countable;
+use ArrayAccess;
+use ArrayIterator;
+use BadMethodCallException;
 
-abstract class AbstractReflectionCollection implements \IteratorAggregate, \Countable, \ArrayAccess
+abstract class AbstractReflectionCollection implements IteratorAggregate, Countable, ArrayAccess
 {
     /**
      * @var array
@@ -17,8 +22,6 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
     {
         $this->items = $items;
     }
-
-    abstract protected function collectionType(): string;
 
     public function count(): int
     {
@@ -92,7 +95,7 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->items);
+        return new ArrayIterator($this->items);
     }
 
     public function offsetGet($name)
@@ -100,18 +103,20 @@ abstract class AbstractReflectionCollection implements \IteratorAggregate, \Coun
         return $this->get($name);
     }
 
-    public function offsetSet($name, $value)
+    public function offsetSet($name, $value): void
     {
-        throw new \BadMethodCallException('Collections are immutable');
+        throw new BadMethodCallException('Collections are immutable');
     }
 
-    public function offsetUnset($name)
+    public function offsetUnset($name): void
     {
-        throw new \BadMethodCallException('Collections are immutable');
+        throw new BadMethodCallException('Collections are immutable');
     }
 
     public function offsetExists($name)
     {
         return isset($this->items[$name]);
     }
+
+    abstract protected function collectionType(): string;
 }

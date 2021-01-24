@@ -5,13 +5,14 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Inference\Frame;
+use Closure;
 
 class FrameBuilderTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideForMethod
      */
-    public function testForMethod(string $source, array $classAndMethod, \Closure $assertion)
+    public function testForMethod(string $source, array $classAndMethod, Closure $assertion): void
     {
         list($className, $methodName) = $classAndMethod;
         $reflector = $this->createReflector($source);
@@ -25,17 +26,17 @@ class FrameBuilderTest extends IntegrationTestCase
     {
         yield 'Tolerates missing tokens' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function hello()
-    {
-        $reflection = )>classReflector->reflect(TestCase::class);
-    }
-}
-EOT
-        , [ 'Foobar', 'hello' ], function (Frame $frame, $logger) {
+                class Foobar
+                {
+                    public function hello()
+                    {
+                        $reflection = )>classReflector->reflect(TestCase::class);
+                    }
+                }
+                EOT
+        , [ 'Foobar', 'hello' ], function (Frame $frame, $logger): void {
             $this->assertStringContainsString('Non-node class passed to resolveNode, got', (string) $frame->problems());
         }];
     }

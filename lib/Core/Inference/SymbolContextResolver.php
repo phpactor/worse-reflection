@@ -100,45 +100,6 @@ class SymbolContextResolver
         $this->cache = $cache;
     }
 
-    public function resolveNode(Frame $frame, $node): SymbolContext
-    {
-        try {
-            if (
-                $node instanceof ParserVariable
-                && $node->parent instanceof ScopedPropertyAccessExpression
-                && $node === $node->parent->memberName
-            ) {
-                return $this->_resolveNode($frame, $node->parent);
-            }
-            return $this->_resolveNode($frame, $node);
-        } catch (CouldNotResolveNode $couldNotResolveNode) {
-            return SymbolContext::none()
-                ->withIssue($couldNotResolveNode->getMessage());
-        }
-    }
-
-    /**
-     * Internal interface
-     */
-    public function _resolveNode(Frame $frame, $node): SymbolContext
-    {
-        $key = 'sc:'.spl_object_hash($node);
-
-        return $this->cache->getOrSet($key, function () use ($frame, $node) {
-            if (false === $node instanceof Node) {
-                throw new CouldNotResolveNode(sprintf(
-                    'Non-node class passed to resolveNode, got "%s"',
-                    get_class($node)
-                ));
-            }
-
-            $context = $this->__resolveNode($frame, $node);
-            $context = $context->withScope(new ReflectionScope($node));
-
-            return $context;
-        });
-    }
-
     private function __resolveNode(Frame $frame, Node $node): SymbolContext
     {
         $this->logger->debug(sprintf('Resolving: %s', get_class($node)));
@@ -286,6 +247,45 @@ class SymbolContextResolver
             get_class($node),
             $node->getText()
         ));
+    }
+
+    public function resolveNode(Frame $frame, $node): SymbolContext
+    {
+        try {
+            if (
+                $node instanceof ParserVariable
+                && $node->parent instanceof ScopedPropertyAccessExpression
+                && $node === $node->parent->memberName
+            ) {
+                return $this->_resolveNode($frame, $node->parent);
+            }
+            return $this->_resolveNode($frame, $node);
+        } catch (CouldNotResolveNode $couldNotResolveNode) {
+            return SymbolContext::none()
+                ->withIssue($couldNotResolveNode->getMessage());
+        }
+    }
+
+    /**
+     * Internal interface
+     */
+    public function _resolveNode(Frame $frame, $node): SymbolContext
+    {
+        $key = 'sc:'.spl_object_hash($node);
+
+        return $this->cache->getOrSet($key, function () use ($frame, $node) {
+            if (false === $node instanceof Node) {
+                throw new CouldNotResolveNode(sprintf(
+                    'Non-node class passed to resolveNode, got "%s"',
+                    get_class($node)
+                ));
+            }
+
+            $context = $this->__resolveNode($frame, $node);
+            $context = $context->withScope(new ReflectionScope($node));
+
+            return $context;
+        });
     }
 
     private function resolveVariable(Frame $frame, ParserVariable $node)

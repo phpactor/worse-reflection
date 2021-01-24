@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 
 class DocblockFactoryTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $innerFactory = new DocblockFactory();
         $factory = new BridgeFactory($innerFactory);

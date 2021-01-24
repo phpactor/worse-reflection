@@ -7,24 +7,26 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
+use Closure;
+use Generator;
 
 class DeclaredMemberTypeResolverTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideResolveTypes
      */
-    public function testResolveTypes(string $source, string $class, \Closure $assertion)
+    public function testResolveTypes(string $source, string $class, Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClass(ClassName::fromString($class));
         $assertion($class->properties()->get('p'));
     }
 
-    public function provideResolveTypes(): \Generator
+    public function provideResolveTypes(): Generator
     {
         yield 'union type' => [
             '<?php class C { private int|string $p; }',
                 'C',
-                function (ReflectionProperty $property) {
+                function (ReflectionProperty $property): void {
                     $this->assertEquals(Types::fromTypes([
                         Type::int(),
                         Type::string(),
@@ -35,7 +37,7 @@ class DeclaredMemberTypeResolverTest extends IntegrationTestCase
         yield 'union type with FQN' => [
             '<?php class C { private int|Foobar|Baz $p; }',
                 'C',
-                function (ReflectionProperty $property) {
+                function (ReflectionProperty $property): void {
                     $this->assertEquals(Types::fromTypes([
                         Type::int(),
                         Type::class('Foobar'),

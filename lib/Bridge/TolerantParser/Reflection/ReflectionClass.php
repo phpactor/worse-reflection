@@ -80,11 +80,6 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         $this->sourceCode = $sourceCode;
     }
 
-    protected function node(): Node
-    {
-        return $this->node;
-    }
-
     public function isAbstract(): bool
     {
         if (false === $this->node instanceof ClassDeclaration) {
@@ -372,5 +367,10 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
 
         return $modifier->kind === TokenKind::FinalKeyword;
+    }
+
+    protected function node(): Node
+    {
+        return $this->node;
     }
 }

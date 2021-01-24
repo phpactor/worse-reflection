@@ -23,7 +23,7 @@ class ClassToFileSourceLocatorTest extends IntegrationTestCase
     /**
      * It should locate source.
      */
-    public function testLocator()
+    public function testLocator(): void
     {
         $source = $this->locator->locate(ClassName::fromString(__CLASS__));
         $this->assertEquals(file_get_contents(__FILE__), (string) $source);
@@ -33,7 +33,7 @@ class ClassToFileSourceLocatorTest extends IntegrationTestCase
     /**
      * It should throw an exception if class was not found.
      */
-    public function testLocateNotFound()
+    public function testLocateNotFound(): void
     {
         $this->expectException(SourceNotFound::class);
         $this->locator->locate(ClassName::fromString('asdDSA'));

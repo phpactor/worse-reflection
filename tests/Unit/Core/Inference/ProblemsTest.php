@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
 class ProblemsTest extends TestCase
 {
-    public function testMerge()
+    public function testMerge(): void
     {
         $s1 = SymbolContext::none();
         $s2 = SymbolContext::none();

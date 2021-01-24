@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Name;
 
 class ComposerSourceLocatorTest extends TestCase
 {
-    public function testLocate()
+    public function testLocate(): void
     {
         $autoloader = require(__DIR__ . '/../../../../vendor/autoload.php');
         $locator = new ComposerSourceLocator($autoloader);

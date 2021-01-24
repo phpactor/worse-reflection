@@ -47,11 +47,6 @@ class ReflectionParameterCollection extends AbstractReflectionCollection impleme
         return new static($serviceLocator, $items);
     }
 
-    protected function collectionType(): string
-    {
-        return CoreReflectionParameterCollection::class;
-    }
-
     public function promoted(): PhpactorReflectionParameterCollection
     {
         return new self($this->serviceLocator, array_filter($this->items, function (PhpactorReflectionParameter $parameter) {
@@ -64,5 +59,10 @@ class ReflectionParameterCollection extends AbstractReflectionCollection impleme
         return new self($this->serviceLocator, array_filter($this->items, function (PhpactorReflectionParameter $parameter) {
             return !$parameter->isPromoted();
         }));
+    }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionParameterCollection::class;
     }
 }

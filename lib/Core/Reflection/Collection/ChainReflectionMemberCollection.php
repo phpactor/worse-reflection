@@ -171,14 +171,6 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
         return new self($collections);
     }
 
-    /**
-     * @param T $collection
-     */
-    private function add(ReflectionMemberCollection $collection): void
-    {
-        $this->collections[] = $collection;
-    }
-
     public function byName(string $name): ReflectionMemberCollection
     {
         $collections = [];
@@ -234,5 +226,13 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
         }
 
         return new self($collections);
+    }
+
+    /**
+     * @param T $collection
+     */
+    private function add(ReflectionMemberCollection $collection): void
+    {
+        $this->collections[] = $collection;
     }
 }

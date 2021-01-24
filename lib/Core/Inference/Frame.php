@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Closure;
+
 class Frame
 {
     /**
@@ -79,7 +81,7 @@ class Frame
         return $this->parent;
     }
 
-    public function reduce(\Closure $closure, $initial = null)
+    public function reduce(Closure $closure, $initial = null)
     {
         $initial = $closure($this, $initial);
 

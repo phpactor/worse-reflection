@@ -18,6 +18,7 @@ use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Visibility;
+use InvalidArgumentException;
 
 class ReflectionPromotedProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
@@ -66,7 +67,7 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
 
         /** @phpstan-ignore-next-line */
         if (null === $class) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Could not locate class-like ancestor node for method "%s"',
                 $this->name()
             ));
@@ -105,16 +106,6 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
             $this->class()->name(),
             $this->parameter->questionToken ? true : false
         );
-    }
-
-    protected function node(): Node
-    {
-        return $this->parameter;
-    }
-
-    protected function serviceLocator(): ServiceLocator
-    {
-        return $this->serviceLocator;
     }
 
     public function class(): ReflectionClassLike
@@ -159,5 +150,15 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
         }
 
         return Visibility::public();
+    }
+
+    protected function node(): Node
+    {
+        return $this->parameter;
+    }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
     }
 }

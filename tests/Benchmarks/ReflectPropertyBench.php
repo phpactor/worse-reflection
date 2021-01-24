@@ -19,7 +19,7 @@ class ReflectPropertyBench extends BaseBenchCase
      */
     private $class;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->class = $this->getReflector()->reflectClassLike(ClassName::fromString(PropertyClass::class));
@@ -28,7 +28,7 @@ class ReflectPropertyBench extends BaseBenchCase
     /**
      * @Subject()
      */
-    public function property()
+    public function property(): void
     {
         $this->class->properties()->get('noType');
     }
@@ -36,7 +36,7 @@ class ReflectPropertyBench extends BaseBenchCase
     /**
      * @Subject()
      */
-    public function property_return_type()
+    public function property_return_type(): void
     {
         $this->class->properties()->get('withType')->inferredTypes();
     }

@@ -6,6 +6,15 @@ class Visibility
 {
     private $visibility;
 
+    private function __construct()
+    {
+    }
+
+    public function __toString()
+    {
+        return $this->visibility;
+    }
+
     public static function public()
     {
         return self::create('public');
@@ -34,15 +43,6 @@ class Visibility
     public function isPrivate()
     {
         return $this->visibility === 'private';
-    }
-
-    public function __toString()
-    {
-        return $this->visibility;
-    }
-
-    private function __construct()
-    {
     }
 
     private static function create($visibility)

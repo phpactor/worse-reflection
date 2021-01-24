@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 use Prophecy\PhpUnit\ProphecyTrait;
+use RuntimeException;
 
 class SymbolFactoryTest extends TestCase
 {
@@ -31,14 +32,14 @@ class SymbolFactoryTest extends TestCase
         $this->node = $this->prophesize(Node::class);
     }
 
-    public function testInformationInvalidKeys()
+    public function testInformationInvalidKeys(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid keys "asd"');
         $this->factory->context('hello', 10, 20, [ 'asd' => 'asd' ]);
     }
 
-    public function testInformation()
+    public function testInformation(): void
     {
         $information = $this->factory->context('hello', 10, 20);
         $this->assertInstanceOf(SymbolContext::class, $information);
@@ -49,7 +50,7 @@ class SymbolFactoryTest extends TestCase
         $this->assertEquals(20, $symbol->position()->end());
     }
 
-    public function testInformationOptions()
+    public function testInformationOptions(): void
     {
         $containerType = Type::fromString('container');
         $type = Type::fromString('type');

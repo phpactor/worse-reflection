@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Psr\Log\LoggerInterface;
+use Closure;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
@@ -18,7 +19,7 @@ class ReflectionMethodTest extends IntegrationTestCase
      * @dataProvider provideReflectionMethod
      * @dataProvider provideDeprecations
      */
-    public function testReflectMethod(string $source, string $class, \Closure $assertion)
+    public function testReflectMethod(string $source, string $class, Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class->methods(), $this->logger());
@@ -28,76 +29,76 @@ class ReflectionMethodTest extends IntegrationTestCase
     {
         yield 'It reflects a method' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function method();
-}
-EOT
+                class Foobar
+                {
+                    public function method();
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals('method', $methods->get('method')->name());
                 $this->assertInstanceOf(ReflectionMethod::class, $methods->get('method'));
             },
         ];
         yield 'Private visibility' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    private function method();
-}
-EOT
+                class Foobar
+                {
+                    private function method();
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Visibility::private(), $methods->get('method')->visibility());
             },
         ];
         yield 'Protected visibility' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    protected function method()
-    {
-    }
-}
-EOT
+                class Foobar
+                {
+                    protected function method()
+                    {
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Visibility::protected(), $methods->get('method')->visibility());
             },
         ];
         yield 'Public visibility' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function method();
-}
-EOT
+                class Foobar
+                {
+                    public function method();
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Visibility::public(), $methods->get('method')->visibility());
             },
         ];
         yield 'Union type' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar { function method1(): string|int {} }
-EOT
+                class Foobar { function method1(): string|int {} }
+                EOT
         ,
             'Foobar',
-            function (ReflectionMethodCollection $methods) {
+            function (ReflectionMethodCollection $methods): void {
                 $this->assertEquals(Types::fromTypes([
                     Type::string(),
                     Type::int(),
@@ -106,29 +107,29 @@ EOT
         ];
         yield 'Return type' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Test;
+                namespace Test;
 
-use Acme\Post;
+                use Acme\Post;
 
-class Foobar
-{
-    function method1(): int {}
-    function method2(): string {}
-    function method3(): float {}
-    function method4(): array {}
-    function method5(): Barfoo {}
-    function method6(): Post {}
-    function method7(): self {}
-    function method8(): iterable {}
-    function method9(): callable {}
-    function method10(): resource {}
-}
-EOT
+                class Foobar
+                {
+                    function method1(): int {}
+                    function method2(): string {}
+                    function method3(): float {}
+                    function method4(): array {}
+                    function method5(): Barfoo {}
+                    function method6(): Post {}
+                    function method7(): self {}
+                    function method8(): iterable {}
+                    function method9(): callable {}
+                    function method10(): resource {}
+                }
+                EOT
         ,
             'Test\Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::int(), $methods->get('method1')->returnType());
                 $this->assertEquals(Type::string(), $methods->get('method2')->returnType());
                 $this->assertEquals(Type::float(), $methods->get('method3')->returnType());
@@ -143,18 +144,18 @@ EOT
         ];
         yield 'Nullable return type' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Acme\Post;
+                use Acme\Post;
 
-class Foobar
-{
-    function method1(): ?int {}
-}
-EOT
+                class Foobar
+                {
+                    function method1(): ?int {}
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(
                     Type::int()->asNullable(),
                     $methods->get('method1')->returnType()
@@ -163,29 +164,29 @@ EOT
         ];
         yield 'Inherited methods' => [
             <<<'EOT'
-<?php
+                <?php
 
-class ParentParentClass extends NonExisting
-{
-    public function method5() {}
-}
+                class ParentParentClass extends NonExisting
+                {
+                    public function method5() {}
+                }
 
-class ParentClass extends ParentParentClass
-{
-    private function method1() {}
-    protected function method2() {}
-    public function method3() {}
-    public function method4() {}
-}
+                class ParentClass extends ParentParentClass
+                {
+                    private function method1() {}
+                    protected function method2() {}
+                    public function method3() {}
+                    public function method4() {}
+                }
 
-class Foobar extends ParentClass
-{
-    public function method4() {} // overrides from previous
-}
-EOT
+                class Foobar extends ParentClass
+                {
+                    public function method4() {} // overrides from previous
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(
                     ['method5', 'method2', 'method3', 'method4'],
                     $methods->keys()
@@ -195,170 +196,170 @@ EOT
 
         yield 'Return type from docblock' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Acme\Post;
+                use Acme\Post;
 
-class Foobar
-{
-    /**
-     * @return Post
-     */
-    function method1() {}
-}
-EOT
+                class Foobar
+                {
+                    /**
+                     * @return Post
+                     */
+                    function method1() {}
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
             },
         ];
 
         yield 'Return type from array docblock' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Acme\Post;
+                use Acme\Post;
 
-class Foobar
-{
-    /**
-     * @return Post[]
-     */
-    function method1(): array {}
-}
-EOT
+                class Foobar
+                {
+                    /**
+                     * @return Post[]
+                     */
+                    function method1(): array {}
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::array('Acme\Post'), $methods->get('method1')->inferredTypes()->best());
             },
         ];
         yield 'Return type from docblock this and static' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    /**
-     * @return $this
-     */
-    function method1() {}
+                class Foobar
+                {
+                    /**
+                     * @return $this
+                     */
+                    function method1() {}
 
-    /**
-     * @return static
-     */
-    function method2() {}
-}
-EOT
+                    /**
+                     * @return static
+                     */
+                    function method2() {}
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredTypes()->best());
                 $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredTypes()->best());
             },
         ];
         yield 'Return type from docblock this and static from a trait' => [
             <<<'EOT'
-<?php
+                <?php
 
-trait FooTrait
-{
-    /**
-     * @return $this
-     */
-    function method1() {}
+                trait FooTrait
+                {
+                    /**
+                     * @return $this
+                     */
+                    function method1() {}
 
-    /**
-     * @return static
-     */
-    function method2() {}
-}
+                    /**
+                     * @return static
+                     */
+                    function method2() {}
+                }
 
-class Foobar
-{
-    use FooTrait;
-}
-EOT
+                class Foobar
+                {
+                    use FooTrait;
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredTypes()->best());
                 $this->assertEquals(Type::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredTypes()->best());
             },
         ];
         yield 'Return type from class @method annotation' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Acme\Post;
+                use Acme\Post;
 
-/**
- * @method Post method1()
- */
-class Foobar
-{
-    function method1() {}
-}
-EOT
+                /**
+                 * @method Post method1()
+                 */
+                class Foobar
+                {
+                    function method1() {}
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
             },
         ];
         yield 'Return type from overridden @method annotation' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Acme\Post;
+                use Acme\Post;
 
-class Barfoo
-{
-    /**
-     * @return AbstractPost
-     */
-    function method1() {}
-}
+                class Barfoo
+                {
+                    /**
+                     * @return AbstractPost
+                     */
+                    function method1() {}
+                }
 
-/**
- * @method Post method1()
- */
-class Foobar extends Barfoo
-{
-}
-EOT
+                /**
+                 * @method Post method1()
+                 */
+                class Foobar extends Barfoo
+                {
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
             },
         ];
         yield 'Return type from inherited docblock' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Acme\Post;
+                use Acme\Post;
 
-class ParentClass
-{
-    /**
-     * @return \Articles\Blog
-     */
-    function method1() {}
-}
+                class ParentClass
+                {
+                    /**
+                     * @return \Articles\Blog
+                     */
+                    function method1() {}
+                }
 
-class Foobar extends ParentClass
-{
-    /**
-     * {@inheritdoc}
-     */
-    function method1() {}
-}
-EOT
+                class Foobar extends ParentClass
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    function method1() {}
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::class(
                     ClassName::fromString('\Articles\Blog')
                 ), $methods->get('method1')->inferredTypes()->best());
@@ -366,84 +367,84 @@ EOT
         ];
         yield 'Return type from inherited docblock (from interface)' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Acme\Post;
+                use Acme\Post;
 
-interface Barbar
-{
-    /**
-     * @return \Articles\Blog
-     */
-    function method1();
-}
+                interface Barbar
+                {
+                    /**
+                     * @return \Articles\Blog
+                     */
+                    function method1();
+                }
 
-class Foobar implements Barbar
-{
-    /**
-     * {@inheritdoc}
-     */
-    function method1()
-    {
-    }
-}
-EOT
+                class Foobar implements Barbar
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    function method1()
+                    {
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(Type::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredTypes()->best());
             },
         ];
         yield 'It reflects an abstract method' => [
             <<<'EOT'
-<?php
+                <?php
 
-abstract class Foobar
-{
-    abstract public function method();
-    public function methodNonAbstract();
-}
-EOT
+                abstract class Foobar
+                {
+                    abstract public function method();
+                    public function methodNonAbstract();
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertTrue($methods->get('method')->isAbstract());
                 $this->assertFalse($methods->get('methodNonAbstract')->isAbstract());
             },
         ];
         yield 'It returns the method parameters' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function barfoo($foobar, Barfoo $barfoo, int $number)
-    {
-    }
-}
-EOT
+                class Foobar
+                {
+                    public function barfoo($foobar, Barfoo $barfoo, int $number)
+                    {
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertCount(3, $methods->get('barfoo')->parameters());
             },
         ];
         yield 'It returns the nullable parameter types' => [
             <<<'EOT'
-<?php
+                <?php
 
-namespace Test;
+                namespace Test;
 
-class Foobar
-{
-    public function barfoo(?Barfoo $barfoo)
-    {
-    }
-}
-EOT
+                class Foobar
+                {
+                    public function barfoo(?Barfoo $barfoo)
+                    {
+                    }
+                }
+                EOT
         ,
             'Test\Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertCount(1, $methods->get('barfoo')->parameters());
                 $this->assertEquals(
                     Type::fromString('Test\Barfoo')->asNullable(),
@@ -453,18 +454,18 @@ EOT
         ];
         yield 'It tolerantes and logs method parameters with missing variables parameter' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function barfoo(Barfoo = null)
-    {
-    }
-}
-EOT
+                class Foobar
+                {
+                    public function barfoo(Barfoo = null)
+                    {
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods, LoggerInterface $logger) {
+            function ($methods, LoggerInterface $logger): void {
                 $this->assertEquals('', $methods->get('barfoo')->parameters()->first()->name());
                 $this->assertStringContainsString(
                     'Parameter has no variable',
@@ -474,142 +475,142 @@ EOT
         ];
         yield 'It returns the raw docblock' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    /**
-     * Hello this is a docblock.
-     */
-    public function barfoo($foobar, Barfoo $barfoo, int $number)
-    {
-    }
-}
-EOT
+                class Foobar
+                {
+                    /**
+                     * Hello this is a docblock.
+                     */
+                    public function barfoo($foobar, Barfoo $barfoo, int $number)
+                    {
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertStringContainsString(<<<EOT
-Hello this is a docblock.
-EOT
+                    Hello this is a docblock.
+                    EOT
                 , $methods->get('barfoo')->docblock()->raw());
             },
         ];
         yield 'It returns the formatted docblock' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    /**
-     * Hello this is a docblock.
-     *
-     * Yes?
-     */
-    public function barfoo($foobar, Barfoo $barfoo, int $number)
-    {
-    }
-}
-EOT
+                class Foobar
+                {
+                    /**
+                     * Hello this is a docblock.
+                     *
+                     * Yes?
+                     */
+                    public function barfoo($foobar, Barfoo $barfoo, int $number)
+                    {
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals(<<<EOT
-Hello this is a docblock.
+                    Hello this is a docblock.
 
-Yes?
-EOT
+                    Yes?
+                    EOT
                 , $methods->get('barfoo')->docblock()->formatted());
             },
         ];
         yield 'It returns true if the method is static' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public static function barfoo($foobar, Barfoo $barfoo, int $number)
-    {
-    }
-}
-EOT
+                class Foobar
+                {
+                    public static function barfoo($foobar, Barfoo $barfoo, int $number)
+                    {
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertTrue($methods->get('barfoo')->isStatic());
             },
         ];
         yield 'It returns the method body' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar
-{
-    public function barfoo()
-    {
-        echo "Hello!";
-    }
-}
-EOT
+                class Foobar
+                {
+                    public function barfoo()
+                    {
+                        echo "Hello!";
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertEquals('echo "Hello!";', (string) $methods->get('barfoo')->body());
             },
         ];
         yield 'It reflects a method from an inteface' => [
             <<<'EOT'
-<?php
+                <?php
 
-interface Foobar
-{
-    public function barfoo()
-    {
-        echo "Hello!";
-    }
-}
-EOT
+                interface Foobar
+                {
+                    public function barfoo()
+                    {
+                        echo "Hello!";
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function ($methods) {
+            function ($methods): void {
                 $this->assertTrue($methods->has('barfoo'));
                 $this->assertEquals('Foobar', (string) $methods->get('barfoo')->declaringClass()->name());
             },
         ];
         yield 'It reflects a method from a trait' => [
             <<<'EOT'
-<?php
+                <?php
 
-trait Foobar
-{
-    public function barfoo()
-    {
-        echo "Hello!";
-    }
-}
-EOT
+                trait Foobar
+                {
+                    public function barfoo()
+                    {
+                        echo "Hello!";
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function (ReflectionMethodCollection $methods) {
+            function (ReflectionMethodCollection $methods): void {
                 $this->assertTrue($methods->has('barfoo'));
                 $this->assertEquals('Foobar', (string) $methods->get('barfoo')->declaringClass()->name());
             },
         ];
         yield 'It returns methods when a class extends itself' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar extends Foobar
-{
-    public function barfoo()
-    {
-        echo "Hello!";
-    }
-}
-EOT
+                class Foobar extends Foobar
+                {
+                    public function barfoo()
+                    {
+                        echo "Hello!";
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function (ReflectionMethodCollection $methods) {
+            function (ReflectionMethodCollection $methods): void {
                 $this->assertTrue($methods->has('barfoo'));
             },
         ];
@@ -619,22 +620,22 @@ EOT
     {
         yield 'It shows when method is deprecated' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foobar extends Foobar
-{
-    /**
-     * @deprecated Foobar this hello
-     */
-    public function barfoo()
-    {
-        echo "Hello!";
-    }
-}
-EOT
+                class Foobar extends Foobar
+                {
+                    /**
+                     * @deprecated Foobar this hello
+                     */
+                    public function barfoo()
+                    {
+                        echo "Hello!";
+                    }
+                }
+                EOT
         ,
             'Foobar',
-            function (ReflectionMethodCollection $methods) {
+            function (ReflectionMethodCollection $methods): void {
                 $this->assertTrue($methods->has('barfoo'));
                 $this->assertTrue($methods->get('barfoo')->deprecation()->isDefined());
             },
@@ -644,7 +645,7 @@ EOT
     /**
      * @dataProvider provideReflectionMethodCollection
      */
-    public function testReflectCollection(string $source, string $class, \Closure $assertion)
+    public function testReflectCollection(string $source, string $class, Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class);
@@ -655,21 +656,21 @@ EOT
         return [
             'Only methods belonging to a given class' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-class ParentClass
-{
-    public function method1() {}
-}
+                    class ParentClass
+                    {
+                        public function method1() {}
+                    }
 
-class Foobar extends ParentClass
-{
-    public function method4() {}
-}
-EOT
+                    class Foobar extends ParentClass
+                    {
+                        public function method4() {}
+                    }
+                    EOT
         ,
             'Foobar',
-            function (ReflectionClass $class) {
+            function (ReflectionClass $class): void {
                 $methods = $class->methods()->belongingTo($class->name());
                 $this->assertEquals(
                     ['method4'],

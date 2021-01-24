@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Name;
+use stdClass;
 
 class TypeTest extends TestCase
 {
@@ -13,7 +14,7 @@ class TypeTest extends TestCase
      * @testdox It should __toString the given type.
      * @dataProvider provideToString
      */
-    public function testToString(Type $type, $toString, $phpType)
+    public function testToString(Type $type, $toString, $phpType): void
     {
         $this->assertEquals($toString, (string) $type, '__toString()');
 
@@ -124,7 +125,7 @@ class TypeTest extends TestCase
     /**
      * @testdox It returns the short name for a class.
      */
-    public function testShort()
+    public function testShort(): void
     {
         $type = Type::fromString('Foo\Bar\Bar');
         $this->assertEquals('Bar', $type->short());
@@ -133,7 +134,7 @@ class TypeTest extends TestCase
     /**
      * @testdox It returns the "short" name for a primitive.
      */
-    public function testShortPrimitive()
+    public function testShortPrimitive(): void
     {
         $type = Type::fromString('string');
         $this->assertEquals('string', $type->short());
@@ -142,7 +143,7 @@ class TypeTest extends TestCase
     /**
      * @testdox It has descriptors to say if it is a class or primitive.
      */
-    public function testReturnsIfClass()
+    public function testReturnsIfClass(): void
     {
         $type = Type::fromString('Foo\Bar');
         $this->assertTrue($type->isClass());
@@ -160,7 +161,7 @@ class TypeTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testItCanBeCreatedFromAValue($value, Type $expectedType)
+    public function testItCanBeCreatedFromAValue($value, Type $expectedType): void
     {
         $type = Type::fromValue($value);
         $this->assertEquals($expectedType, $type);
@@ -204,7 +205,7 @@ class TypeTest extends TestCase
         ];
 
         yield [
-            new \stdClass(),
+            new stdClass(),
             Type::class(ClassName::fromString('stdClass')),
         ];
 
@@ -214,13 +215,13 @@ class TypeTest extends TestCase
         ];
 
         yield 'callable' => [
-            function () {
+            function (): void {
             },
             Type::callable(),
         ];
     }
 
-    public function testItIsImmutableClassName()
+    public function testItIsImmutableClassName(): void
     {
         $class = ClassName::fromString('Hello\\Goodbye');
         $type1 = Type::class($class);
@@ -230,7 +231,7 @@ class TypeTest extends TestCase
         $this->assertNotSame($type1->className(), $type2->className());
     }
 
-    public function testItIsImmutableIterableType()
+    public function testItIsImmutableIterableType(): void
     {
         $type1 = Type::array(Type::fromString('Foobar'));
         $type2 = $type1->withClassName(ClassName::fromString('ClassOne'));
@@ -239,14 +240,14 @@ class TypeTest extends TestCase
         $this->assertNotSame($type1->arrayType(), $type2->arrayType());
     }
 
-    public function testIsClassShouldNotReturnTrueForObjectType()
+    public function testIsClassShouldNotReturnTrueForObjectType(): void
     {
         $type1 = Type::fromString('object');
         $this->assertFalse($type1->isClass());
         $this->assertEquals('object', $type1->__toString());
     }
 
-    public function testHasMethodToIndicateIfItIsNullable()
+    public function testHasMethodToIndicateIfItIsNullable(): void
     {
         $type1 = Type::fromString('string');
         $this->assertFalse($type1->isNullable());

@@ -40,7 +40,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
     /**
      * @dataProvider provideCreatesDocblockMethod
      */
-    public function testCreatesDocblockMethod(MethodTag $methodTag, Closure $assertion)
+    public function testCreatesDocblockMethod(MethodTag $methodTag, Closure $assertion): void
     {
         $reflector = ReflectorBuilder::create()->addSource(
             '<?php class Foobar {}'
@@ -57,7 +57,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
                 DocblockTypes::fromStringTypes([]),
                 'myMethod'
             ),
-            function (ReflectionMethod $method) {
+            function (ReflectionMethod $method): void {
                 $this->assertEquals('Foobar', (string) $method->class()->name());
                 $this->assertEquals('myMethod', $method->name());
             }
@@ -70,7 +70,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
                 [],
                 true
             ),
-            function (ReflectionMethod $method) {
+            function (ReflectionMethod $method): void {
                 $this->assertEquals('Foobar', (string) $method->class()->name());
                 $this->assertEquals('myMethod', $method->name());
                 $this->assertTrue($method->isStatic());
@@ -82,7 +82,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
                 DocblockTypes::fromStringTypes(['Foobar', 'string']),
                 'myMethod'
             ),
-            function (ReflectionMethod $method) {
+            function (ReflectionMethod $method): void {
                 $this->assertEquals('Foobar', (string) $method->class()->name());
                 $this->assertEquals('myMethod', $method->name());
                 $this->assertEquals(Types::fromTypes([
@@ -101,7 +101,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
                     new Parameter('two'),
                 ]
             ),
-            function (ReflectionMethod $method) {
+            function (ReflectionMethod $method): void {
                 $this->assertEquals(2, $method->parameters()->count());
                 $this->assertEquals('one', $method->parameters()->first()->name());
                 $this->assertEquals('two', $method->parameters()->get('two')->name());
@@ -119,7 +119,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
                     ], DefaultValue::ofValue(1234)))
                 ]
             ),
-            function (ReflectionMethod $method) {
+            function (ReflectionMethod $method): void {
                 $this->assertEquals(1, $method->parameters()->count());
                 $parameter = $method->parameters()->first();
                 $this->assertEquals('one', $parameter->name());

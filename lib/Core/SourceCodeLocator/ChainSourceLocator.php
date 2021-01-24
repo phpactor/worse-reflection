@@ -65,7 +65,7 @@ class ChainSourceLocator implements SourceCodeLocator
         throw $exception;
     }
 
-    private function add(SourceCodeLocator $locator)
+    private function add(SourceCodeLocator $locator): void
     {
         $this->locators[] = $locator;
     }

@@ -26,11 +26,6 @@ class ReflectionArgumentCollection extends AbstractReflectionCollection implemen
         return new self($locator, $arguments);
     }
 
-    protected function collectionType(): string
-    {
-        return CoreReflectionParameterCollection::class;
-    }
-
     public function notPromoted(): CoreReflectionParameterCollection
     {
         return $this;
@@ -39,5 +34,10 @@ class ReflectionArgumentCollection extends AbstractReflectionCollection implemen
     public function promoted(): CoreReflectionParameterCollection
     {
         return new self($this->serviceLocator, []);
+    }
+
+    protected function collectionType(): string
+    {
+        return CoreReflectionParameterCollection::class;
     }
 }

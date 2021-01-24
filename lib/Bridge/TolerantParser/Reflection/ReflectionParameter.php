@@ -91,11 +91,6 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
         return DefaultValue::fromValue($value);
     }
 
-    protected function node(): Node
-    {
-        return $this->parameter;
-    }
-
     public function byReference(): bool
     {
         return (bool) $this->parameter->byRefToken;
@@ -117,5 +112,10 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     public function isPromoted(): bool
     {
         return $this->parameter->visibilityToken !== null;
+    }
+
+    protected function node(): Node
+    {
+        return $this->parameter;
     }
 }

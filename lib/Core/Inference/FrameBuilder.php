@@ -36,6 +36,16 @@ final class FrameBuilder
      */
     private $cache;
 
+    /**
+     * @param FrameWalker[] $walkers
+     */
+    public function __construct(SymbolContextResolver $symbolContextResolver, array $walkers, Cache $cache)
+    {
+        $this->symbolContextResolver = $symbolContextResolver;
+        $this->walkers = $walkers;
+        $this->cache = $cache;
+    }
+
     public static function create(
         DocBlockFactory $docblockFactory,
         SymbolContextResolver $symbolContextResolver,
@@ -58,19 +68,26 @@ final class FrameBuilder
         return new self($symbolContextResolver, $walkers, $cache);
     }
 
-    /**
-     * @param FrameWalker[] $walkers
-     */
-    public function __construct(SymbolContextResolver $symbolContextResolver, array $walkers, Cache $cache)
-    {
-        $this->symbolContextResolver = $symbolContextResolver;
-        $this->walkers = $walkers;
-        $this->cache = $cache;
-    }
-
     public function build(Node $node): Frame
     {
         return $this->walkNode($this->resolveScopeNode($node), $node);
+    }
+
+
+    /**
+     * @internal For use with walkers
+     *
+     * TODO: Make an interface for this, extract it.
+     */
+    public function resolveNode(Frame $frame, $node): SymbolContext
+    {
+        $info = $this->symbolContextResolver->resolveNode($frame, $node);
+
+        if ($info->issues()) {
+            $frame->problems()->add($info);
+        }
+
+        return $info;
     }
 
     private function walkNode(Node $node, Node $targetNode, ?Frame $frame = null): ?Frame
@@ -106,23 +123,6 @@ final class FrameBuilder
 
             return null;
         });
-    }
-
-
-    /**
-     * @internal For use with walkers
-     *
-     * TODO: Make an interface for this, extract it.
-     */
-    public function resolveNode(Frame $frame, $node): SymbolContext
-    {
-        $info = $this->symbolContextResolver->resolveNode($frame, $node);
-
-        if ($info->issues()) {
-            $frame->problems()->add($info);
-        }
-
-        return $info;
     }
 
     private function resolveScopeNode(Node $node): Node

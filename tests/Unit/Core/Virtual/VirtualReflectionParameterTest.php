@@ -76,7 +76,7 @@ class VirtualReflectionParameterTest extends TestCase
         );
     }
 
-    public function testAccess()
+    public function testAccess(): void
     {
         $parameter = $this->parameter();
         $this->assertEquals($this->name, $parameter->name());

@@ -8,14 +8,15 @@ use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Prophecy\PhpUnit\ProphecyTrait;
+use RuntimeException;
 
 class NodeReflectorTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testUnkown()
+    public function testUnkown(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Did not know how');
         $frame = new Frame('test');
         $locator = $this->prophesize(ServiceLocator::class);

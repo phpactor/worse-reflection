@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Exception;
 
-class NotFound extends \Exception
+use Exception;
+
+class NotFound extends Exception
 {
 }

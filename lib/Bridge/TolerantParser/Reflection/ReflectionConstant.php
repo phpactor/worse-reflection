@@ -58,16 +58,6 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
         return $value->type();
     }
 
-    protected function node(): Node
-    {
-        return $this->declaration;
-    }
-
-    protected function serviceLocator(): ServiceLocator
-    {
-        return $this->serviceLocator;
-    }
-
     public function class(): ReflectionClassLike
     {
         return $this->class;
@@ -103,5 +93,15 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
     public function memberType(): string
     {
         return ReflectionMember::TYPE_CONSTANT;
+    }
+
+    protected function node(): Node
+    {
+        return $this->declaration;
+    }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
     }
 }

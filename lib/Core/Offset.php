@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\TextDocument\ByteOffset;
+use InvalidArgumentException;
 
 final class Offset
 {
@@ -11,7 +12,7 @@ final class Offset
     private function __construct(int $offset)
     {
         if ($offset < 0) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Offset cannot be negative! Got "%s"',
                 $offset
             ));
@@ -34,7 +35,7 @@ final class Offset
             return self::fromInt($value);
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'Do not know how to create offset from type "%s"',
             is_object($value) ? get_class($value) : gettype($value)
         ));

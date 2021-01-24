@@ -10,7 +10,7 @@ class PositionTest extends TestCase
     /**
      * @testdox It provides width
      */
-    public function testWidth()
+    public function testWidth(): void
     {
         $position = Position::fromFullStartStartAndEnd(10, 15, 35);
         $this->assertEquals(10, $position->fullStart());

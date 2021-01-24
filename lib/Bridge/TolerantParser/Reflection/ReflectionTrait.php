@@ -44,14 +44,6 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
         $this->sourceCode = $sourceCode;
     }
 
-    /**
-     * @return TraitDeclaration
-     */
-    protected function node(): Node
-    {
-        return $this->node;
-    }
-
     public function methods(ReflectionClassLike $contextClass = null): CoreReflectionMethodCollection
     {
         $contextClass = $contextClass ?: $this;
@@ -96,5 +88,13 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
+    }
+
+    /**
+     * @return TraitDeclaration
+     */
+    protected function node(): Node
+    {
+        return $this->node;
     }
 }

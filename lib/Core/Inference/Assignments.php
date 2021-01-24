@@ -4,6 +4,8 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Countable;
 use IteratorAggregate;
+use RuntimeException;
+use ArrayIterator;
 
 /**
  * @implements IteratorAggregate<int,Variable>
@@ -73,7 +75,7 @@ abstract class Assignments implements Countable, IteratorAggregate
         $first = reset($this->variables);
 
         if (!$first) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Variable collection is empty'
             );
         }
@@ -84,7 +86,7 @@ abstract class Assignments implements Countable, IteratorAggregate
     public function atIndex(int $index): Variable
     {
         if (!isset($this->variables[$index])) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'No variable at index "%s"',
                 $index
             ));
@@ -98,7 +100,7 @@ abstract class Assignments implements Countable, IteratorAggregate
         $last = end($this->variables);
 
         if (!$last) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Cannot get last, variable collection is empty'
             );
         }
@@ -116,7 +118,7 @@ abstract class Assignments implements Countable, IteratorAggregate
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->variables);
+        return new ArrayIterator($this->variables);
     }
 
     public function merge(Assignments $variables): Assignments

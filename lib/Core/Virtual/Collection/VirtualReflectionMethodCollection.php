@@ -16,15 +16,15 @@ class VirtualReflectionMethodCollection extends VirtualReflectionMemberCollectio
         return new self($methods);
     }
 
-    protected function collectionType(): string
-    {
-        return ReflectionMethodCollection::class;
-    }
-
     public function abstract(): ReflectionMethodCollection
     {
         return new self(array_filter($this->items, function (ReflectionMethod $item) {
             return $item->isAbstract();
         }));
+    }
+
+    protected function collectionType(): string
+    {
+        return ReflectionMethodCollection::class;
     }
 }

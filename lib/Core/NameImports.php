@@ -3,8 +3,10 @@
 namespace Phpactor\WorseReflection\Core;
 
 use RuntimeException;
+use IteratorAggregate;
+use ArrayIterator;
 
-final class NameImports implements \IteratorAggregate
+final class NameImports implements IteratorAggregate
 {
     private $nameImports = [];
 
@@ -22,12 +24,7 @@ final class NameImports implements \IteratorAggregate
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->nameImports);
-    }
-
-    private function add(string $short, Name $item)
-    {
-        $this->nameImports[$short] = $item;
+        return new ArrayIterator($this->nameImports);
     }
 
     public function getByAlias(string $alias)
@@ -61,5 +58,10 @@ final class NameImports implements \IteratorAggregate
     public function hasAlias(string $alias)
     {
         return isset($this->nameImports[$alias]);
+    }
+
+    private function add(string $short, Name $item): void
+    {
+        $this->nameImports[$short] = $item;
     }
 }

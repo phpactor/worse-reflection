@@ -12,7 +12,7 @@ class FunctionReflectorTest extends IntegrationTestCase
     /**
      * @dataProvider provideReflectFunction
      */
-    public function testReflectFunction(string $source, string $name, Closure $assertion)
+    public function testReflectFunction(string $source, string $name, Closure $assertion): void
     {
         $reflection = $this->createReflector($source)->reflectFunction($name);
         $assertion($reflection);
@@ -23,13 +23,13 @@ class FunctionReflectorTest extends IntegrationTestCase
         yield 'reflect function' => [
             '<?php function hello() {}',
             'hello',
-            function (ReflectionFunction $function) {
+            function (ReflectionFunction $function): void {
                 $this->assertEquals('hello', $function->name());
             }
         ];
     }
 
-    public function testThrowsExceptionIfFunctionNotFound()
+    public function testThrowsExceptionIfFunctionNotFound(): void
     {
         $this->expectException(FunctionNotFound::class);
         $this->createReflector('<?php ')->reflectFunction('hallo');

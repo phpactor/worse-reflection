@@ -8,38 +8,40 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
+use Closure;
+use Generator;
 
 class ReflectionPromotedPropertyTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideConsturctorPropertyPromotion
      */
-    public function testReflectProperty(string $source, string $class, \Closure $assertion): void
+    public function testReflectProperty(string $source, string $class, Closure $assertion): void
     {
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class->properties());
     }
 
-    public function provideConsturctorPropertyPromotion(): \Generator
+    public function provideConsturctorPropertyPromotion(): Generator
     {
         yield 'Typed properties' => [
                 <<<'EOT'
-<?php
+                    <?php
 
-namespace Test;
+                    namespace Test;
 
-class Barfoo
-{
-    public function __construct(
-        private string $foobar
-        private int $barfoo,
-        private string|int $baz
-    ) {}
-}
-EOT
+                    class Barfoo
+                    {
+                        public function __construct(
+                            private string $foobar
+                            private int $barfoo,
+                            private string|int $baz
+                        ) {}
+                    }
+                    EOT
                 ,
                 'Test\Barfoo',
-                function (ReflectionPropertyCollection $properties) {
+                function (ReflectionPropertyCollection $properties): void {
                     $this->assertTrue($properties->get('foobar')->isPromoted());
                     $this->assertEquals(
                         Type::string(),
@@ -63,7 +65,7 @@ EOT
         yield 'Nullable' => [
                 '<?php class Barfoo { public function __construct(private ?string $foobar){}}',
                 'Barfoo',
-                function (ReflectionPropertyCollection $properties) {
+                function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
                         Type::string()->asNullable(),
                         $properties->get('foobar')->type()
@@ -74,7 +76,7 @@ EOT
         yield 'No types' => [
                 '<?php class Barfoo { public function __construct(private $foobar){}}',
                 'Barfoo',
-                function (ReflectionPropertyCollection $properties) {
+                function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
                         Type::undefined(),
                         $properties->get('foobar')->type()

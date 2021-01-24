@@ -4,12 +4,13 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\ClassName;
+use stdClass;
 
 class ClassNameTest extends TestCase
 {
     const CLASS_NAME = 'Foobar';
 
-    public function testFromUnknownReturnsClassNameIfGivenClassName()
+    public function testFromUnknownReturnsClassNameIfGivenClassName(): void
     {
         $givenClass = ClassName::fromString(self::CLASS_NAME);
         $className = ClassName::fromUnknown($givenClass);
@@ -17,20 +18,20 @@ class ClassNameTest extends TestCase
         $this->assertSame($givenClass, $className);
     }
 
-    public function testFromUnknownString()
+    public function testFromUnknownString(): void
     {
         $className = ClassName::fromUnknown(self::CLASS_NAME);
 
         $this->assertEquals(ClassName::fromString(self::CLASS_NAME), $className);
     }
 
-    public function testFromUnknownInvalid()
+    public function testFromUnknownInvalid(): void
     {
         $this->expectExceptionMessage('Do not know how to create class');
-        ClassName::fromUnknown(new \stdClass);
+        ClassName::fromUnknown(new stdClass);
     }
 
-    public function testFromUnknownClassName()
+    public function testFromUnknownClassName(): void
     {
         $className1 = ClassName::fromString('Foobar');
         $className2 = ClassName::fromUnknown($className1);
@@ -38,7 +39,7 @@ class ClassNameTest extends TestCase
         $this->assertSame($className1, $className2);
     }
 
-    public function testPrepend()
+    public function testPrepend(): void
     {
         $className1 = ClassName::fromString('Foobar');
         $className2 = ClassName::fromString('Barfoo');

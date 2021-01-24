@@ -41,7 +41,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->member1 = $this->prophesize(ReflectionMember::class);
     }
 
-    public function testIsIterable()
+    public function testIsIterable(): void
     {
         $collection = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),
@@ -58,7 +58,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertEquals(2, $iterator->current());
     }
 
-    public function testItReturnsTheCount()
+    public function testItReturnsTheCount(): void
     {
         $collection = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),
@@ -70,7 +70,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertCount(3, $collection);
     }
 
-    public function testItMergesAnotherCollection()
+    public function testItMergesAnotherCollection(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal()
@@ -85,7 +85,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertNotSame($collection1, $collection2);
     }
 
-    public function testGetsItemByName()
+    public function testGetsItemByName(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),
@@ -105,7 +105,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertSame($this->member1->reveal(), $item);
     }
 
-    public function testThrowsExceptionIfItemDoesNotExistOnGet()
+    public function testThrowsExceptionIfItemDoesNotExistOnGet(): void
     {
         $this->expectException(ItemNotFound::class);
 
@@ -128,7 +128,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertSame($this->member1->reveal(), $item);
     }
 
-    public function testReturnsFirstItem()
+    public function testReturnsFirstItem(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal()
@@ -140,7 +140,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertSame($this->member1->reveal(), $member);
     }
 
-    public function testReturnsLastItem()
+    public function testReturnsLastItem(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal()
@@ -153,7 +153,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
     }
 
 
-    public function testThrowsExceptionIfNoFirstItem()
+    public function testThrowsExceptionIfNoFirstItem(): void
     {
         $this->expectException(ItemNotFound::class);
         $collection1 = ChainReflectionMemberCollection::fromCollections([]);
@@ -161,7 +161,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $collection1->first();
     }
 
-    public function testThrowsExceptionIfNoLastItem()
+    public function testThrowsExceptionIfNoLastItem(): void
     {
         $this->expectException(ItemNotFound::class);
         $collection1 = ChainReflectionMemberCollection::fromCollections([]);
@@ -169,7 +169,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $collection1->last();
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),
@@ -185,7 +185,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertFalse($collection1->has('bar'));
     }
 
-    public function testReturnByVisibilities()
+    public function testReturnByVisibilities(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),
@@ -204,7 +204,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $this->assertCount(2, $collection);
     }
 
-    public function testReturnBelongingTo()
+    public function testReturnBelongingTo(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),
@@ -221,7 +221,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         ]), $collection1->belongingTo($className));
     }
 
-    public function testReturnsItemsAtOffset()
+    public function testReturnsItemsAtOffset(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),
@@ -238,7 +238,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         ]), $collection1->atOffset($name));
     }
 
-    public function testReturnsMembersByName()
+    public function testReturnsMembersByName(): void
     {
         $collection1 = ChainReflectionMemberCollection::fromCollections([
             $this->collection1->reveal(),

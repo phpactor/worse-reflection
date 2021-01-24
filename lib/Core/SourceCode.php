@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core;
 use Phpactor\TextDocument\TextDocument;
 use Phpactor\TextDocument\TextDocumentLanguage;
 use Phpactor\TextDocument\TextDocumentUri;
+use InvalidArgumentException;
 
 class SourceCode implements TextDocument
 {
@@ -22,6 +23,11 @@ class SourceCode implements TextDocument
     {
         $this->source = $source;
         $this->path = $path;
+    }
+
+    public function __toString()
+    {
+        return $this->source;
     }
 
     public static function fromUnknown($value): SourceCode
@@ -46,7 +52,7 @@ class SourceCode implements TextDocument
             return self::fromString($value);
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'Do not know how to create source code from type "%s"',
             is_object($value) ? get_class($value) : gettype($value)
         ));
@@ -60,7 +66,7 @@ class SourceCode implements TextDocument
     public static function fromPath(string $filePath)
     {
         if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'File "%s" does not exist',
                 $filePath
             ));
@@ -102,10 +108,5 @@ class SourceCode implements TextDocument
     public function path()
     {
         return $this->path;
-    }
-
-    public function __toString()
-    {
-        return $this->source;
     }
 }

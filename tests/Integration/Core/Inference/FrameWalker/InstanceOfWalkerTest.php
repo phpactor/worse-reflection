@@ -14,13 +14,13 @@ class InstanceOfWalkerTest extends FrameWalkerTestCase
     {
         yield 'infers type from instanceof' => [
             <<<'EOT'
-<?php
+                <?php
 
-if ($foobar instanceof Foobar) {
-}
-<>
-EOT
-        , function (Frame $frame) {
+                if ($foobar instanceof Foobar) {
+                }
+                <>
+                EOT
+        , function (Frame $frame): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals('Foobar', (string) $frame->locals()->first()->symbolContext()->types()->best());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(1)->symbolContext()->types()->best());
@@ -29,14 +29,14 @@ EOT
 
         yield 'removes type if return' => [
             <<<'EOT'
-<?php
+                <?php
 
-if ($foobar instanceof Foobar) {
-    return;
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                if ($foobar instanceof Foobar) {
+                    return;
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(1)->symbolContext()->types()->best());
         }
@@ -44,14 +44,14 @@ EOT
 
         yield 'removes type if exception' => [
             <<<'EOT'
-<?php
+                <?php
 
-if ($foobar instanceof Foobar) {
-    throw new Exception("HAI!");
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                if ($foobar instanceof Foobar) {
+                    throw new Exception("HAI!");
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(1)->symbolContext()->types()->best());
         }
@@ -59,17 +59,17 @@ EOT
 
         yield 'removes type after continue' => [
             <<<'EOT'
-<?php
+                <?php
 
 
-foreach ([1, 2] as $hello) {
-    if (!$foobar instanceof Foobar) {
-        continue;
-    }
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                foreach ([1, 2] as $hello) {
+                    if (!$foobar instanceof Foobar) {
+                        continue;
+                    }
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals()->byName('foobar'));
             $this->assertEquals(Type::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
         }
@@ -77,17 +77,17 @@ EOT
 
         yield 'removes type after break' => [
             <<<'EOT'
-<?php
+                <?php
 
 
-foreach ([1, 2] as $hello) {
-    if (!$foobar instanceof Foobar) {
-        break;
-    }
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                foreach ([1, 2] as $hello) {
+                    if (!$foobar instanceof Foobar) {
+                        break;
+                    }
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals()->byName('foobar'));
             $this->assertEquals(Type::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
         }
@@ -95,13 +95,13 @@ EOT
 
         yield 'adds no type information if bang negated' => [
             <<<'EOT'
-<?php
+                <?php
 
-if (!$foobar instanceof Foobar) {
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                if (!$foobar instanceof Foobar) {
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(1, $frame->locals());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
         }
@@ -109,13 +109,13 @@ EOT
 
         yield 'adds no type information if false negated' => [
             <<<'EOT'
-<?php
+                <?php
 
-if (false === $foobar instanceof Foobar) {
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                if (false === $foobar instanceof Foobar) {
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(1, $frame->locals());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
         }
@@ -124,15 +124,15 @@ EOT
 
         yield 'adds type information if negated and if statement terminates' => [
             <<<'EOT'
-<?php
+                <?php
 
-if (!$foobar instanceof Foobar) {
+                if (!$foobar instanceof Foobar) {
 
-    return;
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                    return;
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
             $this->assertEquals('Foobar', (string) $frame->locals()->atIndex(1)->symbolContext()->types()->best());
@@ -141,15 +141,15 @@ EOT
 
         yield 'has no type information if double negated and if statement terminates' => [
             <<<'EOT'
-<?php
+                <?php
 
-if (!!$foobar instanceof Foobar) {
+                if (!!$foobar instanceof Foobar) {
 
-    return;
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                    return;
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals('Foobar', (string) $frame->locals()->atIndex(1)->symbolContext()->types()->best());
             $this->assertEquals(Type::unknown(), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
@@ -158,14 +158,14 @@ EOT
 
         yield 'will create a union type with or' => [
             <<<'EOT'
-<?php
+                <?php
 
-if ($foobar instanceof Foobar || $foobar instanceof Barfoo) {
+                if ($foobar instanceof Foobar || $foobar instanceof Barfoo) {
 
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
         }
@@ -173,14 +173,14 @@ EOT
 
         yield 'will create a union type with and' => [
             <<<'EOT'
-<?php
+                <?php
 
-if ($foobar instanceof Foobar && $foobar instanceof Barfoo) {
+                if ($foobar instanceof Foobar && $foobar instanceof Barfoo) {
 
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
         }
@@ -188,15 +188,15 @@ EOT
 
         yield 'reverts to original type' => [
             <<<'EOT'
-<?php
+                <?php
 
-$foobar = new stdClass();
-if ($foobar instanceof Foobar) {
-    return;
-}
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                $foobar = new stdClass();
+                if ($foobar instanceof Foobar) {
+                    return;
+                }
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(3, $frame->locals());
             $this->assertEquals('stdClass', $frame->locals()->atIndex(2)->symbolContext()->types()->best());
         }
@@ -204,15 +204,15 @@ EOT
 
         yield 'resolves namespace' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Foobar\Barfoo;
+                use Foobar\Barfoo;
 
-if ($foobar instanceof Barfoo) {
-<>
-}
-EOT
-        , function (Frame $frame, int $offset) {
+                if ($foobar instanceof Barfoo) {
+                <>
+                }
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
             $this->assertEquals('Foobar\Barfoo', (string) $frame->locals()->atIndex(0)->symbolContext()->types()->best());
         }
@@ -220,70 +220,70 @@ EOT
 
         yield 'ignores condition incomplete expression' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Foobar\Barfoo;
+                use Foobar\Barfoo;
 
-if ($foobar instanceof Barfoo
-<>
-EOT
-        , function (Frame $frame, int $offset) {
+                if ($foobar instanceof Barfoo
+                <>
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
         }
     ];
 
         yield 'ignores condition with missing token' => [
             <<<'EOT'
-<?php
+                <?php
 
-use Foobar\Barfoo;
+                use Foobar\Barfoo;
 
-if ($foobar instanceof Barfoo
-<>
+                if ($foobar instanceof Barfoo
+                <>
 
-if
-EOT
-        , function (Frame $frame, int $offset) {
+                if
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
         }
         ];
 
         yield 'ignores expression which does not include a variable' => [
             <<<'EOT'
-<?php
+                <?php
 
-functoin this_function_returns_something() {
-    return new stdClass();
-}
+                functoin this_function_returns_something() {
+                    return new stdClass();
+                }
 
-if (this_function_returns_something() instanceof Barfoo) {
-<>
-}
-EOT
-        , function (Frame $frame, int $offset) {
+                if (this_function_returns_something() instanceof Barfoo) {
+                <>
+                }
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(0, $frame->locals());
         }
         ];
 
         yield 'should handle properties' => [
             <<<'EOT'
-<?php
+                <?php
 
-class Foo
-{
-    private $bar;
+                class Foo
+                {
+                    private $bar;
 
-    public function bar(): void
-    {
-        if (!$this->bar instanceof Bar) {
-            continue;
-        }
+                    public function bar(): void
+                    {
+                        if (!$this->bar instanceof Bar) {
+                            continue;
+                        }
 
-        <>
-    }
-}
-EOT
-        , function (Frame $frame, int $offset) {
+                        <>
+                    }
+                }
+                EOT
+        , function (Frame $frame, int $offset): void {
             $this->assertCount(1, $frame->locals());
             $this->assertEquals(Type::fromString('Foo'), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
             $this->assertCount(2, $frame->properties());

@@ -14,7 +14,7 @@ class TraitImportsTest extends IntegrationTestCase
     /**
      * @dataProvider provideTraitImports
      */
-    public function testTraitImports(string $source, Closure $assertion)
+    public function testTraitImports(string $source, Closure $assertion): void
     {
         $rootNode = $this->parseSource($source);
         $classDeclaration = $rootNode->getFirstDescendantNode(ClassDeclaration::class);
@@ -25,7 +25,7 @@ class TraitImportsTest extends IntegrationTestCase
     {
         yield 'simple use' => [
             '<?php trait A {}; class B { use A; }',
-            function (TraitImports $traitImports) {
+            function (TraitImports $traitImports): void {
                 $this->assertCount(1, $traitImports);
                 $this->assertTrue($traitImports->has('A'));
                 $this->assertEquals('A', $traitImports->get('A')->name());
@@ -34,7 +34,7 @@ class TraitImportsTest extends IntegrationTestCase
 
         yield 'simple use with alias' => [
             '<?php trait A { function foo() {}}; class B { use A { foo as bar; }',
-            function (TraitImports $traitImports) {
+            function (TraitImports $traitImports): void {
                 $this->assertCount(1, $traitImports);
                 $traitImport = $traitImports->get('A');
                 $this->assertCount(1, $traitImport->traitAliases());
@@ -47,7 +47,7 @@ class TraitImportsTest extends IntegrationTestCase
 
         yield 'simple use with alias and visiblity' => [
             '<?php trait A { function foo() {}}; class B { use A { foo as private bar; bar as protected bar; zed as public aar;}',
-            function (TraitImports $traitImports) {
+            function (TraitImports $traitImports): void {
                 $traitImport = $traitImports->get('A');
                 ;
                 $this->assertEquals(Visibility::private(), $traitImport->traitAliases()['foo']->visiblity());
@@ -60,7 +60,7 @@ class TraitImportsTest extends IntegrationTestCase
             '<?php trait A { function foo(){} function bar()}}' .
             'trait B { function foo() {}} ' .
             'class B { use A, B { B::foo insteadof A } }',
-            function (TraitImports $traitImports) {
+            function (TraitImports $traitImports): void {
                 $traitImport = $traitImports->get('A');
                 $this->assertCount(0, $traitImport->traitAliases());
             }
@@ -70,7 +70,7 @@ class TraitImportsTest extends IntegrationTestCase
             '<?php trait A { function foo(){} }' .
             'trait B { function bar(){} } ' .
             'class B { use A, B { foo as foo1; bar as bar1 } }',
-            function (TraitImports $traitImports) {
+            function (TraitImports $traitImports): void {
                 $this->assertCount(2, $traitImports);
                 $traitImport = $traitImports->get('A');
                 $this->assertCount(2, $traitImport->traitAliases());

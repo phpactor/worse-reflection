@@ -27,6 +27,11 @@ class ReflectionInterfaceCollection extends AbstractReflectionCollection impleme
         return self::fromBaseClause($serviceLocator, $class->classInterfaceClause);
     }
 
+    protected function collectionType(): string
+    {
+        return CoreReflectionInterfaceCollection::class;
+    }
+
     private static function fromBaseClause(ServiceLocator $serviceLocator, $baseClause)
     {
         if (null === $baseClause) {
@@ -55,10 +60,5 @@ class ReflectionInterfaceCollection extends AbstractReflectionCollection impleme
         }
 
         return new self($serviceLocator, $items);
-    }
-
-    protected function collectionType(): string
-    {
-        return CoreReflectionInterfaceCollection::class;
     }
 }

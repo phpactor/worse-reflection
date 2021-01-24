@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Core\Exception;
 
-class UnexpectedReflectionType extends \RuntimeException
+use RuntimeException;
+
+class UnexpectedReflectionType extends RuntimeException
 {
 }

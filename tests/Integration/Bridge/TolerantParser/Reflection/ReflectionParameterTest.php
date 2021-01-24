@@ -6,13 +6,14 @@ use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
+use Closure;
 
 class ReflectionParameterTest extends IntegrationTestCase
 {
     /**
      * @dataProvider provideReflectionParameter
      */
-    public function testReflectParameter(string $source, \Closure $assertion)
+    public function testReflectParameter(string $source, Closure $assertion): void
     {
         $source = sprintf('<?php namespace Acme; class Foobar { public function method(%s) }', $source);
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString('Acme\Foobar'));
@@ -23,14 +24,14 @@ class ReflectionParameterTest extends IntegrationTestCase
     {
         yield 'It reflects a an empty list with no parameters' => [
             '',
-            function ($method) {
+            function ($method): void {
                 $this->assertCount(0, $method->parameters());
             },
         ];
 
         yield 'It reflects a single parameter' => [
             '$foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertCount(1, $method->parameters());
                 $parameter = $method->parameters()->get('foobar');
                 $this->assertInstanceOf(ReflectionParameter::class, $parameter);
@@ -40,28 +41,28 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It returns false if the parameter has no type' => [
             '$foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertFalse($method->parameters()->get('foobar')->type()->isDefined());
             },
         ];
 
         yield 'It returns the parameter type' => [
             'Foobar $foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(Type::fromString('Acme\Foobar'), $method->parameters()->get('foobar')->type());
             },
         ];
 
         yield 'It returns false if the parameter has no default' => [
             '$foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertFalse($method->parameters()->get('foobar')->default()->isDefined());
             },
         ];
 
         yield 'It returns the default value for a string' => [
             '$foobar = "foo"',
-            function ($method) {
+            function ($method): void {
                 $this->assertTrue($method->parameters()->get('foobar')->default()->isDefined());
                 $this->assertEquals(
                     'foo',
@@ -72,7 +73,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It returns the default value for a number' => [
             '$foobar = 1234',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     1234,
                     $method->parameters()->get('foobar')->default()->value()
@@ -82,7 +83,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It returns the default value for an array' => [
             '$foobar = [ "foobar" ]',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     ['foobar'],
                     $method->parameters()->get('foobar')->default()->value()
@@ -92,7 +93,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It returns the default value for null' => [
             '$foobar = null',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     null,
                     $method->parameters()->get('foobar')->default()->value()
@@ -102,7 +103,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It returns the default value for empty array' => [
             '$foobar = []',
-            function ($method) {
+            function ($method): void {
                 $foobar = $method->parameters()->get('foobar');
                 $this->assertEquals(
                     [],
@@ -113,7 +114,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It returns the default value for a boolean' => [
             '$foobar = false',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     false,
                     $method->parameters()->get('foobar')->default()->value()
@@ -123,7 +124,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'Passed by reference' => [
             '&$foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertTrue(
                     $method->parameters()->get('foobar')->byReference()
                 );
@@ -132,7 +133,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'Not passed by reference' => [
             '$foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertFalse(
                     $method->parameters()->get('foobar')->byReference()
                 );
@@ -141,7 +142,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It reflects iterable type properly' => [
             'iterable $foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     Type::fromString('iterable'),
                     $method->parameters()->get('foobar')->type()
@@ -151,7 +152,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It reflects resource type properly' => [
             'resource $foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     Type::fromString('resource'),
                     $method->parameters()->get('foobar')->type()
@@ -161,7 +162,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It reflects callable type properly' => [
             'callable $foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     Type::fromString('callable'),
                     $method->parameters()->get('foobar')->type()
@@ -171,7 +172,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It reflects a nullable parameter' => [
             '?string $foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertEquals(
                     Type::string()->asNullable(),
                     $method->parameters()->get('foobar')->type()
@@ -181,7 +182,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It reflects a promoted parameter' => [
             'private string $foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertTrue(
                     $method->parameters()->get('foobar')->isPromoted()
                 );
@@ -190,7 +191,7 @@ class ReflectionParameterTest extends IntegrationTestCase
 
         yield 'It reflects a (not) promoted parameter' => [
             'string $foobar',
-            function ($method) {
+            function ($method): void {
                 $this->assertFalse(
                     $method->parameters()->get('foobar')->isPromoted()
                 );
@@ -201,7 +202,7 @@ class ReflectionParameterTest extends IntegrationTestCase
     /**
      * @dataProvider provideReflectionParameterWithDocblock
      */
-    public function testReflectParameterWithDocblock(string $source, string $docblock, \Closure $assertion)
+    public function testReflectParameterWithDocblock(string $source, string $docblock, Closure $assertion): void
     {
         $source = sprintf('<?php namespace Acme; class Foobar { %s public function method(%s) }', $docblock, $source);
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString('Acme\Foobar'));
@@ -213,7 +214,7 @@ class ReflectionParameterTest extends IntegrationTestCase
         yield 'It returns docblock parameter type' => [
             '$foobar',
             '/** @param Foobar $foobar */',
-            function ($method) {
+            function ($method): void {
                 $this->assertCount(1, $method->parameters());
                 $this->assertEquals('Acme\Foobar', (string) $method->parameters()->get('foobar')->inferredTypes()->best());
             },
@@ -222,7 +223,7 @@ class ReflectionParameterTest extends IntegrationTestCase
         yield 'It returns unknown type when no type hinting is available' => [
             '$foobar',
             '/** */',
-            function ($method) {
+            function ($method): void {
                 $this->assertCount(1, $method->parameters());
                 $this->assertEquals(Type::unknown(), $method->parameters()->get('foobar')->inferredTypes()->best());
             },

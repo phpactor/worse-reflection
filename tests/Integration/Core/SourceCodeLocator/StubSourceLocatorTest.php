@@ -33,21 +33,21 @@ class StubSourceLocatorTest extends IntegrationTestCase
         );
     }
 
-    public function testCanLocateClasses()
+    public function testCanLocateClasses(): void
     {
         $this->workspace()->put('stubs/Stub.php', '<?php class StubOne {}');
         $code = $this->sourceLocator->locate(ClassName::fromString('StubOne'));
         $this->assertStringContainsString('class StubOne', (string) $code);
     }
 
-    public function testCanLocateFunctions()
+    public function testCanLocateFunctions(): void
     {
         $this->workspace()->put('stubs/Stub.php', '<?php function hello_world() {}');
         $code = $this->sourceLocator->locate(Name::fromString('hello_world'));
         $this->assertStringContainsString('function hello_world()', (string) $code);
     }
 
-    public function testDoesNotParseNonPhpFiles()
+    public function testDoesNotParseNonPhpFiles(): void
     {
         $this->workspace()->put('stubs/Stub.xml', '<?php function hello_world() {}');
         $this->workspace()->put('stubs/Stub.php', '<?php function goodbye_world() {}');

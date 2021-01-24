@@ -18,7 +18,7 @@ class ReflectMethodBench extends BaseBenchCase
      */
     private $class;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->class = $this->getReflector()->reflectClassLike(ClassName::fromString(MethodClass::class));
@@ -27,7 +27,7 @@ class ReflectMethodBench extends BaseBenchCase
     /**
      * @Subject()
      */
-    public function method()
+    public function method(): void
     {
         $this->class->methods()->get('methodNoReturnType');
     }
@@ -35,7 +35,7 @@ class ReflectMethodBench extends BaseBenchCase
     /**
      * @Subject()
      */
-    public function method_return_type()
+    public function method_return_type(): void
     {
         $this->class->methods()->get('methodWithReturnType')->returnType();
     }
@@ -43,7 +43,7 @@ class ReflectMethodBench extends BaseBenchCase
     /**
      * @Subject()
      */
-    public function method_inferred_return_type()
+    public function method_inferred_return_type(): void
     {
         $this->class->methods()->get('methodWithDocblockReturnType')->inferredReturnTypes()->best();
     }

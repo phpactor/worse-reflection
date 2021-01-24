@@ -64,7 +64,7 @@ class DocblockReflectionMethodFactory
         return Types::fromTypes($types);
     }
 
-    private function parametersFrom(VirtualReflectionParameterCollection $parameterCollection, VirtualReflectionMethod $reflectionMethod, MethodTag $methodTag)
+    private function parametersFrom(VirtualReflectionParameterCollection $parameterCollection, VirtualReflectionMethod $reflectionMethod, MethodTag $methodTag): void
     {
         /** @var Parameter $parameter */
         foreach ($methodTag->parameters() as $parameter) {

@@ -50,32 +50,32 @@ class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
         );
     }
 
-    public function testParameters()
+    public function testParameters(): void
     {
         $this->assertEquals($this->parameters->reveal(), $this->member()->parameters());
     }
 
-    public function testBody()
+    public function testBody(): void
     {
         $this->assertEquals($this->body, $this->member()->body());
     }
 
-    public function testIsAbstract()
+    public function testIsAbstract(): void
     {
         $this->assertEquals($this->isAbstract, $this->member()->isAbstract());
     }
 
-    public function testIsStatic()
+    public function testIsStatic(): void
     {
         $this->assertEquals($this->isStatic, $this->member()->isStatic());
     }
 
-    public function testVirtual()
+    public function testVirtual(): void
     {
         $this->assertTrue($this->member()->isStatic());
     }
 
-    public function testReturnType()
+    public function testReturnType(): void
     {
         $this->assertEquals(Type::unknown(), $this->member()->returnType());
     }
