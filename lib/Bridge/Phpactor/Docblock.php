@@ -2,207 +2,175 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
-use Phpactor\Docblock\DocblockType;
-use Phpactor\Docblock\DocblockTypes;
-use Phpactor\Docblock\Tag\MethodTag;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
+use Phpactor\Docblock\Ast\Docblock as PhpactorDocblock;
+use Phpactor\Docblock\Ast\Tag\DeprecatedTag;
+use Phpactor\Docblock\Ast\Tag\MethodTag;
+use Phpactor\Docblock\Ast\Tag\ParamTag;
+use Phpactor\Docblock\Ast\Tag\PropertyTag;
+use Phpactor\Docblock\Ast\Tag\ReturnTag;
+use Phpactor\Docblock\Ast\Tag\VarTag;
+use Phpactor\Docblock\Ast\Token;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
-use Phpactor\Docblock\Docblock as PhpactorDocblock;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionProperty;
+use Phpactor\WorseReflection\Core\Visibility;
+use function Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 
 class Docblock implements CoreDocblock
 {
-    /**
-     * @var PhpactorDocblock
-     */
-    private $docblock;
-
     /**
      * @var string
      */
     private $raw;
 
     /**
-     * @var DocblockReflectionMethodFactory
+     * @var PhpactorDocblock
      */
-    private $methodFactory;
+    private $node;
 
-    /**
-     * @var DocblockReflectionPropertyFactory
-     */
-    private $propertyFactory;
-
-    public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null, DocblockReflectionPropertyFactory $propertyFactory = null)
+    public function __construct(
+        string $raw,
+        PhpactorDocblock $node
+    )
     {
-        $this->docblock = $docblock;
         $this->raw = $raw;
-        $this->methodFactory = $methodFactory ?: new DocblockReflectionMethodFactory();
-        $this->propertyFactory = $propertyFactory ?: new DocblockReflectionPropertyFactory();
+        $this->node = $node;
     }
 
-    public function isDefined(): bool
+    public function parameterTypes(string $paramName): Types
     {
-        return trim($this->raw) != '';
+        $types = [];
+        foreach ($this->node->tags(ParamTag::class) as $child) {
+            $types[] = Type::fromString($child->type->toString());
+        }
+        return Types::fromTypes($types);
     }
+
+    public function propertyTypes(string $methodName): Types
+    {
+        $types = [];
+        foreach ($this->node->tags(PropertyTag::class) as $child) {
+            $types[] = Type::fromString($child->type->toString());
+        }
+        return Types::fromTypes($types);
+    }
+
+    public function vars(): DocBlockVars
+    {
+        $types = [];
+        foreach ($this->node->tags(VarTag::class) as $child) {
+            $types[] = new DocBlockVar(
+                $child->variable->toString(),
+                $child->type->toString()
+            );
+        }
+        return new DocBlockVars($types);
+    }
+
+    public function inherits(): bool
+    {
+        return false;
+    }
+
+    public function methodTypes(string $methodName): Types
+    {
+        $types = [];
+        foreach ($this->node->tags(MethodTag::class) as $child) {
+            $types[] = Type::fromString($child->type->toString());
+        }
+        return Types::fromTypes($types);
+    }
+
+    public function formatted(): string
+    {
+        return $this->node->prose();
+    }
+
+    public function returnTypes(): Types
+    {
+        $types = [];
+        foreach ($this->node->tags(ReturnTag::class) as $child) {
+            $types[] = Type::fromString($child->type->toString());
+        }
+        return Types::fromTypes($types);
+    }
+
 
     public function raw(): string
     {
         return $this->raw;
     }
 
-    public function formatted(): string
+    public function isDefined(): bool
     {
-        return $this->docblock->prose();
-    }
-
-    public function returnTypes(): Types
-    {
-        return $this->typesFromTag('return');
-    }
-
-    public function parameterTypes(string $paramName): Types
-    {
-        $types = [];
-
-        foreach ($this->docblock->tags()->byName('param') as $tag) {
-            if ($tag->varName() !== '$' . $paramName) {
-                continue;
-            }
-
-            foreach ($tag->types() as $type) {
-                $types[] = $this->typesFromDocblockType($type);
-            }
-        }
-
-        return Types::fromTypes($types);
-    }
-
-    public function methodTypes(string $methodName): Types
-    {
-        $types = [];
-        
-        foreach ($this->docblock->tags()->byName('method') as $tag) {
-            if ($tag->methodName() !== $methodName) {
-                continue;
-            }
-        
-            foreach ($tag->types() as $type) {
-                $types[] = $this->typesFromDocblockType($type);
-            }
-        }
-        
-        return Types::fromTypes($types);
-    }
-
-    public function vars(): DocBlockVars
-    {
-        $vars = [];
-        foreach ($this->docblock->tags()->byName('var') as $tag) {
-            $vars[] = new DocBlockVar($tag->varName() ?: '', $this->typesFromDocblockTypes($tag->types()));
-        }
-
-        return new DocBlockVars($vars);
-    }
-
-    public function inherits(): bool
-    {
-        return 0 !== $this->docblock->tags()->byName('inheritDoc')->count();
-    }
-
-    public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection
-    {
-        $methods = [];
-        /** @var MethodTag $methodTag */
-        foreach ($this->docblock->tags()->byName('method') as $methodTag) {
-            if (!$methodTag->methodName()) {
-                continue;
-            }
-            $methods[$methodTag->methodName()] = $this->methodFactory->create($this, $declaringClass, $methodTag);
-        }
-
-        return VirtualReflectionMethodCollection::fromReflectionMethods($methods);
+        return !empty($this->raw);
     }
 
     public function properties(ReflectionClassLike $declaringClass): ReflectionPropertyCollection
     {
         $properties = [];
-        foreach ($this->docblock->tags()->byName('property') as $propertyTag) {
-            if (!$propertyTag->propertyName()) {
-                continue;
-            }
-            if ($declaringClass instanceof ReflectionInterface) {
-                continue;
-            }
-            $properties[$propertyTag->propertyName()] = $this->propertyFactory->create($this, $declaringClass, $propertyTag);
+        foreach ($this->node->tags(PropertyTag::class) as $property) {
+            assert($property instanceof PropertyTag);
+            $properties[] = new VirtualReflectionProperty(
+                Position::fromStartAndEnd($property->start(), $property->start()),
+                $declaringClass,
+                $declaringClass,
+                $property->name->toString(),
+                new Frame(''),
+                null,
+                $declaringClass->scope(),
+                Visibility::public(),
+                Types::fromTypes([Type::fromString($property->type->toString())]),
+                Type::fromString($property->type->toString()),
+                new Deprecation($property->hasChild(DeprecationTag::class))
+            );
         }
 
-        return VirtualReflectionPropertyCollection::fromReflectionProperties($properties);
+        return VirtualReflectionPropertyCollection::fromMembers([]);
     }
 
-    public function propertyTypes(string $propertyName): Types
+    public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection
     {
-        $types = [];
-        
-        foreach ($this->docblock->tags()->byName('property') as $tag) {
-            if ($tag->propertyName() !== $propertyName) {
-                continue;
-            }
-        
-            foreach ($tag->types() as $type) {
-                $types[] = $this->typesFromDocblockType($type);
-            }
+        $methods = [];
+        foreach ($this->node->tags(MethodTag::class) as $method) {
+            assert($method instanceof MethodTag);
+            $methods[] = new VirtualReflectionMethod(
+                Position::fromStartAndEnd($method->start(), $method->start()),
+                $declaringClass,
+                $declaringClass,
+                $method->name->toString(),
+                new Frame(''),
+                $this,
+                $declaringClass->scope(),
+                Visibility::public(),
+                Types::fromTypes([Type::fromString($method->type->toString())]),
+                Type::fromString($method->type->toString()),
+                new Deprecation($this->node->hasTag(DeprecationTag::class))
+            );
         }
-        
-        return Types::fromTypes($types);
+
+        return VirtualReflectionMethodCollection::fromMembers($methods);
     }
 
     public function deprecation(): Deprecation
     {
-        foreach ($this->docblock->tags()->byName('deprecated') as $tag) {
-            return new Deprecation(true, $tag->message());
+        foreach ($this->node->tags(DeprecatedTag::class) as $child) {
+            assert($child instanceof DeprecatedTag);
+            return new Deprecation(true, $child->text->toString());
         }
         return new Deprecation(false);
     }
 
-    private function typesFromTag(string $tag)
-    {
-        $types = [];
-
-        foreach ($this->docblock->tags()->byName($tag) as $tag) {
-            return $this->typesFromDocblockTypes($tag->types());
-        }
-
-        return Types::empty();
-    }
-
-    private function typesFromDocblockTypes(DocblockTypes $types)
-    {
-        $types = array_map(function (DocblockType $type) {
-            return $this->typesFromDocblockType($type);
-        }, iterator_to_array($types));
-
-        return Types::fromTypes($types);
-    }
-
-    private function typesFromDocblockType(DocblockType $type)
-    {
-        if ($type->isArray()) {
-            return Type::array((string) $type->iteratedType());
-        }
-        
-        if ($type->isCollection()) {
-            return Type::collection((string) $type, $type->iteratedType());
-        }
-        
-        return Type::fromString($type->__toString());
-    }
 }
