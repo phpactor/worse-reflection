@@ -10,7 +10,6 @@ use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionStaticMethodCall;
-use RuntimeException;
 
 class NodeReflector
 {

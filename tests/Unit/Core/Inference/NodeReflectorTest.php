@@ -9,7 +9,6 @@ use Phpactor\WorseReflection\Core\Inference\NodeReflector;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Prophecy\PhpUnit\ProphecyTrait;
-use RuntimeException;
 
 class NodeReflectorTest extends TestCase
 {

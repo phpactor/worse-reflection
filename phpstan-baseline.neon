@@ -686,11 +686,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectMethodCall\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectFunctionsIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php

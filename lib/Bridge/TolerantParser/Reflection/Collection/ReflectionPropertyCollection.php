@@ -42,6 +42,7 @@ final class ReflectionPropertyCollection extends ReflectionMemberCollection impl
             }
 
             $parameters = $classMember->parameters;
+            /** @phpstan-ignore-next-line */
             if (!$parameters) {
                 continue;
             }

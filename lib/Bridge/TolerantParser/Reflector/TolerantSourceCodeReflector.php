@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflector;
 
 use Microsoft\PhpParser\Node\SourceFileNode;
-use PhpParser\Node\Expr\MethodCall;
 use Phpactor\TextDocument\TextDocument;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\MethodCallNotFound;
@@ -20,7 +19,6 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Parser;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection as CoreReflectionFunctionCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionFunctionCollection as TolerantReflectionFunctionCollection;
-use RuntimeException;
 
 class TolerantSourceCodeReflector implements SourceCodeReflector
 {
@@ -74,7 +72,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
     {
         try {
             $reflection = $this->reflectNode($sourceCode, $offset);
-        }  catch (CouldNotResolveNode $notFound) {
+        } catch (CouldNotResolveNode $notFound) {
             throw new MethodCallNotFound($notFound->getMessage(), 0, $notFound);
         }
 
