@@ -6,6 +6,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use Microsoft\PhpParser\Node\Expression\MemberAccessExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethodCall;
+use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionStaticMethodCall;
@@ -33,7 +34,7 @@ class NodeReflector
             return $this->reflectScopedPropertyAccessExpression($frame, $node);
         }
 
-        throw new RuntimeException(sprintf(
+        throw new CouldNotResolveNode(sprintf(
             'Did not know how to reflect node of type "%s"',
             get_class($node)
         ));

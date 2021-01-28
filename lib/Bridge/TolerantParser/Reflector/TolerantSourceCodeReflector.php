@@ -3,6 +3,10 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflector;
 
 use Microsoft\PhpParser\Node\SourceFileNode;
+use PhpParser\Node\Expr\MethodCall;
+use Phpactor\TextDocument\TextDocument;
+use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
+use Phpactor\WorseReflection\Core\Exception\MethodCallNotFound;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
@@ -63,12 +67,19 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         return TolerantReflectionOffset::fromFrameAndSymbolContext($frame, $resolver->resolveNode($frame, $node));
     }
 
+    /**
+     * @param SourceCode|string|TextDocument $sourceCode
+     */
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
     {
-        $reflection = $this->reflectNode($sourceCode, $offset);
+        try {
+            $reflection = $this->reflectNode($sourceCode, $offset);
+        }  catch (CouldNotResolveNode $notFound) {
+            throw new MethodCallNotFound($notFound->getMessage(), 0, $notFound);
+        }
 
         if (false === $reflection instanceof ReflectionMethodCall) {
-            throw new RuntimeException(sprintf(
+            throw new MethodCallNotFound(sprintf(
                 'Expected method call, got "%s"',
                 get_class($reflection)
             ));
