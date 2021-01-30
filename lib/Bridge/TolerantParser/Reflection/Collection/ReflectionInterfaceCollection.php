@@ -39,7 +39,13 @@ class ReflectionInterfaceCollection extends AbstractReflectionCollection impleme
         }
 
         $items = [];
-        $children = $baseClause->interfaceNameList->children;
+        $interfaceNameList = $baseClause->interfaceNameList;
+
+        if (null === $interfaceNameList) {
+            return new self($serviceLocator, []);
+        }
+
+        $children = $interfaceNameList->children;
 
         if (!$children) {
             return new self($serviceLocator, []);
