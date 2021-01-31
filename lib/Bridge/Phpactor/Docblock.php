@@ -270,7 +270,11 @@ class Docblock implements CoreDocblock
         return Types::empty();
     }
 
-    private function methodParameter(VirtualReflectionParameterCollection $collection, VirtualReflectionMethod $method, ?ParameterList $parameterList = null): void
+    private function methodParameter(
+        VirtualReflectionParameterCollection $collection,
+        VirtualReflectionMethod $method,
+        ?ParameterList $parameterList = null
+    ): void
     {
         if (!$parameterList) {
             return;
