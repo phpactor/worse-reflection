@@ -208,6 +208,9 @@ class Docblock implements CoreDocblock
                     if (null === $name) {
                         return $type;
                     }
+                    if ($name->wasFullyQualified()) {
+                        return $type;
+                    }
                     return $type->withClassName($declaringClass->scope()->resolveFullyQualifiedName($name));
                 }, iterator_to_array($this->typesFrom($method->type), false))),
                 $originalMethod ? $originalMethod->type() : Type::undefined(),
