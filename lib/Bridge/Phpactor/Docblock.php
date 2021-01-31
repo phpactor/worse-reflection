@@ -68,14 +68,25 @@ class Docblock implements CoreDocblock
 
     public function parameterTypes(string $paramName): Types
     {
-        $types = [];
         foreach ($this->node->tags(ParamTag::class) as $child) {
+            assert($child instanceof ParamTag);
+
             if (!$child->type) {
                 continue;
             }
-            $types[] = Type::fromString($child->type->toString());
+
+            if (!$child->variable) {
+                continue;
+            }
+
+            if ($child->variable->toString() !== '$' . $paramName) {
+                continue;
+            }
+
+            return $this->typesFrom($child->type);
         }
-        return Types::fromTypes($types);
+
+        return Types::empty();
     }
 
     public function propertyTypes(string $methodName): Types
