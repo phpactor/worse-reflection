@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:vars\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/Docblock.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:methodParameter\\(\\) has parameter \\$collection with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionParameterCollection\\.$#"
 			count: 1
 			path: lib/Bridge/Phpactor/Docblock.php
@@ -706,19 +701,9 @@ parameters:
 			path: lib/Core/DefaultValue.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlock\\:\\:vars\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\.$#"
-			count: 1
-			path: lib/Core/DocBlock/DocBlock.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockInspector\\:\\:typesForMethod\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/DocBlock/DocBlockInspector.php
-
-		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/DocBlock/DocBlockVars.php
 
 		-
 			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:\\$vars type has no value type specified in iterable type array\\.$#"
@@ -727,11 +712,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/DocBlock/DocBlockVars.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
 			count: 1
 			path: lib/Core/DocBlock/DocBlockVars.php
 
