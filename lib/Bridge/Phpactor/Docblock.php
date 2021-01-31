@@ -124,6 +124,9 @@ class Docblock implements CoreDocblock
     {
         $types = [];
         foreach ($this->node->tags(ReturnTag::class) as $child) {
+            if (!$child->type) {
+                continue;
+            }
             $types[] = Type::fromString($child->type->toString());
         }
         return Types::fromTypes($types);
