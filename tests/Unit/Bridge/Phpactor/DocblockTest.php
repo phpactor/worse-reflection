@@ -2,9 +2,16 @@
 
 namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
 
+use Closure;
+use Generator;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\ReflectorBuilder;
 
 class DocblockTest extends TestCase
 {
@@ -82,6 +89,74 @@ class DocblockTest extends TestCase
     {
         $docblock = $this->create('/** @deprecated Use foobar instead */');
         $this->assertEquals('Use foobar instead', $docblock->deprecation()->message());
+    }
+
+    /**
+     * @dataProvider provideMethodTags
+     */
+    public function testMethodTags(string $docblock, Closure $assertion): void
+    {
+        $docblock = '/** ' . $docblock . ' */';
+        $class = ReflectorBuilder::create()->addSource(
+            '<?php class Foobar {}'
+        )->build()->reflectClass('Foobar');
+        $methods = $this->create($docblock)->methods($class)->first();
+        $assertion($methods);
+    }
+
+    /**
+     * @return Generator<mixed>
+     */
+    public function provideMethodTags(): Generator
+    {
+        yield 'minimal' => [
+            '@method string myMethod',
+            function (ReflectionMethod $method): void {
+                $this->assertEquals('Foobar', (string) $method->class()->name());
+                $this->assertEquals('myMethod', $method->name());
+            }
+        ];
+
+        yield 'static method' => [
+            '@method static Foobar myMethod',
+            function (ReflectionMethod $method): void {
+                $this->assertEquals('Foobar', (string) $method->class()->name());
+                $this->assertEquals('myMethod', $method->name());
+                $this->assertTrue($method->isStatic());
+            }
+        ];
+
+        yield 'multiple types' => [
+            '@method Foobar|string myMethod',
+            function (ReflectionMethod $method): void {
+                $this->assertEquals('Foobar', (string) $method->class()->name());
+                $this->assertEquals('myMethod', $method->name());
+                $this->assertEquals(Types::fromTypes([
+                    Type::fromString('Foobar'),
+                    Type::string(),
+                ]), $method->inferredTypes());
+            }
+        ];
+
+        yield 'parameters' => [
+            '@method Foobar barfoo($one, $two)',
+            function (ReflectionMethod $method): void {
+                $this->assertEquals(2, $method->parameters()->count());
+                $this->assertEquals('one', $method->parameters()->first()->name());
+                $this->assertEquals('two', $method->parameters()->get('two')->name());
+            }
+        ];
+
+        yield 'parameters with type and default value' => [
+            '@method Foobar barfoo(string|int $one = 1234)',
+            function (ReflectionMethod $method): void {
+                $this->assertEquals(1, $method->parameters()->count());
+                $parameter = $method->parameters()->first();
+                $this->assertEquals('one', $parameter->name());
+                $this->assertCount(2, $parameter->inferredTypes());
+                $this->assertEquals('string', $parameter->inferredTypes()->best());
+            }
+        ];
     }
 
     private function create($docblock): DocBlock

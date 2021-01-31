@@ -128,4 +128,10 @@ class DocblockReflectionMethodFactoryTest extends TestCase
             }
         ];
     }
+
+    private function create($docblock): DocBlock
+    {
+        $factory = new DocblockFactory();
+        return $factory->create($docblock);
+    }
 }

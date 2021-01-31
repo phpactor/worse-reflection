@@ -3,9 +3,11 @@
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
 use Phpactor\Docblock\Ast\Docblock as PhpactorDocblock;
+use Phpactor\Docblock\Ast\ParameterList;
 use Phpactor\Docblock\Ast\Tag\DeprecatedTag;
 use Phpactor\Docblock\Ast\Tag\MethodTag;
 use Phpactor\Docblock\Ast\Tag\ParamTag;
+use Phpactor\Docblock\Ast\Tag\ParameterTag;
 use Phpactor\Docblock\Ast\Tag\PropertyTag;
 use Phpactor\Docblock\Ast\Tag\ReturnTag;
 use Phpactor\Docblock\Ast\Tag\VarTag;
@@ -18,20 +20,26 @@ use Phpactor\Docblock\Ast\Type\ListNode;
 use Phpactor\Docblock\Ast\Type\NullableNode;
 use Phpactor\Docblock\Ast\Type\ScalarNode;
 use Phpactor\Docblock\Ast\Type\UnionNode;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Phpactor\WorseReflection\Core\Inference\Frame;
+use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionProperty;
 use Phpactor\WorseReflection\Core\Visibility;
 use function Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
@@ -159,7 +167,7 @@ class Docblock implements CoreDocblock
                 Visibility::public(),
                 Types::fromTypes([Type::fromString($property->type->toString())]),
                 Type::fromString($property->type->toString()),
-                new Deprecation($property->hasChild(DeprecationTag::class))
+                new Deprecation($property->hasChild(DeprecatedTag::class))
             );
         }
 
@@ -171,7 +179,14 @@ class Docblock implements CoreDocblock
         $methods = [];
         foreach ($this->node->tags(MethodTag::class) as $method) {
             assert($method instanceof MethodTag);
-            $methods[] = new VirtualReflectionMethod(
+            $name = $method->name;
+
+            if (!$name) {
+                continue;
+            }
+
+            $parameters = VirtualReflectionParameterCollection::empty();
+            $reflectionMethod = new VirtualReflectionMethod(
                 Position::fromStartAndEnd($method->start(), $method->start()),
                 $declaringClass,
                 $declaringClass,
@@ -180,10 +195,16 @@ class Docblock implements CoreDocblock
                 $this,
                 $declaringClass->scope(),
                 Visibility::public(),
-                Types::fromTypes([Type::fromString($method->type->toString())]),
+                $this->typesFrom($method->type),
                 Type::fromString($method->type->toString()),
-                new Deprecation($this->node->hasTag(DeprecationTag::class))
+                $parameters,
+                NodeText::fromString($method->text->toString()),
+                false,
+                $method->static ? true : false,
+                new Deprecation($this->node->hasTag(DeprecatedTag::class))
             );
+            $this->methodParameter($parameters, $reflectionMethod, $method->parameters);
+            $methods[] = $reflectionMethod;
         }
 
         return VirtualReflectionMethodCollection::fromMembers($methods);
@@ -198,8 +219,11 @@ class Docblock implements CoreDocblock
         return new Deprecation(false);
     }
 
-    private function typesFrom(TypeNode $type): Types
+    private function typesFrom(?TypeNode $type = null): Types
     {
+        if (null === $type) {
+            return Types::empty();
+        }
         $nullable = false;
         if ($type instanceof NullableNode) {
             $nullable = true;
@@ -244,5 +268,32 @@ class Docblock implements CoreDocblock
         }
 
         return Types::empty();
+    }
+
+    private function methodParameter(VirtualReflectionParameterCollection $collection, VirtualReflectionMethod $method, ?ParameterList $parameterList = null): void
+    {
+        if (!$parameterList) {
+            return;
+        }
+
+        $params = [];
+        foreach ($parameterList->parameters() as $parameterNode) {
+            assert($parameterNode instanceof ParameterTag);
+            if (!$parameterNode->name) {
+                continue;
+            }
+
+            $types = $this->typesFrom($parameterNode->type);
+            $collection->add(new VirtualReflectionParameter(
+                ltrim($parameterNode->name->toString(), '$'),
+                $method,
+                $types,
+                $types->best(),
+                DefaultValue::fromValue(null),
+                false,
+                $method->scope(),
+                $method->position()
+            ));
+        }
     }
 }
