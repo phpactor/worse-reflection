@@ -189,6 +189,9 @@ class Docblock implements CoreDocblock
                 continue;
             }
 
+            $originalMethod = $declaringClass->methods()->has($name->toString()) ?
+                $declaringClass->methods()->get($name->toString()) : null;
+
             $parameters = VirtualReflectionParameterCollection::empty();
             $text = $method->text;
             $reflectionMethod = new VirtualReflectionMethod(
@@ -200,8 +203,14 @@ class Docblock implements CoreDocblock
                 $this,
                 $declaringClass->scope(),
                 Visibility::public(),
-                $this->typesFrom($method->type),
-                Type::fromString($method->type->toString()),
+                Types::fromTypes(array_map(function (Type $type) use ($declaringClass) {
+                    $name = $type->className();
+                    if (null === $name) {
+                        return $type;
+                    }
+                    return $type->withClassName($declaringClass->scope()->resolveFullyQualifiedName($name));
+                }, iterator_to_array($this->typesFrom($method->type), false))),
+                $originalMethod ? $originalMethod->type() : Type::undefined(),
                 $parameters,
                 NodeText::fromString($text ? $text->toString() : ''),
                 false,
