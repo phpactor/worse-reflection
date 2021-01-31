@@ -190,6 +190,7 @@ class Docblock implements CoreDocblock
             }
 
             $parameters = VirtualReflectionParameterCollection::empty();
+            $text = $method->text;
             $reflectionMethod = new VirtualReflectionMethod(
                 Position::fromStartAndEnd($method->start(), $method->start()),
                 $declaringClass,
@@ -202,7 +203,7 @@ class Docblock implements CoreDocblock
                 $this->typesFrom($method->type),
                 Type::fromString($method->type->toString()),
                 $parameters,
-                NodeText::fromString($method->text->toString()),
+                NodeText::fromString($text ? $text->toString() : ''),
                 false,
                 $method->static ? true : false,
                 new Deprecation($this->node->hasTag(DeprecatedTag::class))
