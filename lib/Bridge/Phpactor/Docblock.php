@@ -160,6 +160,7 @@ class Docblock implements CoreDocblock
             if (!$name) {
                 continue;
             }
+            $type = $property->type;
             $properties[] = new VirtualReflectionProperty(
                 Position::fromStartAndEnd($property->start(), $property->start()),
                 $declaringClass,
@@ -169,8 +170,8 @@ class Docblock implements CoreDocblock
                 $this,
                 $declaringClass->scope(),
                 Visibility::public(),
-                $this->typesFrom($property->type),
-                Type::fromString($property->type->toString()),
+                $this->typesFrom($type),
+                $type ? Type::fromString($type->toString()) : Type::undefined(),
                 new Deprecation($property->hasChild(DeprecatedTag::class))
             );
         }
