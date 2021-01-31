@@ -27,6 +27,12 @@ class DocblockFactory implements CoreDocblockPhpactory
 
     public function create(string $docblock): CoreDocblock
     {
-        return new Docblock($docblock, $this->parser->parse($this->lexer->lex($docblock)));
+        static $cache = [];
+        if (isset($cache[$docblock])) {
+            return $cache[$docblock];
+        }
+        $ret = new Docblock($docblock, $this->parser->parse($this->lexer->lex($docblock)));
+        $cache[$docblock] = $ret;
+        return $ret;
     }
 }
