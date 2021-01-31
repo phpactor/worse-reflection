@@ -19,6 +19,7 @@ use Phpactor\Docblock\Ast\Type\GenericNode;
 use Phpactor\Docblock\Ast\Type\ListNode;
 use Phpactor\Docblock\Ast\Type\NullableNode;
 use Phpactor\Docblock\Ast\Type\ScalarNode;
+use Phpactor\Docblock\Ast\Type\ThisNode;
 use Phpactor\Docblock\Ast\Type\UnionNode;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\DefaultValue;
@@ -245,9 +246,14 @@ class Docblock implements CoreDocblock
             return Types::empty();
         }
         $nullable = false;
+
         if ($type instanceof NullableNode) {
             $nullable = true;
             $type = $type->type;
+        }
+
+        if ($type instanceof ThisNode) {
+            return Types::fromTypes([Type::fromString('$this')]);
         }
 
         if (
