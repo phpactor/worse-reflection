@@ -83,16 +83,27 @@ class Docblock implements CoreDocblock
         return Types::empty();
     }
 
-    public function propertyTypes(string $methodName): Types
+    public function propertyTypes(string $propertyName): Types
     {
-        $types = [];
         foreach ($this->node->tags(PropertyTag::class) as $child) {
+            assert($child instanceof PropertyTag);
+
             if (!$child->type) {
                 continue;
             }
-            $types[] = Type::fromString($child->type->toString());
+
+            if (!$child->name) {
+                continue;
+            }
+
+            if (ltrim($child->name->toString(), '$') !== $propertyName) {
+                continue;
+            }
+
+            return $this->typesFrom($child->type);
         }
-        return Types::fromTypes($types);
+
+        return Types::empty();
     }
 
     public function vars(): DocBlockVars
@@ -116,11 +127,21 @@ class Docblock implements CoreDocblock
 
     public function methodTypes(string $methodName): Types
     {
-        $types = [];
         foreach ($this->node->tags(MethodTag::class) as $child) {
+            assert($child instanceof MethodTag);
+
             if (!$child->type) {
                 continue;
             }
+
+            if (!$child->name) {
+                continue;
+            }
+
+            if ($child->name->toString() !== $methodName) {
+                continue;
+            }
+
             return $this->typesFrom($child->type);
         }
 
