@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as BridgeFactory;
-use Phpactor\Docblock\DocblockFactory;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as PhpactorDocblockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 

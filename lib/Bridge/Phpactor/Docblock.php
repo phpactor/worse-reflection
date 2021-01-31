@@ -11,8 +11,6 @@ use Phpactor\Docblock\Ast\Tag\ParameterTag;
 use Phpactor\Docblock\Ast\Tag\PropertyTag;
 use Phpactor\Docblock\Ast\Tag\ReturnTag;
 use Phpactor\Docblock\Ast\Tag\VarTag;
-use Phpactor\Docblock\Ast\Token;
-use Phpactor\Docblock\Ast\TypeList;
 use Phpactor\Docblock\Ast\TypeNode;
 use Phpactor\Docblock\Ast\Type\ClassNode;
 use Phpactor\Docblock\Ast\Type\GenericNode;
@@ -21,7 +19,6 @@ use Phpactor\Docblock\Ast\Type\NullableNode;
 use Phpactor\Docblock\Ast\Type\ScalarNode;
 use Phpactor\Docblock\Ast\Type\ThisNode;
 use Phpactor\Docblock\Ast\Type\UnionNode;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
@@ -30,7 +27,6 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Type;
@@ -43,7 +39,6 @@ use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionProperty;
 use Phpactor\WorseReflection\Core\Visibility;
-use function Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 
 class Docblock implements CoreDocblock
 {
@@ -60,8 +55,7 @@ class Docblock implements CoreDocblock
     public function __construct(
         string $raw,
         PhpactorDocblock $node
-    )
-    {
+    ) {
         $this->raw = $raw;
         $this->node = $node;
     }
@@ -308,8 +302,7 @@ class Docblock implements CoreDocblock
         VirtualReflectionParameterCollection $collection,
         VirtualReflectionMethod $method,
         ?ParameterList $parameterList = null
-    ): void
-    {
+    ): void {
         if (!$parameterList) {
             return;
         }

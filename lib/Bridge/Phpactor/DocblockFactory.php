@@ -2,12 +2,12 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor;
 
+use Phpactor\Docblock\Ast\Docblock as AstDocblock;
 use Phpactor\Docblock\Lexer;
 use Phpactor\Docblock\Parser;
 use Phpactor\WorseReflection\Core\Cache;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory as CoreDocblockPhpactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
-use Phpactor\Docblock\DocblockFactory as PhpactorDocblockFactory;
 
 class DocblockFactory implements CoreDocblockPhpactory
 {
@@ -35,7 +35,11 @@ class DocblockFactory implements CoreDocblockPhpactory
     public function create(string $docblock): CoreDocblock
     {
         return $this->cache->getOrSet($docblock, function () use ($docblock) {
-            return new Docblock($docblock, $this->parser->parse($this->lexer->lex($docblock)));
+            $node = $this->parser->parse($this->lexer->lex($docblock));
+            if (!$node instanceof AstDocblock) {
+                $node = new AstDocblock([]);
+            }
+            return new Docblock($docblock, $node);
         });
     }
 }
