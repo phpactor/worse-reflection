@@ -96,11 +96,8 @@ class Docblock implements CoreDocblock
         foreach ($this->node->tags(VarTag::class) as $child) {
             assert($child instanceof VarTag);
             $variable = $child->variable;
-            if (!$variable) {
-                continue;
-            }
             $types[] = new DocBlockVar(
-                $variable->toString(),
+                $variable ? $variable->toString() : '',
                 $this->typesFrom($child->type)
             );
         }
