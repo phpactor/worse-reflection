@@ -61,6 +61,9 @@ class Docblock implements CoreDocblock
     {
         $types = [];
         foreach ($this->node->tags(ParamTag::class) as $child) {
+            if (!$child->type) {
+                continue;
+            }
             $types[] = Type::fromString($child->type->toString());
         }
         return Types::fromTypes($types);
@@ -70,6 +73,9 @@ class Docblock implements CoreDocblock
     {
         $types = [];
         foreach ($this->node->tags(PropertyTag::class) as $child) {
+            if (!$child->type) {
+                continue;
+            }
             $types[] = Type::fromString($child->type->toString());
         }
         return Types::fromTypes($types);
@@ -101,6 +107,9 @@ class Docblock implements CoreDocblock
     {
         $types = [];
         foreach ($this->node->tags(MethodTag::class) as $child) {
+            if (!$child->type) {
+                continue;
+            }
             $types[] = Type::fromString($child->type->toString());
         }
         return Types::fromTypes($types);
@@ -181,7 +190,7 @@ class Docblock implements CoreDocblock
     {
         foreach ($this->node->tags(DeprecatedTag::class) as $child) {
             assert($child instanceof DeprecatedTag);
-            return new Deprecation(true, $child->text->toString());
+            return new Deprecation(true, trim($child->text->toString()));
         }
         return new Deprecation(false);
     }
@@ -207,9 +216,9 @@ class Docblock implements CoreDocblock
         }
 
         if ($type instanceof UnionNode) {
-            return Types::fromTypes(array_map(function (Types $types) {
-                return $types->best();
-            }, iterator_to_array($type->types)));
+            return Types::fromTypes(array_map(function (TypeNode $typeNode) {
+                return $this->typesFrom($typeNode)->best();
+            }, iterator_to_array($type->types->types())));
         }
 
         if ($type instanceof ListNode) {
@@ -223,7 +232,7 @@ class Docblock implements CoreDocblock
         if ($type instanceof GenericNode) {
             $classType = $this->typesFrom($type->type)->best();
             $iterableType = $type->parameters()->firstDescendant(ClassNode::class);
-            if ($iterableType) {
+            if ($iterableType instanceof ClassNode) {
                 $classType = $classType->withArrayType($this->typesFrom($iterableType)->best());
             }
             return Types::fromTypes([
