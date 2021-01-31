@@ -131,8 +131,15 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
     protected function createVariableSymbolContext(Variable $leftOperand): SymbolContext
     {
+        $name = $leftOperand->getName();
+
+        /** @phpstan-ignore-next-line */
+        if (null === $name) {
+            return SymbolContext::none();
+        }
+
         return $this->symbolFactory()->context(
-            $leftOperand->getName(),
+            $name,
             $leftOperand->getStart(),
             $leftOperand->getEndPosition(),
             ['symbol_type' => Symbol::VARIABLE],
