@@ -10,6 +10,14 @@ use Phpactor\Docblock\Ast\Tag\PropertyTag;
 use Phpactor\Docblock\Ast\Tag\ReturnTag;
 use Phpactor\Docblock\Ast\Tag\VarTag;
 use Phpactor\Docblock\Ast\Token;
+use Phpactor\Docblock\Ast\TypeList;
+use Phpactor\Docblock\Ast\TypeNode;
+use Phpactor\Docblock\Ast\Type\ClassNode;
+use Phpactor\Docblock\Ast\Type\GenericNode;
+use Phpactor\Docblock\Ast\Type\ListNode;
+use Phpactor\Docblock\Ast\Type\NullableNode;
+use Phpactor\Docblock\Ast\Type\ScalarNode;
+use Phpactor\Docblock\Ast\Type\UnionNode;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
@@ -71,9 +79,14 @@ class Docblock implements CoreDocblock
     {
         $types = [];
         foreach ($this->node->tags(VarTag::class) as $child) {
+            assert($child instanceof VarTag);
+            $variable = $child->variable;
+            if (!$variable) {
+                continue;
+            }
             $types[] = new DocBlockVar(
-                $child->variable->toString(),
-                $child->type->toString()
+                $variable->toString(),
+                $this->typesFrom($child->type)
             );
         }
         return new DocBlockVars($types);
@@ -115,7 +128,7 @@ class Docblock implements CoreDocblock
 
     public function isDefined(): bool
     {
-        return !empty($this->raw);
+        return !empty(trim($this->raw));
     }
 
     public function properties(ReflectionClassLike $declaringClass): ReflectionPropertyCollection
@@ -173,4 +186,51 @@ class Docblock implements CoreDocblock
         return new Deprecation(false);
     }
 
+    private function typesFrom(TypeNode $type): Types
+    {
+        $nullable = false;
+        if ($type instanceof NullableNode) {
+            $nullable = true;
+            $type = $type->type;
+        }
+
+        if (
+            $type instanceof ClassNode ||
+            $type instanceof ScalarNode
+        ) {
+            $type = Type::fromString($type->toString());
+            if ($nullable) {
+                $type = $type->asNullable();
+            }
+
+            return Types::fromTypes([$type]);
+        }
+
+        if ($type instanceof UnionNode) {
+            return Types::fromTypes(array_map(function (Types $types) {
+                return $types->best();
+            }, iterator_to_array($type->types)));
+        }
+
+        if ($type instanceof ListNode) {
+            $type = $this->typesFrom($type->type);
+            return Types::fromTypes([
+                Type::array()->withArrayType($type->best())
+            ]);
+        }
+
+        // fake generic support
+        if ($type instanceof GenericNode) {
+            $classType = $this->typesFrom($type->type)->best();
+            $iterableType = $type->parameters()->firstDescendant(ClassNode::class);
+            if ($iterableType) {
+                $classType = $classType->withArrayType($this->typesFrom($iterableType)->best());
+            }
+            return Types::fromTypes([
+                $classType
+            ]);
+        }
+
+        return Types::empty();
+    }
 }
