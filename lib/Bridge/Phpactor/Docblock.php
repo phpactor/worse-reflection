@@ -156,22 +156,26 @@ class Docblock implements CoreDocblock
         $properties = [];
         foreach ($this->node->tags(PropertyTag::class) as $property) {
             assert($property instanceof PropertyTag);
+            $name = $property->name;
+            if (!$name) {
+                continue;
+            }
             $properties[] = new VirtualReflectionProperty(
                 Position::fromStartAndEnd($property->start(), $property->start()),
                 $declaringClass,
                 $declaringClass,
-                $property->name->toString(),
+                ltrim($name->toString(), '$'),
                 new Frame(''),
-                null,
+                $this,
                 $declaringClass->scope(),
                 Visibility::public(),
-                Types::fromTypes([Type::fromString($property->type->toString())]),
+                $this->typesFrom($property->type),
                 Type::fromString($property->type->toString()),
                 new Deprecation($property->hasChild(DeprecatedTag::class))
             );
         }
 
-        return VirtualReflectionPropertyCollection::fromMembers([]);
+        return VirtualReflectionPropertyCollection::fromMembers($properties);
     }
 
     public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection

@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\ReflectorBuilder;
@@ -155,6 +156,45 @@ class DocblockTest extends TestCase
                 $this->assertEquals('one', $parameter->name());
                 $this->assertCount(2, $parameter->inferredTypes());
                 $this->assertEquals('string', $parameter->inferredTypes()->best());
+            }
+        ];
+    }
+
+    /**
+     * @dataProvider providePropertyTags
+     */
+    public function testPropertyTags(string $docblock, Closure $assertion): void
+    {
+        $docblock = '/** ' . $docblock . ' */';
+        $class = ReflectorBuilder::create()->addSource(
+            '<?php class Foobar {}'
+        )->build()->reflectClass('Foobar');
+        $property = $this->create($docblock)->properties($class)->first();
+        $assertion($property);
+    }
+
+    /**
+     * @return Generator<mixed>
+     */
+    public function providePropertyTags(): Generator
+    {
+        yield 'minimal' => [
+            '@property string $myProperty',
+            function (ReflectionProperty $property): void {
+                $this->assertEquals('Foobar', (string) $property->class()->name());
+                $this->assertEquals('myProperty', $property->name());
+            }
+        ];
+
+        yield 'multiple types' => [
+            '@property Foobar|string $myProperty',
+            function (ReflectionProperty $property): void {
+                $this->assertEquals('Foobar', (string) $property->class()->name());
+                $this->assertEquals('myProperty', $property->name());
+                $this->assertEquals(Types::fromTypes([
+                    Type::fromString('Foobar'),
+                    Type::string(),
+                ]), $property->inferredTypes());
             }
         ];
     }
