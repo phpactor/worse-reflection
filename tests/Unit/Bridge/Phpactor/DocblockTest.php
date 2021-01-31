@@ -6,6 +6,7 @@ use Closure;
 use Generator;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory;
+use Phpactor\WorseReflection\Core\Cache\NullCache;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
@@ -200,7 +201,7 @@ class DocblockTest extends TestCase
 
     private function create($docblock): DocBlock
     {
-        $factory = new DocblockFactory();
+        $factory = new DocblockFactory(new NullCache());
         return $factory->create($docblock);
     }
 }
