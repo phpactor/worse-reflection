@@ -118,9 +118,10 @@ class Docblock implements CoreDocblock
             if (!$child->type) {
                 continue;
             }
-            $types[] = Type::fromString($child->type->toString());
+            return $this->typesFrom($child->type);
         }
-        return Types::fromTypes($types);
+
+        return Types::empty();
     }
 
     public function formatted(): string
@@ -135,9 +136,10 @@ class Docblock implements CoreDocblock
             if (!$child->type) {
                 continue;
             }
-            $types[] = Type::fromString($child->type->toString());
+            return $this->typesFrom($child->type);
         }
-        return Types::fromTypes($types);
+
+        return Types::empty();
     }
 
 
