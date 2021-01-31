@@ -127,7 +127,7 @@ class Docblock implements CoreDocblock
 
     public function formatted(): string
     {
-        return $this->node->prose();
+        return preg_replace('{\n +}', "\n", $this->node->prose());
     }
 
     public function returnTypes(): Types
