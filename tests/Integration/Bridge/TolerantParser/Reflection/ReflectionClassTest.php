@@ -302,6 +302,27 @@ class ReflectionClassTest extends IntegrationTestCase
             },
         ];
 
+        yield 'Tolerates not found traits' => [
+            <<<'EOT'
+                <?php
+
+                class Class2
+                {
+                    use TraitNUMBERone, TraitNUMBERtwo;
+
+                    public function notATrait()
+                    {
+                    }
+                }
+
+                EOT
+        ,
+            'Class2',
+            function ($class): void {
+                $this->assertEquals(1, $class->methods()->count());
+            },
+        ];
+
         yield 'Get methods includes aliased trait methods' => [
             <<<'EOT'
                 <?php

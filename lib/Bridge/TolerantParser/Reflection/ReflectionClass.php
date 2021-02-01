@@ -205,7 +205,11 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
         /** @var TraitImport $traitImport */
         foreach ($traitImports as $traitImport) {
-            $trait = $this->traits()->get($traitImport->name());
+            try {
+                $trait = $this->traits()->get($traitImport->name());
+            } catch (NotFound $notFound) {
+                continue;
+            }
 
             $traitMethods = [];
             foreach ($trait->methods($contextClass) as $method) {

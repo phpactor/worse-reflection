@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -27,7 +28,10 @@ class ReflectionTraitCollection extends AbstractReflectionCollection implements 
 
             foreach ($memberDeclaration->traitNameList->getValues() as $traitName) {
                 $traitName = TolerantQualifiedNameResolver::getResolvedName($traitName);
-                $items[(string) $traitName] = $serviceLocator->reflector()->reflectTrait(ClassName::fromString($traitName));
+                try {
+                    $items[(string) $traitName] = $serviceLocator->reflector()->reflectTrait(ClassName::fromString($traitName));
+                } catch (NotFound $notFound) {
+                }
             }
         }
 
