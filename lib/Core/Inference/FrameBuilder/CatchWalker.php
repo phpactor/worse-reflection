@@ -33,11 +33,17 @@ class CatchWalker extends AbstractWalker
 
             $types = $types->merge($builder->resolveNode($frame, $element)->types());
         }
+        
+        $variableName = $node->variableName;
+
+        if (null === $variableName) {
+            return $frame;
+        }
 
         $context = $this->symbolFactory()->context(
-            $node->variableName->getText($node->getFileContents()),
-            $node->variableName->getStartPosition(),
-            $node->variableName->getEndPosition(),
+            (string)$variableName->getText($node->getFileContents()),
+            $variableName->getStartPosition(),
+            $variableName->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
                 'types' => $types,
