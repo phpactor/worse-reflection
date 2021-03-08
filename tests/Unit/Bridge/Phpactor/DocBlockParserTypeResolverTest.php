@@ -19,6 +19,7 @@ use Phpactor\WorseReflection\Core\Type\GenericType;
 use Phpactor\WorseReflection\Core\Type\IntegerType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\StringType;
+use Phpactor\WorseReflection\Core\Type\TemplatedType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 
@@ -79,6 +80,11 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
         yield [
             '/** @return array<int, string> */',
             new ArrayType(new IntegerType(), new StringType())
+        ];
+
+        yield [
+            '/** @template T @return T */',
+            new TemplatedType('T')
         ];
 
         yield [
