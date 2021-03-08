@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockTypeResolver;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
@@ -33,18 +34,19 @@ use function iterator_to_array;
 class DocBlockParserTypeResolver implements DocBlockTypeResolver
 {
     /**
-     * @var ReflectionScope
-     */
-    private $scope;
-    /**
      * @var Docblock
      */
     private $docblock;
 
-    public function __construct(ReflectionScope $scope, Docblock $docblock)
+    /**
+     * @var ReflectionClassLike
+     */
+    private $class;
+
+    public function __construct(ReflectionClassLike $class, Docblock $docblock)
     {
-        $this->scope = $scope;
         $this->docblock = $docblock;
+        $this->class = $class;
     }
 
     public function resolveReturn(): ReflectionType
@@ -129,6 +131,6 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
         if ($name->wasFullyQualified()) {
             return new ClassType($name);
         }
-        return new ClassType($this->scope->resolveFullyQualifiedName($name)->className());
+        return new ClassType($this->class->scope()->resolveFullyQualifiedName($name)->className());
     }
 }

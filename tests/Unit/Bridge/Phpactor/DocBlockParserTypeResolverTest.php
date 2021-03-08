@@ -29,9 +29,9 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
      */
     public function testResolve(string $docblock, ReflectionType $expected): void
     {
-        $scope = $this->createReflector('<?php namespace Bar; class Foobar{}')->reflectClass('Bar\Foobar')->scope();
+        $class = $this->createReflector('<?php namespace Bar; class Foobar{}')->reflectClass('Bar\Foobar');
 
-        $resolver = (new DocBlockParserTypeResolverFactory())->create($scope, $docblock);
+        $resolver = (new DocBlockParserTypeResolverFactory())->create($class, $docblock);
 
         self::assertEquals($expected, $resolver->resolveReturn($docblock));
     }
