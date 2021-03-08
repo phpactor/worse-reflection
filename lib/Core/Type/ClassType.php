@@ -16,4 +16,9 @@ class ClassType implements ReflectionType
     {
         $this->name = $name;
     }
+
+    public function name(): Name
+    {
+        return $this->name;
+    }
 }

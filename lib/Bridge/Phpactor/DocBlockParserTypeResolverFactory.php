@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlockTypeResolverFactory;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use RuntimeException;
 
 class DocBlockParserTypeResolverFactory implements DocBlockTypeResolverFactory
@@ -24,15 +25,21 @@ class DocBlockParserTypeResolverFactory implements DocBlockTypeResolverFactory
      */
     private $parser;
 
-    public function __construct(?Lexer $lexer = null, ?Parser $parser = null)
+    /**
+     * @var ClassReflector
+     */
+    private $reflector;
+
+    public function __construct(ClassReflector $reflector, ?Lexer $lexer = null, ?Parser $parser = null)
     {
         $this->lexer = $lexer ?: new Lexer();
         $this->parser = $parser ?: new Parser();
+        $this->reflector = $reflector;
     }
 
     public function create(ReflectionNode $scope, string $docblock): DocBlockTypeResolver
     {
-        return new DocBlockParserTypeResolver($scope, $this->parseDocblock($docblock));
+        return new DocBlockParserTypeResolver($this->reflector, $scope, $this->parseDocblock($docblock));
     }
 
     private function parseDocblock(string $docblock): Docblock

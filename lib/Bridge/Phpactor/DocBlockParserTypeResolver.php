@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor;
 use PhpBench\Expression\Ast\StringNode;
 use Phpactor\DocblockParser\Ast\Docblock;
 use Phpactor\DocblockParser\Ast\Node;
+use Phpactor\DocblockParser\Ast\Tag\ExtendsTag;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\DocblockParser\Ast\Tag\TemplateTag;
 use Phpactor\DocblockParser\Ast\Type\ArrayNode;
@@ -14,9 +15,11 @@ use Phpactor\DocblockParser\Ast\Type\ScalarNode;
 use Phpactor\DocblockParser\Ast\Type\UnionNode;
 use Phpactor\DocblockParser\Lexer;
 use Phpactor\DocblockParser\Parser;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockTypeResolver;
+use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Placeholder;
 use Phpactor\WorseReflection\Core\Placeholders;
@@ -24,6 +27,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
@@ -51,14 +55,20 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
     private $context;
 
     /**
-     * @var Placeholders
+     * @var Placeholders|null
      */
     private $placeholders;
 
-    public function __construct(ReflectionNode $class, Docblock $docblock)
+    /**
+     * @var ClassReflector
+     */
+    private $reflector;
+
+    public function __construct(ClassReflector $reflector, ReflectionNode $context, Docblock $docblock)
     {
         $this->docblock = $docblock;
-        $this->context = $class;
+        $this->context = $context;
+        $this->reflector = $reflector;
         $this->placeholders = $this->placeholders();
     }
 
@@ -84,6 +94,24 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
         }
 
         $placeholders =  new Placeholders($placeholders);
+
+        if ($this->context instanceof ReflectionClassLike) {
+            foreach ($this->docblock->tags(ExtendsTag::class) as $extendsTag) {
+                assert($extendsTag instanceof ExtendsTag);
+                $extends = $this->resolveType($extendsTag->type);
+                if (!$extends instanceof GenericType) {
+                    continue;
+                }
+
+                try {
+                    $extends = $this->reflector->reflectClass($extends->type()->name());
+                    $placeholders = $placeholders->merge($extends->placeholders());
+                } catch (NotFound $notFound) {
+                }
+
+            }
+        }
+
         if ($this->context instanceof ReflectionMember) {
             $placeholders = $placeholders->merge($this->context->class()->placeholders());
         }

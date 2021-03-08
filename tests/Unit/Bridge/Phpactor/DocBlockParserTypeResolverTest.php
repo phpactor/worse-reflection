@@ -30,9 +30,10 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
      */
     public function testResolve(string $docblock, ReflectionType $expected): void
     {
-        $class = $this->createReflector('<?php namespace Bar; class Foobar{}')->reflectClass('Bar\Foobar');
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $class = $reflector->reflectClass('Bar\Foobar');
 
-        $resolver = (new DocBlockParserTypeResolverFactory())->create($class, $docblock);
+        $resolver = (new DocBlockParserTypeResolverFactory($reflector))->create($class, $docblock);
 
         self::assertEquals($expected, $resolver->resolveReturn());
     }
@@ -107,9 +108,10 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
      */
     public function testResolveWithContext(string $source, ReflectionType $expected): void
     {
-        $method = $this->createReflector($source)->reflectClass('Foobar')->methods()->get('foo');
+        $reflector = $this->createReflector($source);
+        $method = $reflector->reflectClass('Foobar')->methods()->get('foo');
 
-        $resolver = (new DocBlockParserTypeResolverFactory())->create($method, $method->docblock()->raw());
+        $resolver = (new DocBlockParserTypeResolverFactory($reflector))->create($method, $method->docblock()->raw());
         self::assertEquals($expected, $resolver->resolveReturn());
     }
 
@@ -121,6 +123,33 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
         yield [
             '<?php /** @template T */class Foobar { /** @return T */public function foo() {} }',
             new TemplatedType('T')
+        ];
+
+        yield [
+            <<<'EOT'
+<?php
+
+/**
+ * @template X
+ * @template Y
+ */
+class ParentClass
+{
+    /**
+     * @return X
+     */
+    public function foo();
+}
+
+/** 
+ * @extends ParentClass<int,string>
+ */
+class Foobar extends ParentClass
+{
+}
+EOT,
+
+            new TemplatedType('X')
         ];
     }
 }

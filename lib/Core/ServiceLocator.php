@@ -105,7 +105,7 @@ class ServiceLocator
 
         $this->sourceLocator = $sourceLocator;
         $this->docblockFactory = new DocblockFactoryBridge();
-        $this->docblockTypeResolver = new DocBlockParserTypeResolverFactory();
+        $this->docblockTypeResolver = new DocBlockParserTypeResolverFactory($coreReflector);
         $this->logger = $logger;
 
         $this->symbolContextResolver = new SymbolContextResolver(

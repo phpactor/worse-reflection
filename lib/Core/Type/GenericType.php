@@ -20,4 +20,14 @@ class GenericType implements ReflectionType
         $this->type = $type;
         $this->parameters = $parameters;
     }
+
+    public function parameters(): array
+    {
+        return $this->parameters;
+    }
+
+    public function type(): ClassType
+    {
+        return $this->type;
+    }
 }
