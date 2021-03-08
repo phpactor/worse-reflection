@@ -5,14 +5,15 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Deprecation;
-use Phpactor\WorseReflection\Core\ReflectionType;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Microsoft\PhpParser\TokenKind;
+use Phpactor\WorseReflection\Core\Type\UndefinedType;
 use Phpactor\WorseReflection\Core\Util\OriginalMethodResolver;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -44,7 +45,7 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 
     public function reflectionType(): ReflectionType
     {
-        return $this->serviceLocator()->docblockTypeResolver()->resolve(ReturnTag::class, $this->node()->getLeadingCommentAndWhitespaceText());
+        return new UndefinedType();
     }
 
     public function original(): ReflectionMember

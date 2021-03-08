@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
-use Phpactor\WorseReflection\Core\ReflectionType;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 
 interface ReflectionMember
 {
