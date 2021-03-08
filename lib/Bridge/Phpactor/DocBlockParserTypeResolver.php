@@ -6,6 +6,7 @@ use PhpBench\Expression\Ast\StringNode;
 use Phpactor\DocblockParser\Ast\Docblock;
 use Phpactor\DocblockParser\Ast\Node;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
+use Phpactor\DocblockParser\Ast\Tag\TemplateTag;
 use Phpactor\DocblockParser\Ast\Type\ArrayNode;
 use Phpactor\DocblockParser\Ast\Type\ClassNode;
 use Phpactor\DocblockParser\Ast\Type\GenericNode;
@@ -26,6 +27,8 @@ use Phpactor\WorseReflection\Core\Type\GenericType;
 use Phpactor\WorseReflection\Core\Type\IntegerType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\StringType;
+use Phpactor\WorseReflection\Core\Type\Template;
+use Phpactor\WorseReflection\Core\Type\TemplatedType;
 use Phpactor\WorseReflection\Core\Type\UndefinedType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use RuntimeException;
@@ -43,10 +46,22 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
      */
     private $class;
 
+    /**
+     * @var array<string,TemplateTag>
+     */
+    private $placeholders = [];
+
     public function __construct(ReflectionClassLike $class, Docblock $docblock)
     {
         $this->docblock = $docblock;
         $this->class = $class;
+        foreach ($docblock->tags(TemplateTag::class) as $templateTag) {
+            assert($templateTag instanceof TemplateTag);
+            if (!$templateTag->placeholder) {
+                continue;
+            }
+            $this->placeholders[$templateTag->placeholder->value] = $templateTag;
+        }
     }
 
     public function resolveReturn(): ReflectionType
@@ -85,6 +100,10 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
 
         if ($node instanceof UnionNode) {
             return $this->resolveUnionType($node);
+        }
+
+        if ($node instanceof ClassNode && isset($this->placeholders[$node->name->value])) {
+            return $this->resolveTemplatedType($node);
         }
 
         if ($node instanceof ClassNode) {
@@ -132,5 +151,14 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
             return new ClassType($name);
         }
         return new ClassType($this->class->scope()->resolveFullyQualifiedName($name)->className());
+    }
+
+    private function resolveTemplatedType(ClassNode $node): TemplatedType
+    {
+        $placeholder = $this->placeholders[$node->name()->value];
+        assert($placeholder instanceof TemplateTag);
+        $constraint = $placeholder->type ? $this->resolveType($placeholder->type) : null;
+
+        return new TemplatedType($placeholder->placeholder->value, $constraint);
     }
 }

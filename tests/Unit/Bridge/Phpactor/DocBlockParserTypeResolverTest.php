@@ -88,12 +88,41 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
         ];
 
         yield [
+            '/** @template T of Foo @return T */',
+            new TemplatedType('T', new ClassType(ClassName::fromString('Bar\Foo')))
+        ];
+
+        yield [
             '/** @return \IteratorAggregate<Foobar> */',
             new GenericType(new ClassType(
                 ClassName::fromString('\IteratorAggregate')
             ), [new ClassType(
                 ClassName::fromString('Bar\Foobar')
             )])
+        ];
+    }
+
+    /**
+     * @dataProvider provideResolveWithContext
+     */
+    public function testResolveWithContext(string $source, string $docblock, ReflectionType $expected): void
+    {
+        $class = $this->createReflector($source)->reflectClass('Foobar');
+
+        $resolver = (new DocBlockParserTypeResolverFactory())->create($class, $docblock);
+
+        self::assertEquals($expected, $resolver->resolveReturn($docblock));
+    }
+
+    /**
+     * @return Generator<mixed>
+     */
+    public function provideResolveWithContext(): Generator
+    {
+        yield [
+            '<?php /** @template T */class Foobar() {}',
+            '/** @return T */',
+            new TemplatedType('T')
         ];
     }
 }
