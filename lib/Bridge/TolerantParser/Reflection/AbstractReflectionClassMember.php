@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\ReflectionType;
@@ -43,6 +44,7 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
 
     public function reflectionType(): ReflectionType
     {
+        return $this->serviceLocator()->docblockTypeResolver()->resolve(ReturnTag::class, $this->node()->getLeadingCommentAndWhitespaceText());
     }
 
     public function original(): ReflectionMember

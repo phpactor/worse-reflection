@@ -157,4 +157,8 @@ class ServiceLocator
     {
         return $this->methodProviders;
     }
+
+    public function docblockTypeResolver()
+    {
+    }
 }
