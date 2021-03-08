@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Deprecation;
+use Phpactor\WorseReflection\Core\ReflectionType;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\ClassLike;
@@ -38,6 +39,10 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
         }
 
         return $this->serviceLocator()->reflector()->reflectClassLike(ClassName::fromString($class));
+    }
+
+    public function reflectionType(): ReflectionType
+    {
     }
 
     public function original(): ReflectionMember

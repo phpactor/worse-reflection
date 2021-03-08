@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\ReflectionType;
 
 interface ReflectionMember
 {
@@ -50,6 +51,8 @@ interface ReflectionMember
     public function inferredTypes(): Types;
 
     public function type(): Type;
+
+    public function reflectionType(): ReflectionType;
 
     public function isVirtual(): bool;
 
