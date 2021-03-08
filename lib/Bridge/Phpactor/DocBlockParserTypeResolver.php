@@ -18,7 +18,11 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockTypeResolver;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\Placeholder;
+use Phpactor\WorseReflection\Core\Placeholders;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
@@ -42,26 +46,20 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
     private $docblock;
 
     /**
-     * @var ReflectionClassLike
+     * @var ReflectionNode
      */
-    private $class;
+    private $context;
 
     /**
-     * @var array<string,TemplateTag>
+     * @var Placeholders
      */
-    private $placeholders = [];
+    private $placeholders;
 
-    public function __construct(ReflectionClassLike $class, Docblock $docblock)
+    public function __construct(ReflectionNode $class, Docblock $docblock)
     {
         $this->docblock = $docblock;
-        $this->class = $class;
-        foreach ($docblock->tags(TemplateTag::class) as $templateTag) {
-            assert($templateTag instanceof TemplateTag);
-            if (!$templateTag->placeholder) {
-                continue;
-            }
-            $this->placeholders[$templateTag->placeholder->value] = $templateTag;
-        }
+        $this->context = $class;
+        $this->placeholders = $this->placeholders();
     }
 
     public function resolveReturn(): ReflectionType
@@ -71,6 +69,27 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
         }
 
         return new UndefinedType();
+    }
+
+    public function placeholders(): Placeholders
+    {
+        $placeholders = [];
+        foreach ($this->docblock->tags(TemplateTag::class) as $templateTag) {
+            assert($templateTag instanceof TemplateTag);
+            $constraint = $templateTag->type ? $this->resolveType($templateTag->type) : null;
+            $placeholders[$templateTag->placeholder->value] = new Placeholder(
+                $templateTag->placeholder->value,
+                $constraint
+            );
+        }
+
+        $placeholders =  new Placeholders($placeholders);
+        if ($this->context instanceof ReflectionMember) {
+            $placeholders = $placeholders->merge($this->context->class()->placeholders());
+        }
+
+        return $placeholders;
+
     }
 
     private function resolveType(Node $node): ReflectionType
@@ -102,7 +121,7 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
             return $this->resolveUnionType($node);
         }
 
-        if ($node instanceof ClassNode && isset($this->placeholders[$node->name->value])) {
+        if ($node instanceof ClassNode && $this->placeholders && $this->placeholders->has($node->name->value)) {
             return $this->resolveTemplatedType($node);
         }
 
@@ -150,15 +169,13 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
         if ($name->wasFullyQualified()) {
             return new ClassType($name);
         }
-        return new ClassType($this->class->scope()->resolveFullyQualifiedName($name)->className());
+        return new ClassType($this->context->scope()->resolveFullyQualifiedName($name)->className());
     }
 
     private function resolveTemplatedType(ClassNode $node): TemplatedType
     {
-        $placeholder = $this->placeholders[$node->name()->value];
-        assert($placeholder instanceof TemplateTag);
-        $constraint = $placeholder->type ? $this->resolveType($placeholder->type) : null;
+        $placeholder = $this->placeholders->get($node->name()->value);
 
-        return new TemplatedType($placeholder->placeholder->value, $constraint);
+        return new TemplatedType($placeholder->name(), $placeholder->constaint());
     }
 }

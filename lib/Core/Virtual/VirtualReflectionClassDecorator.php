@@ -79,9 +79,9 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $this->class->memberListPosition();
     }
 
-    public function methods(): ReflectionMethodCollection
+    public function methods(ReflectionClass $contextClass = null): ReflectionMethodCollection
     {
-        $realMethods = $this->class->methods($this->class);
+        $realMethods = $this->class->methods($contextClass ?: $this->class);
         $virtualMethods = $this->virtualMethods();
 
         return $realMethods->merge($virtualMethods);

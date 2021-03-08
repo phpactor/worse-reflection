@@ -34,7 +34,7 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
 
         $resolver = (new DocBlockParserTypeResolverFactory())->create($class, $docblock);
 
-        self::assertEquals($expected, $resolver->resolveReturn($docblock));
+        self::assertEquals($expected, $resolver->resolveReturn());
     }
 
     /**
@@ -105,13 +105,12 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
     /**
      * @dataProvider provideResolveWithContext
      */
-    public function testResolveWithContext(string $source, string $docblock, ReflectionType $expected): void
+    public function testResolveWithContext(string $source, ReflectionType $expected): void
     {
-        $class = $this->createReflector($source)->reflectClass('Foobar');
+        $method = $this->createReflector($source)->reflectClass('Foobar')->methods()->get('foo');
 
-        $resolver = (new DocBlockParserTypeResolverFactory())->create($class, $docblock);
-
-        self::assertEquals($expected, $resolver->resolveReturn($docblock));
+        $resolver = (new DocBlockParserTypeResolverFactory())->create($method, $method->docblock()->raw());
+        self::assertEquals($expected, $resolver->resolveReturn());
     }
 
     /**
@@ -120,8 +119,7 @@ class DocBlockParserTypeResolverTest extends IntegrationTestCase
     public function provideResolveWithContext(): Generator
     {
         yield [
-            '<?php /** @template T */class Foobar() {}',
-            '/** @return T */',
+            '<?php /** @template T */class Foobar { /** @return T */public function foo() {} }',
             new TemplatedType('T')
         ];
     }

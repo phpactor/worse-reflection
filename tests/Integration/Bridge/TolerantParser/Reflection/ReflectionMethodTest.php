@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Type\StringType;
+use Phpactor\WorseReflection\Core\Type\TemplatedType;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -632,7 +633,6 @@ class ReflectionMethodTest extends IntegrationTestCase
                     {
                     }
                 }
-
                 /**
                  * @extends Generic<string>
                  */
@@ -643,7 +643,8 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function (ReflectionMethodCollection $methods): void {
-                self::assertInstanceOf(StringType::class, $methods->get('value')->reflectionType());
+                self::assertEquals('Foobar', $methods->get('value')->class()->name()->__toString());
+                self::assertInstanceOf(TemplatedType::class, $methods->get('value')->reflectionType());
             },
         ];
     }

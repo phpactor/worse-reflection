@@ -9,6 +9,7 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImport;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImports;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
+use Phpactor\WorseReflection\Core\Placeholders;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionInterfaceCollection;
@@ -334,6 +335,11 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     public function docblock(): DocBlock
     {
         return $this->serviceLocator->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
+    }
+
+    public function placeholders(): Placeholders
+    {
+        return $this->serviceLocator->docblockTypeResolver()->create($this, $this->node->getLeadingCommentAndWhitespaceText())->placeholders();
     }
 
     /**
