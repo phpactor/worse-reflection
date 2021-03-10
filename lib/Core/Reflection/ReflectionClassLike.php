@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Deprecation;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
 use Phpactor\WorseReflection\Core\PhpDoc\Templates;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -35,7 +36,7 @@ interface ReflectionClassLike extends ReflectionNode
 
     public function docblock(): DocBlock;
 
-    public function deprecation(): Deprecation;
+    public function phpdoc(): PhpDoc;
 
-    public function placeholders(): Templates;
+    public function deprecation(): Deprecation;
 }

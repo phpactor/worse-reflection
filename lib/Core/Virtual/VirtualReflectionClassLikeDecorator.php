@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Virtual;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
 use Phpactor\WorseReflection\Core\PhpDoc\Templates;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
@@ -90,8 +91,8 @@ class VirtualReflectionClassLikeDecorator implements ReflectionClassLike
         return $this->classLike->deprecation();
     }
 
-    public function placeholders(): Templates
+    public function phpdoc(): PhpDoc
     {
-        return $this->classLike->placeholders();
+        return $this->classLike->phpdoc();
     }
 }

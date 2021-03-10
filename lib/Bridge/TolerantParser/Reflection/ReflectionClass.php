@@ -9,6 +9,7 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImport;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport\TraitImports;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
 use Phpactor\WorseReflection\Core\PhpDoc\Templates;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionConstantCollection;
@@ -382,5 +383,13 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     protected function node(): Node
     {
         return $this->node;
+    }
+
+    public function phpdoc(): PhpDoc
+    {
+        return $this->serviceLocator->phpdocFactory()->create(
+            $this->scope(),
+            $this->node->getLeadingCommentAndWhitespaceText()
+        );
     }
 }

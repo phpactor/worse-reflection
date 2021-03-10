@@ -61,9 +61,9 @@ class ServiceLocator
     private $methodProviders;
 
     /**
-     * @var DocBlockParserTypeResolverFactory
+     * @var ParserPhpDocFactory
      */
-    private $docblockTypeResolver;
+    private $phpdocFactory;
 
     /**
      * @param list<FrameWalker> $frameWalkers
@@ -105,7 +105,7 @@ class ServiceLocator
 
         $this->sourceLocator = $sourceLocator;
         $this->docblockFactory = new DocblockFactoryBridge();
-        $this->docblockTypeResolver = new ParserPhpDocFactory();
+        $this->phpdocFactory = new ParserPhpDocFactory();
         $this->logger = $logger;
 
         $this->symbolContextResolver = new SymbolContextResolver(
@@ -167,8 +167,8 @@ class ServiceLocator
         return $this->methodProviders;
     }
 
-    public function docblockTypeResolver(): ParserPhpDocFactory
+    public function phpdocFactory(): PhpDocFactory
     {
-        return $this->docblockTypeResolver;
+        return $this->phpdocFactory;
     }
 }

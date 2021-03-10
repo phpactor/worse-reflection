@@ -6,6 +6,8 @@ use Phpactor\DocblockParser\Ast\Docblock;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Deprecation;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocBlock;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -18,7 +20,6 @@ use Phpactor\WorseReflection\Core\Type\UndefinedType;
 use Phpactor\WorseReflection\Core\Util\OriginalMethodResolver;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
@@ -62,14 +63,14 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
     /**
      * @deprecated Use phpdoc() instead
      */
-    public function docblock(): DocBlock
+    public function docblock(): CoreDocBlock
     {
         return $this->serviceLocator()->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
     }
 
-    public function phpdoc(): Docblock
+    public function phpdoc(): PhpDoc
     {
-        return $this->serviceLocator()->phpdocFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
+        return $this->serviceLocator()->phpdocFactory()->create($this->scope(), $this->node()->getLeadingCommentAndWhitespaceText());
     }
 
     public function visibility(): Visibility

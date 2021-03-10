@@ -18,7 +18,7 @@ class GenericType implements ReflectionType
     public function __construct(ClassType $type, array $parameters)
     {
         $this->type = $type;
-        $this->parameters = $parameters;
+        $this->parameters = array_values($parameters);
     }
 
     public function parameters(): array

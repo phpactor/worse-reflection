@@ -99,10 +99,9 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function reflectionType(): PhpactorReflectionType
     {
-        return $this->serviceLocator->docblockTypeResolver()->create(
-            $this,
-            $this->node->getLeadingCommentAndWhitespaceText()
-        )->resolveReturn();
+        return $this->serviceLocator->docblockTypeResolver()->resolve(
+            $this->phpdoc()->returnType()
+        );
     }
 
     public function parameters(): CoreReflectionParameterCollection
