@@ -4,7 +4,9 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
 use Phpactor\DocblockParser\Ast\Docblock;
 use Phpactor\DocblockParser\Ast\Node;
+use Phpactor\DocblockParser\Ast\Tag\ExtendsTag;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
+use Phpactor\DocblockParser\Ast\Tag\TemplateTag;
 use Phpactor\DocblockParser\Ast\Type\ArrayNode;
 use Phpactor\DocblockParser\Ast\Type\ClassNode;
 use Phpactor\DocblockParser\Ast\Type\GenericNode;
@@ -14,7 +16,9 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\PhpDoc\ExtendsTemplate;
 use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
+use Phpactor\WorseReflection\Core\PhpDoc\Template;
 use Phpactor\WorseReflection\Core\PhpDoc\Templates;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
@@ -57,10 +61,28 @@ final class ParserPhpDoc implements PhpDoc
 
     public function templates(): Templates
     {
+        $templates = [];
+        foreach ($this->docblock->tags(TemplateTag::class) as $templateTag) {
+            assert($templateTag instanceof TemplateTag);
+            $constraint = $templateTag->type ? $this->resolveType($templateTag->type) : null;
+            $templates[$templateTag->placeholder->value] = new Template(
+                $templateTag->placeholder->value,
+                $constraint
+            );
+        }
+
+        return new Templates($templates);
     }
 
-    public function extends(): ExtendsTemplate
+    public function extends(): ?ExtendsTemplate
     {
+        foreach ($this->docblock->tags(ExtendsTag::class) as $extendsTag) {
+            assert($extendsTag instanceof ExtendsTag);
+            $type = $extendsTag->type ? $this->resolveType($extendsTag->type) : null;
+            return new ExtendsTemplate($type);
+        }
+
+        return null;
     }
 
     private function resolveType(Node $node): ReflectionType

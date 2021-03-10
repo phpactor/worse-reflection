@@ -4,13 +4,18 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor\DocblockParser;
 
 use Generator;
 use PHPUnit\Framework\TestCase;
+use Phpactor\ClassFileConverter\Domain\ClassName as PhpactorClassName;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
-use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\PhpDoc;
+use Phpactor\DocblockParser\Ast\Type\GenericNode;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\ParserPhpDocFactory;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\PhpDoc\DocBlockTypeResolver;
+use Phpactor\WorseReflection\Core\PhpDoc\ExtendsTemplate;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc as PhpactorPhpDoc;
 use Phpactor\WorseReflection\Core\PhpDoc\PhpDocFactory;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\PhpDoc\Template;
+use Phpactor\WorseReflection\Core\PhpDoc\Templates;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
@@ -26,14 +31,11 @@ use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 class ParserPhpDocTest extends IntegrationTestCase
 {
     /**
-     * @dataProvider provideResolve
+     * @dataProvider provideResolveType
      */
-    public function testResolve(string $docblock, ReflectionType $expected): void
+    public function testResolveType(string $docblock, ReflectionType $expected): void
     {
-        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
-        $scope = $reflector->reflectClass('Bar\Foobar')->scope();
-
-        $docblock = (new ParserPhpDocFactory())->create($scope, $docblock);
+        $docblock = $this->parseDocblock($docblock);
 
         self::assertEquals($expected, $docblock->returnType());
     }
@@ -41,7 +43,7 @@ class ParserPhpDocTest extends IntegrationTestCase
     /**
      * @return Generator<mixed>
      */
-    public function provideResolve(): Generator
+    public function provideResolveType(): Generator
     {
         yield [
             '/** @return string */',
@@ -96,6 +98,36 @@ class ParserPhpDocTest extends IntegrationTestCase
                 ClassName::fromString('Bar\Foobar')
             )])
         ];
+    }
+
+    public function testTemplates(): void
+    {
+        $docblock = $this->parseDocblock('/** @template T @template Y */');
+        self::assertEquals(new Templates([
+            'T' => new Template('T'),
+            'Y' => new Template('Y'),
+        ]), $docblock->templates());
+    }
+
+    public function testExtends(): void
+    {
+        $docblock = $this->parseDocblock('/** @extends Foobar<\Barfoo> */');
+        self::assertEquals(new ExtendsTemplate(
+            new GenericType(
+                new ClassType(ClassName::fromString('Bar\Foobar')),
+                [
+                    new ClassType(ClassName::fromString('\Barfoo'))
+                ]
+            ),
+        ), $docblock->extends());
+    }
+
+    private function parseDocblock(string $docblock): PhpactorPhpDoc
+    {
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $scope = $reflector->reflectClass('Bar\Foobar')->scope();
+        
+        return (new ParserPhpDocFactory())->create($scope, $docblock);
     }
 
 }

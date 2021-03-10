@@ -10,5 +10,5 @@ interface PhpDoc
 
     public function templates(): Templates;
 
-    public function extends(): ExtendsTemplate;
+    public function extends(): ?ExtendsTemplate;
 }
