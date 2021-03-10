@@ -1,33 +1,22 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\Phpactor;
+namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
-use PhpBench\Expression\Ast\StringNode;
 use Phpactor\DocblockParser\Ast\Docblock;
 use Phpactor\DocblockParser\Ast\Node;
-use Phpactor\DocblockParser\Ast\Tag\ExtendsTag;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
-use Phpactor\DocblockParser\Ast\Tag\TemplateTag;
 use Phpactor\DocblockParser\Ast\Type\ArrayNode;
 use Phpactor\DocblockParser\Ast\Type\ClassNode;
 use Phpactor\DocblockParser\Ast\Type\GenericNode;
 use Phpactor\DocblockParser\Ast\Type\ScalarNode;
 use Phpactor\DocblockParser\Ast\Type\UnionNode;
-use Phpactor\DocblockParser\Lexer;
-use Phpactor\DocblockParser\Parser;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockTypeResolver;
-use Phpactor\WorseReflection\Core\Exception\NotFound;
-use Phpactor\WorseReflection\Core\Name;
-use Phpactor\WorseReflection\Core\Placeholder;
-use Phpactor\WorseReflection\Core\Placeholders;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use Phpactor\WorseReflection\Core\PhpDoc\ExtendsTemplate;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
+use Phpactor\WorseReflection\Core\PhpDoc\Templates;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
-use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
@@ -35,44 +24,29 @@ use Phpactor\WorseReflection\Core\Type\GenericType;
 use Phpactor\WorseReflection\Core\Type\IntegerType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\StringType;
-use Phpactor\WorseReflection\Core\Type\Template;
-use Phpactor\WorseReflection\Core\Type\TemplatedType;
 use Phpactor\WorseReflection\Core\Type\UndefinedType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use RuntimeException;
-use function iterator_to_array;
 
-class DocBlockParserTypeResolver implements DocBlockTypeResolver
+final class ParserPhpDoc implements PhpDoc
 {
+    /**
+     * @var ReflectionScope
+     */
+    private $scope;
+
     /**
      * @var Docblock
      */
     private $docblock;
 
-    /**
-     * @var ReflectionNode
-     */
-    private $context;
-
-    /**
-     * @var Placeholders|null
-     */
-    private $placeholders;
-
-    /**
-     * @var ClassReflector
-     */
-    private $reflector;
-
-    public function __construct(ClassReflector $reflector, ReflectionNode $context, Docblock $docblock)
+    public function __construct(ReflectionScope $scope, Docblock $docblock)
     {
+        $this->scope = $scope;
         $this->docblock = $docblock;
-        $this->context = $context;
-        $this->reflector = $reflector;
-        $this->placeholders = $this->placeholders();
     }
 
-    public function resolveReturn(): ReflectionType
+    public function returnType(): ReflectionType
     {
         foreach ($this->docblock->tags(ReturnTag::class) as $tag) {
             return $this->resolveType($tag->type());
@@ -81,43 +55,12 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
         return new UndefinedType();
     }
 
-    public function placeholders(): Placeholders
+    public function templates(): Templates
     {
-        $placeholders = [];
-        foreach ($this->docblock->tags(TemplateTag::class) as $templateTag) {
-            assert($templateTag instanceof TemplateTag);
-            $constraint = $templateTag->type ? $this->resolveType($templateTag->type) : null;
-            $placeholders[$templateTag->placeholder->value] = new Placeholder(
-                $templateTag->placeholder->value,
-                $constraint
-            );
-        }
+    }
 
-        $placeholders =  new Placeholders($placeholders);
-
-        if ($this->context instanceof ReflectionClassLike) {
-            foreach ($this->docblock->tags(ExtendsTag::class) as $extendsTag) {
-                assert($extendsTag instanceof ExtendsTag);
-                $extends = $this->resolveType($extendsTag->type);
-                if (!$extends instanceof GenericType) {
-                    continue;
-                }
-
-                try {
-                    $extends = $this->reflector->reflectClass($extends->type()->name());
-                    $placeholders = $placeholders->merge($extends->placeholders());
-                } catch (NotFound $notFound) {
-                }
-
-            }
-        }
-
-        if ($this->context instanceof ReflectionMember) {
-            $placeholders = $placeholders->merge($this->context->class()->placeholders());
-        }
-
-        return $placeholders;
-
+    public function extends(): ExtendsTemplate
+    {
     }
 
     private function resolveType(Node $node): ReflectionType
@@ -147,10 +90,6 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
 
         if ($node instanceof UnionNode) {
             return $this->resolveUnionType($node);
-        }
-
-        if ($node instanceof ClassNode && $this->placeholders && $this->placeholders->has($node->name->value)) {
-            return $this->resolveTemplatedType($node);
         }
 
         if ($node instanceof ClassNode) {
@@ -197,13 +136,6 @@ class DocBlockParserTypeResolver implements DocBlockTypeResolver
         if ($name->wasFullyQualified()) {
             return new ClassType($name);
         }
-        return new ClassType($this->context->scope()->resolveFullyQualifiedName($name)->className());
-    }
-
-    private function resolveTemplatedType(ClassNode $node): TemplatedType
-    {
-        $placeholder = $this->placeholders->get($node->name()->value);
-
-        return new TemplatedType($placeholder->name(), $placeholder->constaint());
+        return new ClassType($this->scope->resolveFullyQualifiedName($name)->className());
     }
 }

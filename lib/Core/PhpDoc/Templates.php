@@ -1,10 +1,12 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core;
+namespace Phpactor\WorseReflection\Core\PhpDoc;
 
 use RuntimeException;
+use Phpactor\WorseReflection\Core\PhpDoc\Template;
+use Phpactor\WorseReflection\Core\PhpDoc\Templates;
 
-final class Placeholders
+final class Templates
 {
     /**
      * @var Placeholder[]
@@ -19,7 +21,7 @@ final class Placeholders
         $this->placeholders = $placeholders;
     }
 
-    public function merge(Placeholders $placeholders): self
+    public function merge(Templates $placeholders): self
     {
         return new self(array_merge($this->placeholders, $placeholders->placeholders));
     }
@@ -29,7 +31,7 @@ final class Placeholders
         return isset($this->placeholders[$name]);
     }
 
-    public function get(string $name): Placeholder
+    public function get(string $name): Template
     {
         if (!$this->has($name)) {
             throw new RuntimeException(sprintf(

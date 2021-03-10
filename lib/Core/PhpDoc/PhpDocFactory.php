@@ -1,12 +1,12 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core\DocBlock;
+namespace Phpactor\WorseReflection\Core\PhpDoc;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 
-interface DocBlockTypeResolverFactory
+interface PhpDocFactory
 {
-    public function create(ReflectionNode $scope, string $docblock): DocBlockTypeResolver;
+    public function create(ReflectionScope $scope, string $docblock): PhpDoc;
 }

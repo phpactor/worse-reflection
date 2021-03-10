@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Deprecation;
-use Phpactor\WorseReflection\Core\Placeholders;
+use Phpactor\WorseReflection\Core\PhpDoc\Templates;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\SourceCode;
@@ -37,5 +37,5 @@ interface ReflectionClassLike extends ReflectionNode
 
     public function deprecation(): Deprecation;
 
-    public function placeholders(): Placeholders;
+    public function placeholders(): Templates;
 }

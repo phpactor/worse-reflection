@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
+use Phpactor\DocblockParser\Ast\Docblock;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Deprecation;
@@ -58,9 +59,17 @@ abstract class AbstractReflectionClassMember extends AbstractReflectedNode
         return $this->serviceLocator()->frameBuilder()->build($this->node());
     }
 
+    /**
+     * @deprecated Use phpdoc() instead
+     */
     public function docblock(): DocBlock
     {
         return $this->serviceLocator()->docblockFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
+    }
+
+    public function phpdoc(): Docblock
+    {
+        return $this->serviceLocator()->phpdocFactory()->create($this->node()->getLeadingCommentAndWhitespaceText());
     }
 
     public function visibility(): Visibility

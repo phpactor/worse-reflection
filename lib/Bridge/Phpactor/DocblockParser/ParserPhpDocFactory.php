@@ -1,19 +1,20 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\Phpactor;
+namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
 use Phpactor\DocblockParser\Ast\Docblock;
 use Phpactor\DocblockParser\Lexer;
 use Phpactor\DocblockParser\Parser;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockTypeResolver;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockTypeResolverFactory;
+use Phpactor\WorseReflection\Core\PhpDoc\DocBlockTypeResolver;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDocFactory;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionNode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use RuntimeException;
 
-class DocBlockParserTypeResolverFactory implements DocBlockTypeResolverFactory
+class ParserPhpDocFactory implements PhpDocFactory
 {
     /**
      * @var Lexer
@@ -25,21 +26,15 @@ class DocBlockParserTypeResolverFactory implements DocBlockTypeResolverFactory
      */
     private $parser;
 
-    /**
-     * @var ClassReflector
-     */
-    private $reflector;
-
-    public function __construct(ClassReflector $reflector, ?Lexer $lexer = null, ?Parser $parser = null)
+    public function __construct(?Lexer $lexer = null, ?Parser $parser = null)
     {
         $this->lexer = $lexer ?: new Lexer();
         $this->parser = $parser ?: new Parser();
-        $this->reflector = $reflector;
     }
 
-    public function create(ReflectionNode $scope, string $docblock): DocBlockTypeResolver
+    public function create(ReflectionScope $scope, string $docblock): PhpDoc
     {
-        return new DocBlockParserTypeResolver($this->reflector, $scope, $this->parseDocblock($docblock));
+        return new ParserPhpDoc($scope, $this->parseDocblock($docblock));
     }
 
     private function parseDocblock(string $docblock): Docblock

@@ -1,10 +1,10 @@
 <?php
 
-namespace Phpactor\WorseReflection\Core;
+namespace Phpactor\WorseReflection\Core\PhpDoc;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 
-class Placeholder
+class Template
 {
     /**
      * @var string
