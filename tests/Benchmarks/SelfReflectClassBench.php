@@ -9,8 +9,8 @@ use Phpactor\WorseReflection\Core\ClassName;
  * @Revs(10)
  * @Warmup(1)
  * @OutputTimeUnit("milliseconds", precision=2)
- * @Assert("variant.mode <= baseline.mode +/- 10%")
- * @Assert("variant.mem_peak <= baseline.mem_final +/- 10%")
+ * @Assert("mode(variant.time.avg) <= mode(baseline.time.avg) +/- 10%")
+ * @Assert("mode(variant.mem.peak) <= mode(baseline.mem.peak) +/- 10%")
  */
 class SelfReflectClassBench extends BaseBenchCase
 {

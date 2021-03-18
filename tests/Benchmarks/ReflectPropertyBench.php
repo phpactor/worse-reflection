@@ -10,7 +10,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
  * @Iterations(10)
  * @Revs(30)
  * @OutputTimeUnit("milliseconds", precision=2)
- * @Assert("variant.mode <= baseline.mode +/- 10%")
+ * @Assert("mode(variant.time.avg) <= mode(baseline.time.avg) +/- 10%")
  */
 class ReflectPropertyBench extends BaseBenchCase
 {

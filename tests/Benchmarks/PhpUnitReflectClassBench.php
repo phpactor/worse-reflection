@@ -24,7 +24,7 @@ class PhpUnitReflectClassBench extends BaseBenchCase
     /**
      * @Subject()
      * @OutputTimeUnit("milliseconds", precision=2)
-     * @Assert("variant.mode <= baseline.mode +/- 10%")
+     * @Assert("mode(variant.time.avg) <= mode(baseline.time.avg) +/- 10%")
      */
     public function test_case_methods_and_properties(): void
     {
@@ -41,7 +41,7 @@ class PhpUnitReflectClassBench extends BaseBenchCase
      * @Subject()
      * @Revs(1)
      * @OutputTimeUnit("milliseconds", precision=2)
-     * @Assert("variant.mode <= baseline.mode +/- 10%")
+     * @Assert("mode(variant.time.avg) <= mode(baseline.time.avg) +/- 10%")
      */
     public function test_case_method_frames(): void
     {
