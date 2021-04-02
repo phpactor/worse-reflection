@@ -186,11 +186,12 @@ class ReflectionMethodTest extends IntegrationTestCase
                 EOT
         ,
             'Foobar',
-            function ($methods): void {
+            function (ReflectionMethodCollection $methods): void {
                 $this->assertEquals(
                     ['method5', 'method2', 'method3', 'method4'],
                     $methods->keys()
                 );
+                self::assertEquals('Foobar', $methods->get('method5')->class()->name()->head()->__toString());
             },
         ];
 
@@ -359,7 +360,7 @@ class ReflectionMethodTest extends IntegrationTestCase
                 EOT
         ,
             'Foobar',
-            function ($methods): void {
+            function (ReflectionMethodCollection $methods): void {
                 $this->assertEquals(Type::class(
                     ClassName::fromString('\Articles\Blog')
                 ), $methods->get('method1')->inferredTypes()->best());
