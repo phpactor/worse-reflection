@@ -17,7 +17,7 @@ use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
 
 /**
- * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty get()
+ * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty get(string $name)
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty first()
  * @method \Phpactor\WorseReflection\Core\Reflection\ReflectionProperty last()
  */

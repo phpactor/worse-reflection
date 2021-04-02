@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection as PhpactorReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
@@ -130,11 +131,16 @@ class ReflectionPropertyTest extends IntegrationTestCase
                     EOT
                 ,
                 'Foobar',
-                function ($properties): void {
+                function (PhpactorReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
                         ['property5', 'property2', 'property3', 'property4'],
                         $properties->keys()
                     );
+                    self::assertEquals(
+                        'ParentParentClass',
+                        $properties->get('property5')->declaringClass()->name()->head()->__toString()
+                    );
+                    self::assertEquals('Foobar', $properties->get('property5')->class()->name()->head()->__toString());
                 },
             ];
 
