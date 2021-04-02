@@ -471,16 +471,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:methods\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 2
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Parameter \\#3 \\$reflectionClass of static method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromClassDeclaration\\(\\) expects Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass, Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClass given\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
 			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
@@ -957,11 +947,6 @@ parameters:
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/CatchWalker.php
-
-		-
-			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/CatchWalker.php
 
@@ -2156,11 +2141,6 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:methods\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:methods\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
@@ -2207,11 +2187,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionInterfaceDecorator\\:\\:parents\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\.$#"
-			count: 1
-			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:methods\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
 
