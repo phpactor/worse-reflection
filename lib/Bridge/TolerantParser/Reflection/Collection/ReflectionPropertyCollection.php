@@ -5,13 +5,14 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Parameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionPromotedProperty;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\PropertyDeclaration;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Microsoft\PhpParser\Node\Statement\TraitDeclaration;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionTrait;
 use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
@@ -29,8 +30,11 @@ final class ReflectionPropertyCollection extends ReflectionMemberCollection impl
     public static function fromClassDeclarationConstructorPropertyPromotion(
         ServiceLocator $serviceLocator,
         ClassDeclaration $class,
-        ReflectionClass $reflectionClass
+        ReflectionClassLike $reflectionClass
     ): self {
+        if (!$reflectionClass instanceof ReflectionClass) {
+            return new static($serviceLocator, []);
+        }
         $properties = [];
         foreach ($class->classMembers->classMemberDeclarations as $classMember) {
             if (!$classMember instanceof MethodDeclaration) {
@@ -72,7 +76,7 @@ final class ReflectionPropertyCollection extends ReflectionMemberCollection impl
     /**
      * @return ReflectionPropertyCollection<ReflectionProperty>
      */
-    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClass $reflectionClass): self
+    public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClassLike $reflectionClass): self
     {
         /** @var PropertyDeclaration[] $properties */
         $properties = array_filter($class->classMembers->classMemberDeclarations, function ($member) {

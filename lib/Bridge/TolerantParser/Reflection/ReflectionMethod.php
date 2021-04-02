@@ -46,7 +46,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     private $frameBuilder;
 
     /**
-     * @var AbstractReflectionClass
+     * @var ReflectionClassLike
      */
     private $class;
 
@@ -62,7 +62,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
 
     public function __construct(
         ServiceLocator $serviceLocator,
-        AbstractReflectionClass $class,
+        ReflectionClassLike $class,
         MethodDeclaration $node
     ) {
         $this->serviceLocator = $serviceLocator;

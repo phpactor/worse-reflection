@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 
 use AppendIterator;
-use IteratorIterator;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use RuntimeException;
@@ -41,7 +40,7 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
     }
 
     /**
-     * @return IteratorIterator
+     * @return AppendIterator<ReflectionMember>
      */
     public function getIterator()
     {

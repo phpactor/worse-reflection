@@ -53,7 +53,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
 
     public function __construct(
         ServiceLocator $serviceLocator,
-        AbstractReflectionClass $class,
+        ReflectionClassLike $class,
         PropertyDeclaration $propertyDeclaration,
         Variable $variable
     ) {

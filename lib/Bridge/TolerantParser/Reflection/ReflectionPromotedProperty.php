@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Microsoft\PhpParser\Node\Parameter;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node;
@@ -49,7 +50,7 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
 
     public function __construct(
         ServiceLocator $serviceLocator,
-        AbstractReflectionClass $class,
+        ReflectionClass $class,
         Parameter $parameter
     ) {
         $this->serviceLocator = $serviceLocator;
