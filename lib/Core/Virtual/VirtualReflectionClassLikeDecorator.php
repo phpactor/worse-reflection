@@ -39,7 +39,7 @@ class VirtualReflectionClassLikeDecorator implements ReflectionClassLike
         return $this->classLike->name();
     }
 
-    public function methods(): ReflectionMethodCollection
+    public function methods(ReflectionClassLike $contextClass = null): ReflectionMethodCollection
     {
         return $this->classLike->methods();
     }

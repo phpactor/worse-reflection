@@ -15,6 +15,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceColle
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
 
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Visibility;
@@ -102,7 +103,7 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
         return false;
     }
 
-    public function methods(ReflectionInterface $context = null): CoreReflectionMethodCollection
+    public function methods(ReflectionClassLike $contextClass = null): CoreReflectionMethodCollection
     {
         if ($this->methods) {
             return $this->methods;
@@ -115,9 +116,9 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
             }
         }
 
-        $context = $context ?: $this;
+        $contextClass = $contextClass ?: $this;
         $parentMethods = ReflectionMethodCollection::fromReflectionMethods($this->serviceLocator, $parentMethods);
-        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node, $context);
+        $methods = ReflectionMethodCollection::fromInterfaceDeclaration($this->serviceLocator, $this->node, $contextClass);
 
         $this->methods =  $parentMethods->merge($methods);
 

@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollec
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionInterfaceCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
@@ -46,9 +47,9 @@ class VirtualReflectionInterfaceDecorator extends VirtualReflectionClassLikeDeco
         return $this->interface->parents();
     }
 
-    public function methods(ReflectionInterface $context = null): ReflectionMethodCollection
+    public function methods(ReflectionClassLike $contextClass = null): ReflectionMethodCollection
     {
-        $realMethods = $this->interface->methods($context);
+        $realMethods = $this->interface->methods($contextClass);
         $virtualMethods = $this->virtualMethods();
 
         return $realMethods->merge($virtualMethods);

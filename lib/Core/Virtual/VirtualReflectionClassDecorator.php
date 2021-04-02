@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Virtual;
 
+use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionConstantCollection;
@@ -11,6 +12,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollecti
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionTraitCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
@@ -56,9 +58,9 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $this->class->parent();
     }
 
-    public function properties(): ReflectionPropertyCollection
+    public function properties(ReflectionClassLike $contextClass = null): ReflectionPropertyCollection
     {
-        $realProperties = $this->class->properties();
+        $realProperties = $this->class->properties($contextClass ?: $this->class);
         $virtualProperties = $this->virtualProperties();
 
         return $realProperties->merge($virtualProperties);
@@ -79,9 +81,9 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
         return $this->class->memberListPosition();
     }
 
-    public function methods(): ReflectionMethodCollection
+    public function methods(ReflectionClassLike $contextClass = null): ReflectionMethodCollection
     {
-        $realMethods = $this->class->methods($this->class);
+        $realMethods = $this->class->methods($contextClass ?: $this->class);
         $virtualMethods = $this->virtualMethods();
 
         return $realMethods->merge($virtualMethods);

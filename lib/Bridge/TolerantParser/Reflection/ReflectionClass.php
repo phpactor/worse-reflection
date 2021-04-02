@@ -168,9 +168,10 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         }
     }
 
-    public function properties(): CoreReflectionPropertyCollection
+    public function properties(ReflectionClassLike $contextClass = null): CoreReflectionPropertyCollection
     {
         $properties = ReflectionPropertyCollection::empty($this->serviceLocator);
+        $contextClass = $contextClass ?: $this;
 
         if ($this->traits()->count() > 0) {
             foreach ($this->traits() as $trait) {
@@ -178,19 +179,20 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
             }
         }
 
-        if ($this->parent()) {
+        $parent = $this->parent();
+        if ($parent) {
             $properties = $properties->merge(
-                $this->parent()->properties()->byVisibilities([ Visibility::public(), Visibility::protected() ])
+                $parent->properties($contextClass)->byVisibilities([ Visibility::public(), Visibility::protected() ])
             );
         }
 
-        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node, $this));
-        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclarationConstructorPropertyPromotion($this->serviceLocator, $this->node, $this));
+        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclaration($this->serviceLocator, $this->node, $contextClass));
+        $properties = $properties->merge(ReflectionPropertyCollection::fromClassDeclarationConstructorPropertyPromotion($this->serviceLocator, $this->node, $contextClass));
 
         return $properties;
     }
 
-    public function methods(CoreReflectionClass $contextClass = null): CoreReflectionMethodCollection
+    public function methods(ReflectionClassLike $contextClass = null): CoreReflectionMethodCollection
     {
         $cacheKey = $contextClass ? (string) $contextClass->name() : '*_null_*';
 
