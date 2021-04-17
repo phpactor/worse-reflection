@@ -11,4 +11,8 @@ class NullCache implements Cache
     {
         return $closure();
     }
+
+    public function purge(): void
+    {
+    }
 }

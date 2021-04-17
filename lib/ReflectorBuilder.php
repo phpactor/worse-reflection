@@ -2,6 +2,9 @@
 
 namespace Phpactor\WorseReflection;
 
+use Phpactor\WorseReflection\Core\Cache;
+use Phpactor\WorseReflection\Core\Cache\NullCache;
+use Phpactor\WorseReflection\Core\Cache\TtlCache;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Phpactor\WorseReflection\Bridge\PsrLog\ArrayLogger;
 use Phpactor\WorseReflection\Core\Logger;
@@ -62,6 +65,11 @@ final class ReflectorBuilder
      * @var float
      */
     private $cacheLifetime = 5.0;
+
+    /**
+     * @var Cache|null
+     */
+    private $cache;
 
     /**
      * Create a new instance of the builder
@@ -132,9 +140,8 @@ final class ReflectorBuilder
             $this->buildReflectorFactory(),
             $this->framewalkers,
             $this->memberProviders,
-            $this->enableCache,
-            $this->enableContextualSourceLocation,
-            $this->cacheLifetime
+            $this->buildCache(),
+            $this->enableContextualSourceLocation
         ))->reflector();
     }
 
@@ -164,6 +171,13 @@ final class ReflectorBuilder
     public function enableCache(): ReflectorBuilder
     {
         $this->enableCache = true;
+
+        return $this;
+    }
+
+    public function withCache(Cache $cache): ReflectorBuilder
+    {
+        $this->cache = $cache;
 
         return $this;
     }
@@ -210,5 +224,14 @@ final class ReflectorBuilder
     private function buildReflectorFactory()
     {
         return $this->sourceReflectorFactory ?: new TolerantFactory();
+    }
+
+    private function buildCache(): Cache
+    {
+        if ($this->enableCache) {
+            return $this->cache ?: new TtlCache($this->cacheLifetime);
+        }
+
+        return new NullCache();
     }
 }

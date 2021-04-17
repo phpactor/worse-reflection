@@ -11,4 +11,6 @@ interface Cache
      * @return mixed
      */
     public function getOrSet(string $key, Closure $closure);
+
+    public function purge(): void;
 }

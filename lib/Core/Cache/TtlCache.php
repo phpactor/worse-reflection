@@ -47,6 +47,12 @@ class TtlCache implements Cache
         return $this->cache[$key];
     }
 
+    public function purge(): void
+    {
+        $this->cache = [];
+        $this->expires = [];
+    }
+
     private function purgeExpired(string $now): void
     {
         foreach ($this->expires as $key => $expires) {
