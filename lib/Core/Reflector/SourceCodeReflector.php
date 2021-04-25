@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector;
 
+use Phpactor\WorseReflection\Core\Diagnostics;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
@@ -11,6 +12,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollec
 
 interface SourceCodeReflector
 {
+    public function analyze($sourceCode): Diagnostics;
+
     /**
      * Reflect all classes (or class-likes) in the given source code.
      *
