@@ -30,9 +30,9 @@ final class SymbolContext
     private $containerType;
 
     /**
-     * @var Problem[]
+     * @var Problems
      */
-    private $problems = [];
+    private $problems;
 
     /**
      * @var ReflectionScope
@@ -52,6 +52,7 @@ final class SymbolContext
         $this->types = $types;
         $this->scope = $scope;
         $this->name = $name;
+        $this->problems = Problems::empty();
     }
 
     public static function for(Symbol $symbol): SymbolContext
@@ -126,7 +127,7 @@ final class SymbolContext
     public function withProblem(Problem $problem): SymbolContext
     {
         $new = clone $this;
-        $new->problems[] = $problem;
+        $new->problems->add($problem);
 
         return $new;
     }
@@ -173,7 +174,7 @@ final class SymbolContext
 
     public function problems(): Problems
     {
-        return new Problems($this->problems);
+        return $this->problems;
     }
 
     public function scope(): ReflectionScope
@@ -192,5 +193,12 @@ final class SymbolContext
         $new->name = $name;
 
         return $new;
+    }
+
+    public function mergeProblems(Problems $problems): self
+    {
+        $new = clone $this;
+        $new->problems->merge($problems);
+        return $this;
     }
 }

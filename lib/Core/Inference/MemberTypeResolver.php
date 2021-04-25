@@ -99,7 +99,18 @@ class MemberTypeResolver
 
         if (false === $class->$memberType()->has($name)) {
             $info = $info->withProblem(new Problem(
-                Problem::UNDEFINED,
+                (function (string $type) {
+                    if ($type === 'methods') {
+                        return Problem::METHOD_NOT_FOUND;
+                    }
+                    if ($type === 'properties') {
+                        return Problem::PROPERTY_NOT_FOUND;
+                    }
+                    if ($type === 'constants') {
+                        return Problem::CONSTANT_NOT_FOUND;
+                    }
+                    return Problem::UNDEFINED;
+                })($memberType),
                 sprintf(
                     'Class "%s" has no %s named "%s"',
                     (string) $containerType,

@@ -329,7 +329,7 @@ class SymbolContextResolver
     {
         $class = $this->_resolveNode($frame, $node->dereferencableExpression);
 
-        return $this->_infoFromMemberAccess($frame, $class->type(), $node);
+        return $this->_infoFromMemberAccess($frame, $class->type(), $node)->mergeProblems($class->problems());
     }
 
     private function resolveCallExpression(Frame $frame, CallExpression $node): SymbolContext

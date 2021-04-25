@@ -9,6 +9,9 @@ class Problem
     public const UNDEFINED = 'unknown';
     public const CLASS_NOT_FOUND = 'class_not_found';
     public const VARIABLE_UNDEFINED = 'variable_undefined';
+    public const METHOD_NOT_FOUND = 'method_not_found';
+    public const PROPERTY_NOT_FOUND = 'property_not_found';
+    public const CONSTANT_NOT_FOUND = 'constant_not_found';
 
     /**
      * @var string
@@ -38,5 +41,10 @@ class Problem
     public function message(): string
     {
         return $this->message;
+    }
+
+    public function code(): string
+    {
+        return $this->code;
     }
 }

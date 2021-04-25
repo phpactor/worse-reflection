@@ -124,7 +124,6 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
 
         $node = $this->parseSourceCode($sourceCode);
         $frame = $this->serviceLocator->frameBuilder()->build($node);
-        dump($frame->problems());
-        return Problems::empty();
+        return $frame->problems();
     }
 }

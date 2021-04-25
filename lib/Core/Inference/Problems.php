@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use IteratorAggregate;
 use Countable;
 use ArrayIterator;
+use RuntimeException;
 
 final class Problems implements IteratorAggregate, Countable
 {
@@ -48,12 +49,12 @@ final class Problems implements IteratorAggregate, Countable
         return $this->problems;
     }
 
-    public function merge(Problems $problems)
+    public function merge(Problems $problems): void
     {
-        return new self(array_merge(
+        $this->problems = array_merge(
             $this->problems,
             $problems->toArray()
-        ));
+        );
     }
 
     public function __toString(): string
@@ -62,4 +63,16 @@ final class Problems implements IteratorAggregate, Countable
             return $problem->message();
         }, $this->problems));
     }
+
+    public function first(): Problem
+    {
+        $problem = array_shift($this->problems);
+        if (null === $problem) {
+            throw new RuntimeException(
+                'No problems, cannot get first'
+            );
+        }
+        return $problem;
+    }
+
 }

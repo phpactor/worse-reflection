@@ -85,12 +85,7 @@ final class FrameBuilder
         $info = $this->symbolContextResolver->resolveNode($frame, $node);
 
         if ($info->problems()->count()) {
-            $frame->problems()->add(new Problem(
-                Problem::UNDEFINED,
-                (string)$info->problems(),
-                $info->symbol()->position()->start(),
-                $info->symbol()->position()->end()
-            ));
+            $frame->problems()->merge($info->problems());
         }
 
         return $info;
