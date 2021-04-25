@@ -37,7 +37,7 @@ class FrameBuilderTest extends IntegrationTestCase
                 }
                 EOT
         , [ 'Foobar', 'hello' ], function (Frame $frame, $logger): void {
-            $this->assertStringContainsString('Non-node class passed to resolveNode, got', (string) $frame->problems());
+            $this->assertStringContainsString('Missing token', (string) $frame->problems());
         }];
     }
 }

@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Core\Inference;
 
 use PHPUnit\Framework\TestCase;
+use Phpactor\WorseReflection\Core\Inference\Problem;
 use Phpactor\WorseReflection\Core\Inference\Problems;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 
@@ -10,10 +11,10 @@ class ProblemsTest extends TestCase
 {
     public function testMerge(): void
     {
-        $s1 = SymbolContext::none();
-        $s2 = SymbolContext::none();
-        $s3 = SymbolContext::none();
-        $s4 = SymbolContext::none();
+        $s1 = new Problem('foo', 'foo', 0, 0);
+        $s2 = new Problem('foo', 'foo', 0, 0);
+        $s3 = new Problem('foo', 'foo', 0, 0);
+        $s4 = new Problem('foo', 'foo', 0, 0);
 
         $p1 = Problems::empty();
         $p1->add($s1);

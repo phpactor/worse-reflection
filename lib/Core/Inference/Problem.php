@@ -8,6 +8,7 @@ class Problem
 {
     public const UNDEFINED = 'unknown';
     public const CLASS_NOT_FOUND = 'class_not_found';
+    public const VARIABLE_UNDEFINED = 'variable_undefined';
 
     /**
      * @var string
@@ -32,5 +33,10 @@ class Problem
         $this->message = $message;
         $this->start = $start;
         $this->end = $end;
+    }
+
+    public function message(): string
+    {
+        return $this->message;
     }
 }

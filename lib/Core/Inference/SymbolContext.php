@@ -171,9 +171,9 @@ final class SymbolContext
         return $this->containerType;
     }
 
-    public function problems(): array
+    public function problems(): Problems
     {
-        return $this->problems;
+        return new Problems($this->problems);
     }
 
     public function scope(): ReflectionScope

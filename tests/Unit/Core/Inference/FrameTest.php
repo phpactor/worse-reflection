@@ -26,8 +26,8 @@ class FrameTest extends TestCase
 
     public function testReduce(): void
     {
-        $s1 = new Problem(Problem::UNDEFINED, 'foobar', Offset::fromInt(0), Offset::fromInt(0));
-        $s2 = new Problem(Problem::UNDEFINED, 'foobar', Offset::fromInt(0), Offset::fromInt(0));
+        $s1 = new Problem(Problem::UNDEFINED, 'foobar', 0, 0);
+        $s2 = new Problem(Problem::UNDEFINED, 'foobar', 0, 0);
 
         $frame = new Frame('test');
         $frame->problems()->add($s1);

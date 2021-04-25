@@ -55,4 +55,11 @@ final class Problems implements IteratorAggregate, Countable
             $problems->toArray()
         ));
     }
+
+    public function __toString(): string
+    {
+        return implode(", ", array_map(function (Problem $problem) {
+            return $problem->message();
+        }, $this->problems));
+    }
 }

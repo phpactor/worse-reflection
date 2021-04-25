@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflector\SourceCode;
 
 use Phpactor\WorseReflection\Core\Diagnostics;
+use Phpactor\WorseReflection\Core\Inference\Problems;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollection;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
@@ -78,7 +79,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         return $offset;
     }
 
-    public function analyze($sourceCode): Diagnostics
+    public function analyze($sourceCode): Problems
     {
         return $this->innerReflector->analyze($sourceCode);
     }
