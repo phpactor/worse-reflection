@@ -7,6 +7,7 @@ use Phpactor\TextDocument\TextDocument;
 use Phpactor\WorseReflection\Core\Diagnostics;
 use Phpactor\WorseReflection\Core\Exception\CouldNotResolveNode;
 use Phpactor\WorseReflection\Core\Exception\MethodCallNotFound;
+use Phpactor\WorseReflection\Core\Inference\Problems;
 use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
@@ -117,9 +118,9 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         return $rootNode;
     }
 
-    public function analyze($sourceCode): Diagnostics
+    public function analyze($sourceCode): Problems
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
-        return Diagnostics::empty();
+        return Problems::create();
     }
 }

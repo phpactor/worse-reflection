@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflector;
 
 use Phpactor\WorseReflection\Core\Diagnostics;
+use Phpactor\WorseReflection\Core\Inference\Problems;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Reflector;
@@ -128,7 +129,7 @@ class CompositeReflector implements Reflector
         return $this->functionReflector->sourceCodeForFunction($name);
     }
 
-    public function analyze($sourceCode): Diagnostics
+    public function analyze($sourceCode): Problems
     {
         return $this->sourceCodeReflector->analyze($sourceCode);
     }

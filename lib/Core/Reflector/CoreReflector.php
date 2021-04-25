@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Diagnostics;
 use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Exception\FunctionNotFound;
+use Phpactor\WorseReflection\Core\Inference\Problems;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
@@ -207,7 +208,7 @@ class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionRefl
         return $this->sourceLocator->locate(Name::fromUnknown($name));
     }
 
-    public function analyze($sourceCode): Diagnostics
+    public function analyze($sourceCode): Problems
     {
         return $this->sourceReflector->analyze($sourceCode);
     }
