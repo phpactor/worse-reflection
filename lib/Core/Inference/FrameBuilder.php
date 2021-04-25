@@ -84,10 +84,10 @@ final class FrameBuilder
     {
         $info = $this->symbolContextResolver->resolveNode($frame, $node);
 
-        if ($info->issues()) {
+        if ($info->problems()) {
             $frame->problems()->add(new Problem(
                 Problem::UNDEFINED,
-                implode(', ', $info->issues()),
+                implode(', ', $info->problems()),
                 Offset::fromInt($info->symbol()->position()->start()),
                 Offset::fromInt($info->symbol()->position()->end())
             ));

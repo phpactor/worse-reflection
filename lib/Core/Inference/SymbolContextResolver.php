@@ -262,7 +262,7 @@ class SymbolContextResolver
             return $this->_resolveNode($frame, $node);
         } catch (CouldNotResolveNode $couldNotResolveNode) {
             return SymbolContext::none()
-                ->withIssue($couldNotResolveNode->getMessage());
+                ->withProblem($couldNotResolveNode->getMessage());
         }
     }
 
@@ -346,7 +346,7 @@ class SymbolContextResolver
             try {
                 $function = $this->reflector->reflectFunction($name);
             } catch (NotFound $exception) {
-                return $context->withIssue($exception->getMessage());
+                return $context->withProblem($exception->getMessage());
             }
 
             return $context->withTypes($function->inferredTypes())
@@ -511,11 +511,11 @@ class SymbolContextResolver
         );
 
         if (null === $symbolType) {
-            $info = $info->withIssue(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+            $info = $info->withProblem(sprintf('Could not resolve reserved word "%s"', $node->getText()));
         }
 
         if (null === $type) {
-            $info = $info->withIssue(sprintf('Could not resolve reserved word "%s"', $node->getText()));
+            $info = $info->withProblem(sprintf('Could not resolve reserved word "%s"', $node->getText()));
         }
 
         return $info;
@@ -565,7 +565,7 @@ class SymbolContextResolver
         SubscriptExpression $node = null
     ): SymbolContext {
         if (null === $node->accessExpression) {
-            $info = $info->withIssue(sprintf(
+            $info = $info->withProblem(sprintf(
                 'Subscript expression "%s" is incomplete',
                 (string) $node->getText()
             ));
@@ -575,7 +575,7 @@ class SymbolContextResolver
         $node = $node->accessExpression;
 
         if ($info->type() != Type::array()) {
-            $info = $info->withIssue(sprintf(
+            $info = $info->withProblem(sprintf(
                 'Not resolving subscript expression of type "%s"',
                 (string) $info->type()
             ));
@@ -585,7 +585,7 @@ class SymbolContextResolver
         $subjectValue = $info->value();
 
         if (false === is_array($subjectValue)) {
-            $info = $info->withIssue(sprintf(
+            $info = $info->withProblem(sprintf(
                 'Array value for symbol "%s" is not an array, is a "%s"',
                 (string) $info->symbol(),
                 gettype($subjectValue)
@@ -603,7 +603,7 @@ class SymbolContextResolver
             }
         }
 
-        $info = $info->withIssue(sprintf(
+        $info = $info->withProblem(sprintf(
             'Did not resolve access expression for node type "%s"',
             get_class($node)
         ));
@@ -772,7 +772,7 @@ class SymbolContextResolver
                 [
                     'symbol_type' => Symbol::VARIABLE
                 ]
-            )->withIssue(sprintf('Variable "%s" is undefined', $varName));
+            )->withProblem(sprintf('Variable "%s" is undefined', $varName));
         }
 
         return $variables->last()->symbolContext();

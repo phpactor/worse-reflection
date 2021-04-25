@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\Offset;
 class Problem
 {
     public const UNDEFINED = 'unknown';
+    public const CLASS_NOT_FOUND = 'class_not_found';
 
     /**
      * @var string
@@ -17,15 +18,15 @@ class Problem
      */
     private $message;
     /**
-     * @var Offset
+     * @var int
      */
     private $start;
     /**
-     * @var Offset|null
+     * @var int
      */
     private $end;
 
-    public function __construct(string $code, string $message, Offset $start, Offset $end = null)
+    public function __construct(string $code, string $message, int $start, int $end = null)
     {
         $this->code = $code;
         $this->message = $message;

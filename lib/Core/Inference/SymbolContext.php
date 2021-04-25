@@ -30,9 +30,9 @@ final class SymbolContext
     private $containerType;
 
     /**
-     * @var string[]
+     * @var Problem[]
      */
-    private $issues = [];
+    private $problems = [];
 
     /**
      * @var ReflectionScope
@@ -123,10 +123,10 @@ final class SymbolContext
         return $new;
     }
 
-    public function withIssue(string $message): SymbolContext
+    public function withProblem(Problem $problem): SymbolContext
     {
         $new = clone $this;
-        $new->issues[] = $message;
+        $new->problems[] = $problem;
 
         return $new;
     }
@@ -171,9 +171,9 @@ final class SymbolContext
         return $this->containerType;
     }
 
-    public function issues(): array
+    public function problems(): array
     {
-        return $this->issues;
+        return $this->problems;
     }
 
     public function scope(): ReflectionScope

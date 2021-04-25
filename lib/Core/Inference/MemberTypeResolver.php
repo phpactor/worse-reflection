@@ -2,11 +2,13 @@
 
 namespace Phpactor\WorseReflection\Core\Inference;
 
+use Phpactor\WorseReflection\Core\Offset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use RuntimeException;
 
 class MemberTypeResolver
 {
@@ -53,36 +55,40 @@ class MemberTypeResolver
     private function memberType(string $memberType, Type $containerType, SymbolContext $info, string $name)
     {
         if (false === $containerType->isDefined()) {
-            return $info->withIssue(sprintf(
-                'No type available for containing class "%s" for method "%s"',
-                (string) $containerType,
-                $name
-            ));
+            return $info;
         }
 
         if (false === $containerType->isClass()) {
-            return $info->withIssue(sprintf(
-                'Containing type is not a class, got "%s"',
-                (string) $containerType
+            return $info->withProblem(new Problem(
+                Problem::UNDEFINED,
+                sprintf(
+                    'Containing type is not a class, got "%s"',
+                    (string) $containerType
+                ),
+                $info->symbol()->position()->start(),
+                $info->symbol()->position()->end(),
             ));
         }
 
         try {
             $class = $this->reflectClassOrNull($containerType, $name);
         } catch (NotFound $e) {
-            $info = $info->withIssue(sprintf(
-                'Could not find container class "%s" for "%s"',
-                (string) $containerType,
-                $name
+            return $info->withProblem(new Problem(
+                Problem::CLASS_NOT_FOUND,
+                sprintf(
+                    'Class "%s" not found for member "%s"',
+                    (string) $containerType,
+                    $name
+                ),
+                $info->symbol()->position()->start(),
+                $info->symbol()->position()->end(),
             ));
-
-            return $info;
         }
 
         $info = $info->withContainerType(Type::class($class->name()));
 
         if (!method_exists($class, $memberType)) {
-            $info = $info->withIssue(sprintf(
+            throw new RuntimeException(sprintf(
                 'Container class "%s" has no method "%s"',
                 (string) $containerType,
                 $memberType
@@ -91,19 +97,19 @@ class MemberTypeResolver
             return $info;
         }
 
-        try {
-            if (false === $class->$memberType()->has($name)) {
-                $info = $info->withIssue(sprintf(
+        if (false === $class->$memberType()->has($name)) {
+            $info = $info->withProblem(new Problem(
+                Problem::UNDEFINED,
+                sprintf(
                     'Class "%s" has no %s named "%s"',
                     (string) $containerType,
                     $memberType,
                     $name
-                ));
+                ),
+                $info->symbol()->position()->start(),
+                $info->symbol()->position()->end(),
+            ));
 
-                return $info;
-            }
-        } catch (NotFound $e) {
-            $info = $info->withIssue($e->getMessage());
             return $info;
         }
 
