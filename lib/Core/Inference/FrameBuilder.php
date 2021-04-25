@@ -8,6 +8,7 @@ use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Phpactor\WorseReflection\Core\Cache;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
+use Phpactor\WorseReflection\Core\Offset;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
@@ -84,7 +85,12 @@ final class FrameBuilder
         $info = $this->symbolContextResolver->resolveNode($frame, $node);
 
         if ($info->issues()) {
-            $frame->problems()->add($info);
+            $frame->problems()->add(new Problem(
+                Problem::UNDEFINED,
+                implode(', ', $info->issues()),
+                Offset::fromInt($info->symbol()->position()->start()),
+                Offset::fromInt($info->symbol()->position()->end())
+            ));
         }
 
         return $info;

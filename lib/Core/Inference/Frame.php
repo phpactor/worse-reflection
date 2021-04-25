@@ -45,7 +45,7 @@ class Frame
     ) {
         $this->properties = $properties ?: PropertyAssignments::create();
         $this->locals = $locals ?: LocalAssignments::create();
-        $this->problems = $problems ?: Problems::create();
+        $this->problems = $problems ?: Problems::empty();
         $this->parent = $parent;
         $this->name = $name;
     }

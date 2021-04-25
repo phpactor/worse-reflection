@@ -6,9 +6,11 @@ use Phpactor\WorseReflection\Core\Inference\Assignments;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\LocalAssignments;
+use Phpactor\WorseReflection\Core\Inference\Problem;
 use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Problems;
+use Phpactor\WorseReflection\Core\Offset;
 
 class FrameTest extends TestCase
 {
@@ -24,8 +26,8 @@ class FrameTest extends TestCase
 
     public function testReduce(): void
     {
-        $s1 = SymbolContext::none();
-        $s2 = SymbolContext::none();
+        $s1 = new Problem(Problem::UNDEFINED, 'foobar', Offset::fromInt(0), Offset::fromInt(0));
+        $s2 = new Problem(Problem::UNDEFINED, 'foobar', Offset::fromInt(0), Offset::fromInt(0));
 
         $frame = new Frame('test');
         $frame->problems()->add($s1);
@@ -35,7 +37,7 @@ class FrameTest extends TestCase
 
         $problems = $frame->reduce(function (Frame $frame, Problems $problems) {
             return $problems->merge($frame->problems());
-        }, Problems::create());
+        }, Problems::empty());
 
         $this->assertEquals([ $s1, $s2 ], $problems->toArray());
     }

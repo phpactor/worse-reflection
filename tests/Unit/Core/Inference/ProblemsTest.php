@@ -15,11 +15,11 @@ class ProblemsTest extends TestCase
         $s3 = SymbolContext::none();
         $s4 = SymbolContext::none();
 
-        $p1 = Problems::create();
+        $p1 = Problems::empty();
         $p1->add($s1);
         $p1->add($s2);
 
-        $p2 = Problems::create();
+        $p2 = Problems::empty();
         $p2->add($s3);
         $p2->add($s4);
 

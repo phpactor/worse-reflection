@@ -8,30 +8,17 @@ use ArrayIterator;
 
 final class Problems implements IteratorAggregate, Countable
 {
+    /**
+     * @var Problem[]
+     */
     private $problems = [];
 
-    private function __construct(array $problems = [])
+    public function __construct(array $problems = [])
     {
         $this->problems = $problems;
     }
 
-    public function __toString()
-    {
-        $lines = [];
-        /** @var SymbolContext $symbolInformation */
-        foreach ($this->problems as $symbolInformation) {
-            $lines[] = sprintf(
-                '%s:%s %s',
-                $symbolInformation->symbol()->position()->start(),
-                $symbolInformation->symbol()->position()->end(),
-                implode(', ', $symbolInformation->issues())
-            );
-        }
-
-        return implode(PHP_EOL, $lines);
-    }
-
-    public static function create(): Problems
+    public static function empty(): Problems
     {
         return new self();
     }
@@ -41,12 +28,12 @@ final class Problems implements IteratorAggregate, Countable
         return new ArrayIterator($this->problems);
     }
 
-    public function add(SymbolContext $problem): void
+    public function add(Problem $problem): void
     {
         $this->problems[] = $problem;
     }
 
-    public function none(): bool
+    public function hasNone(): bool
     {
         return count($this->problems) === 0;
     }
