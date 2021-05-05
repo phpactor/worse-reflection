@@ -64,8 +64,8 @@ class ServiceLocator
         SourceCodeLocator $sourceLocator,
         LoggerInterface $logger,
         SourceCodeReflectorFactory $reflectorFactory,
-        array $frameWalkers = [],
-        array $methodProviders = [],
+        array $frameWalkers,
+        array $methodProviders,
         Cache $cache,
         bool $enableContextualLocation = false
     ) {
