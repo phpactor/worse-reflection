@@ -19,7 +19,7 @@ class AssertFrameWalker extends AbstractInstanceOfWalker implements FrameWalker
 
         $name = $node->callableExpression->getText();
 
-        return strtolower($name) == 'assert';
+        return strtolower($name) == 'assert' && $node->argumentExpressionList !== null;
     }
 
     public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame

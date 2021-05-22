@@ -32,6 +32,13 @@ class TraitImportsTest extends IntegrationTestCase
             }
         ];
 
+        yield 'incomplete statement' => [
+            '<?php trait A {}; class B { use }',
+            function (TraitImports $traitImports): void {
+                $this->assertCount(0, $traitImports);
+            }
+        ];
+
         yield 'simple use with alias' => [
             '<?php trait A { function foo() {}}; class B { use A { foo as bar; }',
             function (TraitImports $traitImports): void {

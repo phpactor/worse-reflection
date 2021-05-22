@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
+use Generator;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -22,8 +23,25 @@ class FrameBuilderTest extends IntegrationTestCase
         $assertion($frame, $this->logger());
     }
 
-    public function provideForMethod()
+    public function provideForMethod(): Generator
     {
+        yield 'Tolerates missing assert arguments' => [
+            <<<'EOT'
+                <?php
+
+                class Foobar
+                {
+                    public function hello()
+                    {
+                        assert();
+                    }
+                }
+                EOT
+        , [ 'Foobar', 'hello' ], function (Frame $frame, $logger): void {
+            $this->assertEquals(0, $frame->problems()->count());
+            // $this->assertStringContainsString('Non-node class passed to resolveNode, got', (string) $frame->problems());
+        }];
+
         yield 'Tolerates missing tokens' => [
             <<<'EOT'
                 <?php
