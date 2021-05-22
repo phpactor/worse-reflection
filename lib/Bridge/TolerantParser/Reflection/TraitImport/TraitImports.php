@@ -26,6 +26,10 @@ class TraitImports implements Countable, IteratorAggregate
                 continue;
             }
 
+            if ($memberDeclaration->traitNameList == null) {
+                continue;
+            }
+                
             $traitNames = array_filter(array_map(function ($name) {
                 if (!$name instanceof QualifiedName) {
                     return null;
