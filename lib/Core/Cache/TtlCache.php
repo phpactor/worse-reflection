@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Cache;
 
 use Closure;
+use Exception;
 use Phpactor\WorseReflection\Core\Cache;
 
 class TtlCache implements Cache
@@ -11,6 +12,11 @@ class TtlCache implements Cache
      * @var array<string, mixed>
      */
     private $cache = [];
+
+    /**
+     * @var array<string, Exception>
+     */
+    private $throws = [];
 
     /**
      * @var array<string, int>
@@ -37,11 +43,20 @@ class TtlCache implements Cache
         $now = microtime(true);
 
         if (isset($this->cache[$key]) && $this->expires[$key] > $now) {
+            if (isset($this->throws[$key])) {
+                throw $this->throws[$key];
+            }
+
             return $this->cache[$key];
         }
 
         $this->purgeExpired($now);
-        $this->cache[$key] = $setter();
+        try {
+            $this->cache[$key] = $setter();
+        } catch (Exception $e) {
+            $this->cache[$key] = true;
+            $this->throws[$key] = $e;
+        }
         $this->expires[$key] = microtime(true) + $this->lifetime;
 
         return $this->cache[$key];
