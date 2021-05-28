@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core\Cache;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Cache\TtlCache;
-use Exception;
 
 class TtlCacheTest extends TestCase
 {
@@ -43,23 +42,5 @@ class TtlCacheTest extends TestCase
         }
 
         self::assertLessThanOrEqual(5, $count);
-    }
-
-    public function testCachesException(): void
-    {
-        $cache = new TtlCache(1);
-        $count = 0;
-
-        for ($i = 0; $i < 5; $i++) {
-            try {
-                $cache->getOrSet('foobar', function () use (&$count): void {
-                    $count++;
-                    throw new Exception('Hello');
-                });
-            } catch (Exception $e) {
-            }
-        }
-
-        self::assertEquals(1, $count);
     }
 }
