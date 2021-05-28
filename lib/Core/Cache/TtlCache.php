@@ -56,10 +56,8 @@ class TtlCache implements Cache
         } catch (Exception $e) {
             $this->cache[$key] = true;
             $this->throws[$key] = $e;
-            throw $e;
-        } finally {
-            $this->expires[$key] = microtime(true) + $this->lifetime;
         }
+        $this->expires[$key] = microtime(true) + $this->lifetime;
 
         return $this->cache[$key];
     }
@@ -79,7 +77,6 @@ class TtlCache implements Cache
 
             unset($this->expires[$key]);
             unset($this->cache[$key]);
-            unset($this->throws[$key]);
         }
     }
 }
