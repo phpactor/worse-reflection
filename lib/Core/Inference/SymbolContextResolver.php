@@ -457,7 +457,18 @@ class SymbolContextResolver
 
     private function resolveNumericLiteral(NumericLiteral $node): SymbolContext
     {
-        $value = eval(sprintf('return %s;', $node->getText()));
+        $value = $node->getText();
+        if (0 === strpos($value, '0b')) {
+            $value = bindec(substr($value, 2));
+        } elseif (0 === strpos($value, '0x')) {
+            $value = hexdec(substr($value, 2));
+        } elseif (1 === preg_match('/^0\\d+$/', $value)) {
+            $value = octdec(substr($value, 1));
+        } elseif (1 === preg_match('/^\\d+\\.\\d*$/', $value)) {
+            $value = (float) $value;
+        } else {
+            $value = (int) $value;
+        }
 
         return $this->symbolFactory->context(
             $node->getText(),
