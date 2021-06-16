@@ -52,7 +52,7 @@ final class StubSourceLocator implements SourceCodeLocator
     private function map(): array
     {
         if (file_exists($this->serializedMapPath())) {
-            return unserialize(file_get_contents($this->serializedMapPath()));
+            return unserialize((string)file_get_contents($this->serializedMapPath()));
         }
 
         $this->buildCache();

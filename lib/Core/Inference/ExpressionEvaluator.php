@@ -80,13 +80,19 @@ class ExpressionEvaluator
         return null;
     }
 
+    /**
+     * @return mixed
+     */
     private function walkBinaryExpression(BinaryExpression $node)
     {
         $leftValue = $this->evaluate($node->leftOperand);
         $rightValue = $this->evaluate($node->rightOperand);
-        $operator = strtolower($node->operator->getText($node->getFileContents()));
+        $operator = $node->operator->getText($node->getFileContents());
+        if (!is_string($operator)) {
+            return;
+        }
 
-        switch ($operator) {
+        switch (strtolower($operator)) {
             case '===':
                 return $leftValue === $rightValue;
             case '==':

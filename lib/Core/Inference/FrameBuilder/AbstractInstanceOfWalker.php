@@ -51,9 +51,16 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
         return $variables;
     }
 
+    /**
+     * @return mixed
+     */
     protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame)
     {
         $operator = $node->operator->getText($node->getFileContents());
+
+        if (!is_string($operator)) {
+            return null;
+        }
 
         if (strtolower($operator) !== 'instanceof') {
             return null;
