@@ -548,6 +548,33 @@ class SymbolContextResolverTest extends IntegrationTestCase
                 , [], ['type' => 'int', 'value' => 12, 'symbol_type' => Symbol::NUMBER],
                 ];
 
+        yield 'It returns type for octal integer' => [
+                <<<'EOT'
+                    <?php
+
+                    012<>;
+                    EOT
+                , [], ['type' => 'int', 'value' => 012, 'symbol_type' => Symbol::NUMBER],
+                ];
+
+        yield 'It returns type for hexadecimal integer' => [
+                <<<'EOT'
+                    <?php
+
+                    0x1A<>;
+                    EOT
+                , [], ['type' => 'int', 'value' => 0x1A, 'symbol_type' => Symbol::NUMBER],
+                ];
+
+        yield 'It returns type for binary integer' => [
+                <<<'EOT'
+                    <?php
+
+                    0b11<>;
+                    EOT
+                , [], ['type' => 'int', 'value' => 0b11, 'symbol_type' => Symbol::NUMBER],
+                ];
+
         yield 'It returns type for bool true' => [
                 <<<'EOT'
                     <?php

@@ -457,8 +457,10 @@ class SymbolContextResolver
 
     private function resolveNumericLiteral(NumericLiteral $node): SymbolContext
     {
-        // note hack to cast to either an int or a float
-        $value = $node->getText() + 0;
+        // Strip PHP 7.4 underscorse separator before comparison
+        $value = $this->convertNumericStringToInternalType(
+            str_replace('_', '', $node->getText())
+        );
 
         return $this->symbolFactory->context(
             $node->getText(),
@@ -471,6 +473,27 @@ class SymbolContextResolver
                 'container_type' => $this->classTypeFromNode($node)
             ]
         );
+    }
+
+    /**
+     * @return int|float
+     */
+    private function convertNumericStringToInternalType(string $value)
+    {
+        if (1 === preg_match('/^[1-9][0-9]*$/', $value)) {
+            return (int) $value;
+        }
+        if (1 === preg_match('/^0[xX][0-9a-fA-F]+$/', $value)) {
+            return hexdec(substr($value, 2));
+        }
+        if (1 === preg_match('/^0[0-7]+$/', $value)) {
+            return octdec(substr($value, 1));
+        }
+        if (1 === preg_match('/^0[bB][01]+$/', $value)) {
+            return bindec(substr($value, 2));
+        }
+
+        return (float) $value;
     }
 
     private function resolveReservedWord(Node $node): SymbolContext
