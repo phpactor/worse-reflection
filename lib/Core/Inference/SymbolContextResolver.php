@@ -457,8 +457,7 @@ class SymbolContextResolver
 
     private function resolveNumericLiteral(NumericLiteral $node): SymbolContext
     {
-        // note hack to cast to either an int or a float
-        $value = $node->getText() + 0;
+        $value = eval(sprintf('return %s;', $node->getText()));
 
         return $this->symbolFactory->context(
             $node->getText(),
