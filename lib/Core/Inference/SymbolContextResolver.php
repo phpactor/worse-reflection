@@ -458,18 +458,9 @@ class SymbolContextResolver
     private function resolveNumericLiteral(NumericLiteral $node): SymbolContext
     {
         // Strip PHP 7.4 underscorse separator before comparison
-        $value = str_replace('_', '', $node->getText());
-        if (1 === preg_match('/^[1-9][0-9]*$/', $value)) {
-            $value = (int) $value;
-        } elseif (1 === preg_match('/^0[xX][0-9a-fA-F]+$/', $value)) {
-            $value = hexdec(substr($value, 2));
-        } elseif (1 === preg_match('/^0[0-7]+$/', $value)) {
-            $value = octdec(substr($value, 1));
-        } elseif (1 === preg_match('/^0[bB][01]+$/', $value)) {
-            $value = bindec(substr($value, 2));
-        } else {
-            $value = (float) $value;
-        }
+        $value = $this->convertNumericStringToInternalType(
+            str_replace('_', '', $node->getText())
+        );
 
         return $this->symbolFactory->context(
             $node->getText(),
@@ -482,6 +473,27 @@ class SymbolContextResolver
                 'container_type' => $this->classTypeFromNode($node)
             ]
         );
+    }
+
+    /**
+     * @return int|float
+     */
+    private function convertNumericStringToInternalType(string $value)
+    {
+        if (1 === preg_match('/^[1-9][0-9]*$/', $value)) {
+            return (int) $value;
+        }
+        if (1 === preg_match('/^0[xX][0-9a-fA-F]+$/', $value)) {
+            return hexdec(substr($value, 2));
+        }
+        if (1 === preg_match('/^0[0-7]+$/', $value)) {
+            return octdec(substr($value, 1));
+        }
+        if (1 === preg_match('/^0[bB][01]+$/', $value)) {
+            return bindec(substr($value, 2));
+        }
+
+        return (float) $value;
     }
 
     private function resolveReservedWord(Node $node): SymbolContext
