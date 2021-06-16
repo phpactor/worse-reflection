@@ -1,12 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:vars\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/Docblock.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromTag\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromDocblockType\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/Phpactor/Docblock.php
 
@@ -21,12 +16,22 @@ parameters:
 			path: lib/Bridge/Phpactor/Docblock.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromDocblockType\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromTag\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/Phpactor/Docblock.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:vars\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\.$#"
 			count: 1
 			path: lib/Bridge/Phpactor/Docblock.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionMethodFactory\\:\\:create\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/Phpactor/DocblockReflectionMethodFactory.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionMethodFactory\\:\\:parametersFrom\\(\\) has parameter \\$parameterCollection with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionParameterCollection\\.$#"
 			count: 1
 			path: lib/Bridge/Phpactor/DocblockReflectionMethodFactory.php
 
@@ -41,11 +46,6 @@ parameters:
 			path: lib/Bridge/Phpactor/DocblockReflectionMethodFactory.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionMethodFactory\\:\\:parametersFrom\\(\\) has parameter \\$parameterCollection with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionParameterCollection\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/DocblockReflectionMethodFactory.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionPropertyFactory\\:\\:typesFrom\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/Phpactor/DocblockReflectionPropertyFactory.php
@@ -56,14 +56,19 @@ parameters:
 			path: lib/Bridge/Phpactor/DocblockReflectionPropertyFactory.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\MemberProvider\\\\DocblockMemberProvider\\:\\:provideMembers\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\> but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
+			count: 1
+			path: lib/Bridge/Phpactor/MemberProvider/DocblockMemberProvider.php
+
+		-
 			message: "#^PHPDoc tag @implements contains generic type Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\ReflectionMemberProvider\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\> but interface Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\ReflectionMemberProvider is not generic\\.$#"
 			count: 1
 			path: lib/Bridge/Phpactor/MemberProvider/DocblockMemberProvider.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\MemberProvider\\\\DocblockMemberProvider\\:\\:provideMembers\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\> but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\PsrLog\\\\ArrayLogger\\:\\:messages\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: lib/Bridge/Phpactor/MemberProvider/DocblockMemberProvider.php
+			path: lib/Bridge/PsrLog/ArrayLogger.php
 
 		-
 			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\PsrLog\\\\ArrayLogger\\:\\:\\$messages has no typehint specified\\.$#"
@@ -71,9 +76,9 @@ parameters:
 			path: lib/Bridge/PsrLog/ArrayLogger.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\PsrLog\\\\ArrayLogger\\:\\:messages\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Instanceof between mixed and Microsoft\\\\PhpParser\\\\Node\\\\TraitSelectOrAliasClause will always evaluate to false\\.$#"
 			count: 1
-			path: lib/Bridge/PsrLog/ArrayLogger.php
+			path: lib/Bridge/TolerantParser/Patch/TolerantQualifiedNameResolver.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Patch\\\\TolerantQualifiedNameResolver\\:\\:getResolvedName\\(\\) has no return typehint specified\\.$#"
@@ -91,12 +96,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Patch/TolerantQualifiedNameResolver.php
 
 		-
-			message: "#^Instanceof between mixed and Microsoft\\\\PhpParser\\\\Node\\\\TraitSelectOrAliasClause will always evaluate to false\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Patch/TolerantQualifiedNameResolver.php
-
-		-
-			message: "#^Result of && is always false\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Patch\\\\TolerantQualifiedNameResolver\\:\\:isConstantName\\(\\) has parameter \\$node with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Patch/TolerantQualifiedNameResolver.php
 
@@ -111,14 +111,9 @@ parameters:
 			path: lib/Bridge/TolerantParser/Patch/TolerantQualifiedNameResolver.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Patch\\\\TolerantQualifiedNameResolver\\:\\:isConstantName\\(\\) has parameter \\$node with no typehint specified\\.$#"
+			message: "#^Result of && is always false\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Patch/TolerantQualifiedNameResolver.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\ResolvedName will always evaluate to false\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionClassMember.php
 
 		-
 			message: "#^Parameter \\#1 \\$method of method Phpactor\\\\WorseReflection\\\\Core\\\\Util\\\\OriginalMethodResolver\\:\\:resolveOriginalMember\\(\\) expects Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember, \\$this\\(Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionClassMember\\) given\\.$#"
@@ -126,7 +121,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionClassMember.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionMethodCall\\:\\:\\$node \\(Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\MemberAccessExpression\\|Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\ScopedPropertyAccessExpression\\) does not accept Microsoft\\\\PhpParser\\\\Node\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\ResolvedName will always evaluate to false\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionClassMember.php
+
+		-
+			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionMethodCall.php
 
@@ -136,7 +136,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionMethodCall.php
 
 		-
-			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionMethodCall\\:\\:callExpression\\(\\) should return Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\CallExpression but returns Microsoft\\\\PhpParser\\\\Node\\|null\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionMethodCall.php
 
@@ -146,7 +146,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionMethodCall.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionMethodCall\\:\\:callExpression\\(\\) should return Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\CallExpression but returns Microsoft\\\\PhpParser\\\\Node\\|null\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionMethodCall\\:\\:\\$node \\(Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\MemberAccessExpression\\|Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\ScopedPropertyAccessExpression\\) does not accept Microsoft\\\\PhpParser\\\\Node\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionMethodCall.php
 
@@ -161,17 +161,17 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:\\$items type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:__construct\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:keys\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:empty\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:first\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
@@ -186,12 +186,22 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 3
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:empty\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:keys\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:last\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
@@ -206,22 +216,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:get\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:first\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:last\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:offsetExists\\(\\) has parameter \\$name with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
@@ -251,14 +246,24 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:offsetExists\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:\\$items type has no value type specified in iterable type array\\.$#"
 			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 3
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionArgumentCollection\\:\\:fromArgumentListAndFrame\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionArgumentCollection\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionArgumentCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionClassCollection\\:\\:concrete\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionClassCollection.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionClassCollection\\:\\:fromNode\\(\\) has no return typehint specified\\.$#"
@@ -276,18 +281,13 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionClassCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionClassCollection\\:\\:concrete\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionClassCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionConstantCollection\\:\\:fromClassDeclaration\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionConstantCollection.php
 
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 3
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionConstantCollection\\:\\:fromInterfaceDeclaration\\(\\) has no return typehint specified\\.$#"
+			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionConstantCollection.php
 
 		-
@@ -301,8 +301,8 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionConstantCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionConstantCollection\\:\\:fromInterfaceDeclaration\\(\\) has no return typehint specified\\.$#"
-			count: 1
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 3
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionConstantCollection.php
 
 		-
@@ -311,7 +311,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionFunctionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\:\\:fromInterfaceDeclaration\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\:\\:fromBaseClause\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\:\\:fromBaseClause\\(\\) has parameter \\$baseClause with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
 
@@ -321,12 +326,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\:\\:fromBaseClause\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\:\\:fromBaseClause\\(\\) has parameter \\$baseClause with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\:\\:fromInterfaceDeclaration\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
 
@@ -341,11 +341,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
 
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 2
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\:\\:methods\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection but returns Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
@@ -356,7 +351,17 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
 
 		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 2
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromClassDeclaration\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromReflectionMethods\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
 
@@ -366,9 +371,14 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromReflectionMethods\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			message: "#^If condition is always true\\.$#"
+			count: 2
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionParameterCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionParameterCollection\\:\\:fromFunctionDeclaration\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionParameterCollection.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionParameterCollection\\:\\:fromMethodDeclaration\\(\\) has no return typehint specified\\.$#"
@@ -376,18 +386,8 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionParameterCollection.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 2
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionParameterCollection.php
-
-		-
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
 			count: 2
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionParameterCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionParameterCollection\\:\\:fromFunctionDeclaration\\(\\) has no return typehint specified\\.$#"
-			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionParameterCollection.php
 
 		-
@@ -431,27 +431,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionArgument.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:\\$methods type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:\\$ancestors has no typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between false and true will always evaluate to false\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 4
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
+			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
@@ -461,22 +441,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:parent\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClass\\|null but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Parameter \\#1 \\$serviceLocator of static method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\:\\:empty\\(\\) expects Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ServiceLocator, Phpactor\\\\WorseReflection\\\\Core\\\\ServiceLocator given\\.$#"
-			count: 2
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
@@ -486,7 +456,37 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\Node\\\\QualifiedName\\|Microsoft\\\\PhpParser\\\\Token will always evaluate to false\\.$#"
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 4
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
+
+		-
+			message: "#^Parameter \\#1 \\$serviceLocator of static method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\:\\:empty\\(\\) expects Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ServiceLocator, Phpactor\\\\WorseReflection\\\\Core\\\\ServiceLocator given\\.$#"
+			count: 2
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:\\$ancestors has no typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:\\$methods type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between false and true will always evaluate to false\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionFunction\\:\\:body\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\NodeText but return statement is missing\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionFunction.php
 
@@ -496,17 +496,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionFunction.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionFunction\\:\\:body\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\NodeText but return statement is missing\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\Node\\\\QualifiedName\\|Microsoft\\\\PhpParser\\\\Token will always evaluate to false\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionFunction.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:\\$parents has no typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
-
-		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:\\$methods has no typehint specified\\.$#"
+			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
 
@@ -516,27 +511,32 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:parents\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:methods\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\ResolvedName will always evaluate to false\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:parents\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:\\$methods has no typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:\\$parents has no typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
+
+		-
+			message: "#^Access to an undefined property Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\CompoundStatementNode\\|Microsoft\\\\PhpParser\\\\Token\\:\\:\\$statements\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionMethod.php
 
 		-
-			message: "#^Access to an undefined property Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\CompoundStatementNode\\|Microsoft\\\\PhpParser\\\\Token\\:\\:\\$statements\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\ResolvedName will always evaluate to false\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionMethod.php
 
@@ -571,27 +571,17 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionScope.php
 
 		-
-			message: "#^Parameter \\#3 \\$reflectionTrait of static method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromTraitDeclaration\\(\\) expects Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionClass, Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike given\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionTrait.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionTrait\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionTrait.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImport\\:\\:\\$traitAliases type has no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#3 \\$reflectionTrait of static method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromTraitDeclaration\\(\\) expects Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionClass, Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike given\\.$#"
 			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImport.php
+			path: lib/Bridge/TolerantParser/Reflection/ReflectionTrait.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImport\\:\\:__construct\\(\\) has parameter \\$traitAliases with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImport.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImport\\:\\:traitAliases\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImport.php
 
@@ -606,14 +596,14 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImport.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImport\\:\\:traitAliases\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
+			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImport.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports\\:\\:\\$imports has no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImport\\:\\:\\$traitAliases type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
+			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImport.php
 
 		-
 			message: "#^Argument of an invalid type Microsoft\\\\PhpParser\\\\Node\\\\DelimitedList\\\\TraitSelectOrAliasClauseList supplied for foreach, only iterables are supported\\.$#"
@@ -621,7 +611,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports\\:\\:has\\(\\) has no return typehint specified\\.$#"
+			message: "#^Class Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
 
@@ -631,12 +621,22 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports\\:\\:has\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports\\:\\:visiblity\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TypeResolver\\\\DeclaredMemberTypeResolver\\:\\:resolve\\(\\) has parameter \\$tolerantType with no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports\\:\\:\\$imports has no typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
+
+		-
+			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/TypeResolver/DeclaredMemberTypeResolver.php
 
@@ -646,12 +646,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/TypeResolver/DeclaredMemberTypeResolver.php
 
 		-
-			message: "#^Parameter \\#1 \\$type of static method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:fromString\\(\\) expects string, bool\\|string\\|null given\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TypeResolver\\\\DeclaredMemberTypeResolver\\:\\:resolve\\(\\) has parameter \\$tolerantType with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/TypeResolver/DeclaredMemberTypeResolver.php
 
 		-
-			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			message: "#^Parameter \\#1 \\$type of static method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:fromString\\(\\) expects string, bool\\|string\\|null given\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/TypeResolver/DeclaredMemberTypeResolver.php
 
@@ -661,22 +661,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectFunctionsIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectMethodCall\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectFunctionsIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
 
@@ -696,12 +686,17 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$ticker has no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
 			count: 1
-			path: lib/Core/Cache/TtlCache.php
+			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$lifetime \\(int\\) does not accept float\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
+
+		-
+			message: "#^Array \\(array\\<string, int\\>\\) does not accept float\\.$#"
 			count: 1
 			path: lib/Core/Cache/TtlCache.php
 
@@ -711,19 +706,14 @@ parameters:
 			path: lib/Core/Cache/TtlCache.php
 
 		-
-			message: "#^Array \\(array\\<string, int\\>\\) does not accept float\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$lifetime \\(int\\) does not accept float\\.$#"
 			count: 1
 			path: lib/Core/Cache/TtlCache.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DefaultValue\\:\\:\\$value has no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$ticker has no typehint specified\\.$#"
 			count: 1
-			path: lib/Core/DefaultValue.php
-
-		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DefaultValue\\:\\:\\$undefined has no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/DefaultValue.php
+			path: lib/Core/Cache/TtlCache.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DefaultValue\\:\\:__construct\\(\\) has parameter \\$value with no typehint specified\\.$#"
@@ -737,6 +727,16 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DefaultValue\\:\\:value\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/DefaultValue.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DefaultValue\\:\\:\\$undefined has no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/DefaultValue.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DefaultValue\\:\\:\\$value has no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/DefaultValue.php
 
@@ -756,11 +756,6 @@ parameters:
 			path: lib/Core/DocBlock/DocBlockVars.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:\\$vars type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/DocBlock/DocBlockVars.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/DocBlock/DocBlockVars.php
@@ -771,9 +766,19 @@ parameters:
 			path: lib/Core/DocBlock/DocBlockVars.php
 
 		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:\\$vars type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: lib/Core/DocBlock/DocBlockVars.php
+
+		-
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
 			count: 6
 			path: lib/Core/Inference/Assignments.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:evaluate\\(\\) has no return typehint specified\\.$#"
@@ -786,32 +791,12 @@ parameters:
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkReservedWord\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/ExpressionEvaluator.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkBinaryExpression\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/ExpressionEvaluator.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, bool\\|string\\|null given\\.$#"
-			count: 1
-			path: lib/Core/Inference/ExpressionEvaluator.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkNumericLiteral\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, float given\\.$#"
-			count: 1
-			path: lib/Core/Inference/ExpressionEvaluator.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkPrefixUpdateExpression\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkParenthesizedExpression\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
@@ -821,7 +806,22 @@ parameters:
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkPrefixUpdateExpression\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/ExpressionEvaluator.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkReservedWord\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/ExpressionEvaluator.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkStringLiteral\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/ExpressionEvaluator.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkTernary\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
@@ -836,22 +836,12 @@ parameters:
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkParenthesizedExpression\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/ExpressionEvaluator.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\ExpressionEvaluator\\:\\:walkTernary\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/ExpressionEvaluator.php
-
-		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, float given\\.$#"
 			count: 1
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
@@ -861,12 +851,12 @@ parameters:
 			path: lib/Core/Inference/ExpressionEvaluator.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:\\$problems type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:__construct\\(\\) has parameter \\$problems with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
 			count: 1
 			path: lib/Core/Inference/Frame.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:__construct\\(\\) has parameter \\$problems with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:children\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Inference/Frame.php
 
@@ -891,12 +881,12 @@ parameters:
 			path: lib/Core/Inference/Frame.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:children\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:withLocals\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/Frame.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:withLocals\\(\\) has no return typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Frame\\:\\:\\$problems type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
 			count: 1
 			path: lib/Core/Inference/Frame.php
 
@@ -911,16 +901,6 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\AbstractInstanceOfWalker\\:\\:variableFromBinaryExpression\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/AbstractInstanceOfWalker.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, bool\\|string\\|null given\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/AbstractInstanceOfWalker.php
-
-		-
 			message: "#^Instanceof between Microsoft\\\\PhpParser\\\\Node\\\\Expression and Microsoft\\\\PhpParser\\\\Node\\\\QualifiedName will always evaluate to false\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/AbstractInstanceOfWalker.php
@@ -929,11 +909,6 @@ parameters:
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/AbstractInstanceOfWalker.php
-
-		-
-			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
-			count: 3
-			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
 
 		-
 			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
@@ -946,12 +921,17 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
 
 		-
+			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
+			count: 3
+			path: lib/Core/Inference/FrameBuilder/AssignmentWalker.php
+
+		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/CatchWalker.php
 
 		-
-			message: "#^Parameter \\#3 \\$node of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\FunctionLikeWalker\\:\\:walkFunctionLike\\(\\) expects Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\AnonymousFunctionCreationExpression\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\FunctionDeclaration, Microsoft\\\\PhpParser\\\\FunctionLike&Microsoft\\\\PhpParser\\\\Node given\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\FunctionLikeWalker\\:\\:functionName\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/FunctionLikeWalker.php
 
@@ -961,9 +941,14 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/FunctionLikeWalker.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\FunctionLikeWalker\\:\\:functionName\\(\\) has no return typehint specified\\.$#"
+			message: "#^Parameter \\#3 \\$node of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\FunctionLikeWalker\\:\\:walkFunctionLike\\(\\) expects Microsoft\\\\PhpParser\\\\Node\\\\Expression\\\\AnonymousFunctionCreationExpression\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\FunctionDeclaration, Microsoft\\\\PhpParser\\\\FunctionLike&Microsoft\\\\PhpParser\\\\Node given\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/FunctionLikeWalker.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\IncludeWalker\\:\\:processAssignment\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/FrameBuilder/IncludeWalker.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
@@ -976,22 +961,17 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/IncludeWalker.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\IncludeWalker\\:\\:processAssignment\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder/IncludeWalker.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Assignments\\:\\:byName\\(\\) expects string, bool\\|string\\|null given\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/IncludeWalker.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between false and true will always evaluate to false\\.$#"
+			message: "#^Argument of an invalid type array\\<Microsoft\\\\PhpParser\\\\Node\\\\StatementNode\\>\\|Microsoft\\\\PhpParser\\\\Node\\\\StatementNode supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/InstanceOfWalker.php
 
 		-
-			message: "#^Argument of an invalid type array\\<Microsoft\\\\PhpParser\\\\Node\\\\StatementNode\\>\\|Microsoft\\\\PhpParser\\\\Node\\\\StatementNode supplied for foreach, only iterables are supported\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\InstanceOfWalker\\:\\:existingOrStripType\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/InstanceOfWalker.php
 
@@ -1006,7 +986,7 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/InstanceOfWalker.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\\\InstanceOfWalker\\:\\:existingOrStripType\\(\\) has no return typehint specified\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between false and true will always evaluate to false\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder/InstanceOfWalker.php
 
@@ -1016,12 +996,12 @@ parameters:
 			path: lib/Core/Inference/FrameBuilder/VariableWalker.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:resolve\\(\\) has parameter \\$type with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:currentClass\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:isFunctionCall\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:fromClassImports\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
 
@@ -1031,17 +1011,7 @@ parameters:
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:parentClass\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FullyQualifiedNameResolver.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\ClassDeclaration will always evaluate to false\\.$#"
-			count: 1
-			path: lib/Core/Inference/FullyQualifiedNameResolver.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:currentClass\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:isFunctionCall\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
 
@@ -1051,7 +1021,17 @@ parameters:
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:fromClassImports\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:parentClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/FullyQualifiedNameResolver.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:resolve\\(\\) has parameter \\$type with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/FullyQualifiedNameResolver.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\ClassDeclaration will always evaluate to false\\.$#"
 			count: 1
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
 
@@ -1071,6 +1051,16 @@ parameters:
 			path: lib/Core/Inference/MemberTypeResolver.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\NodeReflector\\:\\:reflectMemberAccessExpression\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/NodeReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\NodeReflector\\:\\:reflectMethodCall\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/NodeReflector.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\NodeReflector\\:\\:reflectNode\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/NodeReflector.php
@@ -1081,7 +1071,7 @@ parameters:
 			path: lib/Core/Inference/NodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\NodeReflector\\:\\:reflectMemberAccessExpression\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\NodeReflector\\:\\:reflectStaticMethodCall\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/NodeReflector.php
 
@@ -1091,22 +1081,7 @@ parameters:
 			path: lib/Core/Inference/NodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\NodeReflector\\:\\:reflectMethodCall\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/NodeReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\NodeReflector\\:\\:reflectStaticMethodCall\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/NodeReflector.php
-
-		-
 			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/Inference/Problems.php
-
-		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:\\$problems type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Inference/Problems.php
 
@@ -1126,17 +1101,22 @@ parameters:
 			path: lib/Core/Inference/Problems.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Inference/Problems.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:merge\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/Problems.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:merge\\(\\) has parameter \\$problems with no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
+			count: 1
+			path: lib/Core/Inference/Problems.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: lib/Core/Inference/Problems.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:\\$problems type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Inference/Problems.php
 
@@ -1156,27 +1136,12 @@ parameters:
 			path: lib/Core/Inference/SymbolContext.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:fromTypeAndValue\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContext.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:fromType\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/SymbolContext.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:withValue\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContext.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:withScope\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContext.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:value\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:fromTypeAndValue\\(\\) has parameter \\$value with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/SymbolContext.php
 
@@ -1191,12 +1156,27 @@ parameters:
 			path: lib/Core/Inference/SymbolContext.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 2
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:value\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/SymbolContext.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:withScope\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/SymbolContext.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContext\\:\\:withValue\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/SymbolContext.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
 			path: lib/Core/Inference/SymbolContextResolver.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveNode\\(\\) has parameter \\$node with no typehint specified\\.$#"
+			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: lib/Core/Inference/SymbolContextResolver.php
 
@@ -1206,7 +1186,27 @@ parameters:
 			path: lib/Core/Inference/SymbolContextResolver.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveVariable\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:classTypeFromNode\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/SymbolContextResolver.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:getClassLikeAncestor\\(\\) should return Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\ClassDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\InterfaceDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\TraitDeclaration but returns Microsoft\\\\PhpParser\\\\Node\\|null\\.$#"
+			count: 1
+			path: lib/Core/Inference/SymbolContextResolver.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveNode\\(\\) has parameter \\$node with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/SymbolContextResolver.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveObjectCreationExpression\\(\\) has parameter \\$node with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Inference/SymbolContextResolver.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveParenthesizedExpression\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/SymbolContextResolver.php
 
@@ -1221,42 +1221,7 @@ parameters:
 			path: lib/Core/Inference/SymbolContextResolver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\ClassDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\InterfaceDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\TraitDeclaration will always evaluate to false\\.$#"
-			count: 2
-			path: lib/Core/Inference/SymbolContextResolver.php
-
-		-
-			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
-			count: 3
-			path: lib/Core/Inference/SymbolContextResolver.php
-
-		-
-			message: "#^Binary operation \"\\+\" between string and 0 results in an error\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContextResolver.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveObjectCreationExpression\\(\\) has parameter \\$node with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContextResolver.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContextResolver.php
-
-		-
-			message: "#^Method Microsoft\\\\PhpParser\\\\Node\\:\\:getText\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContextResolver.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:classTypeFromNode\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/SymbolContextResolver.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveParenthesizedExpression\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:resolveVariable\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/SymbolContextResolver.php
 
@@ -1266,8 +1231,18 @@ parameters:
 			path: lib/Core/Inference/SymbolContextResolver.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolContextResolver\\:\\:getClassLikeAncestor\\(\\) should return Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\ClassDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\InterfaceDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\TraitDeclaration but returns Microsoft\\\\PhpParser\\\\Node\\|null\\.$#"
-			count: 1
+			message: "#^Parameter \\#1 \\$symbolName of method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\SymbolFactory\\:\\:context\\(\\) expects string, bool\\|string\\|null given\\.$#"
+			count: 3
+			path: lib/Core/Inference/SymbolContextResolver.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\ClassDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\InterfaceDeclaration\\|Microsoft\\\\PhpParser\\\\Node\\\\Statement\\\\TraitDeclaration will always evaluate to false\\.$#"
+			count: 2
+			path: lib/Core/Inference/SymbolContextResolver.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 2
 			path: lib/Core/Inference/SymbolContextResolver.php
 
 		-
@@ -1286,19 +1261,14 @@ parameters:
 			path: lib/Core/Inference/Variable.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Variable\\:\\:withTypes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/Variable.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Variable\\:\\:withOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/Variable.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Name\\:\\:\\$parts has no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Variable\\:\\:withTypes\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: lib/Core/Name.php
+			path: lib/Core/Inference/Variable.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Name\\:\\:__construct\\(\\) has parameter \\$parts with no value type specified in iterable type array\\.$#"
@@ -1331,11 +1301,6 @@ parameters:
 			path: lib/Core/Name.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Name\\:\\:tail\\(\\) should return static\\(Phpactor\\\\WorseReflection\\\\Core\\\\Name\\) but returns Phpactor\\\\WorseReflection\\\\Core\\\\Name\\.$#"
-			count: 1
-			path: lib/Core/Name.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Name\\:\\:prepend\\(\\) has parameter \\$name with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Name.php
@@ -1356,12 +1321,17 @@ parameters:
 			path: lib/Core/Name.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\NameImports implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Name\\:\\:tail\\(\\) should return static\\(Phpactor\\\\WorseReflection\\\\Core\\\\Name\\) but returns Phpactor\\\\WorseReflection\\\\Core\\\\Name\\.$#"
 			count: 1
-			path: lib/Core/NameImports.php
+			path: lib/Core/Name.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:\\$nameImports has no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Name\\:\\:\\$parts has no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Name.php
+
+		-
+			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\NameImports implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: lib/Core/NameImports.php
 
@@ -1381,12 +1351,12 @@ parameters:
 			path: lib/Core/NameImports.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:getByAlias\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/NameImports.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:getByAlias\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
 			count: 1
 			path: lib/Core/NameImports.php
 
@@ -1396,12 +1366,17 @@ parameters:
 			path: lib/Core/NameImports.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\NodeText\\:\\:\\$nodeText has no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:\\$nameImports has no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/NameImports.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NodeText\\:\\:__construct\\(\\) has parameter \\$nodeText with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/NodeText.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NodeText\\:\\:__construct\\(\\) has parameter \\$nodeText with no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\NodeText\\:\\:\\$nodeText has no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/NodeText.php
 
@@ -1496,22 +1471,22 @@ parameters:
 			path: lib/Core/Reflection/ReflectionClass.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClass\\:\\:traits\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionTraitCollection\\.$#"
-			count: 1
-			path: lib/Core/Reflection/ReflectionClass.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClass\\:\\:isFinal\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflection/ReflectionClass.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClass\\:\\:traits\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionTraitCollection\\.$#"
+			count: 1
+			path: lib/Core/Reflection/ReflectionClass.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:isConcrete\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflection/ReflectionClassLike.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:isConcrete\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Reflection/ReflectionClassLike.php
 
@@ -1591,6 +1566,11 @@ parameters:
 			path: lib/Core/Reflector/ClassReflector.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\:\\:reflectClassLike\\(\\) has parameter \\$className with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/ClassReflector.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\:\\:reflectInterface\\(\\) has parameter \\$className with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/ClassReflector.php
@@ -1601,22 +1581,7 @@ parameters:
 			path: lib/Core/Reflector/ClassReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\:\\:reflectClassLike\\(\\) has parameter \\$className with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/ClassReflector.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\\\MemonizedReflector\\:\\:reflectClass\\(\\) has parameter \\$className with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/ClassReflector/MemonizedReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\\\MemonizedReflector\\:\\:reflectInterface\\(\\) has parameter \\$className with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/ClassReflector/MemonizedReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\\\MemonizedReflector\\:\\:reflectTrait\\(\\) has parameter \\$className with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/ClassReflector/MemonizedReflector.php
 
@@ -1631,17 +1596,17 @@ parameters:
 			path: lib/Core/Reflector/ClassReflector/MemonizedReflector.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\\\MemonizedReflector\\:\\:reflectInterface\\(\\) has parameter \\$className with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/ClassReflector/MemonizedReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\ClassReflector\\\\MemonizedReflector\\:\\:reflectTrait\\(\\) has parameter \\$className with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/ClassReflector/MemonizedReflector.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectClass\\(\\) has parameter \\$className with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/CompositeReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectInterface\\(\\) has parameter \\$className with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/CompositeReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectTrait\\(\\) has parameter \\$className with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/CompositeReflector.php
 
@@ -1656,12 +1621,17 @@ parameters:
 			path: lib/Core/Reflector/CompositeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectFunction\\(\\) has parameter \\$name with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/CompositeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectFunctionsIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/CompositeReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectInterface\\(\\) has parameter \\$className with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/CompositeReflector.php
 
@@ -1676,12 +1646,17 @@ parameters:
 			path: lib/Core/Reflector/CompositeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectFunctionsIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/CompositeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectFunction\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/CompositeReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CompositeReflector\\:\\:reflectTrait\\(\\) has parameter \\$className with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/CompositeReflector.php
 
@@ -1701,12 +1676,7 @@ parameters:
 			path: lib/Core/Reflector/CoreReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CoreReflector\\:\\:reflectMethodCall\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/CoreReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CoreReflector\\:\\:reflectMethodCall\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CoreReflector\\:\\:reflectFunction\\(\\) has parameter \\$name with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/CoreReflector.php
 
@@ -1716,7 +1686,12 @@ parameters:
 			path: lib/Core/Reflector/CoreReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CoreReflector\\:\\:reflectFunction\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CoreReflector\\:\\:reflectMethodCall\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/CoreReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\CoreReflector\\:\\:reflectMethodCall\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/CoreReflector.php
 
@@ -1731,12 +1706,7 @@ parameters:
 			path: lib/Core/Reflector/SourceCode/ContextualSourceCodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCode\\\\ContextualSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/SourceCode/ContextualSourceCodeReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCode\\\\ContextualSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCode\\\\ContextualSourceCodeReflector\\:\\:reflectFunctionsIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/SourceCode/ContextualSourceCodeReflector.php
 
@@ -1751,7 +1721,12 @@ parameters:
 			path: lib/Core/Reflector/SourceCode/ContextualSourceCodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCode\\\\ContextualSourceCodeReflector\\:\\:reflectFunctionsIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCode\\\\ContextualSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/SourceCode/ContextualSourceCodeReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCode\\\\ContextualSourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/SourceCode/ContextualSourceCodeReflector.php
 
@@ -1766,16 +1741,6 @@ parameters:
 			path: lib/Core/Reflector/SourceCodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/SourceCodeReflector.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflector/SourceCodeReflector.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCodeReflector\\:\\:reflectMethodCall\\(\\) has parameter \\$offset with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflector/SourceCodeReflector.php
@@ -1786,7 +1751,27 @@ parameters:
 			path: lib/Core/Reflector/SourceCodeReflector.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:fromUnknown\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/SourceCodeReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflector\\\\SourceCodeReflector\\:\\:reflectOffset\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Reflector/SourceCodeReflector.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:empty\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/SourceCode.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:fromPath\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/SourceCode.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:fromPathAndString\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/SourceCode.php
 
@@ -1801,27 +1786,17 @@ parameters:
 			path: lib/Core/SourceCode.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:fromPath\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/SourceCode.php
-
-		-
-			message: "#^Parameter \\#1 \\$source of class Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode constructor expects string, string\\|false given\\.$#"
-			count: 1
-			path: lib/Core/SourceCode.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:empty\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/SourceCode.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:fromPathAndString\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:fromUnknown\\(\\) has parameter \\$value with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/SourceCode.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode\\:\\:path\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/SourceCode.php
+
+		-
+			message: "#^Parameter \\#1 \\$source of class Phpactor\\\\WorseReflection\\\\Core\\\\SourceCode constructor expects string, string\\|false given\\.$#"
 			count: 1
 			path: lib/Core/SourceCode.php
 
@@ -1856,26 +1831,6 @@ parameters:
 			path: lib/Core/SourceCodeLocator/NativeReflectionFunctionSourceLocator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\StubSourceLocator\\:\\:map\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
-
-		-
-			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, string\\|false given\\.$#"
-			count: 1
-			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\StubSourceLocator\\:\\:serializedMapPath\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\StubSourceLocator\\:\\:fileIterator\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\StubSourceLocator\\:\\:buildClassMap\\(\\) has parameter \\$file with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
@@ -1906,12 +1861,32 @@ parameters:
 			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
 
 		-
-			message: "#^Ternary operator condition is always true\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\StubSourceLocator\\:\\:fileIterator\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\StubSourceLocator\\:\\:map\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\StubSourceLocator\\:\\:serializedMapPath\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
+
+		-
+			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: lib/Core/Type.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:class\\(\\) has parameter \\$className with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Type.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:create\\(\\) has parameter \\$type with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Type.php
 
@@ -1926,24 +1901,14 @@ parameters:
 			path: lib/Core/Type.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:class\\(\\) has parameter \\$className with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:object\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Type.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:create\\(\\) has parameter \\$type with no typehint specified\\.$#"
+			message: "#^Ternary operator condition is always true\\.$#"
 			count: 1
 			path: lib/Core/Type.php
-
-		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Types\\:\\:\\$types has no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Types.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Types\\:\\:__construct\\(\\) has parameter \\$inferredTypes with no typehint specified\\.$#"
@@ -1957,6 +1922,11 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Types\\:\\:fromTypes\\(\\) has parameter \\$inferredTypes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: lib/Core/Types.php
+
+		-
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Types\\:\\:\\$types has no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Types.php
 
@@ -1976,17 +1946,32 @@ parameters:
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:\\$items type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:__construct\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:first\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
+			count: 1
+			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:keys\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:last\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
@@ -2006,27 +1991,7 @@ parameters:
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:get\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:first\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:last\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:offsetExists\\(\\) has parameter \\$name with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
@@ -2056,12 +2021,22 @@ parameters:
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:offsetExists\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:\\$items type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
 			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMemberCollection implements generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection but does not specify its types\\: T$#"
+			count: 1
+			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMemberCollection\\:\\:byVisibilities\\(\\) has parameter \\$visibilities with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
 
@@ -2081,11 +2056,6 @@ parameters:
 			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMemberCollection\\:\\:byVisibilities\\(\\) has parameter \\$visibilities with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMethodCollection\\:\\:fromReflectionMethods\\(\\) has parameter \\$reflectionMethods with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/VirtualReflectionMethodCollection.php
@@ -2094,6 +2064,11 @@ parameters:
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMethodCollection\\:\\:fromReflectionMethods\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMethodCollection\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/VirtualReflectionMethodCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionParameterCollection\\:\\:empty\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Virtual/Collection/VirtualReflectionParameterCollection.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionParameterCollection\\:\\:fromReflectionParameters\\(\\) has no return typehint specified\\.$#"
@@ -2108,11 +2083,6 @@ parameters:
 		-
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
 			count: 2
-			path: lib/Core/Virtual/Collection/VirtualReflectionParameterCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionParameterCollection\\:\\:empty\\(\\) has no return typehint specified\\.$#"
-			count: 1
 			path: lib/Core/Virtual/Collection/VirtualReflectionParameterCollection.php
 
 		-
@@ -2131,12 +2101,12 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:properties\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionPropertyCollection but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:ancestors\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionClassCollection\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:traits\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionTraitCollection\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
@@ -2146,7 +2116,12 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:properties\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionPropertyCollection but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
+			count: 1
+			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:traits\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionTraitCollection\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
@@ -2161,22 +2136,17 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:ancestors\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionClassCollection\\.$#"
-			count: 1
-			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:virtualProperties\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassLikeDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassLikeDecorator\\:\\:isConcrete\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassLikeDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassLikeDecorator\\:\\:isConcrete\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassLikeDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassLikeDecorator.php
 
@@ -2186,7 +2156,7 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionInterfaceDecorator\\:\\:parents\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionInterfaceDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
 
@@ -2196,7 +2166,7 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionInterfaceDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionInterfaceDecorator\\:\\:parents\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
 
@@ -2216,12 +2186,27 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionProperty.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:\\$visibility has no typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:create\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Visibility.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:public\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:create\\(\\) has parameter \\$visibility with no typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Visibility.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:isPrivate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Visibility.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:isProtected\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Core/Visibility.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:isPublic\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Visibility.php
 
@@ -2236,27 +2221,12 @@ parameters:
 			path: lib/Core/Visibility.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:isPublic\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:public\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Visibility.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:isProtected\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Visibility.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:isPrivate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Visibility.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:create\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Visibility.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:create\\(\\) has parameter \\$visibility with no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Visibility\\:\\:\\$visibility has no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Visibility.php
 
@@ -2271,12 +2241,12 @@ parameters:
 			path: lib/ReflectorBuilder.php
 
 		-
-			message: "#^Ternary operator condition is always true\\.$#"
-			count: 2
+			message: "#^Method Phpactor\\\\WorseReflection\\\\ReflectorBuilder\\:\\:buildReflectorFactory\\(\\) has no return typehint specified\\.$#"
+			count: 1
 			path: lib/ReflectorBuilder.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\ReflectorBuilder\\:\\:buildReflectorFactory\\(\\) has no return typehint specified\\.$#"
-			count: 1
+			message: "#^Ternary operator condition is always true\\.$#"
+			count: 2
 			path: lib/ReflectorBuilder.php
 
