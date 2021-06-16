@@ -11,7 +11,7 @@
     "require": {
         "php": "^7.3 || ^8.0",
         "jetbrains/phpstorm-stubs": "*",
-        "microsoft/tolerant-php-parser": "~0.0",
+        "microsoft/tolerant-php-parser": "^0.0.23",
         "phpactor/docblock": "^0.3.4",
         "phpactor/text-document": "~1.2.3",
         "psr/log": "^1.0"
