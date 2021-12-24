@@ -2,13 +2,13 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
+use Microsoft\PhpParser\Node\Expression\ThrowExpression;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Node\Statement\IfStatementNode;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
-use Microsoft\PhpParser\Node\Statement\ThrowStatement;
 use Microsoft\PhpParser\Node\Statement\ReturnStatement;
 use Microsoft\PhpParser\Node\Expression;
 use Phpactor\WorseReflection\Core\Types;
@@ -93,7 +93,7 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
                     return true;
                 }
 
-                if ($statement instanceof ThrowStatement) {
+                if ($statement instanceof ThrowExpression) {
                     return true;
                 }
 
@@ -134,7 +134,7 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
     private function existingOrStripType(IfStatementNode $node, Frame $frame, WorseVariable $variable)
     {
         $previousAssignments = $this->getAssignmentsMatchingVariableType($frame, $variable)
-            ->lessThan($node->getStart())
+            ->lessThan($node->getStartPosition())
             ->byName($variable->name())
         ;
 

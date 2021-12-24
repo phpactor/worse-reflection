@@ -61,7 +61,7 @@ class VariableWalker extends AbstractWalker
 
         $context = $this->symbolFactory()->context(
             (string)$token->getText($node->getFileContents()),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,

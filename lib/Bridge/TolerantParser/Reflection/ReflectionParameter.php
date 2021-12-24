@@ -50,7 +50,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
         if (null === $this->parameter->getName()) {
             $this->serviceLocator->logger()->warning(sprintf(
                 'Parameter has no variable at offset "%s"',
-                $this->parameter->getStart()
+                $this->parameter->getStartPosition()
             ));
             return '';
         }
@@ -64,7 +64,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
 
         $type = $this->memberTypeResolver->resolve(
             $this->parameter,
-            $this->parameter->typeDeclaration,
+            $this->parameter->typeDeclarationList,
             $className,
             $this->parameter->questionToken ? true : false
         );

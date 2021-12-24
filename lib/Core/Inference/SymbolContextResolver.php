@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Generator;
 use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\Node\DelimitedList\QualifiedNameList;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
@@ -30,6 +31,7 @@ use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
@@ -108,12 +110,15 @@ class SymbolContextResolver
         if ($node instanceof QualifiedName) {
             return $this->resolveQualfiedName($frame, $node);
         }
+        if ($node instanceof QualifiedNameList) {
+            return $this->resolveQualfiedNameList($frame, $node);
+        }
 
         /** @var ConstElement $node */
         if ($node instanceof ConstElement) {
             return $this->symbolFactory->context(
                 $node->getName(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CONSTANT,
@@ -155,7 +160,7 @@ class SymbolContextResolver
             $value = $this->expressionEvaluator->evaluate($node);
             return $this->symbolFactory->context(
                 $node->getText(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CLASS_,
@@ -203,7 +208,7 @@ class SymbolContextResolver
         if ($node instanceof StringLiteral) {
             return $this->symbolFactory->context(
                 (string) $node->getStringContentsText(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::STRING,
@@ -302,7 +307,7 @@ class SymbolContextResolver
     {
         $info = $this->symbolFactory->context(
             $node->getName(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::PROPERTY,
@@ -329,14 +334,41 @@ class SymbolContextResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    private function resolveQualfiedName(Frame $frame, QualifiedName $node)
+    private function resolveQualfiedNameList(Frame $frame, QualifiedNameList $node): SymbolContext
+    {
+        $types = [];
+        $firstType = null;
+        foreach ($node->getChildNodes() as $child) {
+            if (!$child instanceof QualifiedName) {
+                continue;
+            }
+            if (null === $firstType) {
+                $firstType = $child;
+            }
+            $types[] = $this->nameResolver->resolve($child);
+        }
+
+        return $this->symbolFactory->context(
+            $node->getText(),
+            $node->getStartPosition(),
+            $node->getEndPosition(),
+            [
+                'type' => $firstType,
+                'types' => Types::fromTypes($types),
+                'symbol_type' => Symbol::CLASS_,
+                'name' => $firstType ? Name::fromString((string) $firstType->getResolvedName()) : '',
+            ]
+        );
+    }
+
+    private function resolveQualfiedName(Frame $frame, QualifiedName $node): SymbolContext
     {
         if ($node->parent instanceof CallExpression) {
             $name = $node->getResolvedName() ?: $node;
             $name = Name::fromString((string) $name);
             $context = $this->symbolFactory->context(
                 $name->short(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::FUNCTION,
@@ -355,7 +387,7 @@ class SymbolContextResolver
 
         return $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'type' => $this->nameResolver->resolve($node),
@@ -374,11 +406,14 @@ class SymbolContextResolver
             return $this->resolveParameterFromReflection($frame, $method, $node);
         }
 
-        $typeDeclaration = $node->typeDeclaration;
+        $typeDeclaration = $node->typeDeclarationList;
         $type = Type::unknown();
+        if ($typeDeclaration instanceof QualifiedNameList) {
+            $typeDeclaration = QualifiedNameListUtil::firstQualifiedNameOrToken($typeDeclaration);
+        }
 
         if ($typeDeclaration instanceof QualifiedName) {
-            $type = $this->nameResolver->resolve($node->typeDeclaration);
+            $type = $this->nameResolver->resolve($typeDeclaration);
         }
 
         if ($typeDeclaration instanceof Token) {
@@ -464,7 +499,7 @@ class SymbolContextResolver
 
         return $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::NUMBER,
@@ -523,7 +558,7 @@ class SymbolContextResolver
 
         $info = $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'value' => $value,
@@ -551,7 +586,7 @@ class SymbolContextResolver
         if (null === $node->arrayElements) {
             return $this->symbolFactory->context(
                 $node->getText(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'type' => Type::array(),
@@ -573,7 +608,7 @@ class SymbolContextResolver
 
         return $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'type' => Type::array(),
@@ -644,11 +679,11 @@ class SymbolContextResolver
                 $name = $context->type()->className()->__toString();
             }
         }
-        
+
         if (empty($name)) {
             $name = $node->scopeResolutionQualifier->getText();
         }
-        
+
         $parent = $this->nameResolver->resolve($node, $name);
 
         return $this->_infoFromMemberAccess($frame, $parent, $node);
@@ -722,10 +757,10 @@ class SymbolContextResolver
         ) {
             $memberType = Symbol::CONSTANT;
         }
-        
+
         $information = $this->symbolFactory->context(
             $memberName,
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => $memberType,
@@ -790,7 +825,7 @@ class SymbolContextResolver
         if (0 === $variables->count()) {
             return $this->symbolFactory->context(
                 $name,
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE

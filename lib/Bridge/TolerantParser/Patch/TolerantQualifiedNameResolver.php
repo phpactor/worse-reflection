@@ -36,7 +36,7 @@ class TolerantQualifiedNameResolver
     public static function getResolvedName($node, $namespaceDefinition = null)
     {
         // Name resolution not applicable to constructs that define symbol names or aliases.
-        if (($node->parent instanceof Node\Statement\NamespaceDefinition && $node->parent->name->getStart() === $node->getStart()) ||
+        if (($node->parent instanceof Node\Statement\NamespaceDefinition && $node->parent->name->getStartPosition() === $node->getStartPosition()) ||
             $node->parent instanceof Node\Statement\NamespaceUseDeclaration ||
             $node->parent instanceof Node\NamespaceUseClause ||
             $node->parent instanceof Node\NamespaceUseGroupClause ||

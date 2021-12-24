@@ -88,7 +88,7 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
 
         /** @phpstan-ignore-next-line */
         if ($this->parameter->otherTypeDeclarations) {
-            $types = $this->memberTypeResolver->resolveOtherTypes(
+            $types = $this->memberTypeResolver->resolveTypes(
                 $this->parameter,
                 $this->parameter->otherTypeDeclarations,
                 $this->class()->name(),
@@ -103,7 +103,7 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
     {
         return $this->memberTypeResolver->resolve(
             $this->parameter,
-            $this->parameter->typeDeclaration,
+            $this->parameter->typeDeclarationList,
             $this->class()->name(),
             $this->parameter->questionToken ? true : false
         );

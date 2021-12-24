@@ -3,13 +3,13 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver;
 
 use Microsoft\PhpParser\Node\DelimitedList\QualifiedNameList;
-use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 
 class DeclaredMemberTypeResolver
 {
@@ -18,9 +18,12 @@ class DeclaredMemberTypeResolver
         'resource',
     ];
 
-    public function resolveOtherTypes(Node $tolerantNode, ?QualifiedNameList $otherTypes = null, ClassName $className = null, bool $nullable = false): Types
+    /**
+     * @param mixed $declaredTypes
+     */
+    public function resolveTypes(Node $tolerantNode, $declaredTypes = null, ClassName $className = null, bool $nullable = false): Types
     {
-        if (!$otherTypes) {
+        if (!$declaredTypes instanceof QualifiedNameList) {
             return Types::empty();
         }
 
@@ -29,7 +32,7 @@ class DeclaredMemberTypeResolver
                 return false;
             }
             return $this->resolve($tolerantNode, $tolerantType, $className, $nullable);
-        }, $otherTypes->children)));
+        }, $declaredTypes->children)));
     }
 
     public function resolve(Node $tolerantNode, $tolerantType = null, ClassName $className = null, bool $nullable = false): Type
@@ -48,13 +51,16 @@ class DeclaredMemberTypeResolver
             return Type::undefined();
         }
 
+        if ($tolerantType instanceof QualifiedNameList) {
+            $tolerantType = QualifiedNameListUtil::firstQualifiedNameOrToken($tolerantType);
+        }
+
         if ($tolerantType instanceof Token) {
             $text = $tolerantType->getText($tolerantNode->getFileContents());
 
             return Type::fromString($text);
         }
 
-        /** @var QualifiedName $tolerantType */
         $text = $tolerantType->getText($tolerantNode->getFileContents());
         if ($tolerantType->isUnqualifiedName() && in_array($text, self::RESERVED_NAMES)) {
             return type::fromString($text);

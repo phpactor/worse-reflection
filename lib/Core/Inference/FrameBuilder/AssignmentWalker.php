@@ -89,7 +89,7 @@ class AssignmentWalker extends AbstractWalker
         $name = $leftOperand->name->getText($leftOperand->getFileContents());
         $context = $this->symbolFactory()->context(
             $name,
-            $leftOperand->getStart(),
+            $leftOperand->getStartPosition(),
             $leftOperand->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
@@ -133,7 +133,7 @@ class AssignmentWalker extends AbstractWalker
 
         $context = $this->symbolFactory()->context(
             $memberName,
-            $leftOperand->getStart(),
+            $leftOperand->getStartPosition(),
             $leftOperand->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
@@ -218,7 +218,7 @@ class AssignmentWalker extends AbstractWalker
             $varName = $elementValue->name->getText($leftOperand->getFileContents());
             $variableContext = $this->symbolFactory()->context(
                 $varName,
-                $element->getStart(),
+                $element->getStartPosition(),
                 $element->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,

@@ -11,6 +11,7 @@ use Microsoft\PhpParser\Node\TraitSelectOrAliasClause;
 use Microsoft\PhpParser\Node\TraitUseClause;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Patch\TolerantQualifiedNameResolver;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 use Phpactor\WorseReflection\Core\Visibility;
 use RuntimeException;
 
@@ -69,12 +70,14 @@ class TraitImports implements Countable, IteratorAggregate
                             continue;
                         }
 
-                        if (!$clause->targetName instanceof QualifiedName) {
+                        $targetName = QualifiedNameListUtil::firstQualifiedName($clause->targetNameList);
+                        if (null === $targetName) {
                             continue;
                         }
 
+
                         $memberName = (string) $clause->name;
-                        $targetName = (string) $clause->targetName;
+                        $targetName = (string) $targetName;
 
                         $aliases[$memberName] = new TraitAlias($memberName, $this->visiblity($clause), $targetName);
                     }

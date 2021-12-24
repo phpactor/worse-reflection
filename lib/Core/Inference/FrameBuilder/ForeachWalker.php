@@ -76,7 +76,7 @@ class ForeachWalker extends AbstractWalker
         
         $context = $this->symbolFactory()->context(
             $itemName,
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,
@@ -98,7 +98,7 @@ class ForeachWalker extends AbstractWalker
         
         $context = $this->symbolFactory()->context(
             $itemName,
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::VARIABLE,

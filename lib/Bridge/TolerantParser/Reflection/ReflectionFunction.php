@@ -18,6 +18,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Token;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\FunctionReturnTypeResolver;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 
 class ReflectionFunction extends AbstractReflectedNode implements CoreReflectionFunction
 {
@@ -65,7 +66,7 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
 
     public function type(): Type
     {
-        $type = $this->node->returnType;
+        $type = QualifiedNameListUtil::firstQualifiedNameOrToken($this->node->returnTypeList);
 
         if (null === $type) {
             return Type::unknown();
