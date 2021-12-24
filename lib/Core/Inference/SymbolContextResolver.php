@@ -409,7 +409,7 @@ class SymbolContextResolver
         $typeDeclaration = $node->typeDeclarationList;
         $type = Type::unknown();
         if ($typeDeclaration instanceof QualifiedNameList) {
-            $type = $this->nameResolver->resolve(QualifiedNameListUtil::firstQualifiedName($typeDeclaration));
+            $typeDeclaration = QualifiedNameListUtil::firstQualifiedNameOrToken($typeDeclaration);
         }
 
         if ($typeDeclaration instanceof QualifiedName) {

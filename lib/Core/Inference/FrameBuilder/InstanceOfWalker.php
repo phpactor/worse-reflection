@@ -9,7 +9,6 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Microsoft\PhpParser\Node\Statement\IfStatementNode;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
-use Microsoft\PhpParser\Node\Statement\ThrowStatement;
 use Microsoft\PhpParser\Node\Statement\ReturnStatement;
 use Microsoft\PhpParser\Node\Expression;
 use Phpactor\WorseReflection\Core\Types;
