@@ -15,7 +15,7 @@ class QualifiedNameListUtil
     public static function firstQualifiedName($qualifiedNameOrList): ?QualifiedName
     {
         if ($qualifiedNameOrList instanceof QualifiedNameList) {
-            return self::firstReturnTypeOrNull($qualifiedNameOrList);
+            return self::firstQualifiedNameOrNull($qualifiedNameOrList);
         }
 
         if ($qualifiedNameOrList instanceof QualifiedName) {
@@ -35,7 +35,7 @@ class QualifiedNameListUtil
     public static function firstQualifiedNameOrToken($qualifiedNameOrList)
     {
         if ($qualifiedNameOrList instanceof QualifiedNameList) {
-            return self::firstReturnTypeOrNullOrToken($qualifiedNameOrList);
+            return self::firstQualifiedNameOrNullOrToken($qualifiedNameOrList);
         }
 
         if ($qualifiedNameOrList instanceof QualifiedName) {
@@ -56,7 +56,7 @@ class QualifiedNameListUtil
         ));
     }
 
-    public static function firstReturnTypeOrNull(?QualifiedNameList $types): ?QualifiedName
+    public static function firstQualifiedNameOrNull(?QualifiedNameList $types): ?QualifiedName
     {
         if (!$types) {
             return null;
@@ -75,7 +75,7 @@ class QualifiedNameListUtil
     /**
      * @return Token|QualifiedName|null
      */
-    public static function firstReturnTypeOrNullOrToken(?QualifiedNameList $types)
+    public static function firstQualifiedNameOrNullOrToken(?QualifiedNameList $types)
     {
         if (!$types) {
             return null;
