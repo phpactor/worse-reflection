@@ -134,7 +134,7 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
     private function existingOrStripType(IfStatementNode $node, Frame $frame, WorseVariable $variable)
     {
         $previousAssignments = $this->getAssignmentsMatchingVariableType($frame, $variable)
-            ->lessThan($node->getStart())
+            ->lessThan($node->getStartPosition())
             ->byName($variable->name())
         ;
 

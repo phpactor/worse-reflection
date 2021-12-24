@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\Decla
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\ParameterTypeResolver;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 
 class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
 {
@@ -50,7 +51,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
         if (null === $this->parameter->getName()) {
             $this->serviceLocator->logger()->warning(sprintf(
                 'Parameter has no variable at offset "%s"',
-                $this->parameter->getStart()
+                $this->parameter->getStartPosition()
             ));
             return '';
         }
@@ -64,7 +65,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
 
         $type = $this->memberTypeResolver->resolve(
             $this->parameter,
-            $this->parameter->typeDeclaration,
+            QualifiedNameListUtil::firstQualifiedNameOrToken($this->parameter->typeDeclarationList),
             $className,
             $this->parameter->questionToken ? true : false
         );

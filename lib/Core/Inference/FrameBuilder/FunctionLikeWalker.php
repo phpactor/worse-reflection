@@ -56,7 +56,7 @@ class FunctionLikeWalker extends AbstractWalker
             $classType = $builder->resolveNode($frame, $classNode)->type();
             $context = $this->symbolFactory()->context(
                 'this',
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'type' => $classType,
@@ -85,7 +85,7 @@ class FunctionLikeWalker extends AbstractWalker
 
             $context = $this->symbolFactory()->context(
                 $parameterName,
-                $parameterNode->getStart(),
+                $parameterNode->getStartPosition(),
                 $parameterNode->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,
@@ -107,7 +107,7 @@ class FunctionLikeWalker extends AbstractWalker
         }
 
         $parentFrame = $frame->parent();
-        $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStart());
+        $parentVars = $parentFrame->locals()->lessThanOrEqualTo($node->getStartPosition());
 
         if (null === $useClause->useVariableNameList) {
             return;
@@ -122,7 +122,7 @@ class FunctionLikeWalker extends AbstractWalker
 
             $variableContext = $this->symbolFactory()->context(
                 $varName,
-                $element->getStart(),
+                $element->getStartPosition(),
                 $element->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE,

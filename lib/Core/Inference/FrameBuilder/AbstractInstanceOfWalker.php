@@ -116,7 +116,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
         $symbolContext = $this->symbolFactory()->context(
             (string) $leftOperand->memberName->getText($leftOperand->getFileContents()),
-            $leftOperand->getStart(),
+            $leftOperand->getStartPosition(),
             $leftOperand->getEndPosition(),
             ['symbol_type' => Symbol::PROPERTY],
         );
@@ -146,7 +146,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
         return $this->symbolFactory()->context(
             $name,
-            $leftOperand->getStart(),
+            $leftOperand->getStartPosition(),
             $leftOperand->getEndPosition(),
             ['symbol_type' => Symbol::VARIABLE],
         );

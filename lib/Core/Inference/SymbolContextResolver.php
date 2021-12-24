@@ -113,7 +113,7 @@ class SymbolContextResolver
         if ($node instanceof ConstElement) {
             return $this->symbolFactory->context(
                 $node->getName(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CONSTANT,
@@ -155,7 +155,7 @@ class SymbolContextResolver
             $value = $this->expressionEvaluator->evaluate($node);
             return $this->symbolFactory->context(
                 $node->getText(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CLASS_,
@@ -203,7 +203,7 @@ class SymbolContextResolver
         if ($node instanceof StringLiteral) {
             return $this->symbolFactory->context(
                 (string) $node->getStringContentsText(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::STRING,
@@ -302,7 +302,7 @@ class SymbolContextResolver
     {
         $info = $this->symbolFactory->context(
             $node->getName(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::PROPERTY,
@@ -336,7 +336,7 @@ class SymbolContextResolver
             $name = Name::fromString((string) $name);
             $context = $this->symbolFactory->context(
                 $name->short(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::FUNCTION,
@@ -355,7 +355,7 @@ class SymbolContextResolver
 
         return $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'type' => $this->nameResolver->resolve($node),
@@ -464,7 +464,7 @@ class SymbolContextResolver
 
         return $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::NUMBER,
@@ -523,7 +523,7 @@ class SymbolContextResolver
 
         $info = $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'value' => $value,
@@ -551,7 +551,7 @@ class SymbolContextResolver
         if (null === $node->arrayElements) {
             return $this->symbolFactory->context(
                 $node->getText(),
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'type' => Type::array(),
@@ -573,7 +573,7 @@ class SymbolContextResolver
 
         return $this->symbolFactory->context(
             $node->getText(),
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'type' => Type::array(),
@@ -725,7 +725,7 @@ class SymbolContextResolver
         
         $information = $this->symbolFactory->context(
             $memberName,
-            $node->getStart(),
+            $node->getStartPosition(),
             $node->getEndPosition(),
             [
                 'symbol_type' => $memberType,
@@ -790,7 +790,7 @@ class SymbolContextResolver
         if (0 === $variables->count()) {
             return $this->symbolFactory->context(
                 $name,
-                $node->getStart(),
+                $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::VARIABLE

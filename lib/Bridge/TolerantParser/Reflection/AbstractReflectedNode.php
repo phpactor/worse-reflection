@@ -11,8 +11,8 @@ abstract class AbstractReflectedNode
     public function position(): Position
     {
         return Position::fromFullStartStartAndEnd(
-            $this->node()->getFullStart(),
-            $this->node()->getStart(),
+            $this->node()->getFullStartPosition(),
+            $this->node()->getStartPosition(),
             $this->node()->getEndPosition()
         );
     }

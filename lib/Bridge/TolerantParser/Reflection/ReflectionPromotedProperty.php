@@ -18,6 +18,7 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 use Phpactor\WorseReflection\Core\Visibility;
 use InvalidArgumentException;
 
@@ -103,7 +104,7 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
     {
         return $this->memberTypeResolver->resolve(
             $this->parameter,
-            $this->parameter->typeDeclaration,
+            QualifiedNameListUtil::firstQualifiedNameOrToken($this->parameter->typeDeclarationList),
             $this->class()->name(),
             $this->parameter->questionToken ? true : false
         );

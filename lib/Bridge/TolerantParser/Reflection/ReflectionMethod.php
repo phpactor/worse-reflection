@@ -13,6 +13,8 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
+use Phpactor\WorseReflection\Core\Util\ReflectionMethodUtil;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;
@@ -112,13 +114,13 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     {
         $types = $this->returnTypeResolver->resolve();
 
-        if (!$this->node->otherReturnTypes) {
+        if (!$this->node->returnTypeList) {
             return $types;
         }
 
         return $types->merge($this->memberTypeResolver->resolveOtherTypes(
             $this->node,
-            $this->node->otherReturnTypes,
+            $this->node->returnTypeList,
             $this->class()->name(), // note: this call is quite expensive
             $this->node->questionToken ? true : false
         ));
@@ -136,7 +138,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     {
         return $this->memberTypeResolver->resolve(
             $this->node,
-            $this->node->returnType,
+            QualifiedNameListUtil::firstReturnTypeOrNull($this->node->returnTypeList),
             $this->class()->name(),
             $this->node->questionToken ? true : false
         );

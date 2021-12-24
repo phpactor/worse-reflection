@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 
 class DeclaredMemberTypeResolver
 {
@@ -48,13 +49,17 @@ class DeclaredMemberTypeResolver
             return Type::undefined();
         }
 
+        if ($tolerantType instanceof QualifiedNameList) {
+            $tolerantType = QualifiedNameListUtil::firstQualifiedNameOrToken($tolerantType);
+        }
+
         if ($tolerantType instanceof Token) {
             $text = $tolerantType->getText($tolerantNode->getFileContents());
 
             return Type::fromString($text);
         }
 
-        /** @var QualifiedName $tolerantType */
+        /** @var QualifiedNameList $tolerantType */
         $text = $tolerantType->getText($tolerantNode->getFileContents());
         if ($tolerantType->isUnqualifiedName() && in_array($text, self::RESERVED_NAMES)) {
             return type::fromString($text);
