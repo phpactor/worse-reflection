@@ -36,10 +36,6 @@ class MethodTypeResolver
             return $resolvedTypes;
         }
 
-        if ($this->method->returnType()->isDefined()) {
-            return Types::fromTypes([ $this->method->returnType() ]);
-        }
-
         $resolvedTypes = $this->getTypesFromParentClass($this->method->class());
 
         if ($resolvedTypes->count()) {

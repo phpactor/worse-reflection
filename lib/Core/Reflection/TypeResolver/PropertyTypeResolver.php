@@ -37,10 +37,6 @@ class PropertyTypeResolver
             return $this->property->scope()->resolveFullyQualifiedName($type, $this->property->class());
         }, iterator_to_array($docblockTypes));
 
-        if ($this->property->type()->isDefined()) {
-            $resolvedTypes[] = $this->property->type();
-        }
-
         return Types::fromTypes($resolvedTypes);
     }
 
