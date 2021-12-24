@@ -9,7 +9,11 @@ use RuntimeException;
 
 class QualifiedNameListUtil
 {
-    public static function firstQualifiedName($qualifiedNameOrList): ?QualifiedName {
+    /**
+     * @param mixed $qualifiedNameOrList
+     */
+    public static function firstQualifiedName($qualifiedNameOrList): ?QualifiedName
+    {
         if ($qualifiedNameOrList instanceof QualifiedNameList) {
             return self::firstReturnTypeOrNull($qualifiedNameOrList);
         }
@@ -25,9 +29,11 @@ class QualifiedNameListUtil
     }
 
     /**
+     * @param mixed $qualifiedNameOrList
      * @return Token|QualifiedName|null
      */
-    public static function firstQualifiedNameOrToken($qualifiedNameOrList) {
+    public static function firstQualifiedNameOrToken($qualifiedNameOrList)
+    {
         if ($qualifiedNameOrList instanceof QualifiedNameList) {
             return self::firstReturnTypeOrNullOrToken($qualifiedNameOrList);
         }
@@ -50,7 +56,8 @@ class QualifiedNameListUtil
         ));
     }
 
-    public static function firstReturnTypeOrNull(?QualifiedNameList $types): ?QualifiedName {
+    public static function firstReturnTypeOrNull(?QualifiedNameList $types): ?QualifiedName
+    {
         if (!$types) {
             return null;
         }
@@ -68,7 +75,8 @@ class QualifiedNameListUtil
     /**
      * @return Token|QualifiedName|null
      */
-    public static function firstReturnTypeOrNullOrToken(?QualifiedNameList $types) {
+    public static function firstReturnTypeOrNullOrToken(?QualifiedNameList $types)
+    {
         if (!$types) {
             return null;
         }

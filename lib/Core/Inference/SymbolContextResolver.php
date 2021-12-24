@@ -339,6 +339,9 @@ class SymbolContextResolver
         $types = [];
         $firstType = null;
         foreach ($node->getChildNodes() as $child) {
+            if (!$child instanceof QualifiedName) {
+                continue;
+            }
             if (null === $firstType) {
                 $firstType = $child;
             }

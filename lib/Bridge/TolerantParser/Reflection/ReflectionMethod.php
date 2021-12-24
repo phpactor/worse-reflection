@@ -13,8 +13,6 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
-use Phpactor\WorseReflection\Core\Util\ReflectionMethodUtil;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionParameterCollection;

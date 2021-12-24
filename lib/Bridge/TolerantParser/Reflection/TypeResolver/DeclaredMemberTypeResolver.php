@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver;
 
 use Microsoft\PhpParser\Node\DelimitedList\QualifiedNameList;
-use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Type;
@@ -19,6 +18,9 @@ class DeclaredMemberTypeResolver
         'resource',
     ];
 
+    /**
+     * @param mixed $declaredTypes
+     */
     public function resolveTypes(Node $tolerantNode, $declaredTypes = null, ClassName $className = null, bool $nullable = false): Types
     {
         if (!$declaredTypes instanceof QualifiedNameList) {
@@ -59,7 +61,6 @@ class DeclaredMemberTypeResolver
             return Type::fromString($text);
         }
 
-        /** @var QualifiedNameList $tolerantType */
         $text = $tolerantType->getText($tolerantNode->getFileContents());
         if ($tolerantType->isUnqualifiedName() && in_array($text, self::RESERVED_NAMES)) {
             return type::fromString($text);

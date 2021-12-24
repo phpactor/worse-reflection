@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
 use Microsoft\PhpParser\Node;
-use Microsoft\PhpParser\Node\QualifiedName;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\Variable;

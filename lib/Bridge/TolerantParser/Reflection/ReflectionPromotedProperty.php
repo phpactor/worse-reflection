@@ -18,7 +18,6 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\PropertyTypeResolver;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 use Phpactor\WorseReflection\Core\Visibility;
 use InvalidArgumentException;
 

@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 
+use Microsoft\PhpParser\Node\Expression\ThrowExpression;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -93,7 +94,7 @@ class InstanceOfWalker extends AbstractInstanceOfWalker implements FrameWalker
                     return true;
                 }
 
-                if ($statement instanceof ThrowStatement) {
+                if ($statement instanceof ThrowExpression) {
                     return true;
                 }
 

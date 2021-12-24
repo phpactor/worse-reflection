@@ -25,7 +25,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollec
 final class ReflectionPropertyCollection extends ReflectionMemberCollection implements CoreReflectionPropertyCollection
 {
     /**
-     * @return ReflectionPropertyCollection<ReflectionPromotedProperty>
+     * @return static
      */
     public static function fromClassDeclarationConstructorPropertyPromotion(
         ServiceLocator $serviceLocator,
@@ -74,7 +74,7 @@ final class ReflectionPropertyCollection extends ReflectionMemberCollection impl
     }
 
     /**
-     * @return ReflectionPropertyCollection<ReflectionProperty>
+     * @return static
      */
     public static function fromClassDeclaration(ServiceLocator $serviceLocator, ClassDeclaration $class, ReflectionClassLike $reflectionClass): self
     {
