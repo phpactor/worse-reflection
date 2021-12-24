@@ -403,11 +403,14 @@ class SymbolContextResolver
             return $this->resolveParameterFromReflection($frame, $method, $node);
         }
 
-        $typeDeclaration = $node->typeDeclaration;
+        $typeDeclaration = $node->typeDeclarationList;
         $type = Type::unknown();
+        if ($typeDeclaration instanceof QualifiedNameList) {
+            $type = $this->nameResolver->resolve(QualifiedNameListUtil::firstQualifiedName($typeDeclaration));
+        }
 
         if ($typeDeclaration instanceof QualifiedName) {
-            $type = $this->nameResolver->resolve($node->typeDeclaration);
+            $type = $this->nameResolver->resolve($typeDeclaration);
         }
 
         if ($typeDeclaration instanceof Token) {

@@ -90,12 +90,12 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     {
         $types = $this->typeResolver->resolve();
 
-        $types = $this->memberTypeResolver->resolveTypes(
+        $types = $types->merge($this->memberTypeResolver->resolveTypes(
             $this->propertyDeclaration,
             $this->propertyDeclaration->typeDeclarationList,
             $this->class()->name(),
             $this->propertyDeclaration->questionToken ? true : false
-        )->merge($types);
+        ));
 
         return $types;
     }

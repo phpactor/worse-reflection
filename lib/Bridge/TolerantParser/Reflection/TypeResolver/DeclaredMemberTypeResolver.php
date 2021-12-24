@@ -19,9 +19,9 @@ class DeclaredMemberTypeResolver
         'resource',
     ];
 
-    public function resolveTypes(Node $tolerantNode, ?QualifiedNameList $declaredTypes = null, ClassName $className = null, bool $nullable = false): Types
+    public function resolveTypes(Node $tolerantNode, $declaredTypes = null, ClassName $className = null, bool $nullable = false): Types
     {
-        if (!$declaredTypes) {
+        if (!$declaredTypes instanceof QualifiedNameList) {
             return Types::empty();
         }
 
