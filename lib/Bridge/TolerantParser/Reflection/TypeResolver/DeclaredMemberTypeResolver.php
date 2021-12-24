@@ -19,9 +19,9 @@ class DeclaredMemberTypeResolver
         'resource',
     ];
 
-    public function resolveOtherTypes(Node $tolerantNode, ?QualifiedNameList $otherTypes = null, ClassName $className = null, bool $nullable = false): Types
+    public function resolveTypes(Node $tolerantNode, ?QualifiedNameList $declaredTypes = null, ClassName $className = null, bool $nullable = false): Types
     {
-        if (!$otherTypes) {
+        if (!$declaredTypes) {
             return Types::empty();
         }
 
@@ -30,7 +30,7 @@ class DeclaredMemberTypeResolver
                 return false;
             }
             return $this->resolve($tolerantNode, $tolerantType, $className, $nullable);
-        }, $otherTypes->children)));
+        }, $declaredTypes->children)));
     }
 
     public function resolve(Node $tolerantNode, $tolerantType = null, ClassName $className = null, bool $nullable = false): Type
