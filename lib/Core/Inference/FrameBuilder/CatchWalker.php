@@ -20,20 +20,11 @@ class CatchWalker extends AbstractWalker
     public function walk(FrameBuilder $builder, Frame $frame, Node $node): Frame
     {
         assert($node instanceof CatchClause);
-        if (!$node->qualifiedName) {
+        if (!$node->qualifiedNameList) {
             return $frame;
         }
 
-        $types = $builder->resolveNode($frame, $node->qualifiedName)->types();
-
-        foreach ($node->otherQualifiedNameList as $element) {
-            if (!$element instanceof QualifiedName) {
-                continue;
-            }
-
-            $types = $types->merge($builder->resolveNode($frame, $element)->types());
-        }
-        
+        $types = $builder->resolveNode($frame, $node->qualifiedNameList)->types();
         $variableName = $node->variableName;
 
         if (null === $variableName) {

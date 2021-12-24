@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Generator;
 use Microsoft\PhpParser\Node;
+use Microsoft\PhpParser\Node\DelimitedList\QualifiedNameList;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
@@ -30,6 +31,7 @@ use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
@@ -107,6 +109,9 @@ class SymbolContextResolver
         /** @var QualifiedName $node */
         if ($node instanceof QualifiedName) {
             return $this->resolveQualfiedName($frame, $node);
+        }
+        if ($node instanceof QualifiedNameList) {
+            return $this->resolveQualfiedNameList($frame, $node);
         }
 
         /** @var ConstElement $node */
@@ -329,7 +334,31 @@ class SymbolContextResolver
         return $this->_resolveNode($frame, $resolvableNode);
     }
 
-    private function resolveQualfiedName(Frame $frame, QualifiedName $node)
+    private function resolveQualfiedNameList(Frame $frame, QualifiedNameList $node): SymbolContext
+    {
+        $types = [];
+        $firstType = null;
+        foreach ($node->getChildNodes() as $child) {
+            if (null === $firstType) {
+                $firstType = $child;
+            }
+            $types[] = $this->nameResolver->resolve($child);
+        }
+
+        return $this->symbolFactory->context(
+            $node->getText(),
+            $node->getStartPosition(),
+            $node->getEndPosition(),
+            [
+                'type' => $firstType,
+                'types' => Types::fromTypes($types),
+                'symbol_type' => Symbol::CLASS_,
+                'name' => $firstType ? Name::fromString((string) $firstType->getResolvedName()) : '',
+            ]
+        );
+    }
+
+    private function resolveQualfiedName(Frame $frame, QualifiedName $node): SymbolContext
     {
         if ($node->parent instanceof CallExpression) {
             $name = $node->getResolvedName() ?: $node;
@@ -644,11 +673,11 @@ class SymbolContextResolver
                 $name = $context->type()->className()->__toString();
             }
         }
-        
+
         if (empty($name)) {
             $name = $node->scopeResolutionQualifier->getText();
         }
-        
+
         $parent = $this->nameResolver->resolve($node, $name);
 
         return $this->_infoFromMemberAccess($frame, $parent, $node);
@@ -722,7 +751,7 @@ class SymbolContextResolver
         ) {
             $memberType = Symbol::CONSTANT;
         }
-        
+
         $information = $this->symbolFactory->context(
             $memberName,
             $node->getStartPosition(),
