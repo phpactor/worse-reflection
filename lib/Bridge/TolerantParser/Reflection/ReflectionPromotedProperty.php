@@ -104,7 +104,7 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
     {
         return $this->memberTypeResolver->resolve(
             $this->parameter,
-            QualifiedNameListUtil::firstQualifiedNameOrToken($this->parameter->typeDeclarationList),
+            $this->parameter->typeDeclarationList,
             $this->class()->name(),
             $this->parameter->questionToken ? true : false
         );

@@ -138,7 +138,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
     {
         return $this->memberTypeResolver->resolve(
             $this->node,
-            QualifiedNameListUtil::firstReturnTypeOrNull($this->node->returnTypeList),
+            $this->node->returnTypeList,
             $this->class()->name(),
             $this->node->questionToken ? true : false
         );

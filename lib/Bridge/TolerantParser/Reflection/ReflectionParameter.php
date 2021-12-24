@@ -65,7 +65,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
 
         $type = $this->memberTypeResolver->resolve(
             $this->parameter,
-            QualifiedNameListUtil::firstQualifiedNameOrToken($this->parameter->typeDeclarationList),
+            $this->parameter->typeDeclarationList,
             $className,
             $this->parameter->questionToken ? true : false
         );
