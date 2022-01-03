@@ -87,10 +87,10 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
         $types = $this->typeResolver->resolve();
 
         /** @phpstan-ignore-next-line */
-        if ($this->parameter->otherTypeDeclarations) {
+        if ($this->parameter->typeDeclarationList) {
             $types = $this->memberTypeResolver->resolveTypes(
                 $this->parameter,
-                $this->parameter->otherTypeDeclarations,
+                $this->parameter->typeDeclarationList,
                 $this->class()->name(),
                 $this->parameter->questionToken ? true : false
             );
