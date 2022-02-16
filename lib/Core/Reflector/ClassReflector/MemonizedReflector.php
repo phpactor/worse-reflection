@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 
 use Phpactor\WorseReflection\Core\Cache;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
@@ -18,6 +19,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
     private const CLASS_PREFIX = '__class__';
     private const INTERFACE_PREFIX = '__interface__';
     private const TRAIT_PREFIX = '__trait__';
+    private const ENUM_PREFIX = '__enum__';
     private const CLASS_LIKE_PREFIX = '__class_like__';
 
 
@@ -76,6 +78,16 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
     {
         return $this->cache->getOrSet(self::TRAIT_PREFIX.$className, function () use ($className) {
             return $this->classReflector->reflectTrait($className);
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectEnum($className): ReflectionEnum
+    {
+        return $this->cache->getOrSet(self::ENUM_PREFIX.$className, function () use ($className) {
+            return $this->classReflector->reflectEnum($className);
         });
     }
 
