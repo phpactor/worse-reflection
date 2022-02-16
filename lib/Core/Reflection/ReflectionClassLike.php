@@ -30,6 +30,8 @@ interface ReflectionClassLike extends ReflectionNode
 
     public function isClass(): bool;
 
+    public function isEnum(): bool;
+
     public function isConcrete();
 
     public function docblock(): DocBlock;

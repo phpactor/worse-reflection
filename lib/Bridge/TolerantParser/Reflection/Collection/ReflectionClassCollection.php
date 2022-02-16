@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Microsoft\PhpParser\Node\Statement\EnumDeclaration;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionEnum;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Microsoft\PhpParser\Node\Statement\InterfaceDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionInterface;
@@ -42,6 +44,11 @@ class ReflectionClassCollection extends AbstractReflectionCollection implements 
 
             if ($child instanceof TraitDeclaration) {
                 $items[(string) $child->getNamespacedName()] =  new ReflectionTrait($serviceLocator, $source, $child);
+                continue;
+            }
+
+            if ($child instanceof EnumDeclaration) {
+                $items[(string) $child->getNamespacedName()] =  new ReflectionEnum($serviceLocator, $source, $child);
                 continue;
             }
 

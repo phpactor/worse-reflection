@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
+use Microsoft\PhpParser\Node\Statement\EnumDeclaration;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionMethod;
@@ -24,6 +25,21 @@ class ReflectionMethodCollection extends ReflectionMemberCollection implements C
     {
         /** @var MethodDeclaration[] $methods */
         $methods = array_filter($class->classMembers->classMemberDeclarations, function ($member) {
+            return $member instanceof MethodDeclaration;
+        });
+
+        $items = [];
+        foreach ($methods as $method) {
+            $items[$method->getName()] = new ReflectionMethod($serviceLocator, $reflectionClass, $method);
+        }
+
+        return new static($serviceLocator, $items);
+    }
+
+    public static function fromEnumDeclaration(ServiceLocator $serviceLocator, EnumDeclaration $class, ReflectionClassLike $reflectionClass)
+    {
+        /** @var MethodDeclaration[] $methods */
+        $methods = array_filter($class->enumMembers->enumMemberDeclarations, function ($member) {
             return $member instanceof MethodDeclaration;
         });
 
