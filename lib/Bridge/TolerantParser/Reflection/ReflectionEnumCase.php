@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\EnumCaseDeclaration;
 use Microsoft\PhpParser\Token;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ServiceLocator;
@@ -54,7 +55,7 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
         return Type::unknown();
     }
 
-    public function class(): ReflectionEnum
+    public function class(): ReflectionClassLike
     {
         return $this->enum;
     }
