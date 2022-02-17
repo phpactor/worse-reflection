@@ -43,7 +43,7 @@ jobs:
 
             -
                 name: "Run friendsofphp/php-cs-fixer"
-                run: "vendor/bin/php-cs-fixer fix --dry-run --diff --verbose --allow-risky=yes"
+                run: "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --diff --verbose --allow-risky=yes"
     phpstan:
         name: "PHPStan (${{ matrix.php-version }})"
 
@@ -88,6 +88,7 @@ jobs:
                     - '7.3'
                     - '7.4'
                     - '8.0'
+                    - '8.1'
 
         steps:
             -
