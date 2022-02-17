@@ -80,6 +80,10 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
      */
     public function value()
     {
+        if ($this->node->assignment === null) {
+            return null;
+        }
+
         return $this->serviceLocator()
                     ->symbolContextResolver()
                     ->resolveNode(
