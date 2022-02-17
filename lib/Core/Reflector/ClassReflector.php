@@ -29,6 +29,8 @@ interface ClassReflector
 
     /**
      * Reflect a trait
+     *
+     * @param Name|string $className
      */
     public function reflectEnum($className): ReflectionEnum;
 

@@ -78,14 +78,14 @@ class ReflectionEnumTest extends IntegrationTestCase
 
         yield 'Return case' => [
         <<<'EOT'
-                        <?php
+                            <?php
 
-                        enum Class1
-                        {
-                            case FOOBAR;
-                        }
+                            enum Class1
+                            {
+                                case FOOBAR;
+                            }
 
-        EOT
+            EOT
             ,
             'Class1',
             function (ReflectionEnum $class): void {
@@ -96,14 +96,14 @@ class ReflectionEnumTest extends IntegrationTestCase
         ];
         yield 'Return backed case' => [
         <<<'EOT'
-                        <?php
+                            <?php
 
-                        enum Class1
-                        {
-                            case FOOBAR = 'FOO';
-                        }
+                            enum Class1
+                            {
+                                case FOOBAR = 'FOO';
+                            }
 
-        EOT
+            EOT
             ,
             'Class1',
             function (ReflectionEnum $class): void {

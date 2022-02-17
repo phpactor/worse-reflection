@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionEnumCaseCollec
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum as CoreReflectionEnum;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
@@ -61,6 +62,9 @@ class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEn
         );
     }
 
+    /**
+     * @return ReflectionMemberCollection<ReflectionMember>
+     */
     public function members(): ReflectionMemberCollection
     {
         return ChainReflectionMemberCollection::fromCollections([
