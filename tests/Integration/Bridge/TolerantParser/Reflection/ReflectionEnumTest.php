@@ -2,9 +2,9 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Reflection\ReflectionEnumCase;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
 use Closure;
 
@@ -23,12 +23,12 @@ class ReflectionEnumTest extends IntegrationTestCase
     {
         yield 'It reflects a enum' => [
                 <<<'EOT'
-                    <?php
+                                    <?php
 
-                    enum Barfoo
-                    {
-                    }
-    EOT
+                                    enum Barfoo
+                                    {
+                                    }
+                    EOT
         ,
         'Barfoo',
         function ($class): void {
@@ -37,17 +37,17 @@ class ReflectionEnumTest extends IntegrationTestCase
             $this->assertTrue($class->isEnum());
         },
             ];
-    yield 'It reflect enum methods' => [
+        yield 'It reflect enum methods' => [
         <<<'EOT'
-                    <?php
+                            <?php
 
-                    enum Barfoo
-                    {
-                        public function foobar()
-                        {
-                        }
-                    }
-    EOT
+                            enum Barfoo
+                            {
+                                public function foobar()
+                                {
+                                }
+                            }
+            EOT
         ,
         'Barfoo',
         function ($class): void {
@@ -55,23 +55,23 @@ class ReflectionEnumTest extends IntegrationTestCase
             $this->assertEquals(['foobar'], $class->methods()->keys());
         },
     ];
-    yield 'Returns all members' => [
+        yield 'Returns all members' => [
         <<<'EOT'
-                <?php
+                        <?php
 
-                enum Class1
-                {
-                    private $foovar;
-                    private function foobar() {}
-                }
+                        enum Class1
+                        {
+                            case FOOBAR;
+                            private $foovar;
+                            private function foobar() {}
+                        }
 
-    EOT
+            EOT
         ,
         'Class1',
         function (ReflectionEnum $class): void {
-            $this->assertCount(2, $class->members());
-            $this->assertTrue($class->members()->has('foovar'));
-            $this->assertTrue($class->members()->has('foobar'));
+            $this->assertCount(3, $class->members());
+            $this->assertInstanceOf(ReflectionEnumCase::class, $class->members()->get('FOOBAR'));
         },
     ];
     }

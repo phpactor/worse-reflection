@@ -4,10 +4,12 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Statement\EnumDeclaration;
+use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionEnumCaseCollection as PhpactorReflectionEnumCaseCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ChainReflectionMemberCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionEnumCaseCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection as CoreReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection as CoreReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum as CoreReflectionEnum;
@@ -50,11 +52,17 @@ class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEn
         return ReflectionMethodCollection::fromEnumDeclaration($this->serviceLocator, $this->node, $contextClass);
     }
 
+    public function cases(): ReflectionEnumCaseCollection
+    {
+        return PhpactorReflectionEnumCaseCollection::fromEnumDeclaration($this->serviceLocator, $this->node);
+    }
+
     public function members(): ReflectionMemberCollection
     {
         return ChainReflectionMemberCollection::fromCollections([
             $this->properties(),
-            $this->methods()
+            $this->methods(),
+            $this->cases(),
         ]);
     }
 
