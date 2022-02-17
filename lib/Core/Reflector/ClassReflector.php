@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Reflector;
 
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
@@ -13,32 +14,28 @@ interface ClassReflector
 {
     /**
      * Reflect class.
-     *
-     *         an interface or trait.
      */
     public function reflectClass($className): ReflectionClass;
 
     /**
      * Reflect an interface.
-     *
-     *
-     *         was not a trait.
      */
     public function reflectInterface($className): ReflectionInterface;
 
     /**
      * Reflect a trait
-     *
-     *
-     *         was not a trait.
      */
     public function reflectTrait($className): ReflectionTrait;
 
     /**
-     * Reflect a class, trait or interface by its name.
+     * Reflect a trait
      *
-     * If the class it not found an exception will be thrown.
-     *
+     * @param Name|string $className
+     */
+    public function reflectEnum($className): ReflectionEnum;
+
+    /**
+     * Reflect a class, trait, enum or interface by its name.
      */
     public function reflectClassLike($className): ReflectionClassLike;
 

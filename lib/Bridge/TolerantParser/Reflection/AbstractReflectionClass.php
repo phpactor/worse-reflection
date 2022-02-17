@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
 
 abstract class AbstractReflectionClass extends AbstractReflectedNode implements ReflectionClassLike
 {
@@ -21,6 +22,11 @@ abstract class AbstractReflectionClass extends AbstractReflectedNode implements 
     public function isTrait(): bool
     {
         return $this instanceof ReflectionTrait;
+    }
+
+    public function isEnum(): bool
+    {
+        return $this instanceof ReflectionEnum;
     }
 
     /**

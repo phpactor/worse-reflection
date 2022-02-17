@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\Exception\ClassNotFound;
 use Phpactor\WorseReflection\Core\Exception\FunctionNotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Offset;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\SourceCodeLocator;
@@ -104,6 +105,26 @@ class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionRefl
         if (false === $class instanceof ReflectionTrait) {
             throw new ClassNotFound(sprintf(
                 '"%s" is not a trait, it is a "%s"',
+                $className->full(),
+                get_class($class)
+            ));
+        }
+
+        return $class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectEnum($className): ReflectionEnum
+    {
+        $className = ClassName::fromUnknown($className);
+
+        $class = $this->reflectClassLike($className);
+
+        if (false === $class instanceof ReflectionEnum) {
+            throw new ClassNotFound(sprintf(
+                '"%s" is not an enum, it is a "%s"',
                 $className->full(),
                 get_class($class)
             ));

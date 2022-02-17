@@ -346,13 +346,18 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
 
 		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromEnumDeclaration\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
+
+		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromReflectionMethods\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
 
 		-
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 4
+			count: 5
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMethodCollection.php
 
 		-
@@ -377,7 +382,12 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type Microsoft\\\\PhpParser\\\\Node\\\\DelimitedList\\\\ExpressionList supplied for foreach, only iterables are supported\\.$#"
-			count: 2
+			count: 3
+			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionPropertyCollection.php
+
+		-
+			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionPropertyCollection\\:\\:fromEnumDeclaration\\(\\) has no return typehint specified\\.$#"
+			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionPropertyCollection.php
 
 		-

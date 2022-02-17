@@ -4,9 +4,11 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection;
 
 use Microsoft\PhpParser\Node\MethodDeclaration;
 use Microsoft\PhpParser\Node\Parameter;
+use Microsoft\PhpParser\Node\Statement\EnumDeclaration;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionPromotedProperty;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionProperty;
 use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
@@ -117,6 +119,28 @@ final class ReflectionPropertyCollection extends ReflectionMemberCollection impl
                         continue;
                     }
                     $items[$variable->getName()] = new ReflectionProperty($serviceLocator, $reflectionTrait, $property, $variable);
+                }
+            }
+        }
+
+        return new static($serviceLocator, $items);
+    }
+
+    public static function fromEnumDeclaration(ServiceLocator $serviceLocator, EnumDeclaration $enum, ReflectionEnum $reflectionEnum)
+    {
+        /** @var PropertyDeclaration[] $properties */
+        $properties = array_filter($enum->enumMembers->enumMemberDeclarations, function ($member) {
+            return $member instanceof PropertyDeclaration;
+        });
+
+        $items = [];
+        foreach ($properties as $property) {
+            foreach ($property->propertyElements as $propertyElement) {
+                foreach ($propertyElement as $variable) {
+                    if (false === $variable instanceof Variable) {
+                        continue;
+                    }
+                    $items[$variable->getName()] = new ReflectionProperty($serviceLocator, $reflectionEnum, $property, $variable);
                 }
             }
         }

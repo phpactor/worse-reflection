@@ -69,6 +69,11 @@ class VirtualReflectionClassLikeDecorator implements ReflectionClassLike
         return $this->classLike->isTrait();
     }
 
+    public function isEnum(): bool
+    {
+        return $this->classLike->isEnum();
+    }
+
     public function isClass(): bool
     {
         return $this->classLike->isClass();

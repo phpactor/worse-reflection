@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflector;
 
+use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Reflector;
@@ -63,6 +64,14 @@ class CompositeReflector implements Reflector
     public function reflectTrait($className): ReflectionTrait
     {
         return $this->classReflector->reflectTrait($className);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reflectEnum($className): ReflectionEnum
+    {
+        return $this->classReflector->reflectEnum($className);
     }
 
     /**
