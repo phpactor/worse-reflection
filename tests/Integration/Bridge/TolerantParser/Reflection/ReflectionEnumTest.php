@@ -16,6 +16,10 @@ class ReflectionEnumTest extends IntegrationTestCase
      */
     public function testReflectEnum(string $source, string $class, Closure $assertion): void
     {
+        if (!defined('T_ENUM')) {
+            $this->markTestSkipped('PHP 8.1');
+            return;
+        }
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class);
     }
@@ -60,7 +64,7 @@ class ReflectionEnumTest extends IntegrationTestCase
         <<<'EOT'
                         <?php
 
-                        enum Class1
+                        enum Enum1
                         {
                             case FOOBAR;
                             private $foovar;
@@ -69,7 +73,7 @@ class ReflectionEnumTest extends IntegrationTestCase
 
             EOT
         ,
-        'Class1',
+        'Enum1',
         function (ReflectionEnum $class): void {
             $this->assertCount(3, $class->members());
             $this->assertInstanceOf(ReflectionEnumCase::class, $class->members()->get('FOOBAR'));
@@ -80,14 +84,14 @@ class ReflectionEnumTest extends IntegrationTestCase
         <<<'EOT'
                             <?php
 
-                            enum Class1
+                            enum Enum1
                             {
                                 case FOOBAR;
                             }
 
             EOT
             ,
-            'Class1',
+            'Enum1',
             function (ReflectionEnum $class): void {
                 $case = $class->cases()->get('FOOBAR');
                 self::assertEquals('FOOBAR', $case->name());
@@ -98,14 +102,14 @@ class ReflectionEnumTest extends IntegrationTestCase
         <<<'EOT'
                             <?php
 
-                            enum Class1
+                            enum Enum1
                             {
                                 case FOOBAR = 'FOO';
                             }
 
             EOT
             ,
-            'Class1',
+            'Enum1',
             function (ReflectionEnum $class): void {
                 $case = $class->cases()->get('FOOBAR');
                 self::assertEquals('FOOBAR', $case->name());
