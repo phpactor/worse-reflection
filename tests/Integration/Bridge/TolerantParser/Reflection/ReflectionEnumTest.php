@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnumCase;
+use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
@@ -73,6 +74,43 @@ class ReflectionEnumTest extends IntegrationTestCase
             $this->assertCount(3, $class->members());
             $this->assertInstanceOf(ReflectionEnumCase::class, $class->members()->get('FOOBAR'));
         },
-    ];
+        ];
+
+        yield 'Return case' => [
+        <<<'EOT'
+                        <?php
+
+                        enum Class1
+                        {
+                            case FOOBAR;
+                        }
+
+        EOT
+            ,
+            'Class1',
+            function (ReflectionEnum $class): void {
+                $case = $class->cases()->get('FOOBAR');
+                self::assertEquals('FOOBAR', $case->name());
+                self::assertEquals(Type::unknown(), $case->type());
+            },
+        ];
+        yield 'Return backed case' => [
+        <<<'EOT'
+                        <?php
+
+                        enum Class1
+                        {
+                            case FOOBAR = 'FOO';
+                        }
+
+        EOT
+            ,
+            'Class1',
+            function (ReflectionEnum $class): void {
+                $case = $class->cases()->get('FOOBAR');
+                self::assertEquals('FOOBAR', $case->name());
+                self::assertEquals('FOO', $case->value());
+            },
+        ];
     }
 }

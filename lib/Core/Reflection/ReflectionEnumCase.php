@@ -2,6 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection;
 
-class ReflectionEnumCase
+interface ReflectionEnumCase extends ReflectionMember
 {
 }

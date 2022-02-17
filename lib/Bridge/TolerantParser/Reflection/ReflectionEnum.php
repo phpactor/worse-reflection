@@ -54,7 +54,11 @@ class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEn
 
     public function cases(): ReflectionEnumCaseCollection
     {
-        return PhpactorReflectionEnumCaseCollection::fromEnumDeclaration($this->serviceLocator, $this->node);
+        return PhpactorReflectionEnumCaseCollection::fromEnumDeclaration(
+            $this->serviceLocator,
+            $this->node,
+            $this
+        );
     }
 
     public function members(): ReflectionMemberCollection
