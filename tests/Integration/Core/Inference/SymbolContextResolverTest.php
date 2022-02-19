@@ -984,7 +984,27 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     'symbol_name' => 'AAA',
                     'container_type' => 'Foobar'
                 ],
-            ];
+        ];
+
+        // 8.1 only
+        if (defined('T_ENUM')) {
+            yield 'Enum case name' => [
+                    <<<'EOT'
+                        <?php
+
+                        enum Foobar
+                        {
+                            case AA<>A = 'aaa';
+                        }
+                        EOT
+                    , [], [
+                        'type' => '<unknown>',
+                        'symbol_type' => Symbol::CASE,
+                        'symbol_name' => 'AAA',
+                        'container_type' => 'Foobar'
+                    ],
+                ];
+        }
 
         yield 'Function name' => [
                 <<<'EOT'

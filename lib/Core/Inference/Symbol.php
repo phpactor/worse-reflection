@@ -13,6 +13,7 @@ final class Symbol
     const FUNCTION = 'function';
     const PROPERTY = 'property';
     const CONSTANT = 'constant';
+    const CASE = 'case';
     const STRING = 'string';
     const NUMBER = 'number';
     const BOOLEAN = 'boolean';
@@ -31,6 +32,7 @@ final class Symbol
         self::NUMBER,
         self::BOOLEAN,
         self::ARRAY,
+        self::CASE,
     ];
 
     /**

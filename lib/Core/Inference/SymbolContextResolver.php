@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use Generator;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\DelimitedList\QualifiedNameList;
+use Microsoft\PhpParser\Node\EnumCaseDeclaration;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Expression\ArrayCreationExpression;
 use Microsoft\PhpParser\Node\Expression\BinaryExpression;
@@ -31,6 +32,7 @@ use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Util\NodeUtil;
 use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Core\Type;
@@ -122,6 +124,18 @@ class SymbolContextResolver
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CONSTANT,
+                    'container_type' => $this->classTypeFromNode($node)
+                ]
+            );
+        }
+
+        if ($node instanceof EnumCaseDeclaration) {
+            return $this->symbolFactory->context(
+                NodeUtil::nameFromTokenOrQualifiedName($node, $node->name),
+                $node->getStartPosition(),
+                $node->getEndPosition(),
+                [
+                    'symbol_type' => Symbol::CASE,
                     'container_type' => $this->classTypeFromNode($node)
                 ]
             );
