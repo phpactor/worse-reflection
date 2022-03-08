@@ -39,7 +39,7 @@ final class Types implements IteratorAggregate, Countable
         return new self($inferredTypes);
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->types);
     }
@@ -55,7 +55,7 @@ final class Types implements IteratorAggregate, Countable
     /**
      * {@inheritDoc}
      */
-    public function count()
+    public function count(): int
     {
         return count($this->types);
     }

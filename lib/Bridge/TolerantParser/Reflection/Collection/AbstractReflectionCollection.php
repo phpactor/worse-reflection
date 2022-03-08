@@ -11,6 +11,7 @@ use ArrayAccess;
 use InvalidArgumentException;
 use ArrayIterator;
 use BadMethodCallException;
+use ReturnTypeWillChange;
 
 abstract class AbstractReflectionCollection implements IteratorAggregate, Countable, ArrayAccess
 {
@@ -110,11 +111,12 @@ abstract class AbstractReflectionCollection implements IteratorAggregate, Counta
         return isset($this->items[$name]);
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->items);
     }
 
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->get($name);
@@ -130,7 +132,7 @@ abstract class AbstractReflectionCollection implements IteratorAggregate, Counta
         throw new BadMethodCallException('Collections are immutable');
     }
 
-    public function offsetExists($name)
+    public function offsetExists($name): bool
     {
         return isset($this->items[$name]);
     }

@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Virtual\Collection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionCollection;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
+use ReturnTypeWillChange;
 use RuntimeException;
 use IteratorAggregate;
 use Countable;
@@ -93,11 +94,12 @@ abstract class AbstractReflectionCollection implements IteratorAggregate, Counta
         return isset($this->items[$name]);
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->items);
     }
 
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->get($name);
@@ -113,7 +115,7 @@ abstract class AbstractReflectionCollection implements IteratorAggregate, Counta
         throw new BadMethodCallException('Collections are immutable');
     }
 
-    public function offsetExists($name)
+    public function offsetExists($name): bool
     {
         return isset($this->items[$name]);
     }

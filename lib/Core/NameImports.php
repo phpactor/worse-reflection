@@ -22,7 +22,7 @@ final class NameImports implements IteratorAggregate
         return new self($nameImports);
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->nameImports);
     }

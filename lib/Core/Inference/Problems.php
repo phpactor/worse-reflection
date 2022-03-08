@@ -36,7 +36,7 @@ final class Problems implements IteratorAggregate, Countable
         return new self();
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->problems);
     }

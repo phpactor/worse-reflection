@@ -58,7 +58,7 @@ class ChainSourceLocator implements SourceCodeLocator
                 $exception = new SourceNotFound(sprintf(
                     'Could not find source with "%s"',
                     (string) $name
-                ), null, $e);
+                ), 0, $e);
             }
         }
 

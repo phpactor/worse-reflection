@@ -1,5 +1,7 @@
 <?php
 
+use PhpCsFixer\Config;
+
 $finder = PhpCsFixer\Finder::create()
     ->in('lib')
     ->in('tests')
@@ -8,7 +10,7 @@ $finder = PhpCsFixer\Finder::create()
     ])
 ;
 
-return PhpCsFixer\Config::create()
+return (new Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,

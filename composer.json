@@ -12,13 +12,13 @@
         "php": "^7.3 || ^8.0",
         "jetbrains/phpstorm-stubs": "*",
         "microsoft/tolerant-php-parser": "^0.1.0",
-        "phpactor/docblock": "^0.3.4",
+        "phpactor/docblock": "^0.3.5",
         "phpactor/text-document": "~1.2.3",
         "psr/log": "^1.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.0",
-        "friendsofphp/php-cs-fixer": "^2.17",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "phpactor/class-to-file": "~0.4.0",
         "phpactor/test-utils": "~1.1.3",
         "phpbench/phpbench": "dev-master",

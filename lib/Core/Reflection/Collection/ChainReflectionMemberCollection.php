@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use RuntimeException;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Visibility;
+use Traversable;
 
 /**
  * @template T of ReflectionMemberCollection
@@ -42,7 +43,7 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
     /**
      * @return AppendIterator<ReflectionMember>
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         $iterator = new AppendIterator();
         foreach ($this->collections as $collection) {

@@ -4,5 +4,6 @@ parameters:
     level: 7
     inferPrivatePropertyTypeFromConstructor: true
     reportUnmatchedIgnoredErrors: false
+    checkGenericClassInNonGenericObjectType: false
     paths:
         - lib

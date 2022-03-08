@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Reflection\Collection;
 use IteratorAggregate;
 use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Countable;
+use Traversable;
 
 /**
  * @template T
@@ -48,5 +49,5 @@ interface ReflectionCollection extends IteratorAggregate, Countable
 
     public function has(string $name): bool;
 
-    public function getIterator();
+    public function getIterator(): Traversable;
 }
