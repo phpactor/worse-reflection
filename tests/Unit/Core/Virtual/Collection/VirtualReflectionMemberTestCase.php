@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Visibility;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection collection()

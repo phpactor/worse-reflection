@@ -12,7 +12,7 @@ class NativeReflectionFunctionSourceLocatorTest extends TestCase
     /**
      * @var ReflectionFunctionSourceLocator
      */
-    private ReflectionFunctionSourceLocator $locator;
+    private NativeReflectionFunctionSourceLocator $locator;
 
     public function setUp(): void
     {

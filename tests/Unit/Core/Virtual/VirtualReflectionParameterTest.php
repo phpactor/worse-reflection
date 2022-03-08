@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class VirtualReflectionParameterTest extends TestCase
 {

@@ -27,7 +27,7 @@ final class SymbolContext
     /**
      * @var Type
      */
-    private Type $containerType;
+    private ?Type $containerType = null;
 
     /**
      * @var string[]
@@ -37,12 +37,12 @@ final class SymbolContext
     /**
      * @var ReflectionScope
      */
-    private ReflectionScope $scope;
+    private ?ReflectionScope $scope = null;
 
     /**
      * @var Name
      */
-    private Name $name;
+    private ?Name $name = null;
 
     private function __construct(Symbol $symbol, Types $types, Name $name = null, $value = null, Type $containerType = null, ReflectionScope $scope = null)
     {

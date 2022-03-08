@@ -17,7 +17,7 @@ class SourceCode implements TextDocument
     /**
      * @var string
      */
-    private string $path;
+    private ?string $path;
 
     private function __construct(string $source, string $path = null)
     {

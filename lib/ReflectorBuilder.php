@@ -24,7 +24,7 @@ final class ReflectorBuilder
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private ?LoggerInterface $logger = null;
 
     /**
      * @var SourceCodeLocator[]
@@ -49,7 +49,7 @@ final class ReflectorBuilder
     /**
      * @var SourceCodeReflectorFactory
      */
-    private SourceCodeReflectorFactory $sourceReflectorFactory;
+    private ?SourceCodeReflectorFactory $sourceReflectorFactory = null;
 
     /**
      * @var FrameWalker[]
@@ -69,7 +69,7 @@ final class ReflectorBuilder
     /**
      * @var Cache|null
      */
-    private ?Cache $cache;
+    private ?Cache $cache = null;
 
     /**
      * Create a new instance of the builder

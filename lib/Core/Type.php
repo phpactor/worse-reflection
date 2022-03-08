@@ -19,17 +19,17 @@ class Type
     /**
      * @var string
      */
-    private string $phpType;
+    private ?string $phpType = null;
 
     /**
      * @var ClassName
      */
-    private ClassName $className;
+    private ?ClassName $className = null;
 
     /**
      * @var Type|null
      */
-    private ?Type $arrayType;
+    private ?Type $arrayType = null;
 
     /**
      * @var bool

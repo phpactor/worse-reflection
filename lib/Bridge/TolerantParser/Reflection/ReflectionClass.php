@@ -56,18 +56,19 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     /**
      * @var ReflectionInterfaceCollection<ReflectionInterface>
      */
-    private ReflectionInterfaceCollection $interfaces;
+    private ?ReflectionInterfaceCollection $interfaces = null;
 
     /**
      * @var ReflectionClassLike|null
      */
-    private ?ReflectionClassLike $parent;
+    private ?ReflectionClassLike $parent = null;
 
     /**
-     * @var ReflectionMethodCollection|null
+     * @var array<string,ReflectionMethodCollection>
      */
-    private ?ReflectionMethodCollection $methods;
-    private $ancestors;
+    private array $methods = [];
+
+    private ?TolerantReflectionClassCollection $ancestors = null;
 
 
     public function __construct(

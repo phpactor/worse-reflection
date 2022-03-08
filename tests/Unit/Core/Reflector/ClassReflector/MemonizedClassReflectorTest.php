@@ -23,7 +23,7 @@ class MemonizedClassReflectorTest extends TestCase
     /**
      * @var MemonizedClassReflector
      */
-    private MemonizedClassReflector $reflector;
+    private MemonizedReflector $reflector;
 
     /**
      * @var ObjectProphecy|FunctionReflector

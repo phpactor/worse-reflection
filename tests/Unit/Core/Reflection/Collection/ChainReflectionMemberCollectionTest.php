@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Visibility;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Traversable;
 
 class ChainReflectionMemberCollectionTest extends TestCase

@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
 
 class SymbolFactoryTest extends TestCase
@@ -23,7 +24,7 @@ class SymbolFactoryTest extends TestCase
     /**
      * @var Node
      */
-    private Node $node;
+    private ObjectProphecy $node;
 
 
     public function setUp(): void

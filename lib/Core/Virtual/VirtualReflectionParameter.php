@@ -38,7 +38,6 @@ class VirtualReflectionParameter implements ReflectionParameter
     private DefaultValue $default;
 
     /**
-     *
      * @var bool
      */
     private bool $byReference;

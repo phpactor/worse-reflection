@@ -24,7 +24,7 @@ class Frame
     /**
      * @var Frame
      */
-    private Frame $parent;
+    private ?Frame $parent = null;
 
     /**
      * @var Frame[]

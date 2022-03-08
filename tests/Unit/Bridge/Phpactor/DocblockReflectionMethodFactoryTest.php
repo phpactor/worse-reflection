@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\ReflectorBuilder;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class DocblockReflectionMethodFactoryTest extends TestCase
 {
