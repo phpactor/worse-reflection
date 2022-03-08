@@ -18,9 +18,7 @@ class ClassToFileSourceLocator implements SourceCodeLocator
         $this->converter = $converter;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function locate(Name $name): SourceCode
     {
         $candidates = $this->converter->classToFileCandidates(ClassName::fromString((string) $name));

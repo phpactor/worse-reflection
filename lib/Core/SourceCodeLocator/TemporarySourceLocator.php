@@ -50,9 +50,7 @@ class TemporarySourceLocator implements SourceCodeLocator
         $this->source = $source;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function locate(Name $name): SourceCode
     {
         if (null === $this->source) {

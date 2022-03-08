@@ -29,9 +29,7 @@ class DocBlockVars implements IteratorAggregate
         return Types::fromTypes($types);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->vars);

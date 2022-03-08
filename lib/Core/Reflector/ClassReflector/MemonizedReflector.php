@@ -43,9 +43,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         $this->cache = $cache;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectClass($className): ReflectionClass
     {
         return $this->cache->getOrSet(self::CLASS_PREFIX.$className, function () use ($className) {
@@ -53,9 +51,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectInterface($className): ReflectionInterface
     {
         return $this->cache->getOrSet(self::INTERFACE_PREFIX.$className, function () use ($className) {
@@ -63,9 +59,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectTrait($className): ReflectionTrait
     {
         return $this->cache->getOrSet(self::TRAIT_PREFIX.$className, function () use ($className) {
@@ -73,9 +67,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectEnum($className): ReflectionEnum
     {
         return $this->cache->getOrSet(self::ENUM_PREFIX.$className, function () use ($className) {
@@ -83,9 +75,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectClassLike($className): ReflectionClassLike
     {
         return $this->cache->getOrSet(self::CLASS_LIKE_PREFIX.(string)$className, function () use ($className) {
@@ -100,9 +90,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function sourceCodeForFunction($name): SourceCode
     {
         return $this->cache->getOrSet(self::FUNC_PREFIX.'source_code'.$name, function () use ($name) {
@@ -110,9 +98,7 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function sourceCodeForClassLike($name): SourceCode
     {
         return $this->cache->getOrSet(self::CLASS_LIKE_PREFIX.'source_code'.$name, function () use ($name) {

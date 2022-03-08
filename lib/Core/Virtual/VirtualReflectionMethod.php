@@ -87,9 +87,7 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
         return $this->body;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function returnType(): Type
     {
         return $this->type();

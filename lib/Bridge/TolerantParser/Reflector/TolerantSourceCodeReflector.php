@@ -33,9 +33,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $this->parser = $parser;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
@@ -43,9 +41,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         return TolerantReflectionClassCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
@@ -81,9 +77,7 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         return $reflection;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectFunctionsIn($sourceCode): CoreReflectionFunctionCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);

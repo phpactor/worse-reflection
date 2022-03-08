@@ -215,9 +215,7 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function byMemberType(string $type): ReflectionMemberCollection
     {
         $collections = [];

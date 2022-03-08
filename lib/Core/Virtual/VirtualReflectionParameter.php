@@ -70,9 +70,7 @@ class VirtualReflectionParameter implements ReflectionParameter
         return $this->name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function method(): ReflectionFunctionLike
     {
         return $this->functionLike;

@@ -108,9 +108,7 @@ abstract class Assignments implements Countable, IteratorAggregate
         return $last;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function count(): int
     {
         return count($this->variables);

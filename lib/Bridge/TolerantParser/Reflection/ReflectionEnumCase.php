@@ -67,9 +67,7 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function value()
     {
         if ($this->node->assignment === null) {

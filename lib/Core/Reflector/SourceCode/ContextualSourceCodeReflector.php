@@ -23,9 +23,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         $this->locator = $locator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
@@ -36,9 +34,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         return $collection;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);
@@ -59,9 +55,7 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         return $offset;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
     {
         $sourceCode = SourceCode::fromUnknown($sourceCode);

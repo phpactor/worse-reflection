@@ -82,9 +82,7 @@ class SourceCode implements TextDocument
         return new self($source, $filePath);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function uri(): ?TextDocumentUri
     {
         if (!$this->path) {
@@ -94,9 +92,7 @@ class SourceCode implements TextDocument
         return TextDocumentUri::fromString($this->path);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function language(): TextDocumentLanguage
     {
         return TextDocumentLanguage::fromString('php');
