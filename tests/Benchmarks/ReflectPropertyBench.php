@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Benchmarks;
 
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Tests\Benchmarks\Examples\PropertyClass;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 
@@ -14,7 +15,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
  */
 class ReflectPropertyBench extends BaseBenchCase
 {
-    private ReflectionClass $class;
+    private ReflectionClassLike $class;
 
     public function setUp(): void
     {
