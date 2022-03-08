@@ -15,15 +15,9 @@ use ReturnTypeWillChange;
 
 abstract class AbstractReflectionCollection implements IteratorAggregate, Countable, ArrayAccess
 {
-    /**
-     * @var ServiceLocator
-     */
-    protected $serviceLocator;
-
-    /**
-     * @var array
-     */
-    protected $items = [];
+    protected ServiceLocator $serviceLocator;
+    
+    protected array $items = [];
 
     protected function __construct(ServiceLocator $serviceLocator, array $items)
     {

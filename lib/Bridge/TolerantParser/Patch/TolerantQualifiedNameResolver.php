@@ -101,7 +101,6 @@ class TolerantQualifiedNameResolver
 
     /**
      * @param ResolvedName[] $importTable
-     * @param bool $isCaseSensitive
      * @return null
      */
     private static function tryResolveFromImportTable($node, $importTable, bool $isCaseSensitive = false)

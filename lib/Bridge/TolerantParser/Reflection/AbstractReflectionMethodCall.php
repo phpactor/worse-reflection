@@ -16,20 +16,14 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 
 abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 {
-    /**
-     * @var Frame
-     */
-    private $frame;
+    private Frame $frame;
 
     /**
      * @var ScopedPropertyAccessExpression|MemberAccessExpression
      */
     private $node;
-
-    /**
-     * @var ServiceLocator
-     */
-    private $services;
+    
+    private ServiceLocator $services;
 
     public function __construct(
         ServiceLocator $services,
@@ -63,7 +57,6 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 
         return $this->services->reflector()->reflectClassLike((string) $info->containerType());
     }
-
 
     abstract public function isStatic(): bool;
 

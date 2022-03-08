@@ -6,35 +6,23 @@ use Closure;
 
 class Frame
 {
-    /**
-     * @var PropertyAssignments
-     */
-    private $properties;
-
-    /**
-     * @var LocalAssignments
-     */
-    private $locals;
-
-    /**
-     * @var Problems
-     */
-    private $problems;
+    private PropertyAssignments $properties;
+    
+    private LocalAssignments $locals;
+    
+    private Problems $problems;
 
     /**
      * @var Frame
      */
-    private $parent;
+    private ?Frame $parent = null;
 
     /**
      * @var Frame[]
      */
-    private $children = [];
-
-    /**
-     * @var string
-     */
-    private $name;
+    private array $children = [];
+    
+    private string $name;
 
     public function __construct(
         string $name,

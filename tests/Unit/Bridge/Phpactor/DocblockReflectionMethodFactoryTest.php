@@ -16,20 +16,15 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\ReflectorBuilder;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class DocblockReflectionMethodFactoryTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var DocblockReflectionMethodFactory
-     */
-    private $factory;
-
-    /**
-     * @var ObjectProphecy
-     */
-    private $docblock;
+    
+    private DocblockReflectionMethodFactory $factory;
+    
+    private ObjectProphecy $docblock;
 
     public function setUp(): void
     {

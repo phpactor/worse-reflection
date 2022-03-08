@@ -10,16 +10,14 @@ use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
 
 class ClassToFileSourceLocatorTest extends IntegrationTestCase
 {
-    /**
-     * @var ClassToFileSourceLocator
-     */
-    private $locator;
+    private ClassToFileSourceLocator $locator;
 
     public function setUp(): void
     {
         $classToFile = ClassToFileConverter::fromComposerAutoloader(include(__DIR__ . '/../../../../vendor/autoload.php'));
         $this->locator = new ClassToFileSourceLocator($classToFile);
     }
+
     /**
      * It should locate source.
      */

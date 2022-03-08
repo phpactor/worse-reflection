@@ -13,41 +13,29 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class VirtualReflectionParameterTest extends TestCase
 {
     use ProphecyTrait;
 
     private $position;
-    /**
-     * @var ObjectProphecy
-     */
-    private $class;
-    /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var ObjectProphecy
-     */
-    private $frame;
-    /**
-     * @var ObjectProphecy
-     */
-    private $scope;
+    
+    private ObjectProphecy $class;
+    
+    private string $name;
+    
+    private ObjectProphecy $frame;
+    
+    private ObjectProphecy $scope;
+
     private $types;
-    /**
-     * @var Type
-     */
-    private $type;
-    /**
-     * @var ObjectProphecy
-     */
-    private $method;
-    /**
-     * @var DefaultValue
-     */
-    private $defaults;
+    
+    private Type $type;
+    
+    private ObjectProphecy $method;
+    
+    private DefaultValue $defaults;
 
     public function setUp(): void
     {

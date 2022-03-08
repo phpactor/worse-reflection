@@ -13,10 +13,7 @@ use Phpactor\WorseReflection\ReflectorBuilder;
 
 class StubSourceLocatorTest extends IntegrationTestCase
 {
-    /**
-     * @var StubSourceLocator
-     */
-    private $sourceLocator;
+    private StubSourceLocator $sourceLocator;
 
     public function setUp(): void
     {

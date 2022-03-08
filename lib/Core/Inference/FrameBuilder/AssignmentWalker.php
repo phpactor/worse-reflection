@@ -25,10 +25,7 @@ use Psr\Log\LoggerInterface;
 
 class AssignmentWalker extends AbstractWalker
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(LoggerInterface $logger)
     {
@@ -192,8 +189,8 @@ class AssignmentWalker extends AbstractWalker
     }
 
     /**
-     * @param mixed $value
      * @param mixed[] $elements
+     * @param mixed $value
      */
     private function walkArrayElements(array $elements, Node $leftOperand, $value, Frame $frame): void
     {

@@ -38,37 +38,25 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 
 class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var ClassDeclaration
-     */
-    private $node;
-
-    /**
-     * @var SourceCode
-     */
-    private $sourceCode;
+    private ServiceLocator $serviceLocator;
+    
+    private ClassDeclaration $node;
+    
+    private SourceCode $sourceCode;
 
     /**
      * @var ReflectionInterfaceCollection<ReflectionInterface>
      */
-    private $interfaces;
+    private ?ReflectionInterfaceCollection $interfaces = null;
+    
+    private ?ReflectionClassLike $parent = null;
 
     /**
-     * @var ReflectionClassLike|null
+     * @var array<string,ReflectionMethodCollection>
      */
-    private $parent;
+    private array $methods = [];
 
-    /**
-     * @var ReflectionMethodCollection|null
-     */
-    private $methods;
-    private $ancestors;
-
+    private ?TolerantReflectionClassCollection $ancestors = null;
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -290,7 +278,6 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
 
         return $traits;
     }
-
 
     public function memberListPosition(): Position
     {

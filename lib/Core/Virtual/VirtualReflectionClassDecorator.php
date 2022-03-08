@@ -19,20 +19,14 @@ use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorator implements ReflectionClass
 {
-    /**
-     * @var ReflectionClass
-     */
-    private $class;
+    private ReflectionClass $class;
 
     /**
      * @var ReflectionMemberProvider[]
      */
-    private $memberProviders;
-
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
+    private array $memberProviders;
+    
+    private ServiceLocator $serviceLocator;
 
     public function __construct(ServiceLocator $serviceLocator, ReflectionClass $class, array $memberProviders = [])
     {

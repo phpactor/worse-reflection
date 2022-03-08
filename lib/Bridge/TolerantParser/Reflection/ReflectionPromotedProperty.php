@@ -23,30 +23,15 @@ use InvalidArgumentException;
 
 class ReflectionPromotedProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var ReflectionClassLike
-     */
-    private $class;
-
-    /**
-     * @var PropertyTypeResolver
-     */
-    private $typeResolver;
-
-    /**
-     * @var DeclaredMemberTypeResolver
-     */
-    private $memberTypeResolver;
-
-    /**
-     * @var Parameter
-     */
-    private $parameter;
+    private ServiceLocator $serviceLocator;
+    
+    private ReflectionClassLike $class;
+    
+    private PropertyTypeResolver $typeResolver;
+    
+    private DeclaredMemberTypeResolver $memberTypeResolver;
+    
+    private Parameter $parameter;
 
     public function __construct(
         ServiceLocator $serviceLocator,

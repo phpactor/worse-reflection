@@ -19,20 +19,11 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 
 class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionTrait
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var TraitDeclaration
-     */
-    private $node;
-
-    /**
-     * @var SourceCode
-     */
-    private $sourceCode;
+    private ServiceLocator $serviceLocator;
+    
+    private TraitDeclaration $node;
+    
+    private SourceCode $sourceCode;
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -64,7 +55,6 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
 
         return $properties;
     }
-
 
     public function name(): ClassName
     {

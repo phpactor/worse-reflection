@@ -8,10 +8,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
 
 class ParameterTypeResolver
 {
-    /**
-     * @var ReflectionParameter
-     */
-    private $parameter;
+    private ReflectionParameter $parameter;
 
     public function __construct(ReflectionParameter $parameter)
     {

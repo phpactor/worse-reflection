@@ -9,15 +9,12 @@ use InvalidArgumentException;
 
 class SourceCode implements TextDocument
 {
-    /**
-     * @var string
-     */
-    private $source;
+    private string $source;
 
     /**
      * @var string
      */
-    private $path;
+    private ?string $path;
 
     private function __construct(string $source, string $path = null)
     {
@@ -84,10 +81,7 @@ class SourceCode implements TextDocument
     {
         return new self($source, $filePath);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function uri(): ?TextDocumentUri
     {
         if (!$this->path) {
@@ -96,10 +90,7 @@ class SourceCode implements TextDocument
 
         return TextDocumentUri::fromString($this->path);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function language(): TextDocumentLanguage
     {
         return TextDocumentLanguage::fromString('php');

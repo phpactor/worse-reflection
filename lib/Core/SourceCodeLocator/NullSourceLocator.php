@@ -9,9 +9,6 @@ use Phpactor\WorseReflection\Core\SourceCodeLocator;
 
 class NullSourceLocator implements SourceCodeLocator
 {
-    /**
-     * {@inheritDoc}
-     */
     public function locate(Name $name): SourceCode
     {
         throw new SourceNotFound(sprintf(

@@ -17,20 +17,11 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollec
 
 class CompositeReflector implements Reflector
 {
-    /**
-     * @var ClassReflector
-     */
-    private $classReflector;
-
-    /**
-     * @var SourceCodeReflector
-     */
-    private $sourceCodeReflector;
-
-    /**
-     * @var FunctionReflector
-     */
-    private $functionReflector;
+    private ClassReflector $classReflector;
+    
+    private SourceCodeReflector $sourceCodeReflector;
+    
+    private FunctionReflector $functionReflector;
 
     public function __construct(
         ClassReflector $classReflector,
@@ -41,74 +32,47 @@ class CompositeReflector implements Reflector
         $this->sourceCodeReflector = $sourceCodeReflector;
         $this->functionReflector = $functionReflector;
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectClass($className): ReflectionClass
     {
         return $this->classReflector->reflectClass($className);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectInterface($className): ReflectionInterface
     {
         return $this->classReflector->reflectInterface($className);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectTrait($className): ReflectionTrait
     {
         return $this->classReflector->reflectTrait($className);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectEnum($className): ReflectionEnum
     {
         return $this->classReflector->reflectEnum($className);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectClassLike($className): ReflectionClassLike
     {
         return $this->classReflector->reflectClassLike($className);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
         return $this->sourceCodeReflector->reflectClassesIn($sourceCode);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
         return $this->sourceCodeReflector->reflectOffset($sourceCode, $offset);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
     {
         return $this->sourceCodeReflector->reflectMethodCall($sourceCode, $offset);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
     {
         return $this->sourceCodeReflector->reflectFunctionsIn($sourceCode);
@@ -118,19 +82,12 @@ class CompositeReflector implements Reflector
     {
         return $this->functionReflector->reflectFunction($name);
     }
-
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function sourceCodeForClassLike($className): SourceCode
     {
         return $this->classReflector->sourceCodeForClassLike($className);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function sourceCodeForFunction($name): SourceCode
     {
         return $this->functionReflector->sourceCodeForFunction($name);

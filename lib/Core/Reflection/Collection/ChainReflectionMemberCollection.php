@@ -19,7 +19,7 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
     /**
      * @var array<T>
      */
-    private $collections = [];
+    private array $collections = [];
 
     /**
      * @param array<T> $collections
@@ -214,10 +214,7 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
             'Method not supported on chain member collection corrently'
         );
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function byMemberType(string $type): ReflectionMemberCollection
     {
         $collections = [];

@@ -10,29 +10,22 @@ use Phpactor\WorseReflection\Core\SourceCode;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethodCall;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class ContextualSourceCodeReflectorTest extends TestCase
 {
     use ProphecyTrait;
 
     const TEST_SOURCE_CODE = 'hello';
+
     const TEST_OFFSET = 666;
+    
+    private ObjectProphecy $innerReflector;
+    
+    private ContextualSourceCodeReflector $reflector;
+    
+    private ObjectProphecy $locator;
 
-
-    /**
-     * @var ObjectProphecy
-     */
-    private $innerReflector;
-
-    /**
-     * @var ContextualSourceCodeReflector
-     */
-    private $reflector;
-
-    /**
-     * @var ObjectProphecy
-     */
-    private $locator;
     private $code;
 
     public function setUp(): void

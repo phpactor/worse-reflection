@@ -17,7 +17,7 @@ class DeclaredMemberTypeResolver
         'iterable',
         'resource',
     ];
-
+    
     /**
      * @param mixed $declaredTypes
      */

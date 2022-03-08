@@ -5,11 +5,8 @@ namespace Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TraitImport;
 class TraitImport
 {
     private $traitName;
-
-    /**
-     * @var array
-     */
-    private $traitAliases = [];
+    
+    private array $traitAliases = [];
 
     public function __construct(string $traitName, array $traitAliases = [])
     {

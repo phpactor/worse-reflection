@@ -22,20 +22,11 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 
 class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEnum
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var EnumDeclaration
-     */
-    private $node;
-
-    /**
-     * @var SourceCode
-     */
-    private $sourceCode;
+    private ServiceLocator $serviceLocator;
+    
+    private EnumDeclaration $node;
+    
+    private SourceCode $sourceCode;
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -80,7 +71,6 @@ class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEn
 
         return $properties;
     }
-
 
     public function name(): ClassName
     {

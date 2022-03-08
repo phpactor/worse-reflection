@@ -19,15 +19,13 @@ use Phpactor\WorseReflection\Core\Type;
 
 abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
-    /**
-     * @var ExpressionEvaluator
-     */
-    protected $evaluator;
+    protected ExpressionEvaluator $evaluator;
 
     public function __construct()
     {
         $this->evaluator = new ExpressionEvaluator();
     }
+
     /**
      * @return WorseVariable[]
      */
@@ -50,11 +48,8 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
         return $variables;
     }
-
-    /**
-     * @return mixed
-     */
-    protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame)
+    
+    protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame): ?WorseVariable
     {
         $operator = $node->operator->getText($node->getFileContents());
 

@@ -29,12 +29,9 @@ final class FrameBuilder
     /**
      * @var FrameWalker[]
      */
-    private $walkers;
-
-    /**
-     * @var Cache
-     */
-    private $cache;
+    private array $walkers;
+    
+    private Cache $cache;
 
     /**
      * @param FrameWalker[] $walkers
@@ -72,7 +69,6 @@ final class FrameBuilder
     {
         return $this->walkNode($this->resolveScopeNode($node), $node);
     }
-
 
     /**
      * @internal For use with walkers

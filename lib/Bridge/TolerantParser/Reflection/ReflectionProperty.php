@@ -21,35 +21,17 @@ use InvalidArgumentException;
 
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var PropertyDeclaration
-     */
-    private $propertyDeclaration;
-
-    /**
-     * @var Variable
-     */
-    private $variable;
-
-    /**
-     * @var ReflectionClassLike
-     */
-    private $class;
-
-    /**
-     * @var PropertyTypeResolver
-     */
-    private $typeResolver;
-
-    /**
-     * @var DeclaredMemberTypeResolver
-     */
-    private $memberTypeResolver;
+    private ServiceLocator $serviceLocator;
+    
+    private PropertyDeclaration $propertyDeclaration;
+    
+    private Variable $variable;
+    
+    private ReflectionClassLike $class;
+    
+    private PropertyTypeResolver $typeResolver;
+    
+    private DeclaredMemberTypeResolver $memberTypeResolver;
 
     public function __construct(
         ServiceLocator $serviceLocator,

@@ -79,7 +79,7 @@ class ExpressionEvaluator
 
         return null;
     }
-
+    
     /**
      * @return mixed
      */

@@ -16,20 +16,11 @@ use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 
 class ReflectionArgument implements CoreReflectionArgument
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $services;
-
-    /**
-     * @var ArgumentExpression
-     */
-    private $node;
-
-    /**
-     * @var Frame
-     */
-    private $frame;
+    private ServiceLocator $services;
+    
+    private ArgumentExpression $node;
+    
+    private Frame $frame;
 
     public function __construct(ServiceLocator $services, Frame $frame, ArgumentExpression $node)
     {

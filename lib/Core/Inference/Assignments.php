@@ -15,7 +15,7 @@ abstract class Assignments implements Countable, IteratorAggregate
     /**
      * @var Variable[]
      */
-    private $variables = [];
+    private array $variables = [];
 
     /**
      * @param Variable[] $variables
@@ -107,10 +107,7 @@ abstract class Assignments implements Countable, IteratorAggregate
 
         return $last;
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function count(): int
     {
         return count($this->variables);

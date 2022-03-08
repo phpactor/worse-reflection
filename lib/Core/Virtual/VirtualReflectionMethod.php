@@ -18,30 +18,15 @@ use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionMethod extends VirtualReflectionMember implements ReflectionMethod
 {
-    /**
-     * @var ReflectionParameterCollection
-     */
-    private $parameters;
-
-    /**
-     * @var NodeText
-     */
-    private $body;
-
-    /**
-     * @var Type
-     */
-    private $type;
-
-    /**
-     * @var bool
-     */
-    private $isAbstract;
-
-    /**
-     * @var bool
-     */
-    private $isStatic;
+    private ReflectionParameterCollection $parameters;
+    
+    private NodeText $body;
+    
+    private Type $type;
+    
+    private bool $isAbstract;
+    
+    private bool $isStatic;
 
     public function __construct(
         Position $position,
@@ -97,10 +82,7 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
     {
         return $this->body;
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function returnType(): Type
     {
         return $this->type();

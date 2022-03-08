@@ -15,7 +15,9 @@ class ChainSourceLocatorTest extends TestCase
     use ProphecyTrait;
 
     private $locator1;
+
     private $locator2;
+
     private $chain;
 
     public function setUp(): void

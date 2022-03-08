@@ -14,20 +14,14 @@ use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionInterfaceDecorator extends VirtualReflectionClassLikeDecorator implements ReflectionInterface
 {
-    /**
-     * @var ReflectionInterface
-     */
-    private $interface;
+    private ReflectionInterface $interface;
 
     /**
      * @var ReflectionMemberProvider[]
      */
-    private $memberProviders;
-
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
+    private array $memberProviders;
+    
+    private ServiceLocator $serviceLocator;
 
     public function __construct(ServiceLocator $serviceLocator, ReflectionInterface $interface, array $memberProviders = [])
     {

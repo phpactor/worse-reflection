@@ -14,11 +14,8 @@ use Prophecy\PhpUnit\ProphecyTrait;
 class TemporarySourceLocatorTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var TemporarySourceLocator
-     */
-    private $locator;
+    
+    private TemporarySourceLocator $locator;
 
     public function setUp(): void
     {

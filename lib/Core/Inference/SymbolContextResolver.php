@@ -54,40 +54,19 @@ use Psr\Log\LoggerInterface;
 
 class SymbolContextResolver
 {
-    /**
-     * @var MemberTypeResolver
-     */
-    private $memberTypeResolver;
-
-    /**
-     * @var Reflector
-     */
-    private $reflector;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var SymbolFactory
-     */
-    private $symbolFactory;
-
-    /**
-     * @var FullyQualifiedNameResolver
-     */
-    private $nameResolver;
-
-    /**
-     * @var ExpressionEvaluator
-     */
-    private $expressionEvaluator;
-
-    /**
-     * @var Cache
-     */
-    private $cache;
+    private MemberTypeResolver $memberTypeResolver;
+    
+    private Reflector $reflector;
+    
+    private LoggerInterface $logger;
+    
+    private SymbolFactory $symbolFactory;
+    
+    private FullyQualifiedNameResolver $nameResolver;
+    
+    private ExpressionEvaluator $expressionEvaluator;
+    
+    private Cache $cache;
 
     public function __construct(
         Reflector $reflector,

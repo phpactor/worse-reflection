@@ -10,17 +10,14 @@ class TtlCache implements Cache
     /**
      * @var array<string, mixed>
      */
-    private $cache = [];
+    private array $cache = [];
 
     /**
      * @var array<string, int>
      */
-    private $expires = [];
-
-    /**
-     * @var int
-     */
-    private $lifetime;
+    private array $expires = [];
+    
+    private float $lifetime;
 
     private $ticker = 0;
 

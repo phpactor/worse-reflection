@@ -13,21 +13,31 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 abstract class VirtualReflectionMemberTestCase extends TestCase
 {
     use ProphecyTrait;
 
-    protected $position;
-    protected $declaringClass;
-    protected $class;
-    protected $name;
-    protected $frame;
-    protected $docblock;
-    protected $scope;
-    protected $visibility;
-    protected $types;
-    protected $type;
+    protected Position $position;
+
+    protected ObjectProphecy $declaringClass;
+
+    protected ObjectProphecy $class;
+
+    protected string $name;
+
+    protected ObjectProphecy $frame;
+
+    protected ObjectProphecy $docblock;
+
+    protected ObjectProphecy $scope;
+
+    protected Visibility $visibility;
+
+    protected Types $types;
+
+    protected Type $type;
 
     public function setUp(): void
     {

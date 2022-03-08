@@ -8,15 +8,9 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionOffset as CoreReflectionO
 
 final class ReflectionOffset implements CoreReflectionOffset
 {
-    /**
-     * @var Frame
-     */
-    private $frame;
-
-    /**
-     * @var SymbolContext
-     */
-    private $symbolContext;
+    private Frame $frame;
+    
+    private SymbolContext $symbolContext;
 
     private function __construct(Frame $frame, SymbolContext $symbolContext)
     {

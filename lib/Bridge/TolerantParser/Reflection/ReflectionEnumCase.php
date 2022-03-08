@@ -15,20 +15,11 @@ use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreReflectionEnumCase
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var EnumCaseDeclaration
-     */
-    private $node;
-
-    /**
-     * @var ReflectionEnum
-     */
-    private $enum;
+    private ServiceLocator $serviceLocator;
+    
+    private EnumCaseDeclaration $node;
+    
+    private ReflectionEnum $enum;
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -73,9 +64,8 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
     {
         return false;
     }
-
+    
     /**
-     * {@inheritDoc}
      * @return mixed
      */
     public function value()

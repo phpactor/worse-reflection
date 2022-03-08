@@ -4,20 +4,11 @@ namespace Phpactor\WorseReflection\Core;
 
 final class Position
 {
-    /**
-     * @var int
-     */
-    private $fullStart;
-
-    /**
-     * @var int
-     */
-    private $start;
-
-    /**
-     * @var int
-     */
-    private $end;
+    private int $fullStart;
+    
+    private int $start;
+    
+    private int $end;
 
     private function __construct(
         int $fullStart,

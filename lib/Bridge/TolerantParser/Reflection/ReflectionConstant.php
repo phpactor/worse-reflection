@@ -15,25 +15,13 @@ use Microsoft\PhpParser\Node\ClassConstDeclaration;
 
 class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var ConstElement
-     */
-    private $node;
-
-    /**
-     * @var AbstractReflectionClass
-     */
-    private $class;
-
-    /**
-     * @var ClassConstDeclaration
-     */
-    private $declaration;
+    private ServiceLocator $serviceLocator;
+    
+    private ConstElement $node;
+    
+    private AbstractReflectionClass $class;
+    
+    private ClassConstDeclaration $declaration;
 
     public function __construct(
         ServiceLocator $serviceLocator,
@@ -76,10 +64,7 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
     {
         return false;
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function value()
     {
         return $this->serviceLocator()

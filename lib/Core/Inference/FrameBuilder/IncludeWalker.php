@@ -19,16 +19,9 @@ use Webmozart\PathUtil\Path;
 
 class IncludeWalker implements FrameWalker
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
+    private Parser $parser;
+    
+    private LoggerInterface $logger;
 
     public function __construct(LoggerInterface $logger, Parser $parser = null)
     {

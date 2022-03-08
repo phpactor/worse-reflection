@@ -51,10 +51,7 @@ final class Types implements IteratorAggregate, Countable
             $types->types
         ));
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function count(): int
     {
         return count($this->types);

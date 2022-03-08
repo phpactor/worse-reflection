@@ -11,8 +11,8 @@ use stdClass;
 class SourceCodeTest extends TestCase
 {
     const SOURCE_CODE = 'source code';
-    const EXAMPLE_PATH = '/path/to';
 
+    const EXAMPLE_PATH = '/path/to';
 
     /**
      * @testdox It can load source code from a file.

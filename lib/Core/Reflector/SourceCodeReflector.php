@@ -27,7 +27,6 @@ interface SourceCodeReflector
     /**
      * Return the information for the given offset in the given file, including the value
      * and type of a variable and the frame information.
-     *
      */
     public function reflectOffset($sourceCode, $offset): ReflectionOffset;
 

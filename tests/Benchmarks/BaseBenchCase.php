@@ -13,10 +13,7 @@ use Phpactor\WorseReflection\ReflectorBuilder;
  */
 abstract class BaseBenchCase
 {
-    /**
-     * @var Reflector
-     */
-    private $reflector;
+    private Reflector $reflector;
 
     public function setUp(): void
     {

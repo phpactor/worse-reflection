@@ -7,10 +7,7 @@ use Psr\Log\AbstractLogger;
 class ArrayLogger extends AbstractLogger
 {
     private $messages = [];
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function log($level, $message, array $context = [
     ]): void
     {

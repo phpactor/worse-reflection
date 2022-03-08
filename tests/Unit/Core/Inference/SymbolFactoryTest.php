@@ -9,22 +9,19 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
 
 class SymbolFactoryTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var SymbolFactory
-     */
-    private $factory;
+    
+    private SymbolFactory $factory;
 
     /**
      * @var Node
      */
-    private $node;
-
+    private ObjectProphecy $node;
 
     public function setUp(): void
     {

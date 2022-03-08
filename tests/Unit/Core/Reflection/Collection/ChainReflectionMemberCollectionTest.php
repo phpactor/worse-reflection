@@ -11,25 +11,18 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Visibility;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Traversable;
 
 class ChainReflectionMemberCollectionTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var ObjectProphecy
-     */
-    private $collection1;
-    /**
-     * @var ObjectProphecy
-     */
-    private $collection2;
-
-    /**
-     * @var ObjectProphecy
-     */
-    private $member1;
+    
+    private ObjectProphecy $collection1;
+    
+    private ObjectProphecy $collection2;
+    
+    private ObjectProphecy $member1;
 
     public function setUp(): void
     {
@@ -151,7 +144,6 @@ class ChainReflectionMemberCollectionTest extends TestCase
         $member = $collection1->last();
         $this->assertSame($this->member1->reveal(), $member);
     }
-
 
     public function testThrowsExceptionIfNoFirstItem(): void
     {

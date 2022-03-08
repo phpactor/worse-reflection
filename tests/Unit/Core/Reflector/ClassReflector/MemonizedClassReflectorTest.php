@@ -23,17 +23,14 @@ class MemonizedClassReflectorTest extends TestCase
     /**
      * @var MemonizedClassReflector
      */
-    private $reflector;
+    private MemonizedReflector $reflector;
 
     /**
      * @var ObjectProphecy|FunctionReflector
      */
     private $innerFunctionReflector;
-
-    /**
-     * @var ClassName
-     */
-    private $className;
+    
+    private ClassName $className;
 
     public function setUp(): void
     {

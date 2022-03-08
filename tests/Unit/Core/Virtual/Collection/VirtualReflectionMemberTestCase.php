@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Visibility;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @method \Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollection collection()
@@ -14,16 +15,10 @@ use Prophecy\PhpUnit\ProphecyTrait;
 abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollectionTestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var ObjectProphecy
-     */
-    protected $declaringClass;
-
-    /**
-     * @var ObjectProphecy
-     */
-    protected $class;
+    
+    protected ObjectProphecy $declaringClass;
+    
+    protected ObjectProphecy $class;
 
     protected $position;
 

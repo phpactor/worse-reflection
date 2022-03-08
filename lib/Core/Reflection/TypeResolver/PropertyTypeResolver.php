@@ -9,15 +9,9 @@ use Psr\Log\LoggerInterface;
 
 class PropertyTypeResolver
 {
-    /**
-     * @var ReflectionProperty
-     */
-    private $property;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private ReflectionProperty $property;
+    
+    private LoggerInterface $logger;
 
     public function __construct(ReflectionProperty $property, LoggerInterface $logger)
     {

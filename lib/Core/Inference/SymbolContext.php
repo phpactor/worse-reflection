@@ -13,36 +13,30 @@ final class SymbolContext
      * @var mixed
      */
     private $value;
-
-    /**
-     * @var Types
-     */
-    private $types;
-
-    /**
-     * @var Symbol
-     */
-    private $symbol;
+    
+    private Types $types;
+    
+    private Symbol $symbol;
 
     /**
      * @var Type
      */
-    private $containerType;
+    private ?Type $containerType = null;
 
     /**
      * @var string[]
      */
-    private $issues = [];
+    private array $issues = [];
 
     /**
      * @var ReflectionScope
      */
-    private $scope;
+    private ?ReflectionScope $scope = null;
 
     /**
      * @var Name
      */
-    private $name;
+    private ?Name $name = null;
 
     private function __construct(Symbol $symbol, Types $types, Name $name = null, $value = null, Type $containerType = null, ReflectionScope $scope = null)
     {

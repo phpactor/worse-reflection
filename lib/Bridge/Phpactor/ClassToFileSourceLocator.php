@@ -11,19 +11,13 @@ use Phpactor\ClassFileConverter\Domain\ClassName;
 
 class ClassToFileSourceLocator implements SourceCodeLocator
 {
-    /**
-     * @var ClassToFile
-     */
-    private $converter;
+    private ClassToFile $converter;
 
     public function __construct(ClassToFile $converter)
     {
         $this->converter = $converter;
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function locate(Name $name): SourceCode
     {
         $candidates = $this->converter->classToFileCandidates(ClassName::fromString((string) $name));

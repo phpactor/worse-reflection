@@ -25,40 +25,19 @@ use InvalidArgumentException;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var MethodDeclaration
-     */
-    private $node;
-
-    /**
-     * @var Visibility
-     */
-    private $visibility;
-
-    /**
-     * @var FrameBuilder
-     */
-    private $frameBuilder;
-
-    /**
-     * @var ReflectionClassLike
-     */
-    private $class;
-
-    /**
-     * @var MethodTypeResolver
-     */
-    private $returnTypeResolver;
-
-    /**
-     * @var DeclaredMemberTypeResolver
-     */
-    private $memberTypeResolver;
+    private ServiceLocator $serviceLocator;
+    
+    private MethodDeclaration $node;
+    
+    private Visibility $visibility;
+    
+    private FrameBuilder $frameBuilder;
+    
+    private ReflectionClassLike $class;
+    
+    private MethodTypeResolver $returnTypeResolver;
+    
+    private DeclaredMemberTypeResolver $memberTypeResolver;
 
     public function __construct(
         ServiceLocator $serviceLocator,

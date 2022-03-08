@@ -12,46 +12,21 @@ use Phpactor\WorseReflection\Core\Types;
 
 class VirtualReflectionParameter implements ReflectionParameter
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var ReflectionFunctionLike
-     */
-    private $functionLike;
-
-    /**
-     * @var Types
-     */
-    private $inferredTypes;
-
-    /**
-     * @var Type
-     */
-    private $type;
-
-    /**
-     * @var DefaultValue
-     */
-    private $default;
-
-    /**
-     *
-     * @var bool
-     */
-    private $byReference;
-
-    /**
-     * @var ReflectionScope
-     */
-    private $scope;
-
-    /**
-     * @var Position
-     */
-    private $position;
+    private string $name;
+    
+    private ReflectionFunctionLike $functionLike;
+    
+    private Types $inferredTypes;
+    
+    private Type $type;
+    
+    private DefaultValue $default;
+    
+    private bool $byReference;
+    
+    private ReflectionScope $scope;
+    
+    private Position $position;
 
     public function __construct(
         string $name,
@@ -87,10 +62,7 @@ class VirtualReflectionParameter implements ReflectionParameter
     {
         return $this->name;
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function method(): ReflectionFunctionLike
     {
         return $this->functionLike;

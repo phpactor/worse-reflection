@@ -792,7 +792,6 @@ class ReflectionClassTest extends IntegrationTestCase
         $assertion($class);
     }
 
-
     public function provideVirtualMethods()
     {
         yield 'virtual methods' => [
@@ -1051,7 +1050,6 @@ class ReflectionClassTest extends IntegrationTestCase
         $class = $this->createReflector($source)->reflectClassLike(ClassName::fromString($class));
         $assertion($class);
     }
-
 
     public function provideVirtualProperties()
     {

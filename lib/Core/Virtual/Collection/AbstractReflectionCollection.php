@@ -14,10 +14,7 @@ use BadMethodCallException;
 
 abstract class AbstractReflectionCollection implements IteratorAggregate, Countable, ArrayAccess
 {
-    /**
-     * @var array
-     */
-    protected $items = [];
+    protected array $items = [];
 
     protected function __construct(array $items)
     {

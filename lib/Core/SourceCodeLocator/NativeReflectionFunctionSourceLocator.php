@@ -10,9 +10,6 @@ use ReflectionFunction;
 
 class NativeReflectionFunctionSourceLocator implements SourceCodeLocator
 {
-    /**
-     * {@inheritDoc}
-     */
     public function locate(Name $name): SourceCode
     {
         if (function_exists($name)) {

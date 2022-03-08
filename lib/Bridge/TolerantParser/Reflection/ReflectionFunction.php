@@ -22,20 +22,11 @@ use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 
 class ReflectionFunction extends AbstractReflectedNode implements CoreReflectionFunction
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
-
-    /**
-     * @var FunctionDeclaration
-     */
-    private $node;
-
-    /**
-     * @var SourceCode
-     */
-    private $sourceCode;
+    private ServiceLocator $serviceLocator;
+    
+    private FunctionDeclaration $node;
+    
+    private SourceCode $sourceCode;
 
     public function __construct(SourceCode $sourceCode, ServiceLocator $serviceLocator, FunctionDeclaration $node)
     {

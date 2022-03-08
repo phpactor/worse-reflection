@@ -11,31 +11,18 @@ use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\ParameterTypeResolver;
 
 class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
+    
+    private Parameter $parameter;
+    
+    private DeclaredMemberTypeResolver $memberTypeResolver;
 
-    /**
-     * @var Parameter
-     */
-    private $parameter;
-
-    /**
-     * @var DeclaredMemberTypeResolver
-     */
-    private $memberTypeResolver;
-
-    /**
-     * @var CoreReflectionMethod
-     */
-    private $functionLike;
+    private ReflectionFunctionLike $functionLike;
 
     public function __construct(ServiceLocator $serviceLocator, ReflectionFunctionLike $functionLike, Parameter $parameter)
     {

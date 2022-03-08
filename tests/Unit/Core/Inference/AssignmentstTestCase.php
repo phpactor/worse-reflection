@@ -94,6 +94,7 @@ abstract class AssignmentstTestCase extends TestCase
 
         $this->assertCount(1, $assignments->atIndex(5));
     }
+
     abstract protected function assignments(): Assignments;
 
     private function createVariable(string $name, int $start, int $end): Variable

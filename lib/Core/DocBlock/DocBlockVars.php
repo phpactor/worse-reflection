@@ -8,10 +8,7 @@ use ArrayIterator;
 
 class DocBlockVars implements IteratorAggregate
 {
-    /**
-     * @var array
-     */
-    private $vars = [];
+    private array $vars = [];
 
     public function __construct(array $vars)
     {
@@ -31,10 +28,7 @@ class DocBlockVars implements IteratorAggregate
 
         return Types::fromTypes($types);
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->vars);

@@ -24,52 +24,37 @@ final class ReflectorBuilder
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private ?LoggerInterface $logger = null;
 
     /**
      * @var SourceCodeLocator[]
      */
-    private $locators = [];
-
-    /**
-     * @var bool
-     */
-    private $contextualSourceLocation = false;
-
-    /**
-     * @var bool
-     */
-    private $enableCache = false;
-
-    /**
-     * @var bool
-     */
-    private $enableContextualSourceLocation = false;
+    private array $locators = [];
+    
+    private bool $contextualSourceLocation = false;
+    
+    private bool $enableCache = false;
+    
+    private bool $enableContextualSourceLocation = false;
 
     /**
      * @var SourceCodeReflectorFactory
      */
-    private $sourceReflectorFactory;
+    private ?SourceCodeReflectorFactory $sourceReflectorFactory = null;
 
     /**
      * @var FrameWalker[]
      */
-    private $framewalkers = [];
+    private array $framewalkers = [];
 
     /**
      * @var ReflectionMemberProvider[]
      */
-    private $memberProviders = [];
-
-    /**
-     * @var float
-     */
-    private $cacheLifetime = 5.0;
-
-    /**
-     * @var Cache|null
-     */
-    private $cache;
+    private array $memberProviders = [];
+    
+    private float $cacheLifetime = 5.0;
+    
+    private ?Cache $cache = null;
 
     /**
      * Create a new instance of the builder

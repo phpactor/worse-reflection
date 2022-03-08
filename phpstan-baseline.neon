@@ -141,16 +141,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/AbstractReflectionMethodCall.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:__construct\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
@@ -181,11 +171,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:keys\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
@@ -197,11 +182,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:merge\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\AbstractReflectionCollection\\:\\:merge\\(\\) has parameter \\$collection with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection but does not specify its types\\: T$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/AbstractReflectionCollection.php
 
@@ -316,11 +296,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionInterfaceCollection.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection implements generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\:\\:byVisibilities\\(\\) has parameter \\$visibilities with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/Collection/ReflectionMemberCollection.php
@@ -426,17 +401,7 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionArgument.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:constants\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionConstantCollection but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
@@ -461,17 +426,12 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:\\$ancestors has no typehint specified\\.$#"
+			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionClass\\:\\:\\$ancestors type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionClassCollection\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
 		-
 			message: "#^Strict comparison using \\=\\=\\= between false and true will always evaluate to false\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionClass.php
 
@@ -487,11 +447,6 @@ parameters:
 
 		-
 			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionInterface\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
 
@@ -541,11 +496,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionOffset.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionParameter\\:\\:\\$functionLike \\(Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMethod\\) does not accept Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionFunctionLike\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionParameter.php
-
-		-
 			message: "#^Strict comparison using \\=\\=\\= between null and Microsoft\\\\PhpParser\\\\ResolvedName will always evaluate to false\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionProperty.php
@@ -554,11 +504,6 @@ parameters:
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionScope\\:\\:resolveFullyQualifiedName\\(\\) has parameter \\$type with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionScope.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\ReflectionTrait\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionTrait.php
 
 		-
 			message: "#^Parameter \\#3 \\$reflectionTrait of static method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:fromTraitDeclaration\\(\\) expects Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\AbstractReflectionClass, Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike given\\.$#"
@@ -592,16 +537,6 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type Microsoft\\\\PhpParser\\\\Node\\\\DelimitedList\\\\TraitSelectOrAliasClauseList supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
-
-		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflection\\\\TraitImport\\\\TraitImports\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/TraitImport/TraitImports.php
 
@@ -686,11 +621,6 @@ parameters:
 			path: lib/Core/Cache/TtlCache.php
 
 		-
-			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$lifetime \\(int\\) does not accept float\\.$#"
-			count: 1
-			path: lib/Core/Cache/TtlCache.php
-
-		-
 			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\Cache\\\\TtlCache\\:\\:\\$ticker has no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Cache/TtlCache.php
@@ -731,17 +661,7 @@ parameters:
 			path: lib/Core/DocBlock/DocBlockInspector.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/DocBlock/DocBlockVars.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/DocBlock/DocBlockVars.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
 			count: 1
 			path: lib/Core/DocBlock/DocBlockVars.php
 
@@ -1056,22 +976,12 @@ parameters:
 			path: lib/Core/Inference/NodeReflector.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/Inference/Problems.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:__construct\\(\\) has parameter \\$problems with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Inference/Problems.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:create\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\.$#"
-			count: 1
-			path: lib/Core/Inference/Problems.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\Problems\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
 			count: 1
 			path: lib/Core/Inference/Problems.php
 
@@ -1301,11 +1211,6 @@ parameters:
 			path: lib/Core/Name.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\NameImports implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/NameImports.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:__construct\\(\\) has parameter \\$nameImports with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/NameImports.php
@@ -1322,11 +1227,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:getByAlias\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/NameImports.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\NameImports\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
 			count: 1
 			path: lib/Core/NameImports.php
 
@@ -1376,39 +1276,14 @@ parameters:
 			path: lib/Core/Position.php
 
 		-
-			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionClassCollection extends generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Reflection/Collection/ReflectionClassCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionClassCollection\\:\\:concrete\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflection/Collection/ReflectionClassCollection.php
 
 		-
-			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionConstantCollection extends generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Reflection/Collection/ReflectionConstantCollection.php
-
-		-
-			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionFunctionCollection extends generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Reflection/Collection/ReflectionFunctionCollection.php
-
-		-
-			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionInterfaceCollection extends generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Reflection/Collection/ReflectionInterfaceCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\:\\:byVisibilities\\(\\) has parameter \\$visibilities with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Reflection/Collection/ReflectionMemberCollection.php
-
-		-
-			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection extends generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Reflection/Collection/ReflectionMethodCollection.php
 
 		-
 			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection has @implements tag, but can not implement any interface, must extend from it\\.$#"
@@ -1419,16 +1294,6 @@ parameters:
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection\\:\\:abstract\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflection/Collection/ReflectionMethodCollection.php
-
-		-
-			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionPropertyCollection extends generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Reflection/Collection/ReflectionPropertyCollection.php
-
-		-
-			message: "#^Interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionTraitCollection extends generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Reflection/Collection/ReflectionTraitCollection.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionArgument\\:\\:value\\(\\) has no return typehint specified\\.$#"
@@ -1452,11 +1317,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:isConcrete\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflection/ReflectionClassLike.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionClassLike\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Reflection/ReflectionClassLike.php
 
@@ -1771,11 +1631,6 @@ parameters:
 			path: lib/Core/SourceCodeLocator/ChainSourceLocator.php
 
 		-
-			message: "#^Parameter \\#2 \\$code of class Phpactor\\\\WorseReflection\\\\Core\\\\Exception\\\\SourceNotFound constructor expects int, null given\\.$#"
-			count: 1
-			path: lib/Core/SourceCodeLocator/ChainSourceLocator.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\SourceCodeLocator\\\\NativeReflectionFunctionSourceLocator\\:\\:sourceFromFunctionName\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/SourceCodeLocator/NativeReflectionFunctionSourceLocator.php
@@ -1841,11 +1696,6 @@ parameters:
 			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:class\\(\\) has parameter \\$className with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Type.php
@@ -1867,11 +1717,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:object\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
-			message: "#^Ternary operator condition is always true\\.$#"
 			count: 1
 			path: lib/Core/Type.php
 
@@ -1901,16 +1746,6 @@ parameters:
 			path: lib/Core/Util/OriginalMethodResolver.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:__construct\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
@@ -1926,27 +1761,12 @@ parameters:
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:keys\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:last\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:merge\\(\\) has parameter \\$collection with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\AbstractReflectionCollection\\:\\:merge\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
@@ -1996,22 +1816,12 @@ parameters:
 			path: lib/Core/Virtual/Collection/AbstractReflectionCollection.php
 
 		-
-			message: "#^Class Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMemberCollection implements generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection but does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMemberCollection\\:\\:byVisibilities\\(\\) has parameter \\$visibilities with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMemberCollection\\:\\:fromMembers\\(\\) has parameter \\$members with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\Collection\\\\VirtualReflectionMemberCollection\\:\\:fromMembers\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Virtual/Collection/VirtualReflectionMemberCollection.php
 
@@ -2061,11 +1871,6 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassDecorator\\:\\:methods\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMethodCollection but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionClassDecorator.php
@@ -2096,17 +1901,7 @@ parameters:
 			path: lib/Core/Virtual/VirtualReflectionClassLikeDecorator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionClassLikeDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
-			count: 1
-			path: lib/Core/Virtual/VirtualReflectionClassLikeDecorator.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionInterfaceDecorator\\:\\:__construct\\(\\) has parameter \\$memberProviders with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Virtual\\\\VirtualReflectionInterfaceDecorator\\:\\:members\\(\\) return type with generic interface Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection does not specify its types\\: T$#"
 			count: 1
 			path: lib/Core/Virtual/VirtualReflectionInterfaceDecorator.php
 
@@ -2188,10 +1983,5 @@ parameters:
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\ReflectorBuilder\\:\\:buildReflectorFactory\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: lib/ReflectorBuilder.php
-
-		-
-			message: "#^Ternary operator condition is always true\\.$#"
-			count: 2
 			path: lib/ReflectorBuilder.php
 

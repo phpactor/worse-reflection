@@ -8,16 +8,27 @@ use InvalidArgumentException;
 final class Symbol
 {
     const CLASS_ = 'class';
+
     const VARIABLE = 'variable';
+
     const METHOD = 'method';
+
     const FUNCTION = 'function';
+
     const PROPERTY = 'property';
+
     const CONSTANT = 'constant';
+
     const CASE = 'case';
+
     const STRING = 'string';
+
     const NUMBER = 'number';
+
     const BOOLEAN = 'boolean';
+
     const ARRAY = 'array';
+
     const UNKNOWN = '<unknown>';
 
     const VALID_SYMBOLS = [
@@ -34,21 +45,12 @@ final class Symbol
         self::ARRAY,
         self::CASE,
     ];
-
-    /**
-     * @var string
-     */
-    private $symbolType;
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var Position
-     */
-    private $position;
+    
+    private string $symbolType;
+    
+    private string $name;
+    
+    private Position $position;
 
     private function __construct(string $symbolType, string $name, Position $position)
     {
