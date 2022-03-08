@@ -7,12 +7,10 @@ use Phpactor\WorseReflection\Core\Types;
 class DocBlockVar
 {
     /**
-     * @var string
      */
     private string $name;
 
     /**
-     * @var Types
      */
     private Types $types;
 

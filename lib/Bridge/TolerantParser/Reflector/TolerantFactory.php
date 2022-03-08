@@ -11,7 +11,6 @@ use Microsoft\PhpParser\Parser;
 class TolerantFactory implements SourceCodeReflectorFactory
 {
     /**
-     * @var Parser
      */
     private Parser $parser;
 

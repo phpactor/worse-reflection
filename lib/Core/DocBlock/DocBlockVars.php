@@ -9,7 +9,6 @@ use ArrayIterator;
 class DocBlockVars implements IteratorAggregate
 {
     /**
-     * @var array
      */
     private array $vars = [];
 

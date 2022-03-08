@@ -16,62 +16,50 @@ use Phpactor\WorseReflection\Core\Visibility;
 abstract class VirtualReflectionMember implements ReflectionMember
 {
     /**
-     * @var Position
      */
     private Position $position;
 
     /**
-     * @var ReflectionClassLike
      */
     private ReflectionClassLike $declaringClass;
 
     /**
-     * @var ReflectionClassLike
      */
     private ReflectionClassLike $class;
 
     /**
-     * @var string
      */
     private string $name;
 
     /**
-     * @var Frame
      */
     private Frame $frame;
 
     /**
-     * @var DocBlock
      */
     private DocBlock $docblock;
 
     /**
-     * @var ReflectionScope
      */
     private ReflectionScope $scope;
 
     /**
-     * @var Visibility
      */
     private Visibility $visibility;
 
     /**
-     * @var Types
      */
     private Types $inferredTypes;
 
     /**
-     * @var Type
      */
     private Type $type;
 
     /**
-     * @var Visibility
      */
     private Visibility $visiblity;
 
     /**
-     * @var Deprecation
      */
     private Deprecation $deprecation;
 

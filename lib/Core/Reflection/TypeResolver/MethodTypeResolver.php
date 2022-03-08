@@ -13,12 +13,10 @@ use Psr\Log\LoggerInterface;
 class MethodTypeResolver
 {
     /**
-     * @var ReflectionMethod
      */
     private ReflectionMethod $method;
 
     /**
-     * @var LoggerInterface
      */
     private LoggerInterface $logger;
 

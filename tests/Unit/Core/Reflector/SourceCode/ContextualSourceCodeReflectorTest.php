@@ -21,17 +21,14 @@ class ContextualSourceCodeReflectorTest extends TestCase
 
 
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $innerReflector;
 
     /**
-     * @var ContextualSourceCodeReflector
      */
     private ContextualSourceCodeReflector $reflector;
 
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $locator;
     private $code;

@@ -24,22 +24,18 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
 
 
     /**
-     * @var ClassReflector
      */
     private ClassReflector $classReflector;
 
     /**
-     * @var FunctionReflector
      */
     private FunctionReflector $functionReflector;
 
     /**
-     * @var ClassReflector
      */
     private ClassReflector $innerReflector;
 
     /**
-     * @var Cache
      */
     private Cache $cache;
 

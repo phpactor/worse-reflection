@@ -20,12 +20,10 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var DocblockReflectionPropertyFactory
      */
     private DocblockReflectionPropertyFactory $factory;
 
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $docblock;
 

@@ -19,16 +19,13 @@ class ChainReflectionMemberCollectionTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $collection1;
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $collection2;
 
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $member1;
 

@@ -16,22 +16,18 @@ use Microsoft\PhpParser\Node\ClassConstDeclaration;
 class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant
 {
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $serviceLocator;
 
     /**
-     * @var ConstElement
      */
     private ConstElement $node;
 
     /**
-     * @var AbstractReflectionClass
      */
     private AbstractReflectionClass $class;
 
     /**
-     * @var ClassConstDeclaration
      */
     private ClassConstDeclaration $declaration;
 

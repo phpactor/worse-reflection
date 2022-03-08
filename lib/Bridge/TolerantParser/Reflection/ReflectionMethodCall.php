@@ -9,7 +9,6 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 class ReflectionMethodCall extends AbstractReflectionMethodCall
 {
     /**
-     * @var MemberAccessExpression
      */
     private MemberAccessExpression $node;
 

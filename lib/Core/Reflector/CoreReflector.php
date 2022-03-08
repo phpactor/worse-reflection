@@ -25,12 +25,10 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollec
 class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionReflector
 {
     /**
-     * @var SourceCodeReflector
      */
     private SourceCodeReflector $sourceReflector;
 
     /**
-     * @var SourceCodeLocator
      */
     private SourceCodeLocator $sourceLocator;
 

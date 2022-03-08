@@ -19,7 +19,6 @@ class DeclaredMemberTypeResolver
     ];
 
     /**
-     * @param mixed $declaredTypes
      */
     public function resolveTypes(Node $tolerantNode, $declaredTypes = null, ClassName $className = null, bool $nullable = false): Types
     {

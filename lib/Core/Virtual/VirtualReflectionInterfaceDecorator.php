@@ -15,7 +15,6 @@ use Phpactor\WorseReflection\Core\Visibility;
 class VirtualReflectionInterfaceDecorator extends VirtualReflectionClassLikeDecorator implements ReflectionInterface
 {
     /**
-     * @var ReflectionInterface
      */
     private ReflectionInterface $interface;
 
@@ -25,7 +24,6 @@ class VirtualReflectionInterfaceDecorator extends VirtualReflectionClassLikeDeco
     private array $memberProviders;
 
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $serviceLocator;
 

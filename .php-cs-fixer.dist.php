@@ -16,6 +16,7 @@ return (new Config())
         '@PSR2' => true,
         'no_unused_imports' => true,
         'phpdoc_to_property_type' => true,
+        'no_superfluous_phpdoc_tags' => true,
         'phpdoc_trim' => true,
         'array_syntax' => ['syntax' => 'short'],
         'void_return' => true,

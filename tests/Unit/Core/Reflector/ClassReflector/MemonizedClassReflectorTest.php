@@ -31,7 +31,6 @@ class MemonizedClassReflectorTest extends TestCase
     private $innerFunctionReflector;
 
     /**
-     * @var ClassName
      */
     private ClassName $className;
 

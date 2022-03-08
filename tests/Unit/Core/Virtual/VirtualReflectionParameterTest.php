@@ -21,32 +21,25 @@ class VirtualReflectionParameterTest extends TestCase
 
     private $position;
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $class;
     /**
-     * @var string
      */
     private string $name;
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $frame;
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $scope;
     private $types;
     /**
-     * @var Type
      */
     private Type $type;
     /**
-     * @var ObjectProphecy
      */
     private ObjectProphecy $method;
     /**
-     * @var DefaultValue
      */
     private DefaultValue $defaults;
 

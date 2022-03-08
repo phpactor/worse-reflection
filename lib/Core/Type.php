@@ -27,12 +27,10 @@ class Type
     private ?ClassName $className = null;
 
     /**
-     * @var Type|null
      */
     private ?Type $arrayType = null;
 
     /**
-     * @var bool
      */
     private bool $nullable = false;
 

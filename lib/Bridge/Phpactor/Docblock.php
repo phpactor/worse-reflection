@@ -22,22 +22,18 @@ use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCo
 class Docblock implements CoreDocblock
 {
     /**
-     * @var PhpactorDocblock
      */
     private PhpactorDocblock $docblock;
 
     /**
-     * @var string
      */
     private string $raw;
 
     /**
-     * @var DocblockReflectionMethodFactory
      */
     private DocblockReflectionMethodFactory $methodFactory;
 
     /**
-     * @var DocblockReflectionPropertyFactory
      */
     private DocblockReflectionPropertyFactory $propertyFactory;
 

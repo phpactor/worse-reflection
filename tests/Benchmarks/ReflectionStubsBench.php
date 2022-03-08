@@ -12,7 +12,6 @@ use Phpactor\WorseReflection\Reflector;
 class ReflectionStubsBench extends BaseBenchCase
 {
     /**
-     * @var Reflector
      */
     private Reflector $reflector;
 

@@ -26,17 +26,14 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 class ReflectionInterface extends AbstractReflectionClass implements CoreReflectionInterface
 {
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $serviceLocator;
 
     /**
-     * @var InterfaceDeclaration
      */
     private InterfaceDeclaration $node;
 
     /**
-     * @var SourceCode
      */
     private SourceCode $sourceCode;
     private $parents;

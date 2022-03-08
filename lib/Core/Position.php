@@ -5,17 +5,14 @@ namespace Phpactor\WorseReflection\Core;
 final class Position
 {
     /**
-     * @var int
      */
     private int $fullStart;
 
     /**
-     * @var int
      */
     private int $start;
 
     /**
-     * @var int
      */
     private int $end;
 

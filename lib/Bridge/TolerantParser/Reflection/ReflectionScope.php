@@ -15,7 +15,6 @@ use Phpactor\WorseReflection\Bridge\PsrLog\ArrayLogger;
 class ReflectionScope implements CoreReflectionScope
 {
     /**
-     * @var Node
      */
     private Node $node;
 

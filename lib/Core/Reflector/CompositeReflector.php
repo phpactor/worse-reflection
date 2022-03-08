@@ -18,17 +18,14 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollec
 class CompositeReflector implements Reflector
 {
     /**
-     * @var ClassReflector
      */
     private ClassReflector $classReflector;
 
     /**
-     * @var SourceCodeReflector
      */
     private SourceCodeReflector $sourceCodeReflector;
 
     /**
-     * @var FunctionReflector
      */
     private FunctionReflector $functionReflector;
 

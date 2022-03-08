@@ -15,7 +15,6 @@ class MemberTypeResolver
     const TYPE_PROPERTIES = 'properties';
 
     /**
-     * @var ClassReflector
      */
     private ClassReflector $reflector;
 

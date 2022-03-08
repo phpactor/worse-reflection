@@ -7,7 +7,6 @@ class TraitImport
     private $traitName;
 
     /**
-     * @var array
      */
     private array $traitAliases = [];
 

@@ -10,7 +10,6 @@ use RuntimeException;
 class QualifiedNameListUtil
 {
     /**
-     * @param mixed $qualifiedNameOrList
      */
     public static function firstQualifiedName($qualifiedNameOrList): ?QualifiedName
     {
@@ -29,7 +28,6 @@ class QualifiedNameListUtil
     }
 
     /**
-     * @param mixed $qualifiedNameOrList
      * @return Token|QualifiedName|null
      */
     public static function firstQualifiedNameOrToken($qualifiedNameOrList)

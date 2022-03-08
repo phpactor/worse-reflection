@@ -16,12 +16,10 @@ use ReturnTypeWillChange;
 abstract class AbstractReflectionCollection implements IteratorAggregate, Countable, ArrayAccess
 {
     /**
-     * @var ServiceLocator
      */
     protected ServiceLocator $serviceLocator;
 
     /**
-     * @var array
      */
     protected array $items = [];
 

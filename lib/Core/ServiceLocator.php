@@ -22,32 +22,26 @@ use Psr\Log\LoggerInterface;
 class ServiceLocator
 {
     /**
-     * @var SourceCodeLocator
      */
     private SourceCodeLocator $sourceLocator;
 
     /**
-     * @var LoggerInterface
      */
     private LoggerInterface $logger;
 
     /**
-     * @var Reflector
      */
     private Reflector $reflector;
 
     /**
-     * @var FrameBuilder
      */
     private FrameBuilder $frameBuilder;
 
     /**
-     * @var SymbolContextResolver
      */
     private SymbolContextResolver $symbolContextResolver;
 
     /**
-     * @var DocBlockFactory
      */
     private DocBlockFactory $docblockFactory;
 

@@ -10,12 +10,10 @@ use Psr\Log\LoggerInterface;
 class PropertyTypeResolver
 {
     /**
-     * @var ReflectionProperty
      */
     private ReflectionProperty $property;
 
     /**
-     * @var LoggerInterface
      */
     private LoggerInterface $logger;
 

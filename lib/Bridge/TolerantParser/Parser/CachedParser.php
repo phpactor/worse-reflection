@@ -10,7 +10,6 @@ use Phpactor\WorseReflection\Core\Cache\TtlCache;
 class CachedParser extends Parser
 {
     /**
-     * @var Cache
      */
     private Cache $cache;
 

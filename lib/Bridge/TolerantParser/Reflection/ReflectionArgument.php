@@ -17,17 +17,14 @@ use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 class ReflectionArgument implements CoreReflectionArgument
 {
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $services;
 
     /**
-     * @var ArgumentExpression
      */
     private ArgumentExpression $node;
 
     /**
-     * @var Frame
      */
     private Frame $frame;
 

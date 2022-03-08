@@ -14,7 +14,6 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionStaticMe
 class NodeReflector
 {
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $services;
 

@@ -81,7 +81,6 @@ class ExpressionEvaluator
     }
 
     /**
-     * @return mixed
      */
     private function walkBinaryExpression(BinaryExpression $node)
     {

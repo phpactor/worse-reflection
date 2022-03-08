@@ -13,17 +13,14 @@ use RecursiveIteratorIterator;
 final class StubSourceLocator implements SourceCodeLocator
 {
     /**
-     * @var string
      */
     private string $cacheDir;
 
     /**
-     * @var Reflector
      */
     private Reflector $reflector;
 
     /**
-     * @var string
      */
     private string $stubPath;
 

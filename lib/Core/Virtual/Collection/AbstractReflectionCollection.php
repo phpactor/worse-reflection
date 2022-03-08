@@ -15,7 +15,6 @@ use BadMethodCallException;
 abstract class AbstractReflectionCollection implements IteratorAggregate, Countable, ArrayAccess
 {
     /**
-     * @var array
      */
     protected array $items = [];
 

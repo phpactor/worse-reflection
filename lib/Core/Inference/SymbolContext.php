@@ -10,17 +10,14 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 final class SymbolContext
 {
     /**
-     * @var mixed
      */
     private $value;
 
     /**
-     * @var Types
      */
     private Types $types;
 
     /**
-     * @var Symbol
      */
     private Symbol $symbol;
 

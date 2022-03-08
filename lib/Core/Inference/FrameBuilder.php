@@ -32,7 +32,6 @@ final class FrameBuilder
     private array $walkers;
 
     /**
-     * @var Cache
      */
     private Cache $cache;
 

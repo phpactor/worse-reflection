@@ -9,7 +9,6 @@ use Phpactor\Docblock\DocblockFactory as PhpactorDocblockFactory;
 class DocblockFactory implements CoreDocblockPhpactory
 {
     /**
-     * @var PhpactorDocblockFactory
      */
     private PhpactorDocblockFactory $factory;
 

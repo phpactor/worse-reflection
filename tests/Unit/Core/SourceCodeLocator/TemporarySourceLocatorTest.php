@@ -16,7 +16,6 @@ class TemporarySourceLocatorTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var TemporarySourceLocator
      */
     private TemporarySourceLocator $locator;
 

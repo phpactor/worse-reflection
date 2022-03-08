@@ -36,17 +36,14 @@ final class Symbol
     ];
 
     /**
-     * @var string
      */
     private string $symbolType;
 
     /**
-     * @var string
      */
     private string $name;
 
     /**
-     * @var Position
      */
     private Position $position;
 

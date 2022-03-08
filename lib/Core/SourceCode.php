@@ -10,7 +10,6 @@ use InvalidArgumentException;
 class SourceCode implements TextDocument
 {
     /**
-     * @var string
      */
     private string $source;
 

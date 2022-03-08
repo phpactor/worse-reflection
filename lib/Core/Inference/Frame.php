@@ -7,17 +7,14 @@ use Closure;
 class Frame
 {
     /**
-     * @var PropertyAssignments
      */
     private PropertyAssignments $properties;
 
     /**
-     * @var LocalAssignments
      */
     private LocalAssignments $locals;
 
     /**
-     * @var Problems
      */
     private Problems $problems;
 
@@ -32,7 +29,6 @@ class Frame
     private array $children = [];
 
     /**
-     * @var string
      */
     private string $name;
 

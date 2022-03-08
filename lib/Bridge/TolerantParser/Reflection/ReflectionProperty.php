@@ -22,32 +22,26 @@ use InvalidArgumentException;
 class ReflectionProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $serviceLocator;
 
     /**
-     * @var PropertyDeclaration
      */
     private PropertyDeclaration $propertyDeclaration;
 
     /**
-     * @var Variable
      */
     private Variable $variable;
 
     /**
-     * @var ReflectionClassLike
      */
     private ReflectionClassLike $class;
 
     /**
-     * @var PropertyTypeResolver
      */
     private PropertyTypeResolver $typeResolver;
 
     /**
-     * @var DeclaredMemberTypeResolver
      */
     private DeclaredMemberTypeResolver $memberTypeResolver;
 

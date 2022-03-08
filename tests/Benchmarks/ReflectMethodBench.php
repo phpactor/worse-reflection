@@ -14,7 +14,6 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 class ReflectMethodBench extends BaseBenchCase
 {
     /**
-     * @var ReflectionClass
      */
     private ReflectionClass $class;
 

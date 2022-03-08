@@ -5,12 +5,10 @@ namespace Phpactor\WorseReflection\Core;
 class Deprecation
 {
     /**
-     * @var string|null
      */
     private ?string $message;
 
     /**
-     * @var bool
      */
     private bool $isDefined;
 

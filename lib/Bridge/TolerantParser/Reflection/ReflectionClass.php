@@ -39,17 +39,14 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 class ReflectionClass extends AbstractReflectionClass implements CoreReflectionClass
 {
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $serviceLocator;
 
     /**
-     * @var ClassDeclaration
      */
     private ClassDeclaration $node;
 
     /**
-     * @var SourceCode
      */
     private SourceCode $sourceCode;
 
@@ -59,7 +56,6 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     private ?ReflectionInterfaceCollection $interfaces = null;
 
     /**
-     * @var ReflectionClassLike|null
      */
     private ?ReflectionClassLike $parent = null;
 

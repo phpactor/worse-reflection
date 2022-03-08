@@ -13,42 +13,34 @@ use Phpactor\WorseReflection\Core\Types;
 class VirtualReflectionParameter implements ReflectionParameter
 {
     /**
-     * @var string
      */
     private string $name;
 
     /**
-     * @var ReflectionFunctionLike
      */
     private ReflectionFunctionLike $functionLike;
 
     /**
-     * @var Types
      */
     private Types $inferredTypes;
 
     /**
-     * @var Type
      */
     private Type $type;
 
     /**
-     * @var DefaultValue
      */
     private DefaultValue $default;
 
     /**
-     * @var bool
      */
     private bool $byReference;
 
     /**
-     * @var ReflectionScope
      */
     private ReflectionScope $scope;
 
     /**
-     * @var Position
      */
     private Position $position;
 

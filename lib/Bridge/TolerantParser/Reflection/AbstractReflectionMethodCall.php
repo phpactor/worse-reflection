@@ -17,7 +17,6 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 {
     /**
-     * @var Frame
      */
     private Frame $frame;
 
@@ -27,7 +26,6 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
     private $node;
 
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $services;
 

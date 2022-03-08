@@ -20,7 +20,6 @@ use Phpactor\WorseReflection\Core\Type;
 abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
     /**
-     * @var ExpressionEvaluator
      */
     protected ExpressionEvaluator $evaluator;
 
@@ -52,7 +51,6 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
     }
 
     /**
-     * @return mixed
      */
     protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame)
     {

@@ -15,7 +15,6 @@ use Phpactor\WorseReflection\ReflectorBuilder;
 class IntegrationTestCase extends TestCase
 {
     /**
-     * @var ArrayLogger
      */
     private ArrayLogger $logger;
 

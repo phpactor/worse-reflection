@@ -55,37 +55,30 @@ use Psr\Log\LoggerInterface;
 class SymbolContextResolver
 {
     /**
-     * @var MemberTypeResolver
      */
     private MemberTypeResolver $memberTypeResolver;
 
     /**
-     * @var Reflector
      */
     private Reflector $reflector;
 
     /**
-     * @var LoggerInterface
      */
     private LoggerInterface $logger;
 
     /**
-     * @var SymbolFactory
      */
     private SymbolFactory $symbolFactory;
 
     /**
-     * @var FullyQualifiedNameResolver
      */
     private FullyQualifiedNameResolver $nameResolver;
 
     /**
-     * @var ExpressionEvaluator
      */
     private ExpressionEvaluator $expressionEvaluator;
 
     /**
-     * @var Cache
      */
     private Cache $cache;
 

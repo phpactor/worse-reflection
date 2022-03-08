@@ -11,24 +11,20 @@ use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod as CoreReflectionMethod;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\ParameterTypeResolver;
 
 class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
 {
     /**
-     * @var ServiceLocator
      */
     private ServiceLocator $serviceLocator;
 
     /**
-     * @var Parameter
      */
     private Parameter $parameter;
 
     /**
-     * @var DeclaredMemberTypeResolver
      */
     private DeclaredMemberTypeResolver $memberTypeResolver;
 

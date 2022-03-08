@@ -7,7 +7,6 @@ class PropertyClass
     public $noType;
 
     /**
-     * @var MethodClass
      */
     public MethodClass $withType;
 }
