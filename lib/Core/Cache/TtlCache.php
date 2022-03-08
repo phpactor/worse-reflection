@@ -19,7 +19,7 @@ class TtlCache implements Cache
 
     /**
      */
-    private int $lifetime;
+    private float $lifetime;
 
     private $ticker = 0;
 
