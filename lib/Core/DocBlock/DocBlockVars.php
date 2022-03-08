@@ -11,7 +11,7 @@ class DocBlockVars implements IteratorAggregate
     /**
      * @var array
      */
-    private $vars = [];
+    private array $vars = [];
 
     public function __construct(array $vars)
     {

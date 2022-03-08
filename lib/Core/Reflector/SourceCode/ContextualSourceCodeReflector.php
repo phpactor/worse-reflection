@@ -15,12 +15,12 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
     /**
      * @var SourceCodeReflector
      */
-    private $innerReflector;
+    private SourceCodeReflector $innerReflector;
 
     /**
      * @var TemporarySourceLocator
      */
-    private $locator;
+    private TemporarySourceLocator $locator;
 
     public function __construct(SourceCodeReflector $innerReflector, TemporarySourceLocator $locator)
     {

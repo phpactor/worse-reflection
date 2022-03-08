@@ -18,17 +18,17 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var EnumCaseDeclaration
      */
-    private $node;
+    private EnumCaseDeclaration $node;
 
     /**
      * @var ReflectionEnum
      */
-    private $enum;
+    private ReflectionEnum $enum;
 
     public function __construct(
         ServiceLocator $serviceLocator,

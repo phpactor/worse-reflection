@@ -20,17 +20,17 @@ class CompositeReflector implements Reflector
     /**
      * @var ClassReflector
      */
-    private $classReflector;
+    private ClassReflector $classReflector;
 
     /**
      * @var SourceCodeReflector
      */
-    private $sourceCodeReflector;
+    private SourceCodeReflector $sourceCodeReflector;
 
     /**
      * @var FunctionReflector
      */
-    private $functionReflector;
+    private FunctionReflector $functionReflector;
 
     public function __construct(
         ClassReflector $classReflector,

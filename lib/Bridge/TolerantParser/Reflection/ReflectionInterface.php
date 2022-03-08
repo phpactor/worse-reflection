@@ -28,17 +28,17 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var InterfaceDeclaration
      */
-    private $node;
+    private InterfaceDeclaration $node;
 
     /**
      * @var SourceCode
      */
-    private $sourceCode;
+    private SourceCode $sourceCode;
     private $parents;
     private $methods;
 

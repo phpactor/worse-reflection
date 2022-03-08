@@ -9,5 +9,5 @@ class PropertyClass
     /**
      * @var MethodClass
      */
-    public $withType;
+    public MethodClass $withType;
 }

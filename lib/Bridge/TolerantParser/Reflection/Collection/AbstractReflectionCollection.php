@@ -18,12 +18,12 @@ abstract class AbstractReflectionCollection implements IteratorAggregate, Counta
     /**
      * @var ServiceLocator
      */
-    protected $serviceLocator;
+    protected ServiceLocator $serviceLocator;
 
     /**
      * @var array
      */
-    protected $items = [];
+    protected array $items = [];
 
     protected function __construct(ServiceLocator $serviceLocator, array $items)
     {

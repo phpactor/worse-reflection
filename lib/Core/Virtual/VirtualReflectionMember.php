@@ -18,62 +18,62 @@ abstract class VirtualReflectionMember implements ReflectionMember
     /**
      * @var Position
      */
-    private $position;
+    private Position $position;
 
     /**
      * @var ReflectionClassLike
      */
-    private $declaringClass;
+    private ReflectionClassLike $declaringClass;
 
     /**
      * @var ReflectionClassLike
      */
-    private $class;
+    private ReflectionClassLike $class;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var Frame
      */
-    private $frame;
+    private Frame $frame;
 
     /**
      * @var DocBlock
      */
-    private $docblock;
+    private DocBlock $docblock;
 
     /**
      * @var ReflectionScope
      */
-    private $scope;
+    private ReflectionScope $scope;
 
     /**
      * @var Visibility
      */
-    private $visibility;
+    private Visibility $visibility;
 
     /**
      * @var Types
      */
-    private $inferredTypes;
+    private Types $inferredTypes;
 
     /**
      * @var Type
      */
-    private $type;
+    private Type $type;
 
     /**
      * @var Visibility
      */
-    private $visiblity;
+    private Visibility $visiblity;
 
     /**
      * @var Deprecation
      */
-    private $deprecation;
+    private Deprecation $deprecation;
 
     public function __construct(
         Position $position,

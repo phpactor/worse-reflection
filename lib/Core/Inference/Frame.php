@@ -9,32 +9,32 @@ class Frame
     /**
      * @var PropertyAssignments
      */
-    private $properties;
+    private PropertyAssignments $properties;
 
     /**
      * @var LocalAssignments
      */
-    private $locals;
+    private LocalAssignments $locals;
 
     /**
      * @var Problems
      */
-    private $problems;
+    private Problems $problems;
 
     /**
      * @var Frame
      */
-    private $parent;
+    private Frame $parent;
 
     /**
      * @var Frame[]
      */
-    private $children = [];
+    private array $children = [];
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     public function __construct(
         string $name,

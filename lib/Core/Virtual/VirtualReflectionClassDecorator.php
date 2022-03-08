@@ -22,17 +22,17 @@ class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorato
     /**
      * @var ReflectionClass
      */
-    private $class;
+    private ReflectionClass $class;
 
     /**
      * @var ReflectionMemberProvider[]
      */
-    private $memberProviders;
+    private array $memberProviders;
 
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     public function __construct(ServiceLocator $serviceLocator, ReflectionClass $class, array $memberProviders = [])
     {

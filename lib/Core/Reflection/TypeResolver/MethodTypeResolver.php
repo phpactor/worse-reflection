@@ -15,12 +15,12 @@ class MethodTypeResolver
     /**
      * @var ReflectionMethod
      */
-    private $method;
+    private ReflectionMethod $method;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(ReflectionMethod $method, LoggerInterface $logger)
     {

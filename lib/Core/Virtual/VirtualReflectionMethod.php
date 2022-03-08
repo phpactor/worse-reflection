@@ -21,27 +21,27 @@ class VirtualReflectionMethod extends VirtualReflectionMember implements Reflect
     /**
      * @var ReflectionParameterCollection
      */
-    private $parameters;
+    private ReflectionParameterCollection $parameters;
 
     /**
      * @var NodeText
      */
-    private $body;
+    private NodeText $body;
 
     /**
      * @var Type
      */
-    private $type;
+    private Type $type;
 
     /**
      * @var bool
      */
-    private $isAbstract;
+    private bool $isAbstract;
 
     /**
      * @var bool
      */
-    private $isStatic;
+    private bool $isStatic;
 
     public function __construct(
         Position $position,

@@ -21,17 +21,17 @@ class VariableWalker extends AbstractWalker
     /**
      * @var DocBlockFactory
      */
-    private $docblockFactory;
+    private DocBlockFactory $docblockFactory;
 
     /**
      * @var array
      */
-    private $injectedTypes = [];
+    private array $injectedTypes = [];
 
     /**
      * @var FullyQualifiedNameResolver
      */
-    private $nameResolver;
+    private FullyQualifiedNameResolver $nameResolver;
 
     public function __construct(
         DocBlockFactory $docblockFactory,

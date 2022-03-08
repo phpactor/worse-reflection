@@ -20,22 +20,22 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var Parameter
      */
-    private $parameter;
+    private Parameter $parameter;
 
     /**
      * @var DeclaredMemberTypeResolver
      */
-    private $memberTypeResolver;
+    private DeclaredMemberTypeResolver $memberTypeResolver;
 
     /**
      * @var CoreReflectionMethod
      */
-    private $functionLike;
+    private CoreReflectionMethod $functionLike;
 
     public function __construct(ServiceLocator $serviceLocator, ReflectionFunctionLike $functionLike, Parameter $parameter)
     {

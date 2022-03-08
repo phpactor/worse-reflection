@@ -34,17 +34,17 @@ class TemporarySourceLocator implements SourceCodeLocator
     /**
      * @var SourceCode
      */
-    private $source;
+    private SourceCode $source;
 
     /**
      * @var SourceCodeReflector
      */
-    private $reflector;
+    private SourceCodeReflector $reflector;
 
     /**
      * @var bool
      */
-    private $locateFunctions;
+    private bool $locateFunctions;
 
     public function __construct(SourceCodeReflector $reflector, bool $locateFunctions = false)
     {

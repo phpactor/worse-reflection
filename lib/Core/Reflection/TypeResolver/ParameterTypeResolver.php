@@ -11,7 +11,7 @@ class ParameterTypeResolver
     /**
      * @var ReflectionParameter
      */
-    private $parameter;
+    private ReflectionParameter $parameter;
 
     public function __construct(ReflectionParameter $parameter)
     {

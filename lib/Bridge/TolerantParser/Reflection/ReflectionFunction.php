@@ -25,17 +25,17 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var FunctionDeclaration
      */
-    private $node;
+    private FunctionDeclaration $node;
 
     /**
      * @var SourceCode
      */
-    private $sourceCode;
+    private SourceCode $sourceCode;
 
     public function __construct(SourceCode $sourceCode, ServiceLocator $serviceLocator, FunctionDeclaration $node)
     {

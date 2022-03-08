@@ -17,7 +17,7 @@ class VirtualReflectionClassLikeDecorator implements ReflectionClassLike
     /**
      * @var ReflectionClassLike
      */
-    private $classLike;
+    private ReflectionClassLike $classLike;
 
     public function __construct(ReflectionClassLike $classLike)
     {

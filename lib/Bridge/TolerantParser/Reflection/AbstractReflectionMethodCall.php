@@ -19,7 +19,7 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
     /**
      * @var Frame
      */
-    private $frame;
+    private Frame $frame;
 
     /**
      * @var ScopedPropertyAccessExpression|MemberAccessExpression
@@ -29,7 +29,7 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
     /**
      * @var ServiceLocator
      */
-    private $services;
+    private ServiceLocator $services;
 
     public function __construct(
         ServiceLocator $services,

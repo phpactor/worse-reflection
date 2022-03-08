@@ -17,32 +17,32 @@ final class SymbolContext
     /**
      * @var Types
      */
-    private $types;
+    private Types $types;
 
     /**
      * @var Symbol
      */
-    private $symbol;
+    private Symbol $symbol;
 
     /**
      * @var Type
      */
-    private $containerType;
+    private Type $containerType;
 
     /**
      * @var string[]
      */
-    private $issues = [];
+    private array $issues = [];
 
     /**
      * @var ReflectionScope
      */
-    private $scope;
+    private ReflectionScope $scope;
 
     /**
      * @var Name
      */
-    private $name;
+    private Name $name;
 
     private function __construct(Symbol $symbol, Types $types, Name $name = null, $value = null, Type $containerType = null, ReflectionScope $scope = null)
     {

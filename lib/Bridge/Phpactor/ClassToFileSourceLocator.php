@@ -14,7 +14,7 @@ class ClassToFileSourceLocator implements SourceCodeLocator
     /**
      * @var ClassToFile
      */
-    private $converter;
+    private ClassToFile $converter;
 
     public function __construct(ClassToFile $converter)
     {

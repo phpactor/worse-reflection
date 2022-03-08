@@ -18,22 +18,22 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var ConstElement
      */
-    private $node;
+    private ConstElement $node;
 
     /**
      * @var AbstractReflectionClass
      */
-    private $class;
+    private AbstractReflectionClass $class;
 
     /**
      * @var ClassConstDeclaration
      */
-    private $declaration;
+    private ClassConstDeclaration $declaration;
 
     public function __construct(
         ServiceLocator $serviceLocator,

@@ -15,17 +15,17 @@ final class StubSourceLocator implements SourceCodeLocator
     /**
      * @var string
      */
-    private $cacheDir;
+    private string $cacheDir;
 
     /**
      * @var Reflector
      */
-    private $reflector;
+    private Reflector $reflector;
 
     /**
      * @var string
      */
-    private $stubPath;
+    private string $stubPath;
 
     public function __construct(Reflector $reflector, string $stubPath, string $cacheDir)
     {

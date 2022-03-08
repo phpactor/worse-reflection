@@ -24,12 +24,12 @@ class DocblockReflectionMethodFactoryTest extends TestCase
     /**
      * @var DocblockReflectionMethodFactory
      */
-    private $factory;
+    private DocblockReflectionMethodFactory $factory;
 
     /**
      * @var ObjectProphecy
      */
-    private $docblock;
+    private ObjectProphecy $docblock;
 
     public function setUp(): void
     {

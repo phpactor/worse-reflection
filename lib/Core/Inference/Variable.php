@@ -10,17 +10,17 @@ final class Variable
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var Offset
      */
-    private $offset;
+    private Offset $offset;
 
     /**
      * @var SymbolContext
      */
-    private $symbolContext;
+    private SymbolContext $symbolContext;
 
     private function __construct(string $name, Offset $offset, SymbolContext $symbolContext)
     {

@@ -9,7 +9,7 @@ class TraitImport
     /**
      * @var array
      */
-    private $traitAliases = [];
+    private array $traitAliases = [];
 
     public function __construct(string $traitName, array $traitAliases = [])
     {

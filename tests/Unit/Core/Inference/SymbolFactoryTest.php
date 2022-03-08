@@ -18,12 +18,12 @@ class SymbolFactoryTest extends TestCase
     /**
      * @var SymbolFactory
      */
-    private $factory;
+    private SymbolFactory $factory;
 
     /**
      * @var Node
      */
-    private $node;
+    private Node $node;
 
 
     public function setUp(): void

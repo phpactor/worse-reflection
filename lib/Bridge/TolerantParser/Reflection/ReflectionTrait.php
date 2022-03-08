@@ -22,17 +22,17 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var TraitDeclaration
      */
-    private $node;
+    private TraitDeclaration $node;
 
     /**
      * @var SourceCode
      */
-    private $sourceCode;
+    private SourceCode $sourceCode;
 
     public function __construct(
         ServiceLocator $serviceLocator,

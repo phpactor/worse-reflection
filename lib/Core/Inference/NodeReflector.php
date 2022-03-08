@@ -16,7 +16,7 @@ class NodeReflector
     /**
      * @var ServiceLocator
      */
-    private $services;
+    private ServiceLocator $services;
 
     public function __construct(ServiceLocator $services)
     {

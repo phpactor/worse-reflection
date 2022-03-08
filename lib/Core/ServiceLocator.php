@@ -24,37 +24,37 @@ class ServiceLocator
     /**
      * @var SourceCodeLocator
      */
-    private $sourceLocator;
+    private SourceCodeLocator $sourceLocator;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var Reflector
      */
-    private $reflector;
+    private Reflector $reflector;
 
     /**
      * @var FrameBuilder
      */
-    private $frameBuilder;
+    private FrameBuilder $frameBuilder;
 
     /**
      * @var SymbolContextResolver
      */
-    private $symbolContextResolver;
+    private SymbolContextResolver $symbolContextResolver;
 
     /**
      * @var DocBlockFactory
      */
-    private $docblockFactory;
+    private DocBlockFactory $docblockFactory;
 
     /**
      * @var array<int,ReflectionMemberProvider>
      */
-    private $methodProviders;
+    private array $methodProviders;
 
     /**
      * @param list<FrameWalker> $frameWalkers

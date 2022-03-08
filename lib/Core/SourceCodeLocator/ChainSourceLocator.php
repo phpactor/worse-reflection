@@ -14,12 +14,12 @@ class ChainSourceLocator implements SourceCodeLocator
     /**
      * @var SourceCodeLocator[]
      */
-    private $locators = [];
+    private array $locators = [];
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(array $sourceLocators, ?LoggerInterface $logger = null)
     {

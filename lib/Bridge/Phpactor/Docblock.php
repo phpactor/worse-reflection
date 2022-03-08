@@ -24,22 +24,22 @@ class Docblock implements CoreDocblock
     /**
      * @var PhpactorDocblock
      */
-    private $docblock;
+    private PhpactorDocblock $docblock;
 
     /**
      * @var string
      */
-    private $raw;
+    private string $raw;
 
     /**
      * @var DocblockReflectionMethodFactory
      */
-    private $methodFactory;
+    private DocblockReflectionMethodFactory $methodFactory;
 
     /**
      * @var DocblockReflectionPropertyFactory
      */
-    private $propertyFactory;
+    private DocblockReflectionPropertyFactory $propertyFactory;
 
     public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null, DocblockReflectionPropertyFactory $propertyFactory = null)
     {

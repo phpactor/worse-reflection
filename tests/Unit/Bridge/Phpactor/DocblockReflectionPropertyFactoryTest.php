@@ -21,12 +21,12 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
     /**
      * @var DocblockReflectionPropertyFactory
      */
-    private $factory;
+    private DocblockReflectionPropertyFactory $factory;
 
     /**
      * @var ObjectProphecy
      */
-    private $docblock;
+    private ObjectProphecy $docblock;
 
     public function setUp(): void
     {

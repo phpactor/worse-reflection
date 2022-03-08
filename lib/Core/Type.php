@@ -19,22 +19,22 @@ class Type
     /**
      * @var string
      */
-    private $phpType;
+    private string $phpType;
 
     /**
      * @var ClassName
      */
-    private $className;
+    private ClassName $className;
 
     /**
      * @var Type|null
      */
-    private $arrayType;
+    private ?Type $arrayType;
 
     /**
      * @var bool
      */
-    private $nullable = false;
+    private bool $nullable = false;
 
     public function __construct(string $phpType = null)
     {

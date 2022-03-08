@@ -25,17 +25,17 @@ class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEn
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var EnumDeclaration
      */
-    private $node;
+    private EnumDeclaration $node;
 
     /**
      * @var SourceCode
      */
-    private $sourceCode;
+    private SourceCode $sourceCode;
 
     public function __construct(
         ServiceLocator $serviceLocator,

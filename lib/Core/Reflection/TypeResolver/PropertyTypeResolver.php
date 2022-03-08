@@ -12,12 +12,12 @@ class PropertyTypeResolver
     /**
      * @var ReflectionProperty
      */
-    private $property;
+    private ReflectionProperty $property;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(ReflectionProperty $property, LoggerInterface $logger)
     {

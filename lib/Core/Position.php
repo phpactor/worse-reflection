@@ -7,17 +7,17 @@ final class Position
     /**
      * @var int
      */
-    private $fullStart;
+    private int $fullStart;
 
     /**
      * @var int
      */
-    private $start;
+    private int $start;
 
     /**
      * @var int
      */
-    private $end;
+    private int $end;
 
     private function __construct(
         int $fullStart,

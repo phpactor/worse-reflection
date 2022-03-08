@@ -24,32 +24,32 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var PropertyDeclaration
      */
-    private $propertyDeclaration;
+    private PropertyDeclaration $propertyDeclaration;
 
     /**
      * @var Variable
      */
-    private $variable;
+    private Variable $variable;
 
     /**
      * @var ReflectionClassLike
      */
-    private $class;
+    private ReflectionClassLike $class;
 
     /**
      * @var PropertyTypeResolver
      */
-    private $typeResolver;
+    private PropertyTypeResolver $typeResolver;
 
     /**
      * @var DeclaredMemberTypeResolver
      */
-    private $memberTypeResolver;
+    private DeclaredMemberTypeResolver $memberTypeResolver;
 
     public function __construct(
         ServiceLocator $serviceLocator,

@@ -41,32 +41,32 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var ClassDeclaration
      */
-    private $node;
+    private ClassDeclaration $node;
 
     /**
      * @var SourceCode
      */
-    private $sourceCode;
+    private SourceCode $sourceCode;
 
     /**
      * @var ReflectionInterfaceCollection<ReflectionInterface>
      */
-    private $interfaces;
+    private ReflectionInterfaceCollection $interfaces;
 
     /**
      * @var ReflectionClassLike|null
      */
-    private $parent;
+    private ?ReflectionClassLike $parent;
 
     /**
      * @var ReflectionMethodCollection|null
      */
-    private $methods;
+    private ?ReflectionMethodCollection $methods;
     private $ancestors;
 
 

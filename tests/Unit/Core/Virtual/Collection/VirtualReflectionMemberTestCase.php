@@ -18,12 +18,12 @@ abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollect
     /**
      * @var ObjectProphecy
      */
-    protected $declaringClass;
+    protected ObjectProphecy $declaringClass;
 
     /**
      * @var ObjectProphecy
      */
-    protected $class;
+    protected ObjectProphecy $class;
 
     protected $position;
 

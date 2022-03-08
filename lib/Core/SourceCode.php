@@ -12,12 +12,12 @@ class SourceCode implements TextDocument
     /**
      * @var string
      */
-    private $source;
+    private string $source;
 
     /**
      * @var string
      */
-    private $path;
+    private string $path;
 
     private function __construct(string $source, string $path = null)
     {

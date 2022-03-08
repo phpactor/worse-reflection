@@ -16,7 +16,7 @@ class ReflectMethodBench extends BaseBenchCase
     /**
      * @var ReflectionClass
      */
-    private $class;
+    private ReflectionClass $class;
 
     public function setUp(): void
     {

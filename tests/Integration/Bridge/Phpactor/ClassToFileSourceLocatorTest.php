@@ -13,7 +13,7 @@ class ClassToFileSourceLocatorTest extends IntegrationTestCase
     /**
      * @var ClassToFileSourceLocator
      */
-    private $locator;
+    private ClassToFileSourceLocator $locator;
 
     public function setUp(): void
     {

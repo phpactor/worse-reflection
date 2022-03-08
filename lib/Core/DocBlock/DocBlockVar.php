@@ -9,12 +9,12 @@ class DocBlockVar
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var Types
      */
-    private $types;
+    private Types $types;
 
     public function __construct(string $name, Types $types)
     {

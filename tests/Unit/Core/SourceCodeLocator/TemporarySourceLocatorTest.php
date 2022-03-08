@@ -18,7 +18,7 @@ class TemporarySourceLocatorTest extends TestCase
     /**
      * @var TemporarySourceLocator
      */
-    private $locator;
+    private TemporarySourceLocator $locator;
 
     public function setUp(): void
     {

@@ -22,7 +22,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
     /**
      * @var ExpressionEvaluator
      */
-    protected $evaluator;
+    protected ExpressionEvaluator $evaluator;
 
     public function __construct()
     {

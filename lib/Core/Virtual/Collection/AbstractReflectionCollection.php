@@ -17,7 +17,7 @@ abstract class AbstractReflectionCollection implements IteratorAggregate, Counta
     /**
      * @var array
      */
-    protected $items = [];
+    protected array $items = [];
 
     protected function __construct(array $items)
     {

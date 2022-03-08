@@ -57,37 +57,37 @@ class SymbolContextResolver
     /**
      * @var MemberTypeResolver
      */
-    private $memberTypeResolver;
+    private MemberTypeResolver $memberTypeResolver;
 
     /**
      * @var Reflector
      */
-    private $reflector;
+    private Reflector $reflector;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var SymbolFactory
      */
-    private $symbolFactory;
+    private SymbolFactory $symbolFactory;
 
     /**
      * @var FullyQualifiedNameResolver
      */
-    private $nameResolver;
+    private FullyQualifiedNameResolver $nameResolver;
 
     /**
      * @var ExpressionEvaluator
      */
-    private $expressionEvaluator;
+    private ExpressionEvaluator $expressionEvaluator;
 
     /**
      * @var Cache
      */
-    private $cache;
+    private Cache $cache;
 
     public function __construct(
         Reflector $reflector,

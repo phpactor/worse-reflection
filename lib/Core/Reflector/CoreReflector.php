@@ -27,12 +27,12 @@ class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionRefl
     /**
      * @var SourceCodeReflector
      */
-    private $sourceReflector;
+    private SourceCodeReflector $sourceReflector;
 
     /**
      * @var SourceCodeLocator
      */
-    private $sourceLocator;
+    private SourceCodeLocator $sourceLocator;
 
     public function __construct(SourceCodeReflector $sourceReflector, SourceCodeLocator $sourceLocator)
     {

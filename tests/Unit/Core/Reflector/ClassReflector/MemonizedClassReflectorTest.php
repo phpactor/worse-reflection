@@ -23,7 +23,7 @@ class MemonizedClassReflectorTest extends TestCase
     /**
      * @var MemonizedClassReflector
      */
-    private $reflector;
+    private MemonizedClassReflector $reflector;
 
     /**
      * @var ObjectProphecy|FunctionReflector
@@ -33,7 +33,7 @@ class MemonizedClassReflectorTest extends TestCase
     /**
      * @var ClassName
      */
-    private $className;
+    private ClassName $className;
 
     public function setUp(): void
     {

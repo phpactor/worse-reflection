@@ -20,16 +20,16 @@ class ChainReflectionMemberCollectionTest extends TestCase
     /**
      * @var ObjectProphecy
      */
-    private $collection1;
+    private ObjectProphecy $collection1;
     /**
      * @var ObjectProphecy
      */
-    private $collection2;
+    private ObjectProphecy $collection2;
 
     /**
      * @var ObjectProphecy
      */
-    private $member1;
+    private ObjectProphecy $member1;
 
     public function setUp(): void
     {

@@ -22,12 +22,12 @@ class IncludeWalker implements FrameWalker
     /**
      * @var Parser
      */
-    private $parser;
+    private Parser $parser;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
 
     public function __construct(LoggerInterface $logger, Parser $parser = null)

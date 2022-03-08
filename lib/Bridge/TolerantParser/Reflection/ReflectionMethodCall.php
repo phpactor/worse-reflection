@@ -11,7 +11,7 @@ class ReflectionMethodCall extends AbstractReflectionMethodCall
     /**
      * @var MemberAccessExpression
      */
-    private $node;
+    private MemberAccessExpression $node;
 
     public function __construct(
         ServiceLocator $locator,

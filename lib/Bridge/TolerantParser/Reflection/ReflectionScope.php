@@ -17,7 +17,7 @@ class ReflectionScope implements CoreReflectionScope
     /**
      * @var Node
      */
-    private $node;
+    private Node $node;
 
     public function __construct(Node $node)
     {

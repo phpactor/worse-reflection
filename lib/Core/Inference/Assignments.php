@@ -15,7 +15,7 @@ abstract class Assignments implements Countable, IteratorAggregate
     /**
      * @var Variable[]
      */
-    private $variables = [];
+    private array $variables = [];
 
     /**
      * @param Variable[] $variables

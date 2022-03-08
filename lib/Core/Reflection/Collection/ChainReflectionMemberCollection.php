@@ -19,7 +19,7 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
     /**
      * @var array<T>
      */
-    private $collections = [];
+    private array $collections = [];
 
     /**
      * @param array<T> $collections

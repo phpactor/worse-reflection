@@ -7,12 +7,12 @@ class Deprecation
     /**
      * @var string|null
      */
-    private $message;
+    private ?string $message;
 
     /**
      * @var bool
      */
-    private $isDefined;
+    private bool $isDefined;
 
 
     public function __construct(bool $isDefined, ?string $message = null)

@@ -15,6 +15,7 @@ return (new Config())
     ->setRules([
         '@PSR2' => true,
         'no_unused_imports' => true,
+        'phpdoc_to_property_type' => true,
         'array_syntax' => ['syntax' => 'short'],
         'void_return' => true,
         'ordered_class_elements' => true,

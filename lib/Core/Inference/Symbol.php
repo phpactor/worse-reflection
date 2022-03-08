@@ -38,17 +38,17 @@ final class Symbol
     /**
      * @var string
      */
-    private $symbolType;
+    private string $symbolType;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var Position
      */
-    private $position;
+    private Position $position;
 
     private function __construct(string $symbolType, string $name, Position $position)
     {

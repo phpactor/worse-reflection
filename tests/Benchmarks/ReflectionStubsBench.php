@@ -14,7 +14,7 @@ class ReflectionStubsBench extends BaseBenchCase
     /**
      * @var Reflector
      */
-    private $reflector;
+    private Reflector $reflector;
 
     public function setUp(): void
     {

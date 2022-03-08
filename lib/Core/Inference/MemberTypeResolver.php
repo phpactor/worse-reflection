@@ -17,7 +17,7 @@ class MemberTypeResolver
     /**
      * @var ClassReflector
      */
-    private $reflector;
+    private ClassReflector $reflector;
 
     public function __construct(ClassReflector $reflector)
     {

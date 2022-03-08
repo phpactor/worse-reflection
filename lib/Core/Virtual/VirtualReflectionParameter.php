@@ -15,43 +15,43 @@ class VirtualReflectionParameter implements ReflectionParameter
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var ReflectionFunctionLike
      */
-    private $functionLike;
+    private ReflectionFunctionLike $functionLike;
 
     /**
      * @var Types
      */
-    private $inferredTypes;
+    private Types $inferredTypes;
 
     /**
      * @var Type
      */
-    private $type;
+    private Type $type;
 
     /**
      * @var DefaultValue
      */
-    private $default;
+    private DefaultValue $default;
 
     /**
      *
      * @var bool
      */
-    private $byReference;
+    private bool $byReference;
 
     /**
      * @var ReflectionScope
      */
-    private $scope;
+    private ReflectionScope $scope;
 
     /**
      * @var Position
      */
-    private $position;
+    private Position $position;
 
     public function __construct(
         string $name,

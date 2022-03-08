@@ -19,17 +19,17 @@ class ReflectionArgument implements CoreReflectionArgument
     /**
      * @var ServiceLocator
      */
-    private $services;
+    private ServiceLocator $services;
 
     /**
      * @var ArgumentExpression
      */
-    private $node;
+    private ArgumentExpression $node;
 
     /**
      * @var Frame
      */
-    private $frame;
+    private Frame $frame;
 
     public function __construct(ServiceLocator $services, Frame $frame, ArgumentExpression $node)
     {

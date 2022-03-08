@@ -11,12 +11,12 @@ final class ReflectionOffset implements CoreReflectionOffset
     /**
      * @var Frame
      */
-    private $frame;
+    private Frame $frame;
 
     /**
      * @var SymbolContext
      */
-    private $symbolContext;
+    private SymbolContext $symbolContext;
 
     private function __construct(Frame $frame, SymbolContext $symbolContext)
     {

@@ -25,12 +25,12 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var Parser
      */
-    private $parser;
+    private Parser $parser;
 
     public function __construct(ServiceLocator $serviceLocator, Parser $parser)
     {

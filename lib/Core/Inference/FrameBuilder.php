@@ -29,12 +29,12 @@ final class FrameBuilder
     /**
      * @var FrameWalker[]
      */
-    private $walkers;
+    private array $walkers;
 
     /**
      * @var Cache
      */
-    private $cache;
+    private Cache $cache;
 
     /**
      * @param FrameWalker[] $walkers

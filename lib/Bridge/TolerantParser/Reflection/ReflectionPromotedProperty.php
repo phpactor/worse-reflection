@@ -26,27 +26,27 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
     /**
      * @var ServiceLocator
      */
-    private $serviceLocator;
+    private ServiceLocator $serviceLocator;
 
     /**
      * @var ReflectionClassLike
      */
-    private $class;
+    private ReflectionClassLike $class;
 
     /**
      * @var PropertyTypeResolver
      */
-    private $typeResolver;
+    private PropertyTypeResolver $typeResolver;
 
     /**
      * @var DeclaredMemberTypeResolver
      */
-    private $memberTypeResolver;
+    private DeclaredMemberTypeResolver $memberTypeResolver;
 
     /**
      * @var Parameter
      */
-    private $parameter;
+    private Parameter $parameter;
 
     public function __construct(
         ServiceLocator $serviceLocator,
