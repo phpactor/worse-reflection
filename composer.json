@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "jetbrains/phpstorm-stubs": "*",
         "microsoft/tolerant-php-parser": "^0.1.0",
         "phpactor/docblock": "^0.3.5",
