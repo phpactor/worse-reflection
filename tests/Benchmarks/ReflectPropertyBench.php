@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Tests\Benchmarks;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Tests\Benchmarks\Examples\PropertyClass;
-use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
 
 /**
  * @Iterations(10)
