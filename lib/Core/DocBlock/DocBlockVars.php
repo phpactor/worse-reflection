@@ -8,7 +8,6 @@ use ArrayIterator;
 
 class DocBlockVars implements IteratorAggregate
 {
-    
     private array $vars = [];
 
     public function __construct(array $vars)

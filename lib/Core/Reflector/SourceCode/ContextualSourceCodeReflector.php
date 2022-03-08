@@ -12,7 +12,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollectio
 
 class ContextualSourceCodeReflector implements SourceCodeReflector
 {
-    
     private SourceCodeReflector $innerReflector;
 
     

@@ -21,7 +21,6 @@ use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCo
 
 class Docblock implements CoreDocblock
 {
-    
     private PhpactorDocblock $docblock;
 
     

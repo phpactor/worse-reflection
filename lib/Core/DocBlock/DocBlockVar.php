@@ -6,7 +6,6 @@ use Phpactor\WorseReflection\Core\Types;
 
 class DocBlockVar
 {
-    
     private string $name;
 
     

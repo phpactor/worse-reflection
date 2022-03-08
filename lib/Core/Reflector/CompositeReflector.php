@@ -17,7 +17,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollec
 
 class CompositeReflector implements Reflector
 {
-    
     private ClassReflector $classReflector;
 
     

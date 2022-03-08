@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Core;
 
 final class Position
 {
-    
     private int $fullStart;
 
     

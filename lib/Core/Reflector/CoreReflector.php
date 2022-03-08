@@ -24,7 +24,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollec
 
 class CoreReflector implements ClassReflector, SourceCodeReflector, FunctionReflector
 {
-    
     private SourceCodeReflector $sourceReflector;
 
     

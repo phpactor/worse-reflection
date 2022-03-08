@@ -12,7 +12,6 @@ use Phpactor\WorseReflection\Core\Types;
 
 class VirtualReflectionParameter implements ReflectionParameter
 {
-    
     private string $name;
 
     

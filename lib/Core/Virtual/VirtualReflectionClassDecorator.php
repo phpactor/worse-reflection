@@ -19,7 +19,6 @@ use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionClassDecorator extends VirtualReflectionClassLikeDecorator implements ReflectionClass
 {
-    
     private ReflectionClass $class;
 
     /**

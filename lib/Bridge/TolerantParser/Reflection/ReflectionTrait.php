@@ -19,7 +19,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 
 class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionTrait
 {
-    
     private ServiceLocator $serviceLocator;
 
     

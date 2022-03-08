@@ -22,7 +22,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 
 class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEnum
 {
-    
     private ServiceLocator $serviceLocator;
 
     

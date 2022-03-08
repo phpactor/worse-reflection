@@ -16,7 +16,6 @@ use Phpactor\WorseReflection\Core\Reflection\TypeResolver\ParameterTypeResolver;
 
 class ReflectionParameter extends AbstractReflectedNode implements CoreReflectionParameter
 {
-    
     private ServiceLocator $serviceLocator;
 
     

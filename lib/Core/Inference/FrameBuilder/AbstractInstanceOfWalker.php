@@ -19,7 +19,6 @@ use Phpactor\WorseReflection\Core\Type;
 
 abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
-    
     protected ExpressionEvaluator $evaluator;
 
     public function __construct()

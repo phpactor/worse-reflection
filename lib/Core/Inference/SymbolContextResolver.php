@@ -54,7 +54,6 @@ use Psr\Log\LoggerInterface;
 
 class SymbolContextResolver
 {
-    
     private MemberTypeResolver $memberTypeResolver;
 
     

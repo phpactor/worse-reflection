@@ -25,7 +25,6 @@ use InvalidArgumentException;
 
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
-    
     private ServiceLocator $serviceLocator;
 
     

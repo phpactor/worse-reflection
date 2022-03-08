@@ -23,7 +23,6 @@ use InvalidArgumentException;
 
 class ReflectionPromotedProperty extends AbstractReflectionClassMember implements CoreReflectionProperty
 {
-    
     private ServiceLocator $serviceLocator;
 
     

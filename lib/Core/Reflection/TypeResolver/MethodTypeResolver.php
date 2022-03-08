@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface;
 
 class MethodTypeResolver
 {
-    
     private ReflectionMethod $method;
 
     

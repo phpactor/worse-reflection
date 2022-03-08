@@ -14,7 +14,6 @@ use Phpactor\WorseReflection\Core\SourceCode;
 
 class VirtualReflectionClassLikeDecorator implements ReflectionClassLike
 {
-    
     private ReflectionClassLike $classLike;
 
     public function __construct(ReflectionClassLike $classLike)

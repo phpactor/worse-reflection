@@ -6,7 +6,6 @@ use Closure;
 
 class Frame
 {
-    
     private PropertyAssignments $properties;
 
     

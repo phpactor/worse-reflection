@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 
 class PropertyTypeResolver
 {
-    
     private ReflectionProperty $property;
 
     

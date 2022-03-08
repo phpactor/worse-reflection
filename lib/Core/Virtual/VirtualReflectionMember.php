@@ -15,7 +15,6 @@ use Phpactor\WorseReflection\Core\Visibility;
 
 abstract class VirtualReflectionMember implements ReflectionMember
 {
-    
     private Position $position;
 
     

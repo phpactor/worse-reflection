@@ -9,7 +9,6 @@ use RuntimeException;
 
 class QualifiedNameListUtil
 {
-    
     public static function firstQualifiedName($qualifiedNameOrList): ?QualifiedName
     {
         if ($qualifiedNameOrList instanceof QualifiedNameList) {

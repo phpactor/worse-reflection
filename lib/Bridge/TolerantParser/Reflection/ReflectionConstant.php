@@ -15,7 +15,6 @@ use Microsoft\PhpParser\Node\ClassConstDeclaration;
 
 class ReflectionConstant extends AbstractReflectionClassMember implements CoreReflectionConstant
 {
-    
     private ServiceLocator $serviceLocator;
 
     

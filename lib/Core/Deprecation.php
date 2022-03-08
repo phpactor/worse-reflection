@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\Core;
 
 class Deprecation
 {
-    
     private ?string $message;
 
     

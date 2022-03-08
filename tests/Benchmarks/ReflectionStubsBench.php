@@ -11,7 +11,6 @@ use Phpactor\WorseReflection\Reflector;
  */
 class ReflectionStubsBench extends BaseBenchCase
 {
-    
     private Reflector $reflector;
 
     public function setUp(): void

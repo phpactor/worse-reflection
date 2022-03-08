@@ -25,7 +25,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 
 class ReflectionInterface extends AbstractReflectionClass implements CoreReflectionInterface
 {
-    
     private ServiceLocator $serviceLocator;
 
     

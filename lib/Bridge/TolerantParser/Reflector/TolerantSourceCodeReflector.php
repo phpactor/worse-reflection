@@ -22,7 +22,6 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 
 class TolerantSourceCodeReflector implements SourceCodeReflector
 {
-    
     private ServiceLocator $serviceLocator;
 
     

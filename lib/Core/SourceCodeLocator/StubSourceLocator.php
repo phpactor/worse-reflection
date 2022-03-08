@@ -12,7 +12,6 @@ use RecursiveIteratorIterator;
 
 final class StubSourceLocator implements SourceCodeLocator
 {
-    
     private string $cacheDir;
 
     
