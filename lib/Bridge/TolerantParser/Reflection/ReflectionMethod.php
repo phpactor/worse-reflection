@@ -26,22 +26,16 @@ use InvalidArgumentException;
 class ReflectionMethod extends AbstractReflectionClassMember implements CoreReflectionMethod
 {
     private ServiceLocator $serviceLocator;
-
     
     private MethodDeclaration $node;
-
     
     private Visibility $visibility;
-
     
     private FrameBuilder $frameBuilder;
-
     
     private ReflectionClassLike $class;
-
     
     private MethodTypeResolver $returnTypeResolver;
-
     
     private DeclaredMemberTypeResolver $memberTypeResolver;
 

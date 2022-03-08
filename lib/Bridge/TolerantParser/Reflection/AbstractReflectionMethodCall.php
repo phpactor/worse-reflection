@@ -22,7 +22,6 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
      * @var ScopedPropertyAccessExpression|MemberAccessExpression
      */
     private $node;
-
     
     private ServiceLocator $services;
 
@@ -58,7 +57,6 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
 
         return $this->services->reflector()->reflectClassLike((string) $info->containerType());
     }
-
 
     abstract public function isStatic(): bool;
 

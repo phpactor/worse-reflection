@@ -18,10 +18,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 class DocblockReflectionPropertyFactoryTest extends TestCase
 {
     use ProphecyTrait;
-
     
     private DocblockReflectionPropertyFactory $factory;
-
     
     private ObjectProphecy $docblock;
 

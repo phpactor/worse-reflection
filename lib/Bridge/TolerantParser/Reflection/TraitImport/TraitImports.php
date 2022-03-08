@@ -104,13 +104,11 @@ class TraitImports implements Countable, IteratorAggregate
 
         return $this->imports[$name];
     }
-
     
     public function count(): int
     {
         return count($this->imports);
     }
-
     
     public function getIterator(): ArrayIterator
     {

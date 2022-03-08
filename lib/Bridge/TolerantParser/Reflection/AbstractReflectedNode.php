@@ -21,5 +21,6 @@ abstract class AbstractReflectedNode
     {
         return new ReflectionScope($this->node());
     }
+
     abstract protected function node(): Node;
 }

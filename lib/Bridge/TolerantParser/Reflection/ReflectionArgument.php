@@ -17,10 +17,8 @@ use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 class ReflectionArgument implements CoreReflectionArgument
 {
     private ServiceLocator $services;
-
     
     private ArgumentExpression $node;
-
     
     private Frame $frame;
 

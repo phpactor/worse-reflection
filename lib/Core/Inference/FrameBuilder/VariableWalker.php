@@ -19,10 +19,8 @@ use Phpactor\WorseReflection\Core\Types;
 class VariableWalker extends AbstractWalker
 {
     private DocBlockFactory $docblockFactory;
-
     
     private array $injectedTypes = [];
-
     
     private FullyQualifiedNameResolver $nameResolver;
 

@@ -8,10 +8,8 @@ use Phpactor\WorseReflection\Core\Types;
 final class Variable
 {
     private string $name;
-
     
     private Offset $offset;
-
     
     private SymbolContext $symbolContext;
 

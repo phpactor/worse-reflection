@@ -51,7 +51,6 @@ final class Types implements IteratorAggregate, Countable
             $types->types
         ));
     }
-
     
     public function count(): int
     {

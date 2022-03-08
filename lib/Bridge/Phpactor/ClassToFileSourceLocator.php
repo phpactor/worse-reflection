@@ -17,7 +17,6 @@ class ClassToFileSourceLocator implements SourceCodeLocator
     {
         $this->converter = $converter;
     }
-
     
     public function locate(Name $name): SourceCode
     {

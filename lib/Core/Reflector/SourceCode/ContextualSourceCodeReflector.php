@@ -13,7 +13,6 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollectio
 class ContextualSourceCodeReflector implements SourceCodeReflector
 {
     private SourceCodeReflector $innerReflector;
-
     
     private TemporarySourceLocator $locator;
 
@@ -22,7 +21,6 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
         $this->innerReflector = $innerReflector;
         $this->locator = $locator;
     }
-
     
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
@@ -33,7 +31,6 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
 
         return $collection;
     }
-
     
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
@@ -54,7 +51,6 @@ class ContextualSourceCodeReflector implements SourceCodeReflector
 
         return $offset;
     }
-
     
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
     {

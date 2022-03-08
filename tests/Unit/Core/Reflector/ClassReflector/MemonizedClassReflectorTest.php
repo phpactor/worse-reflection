@@ -29,7 +29,6 @@ class MemonizedClassReflectorTest extends TestCase
      * @var ObjectProphecy|FunctionReflector
      */
     private $innerFunctionReflector;
-
     
     private ClassName $className;
 

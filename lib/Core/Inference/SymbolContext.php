@@ -13,10 +13,8 @@ final class SymbolContext
      * @var mixed
      */
     private $value;
-
     
     private Types $types;
-
     
     private Symbol $symbol;
 

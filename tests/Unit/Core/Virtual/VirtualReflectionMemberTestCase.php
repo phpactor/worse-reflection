@@ -20,14 +20,23 @@ abstract class VirtualReflectionMemberTestCase extends TestCase
     use ProphecyTrait;
 
     protected Position $position;
+
     protected ObjectProphecy $declaringClass;
+
     protected ObjectProphecy $class;
+
     protected string $name;
+
     protected ObjectProphecy $frame;
+
     protected ObjectProphecy $docblock;
+
     protected ObjectProphecy $scope;
+
     protected Visibility $visibility;
+
     protected Types $types;
+
     protected Type $type;
 
     public function setUp(): void

@@ -13,8 +13,11 @@ class ReflectionClassCollectionTest extends TestCase
     use ProphecyTrait;
 
     private $serviceLocator;
+
     private $reflection1;
+
     private $reflection2;
+
     private $reflection3;
 
     protected function setUp(): void

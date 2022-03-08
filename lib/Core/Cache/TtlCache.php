@@ -16,7 +16,6 @@ class TtlCache implements Cache
      * @var array<string, int>
      */
     private array $expires = [];
-
     
     private float $lifetime;
 

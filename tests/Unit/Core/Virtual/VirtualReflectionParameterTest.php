@@ -28,6 +28,7 @@ class VirtualReflectionParameterTest extends TestCase
     private ObjectProphecy $frame;
     
     private ObjectProphecy $scope;
+
     private $types;
     
     private Type $type;

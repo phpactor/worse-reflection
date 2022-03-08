@@ -14,7 +14,6 @@ use Prophecy\PhpUnit\ProphecyTrait;
 class TemporarySourceLocatorTest extends TestCase
 {
     use ProphecyTrait;
-
     
     private TemporarySourceLocator $locator;
 

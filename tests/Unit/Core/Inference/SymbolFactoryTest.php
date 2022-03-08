@@ -15,7 +15,6 @@ use RuntimeException;
 class SymbolFactoryTest extends TestCase
 {
     use ProphecyTrait;
-
     
     private SymbolFactory $factory;
 
@@ -23,7 +22,6 @@ class SymbolFactoryTest extends TestCase
      * @var Node
      */
     private ObjectProphecy $node;
-
 
     public function setUp(): void
     {

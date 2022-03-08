@@ -23,7 +23,6 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 class TolerantSourceCodeReflector implements SourceCodeReflector
 {
     private ServiceLocator $serviceLocator;
-
     
     private Parser $parser;
 
@@ -32,7 +31,6 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $this->serviceLocator = $serviceLocator;
         $this->parser = $parser;
     }
-
     
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
@@ -40,7 +38,6 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         $node = $this->parseSourceCode($sourceCode);
         return TolerantReflectionClassCollection::fromNode($this->serviceLocator, $sourceCode, $node);
     }
-
     
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
@@ -76,7 +73,6 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
 
         return $reflection;
     }
-
     
     public function reflectFunctionsIn($sourceCode): CoreReflectionFunctionCollection
     {

@@ -15,10 +15,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollectionTestCase
 {
     use ProphecyTrait;
-
     
     protected ObjectProphecy $declaringClass;
-
     
     protected ObjectProphecy $class;
 

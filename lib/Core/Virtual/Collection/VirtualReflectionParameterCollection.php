@@ -31,18 +31,17 @@ class VirtualReflectionParameterCollection extends AbstractReflectionCollection 
     {
         $this->items[$virtualReflectionParameter->name()] = $virtualReflectionParameter;
     }
-
     
     public function notPromoted(): ReflectionParameterCollection
     {
         return $this;
     }
-
     
     public function promoted(): ReflectionParameterCollection
     {
         return new self([]);
     }
+
     protected function collectionType(): string
     {
         return ReflectionParameterCollection::class;

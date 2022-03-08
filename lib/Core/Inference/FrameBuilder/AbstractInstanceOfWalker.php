@@ -25,6 +25,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
     {
         $this->evaluator = new ExpressionEvaluator();
     }
+
     /**
      * @return WorseVariable[]
      */
@@ -47,7 +48,6 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
         return $variables;
     }
-
     
     protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame): ?WorseVariable
     {

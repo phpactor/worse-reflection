@@ -40,7 +40,6 @@ class ReflectionConstantCollection extends ReflectionMemberCollection implements
         return new static($serviceLocator, $constants);
     }
 
-
     public static function fromInterfaceDeclaration(ServiceLocator $serviceLocator, InterfaceDeclaration $interface, ReflectionInterface $reflectionInterface)
     {
         $items = [];

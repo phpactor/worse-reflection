@@ -30,13 +30,10 @@ final class ReflectorBuilder
      * @var SourceCodeLocator[]
      */
     private array $locators = [];
-
     
     private bool $contextualSourceLocation = false;
-
     
     private bool $enableCache = false;
-
     
     private bool $enableContextualSourceLocation = false;
 
@@ -54,10 +51,8 @@ final class ReflectorBuilder
      * @var ReflectionMemberProvider[]
      */
     private array $memberProviders = [];
-
     
     private float $cacheLifetime = 5.0;
-
     
     private ?Cache $cache = null;
 

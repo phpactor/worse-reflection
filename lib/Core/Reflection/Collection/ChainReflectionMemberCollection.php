@@ -214,7 +214,6 @@ class ChainReflectionMemberCollection implements ReflectionMemberCollection
             'Method not supported on chain member collection corrently'
         );
     }
-
     
     public function byMemberType(string $type): ReflectionMemberCollection
     {

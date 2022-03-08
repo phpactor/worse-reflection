@@ -7,6 +7,7 @@ use InvalidArgumentException;
 class Name
 {
     protected $parts;
+
     private $wasFullyQualified;
 
     final public function __construct(array $parts, bool $wasFullyQualified)

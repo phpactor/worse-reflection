@@ -13,8 +13,11 @@ use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 class VirtualReflectionMethodTest extends VirtualReflectionMemberTestCase
 {
     private $parameters;
+
     private $body;
+
     private $isAbstract;
+
     private $isStatic;
 
     public function setUp(): void

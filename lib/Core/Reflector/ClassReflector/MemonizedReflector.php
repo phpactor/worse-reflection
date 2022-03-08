@@ -16,22 +16,22 @@ use Phpactor\WorseReflection\Core\SourceCode;
 class MemonizedReflector implements ClassReflector, FunctionReflector
 {
     private const FUNC_PREFIX = '__func__';
+
     private const CLASS_PREFIX = '__class__';
+
     private const INTERFACE_PREFIX = '__interface__';
+
     private const TRAIT_PREFIX = '__trait__';
+
     private const ENUM_PREFIX = '__enum__';
+
     private const CLASS_LIKE_PREFIX = '__class_like__';
-
-
     
     private ClassReflector $classReflector;
-
     
     private FunctionReflector $functionReflector;
-
     
     private ClassReflector $innerReflector;
-
     
     private Cache $cache;
 
@@ -42,7 +42,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
         $this->innerReflector = $innerReflector;
         $this->cache = $cache;
     }
-
     
     public function reflectClass($className): ReflectionClass
     {
@@ -50,7 +49,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
             return $this->classReflector->reflectClass($className);
         });
     }
-
     
     public function reflectInterface($className): ReflectionInterface
     {
@@ -58,7 +56,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
             return $this->classReflector->reflectInterface($className);
         });
     }
-
     
     public function reflectTrait($className): ReflectionTrait
     {
@@ -66,7 +63,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
             return $this->classReflector->reflectTrait($className);
         });
     }
-
     
     public function reflectEnum($className): ReflectionEnum
     {
@@ -74,7 +70,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
             return $this->classReflector->reflectEnum($className);
         });
     }
-
     
     public function reflectClassLike($className): ReflectionClassLike
     {
@@ -89,7 +84,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
             return $this->functionReflector->reflectFunction($name);
         });
     }
-
     
     public function sourceCodeForFunction($name): SourceCode
     {
@@ -97,7 +91,6 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
             return $this->functionReflector->sourceCodeForFunction($name);
         });
     }
-
     
     public function sourceCodeForClassLike($name): SourceCode
     {

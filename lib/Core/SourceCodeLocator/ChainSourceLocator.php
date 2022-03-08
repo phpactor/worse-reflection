@@ -15,7 +15,6 @@ class ChainSourceLocator implements SourceCodeLocator
      * @var SourceCodeLocator[]
      */
     private array $locators = [];
-
     
     private LoggerInterface $logger;
 

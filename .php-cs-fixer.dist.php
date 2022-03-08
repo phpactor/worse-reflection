@@ -6,7 +6,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in('lib')
     ->in('tests')
     ->exclude([
-        'tests/Workspace',
+        'Workspace',
     ])
 ;
 
@@ -20,6 +20,7 @@ return (new Config())
             'remove_inheritdoc' => true,
             'allow_mixed' => true,
         ],
+        'class_attributes_separation' => true,
         'no_empty_phpdoc' => true,
         'phpdoc_trim' => true,
         'array_syntax' => ['syntax' => 'short'],

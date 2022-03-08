@@ -5,15 +5,25 @@ namespace Phpactor\WorseReflection\Core;
 class Type
 {
     const TYPE_ARRAY = 'array';
+
     const TYPE_BOOL = 'bool';
+
     const TYPE_STRING = 'string';
+
     const TYPE_INT = 'int';
+
     const TYPE_FLOAT = 'float';
+
     const TYPE_CLASS = 'object';
+
     const TYPE_NULL = 'null';
+
     const TYPE_VOID = 'void';
+
     const TYPE_ITERABLE = 'iterable';
+
     const TYPE_CALLABLE = 'callable';
+
     const TYPE_RESOURCE = 'resource';
 
     /**
@@ -25,10 +35,8 @@ class Type
      * @var ClassName
      */
     private ?ClassName $className = null;
-
     
     private ?Type $arrayType = null;
-
     
     private bool $nullable = false;
 

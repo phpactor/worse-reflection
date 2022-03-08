@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core;
 final class DefaultValue
 {
     private $value;
+
     private $undefined = false;
 
     private function __construct($value = null)

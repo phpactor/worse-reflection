@@ -18,10 +18,8 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionFunctionCollec
 class CompositeReflector implements Reflector
 {
     private ClassReflector $classReflector;
-
     
     private SourceCodeReflector $sourceCodeReflector;
-
     
     private FunctionReflector $functionReflector;
 
@@ -34,55 +32,46 @@ class CompositeReflector implements Reflector
         $this->sourceCodeReflector = $sourceCodeReflector;
         $this->functionReflector = $functionReflector;
     }
-
     
     public function reflectClass($className): ReflectionClass
     {
         return $this->classReflector->reflectClass($className);
     }
-
     
     public function reflectInterface($className): ReflectionInterface
     {
         return $this->classReflector->reflectInterface($className);
     }
-
     
     public function reflectTrait($className): ReflectionTrait
     {
         return $this->classReflector->reflectTrait($className);
     }
-
     
     public function reflectEnum($className): ReflectionEnum
     {
         return $this->classReflector->reflectEnum($className);
     }
-
     
     public function reflectClassLike($className): ReflectionClassLike
     {
         return $this->classReflector->reflectClassLike($className);
     }
-
     
     public function reflectClassesIn($sourceCode): ReflectionClassCollection
     {
         return $this->sourceCodeReflector->reflectClassesIn($sourceCode);
     }
-
     
     public function reflectOffset($sourceCode, $offset): ReflectionOffset
     {
         return $this->sourceCodeReflector->reflectOffset($sourceCode, $offset);
     }
-
     
     public function reflectMethodCall($sourceCode, $offset): ReflectionMethodCall
     {
         return $this->sourceCodeReflector->reflectMethodCall($sourceCode, $offset);
     }
-
     
     public function reflectFunctionsIn($sourceCode): ReflectionFunctionCollection
     {
@@ -93,14 +82,11 @@ class CompositeReflector implements Reflector
     {
         return $this->functionReflector->reflectFunction($name);
     }
-
-
     
     public function sourceCodeForClassLike($className): SourceCode
     {
         return $this->classReflector->sourceCodeForClassLike($className);
     }
-
     
     public function sourceCodeForFunction($name): SourceCode
     {
