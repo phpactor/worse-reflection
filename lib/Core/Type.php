@@ -26,12 +26,10 @@ class Type
      */
     private ?ClassName $className = null;
 
-    /**
-     */
+    
     private ?Type $arrayType = null;
 
-    /**
-     */
+    
     private bool $nullable = false;
 
     public function __construct(string $phpType = null)

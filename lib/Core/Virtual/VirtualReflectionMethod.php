@@ -18,24 +18,19 @@ use Phpactor\WorseReflection\Core\Visibility;
 
 class VirtualReflectionMethod extends VirtualReflectionMember implements ReflectionMethod
 {
-    /**
-     */
+    
     private ReflectionParameterCollection $parameters;
 
-    /**
-     */
+    
     private NodeText $body;
 
-    /**
-     */
+    
     private Type $type;
 
-    /**
-     */
+    
     private bool $isAbstract;
 
-    /**
-     */
+    
     private bool $isStatic;
 
     public function __construct(

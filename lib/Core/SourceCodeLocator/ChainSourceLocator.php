@@ -16,8 +16,7 @@ class ChainSourceLocator implements SourceCodeLocator
      */
     private array $locators = [];
 
-    /**
-     */
+    
     private LoggerInterface $logger;
 
     public function __construct(array $sourceLocators, ?LoggerInterface $logger = null)

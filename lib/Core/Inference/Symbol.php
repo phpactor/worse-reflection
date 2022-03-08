@@ -35,16 +35,13 @@ final class Symbol
         self::CASE,
     ];
 
-    /**
-     */
+    
     private string $symbolType;
 
-    /**
-     */
+    
     private string $name;
 
-    /**
-     */
+    
     private Position $position;
 
     private function __construct(string $symbolType, string $name, Position $position)

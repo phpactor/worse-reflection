@@ -10,8 +10,7 @@ use Microsoft\PhpParser\Parser;
 
 class TolerantFactory implements SourceCodeReflectorFactory
 {
-    /**
-     */
+    
     private Parser $parser;
 
     public function __construct(Parser $parser = null)

@@ -16,8 +16,7 @@ use Psr\Log\LoggerInterface;
 
 class FullyQualifiedNameResolver
 {
-    /**
-     */
+    
     private LoggerInterface $logger;
 
     public function __construct(

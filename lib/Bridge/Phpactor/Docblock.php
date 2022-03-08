@@ -21,20 +21,16 @@ use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCo
 
 class Docblock implements CoreDocblock
 {
-    /**
-     */
+    
     private PhpactorDocblock $docblock;
 
-    /**
-     */
+    
     private string $raw;
 
-    /**
-     */
+    
     private DocblockReflectionMethodFactory $methodFactory;
 
-    /**
-     */
+    
     private DocblockReflectionPropertyFactory $propertyFactory;
 
     public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null, DocblockReflectionPropertyFactory $propertyFactory = null)

@@ -12,12 +12,10 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollectio
 
 class ContextualSourceCodeReflector implements SourceCodeReflector
 {
-    /**
-     */
+    
     private SourceCodeReflector $innerReflector;
 
-    /**
-     */
+    
     private TemporarySourceLocator $locator;
 
     public function __construct(SourceCodeReflector $innerReflector, TemporarySourceLocator $locator)

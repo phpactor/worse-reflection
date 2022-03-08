@@ -22,12 +22,10 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\Reflect
 
 class TolerantSourceCodeReflector implements SourceCodeReflector
 {
-    /**
-     */
+    
     private ServiceLocator $serviceLocator;
 
-    /**
-     */
+    
     private Parser $parser;
 
     public function __construct(ServiceLocator $serviceLocator, Parser $parser)

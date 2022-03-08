@@ -10,8 +10,7 @@ use Phpactor\WorseReflection\Core\Exception\SourceNotFound;
 
 class ClassToFileSourceLocatorTest extends IntegrationTestCase
 {
-    /**
-     */
+    
     private ClassToFileSourceLocator $locator;
 
     public function setUp(): void

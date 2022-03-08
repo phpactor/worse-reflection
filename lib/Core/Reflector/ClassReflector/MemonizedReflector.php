@@ -23,20 +23,16 @@ class MemonizedReflector implements ClassReflector, FunctionReflector
     private const CLASS_LIKE_PREFIX = '__class_like__';
 
 
-    /**
-     */
+    
     private ClassReflector $classReflector;
 
-    /**
-     */
+    
     private FunctionReflector $functionReflector;
 
-    /**
-     */
+    
     private ClassReflector $innerReflector;
 
-    /**
-     */
+    
     private Cache $cache;
 
     public function __construct(ClassReflector $innerReflector, FunctionReflector $functionReflector, Cache $cache)

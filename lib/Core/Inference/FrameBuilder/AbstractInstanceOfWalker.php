@@ -19,8 +19,7 @@ use Phpactor\WorseReflection\Core\Type;
 
 abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
-    /**
-     */
+    
     protected ExpressionEvaluator $evaluator;
 
     public function __construct()
@@ -50,8 +49,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
         return $variables;
     }
 
-    /**
-     */
+    
     protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame)
     {
         $operator = $node->operator->getText($node->getFileContents());

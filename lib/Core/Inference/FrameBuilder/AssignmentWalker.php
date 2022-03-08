@@ -25,8 +25,7 @@ use Psr\Log\LoggerInterface;
 
 class AssignmentWalker extends AbstractWalker
 {
-    /**
-     */
+    
     private LoggerInterface $logger;
 
     public function __construct(LoggerInterface $logger)

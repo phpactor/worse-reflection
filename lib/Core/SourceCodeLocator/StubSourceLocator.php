@@ -12,16 +12,13 @@ use RecursiveIteratorIterator;
 
 final class StubSourceLocator implements SourceCodeLocator
 {
-    /**
-     */
+    
     private string $cacheDir;
 
-    /**
-     */
+    
     private Reflector $reflector;
 
-    /**
-     */
+    
     private string $stubPath;
 
     public function __construct(Reflector $reflector, string $stubPath, string $cacheDir)

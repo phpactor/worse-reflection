@@ -18,8 +18,7 @@ class DeclaredMemberTypeResolver
         'resource',
     ];
 
-    /**
-     */
+    
     public function resolveTypes(Node $tolerantNode, $declaredTypes = null, ClassName $className = null, bool $nullable = false): Types
     {
         if (!$declaredTypes instanceof QualifiedNameList) {

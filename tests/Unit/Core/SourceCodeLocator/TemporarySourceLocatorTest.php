@@ -15,8 +15,7 @@ class TemporarySourceLocatorTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     */
+    
     private TemporarySourceLocator $locator;
 
     public function setUp(): void

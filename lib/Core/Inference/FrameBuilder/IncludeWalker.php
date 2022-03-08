@@ -19,12 +19,10 @@ use Webmozart\PathUtil\Path;
 
 class IncludeWalker implements FrameWalker
 {
-    /**
-     */
+    
     private Parser $parser;
 
-    /**
-     */
+    
     private LoggerInterface $logger;
 
 

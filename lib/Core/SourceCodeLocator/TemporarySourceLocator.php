@@ -31,16 +31,13 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
  */
 class TemporarySourceLocator implements SourceCodeLocator
 {
-    /**
-     */
+    
     private SourceCode $source;
 
-    /**
-     */
+    
     private SourceCodeReflector $reflector;
 
-    /**
-     */
+    
     private bool $locateFunctions;
 
     public function __construct(SourceCodeReflector $reflector, bool $locateFunctions = false)

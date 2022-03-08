@@ -13,8 +13,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionStaticMe
 
 class NodeReflector
 {
-    /**
-     */
+    
     private ServiceLocator $services;
 
     public function __construct(ServiceLocator $services)

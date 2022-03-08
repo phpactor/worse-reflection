@@ -22,16 +22,13 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMemberCollecti
 
 class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEnum
 {
-    /**
-     */
+    
     private ServiceLocator $serviceLocator;
 
-    /**
-     */
+    
     private EnumDeclaration $node;
 
-    /**
-     */
+    
     private SourceCode $sourceCode;
 
     public function __construct(

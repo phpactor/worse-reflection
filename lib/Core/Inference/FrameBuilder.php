@@ -31,8 +31,7 @@ final class FrameBuilder
      */
     private array $walkers;
 
-    /**
-     */
+    
     private Cache $cache;
 
     /**

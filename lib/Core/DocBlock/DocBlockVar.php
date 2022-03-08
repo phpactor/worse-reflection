@@ -6,12 +6,10 @@ use Phpactor\WorseReflection\Core\Types;
 
 class DocBlockVar
 {
-    /**
-     */
+    
     private string $name;
 
-    /**
-     */
+    
     private Types $types;
 
     public function __construct(string $name, Types $types)

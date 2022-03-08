@@ -13,8 +13,7 @@ use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionClass;
  */
 class ReflectMethodBench extends BaseBenchCase
 {
-    /**
-     */
+    
     private ReflectionClass $class;
 
     public function setUp(): void

@@ -11,8 +11,7 @@ use Phpactor\ClassFileConverter\Domain\ClassName;
 
 class ClassToFileSourceLocator implements SourceCodeLocator
 {
-    /**
-     */
+    
     private ClassToFile $converter;
 
     public function __construct(ClassToFile $converter)

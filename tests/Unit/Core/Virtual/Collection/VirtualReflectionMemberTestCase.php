@@ -16,12 +16,10 @@ abstract class VirtualReflectionMemberTestCase extends AbstractReflectionCollect
 {
     use ProphecyTrait;
 
-    /**
-     */
+    
     protected ObjectProphecy $declaringClass;
 
-    /**
-     */
+    
     protected ObjectProphecy $class;
 
     protected $position;

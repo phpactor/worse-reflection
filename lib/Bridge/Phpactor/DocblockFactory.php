@@ -8,8 +8,7 @@ use Phpactor\Docblock\DocblockFactory as PhpactorDocblockFactory;
 
 class DocblockFactory implements CoreDocblockPhpactory
 {
-    /**
-     */
+    
     private PhpactorDocblockFactory $factory;
 
     public function __construct(PhpactorDocblockFactory $factory = null)

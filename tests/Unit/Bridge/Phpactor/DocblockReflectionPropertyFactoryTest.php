@@ -19,12 +19,10 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     */
+    
     private DocblockReflectionPropertyFactory $factory;
 
-    /**
-     */
+    
     private ObjectProphecy $docblock;
 
     public function setUp(): void

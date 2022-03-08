@@ -80,8 +80,7 @@ class ExpressionEvaluator
         return null;
     }
 
-    /**
-     */
+    
     private function walkBinaryExpression(BinaryExpression $node)
     {
         $leftValue = $this->evaluate($node->leftOperand);

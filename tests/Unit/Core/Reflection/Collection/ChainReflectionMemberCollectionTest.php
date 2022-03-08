@@ -18,15 +18,12 @@ class ChainReflectionMemberCollectionTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     */
+    
     private ObjectProphecy $collection1;
-    /**
-     */
+    
     private ObjectProphecy $collection2;
 
-    /**
-     */
+    
     private ObjectProphecy $member1;
 
     public function setUp(): void

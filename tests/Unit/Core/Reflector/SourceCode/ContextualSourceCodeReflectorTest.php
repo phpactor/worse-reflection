@@ -20,16 +20,13 @@ class ContextualSourceCodeReflectorTest extends TestCase
     const TEST_OFFSET = 666;
 
 
-    /**
-     */
+    
     private ObjectProphecy $innerReflector;
 
-    /**
-     */
+    
     private ContextualSourceCodeReflector $reflector;
 
-    /**
-     */
+    
     private ObjectProphecy $locator;
     private $code;
 

@@ -15,16 +15,13 @@ use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreReflectionEnumCase
 {
-    /**
-     */
+    
     private ServiceLocator $serviceLocator;
 
-    /**
-     */
+    
     private EnumCaseDeclaration $node;
 
-    /**
-     */
+    
     private ReflectionEnum $enum;
 
     public function __construct(

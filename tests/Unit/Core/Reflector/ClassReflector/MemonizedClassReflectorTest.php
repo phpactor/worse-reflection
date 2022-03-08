@@ -30,8 +30,7 @@ class MemonizedClassReflectorTest extends TestCase
      */
     private $innerFunctionReflector;
 
-    /**
-     */
+    
     private ClassName $className;
 
     public function setUp(): void

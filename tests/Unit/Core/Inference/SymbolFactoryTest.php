@@ -16,8 +16,7 @@ class SymbolFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     */
+    
     private SymbolFactory $factory;
 
     /**
