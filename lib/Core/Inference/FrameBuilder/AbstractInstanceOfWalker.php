@@ -49,7 +49,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
     }
 
     
-    protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame)
+    protected function variableFromBinaryExpression(BinaryExpression $node, Frame $frame): ?WorseVariable
     {
         $operator = $node->operator->getText($node->getFileContents());
 

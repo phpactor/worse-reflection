@@ -81,6 +81,9 @@ class ExpressionEvaluator
     }
 
     
+    /**
+     * @return mixed
+     */
     private function walkBinaryExpression(BinaryExpression $node)
     {
         $leftValue = $this->evaluate($node->leftOperand);

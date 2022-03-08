@@ -9,6 +9,9 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 
 final class SymbolContext
 {
+    /**
+     * @var mixed
+     */
     private $value;
 
     

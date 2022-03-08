@@ -68,6 +68,9 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
     }
 
     
+    /**
+     * @return mixed
+     */
     public function value()
     {
         if ($this->node->assignment === null) {

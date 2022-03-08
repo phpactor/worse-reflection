@@ -31,7 +31,7 @@ use Phpactor\WorseReflection\Core\Reflector\SourceCodeReflector;
  */
 class TemporarySourceLocator implements SourceCodeLocator
 {
-    private SourceCode $source;
+    private ?SourceCode $source = null;
 
     
     private SourceCodeReflector $reflector;
