@@ -41,7 +41,7 @@ class DeclaredMemberTypeResolver
         $type = $this->doResolve($tolerantType, $tolerantNode, $className);
 
         if ($nullable) {
-            return $type->asNullable();
+            return TypeFactory::nullable($type);
         }
         return $type;
     }

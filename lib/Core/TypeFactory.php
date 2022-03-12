@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\NullType;
+use Phpactor\WorseReflection\Core\Type\NullableType;
 use Phpactor\WorseReflection\Core\Type\ResourceType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
@@ -21,7 +22,7 @@ class TypeFactory
     public static function fromString(string $type): Type
     {
         if ('?' === substr($type, 0, 1)) {
-            return self::union(self::null(), self::typeFromString(substr($Type, 1)));
+            return self::nullable(self::typeFromString(substr($type, 1)));
         }
 
         return self::typeFromString($type);
@@ -162,5 +163,10 @@ class TypeFactory
     public static function callable(): CallableType
     {
         return new CallableType([], new MissingType());
+    }
+
+    public static function nullable(Type $type): NullableType
+    {
+        return new NullableType($type);
     }
 }

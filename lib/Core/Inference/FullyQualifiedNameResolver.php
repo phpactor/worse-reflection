@@ -38,10 +38,9 @@ class FullyQualifiedNameResolver
         $type = $type instanceof Type ? $type : TypeFactory::fromString($type);
 
         if ($type instanceof IterableType) {
-            // TODO: Here
-            $arrayType = $this->resolve($node, $type->arrayType());
+            $arrayType = $this->resolve($node, $type->valueType);
 
-            $type = $type->withArrayType($arrayType);
+            $type->valueType = $arrayType;
         }
 
         if ($this->isFunctionCall($node)) {

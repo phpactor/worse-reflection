@@ -12,4 +12,9 @@ final class UnionType implements Type
     {
         $this->types = $types;
     }
+
+    public function __toString(): string
+    {
+        return sprintf('Union<%s>', array_map(fn (Type $type) => $type->__toString(), $this->types));
+    }
 }

@@ -158,7 +158,7 @@ class ReflectionMethodTest extends IntegrationTestCase
             'Foobar',
             function ($methods): void {
                 $this->assertEquals(
-                    TypeFactory::int()->asNullable(),
+                    TypeFactory::fromString('?int'),
                     $methods->get('method1')->returnType()
                 );
             },
@@ -449,7 +449,7 @@ class ReflectionMethodTest extends IntegrationTestCase
             function ($methods): void {
                 $this->assertCount(1, $methods->get('barfoo')->parameters());
                 $this->assertEquals(
-                    TypeFactory::fromString('Test\Barfoo')->asNullable(),
+                    TypeFactory::fromString('?Test\Barfoo'),
                     $methods->get('barfoo')->parameters()->first()->type()
                 );
             },
