@@ -32,6 +32,7 @@ use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Util\NodeUtil;
 use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
@@ -698,7 +699,7 @@ class SymbolContextResolver
         if ($node->ifExpression) {
             $ifValue = $this->_resolveNode($frame, $node->ifExpression);
 
-            if ($ifValue->type()->isDefined()) {
+            if (!$ifValue->type() instanceof MissingType) {
                 return $ifValue;
             }
         }
@@ -706,7 +707,7 @@ class SymbolContextResolver
         // if expression was not defined, fallback to condition
         $conditionValue = $this->_resolveNode($frame, $node->condition);
 
-        if ($conditionValue->type()->isDefined()) {
+        if (!$conditionValue->type() instanceof MissingType) {
             return $conditionValue;
         }
 

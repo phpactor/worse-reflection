@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Type;
@@ -43,7 +44,9 @@ class ReflectionParameterTest extends IntegrationTestCase
         yield 'It returns false if the parameter has no type' => [
             '$foobar',
             function ($method): void {
-                $this->assertFalse($method->parameters()->get('foobar')->type()->isDefined());
+                $this->assertTrue(
+                    $method->parameters()->get('foobar')->type() instanceof MissingType
+                );
             },
         ];
 
