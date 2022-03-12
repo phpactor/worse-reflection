@@ -839,8 +839,9 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     Symbol::PROPERTY,
                     'bar',
                     Position::fromStartAndEnd(0, 0),
-                ))->withContainerType(TypeFactory::class('Foobar\Barfoo\Foobar'))
-                ->withType(TypeFactory::class('Acme\Factory')),
+                ))
+                    ->withContainerType(TypeFactory::class('Foobar\Barfoo\Foobar'))
+                    ->withType(TypeFactory::class('Acme\Factory')),
             ], [
                 'types' => [
                     TypeFactory::class('Acme\FactoryInterface'),

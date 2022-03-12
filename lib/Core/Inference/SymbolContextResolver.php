@@ -872,7 +872,7 @@ class SymbolContextResolver
             ->byName($propertyName)
         ;
 
-        if ($classType instanceof ClassType) {
+        if (!$classType instanceof ClassType) {
             return;
         }
 
