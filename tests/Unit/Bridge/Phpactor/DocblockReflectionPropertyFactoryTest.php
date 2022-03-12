@@ -66,7 +66,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
                 $this->assertEquals('myProperty', $property->name());
                 $this->assertEquals(Types::fromTypes([
                     TypeFactory::fromString('Foobar'),
-                    Type::string(),
+                    TypeFactory::string(),
                 ]), $property->inferredTypes());
             }
         ];

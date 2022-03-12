@@ -168,7 +168,7 @@ class AssignmentWalker extends AbstractWalker
     private function walkSubscriptExpression(FrameBuilder $builder, Frame $frame, SubscriptExpression $leftOperand, SymbolContext $rightContext): void
     {
         if ($leftOperand->postfixExpression instanceof MemberAccessExpression) {
-            $rightContext = $rightContext->withType(Type::array());
+            $rightContext = $rightContext->withType(TypeFactory::array());
             $this->walkMemberAccessExpression($builder, $frame, $leftOperand->postfixExpression, $rightContext);
         }
     }

@@ -75,13 +75,13 @@ class TypeTest extends TestCase
         ];
 
         yield 'Collection' => [
-            Type::collection('Foobar', Type::string()),
+            TypeFactory::collection('Foobar', TypeFactory::string()),
             'Foobar<string>',
             'object',
         ];
 
         yield 'Typed array' => [
-            Type::array('string'),
+            TypeFactory::array('string'),
             'string[]',
             'array',
         ];
@@ -154,7 +154,7 @@ class TypeTest extends TestCase
         $this->assertFalse($type->isClass());
         $this->assertTrue($type->isPrimitive());
 
-        $type = Type::collection('MyCollection', 'string');
+        $type = TypeFactory::collection('MyCollection', 'string');
         $this->assertTrue($type->isClass());
         $this->assertFalse($type->isPrimitive());
     }
@@ -164,7 +164,7 @@ class TypeTest extends TestCase
      */
     public function testItCanBeCreatedFromAValue($value, Type $expectedType): void
     {
-        $type = Type::fromValue($value);
+        $type = TypeFactory::fromValue($value);
         $this->assertEquals($expectedType, $type);
     }
 
@@ -172,60 +172,60 @@ class TypeTest extends TestCase
     {
         yield [
             'string',
-            Type::string(),
+            TypeFactory::string(),
         ];
 
         yield [
             11,
-            Type::int(),
+            TypeFactory::int(),
         ];
 
         yield [
             11.2,
-            Type::float(),
+            TypeFactory::float(),
         ];
 
         yield [
             [],
-            Type::array(),
+            TypeFactory::array(),
         ];
 
         yield [
             true,
-            Type::bool(),
+            TypeFactory::bool(),
         ];
 
         yield [
             false,
-            Type::bool(),
+            TypeFactory::bool(),
         ];
 
         yield [
             null,
-            Type::null(),
+            TypeFactory::null(),
         ];
 
         yield [
             new stdClass(),
-            Type::class(ClassName::fromString('stdClass')),
+            TypeFactory::class(ClassName::fromString('stdClass')),
         ];
 
         yield 'resource' => [
             \fopen(__FILE__, 'r'),
-            Type::resource(),
+            TypeFactory::resource(),
         ];
 
         yield 'callable' => [
             function (): void {
             },
-            Type::callable(),
+            TypeFactory::callable(),
         ];
     }
 
     public function testItIsImmutableClassName(): void
     {
         $class = ClassName::fromString('Hello\\Goodbye');
-        $type1 = Type::class($class);
+        $type1 = TypeFactory::class($class);
         $type2 = $type1->withArrayType(TypeFactory::fromString('string'));
 
         $this->assertNotSame($type1, $type2);
@@ -234,7 +234,7 @@ class TypeTest extends TestCase
 
     public function testItIsImmutableIterableType(): void
     {
-        $type1 = Type::array(TypeFactory::fromString('Foobar'));
+        $type1 = TypeFactory::array(TypeFactory::fromString('Foobar'));
         $type2 = $type1->withClassName(ClassName::fromString('ClassOne'));
 
         $this->assertNotSame($type1, $type2);

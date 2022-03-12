@@ -11,17 +11,17 @@ class Trinary
         $this->true = $true;
     }
 
-    public function TRUE(): self
+    public static function true(): self
     {
         return new self(true);
     }
 
-    public function FALSE(): self
+    public static function false(): self
     {
         return new self(false);
     }
 
-    public function MAYBE(): self
+    public static function maybe(): self
     {
         return new self(null);
     }

@@ -31,7 +31,7 @@ final class Types implements IteratorAggregate, Countable
             return $type;
         }
 
-        return Type::unknown();
+        return TypeFactory::unknown();
     }
 
     public static function fromTypes(array $inferredTypes): Types

@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter as CoreReflectionParameter;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\TypeResolver\DeclaredMemberTypeResolver;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\TypeResolver\ParameterTypeResolver;
 
@@ -57,7 +58,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
         );
 
         if ($this->parameter->dotDotDotToken) {
-            return Type::array($type->__toString());
+            return TypeFactory::array($type->__toString());
         }
 
         return $type;

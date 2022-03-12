@@ -34,8 +34,8 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 function ($properties): void {
                     $this->assertEquals('property', $properties->get('property')->name());
                     $this->assertEquals(Types::fromTypes([
-                        Type::int(),
-                        Type::string(),
+                        TypeFactory::int(),
+                        TypeFactory::string(),
                     ]), $properties->get('property')->inferredTypes());
                 },
         ];
@@ -163,7 +163,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 'Foobar',
                 function ($properties): void {
                     $this->assertEquals(
-                        Type::class(ClassName::fromString('Acme\Post')),
+                        TypeFactory::class(ClassName::fromString('Acme\Post')),
                         $properties->get('property1')->inferredTypes()->best()
                     );
                     $this->assertFalse($properties->get('property1')->isStatic());
@@ -188,7 +188,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 'Foobar',
                 function ($properties): void {
                     $this->assertEquals(
-                        Type::unknown(),
+                        TypeFactory::unknown(),
                         $properties->get('property1')->type()
                     );
                 },
@@ -341,14 +341,14 @@ class ReflectionPropertyTest extends IntegrationTestCase
                     $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->type());
                     $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
 
-                    $this->assertEquals(Type::string(), $properties->get('baz')->type());
+                    $this->assertEquals(TypeFactory::string(), $properties->get('baz')->type());
 
-                    $this->assertEquals(Type::undefined(), $properties->get('undefined')->type());
+                    $this->assertEquals(TypeFactory::undefined(), $properties->get('undefined')->type());
 
-                    $this->assertEquals(Type::iterable(), $properties->get('collection')->type());
-                    $this->assertEquals(Type::array('Bar\Foo'), $properties->get('collection')->inferredTypes()->best());
+                    $this->assertEquals(TypeFactory::iterable(), $properties->get('collection')->type());
+                    $this->assertEquals(TypeFactory::array('Bar\Foo'), $properties->get('collection')->inferredTypes()->best());
                     $this->assertEquals(
-                        Type::iterable(),
+                        TypeFactory::iterable(),
                         $properties->get('it')->type()
                     );
                 },
@@ -369,7 +369,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 'Test\Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
-                        Type::string()->asNullable(),
+                        TypeFactory::string()->asNullable(),
                         $properties->get('foo')->type()
                     );
                 },

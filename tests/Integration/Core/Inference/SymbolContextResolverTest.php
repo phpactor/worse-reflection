@@ -97,7 +97,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
             PropertyAssignments::create(),
             $source
         );
-        $this->assertEquals(Type::unknown(), $value->type());
+        $this->assertEquals(TypeFactory::unknown(), $value->type());
     }
 
     public function provideGeneral()
@@ -771,7 +771,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     'barfoo' => SymbolContext::for(
                         Symbol::fromTypeNameAndPosition(Symbol::STRING, 'barfoo', Position::fromStartAndEnd(0, 0))
                     )
-                    ->withType(Type::string())->withValue('hello')
+                    ->withType(TypeFactory::string())->withValue('hello')
                 ], ['type' => 'string'],
             ];
 
@@ -834,17 +834,17 @@ class SymbolContextResolverTest extends IntegrationTestCase
 
                     EOT
             , [
-                'this' => Type::class('Foobar\Barfoo\Foobar'),
+                'this' => TypeFactory::class('Foobar\Barfoo\Foobar'),
                 'bar' => SymbolContext::for(Symbol::fromTypeNameAndPosition(
                     Symbol::PROPERTY,
                     'bar',
                     Position::fromStartAndEnd(0, 0),
-                ))->withContainerType(Type::class('Foobar\Barfoo\Foobar'))
-                ->withType(Type::class('Acme\Factory')),
+                ))->withContainerType(TypeFactory::class('Foobar\Barfoo\Foobar'))
+                ->withType(TypeFactory::class('Acme\Factory')),
             ], [
                 'types' => [
-                    Type::class('Acme\FactoryInterface'),
-                    Type::class('Acme\Factory'),
+                    TypeFactory::class('Acme\FactoryInterface'),
+                    TypeFactory::class('Acme\Factory'),
                 ],
                 'symbol_type' => Symbol::PROPERTY,
                 'symbol_name' => 'bar',

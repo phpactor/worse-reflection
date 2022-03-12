@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
 use Phpactor\WorseReflection\Core\Type;
@@ -31,7 +32,7 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
-            $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolContext()->type());
+            $this->assertEquals(TypeFactory::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolContext()->type());
             $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolContext()->symbol()->symbolType());
         }];
 
@@ -56,7 +57,7 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
         , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
             $this->assertEquals(
-                Type::fromString('Foobar\Barfoo\Foobar'),
+                TypeFactory::fromString('Foobar\Barfoo\Foobar'),
                 $frame->locals()->byName('this')->first()->symbolContext()->type()
             );
         }];
@@ -146,7 +147,7 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$foo'));
                 $variable = $frame->locals()->byName('$foo')->first();
-                $this->assertEquals(Type::fromString('Foobar'), $variable->symbolContext()->type());
+                $this->assertEquals(TypeFactory::fromString('Foobar'), $variable->symbolContext()->type());
             }
         ];
 

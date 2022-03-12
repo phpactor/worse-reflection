@@ -61,7 +61,7 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
         $type = QualifiedNameListUtil::firstQualifiedNameOrToken($this->node->returnTypeList);
 
         if (null === $type) {
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
 
         if ($type instanceof Token) {
@@ -69,7 +69,7 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
         }
 
         if (!$type instanceof QualifiedName) {
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
 
         return TypeFactory::fromString($type->getResolvedName());

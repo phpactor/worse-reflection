@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Generator;
@@ -44,7 +45,7 @@ class ForeachWalkerTest extends FrameWalkerTestCase
             function (Frame $frame): void {
                 $this->assertCount(3, $frame->locals());
                 $this->assertCount(1, $frame->locals()->byName('key'));
-                $this->assertEquals(Type::unknown(), $frame->locals()->byName('key')->first()->symbolContext()->types()->best());
+                $this->assertEquals(TypeFactory::unknown(), $frame->locals()->byName('key')->first()->symbolContext()->types()->best());
                 $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('key')->first()->symbolContext()->symbol()->symbolType());
             }
         ];
@@ -155,7 +156,7 @@ class ForeachWalkerTest extends FrameWalkerTestCase
         ,
             function (Frame $frame): void {
                 $this->assertEquals(
-                    Type::string(),
+                    TypeFactory::string(),
                     $frame->locals()->byName('foo')->atIndex(0)->symbolContext()->type(),
                     'Type'
                 );

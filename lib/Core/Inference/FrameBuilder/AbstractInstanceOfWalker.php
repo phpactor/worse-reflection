@@ -122,7 +122,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
         if (0 === $assignments->count()) {
             return $symbolContext
-                ->withContainerType(Type::unknown())
+                ->withContainerType(TypeFactory::unknown())
                 ->withIssue(sprintf('Variable "%s" is undefined', $classVariableName))
             ;
         }

@@ -14,4 +14,9 @@ final class IterableType implements Type
         $this->keyType = $keyType;
         $this->valueType = $valueType;
     }
+
+    public function __toString(): string
+    {
+        return 'iterable';
+    }
 }

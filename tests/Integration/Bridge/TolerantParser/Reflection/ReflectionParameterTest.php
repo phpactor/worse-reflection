@@ -175,7 +175,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             '?string $foobar',
             function ($method): void {
                 $this->assertEquals(
-                    Type::string()->asNullable(),
+                    TypeFactory::string()->asNullable(),
                     $method->parameters()->get('foobar')->type()
                 );
             },
@@ -226,7 +226,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             '/** */',
             function ($method): void {
                 $this->assertCount(1, $method->parameters());
-                $this->assertEquals(Type::unknown(), $method->parameters()->get('foobar')->inferredTypes()->best());
+                $this->assertEquals(TypeFactory::unknown(), $method->parameters()->get('foobar')->inferredTypes()->best());
             },
         ];
     }

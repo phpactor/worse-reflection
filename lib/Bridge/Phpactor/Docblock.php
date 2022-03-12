@@ -15,6 +15,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollec
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
@@ -184,13 +185,13 @@ class Docblock implements CoreDocblock
     private function typesFromDocblockType(DocblockType $type)
     {
         if ($type->isArray()) {
-            return Type::array((string) $type->iteratedType());
+            return TypeFactory::array((string) $type->iteratedType());
         }
         
         if ($type->isCollection()) {
-            return Type::collection((string) $type, $type->iteratedType());
+            return TypeFactory::collection((string) $type, $type->iteratedType());
         }
         
-        return Type::fromString($type->__toString());
+        return TypeFactory::fromString($type->__toString());
     }
 }

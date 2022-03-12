@@ -45,7 +45,7 @@ class FullyQualifiedNameResolver
         }
 
         if ($this->isFunctionCall($node)) {
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
         
         if ($this->isUseDefinition($node)) {
@@ -101,12 +101,12 @@ class FullyQualifiedNameResolver
 
         if (null === $class) {
             $this->logger->warning('"parent" keyword used outside of class scope');
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
 
         if (null === $class->classBaseClause) {
             $this->logger->warning('"parent" keyword used but class does not extend anything');
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
 
 
@@ -121,7 +121,7 @@ class FullyQualifiedNameResolver
         $class = $node->getFirstAncestor(ClassLike::class);
 
         if (null === $class) {
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
 
         assert($class instanceof NamespacedNameInterface);

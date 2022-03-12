@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionConstant as CoreReflectionConstant;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Microsoft\PhpParser\Node\ClassConstDeclaration;
 
@@ -53,7 +54,7 @@ class ReflectionConstant extends AbstractReflectionClassMember implements CoreRe
 
     public function inferredTypes(): Types
     {
-        if (Type::unknown() !== $this->type()) {
+        if (TypeFactory::unknown() !== $this->type()) {
             return Types::fromTypes([ $this->type() ]);
         }
 

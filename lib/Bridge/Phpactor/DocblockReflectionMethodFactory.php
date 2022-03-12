@@ -73,7 +73,7 @@ class DocblockReflectionMethodFactory
                 $parameter->name(),
                 $reflectionMethod,
                 $this->typesFrom($reflectionMethod->scope(), $parameter->types()),
-                Type::unknown(),
+                TypeFactory::unknown(),
                 $parameter->defaultValue()->isDefined() ? DefaultValue::fromValue($parameter->defaultValue()->value()) : DefaultValue::undefined(),
                 false,
                 $reflectionMethod->scope(),
