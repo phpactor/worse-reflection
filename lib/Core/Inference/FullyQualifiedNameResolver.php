@@ -146,12 +146,15 @@ class FullyQualifiedNameResolver
         $className = $type->name->__toString();
 
         if (isset($classImports[$className])) {
-            return $type->withClassName((string) $classImports[$className]);
+            $type->name = ClassName::fromString((string) $classImports[$className]);
+            return $type;
         }
 
         if (isset($classImports[$type->name->head()->__toString()])) {
-            // namespace was imported
-            return $type->withClassName((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
+            $type->name = ClassName::fromString(
+                (string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail()
+            );
+            return $type;
         }
 
         return null;
