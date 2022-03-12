@@ -41,8 +41,10 @@ class ReflectionArgument implements CoreReflectionArgument
             return $name;
         }
 
-        if ($this->type()->isDefined()) {
-            $typeName = $this->type()->isClass() ? (string) $this->type()->className()->short() : (string) $this->type();
+        $type = $this->type();
+
+        if (!$type instanceof MissingType) {
+            $typeName = $type instanceof ClassType ? (string) $type->name->short() : (string) $this->type();
             return lcfirst($typeName);
         }
 
