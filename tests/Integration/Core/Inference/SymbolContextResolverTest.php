@@ -6,6 +6,7 @@ use Phpactor\WorseReflection\Core\Cache\NullCache;
 use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -90,7 +91,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                         Symbol::CLASS_,
                         'bar',
                         Position::fromStartAndEnd(0, 0)
-                    ))->withType(Type::fromString('Foobar'))
+                    ))->withType(TypeFactory::fromString('Foobar'))
                 ),
             ]),
             PropertyAssignments::create(),
@@ -318,7 +319,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
 
                     EOT
-            , [ 'foo' => Type::fromString('string') ], ['type' => 'string', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'foo']
+            , [ 'foo' => TypeFactory::fromString('string') ], ['type' => 'string', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'foo']
         ];
 
         yield 'It resolves an undeclared variable' => [
@@ -348,7 +349,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
 
                     EOT
-                , [ 'world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'world']
+                , [ 'world' => TypeFactory::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'world']
                 ];
 
         yield 'It returns type for a call access expression' => [
@@ -392,7 +393,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar\Barfoo\Foobar'),
+                'this' => TypeFactory::fromString('Foobar\Barfoo\Foobar'),
             ], [
                 'type' => 'Foobar\Barfoo\Type3',
                 'symbol_type' => Symbol::METHOD,
@@ -423,7 +424,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar'),
+                'this' => TypeFactory::fromString('Foobar'),
             ], [
                 'type' => 'string',
                 'symbol_type' => Symbol::METHOD,
@@ -459,7 +460,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar'),
+                'this' => TypeFactory::fromString('Foobar'),
             ], [
                 'type' => 'Type3',
                 'symbol_type' => Symbol::METHOD,
@@ -497,7 +498,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar'),
+                'this' => TypeFactory::fromString('Foobar'),
             ], ['type' => 'string'],
         ];
 
@@ -517,7 +518,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     new $<>foobar;
                     EOT
         , [
-                'foobar' => Type::fromString('Foobar'),
+                'foobar' => TypeFactory::fromString('Foobar'),
         ], ['type' => 'Foobar'],
     ];
 
@@ -731,7 +732,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                 $foobar::$my<>Property = 5;
                 EOT
             , [
-                'foobar' => Type::fromString('Foobar')
+                'foobar' => TypeFactory::fromString('Foobar')
             ], [
                 'type' => 'string',
                 'symbol_type' => Symbol::PROPERTY,
@@ -766,7 +767,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     $foobar->$barfoo(<>);
                     EOT
                 , [
-                    'foobar' => Type::fromString('Foobar'),
+                    'foobar' => TypeFactory::fromString('Foobar'),
                     'barfoo' => SymbolContext::for(
                         Symbol::fromTypeNameAndPosition(Symbol::STRING, 'barfoo', Position::fromStartAndEnd(0, 0))
                     )

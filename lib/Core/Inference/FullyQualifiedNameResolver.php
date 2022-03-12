@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression\ScopedPropertyAccessExpression;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
+use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\ClassLike;
 use Microsoft\PhpParser\Node\NamespaceUseClause;
@@ -12,6 +13,11 @@ use Microsoft\PhpParser\Node\Statement\ClassDeclaration;
 use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Type\ClassType;
+use Phpactor\WorseReflection\Core\Type\IterableType;
+use Phpactor\WorseReflection\Core\Type\SelfType;
+use Phpactor\WorseReflection\Core\Type\StaticType;
 use Psr\Log\LoggerInterface;
 
 class FullyQualifiedNameResolver
@@ -29,9 +35,10 @@ class FullyQualifiedNameResolver
         $type = $type ?: $node->getText();
 
         /** @var Type $type */
-        $type = $type instanceof Type ? $type : Type::fromString($type);
+        $type = $type instanceof Type ? $type : TypeFactory::fromString($type);
 
-        if ($type->arrayType()->isDefined()) {
+        if ($type instanceof IterableType) {
+            // TODO: Here
             $arrayType = $this->resolve($node, $type->arrayType());
 
             $type = $type->withArrayType($arrayType);
@@ -42,24 +49,25 @@ class FullyQualifiedNameResolver
         }
         
         if ($this->isUseDefinition($node)) {
-            return Type::fromString((string) $type);
+            return TypeFactory::fromString((string) $type);
         }
 
-        if ($type->isPrimitive()) {
+        if ($type instanceof ScalarType) {
             return $type;
         }
 
-        if ($type->className()->wasFullyQualified()) {
+        if ($type instanceof ClassType && $type->name->wasFullyQualified()) {
             return $type;
         }
 
-        if (in_array((string) $type, ['self', 'static', '$this'])) {
+        if ($type instanceof SelfType || $type instanceof StaticType) {
             return $this->currentClass($node, $currentClass);
         }
 
-        if ((string) $type == 'parent') {
-            return $this->parentClass($node);
-        }
+        // TODO: how is this a thing?
+        // if ((string) $type == 'parent') {
+        //     return $this->parentClass($node);
+        // }
 
         if ($importedType = $this->fromClassImports($node, $type)) {
             return $importedType;
@@ -101,13 +109,13 @@ class FullyQualifiedNameResolver
         }
 
 
-        return Type::fromString($class->classBaseClause->baseClass->getResolvedName());
+        return TypeFactory::fromString($class->classBaseClause->baseClass->getResolvedName());
     }
 
     private function currentClass(Node $node, Name $currentClass = null)
     {
         if ($currentClass) {
-            return Type::fromString($currentClass->full());
+            return TypeFactory::fromString($currentClass->full());
         }
         $class = $node->getFirstAncestor(ClassLike::class);
 
@@ -117,7 +125,7 @@ class FullyQualifiedNameResolver
 
         assert($class instanceof NamespacedNameInterface);
 
-        return Type::fromString($class->getNamespacedName());
+        return TypeFactory::fromString($class->getNamespacedName());
     }
 
     private function isUseDefinition(Node $node)
@@ -125,19 +133,26 @@ class FullyQualifiedNameResolver
         return $node->getParent() instanceof NamespaceUseClause;
     }
 
-    private function fromClassImports(Node $node, Type $type)
+    private function fromClassImports(Node $node, Type $type): ?Type
     {
         $imports = $node->getImportTablesForCurrentScope();
         $classImports = $imports[0];
-        $className = $type->className();
 
-        if (isset($classImports[(string) $type])) {
-            return $type->withClassName((string) $classImports[(string) $type]);
+        if (!$type instanceof ClassType) {
+            return $type;
         }
 
-        if (isset($classImports[(string) $className->head()])) {
+        $className = $type->name->__toString();
+
+        if (isset($classImports[$className])) {
+            return $type->withClassName((string) $classImports[$className]);
+        }
+
+        if (isset($classImports[$type->name->head()->__toString()])) {
             // namespace was imported
             return $type->withClassName((string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail());
         }
+
+        return null;
     }
 }

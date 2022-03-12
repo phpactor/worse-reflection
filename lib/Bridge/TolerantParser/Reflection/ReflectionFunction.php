@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
@@ -64,14 +65,14 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
         }
 
         if ($type instanceof Token) {
-            return Type::fromString($type->getText($this->node->getFileContents()));
+            return TypeFactory::fromString($type->getText($this->node->getFileContents()));
         }
 
         if (!$type instanceof QualifiedName) {
             return Type::unknown();
         }
 
-        return Type::fromString($type->getResolvedName());
+        return TypeFactory::fromString($type->getResolvedName());
     }
 
     public function parameters(): ReflectionParameterCollection

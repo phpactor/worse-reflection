@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Closure;
 use Phpactor\WorseReflection\Core\Position;
@@ -118,7 +119,7 @@ class ReflectionFunctionTest extends IntegrationTestCase
                 function hello() {}
                 EOT
             , 'Bar\hello', function (ReflectionFunction $function): void {
-                $this->assertEquals(Type::fromString('Foo\Goodbye'), $function->inferredTypes()->best());
+                $this->assertEquals(TypeFactory::fromString('Foo\Goodbye'), $function->inferredTypes()->best());
             }
         ];
 

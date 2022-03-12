@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -25,7 +26,7 @@ class CatchWalkerTest extends FrameWalkerTestCase
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$exception'));
                 $exception = $frame->locals()->byName('$exception')->first();
-                $this->assertEquals(Type::fromString('\Exception'), $exception->symbolContext()->type());
+                $this->assertEquals(TypeFactory::fromString('\Exception'), $exception->symbolContext()->type());
             }
         ];
 
@@ -43,8 +44,8 @@ class CatchWalkerTest extends FrameWalkerTestCase
                 $this->assertCount(1, $frame->locals()->byName('$exception'));
                 $exception = $frame->locals()->byName('$exception')->first();
                 $this->assertEquals(Types::fromTypes([
-                    Type::fromString('Foo'),
-                    Type::fromString('Bar'),
+                    TypeFactory::fromString('Foo'),
+                    TypeFactory::fromString('Bar'),
                 ]), $exception->symbolContext()->types());
             }
         ];

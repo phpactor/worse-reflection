@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
@@ -120,8 +121,8 @@ class VariableWalkerTest extends FrameWalkerTestCase
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
                 $this->assertEquals(Types::fromTypes([
-                    Type::fromString('Bar'),
-                    Type::fromString('Baz')
+                    TypeFactory::fromString('Bar'),
+                    TypeFactory::fromString('Baz')
                 ]), $frame->locals()->byName('$zed')->last()->symbolContext()->types());
             }
         ];

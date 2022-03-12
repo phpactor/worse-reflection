@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -448,7 +449,7 @@ class ReflectionMethodTest extends IntegrationTestCase
             function ($methods): void {
                 $this->assertCount(1, $methods->get('barfoo')->parameters());
                 $this->assertEquals(
-                    Type::fromString('Test\Barfoo')->asNullable(),
+                    TypeFactory::fromString('Test\Barfoo')->asNullable(),
                     $methods->get('barfoo')->parameters()->first()->type()
                 );
             },

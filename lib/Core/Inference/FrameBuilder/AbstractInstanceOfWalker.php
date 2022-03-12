@@ -16,6 +16,7 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 
 abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
@@ -86,7 +87,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
         $type = (string) $rightOperand->getResolvedName();
 
         $context = $this->createSymbolContext($variable, $frame);
-        $context = $context->withType(Type::fromString($type));
+        $context = $context->withType(TypeFactory::fromString($type));
         $variable = WorseVariable::fromSymbolContext($context);
 
         return $variable;

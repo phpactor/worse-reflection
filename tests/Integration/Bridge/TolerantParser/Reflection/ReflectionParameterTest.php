@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Type;
@@ -49,7 +50,7 @@ class ReflectionParameterTest extends IntegrationTestCase
         yield 'It returns the parameter type' => [
             'Foobar $foobar',
             function ($method): void {
-                $this->assertEquals(Type::fromString('Acme\Foobar'), $method->parameters()->get('foobar')->type());
+                $this->assertEquals(TypeFactory::fromString('Acme\Foobar'), $method->parameters()->get('foobar')->type());
             },
         ];
 
@@ -144,7 +145,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             'iterable $foobar',
             function ($method): void {
                 $this->assertEquals(
-                    Type::fromString('iterable'),
+                    TypeFactory::fromString('iterable'),
                     $method->parameters()->get('foobar')->type()
                 );
             },
@@ -154,7 +155,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             'resource $foobar',
             function ($method): void {
                 $this->assertEquals(
-                    Type::fromString('resource'),
+                    TypeFactory::fromString('resource'),
                     $method->parameters()->get('foobar')->type()
                 );
             },
@@ -164,7 +165,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             'callable $foobar',
             function ($method): void {
                 $this->assertEquals(
-                    Type::fromString('callable'),
+                    TypeFactory::fromString('callable'),
                     $method->parameters()->get('foobar')->type()
                 );
             },

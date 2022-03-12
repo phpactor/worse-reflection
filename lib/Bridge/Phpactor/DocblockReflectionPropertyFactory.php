@@ -13,6 +13,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionProperty;
@@ -62,7 +63,7 @@ class DocblockReflectionPropertyFactory
         $types = [];
         /** @var DocblockType $docblockType */
         foreach ($docblockTypes as $docblockType) {
-            $types[] = Type::fromString($scope->resolveFullyQualifiedName($docblockType->__toString()));
+            $types[] = TypeFactory::fromString($scope->resolveFullyQualifiedName($docblockType->__toString()));
         }
 
         return Types::fromTypes($types);

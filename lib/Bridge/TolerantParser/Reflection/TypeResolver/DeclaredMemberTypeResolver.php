@@ -8,6 +8,7 @@ use Microsoft\PhpParser\TokenKind;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Microsoft\PhpParser\Node;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
 
@@ -58,7 +59,7 @@ class DeclaredMemberTypeResolver
         if ($tolerantType instanceof Token) {
             $text = $tolerantType->getText($tolerantNode->getFileContents());
 
-            return Type::fromString($text);
+            return TypeFactory::fromString($text);
         }
 
         $text = $tolerantType->getText($tolerantNode->getFileContents());
@@ -68,9 +69,9 @@ class DeclaredMemberTypeResolver
 
         $name = $tolerantType->getResolvedName();
         if ($className && $name === 'self') {
-            return Type::fromString((string) $className);
+            return TypeFactory::fromString((string) $className);
         }
 
-        return Type::fromString($name);
+        return TypeFactory::fromString($name);
     }
 }

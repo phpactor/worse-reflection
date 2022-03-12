@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
@@ -40,7 +41,7 @@ class DocblockReflectionMethodFactory
             $reflectionClass->scope(),
             Visibility::public(),
             $types,
-            $originalMethod ? $originalMethod->type() : Type::unknown(),
+            $originalMethod ? $originalMethod->type() : TypeFactory::unknown(),
             $parameters,
             NodeText::fromString(''),
             false,
@@ -58,7 +59,7 @@ class DocblockReflectionMethodFactory
         $types = [];
         /** @var DocblockType $docblockType */
         foreach ($docblockTypes as $docblockType) {
-            $types[] = Type::fromString($scope->resolveFullyQualifiedName($docblockType->__toString()));
+            $types[] = $scope->resolveFullyQualifiedName($docblockType->__toString());
         }
 
         return Types::fromTypes($types);

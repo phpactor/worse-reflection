@@ -31,6 +31,7 @@ use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Util\NodeUtil;
 use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
@@ -171,7 +172,7 @@ class SymbolContextResolver
                 [
                     'name' => Name::fromString($node->getNamespacedName()),
                     'symbol_type' => Symbol::CLASS_,
-                    'type' => Type::fromString($node->getNamespacedName())
+                    'type' => TypeFactory::fromString($node->getNamespacedName())
                 ]
             );
         }
@@ -410,7 +411,7 @@ class SymbolContextResolver
         }
 
         if ($typeDeclaration instanceof Token) {
-            $type = Type::fromString($typeDeclaration->getText($node->getFileContents()));
+            $type = TypeFactory::fromString($typeDeclaration->getText($node->getFileContents()));
         }
 
         $value = null;
@@ -801,7 +802,7 @@ class SymbolContextResolver
 
         assert($classNode instanceof NamespacedNameInterface);
 
-        return Type::fromString($classNode->getNamespacedName());
+        return TypeFactory::fromString($classNode->getNamespacedName());
     }
 
     private function resolveParenthesizedExpression(Frame $frame, ParenthesizedExpression $node)

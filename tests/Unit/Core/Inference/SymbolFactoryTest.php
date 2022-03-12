@@ -8,6 +8,7 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
@@ -49,8 +50,8 @@ class SymbolFactoryTest extends TestCase
 
     public function testInformationOptions(): void
     {
-        $containerType = Type::fromString('container');
-        $type = Type::fromString('type');
+        $containerType = TypeFactory::fromString('container');
+        $type = TypeFactory::fromString('type');
 
         $information = $this->factory->context('hello', 10, 20, [
             'symbol_type' => Symbol::ARRAY,

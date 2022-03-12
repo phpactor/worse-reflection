@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 
@@ -50,7 +51,7 @@ final class SymbolContext
 
     public static function for(Symbol $symbol): SymbolContext
     {
-        return new self($symbol, Types::fromTypes([ Type::unknown() ]));
+        return new self($symbol, Types::fromTypes([ TypeFactory::unknown() ]));
     }
 
     /**
@@ -134,7 +135,7 @@ final class SymbolContext
             return $type;
         }
 
-        return Type::unknown();
+        return TypeFactory::unknown();
     }
 
     public function types(): Types

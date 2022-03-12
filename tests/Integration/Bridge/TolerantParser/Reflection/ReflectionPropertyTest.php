@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\Collection\ReflectionPropertyCollection as PhpactorReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -262,7 +263,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 ,
                 'Foobar',
                 function (ReflectionPropertyCollection $properties): void {
-                    $this->assertEquals(Type::fromString('string'), $properties->get('bar')->inferredTypes()->best());
+                    $this->assertEquals(TypeFactory::fromString('string'), $properties->get('bar')->inferredTypes()->best());
                 },
             ];
 
@@ -284,7 +285,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 ,
                 'Foobar',
                 function (ReflectionPropertyCollection $properties): void {
-                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
                 },
             ];
 
@@ -310,7 +311,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 ,
                 'Foobar',
                 function (ReflectionPropertyCollection $properties): void {
-                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
                 },
             ];
 
@@ -337,8 +338,8 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 ,
                 'Test\Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
-                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->type());
-                    $this->assertEquals(Type::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->type());
+                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
 
                     $this->assertEquals(Type::string(), $properties->get('baz')->type());
 

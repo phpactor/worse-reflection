@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -71,7 +72,7 @@ class InstanceOfWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals()->byName('foobar'));
-            $this->assertEquals(Type::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
+            $this->assertEquals(TypeFactory::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
         }
         ];
 
@@ -89,7 +90,7 @@ class InstanceOfWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals()->byName('foobar'));
-            $this->assertEquals(Type::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
+            $this->assertEquals(TypeFactory::fromString('Foobar'), $frame->locals()->last()->symbolContext()->types()->best());
         }
         ];
 
@@ -167,7 +168,7 @@ class InstanceOfWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
-            $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
+            $this->assertEquals(Types::fromTypes([ TypeFactory::fromString('Foobar'), TypeFactory::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
         }
         ];
 
@@ -182,7 +183,7 @@ class InstanceOfWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame, int $offset): void {
             $this->assertCount(2, $frame->locals());
-            $this->assertEquals(Types::fromTypes([ Type::fromString('Foobar'), Type::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
+            $this->assertEquals(Types::fromTypes([ TypeFactory::fromString('Foobar'), TypeFactory::fromString('Barfoo') ]), $frame->locals()->atIndex(0)->symbolContext()->types());
         }
         ];
 
@@ -285,12 +286,12 @@ class InstanceOfWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame, int $offset): void {
             $this->assertCount(1, $frame->locals());
-            $this->assertEquals(Type::fromString('Foo'), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
+            $this->assertEquals(TypeFactory::fromString('Foo'), $frame->locals()->atIndex(0)->symbolContext()->types()->best());
             $this->assertCount(2, $frame->properties());
-            $this->assertEquals(Type::fromString('Foo'), $frame->properties()->atIndex(0)->symbolContext()->containerType());
+            $this->assertEquals(TypeFactory::fromString('Foo'), $frame->properties()->atIndex(0)->symbolContext()->containerType());
             $this->assertEquals(Type::unknown(), $frame->properties()->atIndex(0)->symbolContext()->types()->best());
-            $this->assertEquals(Type::fromString('Foo'), $frame->properties()->atIndex(1)->symbolContext()->containerType());
-            $this->assertEquals(Type::fromString('Bar'), $frame->properties()->atIndex(1)->symbolContext()->types()->best());
+            $this->assertEquals(TypeFactory::fromString('Foo'), $frame->properties()->atIndex(1)->symbolContext()->containerType());
+            $this->assertEquals(TypeFactory::fromString('Bar'), $frame->properties()->atIndex(1)->symbolContext()->types()->best());
         }
         ];
     }

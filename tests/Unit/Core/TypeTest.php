@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use stdClass;
 
 class TypeTest extends TestCase
@@ -26,49 +27,49 @@ class TypeTest extends TestCase
     public function provideToString()
     {
         yield [
-            Type::fromString('string'),
+            TypeFactory::fromString('string'),
             'string',
             'string',
         ];
 
         yield [
-            Type::fromString('float'),
+            TypeFactory::fromString('float'),
             'float',
             'float',
         ];
 
         yield [
-            Type::fromString('int'),
+            TypeFactory::fromString('int'),
             'int',
             'int',
         ];
 
         yield [
-            Type::fromString('bool'),
+            TypeFactory::fromString('bool'),
             'bool',
             'bool',
         ];
 
         yield [
-            Type::fromString('array'),
+            TypeFactory::fromString('array'),
             'array',
             'array',
         ];
 
         yield [
-            Type::fromString('void'),
+            TypeFactory::fromString('void'),
             'void',
             'void',
         ];
 
         yield [
-            Type::fromString('Foobar'),
+            TypeFactory::fromString('Foobar'),
             'Foobar',
             'object'
         ];
 
         yield [
-            Type::fromString('mixed'),
+            TypeFactory::fromString('mixed'),
             '<unknown>',
             '<unknown>'
         ];
@@ -86,37 +87,37 @@ class TypeTest extends TestCase
         ];
 
         yield 'Nullable string' => [
-            Type::fromString('?string'),
+            TypeFactory::fromString('?string'),
             '?string',
             '?string',
         ];
 
         yield 'Nullable class' => [
-            Type::fromString('?Foobar'),
+            TypeFactory::fromString('?Foobar'),
             '?Foobar',
             '?object',
         ];
 
         yield 'Nullable iterable class' => [
-            Type::fromString('?Foo<Bar>'),
+            TypeFactory::fromString('?Foo<Bar>'),
             '?Foo<Bar>',
             '?object',
         ];
 
         yield 'callable' => [
-            Type::fromString('callable'),
+            TypeFactory::fromString('callable'),
             'callable',
             'callable'
         ];
 
         yield 'iterable' => [
-            Type::fromString('iterable'),
+            TypeFactory::fromString('iterable'),
             'iterable',
             'iterable'
         ];
 
         yield 'resource' => [
-            Type::fromString('resource'),
+            TypeFactory::fromString('resource'),
             'resource',
             'resource'
         ];
@@ -127,7 +128,7 @@ class TypeTest extends TestCase
      */
     public function testShort(): void
     {
-        $type = Type::fromString('Foo\Bar\Bar');
+        $type = TypeFactory::fromString('Foo\Bar\Bar');
         $this->assertEquals('Bar', $type->short());
     }
 
@@ -136,7 +137,7 @@ class TypeTest extends TestCase
      */
     public function testShortPrimitive(): void
     {
-        $type = Type::fromString('string');
+        $type = TypeFactory::fromString('string');
         $this->assertEquals('string', $type->short());
     }
 
@@ -145,11 +146,11 @@ class TypeTest extends TestCase
      */
     public function testReturnsIfClass(): void
     {
-        $type = Type::fromString('Foo\Bar');
+        $type = TypeFactory::fromString('Foo\Bar');
         $this->assertTrue($type->isClass());
         $this->assertFalse($type->isPrimitive());
 
-        $type = Type::fromString('string');
+        $type = TypeFactory::fromString('string');
         $this->assertFalse($type->isClass());
         $this->assertTrue($type->isPrimitive());
 
@@ -225,7 +226,7 @@ class TypeTest extends TestCase
     {
         $class = ClassName::fromString('Hello\\Goodbye');
         $type1 = Type::class($class);
-        $type2 = $type1->withArrayType(Type::fromString('string'));
+        $type2 = $type1->withArrayType(TypeFactory::fromString('string'));
 
         $this->assertNotSame($type1, $type2);
         $this->assertNotSame($type1->className(), $type2->className());
@@ -233,7 +234,7 @@ class TypeTest extends TestCase
 
     public function testItIsImmutableIterableType(): void
     {
-        $type1 = Type::array(Type::fromString('Foobar'));
+        $type1 = Type::array(TypeFactory::fromString('Foobar'));
         $type2 = $type1->withClassName(ClassName::fromString('ClassOne'));
 
         $this->assertNotSame($type1, $type2);
@@ -242,16 +243,16 @@ class TypeTest extends TestCase
 
     public function testIsClassShouldNotReturnTrueForObjectType(): void
     {
-        $type1 = Type::fromString('object');
+        $type1 = TypeFactory::fromString('object');
         $this->assertFalse($type1->isClass());
         $this->assertEquals('object', $type1->__toString());
     }
 
     public function testHasMethodToIndicateIfItIsNullable(): void
     {
-        $type1 = Type::fromString('string');
+        $type1 = TypeFactory::fromString('string');
         $this->assertFalse($type1->isNullable());
-        $type1 = Type::fromString('?string');
+        $type1 = TypeFactory::fromString('?string');
         $this->assertTrue($type1->isNullable());
     }
 }

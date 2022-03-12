@@ -21,6 +21,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\ArrayElement;
 use Microsoft\PhpParser\MissingToken;
 use Microsoft\PhpParser\Node\Statement\ExpressionStatement;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Psr\Log\LoggerInterface;
 
 class AssignmentWalker extends AbstractWalker
@@ -224,7 +225,7 @@ class AssignmentWalker extends AbstractWalker
         
             if (is_array($value) && isset($value[$index])) {
                 $variableContext = $variableContext->withValue($value[$index]);
-                $variableContext = $variableContext->withType(Type::fromString(gettype($value[$index])));
+                $variableContext = $variableContext->withType(TypeFactory::fromString(gettype($value[$index])));
             }
         
             $frame->locals()->add(WorseVariable::fromSymbolContext($variableContext));
