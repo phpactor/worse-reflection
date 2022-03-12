@@ -15,6 +15,8 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
+use Phpactor\WorseReflection\Core\Type\IterableType;
+use Phpactor\WorseReflection\Core\Type\MissingType;
 
 class ForeachWalker extends AbstractWalker
 {
@@ -95,7 +97,7 @@ class ForeachWalker extends AbstractWalker
         }
 
         $collectionType = $collection->types()->best();
-        
+
         $context = $this->symbolFactory()->context(
             $itemName,
             $node->getStartPosition(),
@@ -105,8 +107,8 @@ class ForeachWalker extends AbstractWalker
             ]
         );
         
-        if ($collectionType->arrayType()->isDefined()) {
-            $context = $context->withType($collectionType->arrayType());
+        if ($collectionType instanceof IterableType && !$collectionType->valueType instanceof MissingType) {
+            $context = $context->withType($collectionType->valueType);
         }
         
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
