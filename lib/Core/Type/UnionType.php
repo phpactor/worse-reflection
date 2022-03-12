@@ -6,6 +6,9 @@ use Phpactor\WorseReflection\Core\Type;
 
 final class UnionType implements Type
 {
+    /**
+     * @var Type[]
+     */
     public array $types;
 
     public function __construct(Type ...$types)
@@ -15,6 +18,11 @@ final class UnionType implements Type
 
     public function __toString(): string
     {
-        return sprintf('Union<%s>', array_map(fn (Type $type) => $type->__toString(), $this->types));
+        return implode('|', array_map(fn (Type $type) => $type->__toString(), $this->types));
+    }
+
+    public function toPhpString(): string
+    {
+        return $this->__toString();
     }
 }

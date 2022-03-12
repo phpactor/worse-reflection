@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\TypeFactory;

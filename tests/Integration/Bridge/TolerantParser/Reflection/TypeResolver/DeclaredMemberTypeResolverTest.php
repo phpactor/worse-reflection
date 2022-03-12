@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection\TypeResolver;
 
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;

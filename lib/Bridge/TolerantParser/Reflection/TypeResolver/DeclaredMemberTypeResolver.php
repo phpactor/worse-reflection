@@ -59,7 +59,7 @@ class DeclaredMemberTypeResolver
         if ($tolerantType instanceof Token) {
             $text = $tolerantType->getText($tolerantNode->getFileContents());
 
-            return TypeFactory::fromString($text);
+            return TypeFactory::fromString((string)$text);
         }
 
         $text = $tolerantType->getText($tolerantNode->getFileContents());

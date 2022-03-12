@@ -13,7 +13,6 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;

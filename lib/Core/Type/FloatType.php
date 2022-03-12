@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
-use Phpactor\WorseReflection\Core\Type;
-
 final class FloatType extends ScalarType
 {
     public ?float $value;

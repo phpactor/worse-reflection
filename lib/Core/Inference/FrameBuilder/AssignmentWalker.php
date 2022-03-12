@@ -17,7 +17,6 @@ use Microsoft\PhpParser\Node\Expression\AssignmentExpression;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
 use Microsoft\PhpParser\Token;
-use Phpactor\WorseReflection\Core\Type;
 use Microsoft\PhpParser\Node\ArrayElement;
 use Microsoft\PhpParser\MissingToken;
 use Microsoft\PhpParser\Node\Statement\ExpressionStatement;

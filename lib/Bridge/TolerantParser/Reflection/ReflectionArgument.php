@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Inference\Frame;
 use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionArgument as CoreReflectionArgument;
+use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use RuntimeException;
 use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
@@ -45,8 +46,10 @@ class ReflectionArgument implements CoreReflectionArgument
         $type = $this->type();
 
         if (!$type instanceof MissingType) {
-            $typeName = $type instanceof ClassType ? (string) $type->name->short() : (string) $this->type();
-            return lcfirst($typeName);
+            if ($type instanceof ClassType) {
+                return lcfirst($type->name->short());
+            }
+            return lcfirst($type->toPhpString());
         }
 
 

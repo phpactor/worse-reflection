@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use stdClass;
 

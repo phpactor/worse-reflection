@@ -7,6 +7,7 @@ use Phpactor\WorseReflection\Core\Type;
 class IterableType implements Type
 {
     public Type $keyType;
+
     public Type $valueType;
 
     public function __construct(Type $keyType, Type $valueType)

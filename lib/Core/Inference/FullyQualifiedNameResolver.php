@@ -17,6 +17,7 @@ use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\CollectionType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
+use Phpactor\WorseReflection\Core\Type\ScalarType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
 use Phpactor\WorseReflection\Core\Type\StaticType;
 use Psr\Log\LoggerInterface;

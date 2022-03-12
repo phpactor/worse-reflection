@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnumCase;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;

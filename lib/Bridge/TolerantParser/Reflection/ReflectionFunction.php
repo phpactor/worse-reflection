@@ -65,7 +65,7 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
         }
 
         if ($type instanceof Token) {
-            return TypeFactory::fromString($type->getText($this->node->getFileContents()));
+            return TypeFactory::fromString((string)$type->getText($this->node->getFileContents()));
         }
 
         if (!$type instanceof QualifiedName) {

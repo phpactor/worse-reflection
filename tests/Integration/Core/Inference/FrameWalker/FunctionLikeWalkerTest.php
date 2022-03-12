@@ -6,7 +6,6 @@ use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 

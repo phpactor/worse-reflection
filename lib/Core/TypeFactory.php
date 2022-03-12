@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\NullType;
 use Phpactor\WorseReflection\Core\Type\NullableType;
+use Phpactor\WorseReflection\Core\Type\ObjectType;
 use Phpactor\WorseReflection\Core\Type\ResourceType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
 use Phpactor\WorseReflection\Core\Type\StaticType;
@@ -32,75 +33,9 @@ class TypeFactory
         return self::typeFromString($type);
     }
 
-    private static function typeFromString(string $type): Type
-    {
-        if ('' === $type) {
-            return self::unknown();
-        }
-
-        if ($type === 'string') {
-            return self::string();
-        }
-
-        if ($type === 'int') {
-            return self::int();
-        }
-
-        if ($type === 'float') {
-            return self::float();
-        }
-
-        if ($type === 'array') {
-            return self::array();
-        }
-
-        if ($type === 'bool') {
-            return self::bool();
-        }
-
-        if ($type === 'mixed') {
-            return self::mixed();
-        }
-
-        if ($type === 'null') {
-            return self::null();
-        }
-
-        if ($type === 'object') {
-            return self::object();
-        }
-
-        if ($type === 'void') {
-            return self::void();
-        }
-
-        if ($type === 'callable') {
-            return self::callable();
-        }
-
-        if ($type === 'resource') {
-            return self::resource();
-        }
-
-        if ($type === 'iterable') {
-            return self::iterable();
-        }
-
-        if ($type === 'self') {
-            return new SelfType();
-        }
-
-        if ($type === 'static') {
-            return new StaticType();
-        }
-
-        if ($type === '$this') {
-            return new StaticType();
-        }
-
-        return self::class(ClassName::fromString($type));
-    }
-
+    /**
+     * @param mixed $value
+     */
     public static function fromValue($value): Type
     {
         if (is_int($value)) {
@@ -187,9 +122,9 @@ class TypeFactory
         return new BooleanType();
     }
 
-    public static function object(): ClassType
+    public static function object(): ObjectType
     {
-        return new ClassType(null);
+        return new ObjectType();
     }
 
     public static function void(): VoidType
@@ -230,8 +165,77 @@ class TypeFactory
         return new NullableType($type);
     }
 
-    public static function collection(string $classType, $iterableType): CollectionType
+    public static function collection(string $classType, string $iterableType): CollectionType
     {
         return new CollectionType(self::fromString($classType), self::fromString($iterableType));
+    }
+
+    private static function typeFromString(string $type): Type
+    {
+        if ('' === $type) {
+            return self::unknown();
+        }
+
+        if ($type === 'string') {
+            return self::string();
+        }
+
+        if ($type === 'int') {
+            return self::int();
+        }
+
+        if ($type === 'float') {
+            return self::float();
+        }
+
+        if ($type === 'array') {
+            return self::array();
+        }
+
+        if ($type === 'bool') {
+            return self::bool();
+        }
+
+        if ($type === 'mixed') {
+            return self::mixed();
+        }
+
+        if ($type === 'null') {
+            return self::null();
+        }
+
+        if ($type === 'object') {
+            return self::object();
+        }
+
+        if ($type === 'void') {
+            return self::void();
+        }
+
+        if ($type === 'callable') {
+            return self::callable();
+        }
+
+        if ($type === 'resource') {
+            return self::resource();
+        }
+
+        if ($type === 'iterable') {
+            return self::iterable();
+        }
+
+        if ($type === 'self') {
+            return new SelfType();
+        }
+
+        if ($type === 'static') {
+            return new StaticType();
+        }
+
+        if ($type === '$this') {
+            return new StaticType();
+        }
+
+        return self::class(ClassName::fromString($type));
     }
 }

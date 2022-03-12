@@ -6,7 +6,6 @@ use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Type;
 use Generator;
 
 class CatchWalkerTest extends FrameWalkerTestCase

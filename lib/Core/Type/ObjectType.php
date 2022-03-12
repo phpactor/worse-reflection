@@ -2,15 +2,17 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
-final class ResourceType extends PrimitiveType
+use Phpactor\WorseReflection\Core\Type;
+
+final class ObjectType implements Type
 {
     public function __toString(): string
     {
-        return 'resource';
+        return 'object';
     }
 
     public function toPhpString(): string
     {
-        return 'resource';
+        return $this->__toString();
     }
 }

@@ -7,7 +7,6 @@ use Phpactor\WorseReflection\Core\Inference\SymbolFactory;
 use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;

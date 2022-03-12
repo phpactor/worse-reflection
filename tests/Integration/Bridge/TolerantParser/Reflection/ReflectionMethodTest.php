@@ -8,7 +8,6 @@ use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Psr\Log\LoggerInterface;
