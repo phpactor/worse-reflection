@@ -782,7 +782,7 @@ class SymbolContextResolver
 
         $this->logger->debug(sprintf(
             'Resolved type "%s" for %s "%s" of class "%s"',
-            (string) $info->type(),
+            $info->type(),
             $memberType,
             $memberName,
             (string) $classType
