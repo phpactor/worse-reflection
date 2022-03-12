@@ -14,4 +14,9 @@ final class CallableType extends PrimitiveType
         $this->args = $args;
         $this->returnType = $returnType;
     }
+
+    public function __toString(): string
+    {
+        return sprintf('(...): %s', $this->returnType->__toString());
+    }
 }

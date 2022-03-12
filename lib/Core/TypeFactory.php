@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\WorseReflection\Core\Type\BooleanType;
+use Phpactor\WorseReflection\Core\Type\CallableType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
 use Phpactor\WorseReflection\Core\Type\IntType;
@@ -156,5 +157,10 @@ class TypeFactory
     public static function undefined(): MissingType
     {
         return new MissingType();
+    }
+
+    public static function callable(): CallableType
+    {
+        return new CallableType([], new MissingType());
     }
 }

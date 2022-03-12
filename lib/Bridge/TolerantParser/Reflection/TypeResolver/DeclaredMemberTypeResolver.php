@@ -64,7 +64,7 @@ class DeclaredMemberTypeResolver
 
         $text = $tolerantType->getText($tolerantNode->getFileContents());
         if ($tolerantType->isUnqualifiedName() && in_array($text, self::RESERVED_NAMES)) {
-            return type::fromString($text);
+            return TypeFactory::fromString($text);
         }
 
         $name = $tolerantType->getResolvedName();
