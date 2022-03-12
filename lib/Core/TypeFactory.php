@@ -164,9 +164,12 @@ class TypeFactory
         return new IterableType(new MissingType(), new MissingType());
     }
 
-    public static function class(ClassName $className): ClassType
+    /**
+     * @param string|ClassName $className
+     */
+    public static function class($className): ClassType
     {
-        return new ClassType($className);
+        return new ClassType(ClassName::fromUnknown($className));
     }
 
     public static function undefined(): MissingType
