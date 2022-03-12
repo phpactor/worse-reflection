@@ -2,6 +2,6 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
-class ScalarType extends PrimitiveType
+abstract class ScalarType extends PrimitiveType
 {
 }

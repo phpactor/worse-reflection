@@ -49,7 +49,7 @@ class DeclaredMemberTypeResolver
     private function doResolve($tolerantType, ?Node $tolerantNode, ?ClassName $className): Type
     {
         if (null === $tolerantType) {
-            return Type::undefined();
+            return TypeFactory::undefined();
         }
 
         if ($tolerantType instanceof QualifiedNameList) {

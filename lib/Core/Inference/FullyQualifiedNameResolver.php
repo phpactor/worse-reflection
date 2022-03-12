@@ -74,9 +74,10 @@ class FullyQualifiedNameResolver
         }
 
         $namespaceDefinition = $node->getNamespaceDefinition();
-        if ($namespaceDefinition && $namespaceDefinition->name instanceof QualifiedName) {
-            $className = $type->className()->prepend($namespaceDefinition->name->getText());
-            return $type->withClassName($className);
+        if ($type instanceof ClassType && $namespaceDefinition && $namespaceDefinition->name instanceof QualifiedName) {
+            $className = $type->name->prepend($namespaceDefinition->name->getText());
+            $type->name = $className;
+            return $type;
         }
 
         return $type;

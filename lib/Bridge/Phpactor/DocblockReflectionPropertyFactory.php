@@ -51,7 +51,7 @@ class DocblockReflectionPropertyFactory
             $reflectionClass->scope(),
             Visibility::public(),
             $types,
-            $originalProperty ? $originalProperty->type() : Type::unknown(),
+            $originalProperty ? $originalProperty->type() : TypeFactory::unknown(),
             new Deprecation(false)
         );
 

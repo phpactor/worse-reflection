@@ -152,4 +152,9 @@ class TypeFactory
     {
         return new ClassType($className);
     }
+
+    public static function undefined(): MissingType
+    {
+        return new MissingType();
+    }
 }

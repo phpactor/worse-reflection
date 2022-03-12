@@ -158,7 +158,7 @@ class SymbolContextResolver
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CLASS_,
-                    'type' => Type::fromValue($value),
+                    'type' => TypeFactory::fromValue($value),
                     'value' => $value,
                 ]
             );
@@ -206,7 +206,7 @@ class SymbolContextResolver
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::STRING,
-                    'type' => Type::string(),
+                    'type' => TypeFactory::string(),
                     'value' => (string) $node->getStringContentsText(),
                     'container_type' => $this->classTypeFromNode($node)
                 ]
@@ -401,7 +401,7 @@ class SymbolContextResolver
         }
 
         $typeDeclaration = $node->typeDeclarationList;
-        $type = Type::unknown();
+        $type = TypeFactory::unknown();
         if ($typeDeclaration instanceof QualifiedNameList) {
             $typeDeclaration = QualifiedNameListUtil::firstQualifiedNameOrToken($typeDeclaration);
         }
@@ -497,7 +497,7 @@ class SymbolContextResolver
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::NUMBER,
-                'type' => is_float($value) ? Type::float() : Type::int(),
+                'type' => is_float($value) ? TypeFactory::float() : TypeFactory::int(),
                 'value' => $value,
                 'container_type' => $this->classTypeFromNode($node)
             ]
@@ -531,20 +531,20 @@ class SymbolContextResolver
         $word = strtolower($node->getText());
 
         if ('null' === $word) {
-            $type = Type::null();
+            $type = TypeFactory::null();
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
         }
 
         if ('false' === $word) {
             $value = false;
-            $type = Type::bool();
+            $type = TypeFactory::bool();
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
         }
 
         if ('true' === $word) {
-            $type = Type::bool();
+            $type = TypeFactory::bool();
             $value = true;
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
@@ -583,7 +583,7 @@ class SymbolContextResolver
                 $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
-                    'type' => Type::array(),
+                    'type' => TypeFactory::array(),
                     'value' => []
                 ]
             );
@@ -605,7 +605,7 @@ class SymbolContextResolver
             $node->getStartPosition(),
             $node->getEndPosition(),
             [
-                'type' => Type::array(),
+                'type' => TypeFactory::array(),
                 'value' => $array
             ]
         );
@@ -626,7 +626,7 @@ class SymbolContextResolver
 
         $node = $node->accessExpression;
 
-        if ($info->type() != Type::array()) {
+        if ($info->type() != TypeFactory::array()) {
             $info = $info->withIssue(sprintf(
                 'Not resolving subscript expression of type "%s"',
                 (string) $info->type()

@@ -12,4 +12,9 @@ final class StringType extends ScalarType
     {
         $this->value = $value;
     }
+
+    public function __toString(): string
+    {
+        return 'string';
+    }
 }
