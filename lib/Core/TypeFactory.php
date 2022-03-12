@@ -129,9 +129,9 @@ class TypeFactory
         return new FloatType();
     }
 
-    public static function array(): IterableType
+    public static function array(?string $iterableType = null): IterableType
     {
-        return new IterableType(new MissingType(), new MissingType());
+        return new IterableType(new MissingType(), $iterableType ? self::fromString($iterableType) : new MissingType());
     }
 
     public static function mixed(): MixedType

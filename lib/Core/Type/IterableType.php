@@ -17,6 +17,9 @@ final class IterableType implements Type
 
     public function __toString(): string
     {
+        if ((!$this->valueType instanceof MissingType) && $this->keyType instanceof MissingType) {
+            return sprintf('%s[]', $this->valueType->__toString());
+        }
         return 'iterable';
     }
 }

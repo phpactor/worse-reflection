@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Generator;
@@ -113,8 +114,10 @@ class AssignmentWalkerTest extends FrameWalkerTestCase
             $vars = $frame->locals()->byName('foobar');
             $this->assertCount(1, $vars);
             $symbolInformation = $vars->first()->symbolContext();
-            $this->assertEquals('Foobar[]', (string) $symbolInformation->type());
-            $this->assertEquals('Foobar', (string) $symbolInformation->type()->arrayType());
+            $type = $symbolInformation->type();
+            assert($type instanceof IterableType);
+            $this->assertEquals('Foobar[]', (string) $type);
+            $this->assertEquals('Foobar', (string) $symbolInformation->type()->valueType);
         }];
 
 
