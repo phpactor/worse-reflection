@@ -68,10 +68,9 @@ class FullyQualifiedNameResolver
             return $this->currentClass($node, $currentClass);
         }
 
-        // TODO: how is this a thing?
-        // if ((string) $type == 'parent') {
-        //     return $this->parentClass($node);
-        // }
+        if ($type instanceof ClassType && (string) $type == 'parent') {
+            return $this->parentClass($node);
+        }
 
         if ($importedType = $this->fromClassImports($node, $type)) {
             return $importedType;
