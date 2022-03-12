@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Core\Type;
 /**
  * NOTE: This class will be replaced by generics
  */
-class CollectionType implements Type
+class CollectionType extends IterableType
 {
     public Type $classType;
     public Type $valueType;

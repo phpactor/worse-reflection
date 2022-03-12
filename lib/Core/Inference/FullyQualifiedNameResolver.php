@@ -15,6 +15,7 @@ use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Type\ClassType;
+use Phpactor\WorseReflection\Core\Type\CollectionType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
 use Phpactor\WorseReflection\Core\Type\StaticType;
@@ -36,6 +37,10 @@ class FullyQualifiedNameResolver
 
         /** @var Type $type */
         $type = $type instanceof Type ? $type : TypeFactory::fromString($type);
+
+        if ($type instanceof CollectionType) {
+            $type->classType = $this->resolve($node, $type->classType);
+        }
 
         if ($type instanceof IterableType) {
             $arrayType = $this->resolve($node, $type->valueType);
