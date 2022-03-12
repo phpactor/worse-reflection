@@ -10,4 +10,9 @@ final class NullType extends PrimitiveType
     {
         return 'null';
     }
+
+    public function toPhpString(): string
+    {
+        return 'null';
+    }
 }

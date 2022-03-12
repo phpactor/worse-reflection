@@ -10,4 +10,9 @@ final class SelfType implements Type
     {
         return 'self';
     }
+
+    public function toPhpString(): string
+    {
+        return 'self';
+    }
 }

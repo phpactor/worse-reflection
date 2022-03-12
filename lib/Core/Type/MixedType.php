@@ -8,4 +8,9 @@ final class MixedType extends PrimitiveType
     {
         return 'mixed';
     }
+
+    public function toPhpString(): string
+    {
+        return $this->__toString();
+    }
 }

@@ -22,4 +22,9 @@ class IterableType implements Type
         }
         return 'iterable';
     }
+
+    public function toPhpString(): string
+    {
+        return 'iterable';
+    }
 }

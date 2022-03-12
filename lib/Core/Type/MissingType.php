@@ -10,4 +10,9 @@ final class MissingType implements Type
     {
         return '<missing>';
     }
+
+    public function toPhpString(): string
+    {
+        return '';
+    }
 }

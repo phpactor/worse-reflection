@@ -17,4 +17,9 @@ class NullableType implements Type
     {
         return '?' . $this->type->__toString();
     }
+
+    public function toPhpString(): string
+    {
+        return '?' . $this->type->toPhpString();
+    }
 }

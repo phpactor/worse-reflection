@@ -10,4 +10,9 @@ final class VoidType extends PrimitiveType
     {
         return 'void';
     }
+
+    public function toPhpString(): string
+    {
+        return $this->__toString();
+    }
 }

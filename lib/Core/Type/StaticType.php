@@ -10,4 +10,9 @@ final class StaticType implements Type
     {
         return 'static';
     }
+
+    public function toPhpString(): string
+    {
+        return 'static';
+    }
 }

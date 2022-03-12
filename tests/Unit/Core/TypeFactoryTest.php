@@ -9,7 +9,7 @@ use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use stdClass;
 
-class TypeTest extends TestCase
+class TypeFactoryTest extends TestCase
 {
     /**
      * @testdox It should __toString the given type.
@@ -18,10 +18,7 @@ class TypeTest extends TestCase
     public function testToString(Type $type, $toString, $phpType): void
     {
         $this->assertEquals($toString, (string) $type, '__toString()');
-
-        if ($type->isDefined()) {
-            $this->assertEquals($phpType, $type->primitive(), 'primitive (phptype)');
-        }
+        $this->assertEquals($phpType, $type->toPhpString(), 'phptype');
     }
 
     public function provideToString()
@@ -65,19 +62,19 @@ class TypeTest extends TestCase
         yield [
             TypeFactory::fromString('Foobar'),
             'Foobar',
-            'object'
+            'Foobar'
         ];
 
         yield [
             TypeFactory::fromString('mixed'),
-            '<unknown>',
-            '<unknown>'
+            'mixed',
+            'mixed'
         ];
 
         yield 'Collection' => [
             TypeFactory::collection('Foobar', TypeFactory::string()),
             'Foobar<string>',
-            'object',
+            'Foobar',
         ];
 
         yield 'Typed array' => [
@@ -95,18 +92,18 @@ class TypeTest extends TestCase
         yield 'Nullable class' => [
             TypeFactory::fromString('?Foobar'),
             '?Foobar',
-            '?object',
+            '?Foobar',
         ];
 
         yield 'Nullable iterable class' => [
-            TypeFactory::fromString('?Foo<Bar>'),
+            TypeFactory::nullable(TypeFactory::collection('Foo', 'Bar')),
             '?Foo<Bar>',
-            '?object',
+            '?Foo',
         ];
 
         yield 'callable' => [
             TypeFactory::fromString('callable'),
-            'callable',
+            '(...): <missing>',
             'callable'
         ];
 
@@ -121,42 +118,6 @@ class TypeTest extends TestCase
             'resource',
             'resource'
         ];
-    }
-
-    /**
-     * @testdox It returns the short name for a class.
-     */
-    public function testShort(): void
-    {
-        $type = TypeFactory::fromString('Foo\Bar\Bar');
-        $this->assertEquals('Bar', $type->short());
-    }
-
-    /**
-     * @testdox It returns the "short" name for a primitive.
-     */
-    public function testShortPrimitive(): void
-    {
-        $type = TypeFactory::fromString('string');
-        $this->assertEquals('string', $type->short());
-    }
-
-    /**
-     * @testdox It has descriptors to say if it is a class or primitive.
-     */
-    public function testReturnsIfClass(): void
-    {
-        $type = TypeFactory::fromString('Foo\Bar');
-        $this->assertTrue($type->isClass());
-        $this->assertFalse($type->isPrimitive());
-
-        $type = TypeFactory::fromString('string');
-        $this->assertFalse($type->isClass());
-        $this->assertTrue($type->isPrimitive());
-
-        $type = TypeFactory::collection('MyCollection', 'string');
-        $this->assertTrue($type->isClass());
-        $this->assertFalse($type->isPrimitive());
     }
 
     /**
@@ -220,39 +181,5 @@ class TypeTest extends TestCase
             },
             TypeFactory::callable(),
         ];
-    }
-
-    public function testItIsImmutableClassName(): void
-    {
-        $class = ClassName::fromString('Hello\\Goodbye');
-        $type1 = TypeFactory::class($class);
-        $type2 = $type1->withArrayType(TypeFactory::fromString('string'));
-
-        $this->assertNotSame($type1, $type2);
-        $this->assertNotSame($type1->className(), $type2->className());
-    }
-
-    public function testItIsImmutableIterableType(): void
-    {
-        $type1 = TypeFactory::array(TypeFactory::fromString('Foobar'));
-        $type2 = $type1->withClassName(ClassName::fromString('ClassOne'));
-
-        $this->assertNotSame($type1, $type2);
-        $this->assertNotSame($type1->arrayType(), $type2->arrayType());
-    }
-
-    public function testIsClassShouldNotReturnTrueForObjectType(): void
-    {
-        $type1 = TypeFactory::fromString('object');
-        $this->assertFalse($type1->isClass());
-        $this->assertEquals('object', $type1->__toString());
-    }
-
-    public function testHasMethodToIndicateIfItIsNullable(): void
-    {
-        $type1 = TypeFactory::fromString('string');
-        $this->assertFalse($type1->isNullable());
-        $type1 = TypeFactory::fromString('?string');
-        $this->assertTrue($type1->isNullable());
     }
 }

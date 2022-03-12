@@ -11,4 +11,9 @@ class ArrayType extends IterableType
         }
         return 'array';
     }
+
+    public function toPhpString(): string
+    {
+        return 'array';
+    }
 }

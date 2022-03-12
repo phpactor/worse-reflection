@@ -10,4 +10,9 @@ final class ResourceType extends PrimitiveType
     {
         return 'resource';
     }
+
+    public function toPhpString(): string
+    {
+        return 'resource';
+    }
 }

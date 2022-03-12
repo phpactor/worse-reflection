@@ -19,4 +19,9 @@ final class ClassType implements Type
     {
         return $this->name->full();
     }
+
+    public function toPhpString(): string
+    {
+        return $this->__toString();
+    }
 }

@@ -23,4 +23,9 @@ class CollectionType extends IterableType
     {
         return sprintf('%s<%s>', $this->classType, $this->valueType);
     }
+
+    public function toPhpString(): string
+    {
+        return $this->classType->__toString();
+    }
 }
