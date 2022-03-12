@@ -13,6 +13,8 @@ use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\NullType;
 use Phpactor\WorseReflection\Core\Type\NullableType;
 use Phpactor\WorseReflection\Core\Type\ResourceType;
+use Phpactor\WorseReflection\Core\Type\SelfType;
+use Phpactor\WorseReflection\Core\Type\StaticType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Core\Type\VoidType;
@@ -80,6 +82,18 @@ class TypeFactory
 
         if ($type === 'iterable') {
             return self::iterable();
+        }
+
+        if ($type === 'self') {
+            return new SelfType();
+        }
+
+        if ($type === 'static') {
+            return new StaticType();
+        }
+
+        if ($type === '$this') {
+            return new StaticType();
         }
 
         return self::class(ClassName::fromString($type));
