@@ -8,6 +8,6 @@ final class VoidType extends PrimitiveType
 {
     public function __toString(): string
     {
-        return 'void;'
+        return 'void';
     }
 }

@@ -83,7 +83,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
                 $this->assertEquals('myMethod', $method->name());
                 $this->assertEquals(Types::fromTypes([
                     TypeFactory::fromString('Foobar'),
-                    Type::string(),
+                    TypeFactory::string(),
                 ]), $method->inferredTypes());
             }
         ];
