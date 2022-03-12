@@ -126,6 +126,7 @@ class ForeachWalker extends AbstractWalker
             return;
         }
 
+        $collectionType = $collection->type();
         $values = (array)$collection->value();
         $index = 0;
         foreach ($elements->children as $child) {
@@ -134,7 +135,9 @@ class ForeachWalker extends AbstractWalker
             }
 
             $context = $builder->resolveNode($frame, $child->elementValue);
-            $context = $context->withType($collection->type()->arrayType());
+            if ($collectionType instanceof IterableType) {
+                $context = $context->withType($collectionType->valueType);
+            }
 
             if (isset($values[$index])) {
                 $context = $context->withValue($values[$index]);
