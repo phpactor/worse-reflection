@@ -369,7 +369,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 'Test\Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
-                        TypeFactory::string()->asNullable(),
+                        TypeFactory::fromString('?string'),
                         $properties->get('foo')->type()
                     );
                 },

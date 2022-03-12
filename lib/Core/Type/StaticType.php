@@ -2,6 +2,12 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
-final class StaticType
+use Phpactor\WorseReflection\Core\Type;
+
+final class StaticType implements Type
 {
+    public function __toString(): string
+    {
+        return 'static';
+    }
 }

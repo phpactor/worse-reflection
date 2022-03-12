@@ -68,7 +68,7 @@ class ReflectionPromotedPropertyTest extends IntegrationTestCase
                 'Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
-                        TypeFactory::string()->asNullable(),
+                        TypeFactory::fromString('?string'),
                         $properties->get('foobar')->type()
                     );
                 },

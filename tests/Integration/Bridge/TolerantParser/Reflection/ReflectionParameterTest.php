@@ -178,7 +178,7 @@ class ReflectionParameterTest extends IntegrationTestCase
             '?string $foobar',
             function ($method): void {
                 $this->assertEquals(
-                    TypeFactory::string()->asNullable(),
+                    TypeFactory::nullable(TypeFactory::string()),
                     $method->parameters()->get('foobar')->type()
                 );
             },
