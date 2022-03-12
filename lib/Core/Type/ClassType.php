@@ -7,9 +7,9 @@ use Phpactor\WorseReflection\Core\Type;
 
 final class ClassType implements Type
 {
-    public Name $name;
+    public ?Name $name;
 
-    public function __construct(Name $name)
+    public function __construct(?Name $name)
     {
         $this->name = $name;
     }

@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Core\Type;
 
 use Phpactor\WorseReflection\Core\Type;
 
-final class FloatType implements Type
+final class IntType extends ScalarType
 {
     public ?int $value;
 

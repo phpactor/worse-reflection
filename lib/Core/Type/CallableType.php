@@ -4,7 +4,7 @@ namespace Phpactor\WorseReflection\Core\Type;
 
 use Phpactor\WorseReflection\Core\Type;
 
-final class CallableType implements Type
+final class CallableType extends PrimitiveType
 {
     public array $args;
     public Type $returnType;
