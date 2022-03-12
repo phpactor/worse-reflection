@@ -104,7 +104,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
     {
         yield 'It should return none value for whitespace' => [
                 '  <>  ', [],
-                ['type' => '<unknown>'],
+                ['type' => '<missing>'],
             ];
 
         yield 'It should return the name of a class' => [
@@ -274,7 +274,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                 }
 
                 EOT
-            , [], ['type' => '<unknown>', 'symbol_type' => '<unknown>', 'symbol_name' => '<unknown>']
+            , [], ['type' => '<missing>', 'symbol_type' => '<unknown>', 'symbol_name' => '<unknown>']
             ];
 
         yield 'It returns the FQN of a static call' => [
@@ -329,7 +329,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     $b<>lah;
 
                     EOT
-            , [], ['type' => '<unknown>', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'blah']
+            , [], ['type' => '<missing>', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'blah']
         ];
 
         yield 'It returns the FQN of variable assigned in frame' => [
@@ -752,7 +752,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     {
                     }
                     EOT
-                , [], ['type' => '<unknown>'],
+                , [], ['type' => '<missing>'],
                 ];
 
         yield 'Member access with valued variable' => [
@@ -925,7 +925,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
 
                     $barfoo ?:<> new \stdClass();
                     EOT
-                , [], ['type' => '<unknown>']
+                , [], ['type' => '<missing>']
                 ];
 
 
@@ -967,7 +967,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                         private $a<>aa = 'asd';
                     }
                     EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'container_type' => 'Foobar'],
+                , [], ['type' => '<missing>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'container_type' => 'Foobar'],
                 ];
 
         yield 'Constant name' => [
@@ -980,7 +980,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
                 , [], [
-                    'type' => '<unknown>',
+                    'type' => '<missing>',
                     'symbol_type' => Symbol::CONSTANT,
                     'symbol_name' => 'AAA',
                     'container_type' => 'Foobar'
@@ -999,7 +999,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                         }
                         EOT
                     , [], [
-                        'type' => '<unknown>',
+                        'type' => '<missing>',
                         'symbol_type' => Symbol::CASE,
                         'symbol_name' => 'AAA',
                         'container_type' => 'Foobar'

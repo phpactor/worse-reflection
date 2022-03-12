@@ -156,7 +156,7 @@ class FullyQualifiedNameResolver
 
         if (isset($classImports[$type->name->head()->__toString()])) {
             $type->name = ClassName::fromString(
-                (string) $classImports[(string) $className->head()] . '\\' . (string) $className->tail()
+                (string) $classImports[(string) $type->name->head()] . '\\' . (string) $type->name->tail()
             );
             return $type;
         }
