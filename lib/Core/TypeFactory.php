@@ -2,9 +2,11 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\BooleanType;
 use Phpactor\WorseReflection\Core\Type\CallableType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
+use Phpactor\WorseReflection\Core\Type\CollectionType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
 use Phpactor\WorseReflection\Core\Type\IntType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
@@ -131,7 +133,7 @@ class TypeFactory
 
     public static function array(?string $iterableType = null): IterableType
     {
-        return new IterableType(new MissingType(), $iterableType ? self::fromString($iterableType) : new MissingType());
+        return new ArrayType(new MissingType(), $iterableType ? self::fromString($iterableType) : new MissingType());
     }
 
     public static function mixed(): MixedType
@@ -185,5 +187,10 @@ class TypeFactory
     public static function nullable(Type $type): NullableType
     {
         return new NullableType($type);
+    }
+
+    public static function collection(string $classType, $iterableType): CollectionType
+    {
+        return new CollectionType(self::fromString($classType), self::fromString($iterableType));
     }
 }

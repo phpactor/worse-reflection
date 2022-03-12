@@ -17,6 +17,6 @@ final class ClassType implements Type
 
     public function __toString(): string
     {
-        return $this->name->__toString();
+        return $this->name->full();
     }
 }
