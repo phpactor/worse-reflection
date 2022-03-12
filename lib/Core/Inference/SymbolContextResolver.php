@@ -32,6 +32,7 @@ use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Util\NodeUtil;
@@ -670,8 +671,9 @@ class SymbolContextResolver
         if ($node->scopeResolutionQualifier instanceof ParserVariable) {
             /** @var SymbolContext $context */
             $context = $this->resolveVariable($frame, $node->scopeResolutionQualifier);
-            if ($context->type()->className() !== null) {
-                $name = $context->type()->className()->__toString();
+            $type = $context->type();
+            if ($type instanceof ClassType) {
+                $name = $type->name->__toString();
             }
         }
 
@@ -870,18 +872,24 @@ class SymbolContextResolver
             ->byName($propertyName)
         ;
 
+        if ($classType instanceof ClassType) {
+            return;
+        }
+
         /** @var Variable $variable */
         foreach ($assignments as $variable) {
             $symbolContext = $variable->symbolContext();
             $containerType = $symbolContext->containerType();
 
-            if (
-                !$containerType
-                || !$containerType->isClass()
-                || $containerType->className() != $classType->className()
-            ) {
-                // Ignore if not a class, could throw LogicException since it shoudl not append
-                // Or if the symbol is for a different class
+            if (!$containerType) {
+                continue;
+            }
+
+            if (!$containerType instanceof ClassType) {
+                continue;
+            }
+
+            if ($containerType->name != $classType->name) {
                 continue;
             }
 
