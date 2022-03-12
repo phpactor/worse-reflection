@@ -30,8 +30,8 @@ class VariableWalkerTest extends FrameWalkerTestCase
         , function (Frame $frame): void {
             $vars = $frame->locals()->byName('$foobar');
             $this->assertCount(2, $vars);
-            $this->assertEquals('Foobar', (string) $vars->first()->symbolContext()->type()->className());
-            $this->assertEquals('stdClass', (string) $vars->last()->symbolContext()->type()->className());
+            $this->assertEquals('Foobar', (string) $vars->first()->symbolContext()->type());
+            $this->assertEquals('stdClass', (string) $vars->last()->symbolContext()->type());
         }];
 
         yield 'Injects variables with @var (standard)' => [
