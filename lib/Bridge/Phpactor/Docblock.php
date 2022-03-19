@@ -18,6 +18,7 @@ use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
+use Phpactor\WorseReflection\Reflector;
 
 class Docblock implements CoreDocblock
 {
@@ -29,12 +30,21 @@ class Docblock implements CoreDocblock
     
     private DocblockReflectionPropertyFactory $propertyFactory;
 
-    public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null, DocblockReflectionPropertyFactory $propertyFactory = null)
+    private Reflector $reflector;
+
+    public function __construct(
+        string $raw,
+        PhpactorDocblock $docblock,
+        Reflector $reflector,
+        DocblockReflectionMethodFactory $methodFactory = null,
+        DocblockReflectionPropertyFactory $propertyFactory = null
+    )
     {
         $this->docblock = $docblock;
         $this->raw = $raw;
         $this->methodFactory = $methodFactory ?: new DocblockReflectionMethodFactory();
         $this->propertyFactory = $propertyFactory ?: new DocblockReflectionPropertyFactory();
+        $this->reflector = $reflector;
     }
 
     public function isDefined(): bool

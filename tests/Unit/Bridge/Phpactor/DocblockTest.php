@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\CollectionType;
+use Phpactor\WorseReflection\ReflectorBuilder;
 
 class DocblockTest extends TestCase
 {
@@ -90,9 +91,9 @@ class DocblockTest extends TestCase
         $this->assertEquals('Use foobar instead', $docblock->deprecation()->message());
     }
 
-    private function create($docblock): DocBlock
+    private function create(string $docblock): DocBlock
     {
-        $factory = new DocblockFactory();
+        $factory = new DocblockFactory(ReflectorBuilder::create()->build());
         return $factory->create($docblock);
     }
 }

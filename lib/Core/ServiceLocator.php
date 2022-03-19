@@ -86,7 +86,7 @@ class ServiceLocator
         );
 
         $this->sourceLocator = $sourceLocator;
-        $this->docblockFactory = new DocblockFactoryBridge();
+        $this->docblockFactory = new DocblockFactoryBridge($this->reflector);
         $this->logger = $logger;
         $this->typeFactory = new TypeFactory($this->reflector);
 
