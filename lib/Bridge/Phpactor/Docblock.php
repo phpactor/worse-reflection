@@ -202,6 +202,6 @@ class Docblock implements CoreDocblock
             return TypeFactory::collection((string) $type, $type->iteratedType());
         }
         
-        return TypeFactory::fromString($type->__toString(), $this->reflector);
+        return TypeFactory::fromStringWithReflector($type->__toString(), $this->reflector);
     }
 }

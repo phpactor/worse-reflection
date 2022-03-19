@@ -52,7 +52,7 @@ class ReflectionParameterTest extends IntegrationTestCase
         yield 'It returns the parameter type' => [
             'Foobar $foobar',
             function ($method): void {
-                $this->assertEquals(TypeFactory::fromString('Acme\Foobar'), $method->parameters()->get('foobar')->type());
+                $this->assertEquals('Acme\Foobar', $method->parameters()->get('foobar')->type()->__toString());
             },
         ];
 

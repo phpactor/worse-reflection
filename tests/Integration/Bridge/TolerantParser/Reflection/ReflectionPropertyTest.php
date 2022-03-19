@@ -337,8 +337,8 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 ,
                 'Test\Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
-                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->type());
-                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+                    $this->assertEquals('Bar\Foo', $properties->get('bar')->type()->__toString());
+                    $this->assertEquals('Bar\Foo', $properties->get('bar')->inferredTypes()->best()->__toString());
 
                     $this->assertEquals(TypeFactory::string(), $properties->get('baz')->type());
 

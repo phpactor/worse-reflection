@@ -29,7 +29,7 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     {
         $this->serviceLocator = $serviceLocator;
         $this->parameter = $parameter;
-        $this->memberTypeResolver = new DeclaredMemberTypeResolver();
+        $this->memberTypeResolver = new DeclaredMemberTypeResolver($serviceLocator->reflector());
         $this->functionLike = $functionLike;
     }
 

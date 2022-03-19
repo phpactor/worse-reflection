@@ -27,6 +27,11 @@ use Phpactor\WorseReflection\Reflector;
 
 class TypeFactory
 {
+    public static function fromStringWithReflector(string $type, Reflector $reflector): Type
+    {
+        return self::fromString($type, $reflector);
+    }
+
     public static function fromString(string $type, Reflector $reflector = null): Type
     {
         if ('?' === substr($type, 0, 1)) {

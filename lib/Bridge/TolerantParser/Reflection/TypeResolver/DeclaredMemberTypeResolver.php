@@ -11,13 +11,20 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
+use Phpactor\WorseReflection\Reflector;
 
 class DeclaredMemberTypeResolver
 {
+    private Reflector $reflector;
     private const RESERVED_NAMES = [
         'iterable',
         'resource',
     ];
+
+    public function __construct(Reflector $reflector)
+    {
+        $this->reflector = $reflector;
+    }
     
     /**
      * @param mixed $declaredTypes
@@ -59,19 +66,19 @@ class DeclaredMemberTypeResolver
         if ($tolerantType instanceof Token) {
             $text = $tolerantType->getText($tolerantNode->getFileContents());
 
-            return TypeFactory::fromString((string)$text);
+            return TypeFactory::fromStringWithReflector((string)$text, $this->reflector);
         }
 
         $text = $tolerantType->getText($tolerantNode->getFileContents());
         if ($tolerantType->isUnqualifiedName() && in_array($text, self::RESERVED_NAMES)) {
-            return TypeFactory::fromString($text);
+            return TypeFactory::fromStringWithReflector($text, $this->reflector);
         }
 
         $name = $tolerantType->getResolvedName();
         if ($className && $name === 'self') {
-            return TypeFactory::fromString((string) $className);
+            return TypeFactory::fromStringWithReflector((string) $className, $this->reflector);
         }
 
-        return TypeFactory::fromString($name);
+        return TypeFactory::fromStringWithReflector($name, $this->reflector);
     }
 }

@@ -463,8 +463,8 @@ class ReflectionMethodTest extends IntegrationTestCase
             function ($methods): void {
                 $this->assertCount(1, $methods->get('barfoo')->parameters());
                 $this->assertEquals(
-                    TypeFactory::fromString('?Test\Barfoo'),
-                    $methods->get('barfoo')->parameters()->first()->type()
+                    '?Test\Barfoo',
+                    $methods->get('barfoo')->parameters()->first()->type()->__toString(),
                 );
             },
         ];

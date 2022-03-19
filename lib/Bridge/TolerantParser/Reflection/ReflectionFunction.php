@@ -65,14 +65,17 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
         }
 
         if ($type instanceof Token) {
-            return TypeFactory::fromString((string)$type->getText($this->node->getFileContents()));
+            return TypeFactory::fromStringWithReflector(
+                (string)$type->getText($this->node->getFileContents()),
+                $this->serviceLocator()->reflector()
+            );
         }
 
         if (!$type instanceof QualifiedName) {
             return TypeFactory::unknown();
         }
 
-        return TypeFactory::fromString($type->getResolvedName());
+        return TypeFactory::fromStringWithReflector($type->getResolvedName(), $this->serviceLocator()->reflector());
     }
 
     public function parameters(): ReflectionParameterCollection

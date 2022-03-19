@@ -48,7 +48,7 @@ class ReflectionMethod extends AbstractReflectionClassMember implements CoreRefl
         $this->node = $node;
         $this->class = $class;
         $this->returnTypeResolver = new MethodTypeResolver($this, $serviceLocator->logger());
-        $this->memberTypeResolver = new DeclaredMemberTypeResolver();
+        $this->memberTypeResolver = new DeclaredMemberTypeResolver($this->serviceLocator->reflector());
     }
 
     public function name(): string
