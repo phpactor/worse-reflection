@@ -18,6 +18,10 @@ abstract class ScalarType extends PrimitiveType
             return Trinary::true();
         }
 
+        if ($type instanceof MixedType) {
+            return Trinary::maybe();
+        }
+
         if ($type instanceof MissingType) {
             return Trinary::maybe();
         }

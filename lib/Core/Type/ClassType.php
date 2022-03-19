@@ -45,6 +45,14 @@ class ClassType implements Type
 
     public function accepts(Type $type): Trinary
     {
-        return $this->is($type);
+        if ($this->is($type)->isTrue()) {
+            return Trinary::true();
+        }
+
+        if ($type instanceof ClassType) {
+            return Trinary::maybe();
+        }
+
+        return Trinary::false();
     }
 }
