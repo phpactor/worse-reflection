@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\BooleanType;
 use Phpactor\WorseReflection\Core\Type\CallableType;
@@ -15,6 +16,7 @@ use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\NullType;
 use Phpactor\WorseReflection\Core\Type\NullableType;
 use Phpactor\WorseReflection\Core\Type\ObjectType;
+use Phpactor\WorseReflection\Core\Type\ReflectedClassType;
 use Phpactor\WorseReflection\Core\Type\ResourceType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
 use Phpactor\WorseReflection\Core\Type\StaticType;
@@ -148,6 +150,14 @@ class TypeFactory
     public static function class($className): ClassType
     {
         return new ClassType(ClassName::fromUnknown($className));
+    }
+
+    /**
+     * @param string|ClassName $className
+     */
+    public static function reflectedClass(ClassReflector $reflector, $className): ReflectedClassType
+    {
+        return new ReflectedClassType($reflector, ClassName::fromUnknown($className));
     }
 
     public static function undefined(): MissingType

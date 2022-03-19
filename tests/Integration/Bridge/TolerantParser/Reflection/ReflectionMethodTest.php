@@ -134,9 +134,9 @@ class ReflectionMethodTest extends IntegrationTestCase
                 $this->assertEquals(TypeFactory::string(), $methods->get('method2')->returnType());
                 $this->assertEquals(TypeFactory::float(), $methods->get('method3')->returnType());
                 $this->assertEquals(TypeFactory::array(), $methods->get('method4')->returnType());
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Test\Barfoo')), $methods->get('method5')->returnType());
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Acme\Post')), $methods->get('method6')->returnType());
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Test\Foobar')), $methods->get('method7')->returnType());
+                $this->assertEquals(ClassName::fromString('Test\Barfoo'), $methods->get('method5')->returnType()->name);
+                $this->assertEquals(ClassName::fromString('Acme\Post'), $methods->get('method6')->returnType()->name);
+                $this->assertEquals(ClassName::fromString('Test\Foobar'), $methods->get('method7')->returnType()->name);
                 $this->assertEquals(TypeFactory::iterable(), $methods->get('method8')->returnType());
                 $this->assertEquals(TypeFactory::callable(), $methods->get('method9')->returnType());
                 $this->assertEquals(TypeFactory::resource(), $methods->get('method10')->returnType());
