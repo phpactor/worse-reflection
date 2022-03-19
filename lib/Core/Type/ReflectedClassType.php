@@ -39,7 +39,7 @@ class ReflectedClassType extends ClassType
 
         try {
             $reflected = $this->reflector->reflectClass($this->name());
-        } catch  (NotFound $e) {
+        } catch (NotFound $e) {
             return Trinary::maybe();
         }
 
@@ -49,7 +49,7 @@ class ReflectedClassType extends ClassType
     public function reflectionOrNull(): ?ReflectionClassLike
     {
         try {
-            return $this->reflector->reflectClass($this->name());
+            return $this->reflector->reflectClassLike($this->name());
         } catch (NotFound $notFound) {
         }
         return null;

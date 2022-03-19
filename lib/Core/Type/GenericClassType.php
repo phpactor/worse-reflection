@@ -8,10 +8,8 @@ use Phpactor\WorseReflection\Core\TemplateMap;
 use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
-use Phpactor\WorseReflection\Reflector;
 
 class GenericClassType extends ReflectedClassType implements IterableType
-
 {
     /**
      * @var GenericClassType[]
