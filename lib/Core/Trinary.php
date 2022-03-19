@@ -39,4 +39,14 @@ class Trinary
     {
         return $this->true === true;
     }
+
+    public function isFalse(): bool
+    {
+        return $this->true === false;
+    }
+
+    public function isMaybe(): bool
+    {
+        return $this->true === null;
+    }
 }

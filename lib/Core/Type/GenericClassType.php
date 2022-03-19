@@ -3,15 +3,16 @@
 namespace Phpactor\WorseReflection\Core\Type;
 
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\TemplateMap;
 use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Reflector;
 
-class GenericClassType extends ClassType implements IterableType
+class GenericClassType extends ReflectedClassType implements IterableType
+
 {
-    public ClassName $name;
-
     /**
      * @var GenericClassType[]
      */
@@ -22,9 +23,9 @@ class GenericClassType extends ClassType implements IterableType
     /**
      * @param GenericClassType[] $extendAndImplements
      */
-    public function __construct(ClassName $name, TemplateMap $templateMap, array $extendAndImplements = [])
+    public function __construct(ClassReflector $reflector, ClassName $name, TemplateMap $templateMap, array $extendAndImplements = [])
     {
-        $this->name = $name;
+        parent::__construct($reflector, $name);
         $this->extendAndImplements = $extendAndImplements;
         $this->templateMap = $templateMap;
     }
@@ -57,7 +58,7 @@ class GenericClassType extends ClassType implements IterableType
         return $this->name->__toString();
     }
 
-    private function accepts(Type $type): Trinary
+    public function accepts(Type $type): Trinary
     {
         if ($this->is($type)->isTrue()) {
             return Trinary::true();

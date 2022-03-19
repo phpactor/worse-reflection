@@ -42,4 +42,9 @@ class ClassType implements Type
 
         return Trinary::fromBoolean($type->name() == $this->name());
     }
+
+    public function accepts(Type $type): Trinary
+    {
+        return $this->is($type);
+    }
 }

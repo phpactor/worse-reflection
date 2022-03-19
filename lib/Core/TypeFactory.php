@@ -185,9 +185,10 @@ class TypeFactory
         return new NullableType($type);
     }
 
-    public static function collection(string $classType, string $iterableType): GenericClassType
+    public static function collection(ClassReflector $reflector, string $classType, string $iterableType): GenericClassType
     {
         return new GenericClassType(
+            $reflector,
             ClassName::fromString($classType),
             new TemplateMap(
                 [
@@ -196,6 +197,7 @@ class TypeFactory
             ),
             [
                 new GenericClassType(
+                    $reflector,
                     ClassName::fromString('Traversable'),
                     new TemplateMap([]),
                     [],
