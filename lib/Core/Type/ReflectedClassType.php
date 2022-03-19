@@ -4,13 +4,12 @@ namespace Phpactor\WorseReflection\Core\Type;
 
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
-use Phpactor\WorseReflection\Core\Type;
 
 final class ReflectedClassType extends ClassType
 {
-    private ClassReflector $reflector;
-
     public ClassName $name;
+
+    private ClassReflector $reflector;
 
     public function __construct(ClassReflector $reflector, ClassName $name)
     {

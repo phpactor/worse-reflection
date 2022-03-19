@@ -25,7 +25,6 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
     private Reflector $reflector;
 
-
     public function __construct(Reflector $reflector)
     {
         $this->evaluator = new ExpressionEvaluator();

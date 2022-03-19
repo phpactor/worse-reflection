@@ -29,7 +29,6 @@ class FullyQualifiedNameResolver
 
     private Reflector $reflector;
 
-
     public function __construct(
         Reflector $reflector,
         LoggerInterface $logger

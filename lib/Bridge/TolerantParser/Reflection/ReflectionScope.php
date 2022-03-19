@@ -7,7 +7,6 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\NameImports;
 use Phpactor\WorseReflection\Core\Name;
 use Microsoft\PhpParser\ResolvedName;
-use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
@@ -19,8 +18,6 @@ class ReflectionScope implements CoreReflectionScope
     private Node $node;
 
     private Reflector $reflector;
-
-
 
     public function __construct(Reflector $reflector, Node $node)
     {

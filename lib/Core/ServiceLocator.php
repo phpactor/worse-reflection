@@ -111,7 +111,6 @@ class ServiceLocator
                 new InstanceOfWalker($this->reflector),
                 new IncludeWalker($logger),
             ], $frameWalkers)
-
         );
         $this->methodProviders = $methodProviders;
     }

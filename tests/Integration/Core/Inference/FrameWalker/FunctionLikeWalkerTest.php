@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
-use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;

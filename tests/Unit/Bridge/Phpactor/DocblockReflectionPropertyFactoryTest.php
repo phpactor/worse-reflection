@@ -9,8 +9,6 @@ use Phpactor\Docblock\Tag\PropertyTag;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockReflectionPropertyFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
-use Phpactor\WorseReflection\Core\TypeFactory;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\ReflectorBuilder;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;

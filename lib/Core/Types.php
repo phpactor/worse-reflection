@@ -20,6 +20,11 @@ final class Types implements IteratorAggregate, Countable
         }
     }
 
+    public function __toString(): string
+    {
+        return implode('|', array_map(fn (Type $type) => $type->__toString(), $this->types));
+    }
+
     public static function empty(): self
     {
         return new self([]);
@@ -63,10 +68,5 @@ final class Types implements IteratorAggregate, Countable
     private function add(Type $item): void
     {
         $this->types[] = $item;
-    }
-
-    public function __toString(): string
-    {
-        return implode('|', array_map(fn (Type $type) => $type->__toString(), $this->types));
     }
 }

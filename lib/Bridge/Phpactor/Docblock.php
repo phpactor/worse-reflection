@@ -39,8 +39,7 @@ class Docblock implements CoreDocblock
         Reflector $reflector,
         DocblockReflectionMethodFactory $methodFactory = null,
         DocblockReflectionPropertyFactory $propertyFactory = null
-    )
-    {
+    ) {
         $this->docblock = $docblock;
         $this->raw = $raw;
         $this->methodFactory = $methodFactory ?: new DocblockReflectionMethodFactory($reflector);

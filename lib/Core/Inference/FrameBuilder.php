@@ -7,17 +7,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Phpactor\WorseReflection\Core\Cache;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
-use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\ForeachWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\FunctionLikeWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\InstanceOfWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssertFrameWalker;
 
 final class FrameBuilder
 {

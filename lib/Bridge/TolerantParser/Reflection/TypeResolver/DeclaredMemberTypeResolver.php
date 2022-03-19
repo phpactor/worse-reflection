@@ -15,11 +15,12 @@ use Phpactor\WorseReflection\Reflector;
 
 class DeclaredMemberTypeResolver
 {
-    private Reflector $reflector;
     private const RESERVED_NAMES = [
         'iterable',
         'resource',
     ];
+
+    private Reflector $reflector;
 
     public function __construct(Reflector $reflector)
     {
