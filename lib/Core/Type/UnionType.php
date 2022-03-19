@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
+use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\Type;
 
 final class UnionType implements Type
@@ -24,5 +25,24 @@ final class UnionType implements Type
     public function toPhpString(): string
     {
         return $this->__toString();
+    }
+
+    public function accepts(Type $type): Trinary
+    {
+        $maybe = false;
+        foreach ($this->types as $uType) {
+            if ($uType->accepts($type)->isTrue()) {
+                return Trinary::true();
+            }
+            if ($uType->accepts($type)->isMaybe()) {
+                $maybe = true;
+            }
+        }
+
+        if ($maybe) {
+            return Trinary::maybe();
+        }
+
+        return Trinary::false();
     }
 }

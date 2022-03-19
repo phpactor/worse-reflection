@@ -19,6 +19,6 @@ final class NullType extends PrimitiveType
 
     public function accepts(Type $type): Trinary
     {
-        return $type instanceof MixedType || $type instanceof NullType;
+        return Trinary::fromBoolean($type instanceof MixedType || $type instanceof NullType);
     }
 }
