@@ -17,14 +17,19 @@ use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Reflector;
 
 abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
     protected ExpressionEvaluator $evaluator;
 
-    public function __construct()
+    private Reflector $reflector;
+
+
+    public function __construct(Reflector $reflector)
     {
         $this->evaluator = new ExpressionEvaluator();
+        $this->reflector = $reflector;
     }
 
     /**
