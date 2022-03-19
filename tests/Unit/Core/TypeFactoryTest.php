@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\ReflectorBuilder;
 use stdClass;
 
 class TypeFactoryTest extends TestCase
@@ -22,6 +23,7 @@ class TypeFactoryTest extends TestCase
 
     public function provideToString()
     {
+        $reflector = ReflectorBuilder::create()->build();
         yield [
             TypeFactory::fromString('string'),
             'string',
@@ -71,7 +73,7 @@ class TypeFactoryTest extends TestCase
         ];
 
         yield 'Collection' => [
-            TypeFactory::collection('Foobar', TypeFactory::string()),
+            TypeFactory::collection($reflector, 'Foobar', TypeFactory::string()),
             'Foobar<string>',
             'Foobar',
         ];
@@ -95,7 +97,7 @@ class TypeFactoryTest extends TestCase
         ];
 
         yield 'Nullable iterable class' => [
-            TypeFactory::nullable(TypeFactory::collection('Foo', 'Bar')),
+            TypeFactory::nullable(TypeFactory::collection($reflector, 'Foo', 'Bar')),
             '?Foo<Bar>',
             '?Foo',
         ];
