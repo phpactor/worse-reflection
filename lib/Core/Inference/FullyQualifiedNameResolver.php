@@ -16,6 +16,7 @@ use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\CollectionType;
+use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Core\Type\ScalarType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
@@ -44,8 +45,10 @@ class FullyQualifiedNameResolver
         /** @var Type $type */
         $type = $type instanceof Type ? $type : TypeFactory::fromStringWithReflector($type, $this->reflector);
 
-        if ($type instanceof CollectionType) {
-            $type->classType = $this->resolve($node, $type->classType);
+        if ($type instanceof GenericClassType) {
+            foreach ($type->templateMap()->toArray() as $key => $gType) {
+                $type->templateMap()->replace($key, $this->resolve($node, $gType));
+            }
         }
 
         if ($type instanceof IterableType) {

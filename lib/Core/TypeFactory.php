@@ -9,6 +9,7 @@ use Phpactor\WorseReflection\Core\Type\CallableType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\CollectionType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
+use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\Core\Type\IntType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
@@ -185,9 +186,23 @@ class TypeFactory
         return new NullableType($type);
     }
 
-    public static function collection(string $classType, string $iterableType): CollectionType
+    public static function collection(string $classType, string $iterableType): GenericClassType
     {
-        return new CollectionType(self::fromString($classType), self::fromString($iterableType));
+        return new GenericClassType(
+            ClassName::fromString($classType),
+            new TemplateMap(
+                [
+                    'TValue' => self::fromString($iterableType)
+                ]
+            ),
+            [
+                new GenericClassType(
+                    ClassName::fromString('Traversable'),
+                    new TemplateMap([]),
+                    [],
+                )
+            ],
+        );
     }
 
     private static function typeFromString(string $type, Reflector $reflector = null): Type

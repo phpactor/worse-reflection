@@ -34,4 +34,9 @@ class Trinary
 
         return self::false();
     }
+
+    public function isTrue(): bool
+    {
+        return $this->true === true;
+    }
 }
