@@ -216,7 +216,10 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
+                $this->assertEquals(
+                    'Acme\Post',
+                    $methods->get('method1')->inferredTypes()->best()->__toString(),
+                );
             },
         ];
 
@@ -375,9 +378,7 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function (ReflectionMethodCollection $methods): void {
-                $this->assertEquals(TypeFactory::class(
-                    ClassName::fromString('\Articles\Blog')
-                ), $methods->get('method1')->inferredTypes()->best());
+                $this->assertEquals('Articles\Blog', $methods->get('method1')->inferredTypes()->best()->__toString());
             },
         ];
         yield 'Return type from inherited docblock (from interface)' => [
@@ -407,7 +408,7 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('\Articles\Blog')), $methods->get('method1')->inferredTypes()->best());
+                $this->assertEquals('Articles\Blog', $methods->get('method1')->inferredTypes()->best()->__toString());
             },
         ];
         yield 'It reflects an abstract method' => [

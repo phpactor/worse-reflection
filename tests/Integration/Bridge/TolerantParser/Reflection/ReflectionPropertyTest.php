@@ -162,8 +162,8 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 'Foobar',
                 function ($properties): void {
                     $this->assertEquals(
-                        TypeFactory::class(ClassName::fromString('Acme\Post')),
-                        $properties->get('property1')->inferredTypes()->best()
+                        'Acme\Post',
+                        $properties->get('property1')->inferredTypes()->best()->__toString(),
                     );
                     $this->assertFalse($properties->get('property1')->isStatic());
                 },
@@ -284,7 +284,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 ,
                 'Foobar',
                 function (ReflectionPropertyCollection $properties): void {
-                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+                    $this->assertEquals('Bar\Foo', $properties->get('bar')->inferredTypes()->best()->__toString());
                 },
             ];
 
@@ -310,7 +310,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                 ,
                 'Foobar',
                 function (ReflectionPropertyCollection $properties): void {
-                    $this->assertEquals(TypeFactory::fromString('Bar\Foo'), $properties->get('bar')->inferredTypes()->best());
+                    $this->assertEquals('Bar\Foo', $properties->get('bar')->inferredTypes()->best()->__toString());
                 },
             ];
 

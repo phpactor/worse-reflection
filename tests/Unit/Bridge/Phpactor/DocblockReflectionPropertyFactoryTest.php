@@ -25,7 +25,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->factory = new DocblockReflectionPropertyFactory();
+        $this->factory = new DocblockReflectionPropertyFactory(ReflectorBuilder::create()->build());
         $this->docblock = $this->prophesize(DocBlock::class);
     }
 
@@ -63,10 +63,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
             function (ReflectionProperty $property): void {
                 $this->assertEquals('Foobar', (string) $property->class()->name());
                 $this->assertEquals('myProperty', $property->name());
-                $this->assertEquals(Types::fromTypes([
-                    TypeFactory::fromString('Foobar'),
-                    TypeFactory::string(),
-                ]), $property->inferredTypes());
+                $this->assertEquals('Foobar|string', $property->inferredTypes()->__toString());
             }
         ];
     }

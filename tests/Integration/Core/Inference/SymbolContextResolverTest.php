@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -1186,13 +1187,11 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     $this->assertEquals($value, (string) $information->type(), $name);
                     continue 2;
                 case 'types':
-                    foreach ($information->types() as $index => $type) {
-                        $this->assertEquals(
-                            $value,
-                            iterator_to_array($information->types()),
-                            $name,
-                        );
-                    }
+                    $this->assertEquals(
+                        Types::fromTypes($value)->__toString(),
+                        $information->types()->__toString(),
+                        $name,
+                    );
                     continue 2;
                 case 'value':
                     $this->assertEquals($value, $information->value(), $name);
