@@ -92,7 +92,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
         $type = (string) $rightOperand->getResolvedName();
 
         $context = $this->createSymbolContext($variable, $frame);
-        $context = $context->withType(TypeFactory::fromString($type));
+        $context = $context->withType(TypeFactory::fromStringWithReflector($type, $this->reflector));
         $variable = WorseVariable::fromSymbolContext($context);
 
         return $variable;
