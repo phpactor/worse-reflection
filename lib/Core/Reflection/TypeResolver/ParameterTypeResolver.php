@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
+use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
@@ -28,7 +29,7 @@ class ParameterTypeResolver
             return Types::fromTypes($resolvedTypes);
         }
 
-        if ($this->parameter->type()->isDefined()) {
+        if (!$this->parameter->type() instanceof MissingType) {
             return Types::fromTypes([ $this->parameter->type() ]);
         }
 

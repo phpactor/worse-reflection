@@ -7,17 +7,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\Expression\AnonymousFunctionCreationExpression;
 use Microsoft\PhpParser\Node\SourceFileNode;
 use Phpactor\WorseReflection\Core\Cache;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
-use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\ForeachWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\FunctionLikeWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\InstanceOfWalker;
-use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssertFrameWalker;
 
 final class FrameBuilder
 {
@@ -43,25 +33,14 @@ final class FrameBuilder
         $this->cache = $cache;
     }
 
+    /**
+     * @param FrameWalker[] $walkers
+     */
     public static function create(
-        DocBlockFactory $docblockFactory,
         SymbolContextResolver $symbolContextResolver,
-        LoggerInterface $logger,
         Cache $cache,
         array $walkers = []
     ): self {
-        $nameResolver = new FullyQualifiedNameResolver($logger);
-        $walkers = array_merge([
-            new AssertFrameWalker(),
-            new FunctionLikeWalker(),
-            new VariableWalker($docblockFactory, $nameResolver),
-            new AssignmentWalker($logger),
-            new CatchWalker(),
-            new ForeachWalker(),
-            new InstanceOfWalker(),
-            new IncludeWalker($logger),
-        ], $walkers);
-
         return new self($symbolContextResolver, $walkers, $cache);
     }
 

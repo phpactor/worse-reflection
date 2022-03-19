@@ -13,11 +13,13 @@ use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
+use Phpactor\WorseReflection\Reflector;
 
 class Docblock implements CoreDocblock
 {
@@ -29,12 +31,20 @@ class Docblock implements CoreDocblock
     
     private DocblockReflectionPropertyFactory $propertyFactory;
 
-    public function __construct(string $raw, PhpactorDocblock $docblock, DocblockReflectionMethodFactory $methodFactory = null, DocblockReflectionPropertyFactory $propertyFactory = null)
-    {
+    private Reflector $reflector;
+
+    public function __construct(
+        string $raw,
+        PhpactorDocblock $docblock,
+        Reflector $reflector,
+        DocblockReflectionMethodFactory $methodFactory = null,
+        DocblockReflectionPropertyFactory $propertyFactory = null
+    ) {
         $this->docblock = $docblock;
         $this->raw = $raw;
         $this->methodFactory = $methodFactory ?: new DocblockReflectionMethodFactory();
-        $this->propertyFactory = $propertyFactory ?: new DocblockReflectionPropertyFactory();
+        $this->propertyFactory = $propertyFactory ?: new DocblockReflectionPropertyFactory($reflector);
+        $this->reflector = $reflector;
     }
 
     public function isDefined(): bool
@@ -161,7 +171,7 @@ class Docblock implements CoreDocblock
         return new Deprecation(false);
     }
 
-    private function typesFromTag(string $tag)
+    private function typesFromTag(string $tag): Types
     {
         $types = [];
 
@@ -172,7 +182,7 @@ class Docblock implements CoreDocblock
         return Types::empty();
     }
 
-    private function typesFromDocblockTypes(DocblockTypes $types)
+    private function typesFromDocblockTypes(DocblockTypes $types): Types
     {
         $types = array_map(function (DocblockType $type) {
             return $this->typesFromDocblockType($type);
@@ -181,16 +191,16 @@ class Docblock implements CoreDocblock
         return Types::fromTypes($types);
     }
 
-    private function typesFromDocblockType(DocblockType $type)
+    private function typesFromDocblockType(DocblockType $type): Type
     {
         if ($type->isArray()) {
-            return Type::array((string) $type->iteratedType());
+            return TypeFactory::array((string) $type->iteratedType());
         }
         
         if ($type->isCollection()) {
-            return Type::collection((string) $type, $type->iteratedType());
+            return TypeFactory::collection($this->reflector, (string) $type, $type->iteratedType());
         }
         
-        return Type::fromString($type->__toString());
+        return TypeFactory::fromStringWithReflector($type->__toString(), $this->reflector);
     }
 }

@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\SourceCode;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionParameterCollection;
@@ -60,18 +61,21 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
         $type = QualifiedNameListUtil::firstQualifiedNameOrToken($this->node->returnTypeList);
 
         if (null === $type) {
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
 
         if ($type instanceof Token) {
-            return Type::fromString($type->getText($this->node->getFileContents()));
+            return TypeFactory::fromStringWithReflector(
+                (string)$type->getText($this->node->getFileContents()),
+                $this->serviceLocator()->reflector()
+            );
         }
 
         if (!$type instanceof QualifiedName) {
-            return Type::unknown();
+            return TypeFactory::unknown();
         }
 
-        return Type::fromString($type->getResolvedName());
+        return TypeFactory::fromStringWithReflector($type->getResolvedName(), $this->serviceLocator()->reflector());
     }
 
     public function parameters(): ReflectionParameterCollection
@@ -91,5 +95,10 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
     protected function node(): Node
     {
         return $this->node;
+    }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
     }
 }

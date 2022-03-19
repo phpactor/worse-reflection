@@ -2,8 +2,6 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
-use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -29,8 +27,8 @@ class VariableWalkerTest extends FrameWalkerTestCase
         , function (Frame $frame): void {
             $vars = $frame->locals()->byName('$foobar');
             $this->assertCount(2, $vars);
-            $this->assertEquals('Foobar', (string) $vars->first()->symbolContext()->type()->className());
-            $this->assertEquals('stdClass', (string) $vars->last()->symbolContext()->type()->className());
+            $this->assertEquals('Foobar', (string) $vars->first()->symbolContext()->type());
+            $this->assertEquals('stdClass', (string) $vars->last()->symbolContext()->type());
         }];
 
         yield 'Injects variables with @var (standard)' => [
@@ -119,10 +117,7 @@ class VariableWalkerTest extends FrameWalkerTestCase
         ,
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$zed'));
-                $this->assertEquals(Types::fromTypes([
-                    Type::fromString('Bar'),
-                    Type::fromString('Baz')
-                ]), $frame->locals()->byName('$zed')->last()->symbolContext()->types());
+                $this->assertEquals('Bar|Baz', $frame->locals()->byName('$zed')->last()->symbolContext()->types()->__toString());
             }
         ];
 

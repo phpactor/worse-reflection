@@ -20,7 +20,12 @@ final class Types implements IteratorAggregate, Countable
         }
     }
 
-    public static function empty()
+    public function __toString(): string
+    {
+        return implode('|', array_map(fn (Type $type) => $type->__toString(), $this->types));
+    }
+
+    public static function empty(): self
     {
         return new self([]);
     }
@@ -31,9 +36,12 @@ final class Types implements IteratorAggregate, Countable
             return $type;
         }
 
-        return Type::unknown();
+        return TypeFactory::unknown();
     }
 
+    /**
+     * @param Type[] $inferredTypes
+     */
     public static function fromTypes(array $inferredTypes): Types
     {
         return new self($inferredTypes);

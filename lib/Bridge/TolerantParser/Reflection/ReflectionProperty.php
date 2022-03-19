@@ -44,7 +44,7 @@ class ReflectionProperty extends AbstractReflectionClassMember implements CoreRe
         $this->variable = $variable;
         $this->class = $class;
         $this->typeResolver = new PropertyTypeResolver($this, $this->serviceLocator->logger());
-        $this->memberTypeResolver = new DeclaredMemberTypeResolver();
+        $this->memberTypeResolver = new DeclaredMemberTypeResolver($this->serviceLocator->reflector());
     }
 
     public function declaringClass(): ReflectionClassLike

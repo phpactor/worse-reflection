@@ -3,7 +3,16 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\WorseReflection\Core\Cache\NullCache;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssertFrameWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\ForeachWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\FunctionLikeWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\InstanceOfWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
+use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
@@ -75,20 +84,30 @@ class ServiceLocator
         );
 
         $this->sourceLocator = $sourceLocator;
-        $this->docblockFactory = new DocblockFactoryBridge();
+        $this->docblockFactory = new DocblockFactoryBridge($this->reflector);
         $this->logger = $logger;
 
+        $nameResolver = new FullyQualifiedNameResolver($this->reflector, $this->logger);
         $this->symbolContextResolver = new SymbolContextResolver(
             $this->reflector,
             $this->logger,
-            $cache
-        );
-        $this->frameBuilder = FrameBuilder::create(
-            $this->docblockFactory,
-            $this->symbolContextResolver,
-            $this->logger,
             $cache,
-            $frameWalkers
+            $nameResolver,
+        );
+
+        $this->frameBuilder = FrameBuilder::create(
+            $this->symbolContextResolver,
+            $cache,
+            array_merge([
+                new AssertFrameWalker($this->reflector),
+                new FunctionLikeWalker(),
+                new VariableWalker($this->docblockFactory, $nameResolver),
+                new AssignmentWalker($this->logger),
+                new CatchWalker(),
+                new ForeachWalker(),
+                new InstanceOfWalker($this->reflector),
+                new IncludeWalker($logger),
+            ], $frameWalkers)
         );
         $this->methodProviders = $methodProviders;
     }

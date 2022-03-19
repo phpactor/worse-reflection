@@ -12,8 +12,6 @@ use Phpactor\Docblock\Tag\MethodTag;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockReflectionMethodFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
-use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\ReflectorBuilder;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -80,10 +78,7 @@ class DocblockReflectionMethodFactoryTest extends TestCase
             function (ReflectionMethod $method): void {
                 $this->assertEquals('Foobar', (string) $method->class()->name());
                 $this->assertEquals('myMethod', $method->name());
-                $this->assertEquals(Types::fromTypes([
-                    Type::fromString('Foobar'),
-                    Type::string(),
-                ]), $method->inferredTypes());
+                $this->assertEquals('Foobar|string', $method->inferredTypes()->__toString());
             }
         ];
 

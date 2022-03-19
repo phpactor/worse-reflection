@@ -7,6 +7,9 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
+use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Type\ClassType;
+use Phpactor\WorseReflection\Core\Type\MissingType;
 
 class MemberTypeResolver
 {
@@ -44,14 +47,14 @@ class MemberTypeResolver
     /**
      * @return ReflectionClassLike
      */
-    private function reflectClassOrNull(Type $containerType, string $name)
+    private function reflectClassOrNull(ClassType $containerType, string $name)
     {
-        return $this->reflector->reflectClassLike($containerType->className());
+        return $this->reflector->reflectClassLike($containerType->name);
     }
 
     private function memberType(string $memberType, Type $containerType, SymbolContext $info, string $name)
     {
-        if (false === $containerType->isDefined()) {
+        if ($containerType instanceof MissingType) {
             return $info->withIssue(sprintf(
                 'No type available for containing class "%s" for method "%s"',
                 (string) $containerType,
@@ -59,7 +62,7 @@ class MemberTypeResolver
             ));
         }
 
-        if (false === $containerType->isClass()) {
+        if (!$containerType instanceof ClassType) {
             return $info->withIssue(sprintf(
                 'Containing type is not a class, got "%s"',
                 (string) $containerType
@@ -78,7 +81,7 @@ class MemberTypeResolver
             return $info;
         }
 
-        $info = $info->withContainerType(Type::class($class->name()));
+        $info = $info->withContainerType(TypeFactory::class($class->name(), $this->reflector));
 
         if (!method_exists($class, $memberType)) {
             $info = $info->withIssue(sprintf(
@@ -110,7 +113,7 @@ class MemberTypeResolver
         assert($member instanceof ReflectionMember);
         $declaringClass = $member->declaringClass();
 
-        $info = $info->withContainerType(Type::class($declaringClass->name()));
+        $info = $info->withContainerType(TypeFactory::reflectedClass($this->reflector, $declaringClass->name()));
 
         return $info->withTypes($member->inferredTypes());
     }

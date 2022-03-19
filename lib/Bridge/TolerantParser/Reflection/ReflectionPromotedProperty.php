@@ -41,7 +41,7 @@ class ReflectionPromotedProperty extends AbstractReflectionClassMember implement
         $this->serviceLocator = $serviceLocator;
         $this->class = $class;
         $this->typeResolver = new PropertyTypeResolver($this, $this->serviceLocator->logger());
-        $this->memberTypeResolver = new DeclaredMemberTypeResolver();
+        $this->memberTypeResolver = new DeclaredMemberTypeResolver($this->serviceLocator->reflector());
         $this->parameter = $parameter;
     }
 

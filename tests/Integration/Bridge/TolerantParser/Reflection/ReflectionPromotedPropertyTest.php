@@ -2,9 +2,9 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
@@ -44,18 +44,18 @@ class ReflectionPromotedPropertyTest extends IntegrationTestCase
                 function (ReflectionPropertyCollection $properties): void {
                     $this->assertTrue($properties->get('foobar')->isPromoted());
                     $this->assertEquals(
-                        Type::string(),
+                        TypeFactory::string(),
                         $properties->get('foobar')->type()
                     );
                     $this->assertEquals(Visibility::private(), $properties->get('foobar')->visibility());
                     $this->assertEquals(
-                        Type::int(),
+                        TypeFactory::int(),
                         $properties->get('barfoo')->type()
                     );
                     $this->assertEquals(
                         Types::fromTypes([
-                            Type::string(),
-                            Type::int(),
+                            TypeFactory::string(),
+                            TypeFactory::int(),
                         ]),
                         $properties->get('baz')->inferredTypes()
                     );
@@ -67,7 +67,7 @@ class ReflectionPromotedPropertyTest extends IntegrationTestCase
                 'Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
-                        Type::string()->asNullable(),
+                        TypeFactory::fromString('?string'),
                         $properties->get('foobar')->type()
                     );
                 },
@@ -78,7 +78,7 @@ class ReflectionPromotedPropertyTest extends IntegrationTestCase
                 'Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
-                        Type::undefined(),
+                        TypeFactory::undefined(),
                         $properties->get('foobar')->type()
                     );
                 },

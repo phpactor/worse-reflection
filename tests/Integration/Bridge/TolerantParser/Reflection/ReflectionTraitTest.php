@@ -2,9 +2,9 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
 use Closure;
 
@@ -116,7 +116,7 @@ class ReflectionTraitTest extends IntegrationTestCase
                 ,
                 'Int1',
                 function (ReflectionTrait $class): void {
-                    $this->assertEquals(Type::unknown(), $class->methods()->first()->inferredReturnTypes()->best());
+                    $this->assertEquals(TypeFactory::unknown(), $class->methods()->first()->inferredReturnTypes()->best());
                 },
             ],
             'instanceof' => [

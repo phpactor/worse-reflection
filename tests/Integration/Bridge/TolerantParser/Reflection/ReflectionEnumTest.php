@@ -3,7 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnumCase;
-use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnum;
@@ -95,7 +95,7 @@ class ReflectionEnumTest extends IntegrationTestCase
             function (ReflectionEnum $class): void {
                 $case = $class->cases()->get('FOOBAR');
                 self::assertEquals('FOOBAR', $case->name());
-                self::assertEquals(Type::unknown(), $case->type());
+                self::assertEquals(TypeFactory::unknown(), $case->type());
                 self::assertNull($case->value());
             },
         ];

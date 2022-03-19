@@ -362,6 +362,11 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
         return $modifier->kind === TokenKind::FinalKeyword;
     }
 
+    public function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
+
     protected function node(): Node
     {
         return $this->node;

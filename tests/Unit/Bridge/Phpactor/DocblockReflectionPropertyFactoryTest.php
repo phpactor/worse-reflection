@@ -9,8 +9,6 @@ use Phpactor\Docblock\Tag\PropertyTag;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockReflectionPropertyFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
-use Phpactor\WorseReflection\Core\Type;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\ReflectorBuilder;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -25,7 +23,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->factory = new DocblockReflectionPropertyFactory();
+        $this->factory = new DocblockReflectionPropertyFactory(ReflectorBuilder::create()->build());
         $this->docblock = $this->prophesize(DocBlock::class);
     }
 
@@ -63,10 +61,7 @@ class DocblockReflectionPropertyFactoryTest extends TestCase
             function (ReflectionProperty $property): void {
                 $this->assertEquals('Foobar', (string) $property->class()->name());
                 $this->assertEquals('myProperty', $property->name());
-                $this->assertEquals(Types::fromTypes([
-                    Type::fromString('Foobar'),
-                    Type::string(),
-                ]), $property->inferredTypes());
+                $this->assertEquals('Foobar|string', $property->inferredTypes()->__toString());
             }
         ];
     }

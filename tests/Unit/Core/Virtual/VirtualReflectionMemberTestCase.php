@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Position;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -50,7 +51,7 @@ abstract class VirtualReflectionMemberTestCase extends TestCase
         $this->scope = $this->prophesize(ReflectionScope::class);
         $this->visibility = Visibility::public();
         $this->types = Types::empty();
-        $this->type = Type::unknown();
+        $this->type = TypeFactory::unknown();
     }
 
     abstract public function member(): ReflectionMember;

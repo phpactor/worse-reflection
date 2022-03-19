@@ -16,14 +16,19 @@ use Microsoft\PhpParser\Node;
 use Phpactor\WorseReflection\Core\Inference\ExpressionEvaluator;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Reflector;
 
 abstract class AbstractInstanceOfWalker extends AbstractWalker
 {
     protected ExpressionEvaluator $evaluator;
 
-    public function __construct()
+    private Reflector $reflector;
+
+    public function __construct(Reflector $reflector)
     {
         $this->evaluator = new ExpressionEvaluator();
+        $this->reflector = $reflector;
     }
 
     /**
@@ -86,7 +91,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
         $type = (string) $rightOperand->getResolvedName();
 
         $context = $this->createSymbolContext($variable, $frame);
-        $context = $context->withType(Type::fromString($type));
+        $context = $context->withType(TypeFactory::fromStringWithReflector($type, $this->reflector));
         $variable = WorseVariable::fromSymbolContext($context);
 
         return $variable;
@@ -121,7 +126,7 @@ abstract class AbstractInstanceOfWalker extends AbstractWalker
 
         if (0 === $assignments->count()) {
             return $symbolContext
-                ->withContainerType(Type::unknown())
+                ->withContainerType(TypeFactory::unknown())
                 ->withIssue(sprintf('Variable "%s" is undefined', $classVariableName))
             ;
         }

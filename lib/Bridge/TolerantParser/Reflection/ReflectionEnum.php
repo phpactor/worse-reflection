@@ -103,4 +103,9 @@ class ReflectionEnum extends AbstractReflectionClass implements CoreReflectionEn
     {
         return $this->node;
     }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
 }

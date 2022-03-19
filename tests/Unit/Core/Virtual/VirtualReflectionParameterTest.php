@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionParameter;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -44,7 +45,7 @@ class VirtualReflectionParameterTest extends TestCase
         $this->name = 'test_name';
         $this->scope = $this->prophesize(ReflectionScope::class);
         $this->types = Types::empty();
-        $this->type = Type::unknown();
+        $this->type = TypeFactory::unknown();
         $this->method = $this->prophesize(ReflectionMethod::class);
         $this->defaults = DefaultValue::fromValue(1234);
         $this->byReference = false;

@@ -31,6 +31,9 @@ use Phpactor\WorseReflection\Core\Exception\ItemNotFound;
 use Phpactor\WorseReflection\Core\Exception\NotFound;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
+use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Type\ClassType;
+use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Util\NodeUtil;
 use Phpactor\WorseReflection\Core\Util\QualifiedNameListUtil;
@@ -72,12 +75,13 @@ class SymbolContextResolver
         Reflector $reflector,
         LoggerInterface $logger,
         Cache $cache,
+        FullyQualifiedNameResolver $nameResolver,
         SymbolFactory $symbolFactory = null
     ) {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
-        $this->nameResolver = new FullyQualifiedNameResolver($logger);
+        $this->nameResolver = $nameResolver;
         $this->reflector = $reflector;
         $this->expressionEvaluator = new ExpressionEvaluator();
         $this->cache = $cache;
@@ -157,7 +161,7 @@ class SymbolContextResolver
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::CLASS_,
-                    'type' => Type::fromValue($value),
+                    'type' => TypeFactory::fromValue($value),
                     'value' => $value,
                 ]
             );
@@ -171,7 +175,7 @@ class SymbolContextResolver
                 [
                     'name' => Name::fromString($node->getNamespacedName()),
                     'symbol_type' => Symbol::CLASS_,
-                    'type' => Type::fromString($node->getNamespacedName())
+                    'type' => TypeFactory::fromStringWithReflector($node->getNamespacedName(), $this->reflector)
                 ]
             );
         }
@@ -205,7 +209,7 @@ class SymbolContextResolver
                 $node->getEndPosition(),
                 [
                     'symbol_type' => Symbol::STRING,
-                    'type' => Type::string(),
+                    'type' => TypeFactory::string(),
                     'value' => (string) $node->getStringContentsText(),
                     'container_type' => $this->classTypeFromNode($node)
                 ]
@@ -280,7 +284,7 @@ class SymbolContextResolver
             }
 
             $context = $this->__resolveNode($frame, $node);
-            $context = $context->withScope(new ReflectionScope($node));
+            $context = $context->withScope(new ReflectionScope($this->reflector, $node));
 
             return $context;
         });
@@ -400,7 +404,7 @@ class SymbolContextResolver
         }
 
         $typeDeclaration = $node->typeDeclarationList;
-        $type = Type::unknown();
+        $type = TypeFactory::unknown();
         if ($typeDeclaration instanceof QualifiedNameList) {
             $typeDeclaration = QualifiedNameListUtil::firstQualifiedNameOrToken($typeDeclaration);
         }
@@ -410,7 +414,10 @@ class SymbolContextResolver
         }
 
         if ($typeDeclaration instanceof Token) {
-            $type = Type::fromString($typeDeclaration->getText($node->getFileContents()));
+            $type = TypeFactory::fromStringWithReflector(
+                $typeDeclaration->getText($node->getFileContents()),
+                $this->reflector,
+            );
         }
 
         $value = null;
@@ -496,7 +503,7 @@ class SymbolContextResolver
             $node->getEndPosition(),
             [
                 'symbol_type' => Symbol::NUMBER,
-                'type' => is_float($value) ? Type::float() : Type::int(),
+                'type' => is_float($value) ? TypeFactory::float() : TypeFactory::int(),
                 'value' => $value,
                 'container_type' => $this->classTypeFromNode($node)
             ]
@@ -530,20 +537,20 @@ class SymbolContextResolver
         $word = strtolower($node->getText());
 
         if ('null' === $word) {
-            $type = Type::null();
+            $type = TypeFactory::null();
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
         }
 
         if ('false' === $word) {
             $value = false;
-            $type = Type::bool();
+            $type = TypeFactory::bool();
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
         }
 
         if ('true' === $word) {
-            $type = Type::bool();
+            $type = TypeFactory::bool();
             $value = true;
             $symbolType = Symbol::BOOLEAN;
             $containerType = $this->classTypeFromNode($node);
@@ -582,7 +589,7 @@ class SymbolContextResolver
                 $node->getStartPosition(),
                 $node->getEndPosition(),
                 [
-                    'type' => Type::array(),
+                    'type' => TypeFactory::array(),
                     'value' => []
                 ]
             );
@@ -604,7 +611,7 @@ class SymbolContextResolver
             $node->getStartPosition(),
             $node->getEndPosition(),
             [
-                'type' => Type::array(),
+                'type' => TypeFactory::array(),
                 'value' => $array
             ]
         );
@@ -625,7 +632,7 @@ class SymbolContextResolver
 
         $node = $node->accessExpression;
 
-        if ($info->type() != Type::array()) {
+        if ($info->type() != TypeFactory::array()) {
             $info = $info->withIssue(sprintf(
                 'Not resolving subscript expression of type "%s"',
                 (string) $info->type()
@@ -668,8 +675,9 @@ class SymbolContextResolver
         if ($node->scopeResolutionQualifier instanceof ParserVariable) {
             /** @var SymbolContext $context */
             $context = $this->resolveVariable($frame, $node->scopeResolutionQualifier);
-            if ($context->type()->className() !== null) {
-                $name = $context->type()->className()->__toString();
+            $type = $context->type();
+            if ($type instanceof ClassType) {
+                $name = $type->name->__toString();
             }
         }
 
@@ -697,7 +705,7 @@ class SymbolContextResolver
         if ($node->ifExpression) {
             $ifValue = $this->_resolveNode($frame, $node->ifExpression);
 
-            if ($ifValue->type()->isDefined()) {
+            if (!$ifValue->type() instanceof MissingType) {
                 return $ifValue;
             }
         }
@@ -705,7 +713,7 @@ class SymbolContextResolver
         // if expression was not defined, fallback to condition
         $conditionValue = $this->_resolveNode($frame, $node->condition);
 
-        if ($conditionValue->type()->isDefined()) {
+        if (!$conditionValue->type() instanceof MissingType) {
             return $conditionValue;
         }
 
@@ -781,7 +789,7 @@ class SymbolContextResolver
 
         $this->logger->debug(sprintf(
             'Resolved type "%s" for %s "%s" of class "%s"',
-            (string) $info->type(),
+            $info->type(),
             $memberType,
             $memberName,
             (string) $classType
@@ -801,7 +809,7 @@ class SymbolContextResolver
 
         assert($classNode instanceof NamespacedNameInterface);
 
-        return Type::fromString($classNode->getNamespacedName());
+        return TypeFactory::fromStringWithReflector($classNode->getNamespacedName(), $this->reflector);
     }
 
     private function resolveParenthesizedExpression(Frame $frame, ParenthesizedExpression $node)
@@ -868,18 +876,24 @@ class SymbolContextResolver
             ->byName($propertyName)
         ;
 
+        if (!$classType instanceof ClassType) {
+            return;
+        }
+
         /** @var Variable $variable */
         foreach ($assignments as $variable) {
             $symbolContext = $variable->symbolContext();
             $containerType = $symbolContext->containerType();
 
-            if (
-                !$containerType
-                || !$containerType->isClass()
-                || $containerType->className() != $classType->className()
-            ) {
-                // Ignore if not a class, could throw LogicException since it shoudl not append
-                // Or if the symbol is for a different class
+            if (!$containerType) {
+                continue;
+            }
+
+            if (!$containerType instanceof ClassType) {
+                continue;
+            }
+
+            if ($containerType->name != $classType->name) {
                 continue;
             }
 

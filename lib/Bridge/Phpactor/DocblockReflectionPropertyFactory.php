@@ -12,20 +12,27 @@ use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionTrait;
-use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionProperty;
 use Phpactor\WorseReflection\Core\Visibility;
+use Phpactor\WorseReflection\Reflector;
 use RuntimeException;
 
 class DocblockReflectionPropertyFactory
 {
+    private Reflector $reflector;
+
+    public function __construct(Reflector $reflector)
+    {
+        $this->reflector = $reflector;
+    }
+    
     public function create(DocBlock $docblock, ReflectionClassLike $reflectionClass, PropertyTag $propertyTag): VirtualReflectionProperty
     {
         $types = $this->typesFrom($reflectionClass->scope(), $propertyTag->types());
         $parameters = VirtualReflectionParameterCollection::empty();
-        ;
 
         if (
             !$reflectionClass instanceof ReflectionClass &&
@@ -50,19 +57,22 @@ class DocblockReflectionPropertyFactory
             $reflectionClass->scope(),
             Visibility::public(),
             $types,
-            $originalProperty ? $originalProperty->type() : Type::unknown(),
+            $originalProperty ? $originalProperty->type() : TypeFactory::unknown(),
             new Deprecation(false)
         );
 
         return $reflectionProperty;
     }
 
-    private function typesFrom(ReflectionScope $scope, DocblockTypes $docblockTypes)
+    private function typesFrom(ReflectionScope $scope, DocblockTypes $docblockTypes): Types
     {
         $types = [];
         /** @var DocblockType $docblockType */
         foreach ($docblockTypes as $docblockType) {
-            $types[] = Type::fromString($scope->resolveFullyQualifiedName($docblockType->__toString()));
+            $types[] = TypeFactory::fromStringWithReflector(
+                $scope->resolveFullyQualifiedName($docblockType->__toString()),
+                $this->reflector,
+            );
         }
 
         return Types::fromTypes($types);

@@ -11,6 +11,7 @@ use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\ServiceLocator;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionEnumCase as CoreReflectionEnumCase;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 
 class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreReflectionEnumCase
@@ -43,7 +44,7 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
 
     public function type(): Type
     {
-        return Type::unknown();
+        return TypeFactory::unknown();
     }
 
     public function class(): ReflectionClassLike
@@ -53,7 +54,7 @@ class ReflectionEnumCase extends AbstractReflectionClassMember implements CoreRe
 
     public function inferredTypes(): Types
     {
-        if (Type::unknown() !== $this->type()) {
+        if (TypeFactory::unknown() !== $this->type()) {
             return Types::fromTypes([ $this->type() ]);
         }
 

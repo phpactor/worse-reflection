@@ -2,9 +2,9 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Generator;
-use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 
@@ -31,7 +31,7 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
-            $this->assertEquals(Type::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolContext()->type());
+            $this->assertEquals('Foobar\Barfoo\Foobar', $frame->locals()->byName('this')->first()->symbolContext()->type()->__toString());
             $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolContext()->symbol()->symbolType());
         }];
 
@@ -56,8 +56,8 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
         , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
             $this->assertEquals(
-                Type::fromString('Foobar\Barfoo\Foobar'),
-                $frame->locals()->byName('this')->first()->symbolContext()->type()
+                'Foobar\Barfoo\Foobar',
+                $frame->locals()->byName('this')->first()->symbolContext()->type()->__toString()
             );
         }];
 
@@ -89,7 +89,9 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
 
             $this->assertCount(1, $frame->locals()->byName('worlds'));
             $this->assertEquals('Foobar\Barfoo\World[]', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best());
-            $this->assertEquals('Foobar\Barfoo\World', (string) $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best()->arrayType());
+            $type = $frame->locals()->byName('worlds')->first()->symbolContext()->types()->best();
+            assert($type instanceof IterableType);
+            $this->assertEquals('Foobar\Barfoo\World', (string) $type->valueType);
         }];
 
         yield 'Variadic argument' => [
@@ -113,7 +115,9 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
         , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('hellos'));
             $variable = $frame->locals()->byName('hellos')->first();
-            $this->assertEquals('string', $variable->symbolContext()->type()->arrayType());
+            $type = $variable->symbolContext()->type();
+            assert($type instanceof IterableType);
+            $this->assertEquals('string', (string)$type->valueType);
         }];
 
         yield 'Respects closure scope' => [
@@ -146,7 +150,7 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$foo'));
                 $variable = $frame->locals()->byName('$foo')->first();
-                $this->assertEquals(Type::fromString('Foobar'), $variable->symbolContext()->type());
+                $this->assertEquals('Foobar', $variable->symbolContext()->type()->__toString());
             }
         ];
 

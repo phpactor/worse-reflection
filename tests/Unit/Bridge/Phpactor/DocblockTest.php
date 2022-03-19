@@ -5,6 +5,10 @@ namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Type\ArrayType;
+use Phpactor\WorseReflection\Core\Type\ClassType;
+use Phpactor\WorseReflection\Core\Type\GenericClassType;
+use Phpactor\WorseReflection\ReflectorBuilder;
 
 class DocblockTest extends TestCase
 {
@@ -41,23 +45,28 @@ class DocblockTest extends TestCase
     public function testVarTypes(): void
     {
         $docblock = $this->create('/** @var Foo $foo) */');
-        $this->assertEquals('Foo', $docblock->vars()->types()->best()->className()->full());
-        $this->assertFalse($docblock->vars()->types()->best()->arrayType()->isDefined());
+        $type = $docblock->vars()->types()->best();
+        assert($type instanceof ClassType);
+        $this->assertEquals('Foo', $type);
     }
 
     public function testArrayTypes(): void
     {
         $docblock = $this->create('/** @var Foo[] $foo) */');
-        $this->assertTrue($docblock->vars()->types()->best()->arrayType()->isDefined());
-        $this->assertEquals('Foo', $docblock->vars()->types()->best()->arrayType()->className()->full());
+
+        $type = $docblock->vars()->types()->best();
+        assert($type instanceof ArrayType);
+        $this->assertEquals('Foo', $type->valueType->name->full());
     }
 
     public function testCollectionTypes(): void
     {
         $docblock = $this->create('/** @var Foo<Item> $foo) */');
-        $this->assertTrue($docblock->vars()->types()->best()->arrayType()->isDefined());
-        $this->assertEquals('Foo', $docblock->vars()->types()->best()->short());
-        $this->assertEquals('Item', $docblock->vars()->types()->best()->arrayType()->className()->full());
+        $this->assertEquals('Foo<Item>', (string)$docblock->vars()->types()->best());
+        $type = $docblock->vars()->types()->best();
+        assert($type instanceof GenericClassType);
+
+        $this->assertEquals('Item', $type->iterableValueType()->name->full());
     }
 
     public function testInherits(): void
@@ -82,9 +91,9 @@ class DocblockTest extends TestCase
         $this->assertEquals('Use foobar instead', $docblock->deprecation()->message());
     }
 
-    private function create($docblock): DocBlock
+    private function create(string $docblock): DocBlock
     {
-        $factory = new DocblockFactory();
+        $factory = new DocblockFactory(ReflectorBuilder::create()->build());
         return $factory->create($docblock);
     }
 }

@@ -15,6 +15,9 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
+use Phpactor\WorseReflection\Core\Type\ArrayType;
+use Phpactor\WorseReflection\Core\Type\GenericClassType;
+use Phpactor\WorseReflection\Core\Type\IterableType;
 
 class ForeachWalker extends AbstractWalker
 {
@@ -95,7 +98,7 @@ class ForeachWalker extends AbstractWalker
         }
 
         $collectionType = $collection->types()->best();
-        
+
         $context = $this->symbolFactory()->context(
             $itemName,
             $node->getStartPosition(),
@@ -105,8 +108,11 @@ class ForeachWalker extends AbstractWalker
             ]
         );
         
-        if ($collectionType->arrayType()->isDefined()) {
-            $context = $context->withType($collectionType->arrayType());
+        if ($collectionType instanceof GenericClassType) {
+            $context = $context->withType($collectionType->iterableValueType());
+        }
+        if ($collectionType instanceof ArrayType) {
+            $context = $context->withType($collectionType->valueType);
         }
         
         $frame->locals()->add(WorseVariable::fromSymbolContext($context));
@@ -124,6 +130,7 @@ class ForeachWalker extends AbstractWalker
             return;
         }
 
+        $collectionType = $collection->type();
         $values = (array)$collection->value();
         $index = 0;
         foreach ($elements->children as $child) {
@@ -132,7 +139,9 @@ class ForeachWalker extends AbstractWalker
             }
 
             $context = $builder->resolveNode($frame, $child->elementValue);
-            $context = $context->withType($collection->type()->arrayType());
+            if ($collectionType instanceof IterableType) {
+                $context = $context->withType($collectionType->iterableValueType());
+            }
 
             if (isset($values[$index])) {
                 $context = $context->withValue($values[$index]);

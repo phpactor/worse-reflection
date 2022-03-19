@@ -3,9 +3,12 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Cache\NullCache;
+use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Name;
+use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -90,20 +93,20 @@ class SymbolContextResolverTest extends IntegrationTestCase
                         Symbol::CLASS_,
                         'bar',
                         Position::fromStartAndEnd(0, 0)
-                    ))->withType(Type::fromString('Foobar'))
+                    ))->withType(TypeFactory::fromString('Foobar'))
                 ),
             ]),
             PropertyAssignments::create(),
             $source
         );
-        $this->assertEquals(Type::unknown(), $value->type());
+        $this->assertEquals(TypeFactory::unknown(), $value->type());
     }
 
     public function provideGeneral()
     {
         yield 'It should return none value for whitespace' => [
                 '  <>  ', [],
-                ['type' => '<unknown>'],
+                ['type' => '<missing>'],
             ];
 
         yield 'It should return the name of a class' => [
@@ -273,7 +276,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                 }
 
                 EOT
-            , [], ['type' => '<unknown>', 'symbol_type' => '<unknown>', 'symbol_name' => '<unknown>']
+            , [], ['type' => '<missing>', 'symbol_type' => '<unknown>', 'symbol_name' => '<unknown>']
             ];
 
         yield 'It returns the FQN of a static call' => [
@@ -318,7 +321,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
 
                     EOT
-            , [ 'foo' => Type::fromString('string') ], ['type' => 'string', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'foo']
+            , [ 'foo' => TypeFactory::fromString('string') ], ['type' => 'string', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'foo']
         ];
 
         yield 'It resolves an undeclared variable' => [
@@ -328,7 +331,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     $b<>lah;
 
                     EOT
-            , [], ['type' => '<unknown>', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'blah']
+            , [], ['type' => '<missing>', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'blah']
         ];
 
         yield 'It returns the FQN of variable assigned in frame' => [
@@ -348,7 +351,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
 
                     EOT
-                , [ 'world' => Type::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'world']
+                , [ 'world' => TypeFactory::fromString('World') ], ['type' => 'World', 'symbol_type' => Symbol::VARIABLE, 'symbol_name' => 'world']
                 ];
 
         yield 'It returns type for a call access expression' => [
@@ -392,7 +395,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar\Barfoo\Foobar'),
+                'this' => TypeFactory::fromString('Foobar\Barfoo\Foobar'),
             ], [
                 'type' => 'Foobar\Barfoo\Type3',
                 'symbol_type' => Symbol::METHOD,
@@ -423,7 +426,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar'),
+                'this' => TypeFactory::fromString('Foobar'),
             ], [
                 'type' => 'string',
                 'symbol_type' => Symbol::METHOD,
@@ -459,7 +462,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar'),
+                'this' => TypeFactory::fromString('Foobar'),
             ], [
                 'type' => 'Type3',
                 'symbol_type' => Symbol::METHOD,
@@ -497,7 +500,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
             , [
-                'this' => Type::fromString('Foobar'),
+                'this' => TypeFactory::fromString('Foobar'),
             ], ['type' => 'string'],
         ];
 
@@ -517,7 +520,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     new $<>foobar;
                     EOT
         , [
-                'foobar' => Type::fromString('Foobar'),
+                'foobar' => TypeFactory::fromString('Foobar'),
         ], ['type' => 'Foobar'],
     ];
 
@@ -731,7 +734,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                 $foobar::$my<>Property = 5;
                 EOT
             , [
-                'foobar' => Type::fromString('Foobar')
+                'foobar' => TypeFactory::fromString('Foobar')
             ], [
                 'type' => 'string',
                 'symbol_type' => Symbol::PROPERTY,
@@ -751,7 +754,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     {
                     }
                     EOT
-                , [], ['type' => '<unknown>'],
+                , [], ['type' => '<missing>'],
                 ];
 
         yield 'Member access with valued variable' => [
@@ -766,11 +769,11 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     $foobar->$barfoo(<>);
                     EOT
                 , [
-                    'foobar' => Type::fromString('Foobar'),
+                    'foobar' => TypeFactory::fromString('Foobar'),
                     'barfoo' => SymbolContext::for(
                         Symbol::fromTypeNameAndPosition(Symbol::STRING, 'barfoo', Position::fromStartAndEnd(0, 0))
                     )
-                    ->withType(Type::string())->withValue('hello')
+                    ->withType(TypeFactory::string())->withValue('hello')
                 ], ['type' => 'string'],
             ];
 
@@ -833,17 +836,18 @@ class SymbolContextResolverTest extends IntegrationTestCase
 
                     EOT
             , [
-                'this' => Type::class('Foobar\Barfoo\Foobar'),
+                'this' => TypeFactory::class('Foobar\Barfoo\Foobar'),
                 'bar' => SymbolContext::for(Symbol::fromTypeNameAndPosition(
                     Symbol::PROPERTY,
                     'bar',
                     Position::fromStartAndEnd(0, 0),
-                ))->withContainerType(Type::class('Foobar\Barfoo\Foobar'))
-                ->withType(Type::class('Acme\Factory')),
+                ))
+                    ->withContainerType(TypeFactory::class('Foobar\Barfoo\Foobar'))
+                    ->withType(TypeFactory::class('Acme\Factory')),
             ], [
                 'types' => [
-                    Type::class('Acme\FactoryInterface'),
-                    Type::class('Acme\Factory'),
+                    TypeFactory::class('Acme\FactoryInterface'),
+                    TypeFactory::class('Acme\Factory'),
                 ],
                 'symbol_type' => Symbol::PROPERTY,
                 'symbol_name' => 'bar',
@@ -924,7 +928,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
 
                     $barfoo ?:<> new \stdClass();
                     EOT
-                , [], ['type' => '<unknown>']
+                , [], ['type' => '<missing>']
                 ];
 
 
@@ -966,7 +970,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                         private $a<>aa = 'asd';
                     }
                     EOT
-                , [], ['type' => '<unknown>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'container_type' => 'Foobar'],
+                , [], ['type' => '<missing>', 'symbol_type' => Symbol::PROPERTY, 'symbol_name' => 'aaa', 'container_type' => 'Foobar'],
                 ];
 
         yield 'Constant name' => [
@@ -979,7 +983,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     }
                     EOT
                 , [], [
-                    'type' => '<unknown>',
+                    'type' => '<missing>',
                     'symbol_type' => Symbol::CONSTANT,
                     'symbol_name' => 'AAA',
                     'container_type' => 'Foobar'
@@ -998,7 +1002,7 @@ class SymbolContextResolverTest extends IntegrationTestCase
                         }
                         EOT
                     , [], [
-                        'type' => '<unknown>',
+                        'type' => '<missing>',
                         'symbol_type' => Symbol::CASE,
                         'symbol_name' => 'AAA',
                         'container_type' => 'Foobar'
@@ -1164,7 +1168,13 @@ class SymbolContextResolverTest extends IntegrationTestCase
         list($source, $offset) = ExtractOffset::fromSource($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
 
-        $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger(), new NullCache());
+        $reflector = $this->createReflector($source);
+        $resolver = new SymbolContextResolver(
+            $reflector,
+            $this->logger(),
+            new NullCache(),
+            new FullyQualifiedNameResolver($reflector, $this->logger()),
+        );
 
         return $resolver->resolveNode($frame, $node);
     }
@@ -1177,13 +1187,11 @@ class SymbolContextResolverTest extends IntegrationTestCase
                     $this->assertEquals($value, (string) $information->type(), $name);
                     continue 2;
                 case 'types':
-                    foreach ($information->types() as $index => $type) {
-                        $this->assertEquals(
-                            $value,
-                            iterator_to_array($information->types()),
-                            $name,
-                        );
-                    }
+                    $this->assertEquals(
+                        Types::fromTypes($value)->__toString(),
+                        $information->types()->__toString(),
+                        $name,
+                    );
                     continue 2;
                 case 'value':
                     $this->assertEquals($value, $information->value(), $name);

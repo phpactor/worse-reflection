@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Core\Reflection\TypeResolver;
 
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
+use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Type;
 
@@ -19,7 +20,7 @@ class FunctionReturnTypeResolver
     {
         $resolvedTypes = $this->getDocblockTypesFromFunction($this->function);
 
-        if ($this->function->type()->isDefined()) {
+        if (!$this->function->type() instanceof MissingType) {
             $resolvedTypes = $resolvedTypes->merge(Types::fromTypes([ $this->function->type() ]));
         }
 

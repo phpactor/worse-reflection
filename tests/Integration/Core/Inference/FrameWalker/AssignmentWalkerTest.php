@@ -2,6 +2,8 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
+use Phpactor\WorseReflection\Core\Type\ClassType;
+use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Generator;
@@ -113,8 +115,10 @@ class AssignmentWalkerTest extends FrameWalkerTestCase
             $vars = $frame->locals()->byName('foobar');
             $this->assertCount(1, $vars);
             $symbolInformation = $vars->first()->symbolContext();
-            $this->assertEquals('Foobar[]', (string) $symbolInformation->type());
-            $this->assertEquals('Foobar', (string) $symbolInformation->type()->arrayType());
+            $type = $symbolInformation->type();
+            assert($type instanceof IterableType);
+            $this->assertEquals('Foobar[]', (string) $type);
+            $this->assertEquals('Foobar', (string) $symbolInformation->type()->valueType);
         }];
 
 
@@ -236,8 +240,15 @@ class AssignmentWalkerTest extends FrameWalkerTestCase
         ,
             function (Frame $frame): void {
                 $this->assertCount(3, $frame->locals());
-                $this->assertEquals('Foo\Lister<Foobar\Collection>', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best());
-                $this->assertEquals('Foobar\Collection', (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best()->arrayType());
+                $this->assertEquals(
+                    'Foo\Lister<Foobar\Collection>',
+                    (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best()
+                );
+                $type = $frame->locals()->byName('bar')->first()->symbolContext()->types()->best();
+                $this->assertEquals(
+                    'Foobar\Collection',
+                    $type->iterableValueType()->__toString()
+                );
             }
         ];
 
@@ -260,7 +271,9 @@ class AssignmentWalkerTest extends FrameWalkerTestCase
         ,
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('barfoo'));
-                $this->assertEquals('Barfoo', $frame->locals()->byName('barfoo')->first()->symbolContext()->types()->best()->short());
+                $type = $frame->locals()->byName('barfoo')->first()->symbolContext()->types()->best();
+                assert($type instanceof ClassType);
+                $this->assertEquals('Barfoo', $type->name->short());
             }
         ];
 
