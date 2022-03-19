@@ -62,7 +62,9 @@ class DocblockReflectionPropertyFactory
         $types = [];
         /** @var DocblockType $docblockType */
         foreach ($docblockTypes as $docblockType) {
-            $types[] = TypeFactory::fromString($scope->resolveFullyQualifiedName($docblockType->__toString()));
+            $types[] = TypeFactory::fromString(
+                $scope->resolveFullyQualifiedName($docblockType->__toString())
+            );
         }
 
         return Types::fromTypes($types);

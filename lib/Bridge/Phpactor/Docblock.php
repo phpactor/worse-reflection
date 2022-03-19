@@ -14,6 +14,7 @@ use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollecti
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
@@ -171,7 +172,7 @@ class Docblock implements CoreDocblock
         return new Deprecation(false);
     }
 
-    private function typesFromTag(string $tag)
+    private function typesFromTag(string $tag): Types
     {
         $types = [];
 
@@ -182,7 +183,7 @@ class Docblock implements CoreDocblock
         return Types::empty();
     }
 
-    private function typesFromDocblockTypes(DocblockTypes $types)
+    private function typesFromDocblockTypes(DocblockTypes $types): Types
     {
         $types = array_map(function (DocblockType $type) {
             return $this->typesFromDocblockType($type);
@@ -191,7 +192,7 @@ class Docblock implements CoreDocblock
         return Types::fromTypes($types);
     }
 
-    private function typesFromDocblockType(DocblockType $type)
+    private function typesFromDocblockType(DocblockType $type): Type
     {
         if ($type->isArray()) {
             return TypeFactory::array((string) $type->iteratedType());
@@ -201,6 +202,6 @@ class Docblock implements CoreDocblock
             return TypeFactory::collection((string) $type, $type->iteratedType());
         }
         
-        return TypeFactory::fromString($type->__toString());
+        return TypeFactory::fromString($type->__toString(), $this->reflector);
     }
 }

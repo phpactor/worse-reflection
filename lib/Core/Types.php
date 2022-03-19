@@ -20,7 +20,7 @@ final class Types implements IteratorAggregate, Countable
         }
     }
 
-    public static function empty()
+    public static function empty(): self
     {
         return new self([]);
     }
@@ -34,6 +34,9 @@ final class Types implements IteratorAggregate, Countable
         return TypeFactory::unknown();
     }
 
+    /**
+     * @param Type[] $inferredTypes
+     */
     public static function fromTypes(array $inferredTypes): Types
     {
         return new self($inferredTypes);
