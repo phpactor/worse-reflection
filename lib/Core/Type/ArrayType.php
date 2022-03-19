@@ -2,18 +2,32 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
-class ArrayType extends IterableType
+use Phpactor\WorseReflection\Core\Type;
+
+class ArrayType implements Type, IterableType
 {
+    public Type $valueType;
+
+    public function __construct(Type $valueType)
+    {
+        $this->valueType = $valueType;
+    }
+
     public function __toString(): string
     {
-        if ((!$this->valueType instanceof MissingType) && $this->keyType instanceof MissingType) {
-            return sprintf('%s[]', $this->valueType->__toString());
+        if ($this->valueType instanceof MissingType) {
+            return $this->toPhpString();
         }
-        return 'array';
+        return sprintf('%s[]', $this->valueType->__toString());
     }
 
     public function toPhpString(): string
     {
         return 'array';
+    }
+
+    public function iterableValueType(): Type
+    {
+        return $this->valueType;
     }
 }

@@ -8,16 +8,19 @@ use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
 
-class GenericClassType extends ClassType
+class GenericClassType extends ClassType implements IterableType
 {
     public ClassName $name;
 
+    /**
+     * @var ClassType[]
+     */
     private array $extendAndImplements;
 
     private TemplateMap $templateMap;
 
     /**
-     * @param GenericClassType[] $extendAndImplements
+     * @param ClassType[] $extendAndImplements
      */
     public function __construct(ClassName $name, TemplateMap $templateMap, array $extendAndImplements = [])
     {

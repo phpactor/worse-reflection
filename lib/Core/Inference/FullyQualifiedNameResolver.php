@@ -14,8 +14,8 @@ use Microsoft\PhpParser\Node\QualifiedName;
 use Microsoft\PhpParser\NamespacedNameInterface;
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
-use Phpactor\WorseReflection\Core\Type\CollectionType;
 use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Core\Type\ScalarType;
@@ -50,10 +50,8 @@ class FullyQualifiedNameResolver
                 $type->templateMap()->replace($key, $this->resolve($node, $gType));
             }
         }
-
-        if ($type instanceof IterableType) {
+        if ($type instanceof ArrayType) {
             $arrayType = $this->resolve($node, $type->valueType);
-
             $type->valueType = $arrayType;
         }
 

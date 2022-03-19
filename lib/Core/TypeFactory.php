@@ -7,7 +7,6 @@ use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\BooleanType;
 use Phpactor\WorseReflection\Core\Type\CallableType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
-use Phpactor\WorseReflection\Core\Type\CollectionType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
 use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\Core\Type\IntType;
@@ -17,6 +16,7 @@ use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\NullType;
 use Phpactor\WorseReflection\Core\Type\NullableType;
 use Phpactor\WorseReflection\Core\Type\ObjectType;
+use Phpactor\WorseReflection\Core\Type\PrimitiveIterableType;
 use Phpactor\WorseReflection\Core\Type\ReflectedClassType;
 use Phpactor\WorseReflection\Core\Type\ResourceType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
@@ -116,9 +116,9 @@ class TypeFactory
         return new FloatType();
     }
 
-    public static function array(?string $iterableType = null): IterableType
+    public static function array(?string $iterableType = null): ArrayType
     {
-        return new ArrayType(new MissingType(), $iterableType ? self::fromString($iterableType) : new MissingType());
+        return new ArrayType($iterableType ? self::fromString($iterableType) : new MissingType());
     }
 
     public static function mixed(): MixedType
@@ -146,9 +146,9 @@ class TypeFactory
         return new ResourceType();
     }
 
-    public static function iterable(): IterableType
+    public static function iterable(): PrimitiveIterableType
     {
-        return new IterableType(new MissingType(), new MissingType());
+        return new PrimitiveIterableType();
     }
 
     /**

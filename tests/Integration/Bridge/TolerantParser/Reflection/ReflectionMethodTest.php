@@ -239,7 +239,10 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals(TypeFactory::array('Acme\Post'), $methods->get('method1')->inferredTypes()->best());
+                $this->assertEquals(
+                    TypeFactory::array('Acme\Post'),
+                    $methods->get('method1')->inferredTypes()->best()
+                );
             },
         ];
         yield 'Return type from docblock this and static' => [
