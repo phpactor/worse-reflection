@@ -43,7 +43,7 @@ class FullyQualifiedNameResolver
         $type = $type ?: $node->getText();
 
         /** @var Type $type */
-        $type = $type instanceof Type ? $type : TypeFactory::fromString($type, $this->reflector);
+        $type = $type instanceof Type ? $type : TypeFactory::fromStringWithReflector($type, $this->reflector);
 
         if ($type instanceof CollectionType) {
             $type->classType = $this->resolve($node, $type->classType);
@@ -60,7 +60,7 @@ class FullyQualifiedNameResolver
         }
         
         if ($this->isUseDefinition($node)) {
-            return TypeFactory::fromString((string) $type);
+            return TypeFactory::fromStringWithReflector((string) $type, $this->reflector);
         }
 
         if ($type instanceof ScalarType) {
@@ -120,13 +120,16 @@ class FullyQualifiedNameResolver
         }
 
 
-        return TypeFactory::fromString($class->classBaseClause->baseClass->getResolvedName());
+        return TypeFactory::fromStringWithReflector(
+            $class->classBaseClause->baseClass->getResolvedName(),
+            $this->reflector
+        );
     }
 
     private function currentClass(Node $node, Name $currentClass = null)
     {
         if ($currentClass) {
-            return TypeFactory::fromString($currentClass->full());
+            return TypeFactory::fromStringWithReflector($currentClass->full(), $this->reflector);
         }
         $class = $node->getFirstAncestor(ClassLike::class);
 
@@ -136,7 +139,7 @@ class FullyQualifiedNameResolver
 
         assert($class instanceof NamespacedNameInterface);
 
-        return TypeFactory::fromString($class->getNamespacedName());
+        return TypeFactory::fromStringWithReflector($class->getNamespacedName(), $this->reflector);
     }
 
     private function isUseDefinition(Node $node)

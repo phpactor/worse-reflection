@@ -263,8 +263,8 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredTypes()->best());
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredTypes()->best());
+                $this->assertEquals('Foobar', $methods->get('method1')->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $methods->get('method2')->inferredTypes()->best()->__toString());
             },
         ];
         yield 'Return type from docblock this and static from a trait' => [
@@ -292,8 +292,8 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Foobar')), $methods->get('method1')->inferredTypes()->best());
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Foobar')), $methods->get('method2')->inferredTypes()->best());
+                $this->assertEquals('Foobar', $methods->get('method1')->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $methods->get('method2')->inferredTypes()->best()->__toString());
             },
         ];
         yield 'Return type from class @method annotation' => [
