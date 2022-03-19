@@ -2,6 +2,9 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
+use Phpactor\WorseReflection\Core\Trinary;
+use Phpactor\WorseReflection\Core\Type;
+
 final class ResourceType extends PrimitiveType
 {
     public function __toString(): string
@@ -12,5 +15,10 @@ final class ResourceType extends PrimitiveType
     public function toPhpString(): string
     {
         return 'resource';
+    }
+
+    public function accepts(Type $type): Trinary
+    {
+        return Trinary::fromBoolean($type instanceof ResourceType);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
+use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\Type;
 
 class ArrayType implements Type, IterableType
@@ -29,5 +30,10 @@ class ArrayType implements Type, IterableType
     public function iterableValueType(): Type
     {
         return $this->valueType;
+    }
+
+    public function accepts(Type $type): Trinary
+    {
+        return Trinary::fromBoolean($type instanceof ArrayType);
     }
 }

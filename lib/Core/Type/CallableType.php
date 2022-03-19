@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
+use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\Type;
 
 final class CallableType extends PrimitiveType
@@ -30,5 +31,10 @@ final class CallableType extends PrimitiveType
     public function toPhpString(): string
     {
         return 'callable';
+    }
+
+    public function accepts(Type $type): Trinary
+    {
+        return Trinary::fromBoolean($type instanceof CallableType);
     }
 }

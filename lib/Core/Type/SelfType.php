@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core\Type;
 
+use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\Type;
 
 final class SelfType implements Type
@@ -14,5 +15,10 @@ final class SelfType implements Type
     public function toPhpString(): string
     {
         return 'self';
+    }
+
+    public function accepts(Type $type): Trinary
+    {
+        return Trinary::maybe();
     }
 }
