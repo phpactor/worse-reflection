@@ -13,14 +13,14 @@ class GenericClassType extends ClassType implements IterableType
     public ClassName $name;
 
     /**
-     * @var ClassType[]
+     * @var GenericClassType[]
      */
     private array $extendAndImplements;
 
     private TemplateMap $templateMap;
 
     /**
-     * @param ClassType[] $extendAndImplements
+     * @param GenericClassType[] $extendAndImplements
      */
     public function __construct(ClassName $name, TemplateMap $templateMap, array $extendAndImplements = [])
     {
@@ -52,6 +52,11 @@ class GenericClassType extends ClassType implements IterableType
         return new MissingType();
     }
 
+    public function toPhpString(): string
+    {
+        return $this->name->__toString();
+    }
+
     private function accepts(Type $type): Trinary
     {
         if ($this->is($type)->isTrue()) {
@@ -59,16 +64,11 @@ class GenericClassType extends ClassType implements IterableType
         }
 
         foreach ($this->extendAndImplements as $generic) {
-            if ($generic->accepts($type)) {
+            if ($generic->accepts($type)->isTrue()) {
                 return Trinary::true();
             }
         }
 
         return Trinary::false();
-    }
-
-    public function toPhpString(): string
-    {
-        return $this->name->__toString();
     }
 }

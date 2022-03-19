@@ -6,13 +6,22 @@ use Phpactor\WorseReflection\Core\Type\MissingType;
 
 final class TemplateMap
 {
+    /**
+     * @var array<string,Type>
+     */
     private array $map;
 
+    /**
+     * @param array<string,Type> $map
+     */
     public function __construct(array $map)
     {
         $this->map = $map;
     }
 
+    /**
+     * @return array<string,Type>
+     */
     public function toArray(): array
     {
         return $this->map;
