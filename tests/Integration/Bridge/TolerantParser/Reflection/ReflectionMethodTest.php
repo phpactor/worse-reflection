@@ -5,18 +5,18 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Tests\Assert\TrinaryAssert;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
-use Phpactor\WorseReflection\Tests\Trait\TrinaryTestTrait;
 use Psr\Log\LoggerInterface;
 use Closure;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
-    use TrinaryTestTrait;
+    use TrinaryAssert;
 
     /**
      * @dataProvider provideReflectionMethod

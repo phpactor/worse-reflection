@@ -3,14 +3,14 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
 use Phpactor\WorseReflection\Core\TypeFactory;
+use Phpactor\WorseReflection\Tests\Assert\TrinaryAssert;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Generator;
-use Phpactor\WorseReflection\Tests\Trait\TrinaryTestTrait;
 
 class CatchWalkerTest extends FrameWalkerTestCase
 {
-    use TrinaryTestTrait;
+    use TrinaryAssert;
 
     public function provideWalk(): Generator
     {

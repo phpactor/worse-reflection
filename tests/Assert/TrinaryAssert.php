@@ -1,10 +1,10 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Trait;
+namespace Phpactor\WorseReflection\Tests\Assert;
 
 use Phpactor\WorseReflection\Core\Trinary;
 
-trait TrinaryTestTrait
+trait TrinaryAssert
 {
     public static function assertTrinaryTrue(Trinary $trinary): void
     {
