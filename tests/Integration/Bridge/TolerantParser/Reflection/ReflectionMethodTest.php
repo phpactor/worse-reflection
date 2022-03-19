@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
+use Phpactor\WorseReflection\Core\Trinary;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
@@ -10,11 +11,14 @@ use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
+use Phpactor\WorseReflection\Tests\Trait\TrinaryTestTrait;
 use Psr\Log\LoggerInterface;
 use Closure;
 
 class ReflectionMethodTest extends IntegrationTestCase
 {
+    use TrinaryTestTrait;
+
     /**
      * @dataProvider provideReflectionMethod
      * @dataProvider provideDeprecations
@@ -306,7 +310,13 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
+                self::assertTrinaryTrue(
+                    TypeFactory::class(
+                        ClassName::fromString('Acme\Post')
+                    )->is(
+                        $methods->get('method1')->inferredTypes()->best()
+                    )
+                );
             },
         ];
         yield 'Return type from overridden @method annotation' => [
@@ -333,7 +343,11 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals(TypeFactory::class(ClassName::fromString('Acme\Post')), $methods->get('method1')->inferredTypes()->best());
+                self::assertTrinaryTrue(
+                    TypeFactory::class(ClassName::fromString('Acme\Post'))->is(
+                        $methods->get('method1')->inferredTypes()->best()
+                    )
+                );
             },
         ];
         yield 'Return type from inherited docblock' => [

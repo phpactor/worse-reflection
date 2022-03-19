@@ -61,4 +61,9 @@ final class Types implements IteratorAggregate, Countable
     {
         $this->types[] = $item;
     }
+
+    public function __toString(): string
+    {
+        return implode('|', array_map(fn (Type $type) => $type->__toString(), $this->types));
+    }
 }

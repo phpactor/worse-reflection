@@ -43,7 +43,7 @@ class FullyQualifiedNameResolver
         $type = $type ?: $node->getText();
 
         /** @var Type $type */
-        $type = $type instanceof Type ? $type : TypeFactory::fromString($type);
+        $type = $type instanceof Type ? $type : TypeFactory::fromString($type, $this->reflector);
 
         if ($type instanceof CollectionType) {
             $type->classType = $this->resolve($node, $type->classType);

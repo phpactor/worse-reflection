@@ -7,9 +7,12 @@ use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Generator;
+use Phpactor\WorseReflection\Tests\Trait\TrinaryTestTrait;
 
 class CatchWalkerTest extends FrameWalkerTestCase
 {
+    use TrinaryTestTrait;
+
     public function provideWalk(): Generator
     {
         yield 'Exceptions' => [
@@ -25,7 +28,11 @@ class CatchWalkerTest extends FrameWalkerTestCase
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$exception'));
                 $exception = $frame->locals()->byName('$exception')->first();
-                $this->assertEquals(TypeFactory::fromString('\Exception'), $exception->symbolContext()->type());
+                self::assertTrinaryTrue(
+                    TypeFactory::class('\Exception')->is(
+                        $exception->symbolContext()->type()
+                    )
+                );
             }
         ];
 
@@ -42,10 +49,7 @@ class CatchWalkerTest extends FrameWalkerTestCase
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals()->byName('$exception'));
                 $exception = $frame->locals()->byName('$exception')->first();
-                $this->assertEquals(Types::fromTypes([
-                    TypeFactory::fromString('Foo'),
-                    TypeFactory::fromString('Bar'),
-                ]), $exception->symbolContext()->types());
+                self::assertEquals('Foo|Bar', $exception->symbolContext()->types()->__toString());
             }
         ];
     }

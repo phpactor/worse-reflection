@@ -23,16 +23,17 @@ use Phpactor\WorseReflection\Core\Type\StaticType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Core\Type\VoidType;
+use Phpactor\WorseReflection\Reflector;
 
 class TypeFactory
 {
-    public static function fromString(string $type): Type
+    public static function fromString(string $type, Reflector $reflector = null): Type
     {
         if ('?' === substr($type, 0, 1)) {
             return self::nullable(self::typeFromString(substr($type, 1)));
         }
 
-        return self::typeFromString($type);
+        return self::typeFromString($type, $reflector);
     }
 
     /**
@@ -147,9 +148,13 @@ class TypeFactory
     /**
      * @param string|ClassName $className
      */
-    public static function class($className): ClassType
+    public static function class($className, Reflector $reflector = null): ClassType
     {
-        return new ClassType(ClassName::fromUnknown($className));
+        $name = ClassName::fromUnknown($className);
+        if ($reflector) {
+            return new ReflectedClassType($reflector, $name);
+        }
+        return new ClassType($name);
     }
 
     /**
@@ -180,7 +185,7 @@ class TypeFactory
         return new CollectionType(self::fromString($classType), self::fromString($iterableType));
     }
 
-    private static function typeFromString(string $type): Type
+    private static function typeFromString(string $type, Reflector $reflector = null): Type
     {
         if ('' === $type) {
             return self::unknown();
@@ -246,6 +251,6 @@ class TypeFactory
             return new StaticType();
         }
 
-        return self::class(ClassName::fromString($type));
+        return self::class(ClassName::fromString($type), $reflector);
     }
 }
