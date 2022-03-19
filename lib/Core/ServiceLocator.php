@@ -42,8 +42,6 @@ class ServiceLocator
     
     private DocBlockFactory $docblockFactory;
 
-    private TypeFactory $typeFactory;
-
     /**
      * @var array<int,ReflectionMemberProvider>
      */
@@ -88,7 +86,6 @@ class ServiceLocator
         $this->sourceLocator = $sourceLocator;
         $this->docblockFactory = new DocblockFactoryBridge($this->reflector);
         $this->logger = $logger;
-        $this->typeFactory = new TypeFactory($this->reflector);
 
         $nameResolver = new FullyQualifiedNameResolver($this->reflector, $this->logger);
         $this->symbolContextResolver = new SymbolContextResolver(
@@ -157,10 +154,5 @@ class ServiceLocator
     public function methodProviders(): array
     {
         return $this->methodProviders;
-    }
-
-    public function typeFactory(): TypeFactory
-    {
-        return $this->typeFactory;
     }
 }
