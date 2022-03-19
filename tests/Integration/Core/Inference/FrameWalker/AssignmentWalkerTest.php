@@ -3,7 +3,6 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalker;
 
 use Phpactor\WorseReflection\Core\Type\ClassType;
-use Phpactor\WorseReflection\Core\Type\CollectionType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Tests\Integration\Core\Inference\FrameWalkerTestCase;
 use Phpactor\WorseReflection\Core\Inference\Frame;
@@ -246,7 +245,6 @@ class AssignmentWalkerTest extends FrameWalkerTestCase
                     (string) $frame->locals()->byName('bar')->first()->symbolContext()->types()->best()
                 );
                 $type = $frame->locals()->byName('bar')->first()->symbolContext()->types()->best();
-                assert($type instanceof CollectionType);
                 $this->assertEquals('Foobar\Collection', $type->iterableValueType()->__toString());
             }
         ];

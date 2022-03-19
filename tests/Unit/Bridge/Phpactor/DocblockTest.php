@@ -7,7 +7,7 @@ use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
-use Phpactor\WorseReflection\Core\Type\CollectionType;
+use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\ReflectorBuilder;
 
 class DocblockTest extends TestCase
@@ -64,9 +64,9 @@ class DocblockTest extends TestCase
         $docblock = $this->create('/** @var Foo<Item> $foo) */');
         $this->assertEquals('Foo<Item>', (string)$docblock->vars()->types()->best());
         $type = $docblock->vars()->types()->best();
-        assert($type instanceof CollectionType);
+        assert($type instanceof GenericClassType);
 
-        $this->assertEquals('Item', $type->valueType->name->full());
+        $this->assertEquals('Item', $type->iterableValueType()->name->full());
     }
 
     public function testInherits(): void

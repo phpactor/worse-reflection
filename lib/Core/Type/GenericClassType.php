@@ -63,4 +63,9 @@ class GenericClassType extends ClassType
 
         return Trinary::false();
     }
+
+    public function toPhpString(): string
+    {
+        return $this->name->__toString();
+    }
 }

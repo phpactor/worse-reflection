@@ -92,7 +92,10 @@ class ForeachWalkerTest extends FrameWalkerTestCase
                     'Foobar\\Collection<Foobar\Item>',
                     (string) $frame->locals()->byName('items')->first()->symbolContext()->types()->best()
                 );
-                $this->assertEquals('Foobar\\Item', (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best());
+                $this->assertEquals(
+                    'Foobar\\Item',
+                    (string) $frame->locals()->byName('item')->first()->symbolContext()->types()->best()
+                );
             }
         ];
 

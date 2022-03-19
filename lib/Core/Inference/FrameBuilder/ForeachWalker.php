@@ -15,6 +15,8 @@ use Microsoft\PhpParser\Node\Expression\Variable;
 use Phpactor\WorseReflection\Core\Inference\SymbolContext;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
 use Phpactor\WorseReflection\Core\Inference\Variable as WorseVariable;
+use Phpactor\WorseReflection\Core\Type\ArrayType;
+use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 
@@ -107,7 +109,10 @@ class ForeachWalker extends AbstractWalker
             ]
         );
         
-        if ($collectionType instanceof IterableType && !$collectionType->valueType instanceof MissingType) {
+        if ($collectionType instanceof GenericClassType) {
+            $context = $context->withType($collectionType->iterableValueType());
+        }
+        if ($collectionType instanceof ArrayType) {
             $context = $context->withType($collectionType->valueType);
         }
         
