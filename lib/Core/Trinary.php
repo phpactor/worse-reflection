@@ -25,4 +25,13 @@ class Trinary
     {
         return new self(null);
     }
+
+    public static function fromBoolean(bool $bool): self
+    {
+        if ($bool) {
+            return self::true();
+        }
+
+        return self::false();
+    }
 }
