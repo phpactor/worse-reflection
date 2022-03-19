@@ -148,7 +148,7 @@ class TypeFactory
     /**
      * @param string|ClassName $className
      */
-    public static function class($className, Reflector $reflector = null): ClassType
+    public static function class($className, ClassReflector $reflector = null): ClassType
     {
         $name = ClassName::fromUnknown($className);
         if ($reflector) {
