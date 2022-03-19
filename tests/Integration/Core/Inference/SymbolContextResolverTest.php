@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Tests\Integration\Core\Inference;
 
 use Phpactor\WorseReflection\Core\Cache\NullCache;
+use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\PropertyAssignments;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Name;
@@ -1166,7 +1167,13 @@ class SymbolContextResolverTest extends IntegrationTestCase
         list($source, $offset) = ExtractOffset::fromSource($source);
         $node = $this->parseSource($source)->getDescendantNodeAtPosition($offset);
 
-        $resolver = new SymbolContextResolver($this->createReflector($source), $this->logger(), new NullCache());
+        $reflector = $this->createReflector($source);
+        $resolver = new SymbolContextResolver(
+            $reflector,
+            $this->logger(),
+            new NullCache(),
+            new FullyQualifiedNameResolver($reflector, $this->logger()),
+        );
 
         return $resolver->resolveNode($frame, $node);
     }

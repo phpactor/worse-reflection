@@ -87,4 +87,9 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     {
         return $this->node;
     }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
 }

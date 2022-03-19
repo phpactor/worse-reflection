@@ -366,4 +366,9 @@ class ReflectionClass extends AbstractReflectionClass implements CoreReflectionC
     {
         return $this->node;
     }
+
+    public function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
 }

@@ -93,4 +93,9 @@ class ReflectionFunction extends AbstractReflectedNode implements CoreReflection
     {
         return $this->node;
     }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
 }

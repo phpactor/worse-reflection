@@ -106,4 +106,9 @@ class ReflectionParameter extends AbstractReflectedNode implements CoreReflectio
     {
         return $this->parameter;
     }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
 }

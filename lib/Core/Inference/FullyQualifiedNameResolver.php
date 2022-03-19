@@ -20,16 +20,22 @@ use Phpactor\WorseReflection\Core\Type\IterableType;
 use Phpactor\WorseReflection\Core\Type\ScalarType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
 use Phpactor\WorseReflection\Core\Type\StaticType;
+use Phpactor\WorseReflection\Reflector;
 use Psr\Log\LoggerInterface;
 
 class FullyQualifiedNameResolver
 {
     private LoggerInterface $logger;
 
+    private Reflector $reflector;
+
+
     public function __construct(
+        Reflector $reflector,
         LoggerInterface $logger
     ) {
         $this->logger = $logger;
+        $this->reflector = $reflector;
     }
 
     public function resolve(Node $node, $type = null, Name $currentClass = null): Type

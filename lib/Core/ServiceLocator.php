@@ -3,7 +3,16 @@
 namespace Phpactor\WorseReflection\Core;
 
 use Phpactor\WorseReflection\Core\Cache\NullCache;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssertFrameWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\CatchWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\ForeachWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\FunctionLikeWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\IncludeWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\InstanceOfWalker;
+use Phpactor\WorseReflection\Core\Inference\FrameBuilder\VariableWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameWalker;
+use Phpactor\WorseReflection\Core\Inference\FullyQualifiedNameResolver;
 use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
@@ -32,6 +41,8 @@ class ServiceLocator
     private SymbolContextResolver $symbolContextResolver;
     
     private DocBlockFactory $docblockFactory;
+
+    private TypeFactory $typeFactory;
 
     /**
      * @var array<int,ReflectionMemberProvider>
@@ -77,18 +88,30 @@ class ServiceLocator
         $this->sourceLocator = $sourceLocator;
         $this->docblockFactory = new DocblockFactoryBridge();
         $this->logger = $logger;
+        $this->typeFactory = new TypeFactory($this->reflector);
 
+        $nameResolver = new FullyQualifiedNameResolver($this->reflector, $this->logger);
         $this->symbolContextResolver = new SymbolContextResolver(
             $this->reflector,
             $this->logger,
-            $cache
-        );
-        $this->frameBuilder = FrameBuilder::create(
-            $this->docblockFactory,
-            $this->symbolContextResolver,
-            $this->logger,
             $cache,
-            $frameWalkers
+            $nameResolver,
+        );
+
+        $this->frameBuilder = FrameBuilder::create(
+            $this->symbolContextResolver,
+            $cache,
+            array_merge([
+                new AssertFrameWalker(),
+                new FunctionLikeWalker(),
+                new VariableWalker($this->docblockFactory, $nameResolver),
+                new AssignmentWalker($this->logger),
+                new CatchWalker(),
+                new ForeachWalker(),
+                new InstanceOfWalker(),
+                new IncludeWalker($logger),
+            ], $frameWalkers)
+
         );
         $this->methodProviders = $methodProviders;
     }
@@ -135,5 +158,10 @@ class ServiceLocator
     public function methodProviders(): array
     {
         return $this->methodProviders;
+    }
+
+    public function typeFactory(): TypeFactory
+    {
+        return $this->typeFactory;
     }
 }

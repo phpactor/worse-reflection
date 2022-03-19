@@ -140,4 +140,9 @@ class ReflectionInterface extends AbstractReflectionClass implements CoreReflect
     {
         return $this->node;
     }
+
+    protected function serviceLocator(): ServiceLocator
+    {
+        return $this->serviceLocator;
+    }
 }

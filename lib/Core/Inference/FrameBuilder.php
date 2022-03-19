@@ -43,25 +43,14 @@ final class FrameBuilder
         $this->cache = $cache;
     }
 
+    /**
+     * @param FrameWalker[] $walkers
+     */
     public static function create(
-        DocBlockFactory $docblockFactory,
         SymbolContextResolver $symbolContextResolver,
-        LoggerInterface $logger,
         Cache $cache,
         array $walkers = []
     ): self {
-        $nameResolver = new FullyQualifiedNameResolver($logger);
-        $walkers = array_merge([
-            new AssertFrameWalker(),
-            new FunctionLikeWalker(),
-            new VariableWalker($docblockFactory, $nameResolver),
-            new AssignmentWalker($logger),
-            new CatchWalker(),
-            new ForeachWalker(),
-            new InstanceOfWalker(),
-            new IncludeWalker($logger),
-        ], $walkers);
-
         return new self($symbolContextResolver, $walkers, $cache);
     }
 

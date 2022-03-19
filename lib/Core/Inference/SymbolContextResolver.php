@@ -75,12 +75,13 @@ class SymbolContextResolver
         Reflector $reflector,
         LoggerInterface $logger,
         Cache $cache,
+        FullyQualifiedNameResolver $nameResolver,
         SymbolFactory $symbolFactory = null
     ) {
         $this->logger = $logger;
         $this->symbolFactory = $symbolFactory ?: new SymbolFactory();
         $this->memberTypeResolver = new MemberTypeResolver($reflector);
-        $this->nameResolver = new FullyQualifiedNameResolver($logger);
+        $this->nameResolver = $nameResolver;
         $this->reflector = $reflector;
         $this->expressionEvaluator = new ExpressionEvaluator();
         $this->cache = $cache;
@@ -283,7 +284,7 @@ class SymbolContextResolver
             }
 
             $context = $this->__resolveNode($frame, $node);
-            $context = $context->withScope(new ReflectionScope($node));
+            $context = $context->withScope(new ReflectionScope($this->reflector, $node));
 
             return $context;
         });
