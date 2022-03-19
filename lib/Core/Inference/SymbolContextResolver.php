@@ -175,7 +175,7 @@ class SymbolContextResolver
                 [
                     'name' => Name::fromString($node->getNamespacedName()),
                     'symbol_type' => Symbol::CLASS_,
-                    'type' => TypeFactory::fromString($node->getNamespacedName())
+                    'type' => TypeFactory::fromStringWithReflector($node->getNamespacedName(), $this->reflector)
                 ]
             );
         }
@@ -414,7 +414,10 @@ class SymbolContextResolver
         }
 
         if ($typeDeclaration instanceof Token) {
-            $type = TypeFactory::fromString($typeDeclaration->getText($node->getFileContents()));
+            $type = TypeFactory::fromStringWithReflector(
+                $typeDeclaration->getText($node->getFileContents()),
+                $this->reflector,
+            );
         }
 
         $value = null;
@@ -806,7 +809,7 @@ class SymbolContextResolver
 
         assert($classNode instanceof NamespacedNameInterface);
 
-        return TypeFactory::fromString($classNode->getNamespacedName());
+        return TypeFactory::fromStringWithReflector($classNode->getNamespacedName(), $this->reflector);
     }
 
     private function resolveParenthesizedExpression(Frame $frame, ParenthesizedExpression $node)

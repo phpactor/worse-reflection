@@ -32,7 +32,7 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
                 EOT
         , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
-            $this->assertEquals(TypeFactory::fromString('Foobar\Barfoo\Foobar'), $frame->locals()->byName('this')->first()->symbolContext()->type());
+            $this->assertEquals('Foobar\Barfoo\Foobar', $frame->locals()->byName('this')->first()->symbolContext()->type()->__toString());
             $this->assertEquals(Symbol::VARIABLE, $frame->locals()->byName('this')->first()->symbolContext()->symbol()->symbolType());
         }];
 
@@ -57,8 +57,8 @@ class FunctionLikeWalkerTest extends FrameWalkerTestCase
         , function (Frame $frame): void {
             $this->assertCount(1, $frame->locals()->byName('this'));
             $this->assertEquals(
-                TypeFactory::fromString('Foobar\Barfoo\Foobar'),
-                $frame->locals()->byName('this')->first()->symbolContext()->type()
+                'Foobar\Barfoo\Foobar',
+                $frame->locals()->byName('this')->first()->symbolContext()->type()->__toString()
             );
         }];
 
