@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
+use Phpactor\DocblockParser\Ast\Docblock as ParserDocblock;
 use Phpactor\DocblockParser\Ast\Node;
 use Phpactor\DocblockParser\Ast\ParameterList;
 use Phpactor\DocblockParser\Ast\Tag\DeprecatedTag;
@@ -35,11 +36,11 @@ use function array_map;
 
 class ParsedDocblock implements DocBlock
 {
-    private Node $node;
+    private ParserDocblock $node;
 
     private TypeConverter $typeConverter;
 
-    public function __construct(Node $node, TypeConverter $typeConverter)
+    public function __construct(ParserDocblock $node, TypeConverter $typeConverter)
     {
         $this->node = $node;
         $this->typeConverter = $typeConverter;
@@ -99,13 +100,18 @@ class ParsedDocblock implements DocBlock
 
     public function formatted(): string
     {
+        return implode("\n", array_map(function (string $line) {
+            return preg_replace('{^\s+}', '', $line);
+        }, explode("\n", $this->node->prose())));
     }
 
     public function returnTypes(): Types
     {
         foreach ($this->node->descendantElements(ReturnTag::class) as $tag) {
             assert($tag instanceof ReturnTag);
-            return Types::fromTypes([$this->typeConverter->convert($tag->type())]);
+            return Types::fromTypes([
+                $this->typeConverter->convert($tag->type())
+            ]);
         }
         return Types::empty();
     }

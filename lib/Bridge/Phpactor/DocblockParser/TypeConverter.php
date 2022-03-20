@@ -7,8 +7,11 @@ use Phpactor\DocblockParser\Ast\TypeNode;
 use Phpactor\DocblockParser\Ast\Type\ArrayNode;
 use Phpactor\DocblockParser\Ast\Type\ClassNode;
 use Phpactor\DocblockParser\Ast\Type\GenericNode;
+use Phpactor\DocblockParser\Ast\Type\ListNode;
 use Phpactor\DocblockParser\Ast\Type\ScalarNode;
+use Phpactor\DocblockParser\Ast\Type\ThisNode;
 use Phpactor\DocblockParser\Ast\Type\UnionNode;
+use Phpactor\DocblockParser\Ast\VariableNode;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
@@ -22,6 +25,8 @@ use Phpactor\WorseReflection\Core\Type\IntType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\ReflectedClassType;
+use Phpactor\WorseReflection\Core\Type\SelfType;
+use Phpactor\WorseReflection\Core\Type\StaticType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Core\Types;
@@ -42,6 +47,9 @@ class TypeConverter
         if ($type instanceof ScalarNode) {
             return $this->convertScalar($type->toString());
         }
+        if ($type instanceof ListNode) {
+            return $this->convertList($type, $scope);
+        }
         if ($type instanceof ArrayNode) {
             return $this->convertArray($type);
         }
@@ -53,6 +61,9 @@ class TypeConverter
         }
         if ($type instanceof ClassNode) {
             return $this->convertClass($type, $scope);
+        }
+        if ($type instanceof ThisNode) {
+            return $this->convertThis($type);
         }
 
         return new MissingType();
@@ -126,6 +137,15 @@ class TypeConverter
 
     private function convertClass(ClassNode $typeNode, ?ReflectionScope $scope): Type
     {
+        $name = $typeNode->name()->toString();
+
+        if ($name === 'static') {
+            return new StaticType();
+        }
+        if ($name === 'self') {
+            return new SelfType();
+        }
+
         $type = new ReflectedClassType(
             $this->reflector,
             ClassName::fromString(
@@ -138,5 +158,15 @@ class TypeConverter
         }
 
         return $type;
+    }
+
+    private function convertList(ListNode $type, ?ReflectionScope $scope): Type
+    {
+        return new ArrayType($this->convert($type->type, $scope));
+    }
+
+    private function convertThis(ThisNode $type): Type
+    {
+        return new SelfType();
     }
 }
