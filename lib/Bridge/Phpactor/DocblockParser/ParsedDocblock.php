@@ -6,6 +6,7 @@ use Phpactor\DocblockParser\Ast\Node;
 use Phpactor\DocblockParser\Ast\ParameterList;
 use Phpactor\DocblockParser\Ast\Tag\MethodTag;
 use Phpactor\DocblockParser\Ast\Tag\ParameterTag;
+use Phpactor\DocblockParser\Ast\Tag\PropertyTag;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Deprecation;
@@ -21,8 +22,10 @@ use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionParameterCollection;
+use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionParameter;
+use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionProperty;
 use Phpactor\WorseReflection\Core\Visibility;
 use function array_map;
 
@@ -82,6 +85,26 @@ class ParsedDocblock implements DocBlock
 
     public function properties(ReflectionClassLike $declaringClass): ReflectionPropertyCollection
     {
+        $properties = [];
+        foreach ($this->node->descendantElements(PropertyTag::class) as $propertyTag) {
+            assert($propertyTag instanceof PropertyTag);
+            $method = new VirtualReflectionProperty(
+                $declaringClass->position(),
+                $declaringClass,
+                $declaringClass,
+                ltrim($propertyTag->name->toString(), '$'),
+                new Frame('docblock'),
+                $this,
+                $declaringClass->scope(),
+                Visibility::public(),
+                Types::fromTypes([$this->typeConverter->convert($propertyTag->type)]),
+                $this->typeConverter->convert($propertyTag->type),
+                new Deprecation(false),
+            );
+            $properties[] = $method;
+        }
+
+        return VirtualReflectionPropertyCollection::fromReflectionProperties($properties);
     }
 
     public function methods(ReflectionClassLike $declaringClass): ReflectionMethodCollection
