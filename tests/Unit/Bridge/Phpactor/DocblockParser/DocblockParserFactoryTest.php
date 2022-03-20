@@ -11,6 +11,8 @@ use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\DocblockParserFactor
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\ParserPhpDocFactory;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
 use Phpactor\WorseReflection\Core\PhpDoc\DocBlockTypeResolver;
 use Phpactor\WorseReflection\Core\PhpDoc\ExtendsTemplate;
 use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc as PhpactorPhpDoc;
@@ -30,6 +32,7 @@ use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\TemplatedType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
+use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 
@@ -138,6 +141,25 @@ class DocblockParserFactoryTest extends IntegrationTestCase
 
         self::assertEquals('foobar', $methods->first()->name());
         self::assertEquals('Barfoo', $methods->first()->type());
+    }
+
+    public function testVars(): void
+    {
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $docblock = $this->parseDocblockWithReflector($reflector, '/** @var Barfoo */');
+        $vars = $docblock->vars();
+        self::assertCount(1, $vars->types());
+        self::assertEquals('Barfoo', $vars->types()->best());
+    }
+
+    public function testVarsWithName(): void
+    {
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $docblock = $this->parseDocblockWithReflector($reflector, '/** @var Barfoo $foo */');
+        $vars = iterator_to_array($docblock->vars());
+        self::assertCount(1, $vars);
+        self::assertEquals('Barfoo', $vars[0]->types()->best());
+        self::assertEquals('foo', $vars[0]->name());
     }
 
     private function parseDocblock(string $docblock): DocBlock

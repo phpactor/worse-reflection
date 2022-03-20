@@ -8,9 +8,11 @@ use Phpactor\DocblockParser\Ast\Tag\MethodTag;
 use Phpactor\DocblockParser\Ast\Tag\ParameterTag;
 use Phpactor\DocblockParser\Ast\Tag\PropertyTag;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
+use Phpactor\DocblockParser\Ast\Tag\VarTag;
 use Phpactor\WorseReflection\Core\DefaultValue;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\NodeText;
 use Phpactor\WorseReflection\Core\Position;
@@ -51,6 +53,18 @@ class ParsedDocblock implements DocBlock
 
     public function vars(): DocBlockVars
     {
+        $vars = [];
+        foreach ($this->node->descendantElements(VarTag::class) as $varTag) {
+            assert($varTag instanceof VarTag);
+            $vars[] = new DocBlockVar(
+                $varTag->variable ? ltrim($varTag->variable->name()->toString(), '$') : '',
+                Types::fromTypes([
+                    $this->typeConverter->convert($varTag->type),
+                ])
+            );
+        }
+
+        return new DocBlockVars($vars);
     }
 
     public function parameterTypes(string $paramName): Types
@@ -81,6 +95,7 @@ class ParsedDocblock implements DocBlock
 
     public function isDefined(): bool
     {
+        return true;
     }
 
     public function properties(ReflectionClassLike $declaringClass): ReflectionPropertyCollection
