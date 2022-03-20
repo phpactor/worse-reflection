@@ -1,13 +1,13 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Unit\DocblockParser\Benchmark;
+namespace Phpactor\WorseReflection\Tests\Benchmarks\DocblockParser;
 
 use Phpactor\WorseReflection\DocblockParser\Lexer;
 use Phpactor\WorseReflection\DocblockParser\Parser;
 
 class PhpactorParserBench extends AbstractParserBenchCase
 {
-    private PhpDocParser $parser;
+    private Parser $parser;
     
     private Lexer $lexer;
 

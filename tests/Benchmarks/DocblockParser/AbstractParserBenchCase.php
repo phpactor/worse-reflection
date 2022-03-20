@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Unit\DocblockParser\Benchmark;
+namespace Phpactor\WorseReflection\Tests\Benchmarks\DocblockParser;
 
 /**
  * @Iterations(33)
