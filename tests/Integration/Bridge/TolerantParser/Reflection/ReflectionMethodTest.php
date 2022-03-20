@@ -240,7 +240,7 @@ class ReflectionMethodTest extends IntegrationTestCase
             'Foobar',
             function ($methods): void {
                 $this->assertEquals(
-                    TypeFactory::array('Acme\Post'),
+                    'Acme\Post[]',
                     $methods->get('method1')->inferredTypes()->best()
                 );
             },
@@ -265,8 +265,8 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals('Foobar', $methods->get('method1')->inferredTypes()->best()->__toString());
-                $this->assertEquals('Foobar', $methods->get('method2')->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $methods->get('method1')->inferredTypes()->best()->__toString(), 'this');
+                $this->assertEquals('Foobar', $methods->get('method2')->inferredTypes()->best()->__toString(), 'static');
             },
         ];
         yield 'Return type from docblock this and static from a trait' => [

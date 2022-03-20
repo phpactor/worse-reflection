@@ -345,7 +345,7 @@ class ReflectionPropertyTest extends IntegrationTestCase
                     $this->assertEquals(TypeFactory::undefined(), $properties->get('undefined')->type());
 
                     $this->assertEquals(TypeFactory::iterable(), $properties->get('collection')->type());
-                    $this->assertEquals(TypeFactory::array('Bar\Foo'), $properties->get('collection')->inferredTypes()->best());
+                    $this->assertEquals('Bar\Foo[]', $properties->get('collection')->inferredTypes()->best()->__toString());
                     $this->assertEquals(
                         TypeFactory::iterable(),
                         $properties->get('it')->type()

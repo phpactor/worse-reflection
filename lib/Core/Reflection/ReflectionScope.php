@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Core\Reflection;
 
 use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\NameImports;
+use Phpactor\WorseReflection\Core\Type;
 
 interface ReflectionScope
 {
@@ -11,5 +12,5 @@ interface ReflectionScope
 
     public function resolveLocalName(Name $type): Name;
 
-    public function resolveFullyQualifiedName($type, ReflectionClassLike $classLike = null);
+    public function resolveFullyQualifiedName($type, ReflectionClassLike $classLike = null): Type;
 }

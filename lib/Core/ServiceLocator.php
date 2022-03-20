@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Core;
 
+use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\DocblockParserFactory;
 use Phpactor\WorseReflection\Core\Cache\NullCache;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssertFrameWalker;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder\AssignmentWalker;
@@ -17,7 +18,6 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Bridge\Phpactor\DocblockFactory as DocblockFactoryBridge;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\Reflector\CompositeReflector;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedReflector;
@@ -84,7 +84,7 @@ class ServiceLocator
         );
 
         $this->sourceLocator = $sourceLocator;
-        $this->docblockFactory = new DocblockFactoryBridge($this->reflector);
+        $this->docblockFactory = new DocblockParserFactory($this->reflector);
         $this->logger = $logger;
 
         $nameResolver = new FullyQualifiedNameResolver($this->reflector, $this->logger);
