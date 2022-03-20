@@ -4,6 +4,7 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
 use Phpactor\DocblockParser\Ast\Node;
 use Phpactor\DocblockParser\Ast\ParameterList;
+use Phpactor\DocblockParser\Ast\Tag\DeprecatedTag;
 use Phpactor\DocblockParser\Ast\Tag\MethodTag;
 use Phpactor\DocblockParser\Ast\Tag\ParameterTag;
 use Phpactor\DocblockParser\Ast\Tag\PropertyTag;
@@ -45,10 +46,20 @@ class ParsedDocblock implements DocBlock
 
     public function methodTypes(string $methodName): Types
     {
+        foreach ($this->node->descendantElements(MethodTag::class) as $methodTag) {
+            assert($methodTag instanceof MethodTag);
+            if ($methodTag->name->toString() !== $methodName) {
+                continue;
+            }
+            return Types::fromTypes([$this->typeConverter->convert($methodTag->type)]);
+        }
+
+        return Types::empty();
     }
 
     public function inherits(): bool
     {
+        return false;
     }
 
     public function vars(): DocBlockVars
@@ -154,6 +165,12 @@ class ParsedDocblock implements DocBlock
 
     public function deprecation(): Deprecation
     {
+        foreach ($this->node->descendantElements(DeprecatedTag::class) as $deprecatedTag) {
+            assert($deprecatedTag instanceof DeprecatedTag);
+            return new Deprecation(true, $deprecatedTag->text->toString());
+        }
+
+        return new Deprecation(false);
     }
 
     private function addParameters(VirtualReflectionMethod $method, VirtualReflectionParameterCollection $collection, ?ParameterList $parameterList): void
