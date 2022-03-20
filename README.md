@@ -1,6 +1,8 @@
 Worse Reflection
 ==================
 
+**ARCHIVED**: This repository has been merged into the [phpactr](https://github.com/phpactor/phpactor) monolith.
+
 ![CI](https://github.com/phpactor/worse-reflection/workflows/CI/badge.svg)
 
 This library aims to provide a light class-based AST based "reflection" library.
