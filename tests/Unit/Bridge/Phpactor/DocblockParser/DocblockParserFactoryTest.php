@@ -97,7 +97,14 @@ class DocblockParserFactoryTest extends IntegrationTestCase
 
         yield [
             '/** @return callable(): string */',
-            new CallableType([], new MissingType())
+            new CallableType([], new StringType())
+        ];
+        yield [
+            '/** @return callable(string,bool): string */',
+            new CallableType([
+                new StringType(),
+                new BooleanType(),
+            ], new StringType())
         ];
         yield [
             '/** @return iterable */',

@@ -5,6 +5,7 @@ namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 use Phpactor\DocblockParser\Ast\Node;
 use Phpactor\DocblockParser\Ast\TypeNode;
 use Phpactor\DocblockParser\Ast\Type\ArrayNode;
+use Phpactor\DocblockParser\Ast\Type\CallableNode;
 use Phpactor\DocblockParser\Ast\Type\ClassNode;
 use Phpactor\DocblockParser\Ast\Type\GenericNode;
 use Phpactor\DocblockParser\Ast\Type\ListNode;
@@ -73,6 +74,9 @@ class TypeConverter
         if ($type instanceof NullNode) {
             return new NullType();
         }
+        if ($type instanceof CallableNode) {
+            return $this->convertCallable($type, $scope);
+        }
 
         return new MissingType();
     }
@@ -110,14 +114,14 @@ class TypeConverter
     {
         return new UnionType(...array_map(
             fn (Node $node) => $this->convert($node),
-            $union->types->types()->list
+            iterator_to_array($union->types->types())
         ));
     }
 
     private function convertGeneric(GenericNode $type, ?ReflectionScope $scope): Type
     {
         if ($type->type instanceof ArrayNode) {
-            $parameters = array_values($type->parameters()->types()->list);
+            $parameters = array_values(iterator_to_array($type->parameters()->types()));
             if (count($parameters) === 1) {
                 return new ArrayType(
                     new MissingType(),
@@ -139,7 +143,7 @@ class TypeConverter
             return new MissingType();
         }
 
-        $parameters = $type->parameters()->types()->list;
+        $parameters = iterator_to_array($type->parameters()->types());
 
         if (count($parameters) === 1) {
             // pretend this is a traversable
@@ -206,5 +210,12 @@ class TypeConverter
     private function convertThis(ThisNode $type): Type
     {
         return new SelfType();
+    }
+
+    private function convertCallable(CallableNode $type, ?ReflectionScope $scope): CallableType
+    {
+        return new CallableType(array_map(function (TypeNode $type) {
+            return $this->convert($type);
+        }, $type->parameters ? iterator_to_array($type->parameters->types()) : []), $this->convert($type->type));
     }
 }
