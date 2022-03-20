@@ -94,8 +94,18 @@ class ParsedDocblock implements DocBlock
         return Types::fromTypes($types);
     }
 
-    public function propertyTypes(string $methodName): Types
+    public function propertyTypes(string $propertyName): Types
     {
+        $types = [];
+        foreach ($this->node->descendantElements(PropertyTag::class) as $propertyTag) {
+            assert($propertyTag instanceof PropertyTag);
+            if (ltrim($propertyTag->name->toString(), '$') !== $propertyName) {
+                continue;
+            }
+            $types[] = $this->typeConverter->convert($propertyTag->type);
+        }
+
+        return Types::fromTypes($types);
     }
 
     public function formatted(): string
@@ -141,8 +151,8 @@ class ParsedDocblock implements DocBlock
                 $this,
                 $declaringClass->scope(),
                 Visibility::public(),
-                Types::fromTypes([$this->typeConverter->convert($propertyTag->type)]),
-                $this->typeConverter->convert($propertyTag->type),
+                Types::fromTypes([$this->typeConverter->convert($propertyTag->type, $declaringClass->scope())]),
+                $this->typeConverter->convert($propertyTag->type, $declaringClass->scope()),
                 new Deprecation(false),
             );
             $properties[] = $method;

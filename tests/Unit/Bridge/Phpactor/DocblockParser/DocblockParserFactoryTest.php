@@ -170,6 +170,14 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         self::assertCount(1, $types);
     }
 
+    public function testPropertyTypes(): void
+    {
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $docblock = $this->parseDocblockWithReflector($reflector, '/** @property Barfoo $foobar */');
+        $types = $docblock->propertyTypes('foobar');
+        self::assertCount(1, $types);
+    }
+
     private function parseDocblock(string $docblock): DocBlock
     {
         $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
