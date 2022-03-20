@@ -64,6 +64,9 @@ class DocblockReflectionPropertyFactory
         return $reflectionProperty;
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     private function typesFrom(ReflectionScope $scope, DocblockTypes $docblockTypes): Types
     {
         $types = [];

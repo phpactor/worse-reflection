@@ -18,7 +18,6 @@ use Phpactor\WorseReflection\Core\Inference\SymbolContextResolver;
 use Phpactor\WorseReflection\Core\Inference\FrameBuilder;
 use Phpactor\WorseReflection\Core\Virtual\ReflectionMemberProvider;
 use Phpactor\WorseReflection\Reflector;
-use Phpactor\WorseReflection\Bridge\Phpactor\OldDocblock\DocblockFactory as DocblockFactoryBridge;
 use Phpactor\WorseReflection\Core\Reflector\CoreReflector;
 use Phpactor\WorseReflection\Core\Reflector\CompositeReflector;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedReflector;

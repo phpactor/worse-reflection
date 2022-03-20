@@ -8,6 +8,7 @@ use Phpactor\WorseReflection\Core\Type;
 class ArrayType implements Type, IterableType
 {
     public Type $valueType;
+
     public Type $keyType;
 
     public function __construct(Type $keyType, ?Type $valueType = null)

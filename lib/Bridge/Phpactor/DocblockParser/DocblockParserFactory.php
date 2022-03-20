@@ -7,7 +7,7 @@ use Phpactor\DocblockParser\Lexer;
 use Phpactor\DocblockParser\Parser;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory;
-use Phpactor\WorseReflection\Core\DocBlock\EmptyDocblock;
+use Phpactor\WorseReflection\Core\DocBlock\PlainDocblock;
 use Phpactor\WorseReflection\Reflector;
 
 class DocblockParserFactory implements DocBlockFactory
@@ -18,10 +18,13 @@ class DocblockParserFactory implements DocBlockFactory
         '@param',
         '@return',
         '@method',
+        '@deprecated',
     ];
 
     private Lexer $lexer;
+
     private Parser $parser;
+
     private Reflector $reflector;
 
     public function __construct(Reflector $reflector, ?Lexer $lexer = null, ?Parser $parser = null)
@@ -34,7 +37,7 @@ class DocblockParserFactory implements DocBlockFactory
     public function create(string $docblock): DocBlock
     {
         if (empty(trim($docblock))) {
-            return new EmptyDocblock();
+            return new PlainDocblock();
         }
 
         // if no supported tags in the docblock, do not parse it
@@ -43,7 +46,7 @@ class DocblockParserFactory implements DocBlockFactory
             $docblock,
             $matches
         )) {
-            return new EmptyDocblock();
+            return new PlainDocblock($docblock);
         }
 
         $node = $this->parser->parse($this->lexer->lex($docblock));

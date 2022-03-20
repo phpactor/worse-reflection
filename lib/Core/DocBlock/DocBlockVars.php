@@ -6,6 +6,9 @@ use IteratorAggregate;
 use Phpactor\WorseReflection\Core\Types;
 use ArrayIterator;
 
+/**
+ * @implements IteratorAggregate<DocBlockVar>
+ */
 class DocBlockVars implements IteratorAggregate
 {
     private array $vars = [];

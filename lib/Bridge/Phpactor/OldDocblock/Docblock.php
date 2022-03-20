@@ -182,6 +182,9 @@ class Docblock implements CoreDocblock
         return Types::empty();
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     private function typesFromDocblockTypes(DocblockTypes $types): Types
     {
         $types = array_map(function (DocblockType $type) {

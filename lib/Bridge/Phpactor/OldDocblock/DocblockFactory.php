@@ -2,7 +2,6 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor\OldDocblock;
 
-use Phpactor\WorseReflection\Bridge\Phpactor\OldDocblock\Docblock;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlockFactory as CoreDocblockPhpactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock as CoreDocblock;
 use Phpactor\Docblock\DocblockFactory as PhpactorDocblockFactory;

@@ -3,36 +3,16 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor\DocblockParser;
 
 use Generator;
-use PHPUnit\Framework\TestCase;
-use Phpactor\ClassFileConverter\Domain\ClassName as PhpactorClassName;
-use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
-use Phpactor\DocblockParser\Ast\Type\GenericNode;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\DocblockParserFactory;
-use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\ParserPhpDocFactory;
-use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockVar;
-use Phpactor\WorseReflection\Core\DocBlock\DocBlockVars;
-use Phpactor\WorseReflection\Core\PhpDoc\DocBlockTypeResolver;
-use Phpactor\WorseReflection\Core\PhpDoc\ExtendsTemplate;
-use Phpactor\WorseReflection\Core\PhpDoc\PhpDoc as PhpactorPhpDoc;
-use Phpactor\WorseReflection\Core\PhpDoc\PhpDocFactory;
-use Phpactor\WorseReflection\Core\Name;
-use Phpactor\WorseReflection\Core\PhpDoc\Template;
-use Phpactor\WorseReflection\Core\PhpDoc\Templates;
-use Phpactor\WorseReflection\Core\Reflection\ReflectionType;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
-use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
-use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\Core\Type\IntType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\StringType;
-use Phpactor\WorseReflection\Core\Type\TemplatedType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 
@@ -188,5 +168,4 @@ class DocblockParserFactoryTest extends IntegrationTestCase
     {
         return (new DocblockParserFactory($reflector))->create($docblock);
     }
-
 }

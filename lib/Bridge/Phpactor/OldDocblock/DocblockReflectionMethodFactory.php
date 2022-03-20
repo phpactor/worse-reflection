@@ -22,6 +22,9 @@ use Phpactor\WorseReflection\Core\Visibility;
 
 class DocblockReflectionMethodFactory
 {
+    /**
+     * @phpstan-ignore-next-line
+     */
     public function create(DocBlock $docblock, ReflectionClassLike $reflectionClass, MethodTag $methodTag)
     {
         $types = $this->typesFrom($reflectionClass->scope(), $methodTag->types());
@@ -53,6 +56,9 @@ class DocblockReflectionMethodFactory
         return $reflectionMethod;
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     private function typesFrom(ReflectionScope $scope, DocblockTypes $docblockTypes)
     {
         $types = [];

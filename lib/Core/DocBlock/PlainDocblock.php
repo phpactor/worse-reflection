@@ -9,9 +9,17 @@ use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\Virtual\Collection\VirtualReflectionPropertyCollection;
+use function preg_replace;
 
-class EmptyDocblock implements DocBlock
+class PlainDocblock implements DocBlock
 {
+    private string $raw;
+
+    public function __construct(string $raw = '')
+    {
+        $this->raw = $raw;
+    }
+
     public function methodTypes(string $methodName): Types
     {
         return Types::empty();
@@ -39,7 +47,22 @@ class EmptyDocblock implements DocBlock
 
     public function formatted(): string
     {
-        return '';
+        $lines = [];
+        foreach (explode("\n", $this->raw) as $line) {
+            if (false !== strpos($line, '@')) {
+                continue;
+            }
+            if (false !== strpos($line, '/*')) {
+                continue;
+            }
+            if (false !== strpos($line, '*/')) {
+                continue;
+            }
+            $line = trim(preg_replace('{\s+\*}', '', $line));
+            $lines[] = $line;
+        }
+        return trim(implode("\n", $lines));
+
     }
 
     public function returnTypes(): Types
@@ -47,10 +70,9 @@ class EmptyDocblock implements DocBlock
         return Types::empty();
     }
 
-
     public function raw(): string
     {
-        return '';
+        return $this->raw;
     }
 
     public function isDefined(): bool

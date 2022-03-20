@@ -11,8 +11,6 @@ use Phpactor\DocblockParser\Ast\Type\ListNode;
 use Phpactor\DocblockParser\Ast\Type\ScalarNode;
 use Phpactor\DocblockParser\Ast\Type\ThisNode;
 use Phpactor\DocblockParser\Ast\Type\UnionNode;
-use Phpactor\DocblockParser\Ast\VariableNode;
-use Phpactor\Docblock\DocblockTypes;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\TemplateMap;
@@ -30,9 +28,7 @@ use Phpactor\WorseReflection\Core\Type\SelfType;
 use Phpactor\WorseReflection\Core\Type\StaticType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Reflector;
-use RuntimeException;
 
 class TypeConverter
 {
