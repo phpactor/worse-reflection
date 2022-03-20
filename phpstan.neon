@@ -3,7 +3,7 @@ includes:
 parameters:
     level: 7
     inferPrivatePropertyTypeFromConstructor: true
-    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: true
     checkGenericClassInNonGenericObjectType: false
     paths:
         - lib

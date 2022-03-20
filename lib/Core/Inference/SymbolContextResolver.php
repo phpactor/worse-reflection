@@ -345,15 +345,16 @@ class SymbolContextResolver
             $types[] = $this->nameResolver->resolve($child);
         }
 
+        $types = Types::fromTypes($types);
         return $this->symbolFactory->context(
             $node->getText(),
             $node->getStartPosition(),
             $node->getEndPosition(),
             [
-                'type' => $firstType,
-                'types' => Types::fromTypes($types),
+                'type' => $types->best(),
+                'types' => $types,
                 'symbol_type' => Symbol::CLASS_,
-                'name' => $firstType ? Name::fromString((string) $firstType->getResolvedName()) : '',
+                'name' => $firstType ? Name::fromString((string) $firstType->getResolvedName()) : null,
             ]
         );
     }

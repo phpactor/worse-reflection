@@ -10,6 +10,16 @@ use RuntimeException;
 
 class SymbolFactory
 {
+    /**
+     * @param array{
+     *     container_type?: Type|null,
+     *     type?: Type|null,
+     *     types?: Types|null,
+     *     symbol_type?: Symbol::*|null,
+     *     name?: Name|null,
+     *     value?: mixed|null,
+     * } $config
+     */
     public function context(string $symbolName, int $start, int $end, array $config = []): SymbolContext
     {
         $defaultConfig = [
