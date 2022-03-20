@@ -193,7 +193,7 @@ class ParsedDocblock implements DocBlock
     {
         foreach ($this->node->descendantElements(DeprecatedTag::class) as $deprecatedTag) {
             assert($deprecatedTag instanceof DeprecatedTag);
-            return new Deprecation(true, $deprecatedTag->text->toString());
+            return new Deprecation(true, $deprecatedTag->text());
         }
 
         return new Deprecation(false);
