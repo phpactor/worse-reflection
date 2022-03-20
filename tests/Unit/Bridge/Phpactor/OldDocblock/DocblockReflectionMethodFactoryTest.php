@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
+namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor\OldDocblock;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
@@ -9,7 +9,7 @@ use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\Docblock\Method\Parameter;
 use Phpactor\Docblock\Tag\MethodTag;
-use Phpactor\WorseReflection\Bridge\Phpactor\DocblockReflectionMethodFactory;
+use Phpactor\WorseReflection\Bridge\Phpactor\OldDocblock\DocblockReflectionMethodFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMethod;
 use Phpactor\WorseReflection\ReflectorBuilder;

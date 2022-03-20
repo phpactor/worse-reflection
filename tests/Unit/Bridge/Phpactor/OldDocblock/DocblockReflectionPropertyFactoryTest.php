@@ -1,12 +1,12 @@
 <?php
 
-namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor;
+namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor\OldDocblock;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\Docblock\Tag\PropertyTag;
-use Phpactor\WorseReflection\Bridge\Phpactor\DocblockReflectionPropertyFactory;
+use Phpactor\WorseReflection\Bridge\Phpactor\OldDocblock\DocblockReflectionPropertyFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionProperty;
 use Phpactor\WorseReflection\ReflectorBuilder;

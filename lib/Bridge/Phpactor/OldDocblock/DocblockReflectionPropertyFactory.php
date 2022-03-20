@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpactor\WorseReflection\Bridge\Phpactor;
+namespace Phpactor\WorseReflection\Bridge\Phpactor\OldDocblock;
 
 use Phpactor\Docblock\DocblockType;
 use Phpactor\Docblock\DocblockTypes;
