@@ -10,4 +10,14 @@ trait TrinaryAssert
     {
         self::assertEquals(Trinary::true(), $trinary);
     }
+
+    public static function assertTrinaryFalse(Trinary $trinary): void
+    {
+        self::assertEquals(Trinary::false(), $trinary);
+    }
+
+    public static function assertTrinaryMaybe(Trinary $trinary): void
+    {
+        self::assertEquals(Trinary::maybe(), $trinary);
+    }
 }
