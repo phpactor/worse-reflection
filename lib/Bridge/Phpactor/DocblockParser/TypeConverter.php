@@ -74,6 +74,7 @@ class TypeConverter
         if ($type instanceof NullNode) {
             return new NullType();
         }
+
         if ($type instanceof CallableNode) {
             return $this->convertCallable($type, $scope);
         }
