@@ -8,6 +8,7 @@ use Phpactor\DocblockParser\Ast\Type\ArrayNode;
 use Phpactor\DocblockParser\Ast\Type\ClassNode;
 use Phpactor\DocblockParser\Ast\Type\GenericNode;
 use Phpactor\DocblockParser\Ast\Type\ListNode;
+use Phpactor\DocblockParser\Ast\Type\NullNode;
 use Phpactor\DocblockParser\Ast\Type\ScalarNode;
 use Phpactor\DocblockParser\Ast\Type\ThisNode;
 use Phpactor\DocblockParser\Ast\Type\UnionNode;
@@ -17,17 +18,24 @@ use Phpactor\WorseReflection\Core\TemplateMap;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
+use Phpactor\WorseReflection\Core\Type\BooleanType;
+use Phpactor\WorseReflection\Core\Type\CallableType;
 use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
 use Phpactor\WorseReflection\Core\Type\GenericClassType;
 use Phpactor\WorseReflection\Core\Type\IntType;
+use Phpactor\WorseReflection\Core\Type\IterablePrimitiveType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
+use Phpactor\WorseReflection\Core\Type\NullType;
+use Phpactor\WorseReflection\Core\Type\ObjectType;
 use Phpactor\WorseReflection\Core\Type\ReflectedClassType;
+use Phpactor\WorseReflection\Core\Type\ResourceType;
 use Phpactor\WorseReflection\Core\Type\SelfType;
 use Phpactor\WorseReflection\Core\Type\StaticType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
+use Phpactor\WorseReflection\Core\Type\VoidType;
 use Phpactor\WorseReflection\Reflector;
 
 class TypeConverter
@@ -62,6 +70,9 @@ class TypeConverter
         if ($type instanceof ThisNode) {
             return $this->convertThis($type);
         }
+        if ($type instanceof NullNode) {
+            return new NullType();
+        }
 
         return new MissingType();
     }
@@ -79,6 +90,12 @@ class TypeConverter
         }
         if ($type === 'mixed') {
             return new MixedType();
+        }
+        if ($type === 'bool') {
+            return new BooleanType();
+        }
+        if ($type === 'callable') {
+            return new CallableType([], new MissingType());
         }
 
         return new MissingType();
@@ -146,8 +163,25 @@ class TypeConverter
         if ($name === 'static') {
             return new StaticType();
         }
+
+        if ($name === 'iterable') {
+            return new IterablePrimitiveType();
+        }
+
         if ($name === 'self') {
             return new SelfType();
+        }
+
+        if ($name === 'object') {
+            return new ObjectType();
+        }
+
+        if ($name === 'resource') {
+            return new ResourceType();
+        }
+
+        if ($name === 'void') {
+            return new VoidType();
         }
 
         $type = new ReflectedClassType(

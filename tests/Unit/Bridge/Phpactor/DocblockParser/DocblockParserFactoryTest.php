@@ -7,12 +7,20 @@ use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\DocblockParserFactor
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
+use Phpactor\WorseReflection\Core\Type\BooleanType;
+use Phpactor\WorseReflection\Core\Type\CallableType;
+use Phpactor\WorseReflection\Core\Type\ClassType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
 use Phpactor\WorseReflection\Core\Type\IntType;
+use Phpactor\WorseReflection\Core\Type\IterablePrimitiveType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
+use Phpactor\WorseReflection\Core\Type\NullType;
+use Phpactor\WorseReflection\Core\Type\ObjectType;
+use Phpactor\WorseReflection\Core\Type\ResourceType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
+use Phpactor\WorseReflection\Core\Type\VoidType;
 use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 
@@ -73,6 +81,42 @@ class DocblockParserFactoryTest extends IntegrationTestCase
             new ArrayType(new StringType())
         ];
 
+        yield [
+            '/** @return bool */',
+            new BooleanType()
+        ];
+
+        yield [
+            '/** @return null */',
+            new NullType()
+        ];
+
+        yield [
+            '/** @return callable */',
+            new CallableType([], new MissingType())
+        ];
+
+        yield [
+            '/** @return callable(): string */',
+            new CallableType([], new MissingType())
+        ];
+        yield [
+            '/** @return iterable */',
+            new IterablePrimitiveType(),
+        ];
+        yield [
+            '/** @return object */',
+            new ObjectType(),
+        ];
+        yield [
+            '/** @return resource */',
+            new ResourceType(),
+        ];
+
+        yield [
+            '/** @return void */',
+            new VoidType(),
+        ];
         yield [
             '/** @return array<int, string> */',
             new ArrayType(new IntType(), new StringType())

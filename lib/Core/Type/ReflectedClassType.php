@@ -54,4 +54,13 @@ class ReflectedClassType extends ClassType
         }
         return null;
     }
+
+    public function instanceOf(ClassName $className): Trinary
+    {
+        $reflection = $this->reflectionOrNull();
+        if (!$reflection) {
+            return Trinary::maybe();
+        }
+        return Trinary::fromBoolean($reflection->isInstanceOf($className));
+    }
 }
