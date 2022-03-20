@@ -127,6 +127,10 @@ class DocblockParserFactoryTest extends IntegrationTestCase
             '/** @return array<int, string> */',
             new ArrayType(new IntType(), new StringType())
         ];
+        yield [
+            '/** @return array<int, array<string,bool>> */',
+            new ArrayType(new IntType(), new ArrayType(new StringType(), new BooleanType()))
+        ];
 
         yield [
             '/** @return T */',
