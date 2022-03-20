@@ -17,7 +17,7 @@ class PlainDocblock implements DocBlock
 
     public function __construct(string $raw = '')
     {
-        $this->raw = $raw;
+        $this->raw = trim($raw);
     }
 
     public function methodTypes(string $methodName): Types
@@ -27,7 +27,7 @@ class PlainDocblock implements DocBlock
 
     public function inherits(): bool
     {
-        return false;
+        return false !== strpos($this->raw, '@inheritDoc');
     }
 
     public function vars(): DocBlockVars
@@ -76,7 +76,7 @@ class PlainDocblock implements DocBlock
 
     public function isDefined(): bool
     {
-        return false;
+        return $this->raw !== '';
     }
 
     public function properties(ReflectionClassLike $declaringClass): ReflectionPropertyCollection
