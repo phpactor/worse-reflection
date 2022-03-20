@@ -6,6 +6,7 @@ use Phpactor\DocblockParser\Ast\Node;
 use Phpactor\DocblockParser\Ast\ParameterList;
 use Phpactor\DocblockParser\Ast\Tag\DeprecatedTag;
 use Phpactor\DocblockParser\Ast\Tag\MethodTag;
+use Phpactor\DocblockParser\Ast\Tag\ParamTag;
 use Phpactor\DocblockParser\Ast\Tag\ParameterTag;
 use Phpactor\DocblockParser\Ast\Tag\PropertyTag;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
@@ -80,6 +81,16 @@ class ParsedDocblock implements DocBlock
 
     public function parameterTypes(string $paramName): Types
     {
+        $types = [];
+        foreach ($this->node->descendantElements(ParamTag::class) as $paramTag) {
+            assert($paramTag instanceof ParamTag);
+            if (ltrim($paramTag->variable->name->toString(), '$') !== $paramName) {
+                continue;
+            }
+            $types[] = $this->typeConverter->convert($paramTag->type);
+        }
+
+        return Types::fromTypes($types);
     }
 
     public function propertyTypes(string $methodName): Types
