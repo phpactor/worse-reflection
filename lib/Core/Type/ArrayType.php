@@ -11,7 +11,7 @@ class ArrayType implements Type, IterableType
 
     public Type $keyType;
 
-    public function __construct(Type $keyType, ?Type $valueType = null)
+    public function __construct(Type $keyType = null, ?Type $valueType = null)
     {
         if (null === $valueType) {
             $this->valueType = $keyType;
@@ -28,7 +28,11 @@ class ArrayType implements Type, IterableType
         if ($this->valueType instanceof MissingType) {
             return $this->toPhpString();
         }
-        return sprintf('%s[]', $this->valueType->__toString());
+        if ($this->keyType instanceof ArrayKeyType) {
+            return sprintf('%s[]', $this->valueType->__toString());
+        }
+
+        return sprintf('array<%s,%s>', $this->keyType->__toString(), $this->valueType->__toString());
     }
 
     public function toPhpString(): string
