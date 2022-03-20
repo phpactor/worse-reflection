@@ -91,11 +91,18 @@ class TypeConverter
     private function convertGeneric(GenericNode $type): Type
     {
         if ($type->type instanceof ArrayNode) {
-            foreach ($type->parameters as $parameter) {
-                if (!$parameter instanceof TypeNode) {
-                    continue;
-                }
-                return new ArrayType($this->convert($parameter));
+            $parameters = array_values($type->parameters()->types()->list);
+            if (count($parameters) === 1) {
+                return new ArrayType(
+                    new MissingType(),
+                    $this->convert($parameters[0])
+                );
+            }
+            if (count($parameters) === 2) {
+                return new ArrayType(
+                    $this->convert($parameters[0]),
+                    $this->convert($parameters[1]),
+                );
             }
             return new MissingType();
         }

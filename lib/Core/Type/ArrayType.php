@@ -8,10 +8,18 @@ use Phpactor\WorseReflection\Core\Type;
 class ArrayType implements Type, IterableType
 {
     public Type $valueType;
+    public Type $keyType;
 
-    public function __construct(Type $valueType)
+    public function __construct(Type $keyType, ?Type $valueType = null)
     {
+        if (null === $valueType) {
+            $this->valueType = $keyType;
+            $this->keyType = new MissingType();
+            return;
+        }
+
         $this->valueType = $valueType;
+        $this->keyType = $keyType;
     }
 
     public function __toString(): string
