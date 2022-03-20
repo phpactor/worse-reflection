@@ -1,56 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromDocblockType\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/Docblock.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromDocblockTypes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/Docblock.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromDocblockTypes\\(\\) has parameter \\$types with no value type specified in iterable type Phpactor\\\\Docblock\\\\DocblockTypes\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/Docblock.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:typesFromTag\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/Docblock.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\Docblock\\:\\:vars\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/Docblock.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionMethodFactory\\:\\:create\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/DocblockReflectionMethodFactory.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionMethodFactory\\:\\:typesFrom\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/DocblockReflectionMethodFactory.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionMethodFactory\\:\\:typesFrom\\(\\) has parameter \\$docblockTypes with no value type specified in iterable type Phpactor\\\\Docblock\\\\DocblockTypes\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/DocblockReflectionMethodFactory.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionPropertyFactory\\:\\:typesFrom\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/DocblockReflectionPropertyFactory.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\DocblockReflectionPropertyFactory\\:\\:typesFrom\\(\\) has parameter \\$docblockTypes with no value type specified in iterable type Phpactor\\\\Docblock\\\\DocblockTypes\\.$#"
-			count: 1
-			path: lib/Bridge/Phpactor/DocblockReflectionPropertyFactory.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\Phpactor\\\\MemberProvider\\\\DocblockMemberProvider\\:\\:provideMembers\\(\\) should return Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionMemberCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\> but returns Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\Collection\\\\ReflectionCollection\\<Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionMember\\>\\.$#"
 			count: 1
 			path: lib/Bridge/Phpactor/MemberProvider/DocblockMemberProvider.php
@@ -441,11 +391,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionFunction.php
 
 		-
-			message: "#^Parameter \\#1 \\$type of static method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:fromString\\(\\) expects string, bool\\|string\\|null given\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/ReflectionFunction.php
-
-		-
 			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflection/ReflectionInterface.php
@@ -566,11 +511,6 @@ parameters:
 			path: lib/Bridge/TolerantParser/Reflection/TypeResolver/DeclaredMemberTypeResolver.php
 
 		-
-			message: "#^Parameter \\#1 \\$type of static method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:fromString\\(\\) expects string, bool\\|string\\|null given\\.$#"
-			count: 1
-			path: lib/Bridge/TolerantParser/Reflection/TypeResolver/DeclaredMemberTypeResolver.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Bridge\\\\TolerantParser\\\\Reflector\\\\TolerantSourceCodeReflector\\:\\:reflectClassesIn\\(\\) has parameter \\$sourceCode with no typehint specified\\.$#"
 			count: 1
 			path: lib/Bridge/TolerantParser/Reflector/TolerantSourceCodeReflector.php
@@ -649,11 +589,6 @@ parameters:
 			message: "#^Property Phpactor\\\\WorseReflection\\\\Core\\\\DefaultValue\\:\\:\\$value has no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/DefaultValue.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlock\\:\\:vars\\(\\) return type has no value type specified in iterable type Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockVars\\.$#"
-			count: 1
-			path: lib/Core/DocBlock/DocBlock.php
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\DocBlock\\\\DocBlockInspector\\:\\:typesForMethod\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -791,11 +726,6 @@ parameters:
 			path: lib/Core/Inference/Frame.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\:\\:create\\(\\) has parameter \\$walkers with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Inference/FrameBuilder.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FrameBuilder\\:\\:resolveNode\\(\\) has parameter \\$node with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FrameBuilder.php
@@ -892,11 +822,6 @@ parameters:
 
 		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:currentClass\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Inference/FullyQualifiedNameResolver.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Inference\\\\FullyQualifiedNameResolver\\:\\:fromClassImports\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Inference/FullyQualifiedNameResolver.php
 
@@ -1351,11 +1276,6 @@ parameters:
 			path: lib/Core/Reflection/ReflectionScope.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionScope\\:\\:resolveFullyQualifiedName\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Reflection/ReflectionScope.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Reflection\\\\ReflectionScope\\:\\:resolveFullyQualifiedName\\(\\) has parameter \\$type with no typehint specified\\.$#"
 			count: 1
 			path: lib/Core/Reflection/ReflectionScope.php
@@ -1696,42 +1616,7 @@ parameters:
 			path: lib/Core/SourceCodeLocator/StubSourceLocator.php
 
 		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:class\\(\\) has parameter \\$className with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:create\\(\\) has parameter \\$type with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:fromArray\\(\\) has parameter \\$parts with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:fromValue\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Type\\:\\:object\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Type.php
-
-		-
 			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Types\\:\\:__construct\\(\\) has parameter \\$inferredTypes with no typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Types.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Types\\:\\:empty\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: lib/Core/Types.php
-
-		-
-			message: "#^Method Phpactor\\\\WorseReflection\\\\Core\\\\Types\\:\\:fromTypes\\(\\) has parameter \\$inferredTypes with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: lib/Core/Types.php
 
