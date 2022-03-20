@@ -8,12 +8,6 @@
             "email": "daniel@dantleech.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:phpactor/docblock-parser"
-        }
-    ],
     "require": {
         "php": "^7.4 || ^8.0",
         "jetbrains/phpstorm-stubs": "*",
@@ -41,13 +35,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Phpactor\\DocblockParser\\": "parser/",
             "Phpactor\\WorseReflection\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Phpactor\\DocblockParser\\Tests\\": "parser-tests/",
             "Phpactor\\WorseReflection\\Tests\\": "tests/"
         }
     },
