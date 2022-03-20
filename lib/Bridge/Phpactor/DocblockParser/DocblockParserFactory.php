@@ -23,6 +23,9 @@ class DocblockParserFactory implements DocBlockFactory
 
     public function create(string $docblock): DocBlock
     {
-        return new ParsedDocblock($this->parser->parse($this->lexer->lex($docblock)), new TypeConverter());
+        return new ParsedDocblock(
+            $this->parser->parse($this->lexer->lex($docblock)),
+            new TypeConverter($this->reflector)
+        );
     }
 }

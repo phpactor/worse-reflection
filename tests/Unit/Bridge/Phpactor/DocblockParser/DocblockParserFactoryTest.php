@@ -96,7 +96,7 @@ class DocblockParserFactoryTest extends IntegrationTestCase
 
         yield [
             '/** @return T */',
-            'Bar\T',
+            'T',
         ];
 
         yield [
