@@ -41,11 +41,13 @@
     },
     "autoload": {
         "psr-4": {
+            "Phpactor\\DocblockParser\\": "parser/",
             "Phpactor\\WorseReflection\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
+            "Phpactor\\DocblockParser\\Tests\\": "parser-tests/",
             "Phpactor\\WorseReflection\\Tests\\": "tests/"
         }
     },
