@@ -18,7 +18,6 @@
         "php": "^7.4 || ^8.0",
         "jetbrains/phpstorm-stubs": "*",
         "microsoft/tolerant-php-parser": "^0.1.0",
-        "phpactor/docblock": "^0.3.5",
         "phpactor/docblock-parser": "*",
         "phpactor/text-document": "~1.2.3",
         "psr/log": "^1.0"

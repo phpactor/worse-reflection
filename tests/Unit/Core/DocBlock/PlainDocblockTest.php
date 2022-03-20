@@ -22,13 +22,14 @@ class PlainDocblockTest extends TestCase
 
     public function testFormatted(): void
     {
-        self::assertEquals("hello world\ngoodbye world", $this->createDocblock(<<<'EOT'
-            /**
-             * hello world
-             * goodbye world
-             */
+        self::assertEquals("hello world\ngoodbye world", $this->createDocblock(
+            <<<'EOT'
+                    /**
+                     * hello world
+                     * goodbye world
+                     */
 
-        EOT
+                EOT
         )->formatted());
     }
 
