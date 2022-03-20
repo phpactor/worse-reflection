@@ -140,7 +140,7 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         $methods = $docblock->properties($reflector->reflectClass('Bar\Foobar'));
 
         self::assertEquals('foobar', $methods->first()->name());
-        self::assertEquals('Barfoo', $methods->first()->type());
+        self::assertEquals('Bar\Barfoo', $methods->first()->type()->__toString());
     }
 
     public function testVars(): void
