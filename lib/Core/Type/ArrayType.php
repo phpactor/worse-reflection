@@ -15,7 +15,7 @@ class ArrayType implements Type, IterableType
     {
         if (null === $valueType) {
             $this->valueType = $keyType;
-            $this->keyType = new MissingType();
+            $this->keyType = new ArrayKeyType();
             return;
         }
 

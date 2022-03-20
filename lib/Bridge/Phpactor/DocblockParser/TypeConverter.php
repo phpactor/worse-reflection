@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
+use Phpactor\WorseReflection\Core\Type\ArrayKeyType;
 use Phpactor\WorseReflection\DocblockParser\Ast\Node;
 use Phpactor\WorseReflection\DocblockParser\Ast\TypeNode;
 use Phpactor\WorseReflection\DocblockParser\Ast\Type\ArrayNode;
@@ -108,7 +109,7 @@ class TypeConverter
 
     private function convertArray(ArrayNode $type): Type
     {
-        return new ArrayType(new MissingType());
+        return new ArrayType(new ArrayKeyType(), new MissingType());
     }
 
     private function convertUnion(UnionNode $union): Type
@@ -125,7 +126,7 @@ class TypeConverter
             $parameters = array_values(iterator_to_array($type->parameters()->types()));
             if (count($parameters) === 1) {
                 return new ArrayType(
-                    new MissingType(),
+                    new ArrayKeyType(),
                     $this->convert($parameters[0], $scope)
                 );
             }
