@@ -3,6 +3,7 @@
 namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
 use Phpactor\DocblockParser\Ast\Node;
+use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\WorseReflection\Core\Deprecation;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
@@ -15,9 +16,12 @@ class ParsedDocblock implements DocBlock
 {
     private Node $node;
 
-    public function __construct(Node $node)
+    private TypeConverter $typeConverter;
+
+    public function __construct(Node $node, TypeConverter $typeConverter)
     {
         $this->node = $node;
+        $this->typeConverter = $typeConverter;
     }
 
     public function methodTypes(string $methodName): Types
@@ -46,6 +50,11 @@ class ParsedDocblock implements DocBlock
 
     public function returnTypes(): Types
     {
+        foreach ($this->node->descendantElements(ReturnTag::class) as $tag) {
+            assert($tag instanceof ReturnTag);
+            return Types::fromTypes([$this->typeConverter->convert($tag->type())]);
+        }
+        return Types::empty();
     }
 
 
