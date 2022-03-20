@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser;
 
+use Phpactor\DocblockParser\Ast\Docblock as ParserDocblock;
 use Phpactor\DocblockParser\Lexer;
 use Phpactor\DocblockParser\Parser;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
@@ -36,12 +37,19 @@ class DocblockParserFactory implements DocBlockFactory
             return new EmptyDocblock();
         }
 
-        if (0 === preg_match(sprintf('{(%s)}', implode('|', self::SUPPORTED_TAGS)), $docblock, $matches)) {
+        // if no supported tags in the docblock, do not parse it
+        if (0 === preg_match(
+            sprintf('{(%s)}', implode('|', self::SUPPORTED_TAGS)),
+            $docblock,
+            $matches
+        )) {
             return new EmptyDocblock();
         }
 
+        $node = $this->parser->parse($this->lexer->lex($docblock));
+        assert($node instanceof ParserDocblock);
         return new ParsedDocblock(
-            $this->parser->parse($this->lexer->lex($docblock)),
+            $node,
             new TypeConverter($this->reflector)
         );
     }
