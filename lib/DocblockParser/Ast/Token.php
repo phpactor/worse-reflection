@@ -1,8 +1,6 @@
 <?php
 
 namespace Phpactor\WorseReflection\DocblockParser\Ast;
-use Phpactor\WorseReflection\DocblockParser\Ast\Element;
-
 
 final class Token implements Element
 {

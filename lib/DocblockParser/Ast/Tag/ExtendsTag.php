@@ -12,10 +12,8 @@ class ExtendsTag extends TagNode
         'tag',
         'type',
     ];
-
     
     public Token $tag;
-
     
     public ?TypeNode $type;
 

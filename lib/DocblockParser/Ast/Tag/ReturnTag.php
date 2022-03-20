@@ -14,13 +14,10 @@ class ReturnTag extends TagNode
         'type',
         'text',
     ];
-
     
     public ?TypeNode $type;
-
     
     public ?TextNode $text;
-
     
     public Token $tag;
 

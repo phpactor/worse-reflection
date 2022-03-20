@@ -15,10 +15,8 @@ class GenericNode extends TypeNode
         'parameters',
         'close'
     ];
-
     
     public Token $open;
-
     
     public Token $close;
 
@@ -26,7 +24,6 @@ class GenericNode extends TypeNode
      * @var TypeList<Element>
      */
     public TypeList $parameters;
-
     
     public TypeNode $type;
 

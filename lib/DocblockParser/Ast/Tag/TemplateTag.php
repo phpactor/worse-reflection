@@ -14,16 +14,12 @@ class TemplateTag extends TagNode
         'constraint',
         'type'
     ];
-
     
     public Token $tag;
-
     
     public ?Token $placeholder;
-
     
     public ?Token $constraint;
-
     
     public ?TypeNode $type;
 

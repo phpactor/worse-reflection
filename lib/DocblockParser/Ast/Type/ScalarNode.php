@@ -10,7 +10,6 @@ class ScalarNode extends TypeNode
     protected const CHILD_NAMES = [
         'name',
     ];
-
     
     public Token $name;
 

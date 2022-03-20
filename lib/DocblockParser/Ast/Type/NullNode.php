@@ -10,7 +10,6 @@ class NullNode extends TypeNode
     protected const CHILD_NAMES = [
         'null',
     ];
-
     
     public Token $null;
 

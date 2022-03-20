@@ -3,8 +3,6 @@
 namespace Phpactor\WorseReflection\DocblockParser\Ast;
 
 use Generator;
-use Phpactor\WorseReflection\DocblockParser\Ast\Element;
-use Phpactor\WorseReflection\DocblockParser\Ast\Node;
 use Traversable;
 
 abstract class Node implements Element

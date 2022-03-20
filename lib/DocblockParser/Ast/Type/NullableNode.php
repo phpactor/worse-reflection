@@ -11,10 +11,8 @@ class NullableNode extends TypeNode
         'nullable',
         'type',
     ];
-
     
     public Token $nullable;
-
     
     public TypeNode $type;
 

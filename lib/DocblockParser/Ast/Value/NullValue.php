@@ -7,7 +7,6 @@ use Phpactor\WorseReflection\DocblockParser\Ast\Token;
 
 class NullValue extends ValueNode
 {
-    
     private Token $null;
 
     public function __construct(Token $null)
@@ -19,7 +18,6 @@ class NullValue extends ValueNode
     {
         return $this->null;
     }
-
     
     public function value()
     {

@@ -7,13 +7,10 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Phpactor\WorseReflection\Tests\Unit\DocblockParser\Benchmark\AbstractParserBenchCase;
 
 class PhpstanParserBench extends AbstractParserBenchCase
 {
-    
     private PhpDocParser $parser;
-
     
     private Lexer $lexer;
 

@@ -10,7 +10,6 @@ class ThisNode extends TypeNode
     protected const CHILD_NAMES = [
         'name'
     ];
-
     
     public Token $name;
 

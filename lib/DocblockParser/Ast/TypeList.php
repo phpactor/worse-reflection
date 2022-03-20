@@ -5,8 +5,6 @@ namespace Phpactor\WorseReflection\DocblockParser\Ast;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use Phpactor\WorseReflection\DocblockParser\Ast\Element;
-use Phpactor\WorseReflection\DocblockParser\Ast\Node;
 
 /**
  * @implements IteratorAggregate<int,Token|Element>
@@ -42,7 +40,6 @@ class TypeList extends Node implements IteratorAggregate, Countable
     {
         return count($this->list);
     }
-
     
     public function types(): TypeNodes
     {

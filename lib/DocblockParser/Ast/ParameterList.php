@@ -7,7 +7,6 @@ use Countable;
 use Generator;
 use IteratorAggregate;
 use Phpactor\WorseReflection\DocblockParser\Ast\Tag\ParameterTag;
-use Phpactor\WorseReflection\DocblockParser\Ast\Node;
 
 /**
  * @implements IteratorAggregate<ParameterTag|Token>

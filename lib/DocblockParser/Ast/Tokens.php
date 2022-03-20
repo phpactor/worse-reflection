@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\DocblockParser\Ast;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Phpactor\WorseReflection\DocblockParser\Ast\Token;
 use RuntimeException;
 
 /**
@@ -21,7 +20,6 @@ final class Tokens implements IteratorAggregate
      * @var Token[]
      */
     private array $tokens;
-
     
     private int $position = 0;
 

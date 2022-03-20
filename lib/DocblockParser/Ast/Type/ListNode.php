@@ -11,10 +11,8 @@ class ListNode extends TypeNode
         'type',
         'listChars',
     ];
-
     
     public TypeNode $type;
-
     
     public Token $listChars;
 

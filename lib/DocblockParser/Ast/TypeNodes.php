@@ -4,7 +4,6 @@ namespace Phpactor\WorseReflection\DocblockParser\Ast;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Phpactor\WorseReflection\DocblockParser\Ast\TypeNode;
 use RuntimeException;
 use Traversable;
 
