@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -834,12 +835,16 @@ class ReflectionClassTest extends IntegrationTestCase
             'Class1',
             function (ReflectionClass $class): void {
                 $this->assertCount(1, $class->methods());
+
+                // originally this returned the declared type
                 $this->assertEquals(
-                    'Barfoo',
+                    'Foobar',
                     $class->methods()->first()->type()->__toString(),
-                    'original type should be preserved'
                 );
-                $this->assertEquals('Foobar', $class->methods()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals(
+                    'Foobar',
+                    $class->methods()->first()->inferredTypes()->best()->__toString(),
+                );
             },
         ];
 
@@ -1089,8 +1094,8 @@ class ReflectionClassTest extends IntegrationTestCase
                 EOT
         ,
             'Class1',
-            function ($class): void {
-                $this->assertEquals(0, $class->properties()->count());
+            function (ReflectionClass $class): void {
+                $this->assertEquals(2, $class->properties()->count());
             }
         ];
 
@@ -1110,7 +1115,8 @@ class ReflectionClassTest extends IntegrationTestCase
             'Class1',
             function (ReflectionClass $class): void {
                 $this->assertEquals(1, $class->properties()->count());
-                $this->assertCount(2, $class->properties()->first()->inferredTypes());
+                self::assertInstanceOf(UnionType::class, $class->properties()->first()->type());
+                self::assertEquals('string|int', $class->properties()->first()->type());
             }
         ];
 

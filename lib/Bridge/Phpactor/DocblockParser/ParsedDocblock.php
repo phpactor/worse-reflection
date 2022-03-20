@@ -102,6 +102,7 @@ class ParsedDocblock implements DocBlock
 
     public function raw(): string
     {
+        return $this->node->toString();
     }
 
     public function isDefined(): bool
@@ -118,7 +119,7 @@ class ParsedDocblock implements DocBlock
                 $declaringClass->position(),
                 $declaringClass,
                 $declaringClass,
-                ltrim($propertyTag->name->toString(), '$'),
+                ltrim($propertyTag->name ? $propertyTag->name->toString() : '', '$'),
                 new Frame('docblock'),
                 $this,
                 $declaringClass->scope(),
@@ -148,7 +149,9 @@ class ParsedDocblock implements DocBlock
                 $this,
                 $declaringClass->scope(),
                 Visibility::public(),
-                Types::fromTypes([$this->typeConverter->convert($methodTag->type)]),
+                Types::fromTypes([
+                    $this->typeConverter->convert($methodTag->type, $declaringClass->scope())
+                ]),
                 $this->typeConverter->convert($methodTag->type),
                 $params,
                 NodeText::fromString(''),

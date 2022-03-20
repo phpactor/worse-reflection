@@ -11,6 +11,7 @@ use Phpactor\DocblockParser\Ast\Type\ScalarNode;
 use Phpactor\DocblockParser\Ast\Type\UnionNode;
 use Phpactor\Docblock\DocblockTypes;
 use Phpactor\WorseReflection\Core\ClassName;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\TemplateMap;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
@@ -36,7 +37,7 @@ class TypeConverter
         $this->reflector = $reflector;
     }
 
-    public function convert(?TypeNode $type): Type
+    public function convert(?TypeNode $type, ?ReflectionScope $scope = null): Type
     {
         if ($type instanceof ScalarNode) {
             return $this->convertScalar($type->toString());
@@ -48,10 +49,10 @@ class TypeConverter
             return $this->convertUnion($type);
         }
         if ($type instanceof GenericNode) {
-            return $this->convertGeneric($type);
+            return $this->convertGeneric($type, $scope);
         }
         if ($type instanceof ClassNode) {
-            return $this->convertClass($type);
+            return $this->convertClass($type, $scope);
         }
 
         return new MissingType();
@@ -88,26 +89,26 @@ class TypeConverter
         ));
     }
 
-    private function convertGeneric(GenericNode $type): Type
+    private function convertGeneric(GenericNode $type, ?ReflectionScope $scope): Type
     {
         if ($type->type instanceof ArrayNode) {
             $parameters = array_values($type->parameters()->types()->list);
             if (count($parameters) === 1) {
                 return new ArrayType(
                     new MissingType(),
-                    $this->convert($parameters[0])
+                    $this->convert($parameters[0], $scope)
                 );
             }
             if (count($parameters) === 2) {
                 return new ArrayType(
-                    $this->convert($parameters[0]),
-                    $this->convert($parameters[1]),
+                    $this->convert($parameters[0], $scope),
+                    $this->convert($parameters[1], $scope),
                 );
             }
             return new MissingType();
         }
 
-        $classType = $this->convert($type->type);
+        $classType = $this->convert($type->type, $scope);
 
         if (!$classType instanceof ClassType) {
             return new MissingType();
@@ -117,14 +118,25 @@ class TypeConverter
             $this->reflector,
             $classType->name(),
             new TemplateMap(array_map(
-                fn (TypeNode $node) => $this->convert($node),
+                fn (TypeNode $node) => $this->convert($node, $scope),
                 $type->parameters()->types()->list
             ))
         );
     }
 
-    private function convertClass(ClassNode $type): Type
+    private function convertClass(ClassNode $typeNode, ?ReflectionScope $scope): Type
     {
-        return new ReflectedClassType($this->reflector, ClassName::fromString($type->name()->toString()));
+        $type = new ReflectedClassType(
+            $this->reflector,
+            ClassName::fromString(
+                $typeNode->name()->toString()
+            )
+        );
+
+        if ($scope) {
+            return $scope->resolveFullyQualifiedName($type);
+        }
+
+        return $type;
     }
 }
