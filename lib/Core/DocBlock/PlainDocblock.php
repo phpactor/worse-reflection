@@ -62,7 +62,6 @@ class PlainDocblock implements DocBlock
             $lines[] = $line;
         }
         return trim(implode("\n", $lines));
-
     }
 
     public function returnTypes(): Types
