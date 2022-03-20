@@ -30,6 +30,7 @@ use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\TemplatedType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
+use Phpactor\WorseReflection\Reflector;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 
 class DocblockParserFactoryTest extends IntegrationTestCase
@@ -105,11 +106,39 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         ];
     }
 
+    public function testMethods(): void
+    {
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $docblock = $this->parseDocblockWithReflector($reflector, '/** @method Barfoo foobar() */');
+        $methods = $docblock->methods($reflector->reflectClass('Bar\Foobar'));
+
+        self::assertEquals('foobar', $methods->first()->name());
+        self::assertEquals('Barfoo', $methods->first()->type());
+    }
+
+    public function testMethodsWithParams(): void
+    {
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $docblock = $this->parseDocblockWithReflector($reflector, '/** @method Barfoo foobar(string $foobar, int $barfoo) */');
+        $methods = $docblock->methods($reflector->reflectClass('Bar\Foobar'));
+
+        self::assertEquals('foobar', $methods->first()->name());
+        self::assertEquals('Barfoo', $methods->first()->type());
+        self::assertEquals('foobar', $methods->first()->parameters()->first()->name());
+        self::assertEquals('string', $methods->first()->parameters()->first()->type());
+        self::assertEquals('barfoo', $methods->first()->parameters()->get('barfoo')->name());
+        self::assertEquals('int', $methods->first()->parameters()->get('barfoo')->type());
+
+    }
+
     private function parseDocblock(string $docblock): DocBlock
     {
         $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
-        $scope = $reflector->reflectClass('Bar\Foobar')->scope();
-        
+        return $this->parseDocblockWithReflector($reflector, $docblock);
+    }
+
+    private function parseDocblockWithReflector(Reflector $reflector, string $docblock): DocBlock
+    {
         return (new DocblockParserFactory($reflector))->create($docblock);
     }
 
