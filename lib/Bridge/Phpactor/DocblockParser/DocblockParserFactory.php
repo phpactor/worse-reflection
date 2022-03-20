@@ -11,6 +11,14 @@ use Phpactor\WorseReflection\Reflector;
 
 class DocblockParserFactory implements DocBlockFactory
 {
+    const SUPPORTED_TAGS = [
+        '@property',
+        '@var',
+        '@param',
+        '@return',
+        '@method',
+    ];
+
     private Lexer $lexer;
     private Parser $parser;
     private Reflector $reflector;
@@ -25,6 +33,10 @@ class DocblockParserFactory implements DocBlockFactory
     public function create(string $docblock): DocBlock
     {
         if (empty(trim($docblock))) {
+            return new EmptyDocblock();
+        }
+
+        if (0 === preg_match(sprintf('{(%s)}', implode('|', self::SUPPORTED_TAGS)), $docblock, $matches)) {
             return new EmptyDocblock();
         }
 
