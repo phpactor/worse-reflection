@@ -26,7 +26,7 @@ final class CallableType extends PrimitiveType
     public function __toString(): string
     {
         return sprintf(
-            '(%s): %s',
+            'callable(%s): %s',
             implode(', ', array_map(fn (Type $type) => $type->__toString(), $this->args)),
             $this->returnType->__toString()
         );
