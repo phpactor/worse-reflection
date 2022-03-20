@@ -7,6 +7,7 @@ use Phpactor\DocblockParser\Ast\ParameterList;
 use Phpactor\DocblockParser\Ast\Tag\DeprecatedTag;
 use Phpactor\DocblockParser\Ast\Tag\MethodTag;
 use Phpactor\DocblockParser\Ast\Tag\ParamTag;
+use Phpactor\DocblockParser\Ast\Tag\ParameterTag;
 use Phpactor\DocblockParser\Ast\Tag\PropertyTag;
 use Phpactor\DocblockParser\Ast\Tag\ReturnTag;
 use Phpactor\DocblockParser\Ast\Tag\VarTag;
@@ -46,7 +47,7 @@ class ParsedDocblock implements DocBlock
     {
         foreach ($this->node->descendantElements(MethodTag::class) as $methodTag) {
             assert($methodTag instanceof MethodTag);
-            if ($methodTag->name->toString() !== $methodName) {
+            if ($methodTag->methodName() !== $methodName) {
                 continue;
             }
             return Types::fromTypes([$this->typeConverter->convert($methodTag->type)]);
@@ -66,7 +67,7 @@ class ParsedDocblock implements DocBlock
         foreach ($this->node->descendantElements(VarTag::class) as $varTag) {
             assert($varTag instanceof VarTag);
             $vars[] = new DocBlockVar(
-                $varTag->variable ? ltrim($varTag->variable->name()->toString(), '$') : '',
+                $varTag->variable ? ltrim($varTag->name() ?? '', '$') : '',
                 Types::fromTypes([
                     $this->typeConverter->convert($varTag->type),
                 ])
@@ -81,7 +82,7 @@ class ParsedDocblock implements DocBlock
         $types = [];
         foreach ($this->node->descendantElements(ParamTag::class) as $paramTag) {
             assert($paramTag instanceof ParamTag);
-            if (ltrim($paramTag->variable->name->toString(), '$') !== $paramName) {
+            if (ltrim($paramTag->paramName(), '$') !== $paramName) {
                 continue;
             }
             $types[] = $this->typeConverter->convert($paramTag->type);
@@ -95,7 +96,7 @@ class ParsedDocblock implements DocBlock
         $types = [];
         foreach ($this->node->descendantElements(PropertyTag::class) as $propertyTag) {
             assert($propertyTag instanceof PropertyTag);
-            if (ltrim($propertyTag->name->toString(), '$') !== $propertyName) {
+            if (ltrim($propertyTag->propertyName(), '$') !== $propertyName) {
                 continue;
             }
             $types[] = $this->typeConverter->convert($propertyTag->type);
@@ -141,7 +142,7 @@ class ParsedDocblock implements DocBlock
                 $declaringClass->position(),
                 $declaringClass,
                 $declaringClass,
-                ltrim($propertyTag->name ? $propertyTag->name->toString() : '', '$'),
+                ltrim($propertyTag->propertyName() ?? '', '$'),
                 new Frame('docblock'),
                 $this,
                 $declaringClass->scope(),
@@ -166,7 +167,7 @@ class ParsedDocblock implements DocBlock
                 $declaringClass->position(),
                 $declaringClass,
                 $declaringClass,
-                $methodTag->name->toString(),
+                $methodTag->methodName() ?? '',
                 new Frame('docblock'),
                 $this,
                 $declaringClass->scope(),
@@ -204,9 +205,10 @@ class ParsedDocblock implements DocBlock
             return;
         }
         foreach ($parameterList->parameters() as $parameterTag) {
+            assert($parameterTag instanceof ParameterTag);
             $type = $this->typeConverter->convert($parameterTag->type);
             $collection->add(new VirtualReflectionParameter(
-                ltrim($parameterTag->name->name->toString(), '$'),
+                ltrim($parameterTag->parameterName() ?? '', '$'),
                 $method,
                 Types::fromTypes([$type]),
                 $type,
