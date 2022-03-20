@@ -104,7 +104,7 @@ class TypeFactoryTest extends TestCase
 
         yield 'callable' => [
             TypeFactory::fromString('callable'),
-            '(...): <missing>',
+            '(): <missing>',
             'callable'
         ];
 
