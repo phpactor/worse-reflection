@@ -471,7 +471,6 @@ final class Parser
         if ($this->tokens->if(Token::T_LABEL)) {
             $of = $this->tokens->chomp();
             if ($of->value === 'of') {
-                /** @phpstan-ignore-next-line */
                 if ($this->tokens->if(Token::T_LABEL)) {
                     $type = $this->parseTypes();
                 }
