@@ -2,10 +2,11 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Phpactor\TextDocument\TextDocumentBuilder;
 use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Closure;
-use Phpactor\WorseReflection\Core\Position;
+use Phpactor\TextDocument\ByteOffsetRange;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionFunction;
 
 class ReflectionFunctionTest extends IntegrationTestCase
@@ -15,6 +16,7 @@ class ReflectionFunctionTest extends IntegrationTestCase
      */
     public function testReflects(string $source, string $functionName, Closure $assertion): void
     {
+        $source = TextDocumentBuilder::fromUnknown($source);
         $functions = $this->createReflector($source)->reflectFunctionsIn($source);
         $assertion($functions->get($functionName));
     }
@@ -30,7 +32,7 @@ class ReflectionFunctionTest extends IntegrationTestCase
                 EOT
             , 'hello', function (ReflectionFunction $function): void {
                 $this->assertEquals('hello', $function->name());
-                $this->assertEquals(Position::fromStartAndEnd(6, 26), $function->position());
+                $this->assertEquals(ByteOffsetRange::fromInts(6, 26), $function->position());
             }
         ];
 
@@ -82,6 +84,16 @@ class ReflectionFunctionTest extends IntegrationTestCase
             }
         ];
 
+        yield 'the declared union type' => [
+            <<<'EOT'
+                <?php
+                use Foobar\Barfoo;
+                function hello(): string|Barfoo {}
+                EOT
+            , 'hello', function (ReflectionFunction $function): void {
+                $this->assertEquals('string|Foobar\Barfoo', $function->type()->__toString());
+            }
+        ];
         yield 'unknown if nothing declared as type' => [
             <<<'EOT'
                 <?php
@@ -101,7 +113,7 @@ class ReflectionFunctionTest extends IntegrationTestCase
                 function hello() {}
                 EOT
             , 'hello', function (ReflectionFunction $function): void {
-                $this->assertEquals(TypeFactory::string(), $function->inferredTypes()->best());
+                $this->assertEquals(TypeFactory::string(), $function->inferredType());
             }
         ];
 
@@ -118,7 +130,7 @@ class ReflectionFunctionTest extends IntegrationTestCase
                 function hello() {}
                 EOT
             , 'Bar\hello', function (ReflectionFunction $function): void {
-                $this->assertEquals('Foo\Goodbye', $function->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foo\Goodbye', $function->inferredType()->__toString());
             }
         ];
 
@@ -135,7 +147,7 @@ class ReflectionFunctionTest extends IntegrationTestCase
                     EOT
         , 'Bar\hello', function (ReflectionFunction $function): void {
             $this->assertCount(3, $function->parameters());
-            $this->assertEquals('Bar\Barfoo', $function->parameters()->get('barfoo')->inferredTypes()->best());
+            $this->assertEquals('Bar\Barfoo', $function->parameters()->get('barfoo')->inferredType());
         },
         ];
 

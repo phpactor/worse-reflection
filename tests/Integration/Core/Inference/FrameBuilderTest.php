@@ -15,7 +15,7 @@ class FrameBuilderTest extends IntegrationTestCase
      */
     public function testForMethod(string $source, array $classAndMethod, Closure $assertion): void
     {
-        list($className, $methodName) = $classAndMethod;
+        [$className, $methodName] = $classAndMethod;
         $reflector = $this->createReflector($source);
         $method = $reflector->reflectClassLike(ClassName::fromString($className))->methods()->get($methodName);
         $frame = $method->frame();
@@ -23,6 +23,9 @@ class FrameBuilderTest extends IntegrationTestCase
         $assertion($frame, $this->logger());
     }
 
+    /**
+     * @return Generator<string,array{string,array<int,string>,Closure(Frame,LoggerInterface): void}>
+     */
     public function provideForMethod(): Generator
     {
         yield 'Tolerates missing assert arguments' => [
@@ -38,8 +41,7 @@ class FrameBuilderTest extends IntegrationTestCase
                 }
                 EOT
         , [ 'Foobar', 'hello' ], function (Frame $frame, $logger): void {
-            $this->assertEquals(0, $frame->problems()->count());
-            // $this->assertStringContainsString('Non-node class passed to resolveNode, got', (string) $frame->problems());
+            $this->assertEquals(0, $frame->problems()->count(), $frame->problems()->__toString());
         }];
 
         yield 'Tolerates missing tokens' => [
@@ -55,7 +57,7 @@ class FrameBuilderTest extends IntegrationTestCase
                 }
                 EOT
         , [ 'Foobar', 'hello' ], function (Frame $frame, $logger): void {
-            $this->assertStringContainsString('Non-node class passed to resolveNode, got', (string) $frame->problems());
+            $this->assertEquals(0, $frame->problems()->count());
         }];
     }
 }

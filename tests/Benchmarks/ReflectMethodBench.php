@@ -8,7 +8,7 @@ use Phpactor\WorseReflection\Tests\Benchmarks\Examples\MethodClass;
 
 /**
  * @Iterations(10)
- * @Revs(30)
+ * @Revs(1)
  * @OutputTimeUnit("milliseconds", precision=2)
  */
 class ReflectMethodBench extends BaseBenchCase
@@ -42,6 +42,6 @@ class ReflectMethodBench extends BaseBenchCase
      */
     public function method_inferred_return_type(): void
     {
-        $this->class->methods()->get('methodWithDocblockReturnType')->inferredReturnTypes()->best();
+        $this->class->methods()->get('methodWithDocblockReturnType')->type();
     }
 }

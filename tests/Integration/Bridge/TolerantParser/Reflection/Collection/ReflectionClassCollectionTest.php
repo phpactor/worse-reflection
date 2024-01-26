@@ -2,8 +2,9 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection\Collection;
 
+use Phpactor\TextDocument\TextDocumentBuilder;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
-use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassCollection;
+use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionClassLikeCollection;
 use Closure;
 
 class ReflectionClassCollectionTest extends IntegrationTestCase
@@ -13,7 +14,7 @@ class ReflectionClassCollectionTest extends IntegrationTestCase
      */
     public function testCollection(string $source, Closure $assertion): void
     {
-        $collection = $this->createReflector($source)->reflectClassesIn($source);
+        $collection = $this->createReflector($source)->reflectClassesIn(TextDocumentBuilder::create($source)->build());
         $assertion($collection);
     }
 
@@ -33,7 +34,7 @@ class ReflectionClassCollectionTest extends IntegrationTestCase
                     }
                     EOT
                 ,
-                function (ReflectionClassCollection $collection): void {
+                function (ReflectionClassLikeCollection $collection): void {
                     $this->assertEquals(2, $collection->count());
                 },
             ],
@@ -48,7 +49,7 @@ class ReflectionClassCollectionTest extends IntegrationTestCase
                     }
                     EOT
                 ,
-                function (ReflectionClassCollection $collection): void {
+                function (ReflectionClassLikeCollection $collection): void {
                     $this->assertEquals(1, $collection->count());
                 },
             ],

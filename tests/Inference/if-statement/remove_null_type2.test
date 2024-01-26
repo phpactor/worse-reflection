@@ -1,0 +1,10 @@
+<?php
+
+function foo(?Foo $foo = null) {
+    if (null === $foo) {
+        return;
+    }
+
+    wrAssertType('Foo', $foo);
+}
+

@@ -3,28 +3,40 @@
 namespace Phpactor\WorseReflection\Tests\Unit\Bridge\Phpactor\DocblockParser;
 
 use Generator;
+use Phpactor\TextDocument\TextDocumentBuilder;
 use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\DocblockParserFactory;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionClassLike;
+use Phpactor\WorseReflection\Core\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\Type;
+use Phpactor\WorseReflection\Core\TypeFactory;
 use Phpactor\WorseReflection\Core\Type\ArrayType;
 use Phpactor\WorseReflection\Core\Type\BooleanType;
 use Phpactor\WorseReflection\Core\Type\CallableType;
+use Phpactor\WorseReflection\Core\Type\ConditionalType;
 use Phpactor\WorseReflection\Core\Type\FloatType;
+use Phpactor\WorseReflection\Core\Type\IntLiteralType;
+use Phpactor\WorseReflection\Core\Type\IntMaxType;
 use Phpactor\WorseReflection\Core\Type\IntType;
-use Phpactor\WorseReflection\Core\Type\IterablePrimitiveType;
+use Phpactor\WorseReflection\Core\Type\IntersectionType;
 use Phpactor\WorseReflection\Core\Type\MissingType;
 use Phpactor\WorseReflection\Core\Type\MixedType;
 use Phpactor\WorseReflection\Core\Type\NullType;
 use Phpactor\WorseReflection\Core\Type\ObjectType;
+use Phpactor\WorseReflection\Core\Type\PseudoIterableType;
 use Phpactor\WorseReflection\Core\Type\ResourceType;
 use Phpactor\WorseReflection\Core\Type\StringType;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Core\Type\VoidType;
 use Phpactor\WorseReflection\Reflector;
+use Phpactor\WorseReflection\ReflectorBuilder;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
+use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class DocblockParserFactoryTest extends IntegrationTestCase
 {
+    use ProphecyTrait;
     /**
      * @dataProvider provideResolveType
      * @param Type|string $expected
@@ -34,10 +46,12 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         $docblock = $this->parseDocblock($docblock);
 
         if (is_string($expected)) {
-            self::assertEquals($expected, $docblock->returnTypes()->best()->__toString());
+            self::assertEquals($expected, $docblock->returnType()->__toString());
             return;
         }
-        self::assertEquals($expected, $docblock->returnTypes()->best());
+
+        self::assertInstanceOf(get_class($expected), $docblock->returnType());
+        self::assertEquals($expected->__toString(), $docblock->returnType()->__toString());
     }
 
     /**
@@ -76,6 +90,11 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         ];
 
         yield [
+            '/** @return array&string */',
+            new IntersectionType(new ArrayType(new MissingType()), new StringType())
+        ];
+
+        yield [
             '/** @return array<string> */',
             new ArrayType(new StringType())
         ];
@@ -108,7 +127,7 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         ];
         yield [
             '/** @return iterable */',
-            new IterablePrimitiveType(),
+            new PseudoIterableType(),
         ];
         yield [
             '/** @return object */',
@@ -132,6 +151,11 @@ class DocblockParserFactoryTest extends IntegrationTestCase
             new ArrayType(new IntType(), new ArrayType(new StringType(), new BooleanType()))
         ];
 
+        yield 'nullable' => [
+            '/** @return ?string */',
+            '?string',
+        ];
+
         yield [
             '/** @return T */',
             'T',
@@ -141,6 +165,166 @@ class DocblockParserFactoryTest extends IntegrationTestCase
             '/** @return \IteratorAggregate<Foobar> */',
             'IteratorAggregate<Foobar>',
         ];
+
+        yield [
+            '/** @return array{} */',
+            'array{}',
+        ];
+
+        yield 'arrayshape with keys' => [
+            '/** @return array{foo:int,bar:string} */',
+            'array{foo:int,bar:string}',
+        ];
+
+        yield 'parenthesized' => [
+            '/** @return null|(callable(int):string)|string|int */',
+            'null|(callable(int): string)|string|int',
+        ];
+
+        yield 'multiline array shape' => [
+            <<<'EOT'
+                /**
+                 * @return array{
+                 *   foo:int,
+                 *   bar:string
+                 * }
+                 */
+                EOT
+                ,
+            'array{foo:int,bar:string}',
+        ];
+
+        yield 'literals' => [
+            '/** @return null|"foo"|123|123.3 */',
+            'null|"foo"|123|123.3',
+        ];
+
+        yield 'list' => [
+            '/** @return list */',
+            TypeFactory::list(),
+        ];
+
+        yield 'list with type' => [
+            '/** @return list<string> */',
+            TypeFactory::list(TypeFactory::string()),
+        ];
+
+        yield 'never' => [
+            '/** @return never */',
+            TypeFactory::never(),
+        ];
+
+        yield 'false' => [
+            '/** @return false */',
+            TypeFactory::false(),
+        ];
+        yield 'union false' => [
+            '/** @return false|int */',
+            TypeFactory::union(TypeFactory::false(), TypeFactory::int())
+        ];
+
+        yield 'psalm prefix' => [
+            '/** @psalm-return int */',
+            TypeFactory::int(),
+        ];
+
+        yield 'conditional type' => [
+            '/** @return ($foo is true ? string : int) */',
+            TypeFactory::parenthesized(
+                new ConditionalType(
+                    '$foo',
+                    TypeFactory::boolLiteral(true),
+                    TypeFactory::string(),
+                    TypeFactory::int()
+                )
+            )
+        ];
+
+        yield 'class string generic' => [
+            '/** @return class-string<T> */',
+            TypeFactory::classString('T'),
+        ];
+
+        yield 'int range max' => [
+            '/** @return int<12, max> */',
+            TypeFactory::intRange(
+                new IntLiteralType(12),
+                new IntMaxType(PHP_INT_MAX)
+            )
+        ];
+
+        yield 'int range' => [
+            '/** @return int<12, 23> */',
+            TypeFactory::intRange(
+                new IntLiteralType(12),
+                new IntLiteralType(23),
+            )
+        ];
+
+        yield 'int positive' => [
+            '/** @return positive-int */',
+            TypeFactory::intPositive()
+        ];
+
+        yield 'int negative' => [
+            '/** @return negative-int */',
+            TypeFactory::intNegative()
+        ];
+    }
+
+    public function testClassConstant(): void
+    {
+        $source = <<<'EOT'
+                        <?php
+                        namespace Bar;
+
+                        class Foo {
+                            const BAR = "baz";
+                        }
+            EOT;
+        $reflector = ReflectorBuilder::create()->addSource($source)->build();
+        $source = TextDocumentBuilder::fromUnknown($source);
+        $class = $reflector->reflectClassesIn(
+            $source
+        )->first();
+        $docblock = $this->parseDocblockWithClass($reflector, $class, '/** @return self::BAR */');
+        self::assertEquals('self::BAR', $docblock->returnType()->__toString());
+    }
+
+    public function testClassConstantGlob(): void
+    {
+        $source = <<<'EOT'
+                        <?php
+                        class Foo {
+                            const BAZ = "baz";
+                            const BAR = "bar";
+                            const ZED = "zed";
+                            const SED = "sed";
+                        }
+            EOT;
+        $reflector = ReflectorBuilder::create()->addSource($source)->build();
+        $source = TextDocumentBuilder::fromUnknown($source);
+        $class = $reflector->reflectClassesIn($source)->first();
+        $docblock = $this->parseDocblockWithClass($reflector, $class, '/** @return Foo::BA* */');
+        self::assertEquals('Foo::BA*', $docblock->returnType()->__toString());
+    }
+
+    public function testClassConstantGlobInArrayShape(): void
+    {
+        $source = <<<'EOT'
+                        <?php
+                        class Foo {
+                            const BAZ = "baz";
+                            const BAR = "bar";
+                            const ZED = "zed";
+                            const SED = "sed";
+                        }
+            EOT;
+        $reflector = ReflectorBuilder::create()->addSource($source)->build();
+        $source = TextDocumentBuilder::fromUnknown($source);
+        $class = $reflector->reflectClassesIn($source)->first();
+        $docblock = $this->parseDocblockWithClass($reflector, $class, '/** @return array{string,Foo::*} */');
+        self::assertEquals('array{string,Foo::*}', $docblock->returnType()->__toString());
     }
 
     public function testMethods(): void
@@ -151,6 +335,17 @@ class DocblockParserFactoryTest extends IntegrationTestCase
 
         self::assertEquals('foobar', $methods->first()->name());
         self::assertEquals('Barfoo', $methods->first()->type());
+    }
+
+    public function testStaticMethods(): void
+    {
+        $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
+        $docblock = $this->parseDocblockWithReflector($reflector, '/** @method static Barfoo foobar() */');
+        $methods = $docblock->methods($reflector->reflectClass('Bar\Foobar'));
+
+        self::assertEquals('foobar', $methods->first()->name());
+        self::assertEquals('Barfoo', $methods->first()->type());
+        self::assertTrue($methods->first()->isStatic());
     }
 
     public function testMethodsWithParams(): void
@@ -174,7 +369,7 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         $methods = $docblock->properties($reflector->reflectClass('Bar\Foobar'));
 
         self::assertEquals('foobar', $methods->first()->name());
-        self::assertEquals('Bar\Barfoo', $methods->first()->type()->__toString());
+        self::assertEquals('Barfoo', $methods->first()->type()->__toString());
     }
 
     public function testVars(): void
@@ -182,8 +377,7 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
         $docblock = $this->parseDocblockWithReflector($reflector, '/** @var Barfoo */');
         $vars = $docblock->vars();
-        self::assertCount(1, $vars->types());
-        self::assertEquals('Barfoo', $vars->types()->best());
+        self::assertEquals('Barfoo', $vars->type());
     }
 
     public function testVarsWithName(): void
@@ -192,24 +386,24 @@ class DocblockParserFactoryTest extends IntegrationTestCase
         $docblock = $this->parseDocblockWithReflector($reflector, '/** @var Barfoo $foo */');
         $vars = iterator_to_array($docblock->vars());
         self::assertCount(1, $vars);
-        self::assertEquals('Barfoo', $vars[0]->types()->best());
+        self::assertEquals('Barfoo', $vars[0]->type());
         self::assertEquals('foo', $vars[0]->name());
     }
 
-    public function testParameterTypes(): void
+    public function testParameterType(): void
     {
         $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
         $docblock = $this->parseDocblockWithReflector($reflector, '/** @param Barfoo $foobar */');
-        $types = $docblock->parameterTypes('foobar');
-        self::assertCount(1, $types);
+        $type = $docblock->parameterType('foobar');
+        self::assertEquals('Barfoo', $type->__toString());
     }
 
-    public function testPropertyTypes(): void
+    public function testPropertyType(): void
     {
         $reflector = $this->createReflector('<?php namespace Bar; class Foobar{}');
         $docblock = $this->parseDocblockWithReflector($reflector, '/** @property Barfoo $foobar */');
-        $types = $docblock->propertyTypes('foobar');
-        self::assertCount(1, $types);
+        $type = $docblock->propertyType('foobar');
+        self::assertEquals('Barfoo', $type->__toString());
     }
 
     private function parseDocblock(string $docblock): DocBlock
@@ -220,6 +414,14 @@ class DocblockParserFactoryTest extends IntegrationTestCase
 
     private function parseDocblockWithReflector(Reflector $reflector, string $docblock): DocBlock
     {
-        return (new DocblockParserFactory($reflector))->create($docblock);
+        $scope = $this->prophesize(ReflectionScope::class);
+        $scope->resolveFullyQualifiedName(Argument::any())->will(fn ($args) => $args[0]);
+
+        return (new DocblockParserFactory($reflector))->create($docblock, $scope->reveal());
+    }
+
+    private function parseDocblockWithClass(Reflector $reflector, ReflectionClassLike $classLike, string $docblock): DocBlock
+    {
+        return (new DocblockParserFactory($reflector))->create($docblock, $classLike->scope());
     }
 }

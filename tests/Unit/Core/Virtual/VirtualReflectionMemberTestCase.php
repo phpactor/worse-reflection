@@ -6,12 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Bridge\TolerantParser\Reflection\ReflectionScope;
 use Phpactor\WorseReflection\Core\DocBlock\DocBlock;
 use Phpactor\WorseReflection\Core\Inference\Frame;
-use Phpactor\WorseReflection\Core\Position;
+use Phpactor\TextDocument\ByteOffsetRange;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionClass;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionMember;
 use Phpactor\WorseReflection\Core\Type;
 use Phpactor\WorseReflection\Core\TypeFactory;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -20,7 +19,7 @@ abstract class VirtualReflectionMemberTestCase extends TestCase
 {
     use ProphecyTrait;
 
-    protected Position $position;
+    protected ByteOffsetRange $position;
 
     protected ObjectProphecy $declaringClass;
 
@@ -36,13 +35,11 @@ abstract class VirtualReflectionMemberTestCase extends TestCase
 
     protected Visibility $visibility;
 
-    protected Types $types;
-
     protected Type $type;
 
     public function setUp(): void
     {
-        $this->position = Position::fromStartAndEnd(0, 0);
+        $this->position = ByteOffsetRange::fromInts(0, 0);
         $this->declaringClass = $this->prophesize(ReflectionClass::class);
         $this->class = $this->prophesize(ReflectionClass::class);
         $this->name = 'test_name';
@@ -50,7 +47,6 @@ abstract class VirtualReflectionMemberTestCase extends TestCase
         $this->docblock = $this->prophesize(DocBlock::class);
         $this->scope = $this->prophesize(ReflectionScope::class);
         $this->visibility = Visibility::public();
-        $this->types = Types::empty();
         $this->type = TypeFactory::unknown();
     }
 
@@ -94,11 +90,6 @@ abstract class VirtualReflectionMemberTestCase extends TestCase
     public function testVisibility(): void
     {
         $this->assertEquals($this->visibility, $this->member()->visibility());
-    }
-
-    public function testTypes(): void
-    {
-        $this->assertEquals($this->types, $this->member()->inferredTypes());
     }
 
     public function testType(): void

@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Generator;
 use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
@@ -29,7 +30,10 @@ class ReflectionClassTest extends IntegrationTestCase
         $assertion($class);
     }
 
-    public function provideReflectionClass()
+    /**
+     * @return Generator<string,array{string,string,Closure(ReflectionClass): void}>
+     */
+    public function provideReflectionClass(): Generator
     {
         yield 'It reflects an empty class' => [
             <<<'EOT'
@@ -139,8 +143,8 @@ class ReflectionClassTest extends IntegrationTestCase
                 EOT
         ,
             'Class2',
-            function ($class): void {
-                $this->assertEquals(7, $class->position()->start());
+            function (ReflectionClass $class): void {
+                $this->assertEquals(7, $class->position()->start()->toInt());
             },
         ];
 
@@ -161,8 +165,8 @@ class ReflectionClassTest extends IntegrationTestCase
                 EOT
         ,
             'Class2',
-            function ($class): void {
-                $this->assertEquals(20, $class->memberListPosition()->start());
+            function (ReflectionClass $class): void {
+                $this->assertEquals(20, $class->memberListPosition()->start()->toInt());
             },
         ];
 
@@ -358,7 +362,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 $this->assertTrue($class->methods()->has('four'));
                 $this->assertEquals(Visibility::private(), $class->methods()->get('two')->visibility());
                 $this->assertEquals(Visibility::protected(), $class->methods()->get('three')->visibility());
-                $this->assertFalse($class->methods()->belongingTo(ClassName::fromString(Class2::class))->has('two'));
+                $this->assertFalse($class->methods()->belongingTo(ClassName::fromString('Class2'))->has('two'));
                 $this->assertEquals('TraitOne', $class->methods()->get('two')->declaringClass()->name()->short());
             },
         ];
@@ -397,7 +401,7 @@ class ReflectionClassTest extends IntegrationTestCase
             },
         ];
 
-        yield 'Get properties includes trait properties' => [
+        yield 'Get trait properties' => [
             <<<'EOT'
                 <?php
 
@@ -439,7 +443,7 @@ class ReflectionClassTest extends IntegrationTestCase
             },
         ];
 
-        yield 'Get properties includes trait methods' => [
+        yield 'Get properties includes trait properties' => [
             <<<'EOT'
                 <?php
 
@@ -458,7 +462,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 EOT
         ,
             'Class2',
-            function ($class): void {
+            function (ReflectionClass $class): void {
                 $this->assertEquals(2, $class->properties()->count());
                 $this->assertEquals('foobar', $class->properties()->first()->name());
             },
@@ -793,7 +797,10 @@ class ReflectionClassTest extends IntegrationTestCase
         $assertion($class);
     }
 
-    public function provideVirtualMethods()
+    /**
+     * @return Generator<string,array{string,string,Closure(ReflectionClass): void}>
+     */
+    public function provideVirtualMethods(): Generator
     {
         yield 'virtual methods' => [
             <<<'EOT'
@@ -843,7 +850,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 );
                 $this->assertEquals(
                     'Foobar',
-                    $class->methods()->first()->inferredTypes()->best()->__toString(),
+                    $class->methods()->first()->inferredType()->__toString(),
                 );
             },
         ];
@@ -867,7 +874,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 $this->assertCount(2, $class->methods());
                 $this->assertEquals(
                     'Foobar',
-                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredType()->__toString()
                 );
             },
         ];
@@ -890,7 +897,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 $this->assertCount(1, $class->methods());
                 $this->assertEquals(
                     'Foobar',
-                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredType()->__toString()
                 );
             },
         ];
@@ -914,7 +921,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 $this->assertCount(1, $class->methods());
                 $this->assertEquals(
                     'Foobar',
-                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredType()->__toString()
                 );
             },
         ];
@@ -938,7 +945,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 $this->assertCount(1, $class->methods());
                 $this->assertEquals(
                     'Foobar',
-                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredType()->__toString()
                 );
                 $this->assertEquals(
                     'ParentInterface',
@@ -953,7 +960,7 @@ class ReflectionClassTest extends IntegrationTestCase
             function (ReflectionClass $class): void {
                 $this->assertEquals(
                     'Bosh\Foobar',
-                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredType()->__toString()
                 );
             },
         ];
@@ -964,7 +971,7 @@ class ReflectionClassTest extends IntegrationTestCase
             function (ReflectionClass $class): void {
                 $this->assertEquals(
                     'Foobar',
-                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredType()->__toString()
                 );
             },
         ];
@@ -989,7 +996,7 @@ class ReflectionClassTest extends IntegrationTestCase
                 $this->assertCount(2, $class->methods());
                 $this->assertEquals(
                     'Barfoo',
-                    $class->methods()->get('foobar')->inferredTypes()->best()->__toString()
+                    $class->methods()->get('foobar')->inferredType()->__toString()
                 );
             },
         ];
@@ -1014,7 +1021,7 @@ class ReflectionClassTest extends IntegrationTestCase
             'Class1',
             function (ReflectionClass $class): void {
                 $this->assertCount(1, $class->methods());
-                $this->assertEquals('Foobar', $class->methods()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $class->methods()->first()->inferredType()->__toString());
             },
         ];
 
@@ -1042,7 +1049,7 @@ class ReflectionClassTest extends IntegrationTestCase
             'Class1',
             function (ReflectionClass $class): void {
                 $this->assertCount(1, $class->methods());
-                $this->assertEquals('Foobar', $class->methods()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $class->methods()->first()->inferredType()->__toString());
             },
         ];
     }
@@ -1056,7 +1063,10 @@ class ReflectionClassTest extends IntegrationTestCase
         $assertion($class);
     }
 
-    public function provideVirtualProperties()
+    /**
+     * @return Generator<string,array{string,string,Closure(ReflectionClass): void}>
+     */
+    public function provideVirtualProperties(): Generator
     {
         yield 'virtual properties' => [
             <<<'EOT'
@@ -1142,9 +1152,9 @@ class ReflectionClassTest extends IntegrationTestCase
             function (ReflectionClass $class): void {
                 $this->assertEquals(2, $class->properties()->count());
                 $this->assertEquals('foobar', $class->properties()->first()->name());
-                $this->assertEquals('Foobar', $class->properties()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $class->properties()->first()->inferredType()->__toString());
                 $this->assertEquals('barfoo', $class->properties()->last()->name());
-                $this->assertEquals('Barfoo', $class->properties()->last()->inferredTypes()->best()->__toString());
+                $this->assertEquals('Barfoo', $class->properties()->last()->inferredType()->__toString());
             }
         ];
 
@@ -1174,9 +1184,9 @@ class ReflectionClassTest extends IntegrationTestCase
             function (ReflectionClass $class): void {
                 $this->assertEquals(2, $class->properties()->count());
                 $this->assertEquals('foobar', $class->properties()->first()->name());
-                $this->assertEquals('Foobar', $class->properties()->first()->inferredTypes()->best()->__toString());
+                $this->assertEquals('Foobar', $class->properties()->first()->inferredType()->__toString());
                 $this->assertEquals('barfoo', $class->properties()->last()->name());
-                $this->assertEquals('Barfoo', $class->properties()->last()->inferredTypes()->best()->__toString());
+                $this->assertEquals('Barfoo', $class->properties()->last()->inferredType()->__toString());
             }
         ];
     }

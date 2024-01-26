@@ -5,7 +5,6 @@ namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Refle
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionPropertyCollection;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\TypeFactory;
-use Phpactor\WorseReflection\Core\Types;
 use Phpactor\WorseReflection\Core\Visibility;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Closure;
@@ -53,17 +52,18 @@ class ReflectionPromotedPropertyTest extends IntegrationTestCase
                         $properties->get('barfoo')->type()
                     );
                     $this->assertEquals(
-                        Types::fromTypes([
+                        TypeFactory::union(
                             TypeFactory::string(),
                             TypeFactory::int(),
-                        ]),
-                        $properties->get('baz')->inferredTypes()
+                        ),
+                        $properties->get('baz')->inferredType()
                     );
                 },
             ];
 
         yield 'Nullable' => [
                 '<?php class Barfoo { public function __construct(private ?string $foobar){}}',
+
                 'Barfoo',
                 function (ReflectionPropertyCollection $properties): void {
                     $this->assertEquals(
@@ -80,6 +80,24 @@ class ReflectionPromotedPropertyTest extends IntegrationTestCase
                     $this->assertEquals(
                         TypeFactory::undefined(),
                         $properties->get('foobar')->type()
+                    );
+                },
+            ];
+
+        yield 'With docblock' => [
+            <<<'EOT'
+                <?php class Barfoo {
+                    public function __construct(
+                        /** @var Foobar */
+                        private $foobar
+                    ) {}
+                }
+                EOT,
+                'Barfoo',
+                function (ReflectionPropertyCollection $properties): void {
+                    $this->assertEquals(
+                        'Foobar',
+                        $properties->get('foobar')->inferredType()->__toString(),
                     );
                 },
             ];

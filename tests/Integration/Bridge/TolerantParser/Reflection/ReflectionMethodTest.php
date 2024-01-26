@@ -2,9 +2,10 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Generator;
 use Phpactor\WorseReflection\Core\Reflection\Collection\ReflectionMethodCollection;
 use Phpactor\WorseReflection\Core\TypeFactory;
-use Phpactor\WorseReflection\Core\Types;
+use Phpactor\WorseReflection\Core\Type\UnionType;
 use Phpactor\WorseReflection\Tests\Assert\TrinaryAssert;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
@@ -20,6 +21,7 @@ class ReflectionMethodTest extends IntegrationTestCase
 
     /**
      * @dataProvider provideReflectionMethod
+     * @dataProvider provideGenerics
      * @dataProvider provideDeprecations
      */
     public function testReflectMethod(string $source, string $class, Closure $assertion): void
@@ -102,10 +104,10 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function (ReflectionMethodCollection $methods): void {
-                $this->assertEquals(Types::fromTypes([
+                $this->assertEquals(new UnionType(
                     TypeFactory::string(),
                     TypeFactory::int(),
-                ]), $methods->get('method1')->inferredTypes());
+                ), $methods->get('method1')->inferredType());
             },
         ];
         yield 'Return type' => [
@@ -139,7 +141,7 @@ class ReflectionMethodTest extends IntegrationTestCase
                 $this->assertEquals(TypeFactory::array(), $methods->get('method4')->returnType());
                 $this->assertEquals(ClassName::fromString('Test\Barfoo'), $methods->get('method5')->returnType()->name);
                 $this->assertEquals(ClassName::fromString('Acme\Post'), $methods->get('method6')->returnType()->name);
-                $this->assertEquals(ClassName::fromString('Test\Foobar'), $methods->get('method7')->returnType()->name);
+                $this->assertEquals('self(Test\Foobar)', $methods->get('method7')->returnType()->__toString());
                 $this->assertEquals(TypeFactory::iterable(), $methods->get('method8')->returnType());
                 $this->assertEquals(TypeFactory::callable(), $methods->get('method9')->returnType());
                 $this->assertEquals(TypeFactory::resource(), $methods->get('method10')->returnType());
@@ -217,7 +219,7 @@ class ReflectionMethodTest extends IntegrationTestCase
             function ($methods): void {
                 $this->assertEquals(
                     'Acme\Post',
-                    $methods->get('method1')->inferredTypes()->best()->__toString(),
+                    $methods->get('method1')->inferredType()->__toString(),
                 );
             },
         ];
@@ -241,7 +243,7 @@ class ReflectionMethodTest extends IntegrationTestCase
             function ($methods): void {
                 $this->assertEquals(
                     'Acme\Post[]',
-                    $methods->get('method1')->inferredTypes()->best()
+                    $methods->get('method1')->inferredType()->__toString()
                 );
             },
         ];
@@ -265,8 +267,8 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals('Foobar', $methods->get('method1')->inferredTypes()->best()->__toString(), 'this');
-                $this->assertEquals('Foobar', $methods->get('method2')->inferredTypes()->best()->__toString(), 'static');
+                $this->assertEquals('$this(Foobar)', $methods->get('method1')->inferredType()->__toString(), '$this(Foobar)');
+                $this->assertEquals('static(Foobar)', $methods->get('method2')->inferredType()->__toString(), 'static(Foobar)');
             },
         ];
         yield 'Return type from docblock this and static from a trait' => [
@@ -294,8 +296,8 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals('Foobar', $methods->get('method1')->inferredTypes()->best()->__toString());
-                $this->assertEquals('Foobar', $methods->get('method2')->inferredTypes()->best()->__toString());
+                $this->assertEquals('$this(Foobar)', $methods->get('method1')->inferredType()->__toString());
+                $this->assertEquals('static(Foobar)', $methods->get('method2')->inferredType()->__toString());
             },
         ];
         yield 'Return type from class @method annotation' => [
@@ -319,7 +321,7 @@ class ReflectionMethodTest extends IntegrationTestCase
                     TypeFactory::class(
                         ClassName::fromString('Acme\Post')
                     )->is(
-                        $methods->get('method1')->inferredTypes()->best()
+                        $methods->get('method1')->inferredType()
                     )
                 );
             },
@@ -350,7 +352,7 @@ class ReflectionMethodTest extends IntegrationTestCase
             function ($methods): void {
                 self::assertTrinaryTrue(
                     TypeFactory::class(ClassName::fromString('Acme\Post'))->is(
-                        $methods->get('method1')->inferredTypes()->best()
+                        $methods->get('method1')->inferredType()
                     )
                 );
             },
@@ -380,7 +382,7 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function (ReflectionMethodCollection $methods): void {
-                $this->assertEquals('Articles\Blog', $methods->get('method1')->inferredTypes()->best()->__toString());
+                $this->assertEquals('Articles\Blog', $methods->get('method1')->inferredType()->__toString());
             },
         ];
         yield 'Return type from inherited docblock (from interface)' => [
@@ -410,7 +412,7 @@ class ReflectionMethodTest extends IntegrationTestCase
         ,
             'Foobar',
             function ($methods): void {
-                $this->assertEquals('Articles\Blog', $methods->get('method1')->inferredTypes()->best()->__toString());
+                $this->assertEquals('Articles\Blog', $methods->get('method1')->inferredType()->__toString());
             },
         ];
         yield 'It reflects an abstract method' => [
@@ -487,7 +489,7 @@ class ReflectionMethodTest extends IntegrationTestCase
                 $this->assertEquals('', $methods->get('barfoo')->parameters()->first()->name());
                 $this->assertStringContainsString(
                     'Parameter has no variable',
-                    $logger->messages()[0]
+                    $logger->messages()[2]
                 );
             },
         ];
@@ -511,7 +513,7 @@ class ReflectionMethodTest extends IntegrationTestCase
                 $this->assertStringContainsString(<<<EOT
                     Hello this is a docblock.
                     EOT
-                , $methods->get('barfoo')->docblock()->raw());
+                    , $methods->get('barfoo')->docblock()->raw());
             },
         ];
         yield 'It returns the formatted docblock' => [
@@ -538,7 +540,7 @@ class ReflectionMethodTest extends IntegrationTestCase
 
                     Yes?
                     EOT
-                , $methods->get('barfoo')->docblock()->formatted());
+                    , $methods->get('barfoo')->docblock()->formatted());
             },
         ];
         yield 'It returns true if the method is static' => [
@@ -634,7 +636,131 @@ class ReflectionMethodTest extends IntegrationTestCase
         ];
     }
 
-    public function provideDeprecations()
+    /**
+     * Note that generics are now resolved during analysis and not statically.
+     *
+     * @return Generator<mixed>
+     */
+    public function provideGenerics(): Generator
+    {
+        yield 'return type from generic' => [
+            <<<'PHP'
+                <?php
+
+                /**
+                 * @template T
+                 */
+                abstract class Generic {
+                    /**
+                     * @return T
+                     */
+                    public function bar() {}
+                }
+
+                /**
+                 * @extends Generic<Baz>
+                 */
+                class Foobar extends Generic
+                {
+                }
+                PHP
+        ,
+            'Foobar',
+            function (ReflectionMethodCollection $methods): void {
+                self::assertTrue($methods->has('bar'));
+                self::assertEquals('T', $methods->get('bar')->inferredType()->__toString());
+            },
+        ];
+        yield 'return type from generic with multiple parameters' => [
+            <<<'PHP'
+                <?php
+
+                /**
+                 * @template T
+                 * @template V
+                 */
+                abstract class Generic {
+                    /**
+                     * @return V
+                     */
+                    public function vee() {}
+                    /**
+                     * @return T
+                     */
+                    public function tee() {}
+                }
+
+                /**
+                 * @extends Generic<Boo,Baz>
+                 */
+                class Foobar extends Generic
+                {
+                }
+                PHP
+        ,
+            'Foobar',
+            function (ReflectionMethodCollection $methods): void {
+                self::assertTrue($methods->has('tee'));
+                self::assertTrue($methods->has('vee'));
+                self::assertEquals('T', $methods->get('tee')->inferredType()->__toString());
+                self::assertEquals('V', $methods->get('vee')->inferredType()->__toString());
+            },
+        ];
+        yield 'return type from generic with multiple parameters at a distance' => [
+            <<<'PHP'
+                <?php
+
+                /**
+                 * @template T
+                 * @template V
+                 */
+                abstract class Generic {
+                    /**
+                     * @return V
+                     */
+                    public function vee() {}
+                    /**
+                     * @return T
+                     */
+                    public function tee() {}
+                }
+
+
+                /**
+                 * @template T
+                 * @template V
+                 * @template G
+                 * @extends Generic<T, V>
+                 */
+                abstract class Middle extends Generic {
+                    /** @return G */
+                    public function gee() {}
+                }
+
+                /**
+                 * @extends Middle<Boo,Baz,Bom>
+                 */
+                class Foobar extends Middle
+                {
+                }
+                PHP
+        ,
+            'Foobar',
+            function (ReflectionMethodCollection $methods): void {
+                self::assertTrue($methods->has('tee'));
+                self::assertTrue($methods->has('vee'));
+                self::assertTrue($methods->has('gee'));
+                self::assertEquals('T', $methods->get('tee')->inferredType()->__toString());
+                self::assertEquals('V', $methods->get('vee')->inferredType()->__toString());
+                self::assertEquals('G', $methods->get('gee')->inferredType()->__toString());
+            },
+        ];
+    }
+
+    /**
+     * @return Generator<mixed>
+     */
+    public function provideDeprecations(): Generator
     {
         yield 'It shows when method is deprecated' => [
             <<<'EOT'

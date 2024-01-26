@@ -11,13 +11,13 @@ class IncludeWalkerTest extends FrameWalkerTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->workspace()->reset();
+        $this->workspace()->put('foo.php', '<?php $foo = "bar";');
+        $this->workspace()->put('return_value.php', '<?php return "bar";');
     }
 
     public function provideWalk(): Generator
     {
-        $this->workspace()->put('foo.php', '<?php $foo = "bar";');
-        $this->workspace()->put('return_value.php', '<?php return "bar";');
-
         yield 'Require relative' => [
             <<<'EOT'
                 <?php
@@ -28,7 +28,7 @@ class IncludeWalkerTest extends FrameWalkerTestCase
         ,
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals());
-                $this->assertEquals('foo', $frame->locals()->first()->__toString());
+                $this->assertEquals('foo', $frame->locals()->first()->name());
             }
         ];
 
@@ -42,7 +42,7 @@ class IncludeWalkerTest extends FrameWalkerTestCase
         ,
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals());
-                $this->assertEquals('foo', $frame->locals()->first()->__toString());
+                $this->assertEquals('foo', $frame->locals()->first()->name());
             }
         ];
 
@@ -56,7 +56,7 @@ class IncludeWalkerTest extends FrameWalkerTestCase
         ,
             function (Frame $frame): void {
                 $this->assertCount(1, $frame->locals());
-                $this->assertEquals('foo', $frame->locals()->first()->__toString());
+                $this->assertEquals('foo', $frame->locals()->first()->name());
             }
         ];
 
@@ -69,9 +69,9 @@ class IncludeWalkerTest extends FrameWalkerTestCase
                 EOT
         ,
             function (Frame $frame): void {
-                $this->assertCount(2, $frame->locals());
-                $this->assertEquals('foo', $frame->locals()->last()->__toString());
-                $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
+                $this->assertCount(1, $frame->locals());
+                $this->assertEquals('foo', $frame->locals()->last()->name());
+                $this->assertEquals('"bar"', (string) $frame->locals()->last()->type());
             }
         ];
 
@@ -84,9 +84,9 @@ class IncludeWalkerTest extends FrameWalkerTestCase
                 EOT
         ,
             function (Frame $frame): void {
-                $this->assertCount(2, $frame->locals());
-                $this->assertEquals('foo', $frame->locals()->last()->__toString());
-                $this->assertEquals('string', (string) $frame->locals()->last()->symbolContext()->type());
+                $this->assertCount(1, $frame->locals());
+                $this->assertEquals('foo', $frame->locals()->last()->name());
+                $this->assertEquals('"bar"', (string) $frame->locals()->last()->type());
             }
         ];
     }

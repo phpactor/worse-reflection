@@ -8,17 +8,19 @@ use Phpactor\WorseReflection\Core\Name;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflector\ClassReflector\MemonizedReflector;
+use Phpactor\WorseReflection\Core\Reflector\ConstantReflector;
 use Phpactor\WorseReflection\Core\Reflector\FunctionReflector;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class MemonizedClassReflectorTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
-     * @var ClassReflector|ObjectProphecy
+     * @var ObjectProphecy<ClassReflector>
      */
-    private $innerClassReflector;
+    private ObjectProphecy $innerClassReflector;
 
     /**
      * @var MemonizedClassReflector
@@ -26,20 +28,27 @@ class MemonizedClassReflectorTest extends TestCase
     private MemonizedReflector $reflector;
 
     /**
-     * @var ObjectProphecy|FunctionReflector
+     * @var ObjectProphecy<FunctionReflector>
      */
-    private $innerFunctionReflector;
-    
+    private ObjectProphecy $innerFunctionReflector;
+
     private ClassName $className;
+
+    /**
+     * @var ObjectProphecy<ConstantReflector>
+     */
+    private ObjectProphecy $innerConstantReflector;
 
     public function setUp(): void
     {
         $this->innerClassReflector = $this->prophesize(ClassReflector::class);
         $this->innerFunctionReflector = $this->prophesize(FunctionReflector::class);
+        $this->innerConstantReflector = $this->prophesize(ConstantReflector::class);
 
         $this->reflector = new MemonizedReflector(
             $this->innerClassReflector->reveal(),
             $this->innerFunctionReflector->reveal(),
+            $this->innerConstantReflector->reveal(),
             new TtlCache(10)
         );
         $this->className = ClassName::fromString('Hello');
@@ -55,7 +64,7 @@ class MemonizedClassReflectorTest extends TestCase
 
     public function testReflectInterface(): void
     {
-        $this->innerClassReflector->reflectInterface($this->className)->shouldBeCalledTimes(1);
+        $this->innerClassReflector->reflectInterface($this->className, [])->shouldBeCalledTimes(1);
         $this->reflector->reflectInterface($this->className);
         $this->reflector->reflectInterface($this->className);
         $this->reflector->reflectInterface($this->className);
@@ -63,7 +72,7 @@ class MemonizedClassReflectorTest extends TestCase
 
     public function testReflectTrait(): void
     {
-        $this->innerClassReflector->reflectTrait($this->className)->shouldBeCalledTimes(1);
+        $this->innerClassReflector->reflectTrait($this->className, [])->shouldBeCalledTimes(1);
         $this->reflector->reflectTrait($this->className);
         $this->reflector->reflectTrait($this->className);
         $this->reflector->reflectTrait($this->className);
@@ -71,7 +80,7 @@ class MemonizedClassReflectorTest extends TestCase
 
     public function testReflectClassLike(): void
     {
-        $this->innerClassReflector->reflectClassLike($this->className)->shouldBeCalledTimes(1);
+        $this->innerClassReflector->reflectClassLike($this->className, [])->shouldBeCalledTimes(1);
         $this->reflector->reflectClassLike($this->className);
         $this->reflector->reflectClassLike($this->className);
         $this->reflector->reflectClassLike($this->className);

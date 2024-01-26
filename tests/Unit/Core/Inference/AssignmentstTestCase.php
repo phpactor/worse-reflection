@@ -4,10 +4,10 @@ namespace Phpactor\WorseReflection\Tests\Unit\Core\Inference;
 
 use PHPUnit\Framework\TestCase;
 use Phpactor\WorseReflection\Core\Inference\Assignments;
-use Phpactor\WorseReflection\Core\Inference\SymbolContext;
+use Phpactor\WorseReflection\Core\Inference\NodeContext;
 use Phpactor\WorseReflection\Core\Inference\Variable;
 use Phpactor\WorseReflection\Core\Inference\Symbol;
-use Phpactor\WorseReflection\Core\Position;
+use Phpactor\TextDocument\ByteOffsetRange;
 use RuntimeException;
 
 abstract class AssignmentstTestCase extends TestCase
@@ -17,36 +17,26 @@ abstract class AssignmentstTestCase extends TestCase
         $assignments = $this->assignments();
         $this->assertCount(0, $assignments->byName('hello'));
 
-        $information = SymbolContext::for(
+        $information = NodeContext::for(
             Symbol::fromTypeNameAndPosition(
                 Symbol::VARIABLE,
                 'hello',
-                Position::fromStartAndEnd(0, 0)
+                ByteOffsetRange::fromInts(0, 0)
             )
         );
 
-        $assignments->add(Variable::fromSymbolContext($information));
+        $assignments->set(Variable::fromSymbolContext($information));
 
-        $this->assertEquals($information, $assignments->byName('hello')->first()->symbolContext());
-    }
-
-    public function testMultipleByName(): void
-    {
-        $assignments = $this->assignments();
-
-        $assignments->add($this->createVariable('hello', 0, 0));
-        $assignments->add($this->createVariable('hello', 0, 0));
-
-        $this->assertCount(2, $assignments->byName('hello'));
+        $this->assertEquals('hello', $assignments->byName('hello')->first()->name());
     }
 
     public function testLessThanEqualTo(): void
     {
         $assignments = $this->assignments();
 
-        $assignments->add($this->createVariable('hello', 0, 5));
-        $assignments->add($this->createVariable('hello', 5, 10));
-        $assignments->add($this->createVariable('hello', 10, 15));
+        $assignments->set($this->createVariable('hello', 0, 5));
+        $assignments->set($this->createVariable('hello', 5, 10));
+        $assignments->set($this->createVariable('hello', 10, 15));
 
         $this->assertCount(2, $assignments->byName('hello')->lessThanOrEqualTo(5));
     }
@@ -55,9 +45,9 @@ abstract class AssignmentstTestCase extends TestCase
     {
         $assignments = $this->assignments();
 
-        $assignments->add($this->createVariable('hello', 0, 5));
-        $assignments->add($this->createVariable('hello', 5, 10));
-        $assignments->add($this->createVariable('hello', 10, 15));
+        $assignments->set($this->createVariable('hello', 0, 5));
+        $assignments->set($this->createVariable('hello', 5, 10));
+        $assignments->set($this->createVariable('hello', 10, 15));
 
         $this->assertCount(1, $assignments->byName('hello')->lessThan(5));
     }
@@ -66,9 +56,9 @@ abstract class AssignmentstTestCase extends TestCase
     {
         $assignments = $this->assignments();
 
-        $assignments->add($this->createVariable('hello', 0, 5));
-        $assignments->add($this->createVariable('hello', 5, 10));
-        $assignments->add($this->createVariable('hello', 10, 15));
+        $assignments->set($this->createVariable('hello', 0, 5));
+        $assignments->set($this->createVariable('hello', 5, 10));
+        $assignments->set($this->createVariable('hello', 10, 15));
 
         $this->assertCount(2, $assignments->byName('hello')->greaterThanOrEqualTo(5));
     }
@@ -77,9 +67,9 @@ abstract class AssignmentstTestCase extends TestCase
     {
         $assignments = $this->assignments();
 
-        $assignments->add($this->createVariable('hello', 0, 5));
-        $assignments->add($this->createVariable('hello', 5, 10));
-        $assignments->add($this->createVariable('hello', 10, 15));
+        $assignments->set($this->createVariable('hello', 0, 5));
+        $assignments->set($this->createVariable('hello', 5, 10));
+        $assignments->set($this->createVariable('hello', 10, 15));
 
         $this->assertCount(1, $assignments->byName('hello')->greaterThan(5));
     }
@@ -90,7 +80,7 @@ abstract class AssignmentstTestCase extends TestCase
         $this->expectExceptionMessage('No variable at index "5"');
         $assignments = $this->assignments();
 
-        $assignments->add($this->createVariable('hello', 0, 5));
+        $assignments->set($this->createVariable('hello', 0, 5));
 
         $this->assertCount(1, $assignments->atIndex(5));
     }
@@ -99,10 +89,10 @@ abstract class AssignmentstTestCase extends TestCase
 
     private function createVariable(string $name, int $start, int $end): Variable
     {
-        return Variable::fromSymbolContext(SymbolContext::for(Symbol::fromTypeNameAndPosition(
+        return Variable::fromSymbolContext(NodeContext::for(Symbol::fromTypeNameAndPosition(
             Symbol::VARIABLE,
             $name,
-            Position::fromStartAndEnd($start, $end)
+            ByteOffsetRange::fromInts($start, $end)
         )));
     }
 }

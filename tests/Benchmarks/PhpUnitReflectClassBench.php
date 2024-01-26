@@ -7,8 +7,7 @@ use Phpactor\WorseReflection\Core\ClassName;
 
 /**
  * @Iterations(5)
- * @Revs(10)
- * @Warmup(1)
+ * @Revs(1)
  */
 class PhpUnitReflectClassBench extends BaseBenchCase
 {
@@ -32,7 +31,7 @@ class PhpUnitReflectClassBench extends BaseBenchCase
 
         foreach ($class->methods() as $method) {
             foreach ($method->parameters() as $parameter) {
-                $method->inferredReturnTypes();
+                $method->type();
             }
         }
     }

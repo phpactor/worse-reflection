@@ -2,6 +2,7 @@
 
 namespace Phpactor\WorseReflection\Tests\Integration\Bridge\TolerantParser\Reflection;
 
+use Generator;
 use Phpactor\WorseReflection\Tests\Integration\IntegrationTestCase;
 use Phpactor\WorseReflection\Core\ClassName;
 use Phpactor\WorseReflection\Core\Reflection\ReflectionInterface;
@@ -19,7 +20,10 @@ class ReflectionInterfaceTest extends IntegrationTestCase
         $assertion($class);
     }
 
-    public function provideReflectionInterface()
+    /**
+     * @return Generator<array{string,string,Closure(ReflectionInterface): void}>
+     */
+    public function provideReflectionInterface(): Generator
     {
         yield 'It reflects an interface' => [
             <<<'EOT'
@@ -57,7 +61,7 @@ class ReflectionInterfaceTest extends IntegrationTestCase
             function ($class): void {
                 $interfaces = $class->interfaces();
                 $this->assertCount(2, $interfaces);
-                $interface = $interfaces['Barfoo'];
+                $interface = $interfaces->get('Barfoo');
                 $this->assertInstanceOf(ReflectionInterface::class, $interface);
             },
         ];
@@ -82,7 +86,7 @@ class ReflectionInterfaceTest extends IntegrationTestCase
             function ($class): void {
                 $interfaces = $class->parents();
                 $this->assertCount(2, $interfaces);
-                $interface = $interfaces['Barfoo'];
+                $interface = $interfaces->get('Barfoo');
                 $this->assertInstanceOf(ReflectionInterface::class, $interface);
             },
         ];

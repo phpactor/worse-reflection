@@ -17,12 +17,22 @@ use Traversable;
 class ChainReflectionMemberCollectionTest extends TestCase
 {
     use ProphecyTrait;
-    
+
     private ObjectProphecy $collection1;
-    
+
     private ObjectProphecy $collection2;
-    
+
     private ObjectProphecy $member1;
+
+    /**
+     * @var ObjectProphecy<ReflectionMemberCollection>
+     */
+    private ObjectProphecy $collection3;
+
+    /**
+     * @var ObjectProphecy<ReflectionMemberCollection>
+     */
+    private ObjectProphecy $collection4;
 
     public function setUp(): void
     {
@@ -128,6 +138,7 @@ class ChainReflectionMemberCollectionTest extends TestCase
         ]);
 
         $this->collection1->first()->willReturn($this->member1->reveal());
+        $this->collection1->count()->willReturn(1);
 
         $member = $collection1->first();
         $this->assertSame($this->member1->reveal(), $member);
