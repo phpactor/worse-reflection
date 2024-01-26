@@ -1,0 +1,28 @@
+<?php
+
+/** @api */
+interface TreeMapper
+{
+    /**
+     * @template T of object
+     *
+     * @param string|class-string<T> $signature
+     * @param mixed $source
+     * @return (
+     *     $signature is class-string<T>
+     *         ? T
+     *         : mixed
+     * )
+     *
+     * @throws MappingError
+     */
+    public function map(string $signature, $source);
+}
+
+function foo(TreeMapper $mapper) {
+    $map = $mapper->map('foo', 'bar');
+    wrAssertType('mixed', $map);
+
+    $map = $mapper->map(Foo::class, 'bar');
+    wrAssertType('Foo', $map);
+}

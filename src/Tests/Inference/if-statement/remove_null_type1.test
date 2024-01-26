@@ -1,0 +1,10 @@
+<?php
+
+function foo(?string $foo) {
+    if (!$foo) {
+        return;
+    }
+
+    wrAssertType('string', $foo);
+}
+

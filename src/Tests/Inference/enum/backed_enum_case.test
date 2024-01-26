@@ -1,0 +1,9 @@
+<?php
+
+
+enum Foo: string  {
+   case BAR = 'bar';
+}
+
+wrAssertType('enum(Foo::BAR)', Foo::BAR);
+wrAssertType('int|string', Foo::BAR->value);
