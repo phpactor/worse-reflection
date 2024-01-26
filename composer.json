@@ -9,21 +9,24 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.1",
         "jetbrains/phpstorm-stubs": "*",
-        "microsoft/tolerant-php-parser": "^0.1.0",
-        "phpactor/text-document": "~1.2.3",
+        "phpactor/tolerant-php-parser": "dev-main",
+
+        "amphp/amp": "^2.6",
+        "phpactor/text-document": "dev-master",
+        "phpactor/docblock-parser": "dev-master",
         "psr/log": "^1.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.0",
         "friendsofphp/php-cs-fixer": "^3.0",
-        "phpactor/class-to-file": "~0.4.0",
-        "phpactor/test-utils": "~1.1.3",
+        "phpactor/class-to-file": "~0.5.0",
+        "phpactor/test-utils": "^1.1.5",
         "phpbench/phpbench": "dev-master",
         "phpstan/phpstan": "~0.12.0",
         "phpunit/phpunit": "^9.0",
-        "symfony/filesystem": "^4.3 || ^5.0",
+        "symfony/filesystem": "^6.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "symfony/var-dumper": "^5.2"
     },
@@ -34,7 +37,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Phpactor\\WorseReflection\\": "lib/"
+            "Phpactor\\WorseReflection\\": "src/"
         }
     },
     "autoload-dev": {
@@ -52,5 +55,10 @@
             "./vendor/bin/phpbench run --iterations=1",
             "./tests/Smoke/smoke_test.php --limit=100"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        }
     }
 }
