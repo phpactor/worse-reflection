@@ -14,8 +14,8 @@
         "phpactor/tolerant-php-parser": "dev-main",
 
         "amphp/amp": "^2.6",
-        "phpactor/text-document": "dev-master",
-        "phpactor/docblock-parser": "dev-master",
+        "phpactor/text-document": "^2.0.0",
+        "phpactor/docblock-parser": "^0.1.0",
         "psr/log": "^1.0"
     },
     "require-dev": {
