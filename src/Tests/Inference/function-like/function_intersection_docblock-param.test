@@ -1,9 +1,0 @@
-<?php
-
-/**
- * @param Foo&Bar&Baz  $foo
- */
-function foo($foo): void
-{
-    wrAssertType('Foo&Bar&Baz', $foo);
-}

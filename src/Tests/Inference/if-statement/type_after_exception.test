@@ -1,7 +1,0 @@
-<?php
-
-if ($foobar instanceof Foobar) {
-    throw new Exception("HAI!");
-}
-wrAssertType('<missing>', $foobar);
-

@@ -1,1 +1,0 @@
-<?php interface Barfoo extends Foobar { public function barfoo() {}}

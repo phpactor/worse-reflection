@@ -1,6 +1,0 @@
-<?php
-
-assert(
-     $foo instanceof Bar &&
-     wrAssertType('Bar', $foo)
-);

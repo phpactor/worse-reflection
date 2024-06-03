@@ -1,9 +1,0 @@
-<?php
-
-namespace Foo;
-
-define('FOOBAR', 'foobar');
-
-$f = FOOBAR;
-
-wrAssertType('"foobar"', $f);

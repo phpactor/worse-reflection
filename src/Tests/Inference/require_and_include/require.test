@@ -1,4 +1,0 @@
-<?php
-
-$result = require __DIR__ . '/foo.php';
-wrAssertType('Foobar', $result);

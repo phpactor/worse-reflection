@@ -1,4 +1,0 @@
-<?php
-
-wrAssertType('true', is_string("asd"));
-wrAssertType('false', is_null(123));

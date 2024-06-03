@@ -7,7 +7,7 @@ use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use PHPUnit\Framework\TestCase;
-use Phpactor\Extension\LanguageServerBridge\Converter\PositionConverter;
+use Phpactor\TextDocument\ByteOffset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\TextDocument\NodeToTextDocumentConverter;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameResolver;
@@ -196,19 +196,16 @@ class TestAssertWalker implements Walker
     private function assertTypeIs(Node $node, Type $actualType, Type $expectedType, ?NodeContext $message = null): void
     {
         $message = isset($message) ? TypeUtil::valueOrNull($message->type()) : null;
-        $position = PositionConverter::intByteOffsetToPosition($node->getStartPosition(), $node->getFileContents());
         if ($actualType->__toString() === TypeUtil::valueOrNull($expectedType)) {
             $this->testCase->addToAssertionCount(1);
             return;
         }
         $this->testCase->fail(sprintf(
-            "%s: \n\n  %s\n\nis:\n\n  %s\n\non offset %s line %s char %s",
+            "%s: \n\n  %s\n\nis:\n\n  %s\n\non offset %s",
             $message ?: 'Failed asserting that:',
             $actualType->__toString(),
             trim($expectedType->__toString(), '"'),
             $node->getStartPosition(),
-            $position->line + 1,
-            $position->character + 1,
         ));
     }
 }

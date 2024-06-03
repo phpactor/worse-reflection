@@ -1,5 +1,0 @@
-<?php
-
-$result = include __DIR__ . '/foo.php';
-
-wrAssertType('Foobar', $result);

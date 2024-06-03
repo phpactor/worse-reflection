@@ -1,5 +1,0 @@
-<?php
-
-if ($foo instanceof Foobar || true || false or true or false) {
-    wrAssertType('Foobar', $foo);
-}

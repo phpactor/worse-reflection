@@ -1,8 +1,0 @@
-<?php
-
-functoin this_function_returns_something() {
-    return new stdClass();
-}
-
-if (this_function_returns_something() instanceof Barfoo) {
-}

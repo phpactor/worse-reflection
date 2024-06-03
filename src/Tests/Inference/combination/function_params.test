@@ -1,7 +1,0 @@
-<?php
-
-function foo(?Foo $foo = null) {
-    wrAssertType('?Foo', $foo);
-}
-
-

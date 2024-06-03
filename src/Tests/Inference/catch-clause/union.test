@@ -1,6 +1,0 @@
-<?php
-try {
-} catch (Foo | Bar $exception) {
-    wrAssertType('Foo|Bar', $exception);
-}
-

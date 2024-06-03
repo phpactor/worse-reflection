@@ -1,3 +1,0 @@
-<?php
-
-wrAssertType('array{}&array{a:1}', [] + ['a' => 1]);

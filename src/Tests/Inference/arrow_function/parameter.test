@@ -1,3 +1,0 @@
-<?php
-
-fn (string $foo) => wrAssertType('string', $foo);

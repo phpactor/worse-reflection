@@ -1,5 +1,0 @@
-<?php
-
-if (is_callable($foo)) {
-    wrAssertType('callable()', $foo);
-}

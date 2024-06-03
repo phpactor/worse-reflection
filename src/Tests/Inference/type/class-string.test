@@ -1,5 +1,0 @@
-<?php
-
-$f = Foo::class;
-
-wrAssertType('class-string<Foo>', $f);

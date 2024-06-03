@@ -1,3 +1,0 @@
-<?php
-
-wrAssertType('Closure(): string', function (): string {});

@@ -1,8 +1,0 @@
-<?php
-
-namespace Foo;
-
-function foo(): string {}
-
-$foo = foo();
-wrAssertSymbolName('Foo\foo', foo());

@@ -1,7 +1,0 @@
-<?php
-
-use Foobar\Barfoo;
-
-if ($foobar instanceof Barfoo
-
-wrAssertType('Foobar\Barfoo', $foobar);

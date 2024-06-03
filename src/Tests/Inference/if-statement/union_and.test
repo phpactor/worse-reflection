@@ -1,8 +1,0 @@
-<?php
-
-if ($foobar instanceof Foobar && $foobar instanceof Barfoo) {
-    wrAssertType('Foobar&Barfoo', $foobar);
-}
-
-wrAssertType('<missing>', $foobar);
-

@@ -1,6 +1,0 @@
-<?php
-
-/** @var class-string $f */
-$obj = new $f;
-
-wrAssertType('object', $obj);

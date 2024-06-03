@@ -1,4 +1,0 @@
-<?php
-
-wrAssertType('false', is_float(null));
-wrAssertType('true', is_float(1.2));
