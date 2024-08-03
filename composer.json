@@ -16,7 +16,7 @@
         "amphp/amp": "^2.6",
         "phpactor/text-document": "^2.1.0",
         "phpactor/docblock-parser": "^0.2.0",
-        "psr/log": "^1.0"
+        "psr/log": "^1.0||^2.0||^3.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.0",
