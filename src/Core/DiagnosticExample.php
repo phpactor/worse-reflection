@@ -17,5 +17,4 @@ class DiagnosticExample
         public ?string $minPhpVersion = null
     ) {
     }
-
 }

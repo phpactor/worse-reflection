@@ -133,7 +133,6 @@ class TolerantSourceCodeReflector implements SourceCodeReflector
         return $this->serviceLocator->nodeContextResolver()->resolveNode($frame, $node);
     }
 
-
     public function reflectNode(
         TextDocument $sourceCode,
         ByteOffset|int $offset

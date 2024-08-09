@@ -17,6 +17,7 @@ class AssignmentToMissingPropertyDiagnostic implements Diagnostic
         private bool $isSubscriptAssignment
     ) {
     }
+
     public function range(): ByteOffsetRange
     {
         return $this->range;

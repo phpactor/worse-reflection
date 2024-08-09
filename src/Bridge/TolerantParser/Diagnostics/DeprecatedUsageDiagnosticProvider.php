@@ -245,6 +245,7 @@ class DeprecatedUsageDiagnosticProvider implements DiagnosticProvider
             $member->memberType(),
         );
     }
+
     /**
      * @return Generator<DeprecatedUsageDiagnostic>
      */
@@ -262,6 +263,7 @@ class DeprecatedUsageDiagnosticProvider implements DiagnosticProvider
             $reflectionClass->classLikeType(),
         );
     }
+
     /**
      * @return Generator<DeprecatedUsageDiagnostic>
      */

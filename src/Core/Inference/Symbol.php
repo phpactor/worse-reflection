@@ -8,17 +8,29 @@ use InvalidArgumentException;
 final class Symbol
 {
     public const CLASS_ = 'class';
+
     public const VARIABLE = 'variable';
+
     public const METHOD = 'method';
+
     public const FUNCTION = 'function';
+
     public const PROPERTY = 'property';
+
     public const CONSTANT = 'constant';
+
     public const DECLARED_CONSTANT = 'declared_constant';
+
     public const CASE = 'case';
+
     public const STRING = 'string';
+
     public const NUMBER = 'number';
+
     public const BOOLEAN = 'boolean';
+
     public const ARRAY = 'array';
+
     public const UNKNOWN = '<unknown>';
 
     private string $name;

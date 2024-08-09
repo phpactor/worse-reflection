@@ -21,7 +21,6 @@ class VariableWalker implements Walker
     {
     }
 
-
     public function nodeFqns(): array
     {
         return [];

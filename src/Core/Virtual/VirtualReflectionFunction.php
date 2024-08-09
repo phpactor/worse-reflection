@@ -50,7 +50,6 @@ final class VirtualReflectionFunction implements ReflectionFunction
         );
     }
 
-
     public function parameters(): ReflectionParameterCollection
     {
         return $this->parameters;

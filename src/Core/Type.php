@@ -68,7 +68,6 @@ abstract class Type
         return new Types([$this]);
     }
 
-
     public function isDefined(): bool
     {
         return !$this instanceof MissingType;
@@ -218,6 +217,7 @@ abstract class Type
     {
         return $this instanceof MixedType;
     }
+
     public function mergeType(Type $type): Type
     {
         if ($this instanceof MissingType) {

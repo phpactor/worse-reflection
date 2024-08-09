@@ -21,10 +21,15 @@ use Phpactor\TextDocument\TextDocument;
 class MemonizedReflector implements ClassReflector, FunctionReflector, ConstantReflector
 {
     private const FUNC_PREFIX = '__func__';
+
     private const CLASS_PREFIX = '__class__';
+
     private const INTERFACE_PREFIX = '__interface__';
+
     private const TRAIT_PREFIX = '__trait__';
+
     private const ENUM_PREFIX = '__enum__';
+
     private const CLASS_LIKE_PREFIX = '__class_like__';
 
     private ClassReflector $innerReflector;

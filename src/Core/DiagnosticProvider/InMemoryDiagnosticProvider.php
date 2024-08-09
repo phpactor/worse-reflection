@@ -22,6 +22,7 @@ class InMemoryDiagnosticProvider implements DiagnosticProvider
     {
         return [];
     }
+
     public function exit(NodeContextResolver $resolver, Frame $frame, Node $node): iterable
     {
         if (!$node instanceof SourceFileNode) {

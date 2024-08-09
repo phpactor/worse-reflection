@@ -10,6 +10,7 @@ use Phpactor\WorseReflection\Core\DiagnosticSeverity;
 class UnresolvableNameDiagnostic implements Diagnostic
 {
     public const TYPE_CLASS = 'class';
+
     public const TYPE_FUNCTION = 'function';
 
     /**

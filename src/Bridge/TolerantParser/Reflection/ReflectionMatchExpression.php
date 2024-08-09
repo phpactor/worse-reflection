@@ -39,6 +39,7 @@ class ReflectionMatchExpression implements ReflectionNode
         $expr = $this->services->nodeContextResolver()->resolveNode($this->frame, $this->node->expression);
         return $expr->type();
     }
+
     public function scope(): ReflectionScope
     {
         return new ReflectionScope($this->services->reflector(), $this->node);

@@ -10,47 +10,64 @@
  *
  * @template-implements Traversable<TKey, TValue>
  */
-class Generator implements Traversable {
+class Generator implements Traversable
+{
     /**
      * @return ?TValue Can return any type.
      */
-    public function current() {}
+    public function current()
+    {
+    }
 
     /**
      * @return void Any returned value is ignored.
      */
-    public function next() {}
+    public function next(): void
+    {
+    }
 
     /**
      * @return TKey scalar on success, or null on failure.
      */
-    public function key() {}
+    public function key()
+    {
+    }
 
     /**
      * @return bool The return value will be casted to boolean and then evaluated.
      */
-    public function valid() {}
+    public function valid()
+    {
+    }
 
     /**
      * @return void Any returned value is ignored.
      */
-    public function rewind() {}
+    public function rewind(): void
+    {
+    }
 
     /**
      * @return TReturn Can return any type.
      */
-    public function getReturn() {}
+    public function getReturn()
+    {
+    }
 
     /**
      * @param TSend $value
      * @return ?TValue Can return any type.
      */
-    public function send($value) {}
+    public function send($value)
+    {
+    }
 
     /**
      * @return ?TValue Can return any type.
      */
-    public function throw(Throwable $exception) {}
+    public function throw(Throwable $exception)
+    {
+    }
 }
 
 /**
@@ -60,8 +77,8 @@ class Generator implements Traversable {
  * @template TKey
  * @template TValue
  */
-interface ArrayAccess {
-
+interface ArrayAccess
+{
     /**
      * Whether a offset exists
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
@@ -91,22 +108,20 @@ interface ArrayAccess {
      *
      * @param TKey|null $offset The offset to assign the value to.
      * @param TValue $value The value to set.
-     * @return void
      *
      * @since 5.0.0
      */
-    public function offsetSet($offset, $value);
+    public function offsetSet($offset, $value): void;
 
     /**
      * Offset to unset
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
      *
      * @param TKey $offset The offset to unset.
-     * @return void
      *
      * @since 5.0.0
      */
-    public function offsetUnset($offset);
+    public function offsetUnset($offset): void;
 }
 
 /**
@@ -118,7 +133,8 @@ interface ArrayAccess {
  * @template-implements IteratorAggregate<TKey, TValue>
  * @template-implements ArrayAccess<TKey, TValue>
  */
-class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Countable {
+class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Countable
+{
     /**
      * Properties of the object have their normal functionality when accessed as list (var_dump, foreach, etc.).
      */
@@ -139,7 +155,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.0.0
      */
-    public function __construct($input = null, $flags = 0, $iterator_class = "ArrayIterator") { }
+    public function __construct($input = null, $flags = 0, $iterator_class = 'ArrayIterator')
+    {
+    }
 
     /**
      * Returns whether the requested index exists
@@ -150,7 +168,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.0.0
      */
-    public function offsetExists($index) { }
+    public function offsetExists($index)
+    {
+    }
 
     /**
      * Returns the value at the specified index
@@ -161,7 +181,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.0.0
      */
-    public function offsetGet($index) { }
+    public function offsetGet($index)
+    {
+    }
 
     /**
      * Sets the value at the specified index to newval
@@ -169,33 +191,36 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @param TKey $index  The index being set.
      * @param TValue $newval The new value for the index.
-     * @return void
      *
      * @since 5.0.0
      */
-    public function offsetSet($index, $newval) { }
+    public function offsetSet($index, $newval): void
+    {
+    }
 
     /**
      * Unsets the value at the specified index
      * @link http://php.net/manual/en/arrayobject.offsetunset.php
      *
      * @param TKey $index The index being unset.
-     * @return void
      *
      * @since 5.0.0
      */
-    public function offsetUnset($index) { }
+    public function offsetUnset($index): void
+    {
+    }
 
     /**
      * Appends the value
      * @link http://php.net/manual/en/arrayobject.append.php
      *
      * @param TValue $value The value being appended.
-     * @return void
      *
      * @since 5.0.0
      */
-    public function append($value) { }
+    public function append($value): void
+    {
+    }
 
     /**
      * Creates a copy of the ArrayObject.
@@ -206,7 +231,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.0.0
      */
-    public function getArrayCopy() { }
+    public function getArrayCopy()
+    {
+    }
 
     /**
      * Get the number of public properties in the ArrayObject
@@ -217,7 +244,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.0.0
      */
-    public function count() { }
+    public function count()
+    {
+    }
 
     /**
      * Gets the behavior flags.
@@ -227,7 +256,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.1.0
      */
-    public function getFlags() { }
+    public function getFlags()
+    {
+    }
 
     /**
      * Sets the behavior flags.
@@ -263,31 +294,34 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      * @link http://php.net/manual/en/arrayobject.setflags.php
      *
      * @param int $flags The new ArrayObject behavior.
-     * @return void
      *
      * @since 5.1.0
      */
-    public function setFlags($flags) { }
+    public function setFlags($flags): void
+    {
+    }
 
     /**
      * Sort the entries by value
      * @link http://php.net/manual/en/arrayobject.asort.php
      *
-     * @return void
      *
      * @since 5.2.0
      */
-    public function asort() { }
+    public function asort(): void
+    {
+    }
 
     /**
      * Sort the entries by key
      * @link http://php.net/manual/en/arrayobject.ksort.php
      *
-     * @return void
      *
      * @since 5.2.0
      */
-    public function ksort() { }
+    public function ksort(): void
+    {
+    }
 
     /**
      * Sort the entries with a user-defined comparison function and maintain key association
@@ -301,11 +335,12 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      * second.
      *
      * @param callable(TValue, TValue):int $cmp_function
-     * @return void
      *
      * @since 5.2.0
      */
-    public function uasort($cmp_function) { }
+    public function uasort($cmp_function): void
+    {
+    }
 
     /**
      * Sort the entries by keys using a user-defined comparison function
@@ -319,31 +354,34 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      * second.
      *
      * @param callable(TKey, TKey):int $cmp_function The callable comparison function.
-     * @return void
      *
      * @since 5.2.0
      */
-    public function uksort($cmp_function) { }
+    public function uksort($cmp_function): void
+    {
+    }
 
     /**
      * Sort entries using a "natural order" algorithm
      * @link http://php.net/manual/en/arrayobject.natsort.php
      *
-     * @return void
      *
      * @since 5.2.0
      */
-    public function natsort() { }
+    public function natsort(): void
+    {
+    }
 
     /**
      * Sort an array using a case insensitive "natural order" algorithm
      * @link http://php.net/manual/en/arrayobject.natcasesort.php
      *
-     * @return void
      *
      * @since 5.2.0
      */
-    public function natcasesort() { }
+    public function natcasesort(): void
+    {
+    }
 
     /**
      * Unserialize an ArrayObject
@@ -354,7 +392,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.3.0
      */
-    public function unserialize($serialized) { }
+    public function unserialize($serialized): void
+    {
+    }
 
     /**
      * Serialize an ArrayObject
@@ -364,7 +404,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.3.0
      */
-    public function serialize() { }
+    public function serialize()
+    {
+    }
 
     /**
      * Create a new iterator from an ArrayObject instance
@@ -374,7 +416,9 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.0.0
      */
-    public function getIterator() { }
+    public function getIterator()
+    {
+    }
 
     /**
      * Exchange the array for another one.
@@ -385,18 +429,21 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.1.0
      */
-    public function exchangeArray($input) { }
+    public function exchangeArray($input)
+    {
+    }
 
     /**
      * Sets the iterator classname for the ArrayObject.
      * @link http://php.net/manual/en/arrayobject.setiteratorclass.php
      *
      * @param string $iterator_class The classname of the array iterator to use when iterating over this object.
-     * @return void
      *
      * @since 5.1.0
      */
-    public function setIteratorClass($iterator_class) { }
+    public function setIteratorClass($iterator_class): void
+    {
+    }
 
     /**
      * Gets the iterator classname for the ArrayObject.
@@ -406,10 +453,13 @@ class ArrayObject implements IteratorAggregate, ArrayAccess, Serializable, Count
      *
      * @since 5.1.0
      */
-    public function getIteratorClass() { }
+    public function getIteratorClass()
+    {
+    }
 }
 
-interface Serializable {
+interface Serializable
+{
     /**
      * @return null|string
      */
@@ -417,9 +467,8 @@ interface Serializable {
 
     /**
      * @param string $data
-     * @return void
      */
-    public function unserialize($data);
+    public function unserialize($data): void;
 }
 
 /**
@@ -428,17 +477,23 @@ interface Serializable {
 final class WeakReference
 {
     // always fail
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * @template TIn as object
      * @param TIn $referent
      * @return WeakReference<TIn>
      */
-    public static function create(object $referent): WeakReference {}
+    public static function create(object $referent): WeakReference
+    {
+    }
 
     /** @return ?T */
-    public function get(): ?object {}
+    public function get(): ?object
+    {
+    }
 }
 
 /**
@@ -456,44 +511,55 @@ final class WeakMap implements ArrayAccess, Countable, IteratorAggregate, Traver
      * @param TKey $offset
      * @return bool
      */
-    public function offsetExists($offset) {}
+    public function offsetExists($offset)
+    {
+    }
 
     /**
      * @param TKey $offset
      * @return TVal|null
      */
-    public function offsetGet($offset) {}
+    public function offsetGet($offset)
+    {
+    }
 
     /**
      * @param TKey $offset
      * @param TVal $value
-     * @return void
      */
-    public function offsetSet($offset, $value) {}
+    public function offsetSet($offset, $value): void
+    {
+    }
 
     /**
      * @param TKey $offset
-     * @return void
      */
-    public function offsetUnset($offset) {}
+    public function offsetUnset($offset): void
+    {
+    }
 }
 
 
 #[Attribute(Attribute::TARGET_METHOD)]
 final class ReturnTypeWillChange
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }
 
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final class SensitiveParameter
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }
 
 #[Attribute(Attribute::TARGET_CLASS)]
 final class AllowDynamicProperties
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }
-

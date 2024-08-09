@@ -1,12 +1,13 @@
 <?php
 
-class UnitEnumCase {
+class UnitEnumCase
+{
     public string $name;
 }
 
-class BackedEnumCase extends UnitEnumCase {
-    /** @var int|string */
-    public $value;
+class BackedEnumCase extends UnitEnumCase
+{
+    public int|string $value;
 }
 
 interface UnitEnum
@@ -26,14 +27,11 @@ interface BackedEnum extends UnitEnum
 
     /**
      * @param int|string $value
-     * @return static
      */
     public static function from($value): static;
 
     /**
      * @param int|string $value
-     * @return static|null
      */
     public static function tryFrom($value): ?static;
 }
-

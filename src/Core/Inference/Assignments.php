@@ -32,7 +32,6 @@ abstract class Assignments implements Countable, IteratorAggregate
         $this->variables = $variables;
     }
 
-
     public function __toString(): string
     {
         return implode("\n", array_map(function (Variable $variable) {

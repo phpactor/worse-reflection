@@ -51,7 +51,6 @@ final class ChainReflectionMemberCollection implements ReflectionMemberCollectio
     {
         $iterator = new AppendIterator();
         foreach ($this->collections as $collection) {
-            /** @phpstan-ignore-next-line */
             $iterator->append($collection->getIterator());
         }
 
@@ -76,7 +75,6 @@ final class ChainReflectionMemberCollection implements ReflectionMemberCollectio
 
     /**
      * @param ReflectionMemberCollection<ReflectionMember> $collection
-     * @phpstan-ignore-next-line
      */
     public function merge(ReflectionCollection $collection): self
     {

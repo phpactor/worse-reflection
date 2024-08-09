@@ -14,7 +14,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 class ContextualSourceCodeReflectorTest extends TestCase
 {
     use ProphecyTrait;
+
     const TEST_SOURCE_CODE = '<?php echo "hello";';
+
     const TEST_OFFSET = 1;
 
     private ContextualSourceCodeReflector $reflector;

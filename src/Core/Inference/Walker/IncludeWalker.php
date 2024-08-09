@@ -26,7 +26,6 @@ class IncludeWalker implements Walker
         $this->parser = $parser ?: new Parser();
     }
 
-
     public function nodeFqns(): array
     {
         return [ScriptInclusionExpression::class];

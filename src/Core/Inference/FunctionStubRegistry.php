@@ -11,7 +11,6 @@ final class FunctionStubRegistry
     {
     }
 
-
     public function get(string $name): ?FunctionStub
     {
         if (!isset($this->functionMap[$name])) {

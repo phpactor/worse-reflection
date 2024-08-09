@@ -11,8 +11,11 @@ use Phpactor\WorseReflection\Core\Type\ReflectedClassType;
 final class ClassHierarchyResolver
 {
     public const INCLUDE_TRAIT =     0x00000001;
+
     public const INCLUDE_INTERFACE = 0x00000010;
+
     public const INCLUDE_PARENT =    0x00000100;
+
     public const INCLUDE_MIXIN =     0x00001000;
 
     /**

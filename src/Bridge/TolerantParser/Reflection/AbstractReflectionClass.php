@@ -20,6 +20,7 @@ use Phpactor\WorseReflection\Core\Virtual\VirtualReflectionMethod;
 abstract class AbstractReflectionClass extends AbstractReflectedNode implements ReflectionClassLike
 {
     abstract public function name(): ClassName;
+
     abstract public function docblock(): DocBlock;
 
     public function isInterface(): bool

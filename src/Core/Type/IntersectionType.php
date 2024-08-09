@@ -12,6 +12,7 @@ final class IntersectionType extends AggregateType
     {
         return implode('&', array_map(fn (Type $type) => $type->__toString(), $this->types));
     }
+
     public static function toIntersection(Type $type): AggregateType
     {
         if ($type instanceof NullableType) {

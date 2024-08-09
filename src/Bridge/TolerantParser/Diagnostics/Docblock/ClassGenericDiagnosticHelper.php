@@ -32,6 +32,7 @@ final class ClassGenericDiagnosticHelper
             yield from $this->fromReflectionClass($reflector, $range, $class, $parentClass, $class->docblock()->extends(), '@extends');
         }
     }
+
     /**
      * @return Generator<Diagnostic>
      */

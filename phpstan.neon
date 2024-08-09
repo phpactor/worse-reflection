@@ -2,8 +2,8 @@ includes:
     - phpstan-baseline.neon
 parameters:
     level: 7
-    inferPrivatePropertyTypeFromConstructor: true
-    reportUnmatchedIgnoredErrors: true
-    checkGenericClassInNonGenericObjectType: false
+    excludePaths:
+        - src/Core/SourceCodeLocator/InternalStubs/GenericTypes.php
+
     paths:
-        - lib
+        - src

@@ -222,7 +222,6 @@ final class ClassLikeReflectionMemberCollection extends AbstractReflectionCollec
         return new ReflectionEnumCaseCollection($this->enumCases);
     }
 
-
     public function map(Closure $closure)
     {
         $new = new self([]);

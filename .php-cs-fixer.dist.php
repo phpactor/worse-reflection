@@ -3,7 +3,7 @@
 use PhpCsFixer\Config;
 
 $finder = PhpCsFixer\Finder::create()
-    ->in('lib')
+    ->in('src')
     ->in('tests')
     ->exclude([
         'Workspace',

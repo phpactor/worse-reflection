@@ -7,7 +7,6 @@ use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 use Microsoft\PhpParser\Node\Expression\ArgumentExpression;
 use Microsoft\PhpParser\Node\Expression\CallExpression;
 use PHPUnit\Framework\TestCase;
-use Phpactor\TextDocument\ByteOffset;
 use Phpactor\WorseReflection\Bridge\TolerantParser\TextDocument\NodeToTextDocumentConverter;
 use Phpactor\WorseReflection\Core\Inference\Frame;
 use Phpactor\WorseReflection\Core\Inference\FrameResolver;
@@ -38,7 +37,6 @@ class TestAssertWalker implements Walker
         $name = $node->callableExpression->getText();
 
         if ($name === 'wrFrame') {
-            /** @phpstan-ignore-next-line Allow dump() here */
             dump($frame->__toString());
             return $frame;
         }

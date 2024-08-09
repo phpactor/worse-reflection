@@ -26,6 +26,7 @@ class IterableTypeResolver
             'iterable',
         ];
     }
+
     /**
      * @param Type[] $arguments
      */

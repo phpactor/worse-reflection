@@ -55,7 +55,6 @@ class ClassType extends Type implements ClassLikeType, HasEmptyType
         return $new;
     }
 
-
     public function is(Type $type): Trinary
     {
         if ($type instanceof MissingType) {

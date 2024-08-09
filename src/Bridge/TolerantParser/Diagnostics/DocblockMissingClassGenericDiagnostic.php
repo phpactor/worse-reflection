@@ -10,7 +10,6 @@ use Phpactor\WorseReflection\Core\Type\GenericClassType;
 
 class DocblockMissingClassGenericDiagnostic implements Diagnostic
 {
-
     public function __construct(
         private ByteOffsetRange $range,
         private ClassName $className,

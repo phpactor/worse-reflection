@@ -8,6 +8,7 @@ class IntNegative extends IntType
     {
         return 'negative-int';
     }
+
     public function toPhpString(): string
     {
         return 'int';

@@ -178,6 +178,7 @@ abstract class AggregateType extends Type
     {
         return $this->withTypes(...array_filter($this->types, $closure));
     }
+
     public function count(): int
     {
         return count($this->types);

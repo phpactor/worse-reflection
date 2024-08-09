@@ -46,7 +46,6 @@ class TypeCombinator
         return $t;
     }
 
-
     public static function subtract(Type $type, Type $from): Type
     {
         $from = TypeFactory::toAggregateOrUnion($from);

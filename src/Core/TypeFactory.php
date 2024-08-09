@@ -466,7 +466,6 @@ class TypeFactory
         return self::class(ClassName::fromString($type), $reflector);
     }
 
-
     private static function convertNumericStringToInternalType(string $value): NumericType
     {
         if (1 === preg_match('/^[1-9][0-9]*$/', $value)) {

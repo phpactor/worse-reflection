@@ -89,7 +89,6 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
         return NodeUtil::nameFromTokenOrNode($this->node, $this->node->memberName);
     }
 
-
     public function method(): ReflectionMethod
     {
         $class = $this->class();
@@ -114,6 +113,7 @@ abstract class AbstractReflectionMethodCall implements CoreReflectionMethodCall
     {
         return new ReflectionScope($this->services->reflector(), $this->node);
     }
+
     public function nameRange(): ByteOffsetRange
     {
         $memberName = $this->node->memberName;

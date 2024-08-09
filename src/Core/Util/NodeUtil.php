@@ -284,6 +284,7 @@ class NodeUtil
 
         return $node;
     }
+
     public static function firstDescendantNodeBeforeOffset(Node $node, int $offset): Node
     {
         $lastNode = null;
@@ -296,6 +297,7 @@ class NodeUtil
 
         return $node;
     }
+
     public static function lastDescendantNodeBeforeOffsetOfType(Node $node, int $offset, string $fqn): Node
     {
         $best = null;

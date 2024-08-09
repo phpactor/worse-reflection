@@ -57,7 +57,6 @@ interface ReflectionMemberCollection extends ReflectionCollection
      */
     public function byMemberType(string $type): ReflectionCollection;
 
-
     /**
      * @param Closure(T): ReflectionMember $mapper
      * @return static

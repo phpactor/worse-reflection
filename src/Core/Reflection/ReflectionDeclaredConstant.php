@@ -11,8 +11,12 @@ use Phpactor\WorseReflection\Core\Type;
 interface ReflectionDeclaredConstant
 {
     public function name(): Name;
+
     public function type(): Type;
+
     public function sourceCode(): TextDocument;
+
     public function docblock(): DocBlock;
+
     public function position(): ByteOffsetRange;
 }

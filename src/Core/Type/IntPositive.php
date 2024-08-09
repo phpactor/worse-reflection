@@ -8,6 +8,7 @@ class IntPositive extends IntType
     {
         return 'positive-int';
     }
+
     public function toPhpString(): string
     {
         return 'int';

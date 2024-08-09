@@ -37,6 +37,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 class DocblockParserFactoryTest extends IntegrationTestCase
 {
     use ProphecyTrait;
+
     /**
      * @dataProvider provideResolveType
      * @param Type|string $expected

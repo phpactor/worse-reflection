@@ -18,7 +18,6 @@ class IntLiteralType extends IntType implements Literal, Generalizable
         return (string)$this->value;
     }
 
-
     public function value(): int
     {
         return $this->value;

@@ -47,6 +47,7 @@ class UndefinedVariableDiagnostic implements Diagnostic
             $suggestString
         );
     }
+
     /**
      * @return list<string>
      */
@@ -59,5 +60,4 @@ class UndefinedVariableDiagnostic implements Diagnostic
     {
         return $this->varName;
     }
-
 }

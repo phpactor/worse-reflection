@@ -87,6 +87,7 @@ class MissingReturnTypeProvider implements DiagnosticProvider
             }
         );
     }
+
     public function exit(NodeContextResolver $resolver, Frame $frame, Node $node): iterable
     {
         if (!$node instanceof MethodDeclaration) {

@@ -119,6 +119,7 @@ class ReflectionTrait extends AbstractReflectionClass implements CoreReflectionT
     {
         return 'trait';
     }
+
     /**
      * @return TraitDeclaration
      */
