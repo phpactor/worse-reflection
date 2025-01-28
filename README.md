@@ -9,7 +9,7 @@ This library aims to provide a light class-based AST based "reflection" library.
 
 ## Worse than Better
 
-It is influenced by [BetterReflection](https://github.com/Roave/BetterReflection), diffrerences are as follows:
+It is influenced by [BetterReflection](https://github.com/Roave/BetterReflection), differences are as follows:
 
 - Can reflect variables.
 - Does not aim to implement built-in PHP reflection API.
